@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GoogleBusinessPage should render correctly 1`] = `
+<Page>
+  <withRouter(WithStyles(PageHeader)) />
+  <h1>
+    Google Business
+  </h1>
+</Page>
+`;

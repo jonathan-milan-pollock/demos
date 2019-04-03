@@ -1,14 +1,12 @@
 import { pageType } from "../../../constants/PageType";
 
-export const changePage = (selectedPageType, history) => {
+export const findPage = (selectedPageType) => {
   switch (selectedPageType) {
     case pageType.FACEBOOK:
-      history.push("/");
-      break;
+      return "/";
     case pageType.GOOGLE_BUSINESS:
-      history.push("/google-business");
-      break;
+      return "/google-business";
     default:
-      break;
+      throw new Error(`page for ${selectedPageType} could not be found`);
   }
 };
