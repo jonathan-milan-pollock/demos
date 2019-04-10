@@ -17,13 +17,25 @@ const styles = theme => ({
 });
 
 class PageHeader extends Component {
-  render(){
+  render() {
+    const homeIcon = `${this.props.classes.icon} fas fa-home`;
     const facebookIcon = `${this.props.classes.icon} fab fa-facebook-square`;
-    const googleIcon = `${this.props.classes.icon} fab fa-google`;
+    const instagramIcon = `${this.props.classes.icon} fab fa-instagram`;
+    const linkedInIcon = `${this.props.classes.icon} fab fa-linkedin`;
     const bombIcon = `${this.props.classes.icon} fas fa-bomb`;
-  
+
     return (
       <Fragment>
+        <Fab
+          id="home-button"
+          color="primary"
+          className={this.props.classes.fab}
+          onClick={() => {
+            this.props.history.push(findPage(pageType.HOME));
+          }}
+        >
+          <Icon className={homeIcon} />
+        </Fab>
         <Fab
           id="facebook-button"
           color="primary"
@@ -35,14 +47,24 @@ class PageHeader extends Component {
           <Icon className={facebookIcon} />
         </Fab>
         <Fab
-          id="google-business-button"
+          id="instagram-business-button"
           color="primary"
           className={this.props.classes.fab}
           onClick={() => {
-            this.props.history.push(findPage(pageType.GOOGLE_BUSINESS));
+            this.props.history.push(findPage(pageType.INSTAGRAM));
           }}
         >
-          <Icon className={googleIcon} />
+          <Icon className={instagramIcon} />
+        </Fab>
+        <Fab
+          id="linkedin-business-button"
+          color="primary"
+          className={this.props.classes.fab}
+          onClick={() => {
+            this.props.history.push(findPage(pageType.LINKEDIN));
+          }}
+        >
+          <Icon className={linkedInIcon} />
         </Fab>
         <Fab
           color="primary"
