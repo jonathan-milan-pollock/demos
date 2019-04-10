@@ -4,8 +4,8 @@ import { shallow, mount } from "enzyme";
 
 import App from './App';
 import PageHeader from "./components/@shared/PageHeader/PageHeader";
+import HomePage from "./components/pages/HomePage/HomePage";
 import FacebookPage from "./components/pages/FacebookPage/FacebookPage";
-import GoogleBusinessPage from "./components/pages/GoogleBusinessPage/GoogleBusinessPage";
 
 describe("App", () => {
   it('renders without crashing', () => {
@@ -21,9 +21,9 @@ describe("App", () => {
     const mountedApp = mount(<App />);
     expect(mountedApp.find(PageHeader).length).toBe(1);
   });
-  it("should find Facebook Page by default", () => {
+  it("should find Home Page by default", () => {
     const mountedApp = mount(<App />);
-    expect(mountedApp.find(FacebookPage).length).toBe(1);
+    expect(mountedApp.find(HomePage).length).toBe(1);
   });
   it("should find Facebook Page when Facebook icon clicked", () => {
     const mountedApp = mount(<App />);
@@ -31,12 +31,5 @@ describe("App", () => {
       .find('button#facebook-button')
       .simulate('click')
     expect(mountedApp.find(FacebookPage).length).toBe(1);
-  });
-  it("should find Google Business Page when Google Business icon clicked", () => {
-    const mountedApp = mount(<App />);
-    mountedApp
-      .find('button#google-business-button')
-      .simulate('click')
-    expect(mountedApp.find(GoogleBusinessPage).length).toBe(1);
   });
 });

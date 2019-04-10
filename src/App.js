@@ -4,8 +4,10 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
+import HomePage from "./components/pages/HomePage/HomePage";
 import FacebookPage from "./components/pages/FacebookPage/FacebookPage";
-import GoogleBusinessPage from "./components/pages/GoogleBusinessPage/GoogleBusinessPage";
+import InstagramPage from "./components/pages/InstagramPage/InstagramPage";
+import LinkedInPage from "./components/pages/LinkedInPage/LinkedInPage";
 
 const theme = createMuiTheme({
   palette: {
@@ -22,9 +24,10 @@ class App extends Component {
         <CssBaseline>
           <MuiThemeProvider theme={theme}>
             <Switch>
-              <Route exact path="/" component={FacebookPage} />
-              <Route exact path="/google-business" component={GoogleBusinessPage} />
-              <Route component={FacebookPage} />
+              <Route exact path="/facebook" component={FacebookPage} />
+              <Route exact path="/instagram" component={InstagramPage} />
+              <Route exact path="/linked-in" component={LinkedInPage} />
+              <Route component={HomePage} />
             </Switch>
           </MuiThemeProvider>
         </CssBaseline>

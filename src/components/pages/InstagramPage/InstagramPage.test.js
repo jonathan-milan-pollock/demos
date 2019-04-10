@@ -1,11 +1,11 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import GoogleBusinessPage from "./GoogleBusinessPage";
+import InstagramPage from "./InstagramPage";
 
-describe("GoogleBusinessPage", () => {
+describe("InstagramPage", () => {
   it("should render correctly", () => {
-    const component = shallow(<GoogleBusinessPage />);
+    const component = shallow(<InstagramPage />);
 
     expect(component).toMatchSnapshot();
   });

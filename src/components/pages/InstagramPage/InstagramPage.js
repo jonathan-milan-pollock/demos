@@ -3,16 +3,16 @@ import React, { Component } from "react";
 import PageHeader from "../../@shared/PageHeader/PageHeader";
 import Page from "../../@shared/Page/Page";
 
-class GoogleBusinessPage extends Component {
+class InstagramPage extends Component {
 
   render() {
     return (
       <Page>
         <PageHeader />
-        <h1>Google Business</h1>
+        <h1>Instagram</h1>
       </Page>
     );
   }
 }
 
-export default GoogleBusinessPage;
+export default InstagramPage;

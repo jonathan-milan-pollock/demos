@@ -371,12 +371,17 @@ exports[`App should render correctly 1`] = `
         <Route
           component={[Function]}
           exact={true}
-          path="/"
+          path="/facebook"
         />
         <Route
           component={[Function]}
           exact={true}
-          path="/google-business"
+          path="/instagram"
+        />
+        <Route
+          component={[Function]}
+          exact={true}
+          path="/linked-in"
         />
         <Route
           component={[Function]}

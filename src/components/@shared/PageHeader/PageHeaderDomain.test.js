@@ -2,12 +2,12 @@ import { findPage } from "./PageHeaderDomain";
 import { pageType } from "../../../constants/PageType";
 
 describe("PageHeaderDomain", () => {
-  it("when call find page it should return facebook address", () => {
+  it("when call find page with Instagram page type it should return Instagram address", () => {
     const facebookPage = findPage(pageType.FACEBOOK);
-    expect(facebookPage).toEqual("/");
+    expect(facebookPage).toEqual("/facebook");
   });
-  it("when call find page it should return google business address", () => {
-    const googleBusinessPage = findPage(pageType.GOOGLE_BUSINESS);
-    expect(googleBusinessPage).toEqual("/google-business");
+  it("when call find page with Instagram page type it should return Instagram address", () => {
+    const instagramPage = findPage(pageType.INSTAGRAM);
+    expect(instagramPage).toEqual("/instagram");
   });
 });
