@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import PageHeader from "../../@shared/PageHeader/PageHeader";
 import Page from "../../@shared/Page/Page";
 
-class HomePage extends Component {
+export class HomePage extends Component {
 
   render() {
     return (
