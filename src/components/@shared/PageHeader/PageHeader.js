@@ -16,7 +16,7 @@ const styles = theme => ({
   icon: {}
 });
 
-class PageHeader extends Component {
+export class PageHeader extends Component {
   render() {
     const homeIcon = `${this.props.classes.icon} fas fa-home`;
     const facebookIcon = `${this.props.classes.icon} fab fa-facebook-square`;

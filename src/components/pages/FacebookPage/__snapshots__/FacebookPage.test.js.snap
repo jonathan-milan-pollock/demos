@@ -6,5 +6,18 @@ exports[`FacebookPage should render correctly 1`] = `
   <h1>
     Facebook
   </h1>
+  <WithStyles(Fab)
+    color="primary"
+    onClick={[Function]}
+  >
+    RESIZE IMAGE
+  </WithStyles(Fab)>
+  <p>
+    Is Error: 
+    No
+  </p>
+  <p>
+    Error Message: 
+  </p>
 </Page>
 `;

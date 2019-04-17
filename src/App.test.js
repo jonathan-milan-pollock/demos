@@ -2,10 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, mount } from "enzyme";
 
-import App from './App';
-import PageHeader from "./components/@shared/PageHeader/PageHeader";
-import HomePage from "./components/pages/HomePage/HomePage";
-import FacebookPage from "./components/pages/FacebookPage/FacebookPage";
+import {App} from './App';
+import {PageHeader} from "./components/@shared/PageHeader/PageHeader";
+import {HomePage} from "./components/pages/HomePage/HomePage";
+import {FacebookPage} from "./components/pages/FacebookPage/FacebookPage";
+import { Provider } from "react-redux";
+
+import configureStore from 'redux-mock-store';
+import thunk from "redux-thunk";
+const middlewares = [thunk]; 
+const mockStore = configureStore(middlewares);
 
 describe("App", () => {
   it('renders without crashing', () => {
@@ -26,7 +32,10 @@ describe("App", () => {
     expect(mountedApp.find(HomePage).length).toBe(1);
   });
   it("should find Facebook Page when Facebook icon clicked", () => {
-    const mountedApp = mount(<App />);
+
+    const getState = {tinyPng: {isLoading: false}};
+    const store = mockStore(getState);
+    const mountedApp = mount(<Provider store={store}><App /></Provider>);
     mountedApp
       .find('button#facebook-button')
       .simulate('click')

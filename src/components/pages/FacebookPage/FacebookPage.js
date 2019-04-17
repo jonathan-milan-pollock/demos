@@ -9,7 +9,7 @@ import PageHeader from "../../@shared/PageHeader/PageHeader";
 import Page from "../../@shared/Page/Page";
 import { actionCreators as tinyPngActionCreators } from "../../../store/TinyPng";
 
-class FacebookPage extends Component {
+export class FacebookPage extends Component {
   render() {
     return (
       <Page>
