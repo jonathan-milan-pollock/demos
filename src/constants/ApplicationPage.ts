@@ -4,13 +4,13 @@ import { PageType } from 'src/enums/PageType';
 export default class ApplicationPage {
     static readonly HOME: Page = {
         pageType: PageType.Home,
-        title: 'Dark Rush Photography',
+        title: 'Magenic Masters React',
         description:
-            'Dark Rush Photography specializes in Professional, Drone, and VR Photography'
+            'Magenic Masters React, teaching React, Hooks, and little Redux'
     };
     static readonly ABOUT: Page = {
         pageType: PageType.About,
         title: 'About',
-        description: 'About Dark Rush Photography'
+        description: 'About Magenic Masters React'
     };
 }
