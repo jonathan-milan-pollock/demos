@@ -6,7 +6,7 @@ export default class ApplicationPage {
         pageType: PageType.Home,
         title: 'Magenic Masters React',
         description:
-            'Magenic Masters React, teaching React, Hooks, and little Redux'
+            'Magenic Masters React, teaching React, Hooks, and a little Redux'
     };
     static readonly ABOUT: Page = {
         pageType: PageType.About,
