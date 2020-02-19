@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { ThemeType } from 'src/enums/ThemeType';
-import { changeTheme } from 'src/store/ThemeActions';
-import { ReduxState } from 'src/store/RootReducer';
+import { ReduxState } from 'src/store/Store';
+import { changeTheme } from 'src/store/Theme';
 
 const useStyles = makeStyles((theme: Theme) => {
     return {

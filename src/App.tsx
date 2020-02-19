@@ -13,7 +13,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { PageType } from 'src/enums/PageType';
 import { findPagePathname } from 'src/utils/Page';
 import { useTheme } from 'src/hooks/UseTheme';
-import { ReduxState } from 'src/store/RootReducer';
+import { ReduxState } from 'src/store/Store';
 import Home from 'src/pages/Home';
 import AboutPage from 'src/pages/About';
 
