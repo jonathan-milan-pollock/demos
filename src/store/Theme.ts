@@ -1,6 +1,10 @@
 import { ThemeType } from 'src/enums/ThemeType';
 import ReduxAction, { ReduxActionType } from './ReduxAction';
 
+export interface ReduxThemeState {
+    themeType: ThemeType;
+}
+
 const initialState: ReduxThemeState = {
     themeType: ThemeType.Light
 };
@@ -19,10 +23,6 @@ export function changeTheme(themeType: ThemeType): ReduxChangeThemeAction {
         type: ReduxActionType.CHANGE_THEME,
         payload: { themeType: themeType }
     };
-}
-
-export interface ReduxThemeState {
-    themeType: ThemeType;
 }
 
 type TThemeReducerActions = ReduxChangeThemeAction;
