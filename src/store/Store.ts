@@ -2,10 +2,10 @@
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import theme from 'src/store/Theme';
+import * as Theme from 'src/store/Theme';
 
 const reducers = {
-    theme
+    theme: Theme.reducer
 };
 
 const rootReducer = combineReducers({
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
 
 export type ReduxState = ReturnType<typeof rootReducer>;
 
-export default function ConfigureStore() {
+export default function configureStore() {
     const middleware = [thunk];
 
     return createStore(

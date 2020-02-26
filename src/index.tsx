@@ -9,9 +9,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import App from './App';
 
 import * as serviceWorker from './serviceWorker';
-import ConfigureStore from 'src/store/Store';
+import configureStore from 'src/store/Store';
 
-const store = ConfigureStore();
+const store = configureStore();
 
 ReactDOM.render(
     <Provider store={store}>

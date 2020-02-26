@@ -26,14 +26,14 @@ export function changeTheme(themeType: ThemeType): ReduxChangeThemeAction {
 }
 
 type TThemeReducerActions = ReduxChangeThemeAction;
-export default function(
+export const reducer = (
     state: ReduxThemeState = initialState,
     action: TThemeReducerActions
-) {
+) => {
     switch (action.type) {
         case ReduxActionType.CHANGE_THEME:
             return { ...state, themeType: action.payload.themeType };
         default:
             return state;
     }
-}
+};

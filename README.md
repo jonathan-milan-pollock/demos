@@ -27,7 +27,7 @@ General suggestions, as React is an un-opinionated framework these are merely su
 * Recommend JavaScript styles and sass only as needed
 * Use current language features (https://derickbailey.com/2017/06/06/3-features-of-es7-and-beyond-that-you-should-be-using-now/)
 * Use functions instead of inline if with logical && operator, as it’s difficult to read and maintain (https://reactjs.org/docs/conditional-rendering.html)
-* Add third-party components early to to application if known in advance
+* Add third-party components early to an application if known in advance
 * Use Fragments instead of <></> or unnecessary divs
 * Use arrow functions not binding
 * Snapshot testing and tests for styles are fragile

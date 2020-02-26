@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 function ThemeToggleButton(props: any): JSX.Element {
-    const { themeType, changeTheme } = props;
+    const { themeType, actions } = props;
     const classes = useStyles();
     const iconName = themeType === ThemeType.Dark ? 'check-square' : 'square';
 
@@ -49,7 +49,7 @@ function ThemeToggleButton(props: any): JSX.Element {
             <Button
                 className={classes.button}
                 onClick={() => {
-                    changeTheme(
+                    actions.changeTheme(
                         themeType === ThemeType.Dark
                             ? ThemeType.Light
                             : ThemeType.Dark
@@ -71,12 +71,15 @@ const mapStateToProps = (state: ReduxState) => ({
     themeType: state.theme.themeType
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
-    bindActionCreators(
-        {
-            changeTheme
-        },
-        dispatch
-    );
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+    return {
+        actions: bindActionCreators(
+            {
+                changeTheme
+            },
+            dispatch
+        )
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThemeToggleButton);
