@@ -86,7 +86,6 @@ export default function PageContainer({
             <div className={classes.footer}>
                 <BottomDivider />
                 <BottomNavigationBar
-                    pageType={pageType}
                     isDisplayed={layout.isBottomNavigationBarDisplayed}
                 />
             </div>
