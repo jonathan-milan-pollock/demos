@@ -38,15 +38,7 @@ function BottomNavigationBar({ isDisplayed }: Props): JSX.Element {
             <BottomNavigationBarButton
                 icon={{ prefix: 'fas', iconName: 'home' }}
                 label="HOME"
-                buttonPathnames={[
-                    '/',
-                    '/stories',
-                    '/stories/',
-                    '/photo-of-the-week',
-                    '/photo-of-the-week/',
-                    '/extended-reality-studio',
-                    '/extended-reality-studio/'
-                ]}
+                buttonPathnames={['/']}
                 locationPathname={location.pathname}
                 onClick={() => {
                     history.push('/');
