@@ -13,4 +13,3 @@ it('should render the bottom divider', () => {
     const bottomDivider = queryByTestId(container, 'bottom-divider');
     expect(bottomDivider).not.toBeNull();
 });
-

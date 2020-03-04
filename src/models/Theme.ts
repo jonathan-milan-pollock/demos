@@ -1,4 +1,7 @@
+import { ThemeType } from 'src/enums/ThemeType';
+
 export default interface Theme {
+    themeType: ThemeType;
     fontFamily: string;
     accentColor: string;
     bottomButtonFontSize: number;

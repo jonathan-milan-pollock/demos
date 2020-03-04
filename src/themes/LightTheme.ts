@@ -1,8 +1,10 @@
 import ApplicationLayout from 'src/constants/ApplicationLayout';
 import Application from 'src/constants/Application';
+import { ThemeType } from 'src/enums/ThemeType';
 import Theme from 'src/models/Theme';
 
 export const lightTheme: Theme = {
+    themeType: ThemeType.Light,
     fontFamily: Application.FONT_FAMILY,
     accentColor: Application.ACCENT_COLOR,
     bottomButtonFontSize: 12,
