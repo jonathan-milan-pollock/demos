@@ -1,16 +1,16 @@
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 
 import {
   makeStyles,
   Theme,
   AppBar,
   Toolbar,
-  useTheme,
+  //useTheme,
   useMediaQuery,
 } from '@material-ui/core';
 
 import Application from '../../constants/app-constants';
-import BackButton from './BackButton';
+//import BackButton from './BackButton';
 import KabobMenu from './KabobMenu';
 import ThemeToggleButton from './ThemeToggleButton';
 import TopNavigationBarButton from './TopNavigationBarButton';
@@ -38,10 +38,11 @@ const useStyles = makeStyles((theme: Theme) => {
 
 const TopNavigationBar = () => {
   const classes = useStyles();
-  const router = useRouter();
-  const theme = useTheme();
+  //const router = useRouter();
+  //const theme = useTheme();
   const textChangeWidth = useMediaQuery('(min-width:600px)');
 
+    /*
   const displayBackButton = [
     '/stories',
     '/stories/',
@@ -52,7 +53,7 @@ const TopNavigationBar = () => {
   ].includes(router.pathname);
 
   //TODO: This image needs to be an svg
-  /*
+
    {displayBackButton ? (
               <BackButton goBackToPage={router.pathname} />
             ) : null}
