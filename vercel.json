@@ -1,5 +1,5 @@
 "build": {
     "env": {
-      "NPM_TOKEN": "@fontawesome-token"
+      "NPM_TOKEN": "@npm_token"
     }
   }
