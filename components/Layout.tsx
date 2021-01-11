@@ -11,6 +11,7 @@ import TopTabBar from '../components/header/TopTabBar';
 import BottomNavigationBar from '../components/footer/BottomNavigationBar';
 
 //const SIDEBAR_WIDTH = 480;
+// Add comment
 
 const BOTTOM_MOBILE_HEIGHT = AppUiConstants.BOTTOM_NAVIGATION_BAR_HEIGHT;
 const BOTTOM_DESKTOP_HEIGHT = AppUiConstants.BOTTOM_SOCIAL_MEDIA_BAR_HEIGHT;
