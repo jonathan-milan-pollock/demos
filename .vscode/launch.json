@@ -1,0 +1,71 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "website-server",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}/website",
+      "runtimeExecutable": "${workspaceRoot}/website/node_modules/.bin/next",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/website/node_modules/next/bin/next.js"
+      },
+      "runtimeArgs": ["-p", "4000"],
+      "port": 9229,
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      },
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "website",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/website",
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceRoot}/website/*"
+      }
+    },
+    {
+      "name": "website-test",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}/website",
+      "runtimeExecutable": "${workspaceRoot}/website/node_modules/.bin/jest",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/website/node_modules/jest/bin/jest.js"
+      },
+      "args": ["test", "--runInBand", "--no-cache"],
+      "env": {
+        "CI": "true"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229
+    },
+    {
+      "name": "Attach to Node Functions",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "preLaunchTask": "func: host start"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "website-all",
+      "configurations": ["website-server", "website"]
+    }
+  ]
+}

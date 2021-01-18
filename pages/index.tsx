@@ -7,7 +7,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import FontAwesomeIconEm from '../components/FontAwesomeIconEm';
 import AppUiConstants from '../constants/app-ui-constants';
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles((_theme: Theme) => {
   return {
     container: {
       marginTop: 0,
