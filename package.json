@@ -53,7 +53,7 @@
     "@nestjs/platform-express": "^7.0.0",
     "@nguniversal/express-engine": "^11.1.2",
     "@nrwl/angular": "11.6.1",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.9.1",
     "express": "^4.15.2",
     "reflect-metadata": "^0.1.13",
