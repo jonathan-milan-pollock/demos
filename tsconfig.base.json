@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@dark-rush-photography/shared/entities": [
+        "libs/shared/entities/src/index.ts"
+      ],
+      "@dark-rush-photography/api/services": ["libs/api/services/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
