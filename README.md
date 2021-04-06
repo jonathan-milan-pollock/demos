@@ -10,12 +10,6 @@
 
 ## Recommended Reading
 
-### Angular
-
-### Cypress
-
-### Nx
-
 - [5 Reasons to use Angular Elements](https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89)
 - [Angular Elements and Universal with Nx](https://nrwl.io/pages/t-mobile-case-study)
 
@@ -29,15 +23,6 @@
 ## References
 
 - [npm trends](https://www.npmtrends.com/)
-
-### Testing Apps
-
-- npx nx e2e website-e2e --watch
-
-### Running Apps
-
-- npx nx serve api
-- npx nx serve website
 
 ### Deploying Apps
 

@@ -21,5 +21,8 @@
       "@dark-rush-photography/api/services": ["libs/api/services/src/index.ts"]
     }
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
   "exclude": ["node_modules", "tmp"]
 }
