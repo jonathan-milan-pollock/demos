@@ -21,17 +21,16 @@
     }
   },
   "projects": {
-    "website": { "tags": [] },
-    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
-    "shared-entities": { "tags": [] },
-    "api": { "tags": [] },
-    "api-services": { "tags": [] },
     "admin-website": { "tags": [] },
     "admin-website-e2e": {
       "tags": [],
       "implicitDependencies": ["admin-website"]
     },
-    "website-host": { "tags": [] },
-    "admin-website-host": { "tags": [] }
+    "admin-website-host": { "tags": [] },
+    "api": { "tags": [] },
+    "serverless": { "tags": [] },
+    "website": { "tags": [] },
+    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
+    "website-host": { "tags": [] }
   }
 }

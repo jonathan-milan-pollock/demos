@@ -32,6 +32,322 @@
     }
   },
   "projects": {
+    "admin-website": {
+      "projectType": "application",
+      "root": "apps/admin-website",
+      "sourceRoot": "apps/admin-website/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/admin-website/browser",
+            "index": "apps/admin-website/src/index.html",
+            "main": "apps/admin-website/src/main.ts",
+            "polyfills": "apps/admin-website/src/polyfills.ts",
+            "tsConfig": "apps/admin-website/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/admin-website/src/favicon.ico",
+              "apps/admin-website/src/assets"
+            ],
+            "styles": ["apps/admin-website/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/admin-website/src/environments/environment.ts",
+                  "with": "apps/admin-website/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "admin-website:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "admin-website:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "admin-website:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/admin-website/src/**/*.ts",
+              "apps/admin-website/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/admin-website"],
+          "options": {
+            "jestConfig": "apps/admin-website/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/admin-website/server",
+            "main": "apps/admin-website/server.ts",
+            "tsConfig": "apps/admin-website/tsconfig.server.json",
+            "externalDependencies": [
+              "@nestjs/microservices",
+              "@nestjs/microservices/microservices-module",
+              "@nestjs/websockets",
+              "@nestjs/websockets/socket-module",
+              "cache-manager"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "apps/admin-website/src/environments/environment.ts",
+                  "with": "apps/admin-website/src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": false
+            }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "admin-website:build",
+            "serverTarget": "admin-website:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "admin-website:build:production",
+              "serverTarget": "admin-website:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "admin-website:build:production",
+            "serverTarget": "admin-website:server:production",
+            "routes": ["/"]
+          },
+          "configurations": {
+            "production": {}
+          }
+        }
+      }
+    },
+    "admin-website-e2e": {
+      "root": "apps/admin-website-e2e",
+      "sourceRoot": "apps/admin-website-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/admin-website-e2e/cypress.json",
+            "tsConfig": "apps/admin-website-e2e/tsconfig.e2e.json",
+            "devServerTarget": "admin-website:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "admin-website:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/admin-website-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "admin-website-host": {
+      "root": "apps/admin-website-host",
+      "sourceRoot": "apps\\admin-website-host\\src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/admin-website-host",
+            "main": "apps/admin-website-host/src/main.ts",
+            "tsConfig": "apps/admin-website-host/tsconfig.app.json",
+            "assets": ["apps/admin-website-host/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/admin-website-host/src/environments/environment.ts",
+                  "with": "apps/admin-website-host/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "admin-website-host:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/admin-website-host/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/admin-website-host"],
+          "options": {
+            "jestConfig": "apps/admin-website-host/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps\\api\\src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": ["apps/api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api"],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless": {
+      "root": "apps/serverless",
+      "sourceRoot": "apps\\serverless\\src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/serverless",
+            "main": "apps/serverless/src/main.ts",
+            "tsConfig": "apps/serverless/tsconfig.app.json",
+            "assets": ["apps/serverless/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/serverless/src/environments/environment.ts",
+                  "with": "apps/serverless/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "serverless:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/serverless/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/serverless"],
+          "options": {
+            "jestConfig": "apps/serverless/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "website": {
       "projectType": "application",
       "root": "apps/website",
@@ -199,264 +515,6 @@
         }
       }
     },
-    "shared-entities": {
-      "root": "libs/shared/entities",
-      "sourceRoot": "libs/shared/entities/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared/entities/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/entities"],
-          "options": {
-            "jestConfig": "libs/shared/entities/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps\\api\\src",
-      "projectType": "application",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/api",
-            "main": "apps/api/src/main.ts",
-            "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api/src/environments/environment.ts",
-                  "with": "apps/api/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-services": {
-      "root": "libs/api/services",
-      "sourceRoot": "libs/api/services/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/services/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/services"],
-          "options": {
-            "jestConfig": "libs/api/services/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "admin-website": {
-      "projectType": "application",
-      "root": "apps/admin-website",
-      "sourceRoot": "apps/admin-website/src",
-      "prefix": "dark-rush-photography",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/admin-website/browser",
-            "index": "apps/admin-website/src/index.html",
-            "main": "apps/admin-website/src/main.ts",
-            "polyfills": "apps/admin-website/src/polyfills.ts",
-            "tsConfig": "apps/admin-website/tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "apps/admin-website/src/favicon.ico",
-              "apps/admin-website/src/assets"
-            ],
-            "styles": ["apps/admin-website/src/styles.scss"],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/admin-website/src/environments/environment.ts",
-                  "with": "apps/admin-website/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "admin-website:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "admin-website:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "admin-website:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/admin-website/src/**/*.ts",
-              "apps/admin-website/src/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/admin-website"],
-          "options": {
-            "jestConfig": "apps/admin-website/jest.config.js",
-            "passWithNoTests": true
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/admin-website/server",
-            "main": "apps/admin-website/server.ts",
-            "tsConfig": "apps/admin-website/tsconfig.server.json",
-            "externalDependencies": [
-              "@nestjs/microservices",
-              "@nestjs/microservices/microservices-module",
-              "@nestjs/websockets",
-              "@nestjs/websockets/socket-module",
-              "cache-manager"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "apps/admin-website/src/environments/environment.ts",
-                  "with": "apps/admin-website/src/environments/environment.prod.ts"
-                }
-              ],
-              "sourceMap": false,
-              "optimization": false
-            }
-          }
-        },
-        "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
-          "options": {
-            "browserTarget": "admin-website:build",
-            "serverTarget": "admin-website:server"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "admin-website:build:production",
-              "serverTarget": "admin-website:server:production"
-            }
-          }
-        },
-        "prerender": {
-          "builder": "@nguniversal/builders:prerender",
-          "options": {
-            "browserTarget": "admin-website:build:production",
-            "serverTarget": "admin-website:server:production",
-            "routes": ["/"]
-          },
-          "configurations": {
-            "production": {}
-          }
-        }
-      }
-    },
-    "admin-website-e2e": {
-      "root": "apps/admin-website-e2e",
-      "sourceRoot": "apps/admin-website-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/admin-website-e2e/cypress.json",
-            "tsConfig": "apps/admin-website-e2e/tsconfig.e2e.json",
-            "devServerTarget": "admin-website:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "admin-website:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/admin-website-e2e/**/*.{js,ts}"]
-          }
-        }
-      }
-    },
     "website-host": {
       "root": "apps/website-host",
       "sourceRoot": "apps\\website-host\\src",
@@ -502,56 +560,6 @@
           "outputs": ["coverage/apps/website-host"],
           "options": {
             "jestConfig": "apps/website-host/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "admin-website-host": {
-      "root": "apps/admin-website-host",
-      "sourceRoot": "apps\\admin-website-host\\src",
-      "projectType": "application",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/admin-website-host",
-            "main": "apps/admin-website-host/src/main.ts",
-            "tsConfig": "apps/admin-website-host/tsconfig.app.json",
-            "assets": ["apps/admin-website-host/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/admin-website-host/src/environments/environment.ts",
-                  "with": "apps/admin-website-host/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "admin-website-host:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/admin-website-host/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/admin-website-host"],
-          "options": {
-            "jestConfig": "apps/admin-website-host/jest.config.js",
             "passWithNoTests": true
           }
         }
