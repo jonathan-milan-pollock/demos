@@ -1,13 +1,14 @@
 {
-    "cSpell.words": [
-        "appservice",
-        "choco",
-        "cosmosdb",
-        "nestjs",
-        "ngcc",
-        "nrwl",
-        "prebuild",
-        "prerender",
-        "pulumi"
-    ]
+  "cSpell.words": [
+    "appservice",
+    "canonicalized",
+    "choco",
+    "functionapp",
+    "nestjs",
+    "ngcc",
+    "nrwl",
+    "prebuild",
+    "prerender",
+    "pulumi"
+  ]
 }
