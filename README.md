@@ -7,12 +7,13 @@
 1. Use npx (Can remove files from C:\Users\jonathanp\AppData\Roaming\npm leaving npm directory)
 2. With imports 3 sections Platform (ng or node), 3rd Parties, Own Code
 3. Only import what index.ts files of libs export
+4. Declare return types on functions (TODO: how to enable this?!)
 
 ## Recommended Reading
 
 - [Practical Guide to Fp-ts](https://rlee.dev/writing/practical-guide-to-fp-ts-part-1)
 - [5 Reasons to use Angular Elements](https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89)
-- [Angular Elements and Universal with Nx](https://nrwl.io/pages/t-mobile-case-study)
+- [Angular Elements and Universal Nx Case Study](https://nrwl.io/pages/t-mobile-case-study)
 
 ## Recommended Books
 
@@ -23,6 +24,8 @@
 
 ## References
 
+- [TinyPNG](https://tinypng.com/)
+- [Pulumi](https://app.pulumi.com/)
 - [npm trends](https://www.npmtrends.com/)
 
 ### Deploying Apps

@@ -1,0 +1,16 @@
+config:
+  deployment:location: East US
+  deployment:resourceGroupName: drp-rg
+  deployment:mongoDbAccountName: drp-mongo-db-account
+  deployment:mongoDbDatabaseName: drp-mongo-db-database
+  deployment:mongoDbCollectionName: documents
+  deployment:uploadsStorageAccountName: drpuploadssa
+  deployment:uploadsBlobContainerName: uploads
+  deployment:contentStorageAccountName: drpcontentsa
+  deployment:contentBlobContainerName: content
+  deployment:contentCdnProfileName: drp-blobs-cdn
+  deployment:contentCdnEndpointName: dark-rush-photography
+  deployment:serverlessFunctionsStorageAccountName: drpserverlessfunctionssa
+  deployment:serverlessFunctionsBlobContainerName: zips
+  deployment:serverlessFunctionsBlobName: zip
+  deployment:serverlessFunctionsAppName: drp-serverless-functions-app
