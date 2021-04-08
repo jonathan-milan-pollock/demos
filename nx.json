@@ -21,16 +21,9 @@
     }
   },
   "projects": {
-    "admin-website": { "tags": [] },
-    "admin-website-e2e": {
-      "tags": [],
-      "implicitDependencies": ["admin-website"]
-    },
-    "admin-website-host": { "tags": [] },
     "api": { "tags": [] },
     "serverless": { "tags": [] },
     "website": { "tags": [] },
-    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
-    "website-host": { "tags": [] }
+    "website-e2e": { "tags": [], "implicitDependencies": ["website"] }
   }
 }

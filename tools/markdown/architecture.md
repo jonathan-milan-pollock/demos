@@ -58,29 +58,74 @@
 
 ## Project Structure
 
-### apps
+| project                           | scope         | command                                                                                 |
+| --------------------------------- | ------------- | --------------------------------------------------------------------------------------- |
+| apps                              |               |                                                                                         |
+| > api                             |               | npx nx g @nrwl/nest:app api --frontendProject=website                                   |
+|                                   |               | npx nx add @nestjs/ng-universal --clientProject=website                                 |
+|                                   |               | [angular-universal](#angular-universal)                                                 |
+| > serverless                      |               | npx nx g @nrwl/node:app serverless                                                      |
+| > website                         |               | generated with workspace                                                                |
+| libs                              |               |                                                                                         |
+| > api                             |               |                                                                                         |
+| > > feature-authentication        | api           | npx nx g @nrwl/nest:lib api/feature-authentication                                      |
+| > > feature-weekly-photos         | api           | npx nx g @nrwl/nest:lib api/feature-weekly-photos                                       |
+| > > feature-stories               | api           | npx nx g @nrwl/nest:lib api/feature-stories                                             |
+| > > feature-destinations          | api           | npx nx g @nrwl/nest:lib api/feature-destinations                                        |
+| > serverless-functions            |               |                                                                                         |
+| > > feature-social-media-post     | serverless    | npx nx g @nrwl/node:lib serverless/feature-image-processing                             |
+| > > feature-image-processing      | serverless    | npx nx g @nrwl/node:lib serverless/feature-image-processing                             |
+| > shared                          |               |                                                                                         |
+| > > data-entities                 | shared        | npx nx g @nrwl/workspace:lib shared/data-entities                                       |
+| > shared-client                   |               |                                                                                         |
+| > > ui                            | shared-client | npx nx g @nrwl/angular:lib website/shared-client/ui --no-interactive                    |
+| > > ui-image-custom-elements      | shared-client | [ui-image-custom-elements](#ui-image-custom-elements)                                   |
+|                                   |               | npx nx add @angular/elements                                                            |
+| > > feature-image-custom-elements | shared-client | npx nx g @nrwl/angular:lib shared-client/feature-image-custom-elements --no-interactive |
+| > shared-server                   |               |                                                                                         |
+| > > data                          | shared-server | npx nx g @nrwl/node:lib shared-server/data                                              |
+| > > data-content                  | shared-server | npx nx g @nrwl/node:lib shared-server/data-content                                      |
+| > > utils-image-processing        | shared-server | npx nx g @nrwl/node:lib shared-server/utils-image-processing                            |
+| > website                         |               |                                                                                         |
+| > > main                          |               |                                                                                         |
+| > > > feature-login               | website       | npx nx g @nrwl/angular:lib website/main/feature-login                                   |
+| > > > feature-i18n                | website       | npx nx g @nrwl/angular:lib website/main/feature-i18n                                    |
+| > > > feature-pwa                 | website       | npx nx g @nrwl/angular:lib website/main/feature-pwa                                     |
+| > > > feature-main                | website       | npx nx g @nrwl/angular:lib website/main/feature-main                                    |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/main/utils-testing                                   |
+| > > about                         |               |                                                                                         |
+| > > > feature-about               | website       | npx nx g @nrwl/angular:lib website/about/feature-about                                  |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/about/utils-testing                                  |
+| > > review                        |               |                                                                                         |
+| > > > feature-review              | website       | npx nx g @nrwl/angular:lib website/review/feature-review                                |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/review/utils-testing                                 |
+| > > reviews                       |               |                                                                                         |
+| > > > feature-reviews             | website       | npx nx g @nrwl/angular:lib website/reviews/feature-reviews                              |
+| > > > feature-reviews-admin       | website       | npx nx g @nrwl/angular:lib website/reviews/feature-reviews-admin                        |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/reviews/utils-testing                                |
+| > > weekly-photo                  |               |                                                                                         |
+| > > > feature-weekly-photo        | website       | npx nx g @nrwl/angular:lib website/weekly-photo/feature-pwa                             |
+| > > > feature-weekly-photos       | website       | npx nx g @nrwl/angular:lib website/weekly-photo/feature-pwa                             |
+| > > > feature-weekly-photo-admin  | website       | npx nx g @nrwl/angular:lib website/weekly-photo/feature-pwa                             |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/weekly-photo/feature-pwa                             |
+| > > story                         |               |                                                                                         |
+| > > > feature-story               | website       | npx nx g @nrwl/angular:lib website/story/feature-story                                  |
+| > > > feature-stories             | website       | npx nx g @nrwl/angular:lib website/story/feature-stories                                |
+| > > > feature-story-admin         | website       | npx nx g @nrwl/angular:lib website/story/feature-story-admin                            |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/story/utils-testing                                  |
+| > > destination                   |               |                                                                                         |
+| > > > feature-destination         | website       | npx nx g @nrwl/angular:lib website/destination/feature-destination                      |
+| > > > feature-destinations        | website       | npx nx g @nrwl/angular:lib website/destination/feature-destinations                     |
+| > > > feature-destination-admin   | website       | npx nx g @nrwl/angular:lib website/destination/feature-destination-admin                |
+| > > > utils-testing               | website       | npx nx g @nrwl/angular:lib website/destination/utils-testing                            |
+| > deploy                          |               | npx nx g @nrwl/node:lib deploy                                                          |
 
-| project              | command                                                                    |
-| -------------------- | -------------------------------------------------------------------------- |
-| apps                 |                                                                            |
-| > admin-website      | npx nx g @nrwl/angular:app admin-website --no-interactive                  |
-| > admin-website-host | npx nx g @nrwl/nest:app admin-website-host                                 |
-|                      | npx nx add @nestjs/ng-universal --clientProject=admin-website              |
-|                      | [angular-universal](#angular-universal)                                    |
-| > api                | npx nx g @nrwl/nest:app api --frontendProject=website                      |
-| > serverless         | npx nx g @nrwl/node:app serverless                                         |
-| > website            | [generate-workspace-with-website-app](generate-workspace-with-website-app) |
-| > website-host       | npx nx g @nrwl/nest:app website-host                                       |
-|                      | npx nx add @nestjs/ng-universal --clientProject=website                    |
-|                      | [angular-universal](#angular-universal)                                    |
+### angular-universal
 
-#### angular-universal
-
-- adjust npm scripts if multiple Angular Universal apps
 - update files
 
-  1. Update website-host main.ts (apps/website-host/src/main.ts)
-  2. Update website-host app.module.ts (apps/website-host/src/app/app.module.ts)
+  1. Update api main.ts (apps/api/src/main.ts)
+  2. Update api app.module.ts (apps/api/src/app/app.module.ts)
   3. Update website server.ts (apps/website/server.ts)
 
 - remove server generated files
@@ -105,93 +150,20 @@
 
   - @Inject(PLATFORM_ID) private platformId and isPlatformBrowser to check if running in browser (browser api such as localstorage not available)
 
-### libs
+### ui-image-custom-elements
 
-| project                           | framework         | scope         | command                                                          |
-| --------------------------------- | ----------------- | ------------- | ---------------------------------------------------------------- |
-| libs                              |                   |               |                                                                  |
-| > api                             |                   |               |                                                                  |
-| > > feature-authentication        |                   | api           | npx nx g @nrwl/nest:lib api/feature-authentication               |
-| > > feature-weekly-photos         |                   | api           | npx nx g @nrwl/nest:lib api/feature-weekly-photos                |
-| > > feature-stories               |                   | api           | npx nx g @nrwl/nest:lib api/feature-stories                      |
-| > > feature-destinations          |                   | api           | npx nx g @nrwl/nest:lib api/feature-destinations                 |
-| > serverless                      |                   |               |                                                                  |
-| > > feature-image-processing      | nest              | node          |                                                                  |
-| > > feature-social-media-post     | nest              | node          |                                                                  |
-| > shared                          |                   |               |                                                                  |
-| > > data-entities                 |                   | shared        | npx nx g @nrwl/workspace:lib shared/data-entities                |
-| > shared-server                   |                   |               |                                                                  |
-| > > data                          | nest              | shared-server |                                                                  |
-| > > data-files                    | nest              | shared-server |                                                                  |
-| > > utils-image-processing        | nest              | shared-server |                                                                  |
-| > shared-client                   |                   |               |                                                                  |
-| > > ui                            | @nrwl/angular:lib | shared-client | npx nx g @nrwl/angular:lib website/shared/ui --no-interactive ui |
-| > > ui-image-custom-elements      | angular elements  | shared-client | [ui-image-custom-elements](#ui-image-custom-elements)            |
-| > > feature-image-custom-elements | @nrwl/angular:lib | shared-client | [feature-image-custom-elements](#feature-image-custom-elements)  |
-|                                   |                   |               | npx nx add @angular/elements                                     |
-| > website                         |                   |               |                                                                  |
-| > > main                          |                   |               |                                                                  |
-| > > > feature-login               | @nrwl/angular:lib | website       |                                                                  |
-| > > > feature-pwa                 | @nrwl/angular:lib | website       |                                                                  |
-| > > > feature-main                | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > > about                         |                   |               |                                                                  |
-| > > > feature-about               | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > > review                        |                   |               |                                                                  |
-| > > > feature-review              | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > > reviews                       |                   |               |                                                                  |
-| > > > feature-reviews             | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > > weekly-photo                  |                   |               |                                                                  |
-| > > > feature-weekly-photo        | @nrwl/angular:lib | website       |                                                                  |
-| > > > feature-weekly-photos       | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > > story                         |                   |               |                                                                  |
-| > > > feature-story               | @nrwl/angular:lib | website       |                                                                  |
-| > > > feature-stories             | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > > destination                   |                   |               |                                                                  |
-| > > > feature-destination         | @nrwl/angular:lib | website       |                                                                  |
-| > > > feature-destinations        | @nrwl/angular:lib | website       |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | website       |                                                                  |
-| > website-admin                   |                   |               |                                                                  |
-| > > reviews-admin                 |                   |               |                                                                  |
-| > > > feature-reviews-admin       | @nrwl/angular:lib | admin-website |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | admin-website |                                                                  |
-| > > weekly-photo-admin            |                   |               |                                                                  |
-| > > > feature-weekly-photo-admin  | @nrwl/angular:lib | admin-website |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | admin-website |                                                                  |
-| > > story-admin                   |                   |               |                                                                  |
-| > > > feature-story-admin         | @nrwl/angular:lib | admin-website |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | admin-website |                                                                  |
-| > > destination-admin             |                   |               |                                                                  |
-| > > > feature-destination-admin   | @nrwl/angular:lib | admin-website |                                                                  |
-| > > > utils-testing               | @nrwl/angular:lib | admin-website |                                                                  |
-| > website-host                    |                   |               |                                                                  |
-| > > util-services                 | nest              | website-host  |                                                                  |
-| > deploy                          |                   |               | npx nx g @nrwl/node:lib deploy                                   |
+- npx nx g @nrwl/angular:lib website/shared/ui-image-custom-elements --publishable --importPath=@dark-rush-photography/image-custom-elements
 
-#### ui-image-custom-elements
+### --frontendProject=website
 
-npx nx g @nrwl/angular:lib website/shared/ui-image-custom-elements --publishable --importPath=@dark-rush-photography/image-custom-elements
-
-#### feature-image-custom-elements
-
-npx nx g @nrwl/angular:lib shared-client/feature-image-custom-elements --no-interactive feature-image-custom-elements
+- adds proxy angular.json > serve > options > proxyConfig to apps/website/proxy.conf.json
 
 image-grid-gallery
 image-slide-gallery
 progressive-image
 tilt-shift-image
 
-### --frontendProject=website
-
-- adds proxy angular.json > serve > options > proxyConfig to apps/website/proxy.conf.json
-
 ## Workspace Setup
 
-- npx nx g @nrwl/angular:lib ui
 - npx nx g component todos --prefix=drp --project=ui --export
   - adjusted eslint rules of ui to allow prefix drp
