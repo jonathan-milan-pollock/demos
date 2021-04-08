@@ -14,6 +14,8 @@
 - [Practical Guide to Fp-ts](https://rlee.dev/writing/practical-guide-to-fp-ts-part-1)
 - [5 Reasons to use Angular Elements](https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89)
 - [Angular Elements and Universal Nx Case Study](https://nrwl.io/pages/t-mobile-case-study)
+- [OnPush Change Detection](https://blog.angular-university.io/onpush-change-detection-how-it-works/)
+- [10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
 
 ## Recommended Books
 

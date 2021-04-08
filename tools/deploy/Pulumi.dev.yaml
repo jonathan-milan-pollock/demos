@@ -10,7 +10,7 @@ config:
   deployment:contentBlobContainerName: content
   deployment:contentCdnProfileName: drp-blobs-cdn
   deployment:contentCdnEndpointName: dark-rush-photography
-  deployment:serverlessFunctionsStorageAccountName: drpserverlessfunctionssa
-  deployment:serverlessFunctionsBlobContainerName: zips
-  deployment:serverlessFunctionsBlobName: zip
-  deployment:serverlessFunctionsAppName: drp-serverless-functions-app
+  deployment:serverlessStorageAccountName: drpserverlesssa
+  deployment:serverlessBlobContainerName: zips
+  deployment:serverlessBlobName: zip
+  deployment:serverlessAppName: drp-serverless-app
