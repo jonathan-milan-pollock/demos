@@ -93,8 +93,7 @@
           "options": {
             "outputPath": "dist/apps/serverless",
             "main": "apps/serverless/src/main.ts",
-            "tsConfig": "apps/serverless/tsconfig.app.json",
-            "assets": ["apps/serverless/src/assets"]
+            "tsConfig": "apps/serverless/tsconfig.app.json"
           },
           "configurations": {
             "production": {
@@ -128,6 +127,16 @@
           "options": {
             "jestConfig": "apps/serverless/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "make": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "tsc --project apps/serverless/tsconfig.app.json"
+              }
+            ]
           }
         }
       }
@@ -295,6 +304,282 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/website-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "shared-data-entities": {
+      "root": "libs/shared/data-entities",
+      "sourceRoot": "libs/shared/data-entities/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/data-entities/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/data-entities"],
+          "options": {
+            "jestConfig": "libs/shared/data-entities/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-server-data": {
+      "root": "libs/shared-server/data",
+      "sourceRoot": "libs/shared-server/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-server/data"],
+          "options": {
+            "jestConfig": "libs/shared-server/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-feature-authentication": {
+      "root": "libs/api/feature-authentication",
+      "sourceRoot": "libs/api/feature-authentication/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/feature-authentication/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/feature-authentication"],
+          "options": {
+            "jestConfig": "libs/api/feature-authentication/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-feature-weekly-photos": {
+      "root": "libs/api/feature-weekly-photos",
+      "sourceRoot": "libs/api/feature-weekly-photos/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/feature-weekly-photos/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/feature-weekly-photos"],
+          "options": {
+            "jestConfig": "libs/api/feature-weekly-photos/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-feature-stories": {
+      "root": "libs/api/feature-stories",
+      "sourceRoot": "libs/api/feature-stories/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/feature-stories/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/feature-stories"],
+          "options": {
+            "jestConfig": "libs/api/feature-stories/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-feature-destinations": {
+      "root": "libs/api/feature-destinations",
+      "sourceRoot": "libs/api/feature-destinations/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/feature-destinations/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/feature-destinations"],
+          "options": {
+            "jestConfig": "libs/api/feature-destinations/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless-feature-social-media-post": {
+      "root": "libs/serverless/feature-social-media-post",
+      "sourceRoot": "libs/serverless/feature-social-media-post/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/serverless/feature-social-media-post/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/feature-social-media-post"],
+          "options": {
+            "jestConfig": "libs/serverless/feature-social-media-post/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless-feature-image-processing": {
+      "root": "libs/serverless/feature-image-processing",
+      "sourceRoot": "libs/serverless/feature-image-processing/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/serverless/feature-image-processing/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/feature-image-processing"],
+          "options": {
+            "jestConfig": "libs/serverless/feature-image-processing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-client-ui": {
+      "projectType": "library",
+      "root": "libs/shared-client/ui",
+      "sourceRoot": "libs/shared-client/ui/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared-client/ui/src/**/*.ts",
+              "libs/shared-client/ui/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-client/ui"],
+          "options": {
+            "jestConfig": "libs/shared-client/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-client-ui-image-custom-elements": {
+      "projectType": "library",
+      "root": "libs/shared-client/ui-image-custom-elements",
+      "sourceRoot": "libs/shared-client/ui-image-custom-elements/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/shared-client/ui-image-custom-elements/tsconfig.lib.json",
+            "project": "libs/shared-client/ui-image-custom-elements/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/shared-client/ui-image-custom-elements/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared-client/ui-image-custom-elements/src/**/*.ts",
+              "libs/shared-client/ui-image-custom-elements/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-client/ui-image-custom-elements"],
+          "options": {
+            "jestConfig": "libs/shared-client/ui-image-custom-elements/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless-utils-testing": {
+      "root": "libs/serverless/utils-testing",
+      "sourceRoot": "libs/serverless/utils-testing/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/serverless/utils-testing/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/utils-testing"],
+          "options": {
+            "jestConfig": "libs/serverless/utils-testing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-utils-testing": {
+      "root": "libs/api/utils-testing",
+      "sourceRoot": "libs/api/utils-testing/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/utils-testing/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/utils-testing"],
+          "options": {
+            "jestConfig": "libs/api/utils-testing/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

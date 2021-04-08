@@ -18,7 +18,43 @@
       "@dark-rush-photography/shared/entities": [
         "libs/shared/entities/src/index.ts"
       ],
-      "@dark-rush-photography/api/services": ["libs/api/services/src/index.ts"]
+      "@dark-rush-photography/api/services": ["libs/api/services/src/index.ts"],
+      "@dark-rush-photography/shared/data-entities": [
+        "libs/shared/data-entities/src/index.ts"
+      ],
+      "@dark-rush-photography/shared-server/data": [
+        "libs/shared-server/data/src/index.ts"
+      ],
+      "@dark-rush-photography/api/feature-authentication": [
+        "libs/api/feature-authentication/src/index.ts"
+      ],
+      "@dark-rush-photography/api/feature-weekly-photos": [
+        "libs/api/feature-weekly-photos/src/index.ts"
+      ],
+      "@dark-rush-photography/api/feature-stories": [
+        "libs/api/feature-stories/src/index.ts"
+      ],
+      "@dark-rush-photography/api/feature-destinations": [
+        "libs/api/feature-destinations/src/index.ts"
+      ],
+      "@dark-rush-photography/serverless/feature-social-media-post": [
+        "libs/serverless/feature-social-media-post/src/index.ts"
+      ],
+      "@dark-rush-photography/serverless/feature-image-processing": [
+        "libs/serverless/feature-image-processing/src/index.ts"
+      ],
+      "@dark-rush-photography/shared-client/ui": [
+        "libs/shared-client/ui/src/index.ts"
+      ],
+      "@dark-rush-photography/image-custom-elements": [
+        "libs/shared-client/ui-image-custom-elements/src/index.ts"
+      ],
+      "@dark-rush-photography/serverless/utils-testing": [
+        "libs/serverless/utils-testing/src/index.ts"
+      ],
+      "@dark-rush-photography/api/utils-testing": [
+        "libs/api/utils-testing/src/index.ts"
+      ]
     }
   },
   "angularCompilerOptions": {

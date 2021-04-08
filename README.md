@@ -4,10 +4,21 @@
 
 ## Development Preferences
 
-1. Use npx (Can remove files from C:\Users\jonathanp\AppData\Roaming\npm leaving npm directory)
-2. With imports 3 sections Platform (ng or node), 3rd Parties, Own Code
-3. Only import what index.ts files of libs export
-4. Declare return types on functions (TODO: how to enable this?!)
+1. Use npx
+
+   - Can remove global packages ex. C:\Users\username\AppData\Roaming\npm leaving npm directory
+
+2. Order by project name
+
+   - angular.json
+   - jest.config.json
+   - nx.json
+   - tsconfig.base.json
+
+3. With imports 3 sections Platform (ng or node), 3rd Parties, Own Code
+4. Only import what index.ts files of libs export
+5. Keep index.ts exports ordered by file name
+6. Declare return types on functions (TODO: how to enable this?!)
 
 ## Recommended Reading
 
@@ -29,26 +40,6 @@
 - [TinyPNG](https://tinypng.com/)
 - [Pulumi](https://app.pulumi.com/)
 - [npm trends](https://www.npmtrends.com/)
-
-### Deploying Apps
-
-## Build
-
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
 
 <!-- markdownlint-disable -->
 
