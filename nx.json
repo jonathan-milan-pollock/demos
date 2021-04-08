@@ -24,6 +24,18 @@
     "api": { "tags": [] },
     "serverless": { "tags": [] },
     "website": { "tags": [] },
-    "website-e2e": { "tags": [], "implicitDependencies": ["website"] }
+    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
+    "api-feature-authentication": { "tags": [] },
+    "api-feature-destinations": { "tags": [] },
+    "api-feature-stories": { "tags": [] },
+    "api-feature-weekly-photos": { "tags": [] },
+    "serverless-feature-image-processing": { "tags": [] },
+    "serverless-feature-social-media-post": { "tags": [] },
+    "serverless-utils-testing": { "tags": [] },
+    "shared-data-entities": { "tags": [] },
+    "shared-client-ui": { "tags": [] },
+    "shared-client-ui-image-custom-elements": { "tags": [] },
+    "shared-server-data": { "tags": [] },
+    "api-utils-testing": { "tags": [] }
   }
 }

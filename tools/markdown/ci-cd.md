@@ -2,7 +2,14 @@
 
 ## Recommended Reading
 
-[Pulumi Azure Setup](https://www.pulumi.com/docs/intro/cloud-providers/azure/setup/)
+[12 Factor App](https://12factor.net/)
+[Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
+
+## References
+
+- [Pulumi Azure Setup](https://www.pulumi.com/docs/intro/cloud-providers/azure/setup/)
+- [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
+- [GitHub Azure Pipelines](https://azuredevopslabs.com/labs/vstsextend/github-azurepipelines/)
 
 ## Install Packages
 
