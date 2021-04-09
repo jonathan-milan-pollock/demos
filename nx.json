@@ -21,21 +21,89 @@
     }
   },
   "projects": {
-    "api": { "tags": [] },
-    "serverless": { "tags": [] },
-    "website": { "tags": [] },
-    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
-    "api-feature-authentication": { "tags": [] },
-    "api-feature-destinations": { "tags": [] },
-    "api-feature-stories": { "tags": [] },
-    "api-feature-weekly-photos": { "tags": [] },
-    "serverless-feature-image-processing": { "tags": [] },
-    "serverless-feature-social-media-post": { "tags": [] },
-    "serverless-utils-testing": { "tags": [] },
-    "shared-data-entities": { "tags": [] },
-    "shared-client-ui": { "tags": [] },
-    "shared-client-ui-image-custom-elements": { "tags": [] },
-    "shared-server-data": { "tags": [] },
-    "api-utils-testing": { "tags": [] }
+    "api": { "tags": ["scope:api"] },
+    "serverless": { "tags": ["scope:serverless"] },
+    "website": { "tags": ["scope:website"] },
+    "website-e2e": {
+      "tags": ["scope:website"],
+      "implicitDependencies": ["website"]
+    },
+    "api-data": { "tags": ["scope:api", "type:data-access"] },
+    "api-util": { "tags": ["scope:api", "type:util"] },
+    "api-util-testing": { "tags": ["scope:api", "type:util"] },
+    "custom-elements-ui-image-grid": {
+      "tags": ["scope:custom-elements", "type:ui"]
+    },
+    "custom-elements-ui-image-slide": {
+      "tags": ["scope:custom-elements", "type:ui"]
+    },
+    "custom-elements-ui-progressive-image": {
+      "tags": ["scope:custom-elements", "type:ui"]
+    },
+    "custom-elements-ui-tilt-shift-image": {
+      "tags": ["scope:custom-elements", "type:ui"]
+    },
+    "custom-elements-util": { "tags": ["scope:custom-elements", "type:util"] },
+    "custom-elements-util-testing": {
+      "tags": ["scope:custom-elements", "type:util"]
+    },
+    "serverless-data": { "tags": ["scope:serverless", "type:data-access"] },
+    "serverless-util": { "tags": ["scope:serverless", "type:util"] },
+    "serverless-util-testing": { "tags": ["scope:serverless", "type:util"] },
+    "shared-data": { "tags": ["scope:shared", "type:data-access"] },
+    "shared-util": { "tags": ["scope:shared", "type:util"] },
+    "shared-server-data": {
+      "tags": ["scope:shared-server", "type:data-access"]
+    },
+    "shared-server-util": { "tags": ["scope:shared-server", "type:util"] },
+    "shared-server-util-testing": {
+      "tags": ["scope:shared-server", "type:util"]
+    },
+    "website-features-feature-about-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-destination-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-destinations-admin-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-destinations-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-home-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-review-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-reviews-admin-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-reviews-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-stories-admin-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-stories-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-story-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-weekly-photo-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-weekly-photos-admin-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-feature-weekly-photos-page": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-shared-data": { "tags": ["scope:website", "type:data-access"] },
+    "website-shared-ui": { "tags": ["scope:website", "type:ui"] },
+    "website-shared-util": { "tags": ["scope:website", "type:util"] },
+    "website-shared-util-testing": { "tags": ["scope:website", "type:util"] }
   }
 }

@@ -28,6 +28,13 @@
 2. pulumi login
 3. pulumi up
 
+-- can use affected to test use NX Cloud locally and from build
+It checks that the changed code is formatted properly. (nx format:check)
+It runs lint checks for all the projects affected by a PR/commit.
+It runs unit tests for all the projects affected by a PR/commit.
+It runs e2e tests for all the apps affected by a PR/commit.
+It rebuilds all the apps affected by a PR/commit.
+
 ## Post-Deploy
 
 1. Verify CNAME record Type CNAME Record, Host www, Value dark-rush-photography.azureedge.net.
