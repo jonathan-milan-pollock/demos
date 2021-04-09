@@ -31,21 +31,14 @@
     "api-data": { "tags": ["scope:api", "type:data-access"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
     "api-util-testing": { "tags": ["scope:api", "type:util"] },
-    "custom-elements-ui-image-grid": {
-      "tags": ["scope:custom-elements", "type:ui"]
+    "image-custom-elements-ui": {
+      "tags": ["scope:image-custom-elements", "type:ui"]
     },
-    "custom-elements-ui-image-slide": {
-      "tags": ["scope:custom-elements", "type:ui"]
+    "image-custom-elements-util": {
+      "tags": ["scope:image-custom-elements", "type:util"]
     },
-    "custom-elements-ui-progressive-image": {
-      "tags": ["scope:custom-elements", "type:ui"]
-    },
-    "custom-elements-ui-tilt-shift-image": {
-      "tags": ["scope:custom-elements", "type:ui"]
-    },
-    "custom-elements-util": { "tags": ["scope:custom-elements", "type:util"] },
-    "custom-elements-util-testing": {
-      "tags": ["scope:custom-elements", "type:util"]
+    "image-custom-elements-util-testing": {
+      "tags": ["scope:image-custom-elements", "type:util"]
     },
     "serverless-data": { "tags": ["scope:serverless", "type:data-access"] },
     "serverless-util": { "tags": ["scope:serverless", "type:util"] },
@@ -59,51 +52,45 @@
     "shared-server-util-testing": {
       "tags": ["scope:shared-server", "type:util"]
     },
-    "website-features-feature-about-page": {
+    "website-data": { "tags": ["scope:website", "type:data-access"] },
+    "website-feature-about-page": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-destination-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-destination-page": {
+    "website-feature-destinations-admin-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-destinations-admin-page": {
+    "website-feature-destinations-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-destinations-page": {
+    "website-feature-home-page": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-review-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-home-page": {
+    "website-feature-reviews-admin-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-review-page": {
+    "website-feature-reviews-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-reviews-admin-page": {
+    "website-feature-stories-admin-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-reviews-page": {
+    "website-feature-stories-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-stories-admin-page": {
+    "website-feature-story-page": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-weekly-photo-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-stories-page": {
+    "website-feature-weekly-photos-admin-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-story-page": {
+    "website-feature-weekly-photos-page": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-feature-weekly-photo-page": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-feature-weekly-photos-admin-page": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-feature-weekly-photos-page": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-shared-data": { "tags": ["scope:website", "type:data-access"] },
-    "website-shared-ui": { "tags": ["scope:website", "type:ui"] },
-    "website-shared-util": { "tags": ["scope:website", "type:util"] },
-    "website-shared-util-testing": { "tags": ["scope:website", "type:util"] }
+    "website-ui": { "tags": ["scope:website", "type:ui"] },
+    "website-util": { "tags": ["scope:website", "type:util"] },
+    "website-util-testing": { "tags": ["scope:website", "type:util"] }
   }
 }

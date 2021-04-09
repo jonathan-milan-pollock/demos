@@ -14,10 +14,10 @@ interface PulumiConfig {
   readonly contentBlobContainerName: string;
   readonly contentCdnProfileName: string;
   readonly contentCdnEndpointName: string;
-  readonly serverlessFunctionsStorageAccountName: string;
-  readonly serverlessFunctionsBlobContainerName: string;
-  readonly serverlessFunctionsBlobName: string;
-  readonly serverlessFunctionsAppName: string;
+  readonly serverlessStorageAccountName: string;
+  readonly serverlessBlobContainerName: string;
+  readonly serverlessBlobName: string;
+  readonly serverlessAppName: string;
 }
 
 const getConfigValue = (configName: string) => config.require(configName);
@@ -34,12 +34,8 @@ export const pulumiConfig: PulumiConfig = {
   contentBlobContainerName: getConfigValue('contentBlobContainerName'),
   contentCdnProfileName: getConfigValue('contentCdnProfileName'),
   contentCdnEndpointName: getConfigValue('contentCdnEndpointName'),
-  serverlessFunctionsStorageAccountName: getConfigValue(
-    'serverlessFunctionsStorageAccountName'
-  ),
-  serverlessFunctionsBlobContainerName: getConfigValue(
-    'serverlessFunctionsBlobContainerName'
-  ),
-  serverlessFunctionsBlobName: getConfigValue('serverlessFunctionsBlobName'),
-  serverlessFunctionsAppName: getConfigValue('serverlessFunctionsAppName'),
+  serverlessStorageAccountName: getConfigValue('serverlessStorageAccountName'),
+  serverlessBlobContainerName: getConfigValue('serverlessBlobContainerName'),
+  serverlessBlobName: getConfigValue('serverlessBlobName'),
+  serverlessAppName: getConfigValue('serverlessAppName'),
 };

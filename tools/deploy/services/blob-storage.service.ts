@@ -1,9 +1,6 @@
 import { all, interpolate, Output } from '@pulumi/pulumi';
 import { Asset } from '@pulumi/pulumi/asset';
-
-import { ResourceGroup } from '@pulumi/azure-native/resources';
 import {
-  StorageAccount,
   BlobContainer,
   PublicAccess,
   Blob,
@@ -13,87 +10,75 @@ import {
   Permissions,
 } from '@pulumi/azure-native/storage';
 
+import { AzureStorageAccount } from '../models/azure-storage-account.model';
+import { AzureBlobContainer } from '../models/azure-blob-container.model';
+import { AzureBlob } from '../models/azure-blob.model';
+
 export const createPrivateBlobContainer = (blobContainerName: string) => (
-  storage: [ResourceGroup, StorageAccount]
-): [ResourceGroup, StorageAccount, BlobContainer] => {
-  const [resourceGroup, storageAccount] = storage;
-  return [
-    resourceGroup,
-    storageAccount,
-    new BlobContainer(blobContainerName, {
-      containerName: blobContainerName,
-      resourceGroupName: resourceGroup.name,
-      accountName: storageAccount.name,
-    }),
-  ];
-};
+  azureStorageAccount: AzureStorageAccount
+): AzureBlobContainer => ({
+  ...azureStorageAccount,
+  blobContainer: new BlobContainer(blobContainerName, {
+    containerName: blobContainerName,
+    resourceGroupName: azureStorageAccount.resourceGroup.name,
+    accountName: azureStorageAccount.storageAccount.name,
+  }),
+});
 
 export const createPublicBlobContainer = (blobContainerName: string) => (
-  storage: [ResourceGroup, StorageAccount]
-): [ResourceGroup, StorageAccount, BlobContainer] => {
-  const [resourceGroup, storageAccount] = storage;
-  return [
-    resourceGroup,
-    storageAccount,
-    new BlobContainer(blobContainerName, {
-      containerName: blobContainerName,
-      resourceGroupName: resourceGroup.name,
-      accountName: storageAccount.name,
-      publicAccess: PublicAccess.Blob,
-    }),
-  ];
-};
+  azureStorageAccount: AzureStorageAccount
+): AzureBlobContainer => ({
+  ...azureStorageAccount,
+  blobContainer: new BlobContainer(blobContainerName, {
+    containerName: blobContainerName,
+    resourceGroupName: azureStorageAccount.resourceGroup.name,
+    accountName: azureStorageAccount.storageAccount.name,
+    publicAccess: PublicAccess.Blob,
+  }),
+});
 
 export const createBlobWithAsset = (blobName: string) => (asset: Asset) => (
-  blobStorage: [ResourceGroup, StorageAccount, BlobContainer]
-): [ResourceGroup, StorageAccount, BlobContainer, Blob] => {
-  const [resourceGroup, storageAccount, blobContainer] = blobStorage;
+  azureBlobContainer: AzureBlobContainer
+): AzureBlob => ({
+  ...azureBlobContainer,
+  blob: new Blob(blobName, {
+    resourceGroupName: azureBlobContainer.resourceGroup.name,
+    accountName: azureBlobContainer.storageAccount.name,
+    containerName: azureBlobContainer.blobContainer.name,
+    source: asset,
+  }),
+});
 
-  return [
-    resourceGroup,
-    storageAccount,
-    blobContainer,
-    new Blob(blobName, {
-      resourceGroupName: resourceGroup.name,
-      accountName: storageAccount.name,
-      containerName: blobContainer.name,
-      source: asset,
-    }),
-  ];
-};
-
-export const getSignedBlobUrl = (
-  blobStorage: [ResourceGroup, StorageAccount, BlobContainer, Blob]
-): Output<string> => {
-  const [resourceGroup, storageAccount, blobContainer, blob] = blobStorage;
+export const getSignedBlobUrl = (azureBlob: AzureBlob): Output<string> => {
+  const {
+    resourceGroup: { name: resourceGroupName },
+    storageAccount: { name: storageAccountName },
+    blobContainer: { name: blobContainerName },
+    blob: { name: blobName },
+  } = azureBlob;
 
   const blobSAS = all<string>([
-    resourceGroup.name,
-    storageAccount.name,
-    blobContainer.name,
-    blob.name,
-  ]).apply((blobStorage) => {
-    const [
-      resourceGroupName,
-      storageAccountName,
-      blobContainerName,
-      blobName,
-    ] = blobStorage;
-
-    return listStorageAccountServiceSAS({
-      accountName: storageAccountName,
-      protocols: HttpProtocol.Https,
-      sharedAccessExpiryTime: '2030-01-01',
-      sharedAccessStartTime: '2021-01-01',
-      resourceGroupName: resourceGroupName,
-      resource: SignedResource.C,
-      permissions: Permissions.R,
-      canonicalizedResource: `/blob/${blobContainerName}/${blobName}`,
-      contentType: 'application/json',
-      cacheControl: 'max-age=5',
-      contentDisposition: 'inline',
-      contentEncoding: 'deflate',
-    });
-  });
-  return interpolate`https://${storageAccount.name}.blob.core.windows.net/${blobContainer.name}/${blob.name}?${blobSAS.serviceSasToken}`;
+    resourceGroupName,
+    storageAccountName,
+    blobContainerName,
+    blobName,
+  ]).apply(
+    ([resourceGroupName, storageAccountName, blobContainerName, blobName]) => {
+      return listStorageAccountServiceSAS({
+        accountName: storageAccountName,
+        protocols: HttpProtocol.Https,
+        sharedAccessExpiryTime: '2030-01-01',
+        sharedAccessStartTime: '2021-01-01',
+        resourceGroupName: resourceGroupName,
+        resource: SignedResource.C,
+        permissions: Permissions.R,
+        canonicalizedResource: `/blob/${blobContainerName}/${blobName}`,
+        contentType: 'application/json',
+        cacheControl: 'max-age=5',
+        contentDisposition: 'inline',
+        contentEncoding: 'deflate',
+      });
+    }
+  );
+  return interpolate`https://${storageAccountName}.blob.core.windows.net/${blobContainerName}/${blob.name}?${blobSAS.serviceSasToken}`;
 };

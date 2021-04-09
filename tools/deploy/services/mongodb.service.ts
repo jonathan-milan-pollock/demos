@@ -6,11 +6,15 @@ import {
   MongoDBResourceMongoDBCollection,
 } from '@pulumi/azure-native/documentdb';
 
+import { AzureMongoDbDatabaseAccount } from '../models/azure-mongodb-database-account.model';
+import { AzureMongoDbDatabase } from '../models/azure-mongodb-database.model';
+import { AzureMongoDbCollection } from '../models/azure-mongodb-collection.model';
+
 export const createMongoDbAccount = (accountName: string) => (
   resourceGroup: ResourceGroup
-): [ResourceGroup, DatabaseAccount] => [
+): AzureMongoDbDatabaseAccount => ({
   resourceGroup,
-  new DatabaseAccount(accountName, {
+  databaseAccount: new DatabaseAccount(accountName, {
     accountName,
     resourceGroupName: resourceGroup.name,
     location: resourceGroup.location,
@@ -34,74 +38,56 @@ export const createMongoDbAccount = (accountName: string) => (
       serverVersion: ServerVersion.ServerVersion_4_0,
     },
   }),
-];
+});
 
 export const createMongoDbDatabase = (databaseName: string) => (
-  mongoDb: [ResourceGroup, DatabaseAccount]
-): [ResourceGroup, DatabaseAccount, MongoDBResourceMongoDBDatabase] => {
-  const [resourceGroup, account] = mongoDb;
-
-  return [
-    resourceGroup,
-    account,
-    new MongoDBResourceMongoDBDatabase(databaseName, {
-      databaseName,
-      accountName: account.name,
-      resourceGroupName: resourceGroup.name,
-      location: resourceGroup.location,
-      resource: {
-        id: databaseName,
-      },
-    }),
-  ];
-};
+  azureMongoDbDatabaseAccount: AzureMongoDbDatabaseAccount
+): AzureMongoDbDatabase => ({
+  ...azureMongoDbDatabaseAccount,
+  database: new MongoDBResourceMongoDBDatabase(databaseName, {
+    databaseName,
+    accountName: azureMongoDbDatabaseAccount.databaseAccount.name,
+    resourceGroupName: azureMongoDbDatabaseAccount.resourceGroup.name,
+    location: azureMongoDbDatabaseAccount.resourceGroup.location,
+    resource: {
+      id: databaseName,
+    },
+  }),
+});
 
 export const createMongoDbCollection = (collectionName: string) => (
   shardKey: string
-) => (
-  mongoDb: [ResourceGroup, DatabaseAccount, MongoDBResourceMongoDBDatabase]
-): [
-  ResourceGroup,
-  DatabaseAccount,
-  MongoDBResourceMongoDBDatabase,
-  MongoDBResourceMongoDBCollection
-] => {
-  const [resourceGroup, account, database] = mongoDb;
-
-  return [
-    resourceGroup,
-    account,
-    database,
-    new MongoDBResourceMongoDBCollection(collectionName, {
-      collectionName,
-      databaseName: database.name,
-      accountName: account.name,
-      resourceGroupName: resourceGroup.name,
-      location: resourceGroup.location,
-      resource: {
-        id: collectionName,
-        indexes: [
-          {
-            key: {
-              keys: ['_id'],
-            },
-            options: {
-              unique: true,
-            },
+) => (azureMongoDbDatabase: AzureMongoDbDatabase): AzureMongoDbCollection => ({
+  ...azureMongoDbDatabase,
+  collection: new MongoDBResourceMongoDBCollection(collectionName, {
+    collectionName,
+    databaseName: azureMongoDbDatabase.database.name,
+    accountName: azureMongoDbDatabase.databaseAccount.name,
+    resourceGroupName: azureMongoDbDatabase.resourceGroup.name,
+    location: azureMongoDbDatabase.resourceGroup.location,
+    resource: {
+      id: collectionName,
+      indexes: [
+        {
+          key: {
+            keys: ['_id'],
           },
-          {
-            key: {
-              keys: [shardKey],
-            },
-            options: {
-              unique: false,
-            },
+          options: {
+            unique: true,
           },
-        ],
-        shardKey: {
-          slugType: 'Hash',
         },
+        {
+          key: {
+            keys: [shardKey],
+          },
+          options: {
+            unique: false,
+          },
+        },
+      ],
+      shardKey: {
+        slugType: 'Hash',
       },
-    }),
-  ];
-};
+    },
+  }),
+});

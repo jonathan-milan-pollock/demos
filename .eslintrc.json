@@ -10,7 +10,6 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
             "depConstraints": [
               {
                 "sourceTag": "scope:api",
@@ -32,13 +31,13 @@
                 "sourceTag": "scope:website",
                 "onlyDependOnLibsWithTags": [
                   "scope:shared",
-                  "scope:custom-elements",
+                  "scope:image-custom-elements",
                   "scope:website"
                 ]
               },
               {
-                "sourceTag": "scope:custom-elements",
-                "onlyDependOnLibsWithTags": ["scope:custom-elements"]
+                "sourceTag": "scope:image-custom-elements",
+                "onlyDependOnLibsWithTags": ["scope:image-custom-elements"]
               },
               {
                 "sourceTag": "scope:shared",
