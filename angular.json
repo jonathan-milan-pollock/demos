@@ -308,22 +308,367 @@
         }
       }
     },
-    "shared-data-entities": {
-      "root": "libs/shared/data-entities",
-      "sourceRoot": "libs/shared/data-entities/src",
+    "api-data": {
+      "root": "libs/api/data",
+      "sourceRoot": "libs/api/data/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared/data-entities/**/*.ts"]
+            "lintFilePatterns": ["libs/api/data/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/data-entities"],
+          "outputs": ["coverage/libs/api/data"],
           "options": {
-            "jestConfig": "libs/shared/data-entities/jest.config.js",
+            "jestConfig": "libs/api/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-util": {
+      "root": "libs/api/util",
+      "sourceRoot": "libs/api/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/util"],
+          "options": {
+            "jestConfig": "libs/api/util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-util-testing": {
+      "root": "libs/api/util-testing",
+      "sourceRoot": "libs/api/util-testing/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/util-testing/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/util-testing"],
+          "options": {
+            "jestConfig": "libs/api/util-testing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-ui-image-grid": {
+      "projectType": "library",
+      "root": "libs/custom-elements/ui-image-grid",
+      "sourceRoot": "libs/custom-elements/ui-image-grid/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/custom-elements/ui-image-grid/tsconfig.lib.json",
+            "project": "libs/custom-elements/ui-image-grid/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/custom-elements/ui-image-grid/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/custom-elements/ui-image-grid/src/**/*.ts",
+              "libs/custom-elements/ui-image-grid/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/custom-elements/ui-image-grid"],
+          "options": {
+            "jestConfig": "libs/custom-elements/ui-image-grid/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-ui-image-slide": {
+      "projectType": "library",
+      "root": "libs/custom-elements/ui-image-slide",
+      "sourceRoot": "libs/custom-elements/ui-image-slide/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/custom-elements/ui-image-slide/tsconfig.lib.json",
+            "project": "libs/custom-elements/ui-image-slide/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/custom-elements/ui-image-slide/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/custom-elements/ui-image-slide/src/**/*.ts",
+              "libs/custom-elements/ui-image-slide/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/custom-elements/ui-image-slide"],
+          "options": {
+            "jestConfig": "libs/custom-elements/ui-image-slide/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-ui-progressive-image": {
+      "projectType": "library",
+      "root": "libs/custom-elements/ui-progressive-image",
+      "sourceRoot": "libs/custom-elements/ui-progressive-image/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/custom-elements/ui-progressive-image/tsconfig.lib.json",
+            "project": "libs/custom-elements/ui-progressive-image/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/custom-elements/ui-progressive-image/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/custom-elements/ui-progressive-image/src/**/*.ts",
+              "libs/custom-elements/ui-progressive-image/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/custom-elements/ui-progressive-image"],
+          "options": {
+            "jestConfig": "libs/custom-elements/ui-progressive-image/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-ui-tilt-shift-image": {
+      "projectType": "library",
+      "root": "libs/custom-elements/ui-tilt-shift-image",
+      "sourceRoot": "libs/custom-elements/ui-tilt-shift-image/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/custom-elements/ui-tilt-shift-image/tsconfig.lib.json",
+            "project": "libs/custom-elements/ui-tilt-shift-image/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/custom-elements/ui-tilt-shift-image/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/custom-elements/ui-tilt-shift-image/src/**/*.ts",
+              "libs/custom-elements/ui-tilt-shift-image/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/custom-elements/ui-tilt-shift-image"],
+          "options": {
+            "jestConfig": "libs/custom-elements/ui-tilt-shift-image/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-util": {
+      "projectType": "library",
+      "root": "libs/custom-elements/util",
+      "sourceRoot": "libs/custom-elements/util/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/custom-elements/util/src/**/*.ts",
+              "libs/custom-elements/util/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/custom-elements/util"],
+          "options": {
+            "jestConfig": "libs/custom-elements/util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-util-testing": {
+      "projectType": "library",
+      "root": "libs/custom-elements/util-testing",
+      "sourceRoot": "libs/custom-elements/util-testing/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/custom-elements/util-testing/src/**/*.ts",
+              "libs/custom-elements/util-testing/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/custom-elements/util-testing"],
+          "options": {
+            "jestConfig": "libs/custom-elements/util-testing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless-data": {
+      "root": "libs/serverless/data",
+      "sourceRoot": "libs/serverless/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/serverless/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/data"],
+          "options": {
+            "jestConfig": "libs/serverless/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless-util": {
+      "root": "libs/serverless/util",
+      "sourceRoot": "libs/serverless/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/serverless/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/util"],
+          "options": {
+            "jestConfig": "libs/serverless/util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "serverless-util-testing": {
+      "root": "libs/serverless/util-testing",
+      "sourceRoot": "libs/serverless/util-testing/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/serverless/util-testing/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/util-testing"],
+          "options": {
+            "jestConfig": "libs/serverless/util-testing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-data": {
+      "root": "libs/shared/data",
+      "sourceRoot": "libs/shared/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/data"],
+          "options": {
+            "jestConfig": "libs/shared/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-util": {
+      "root": "libs/shared/util",
+      "sourceRoot": "libs/shared/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/util"],
+          "options": {
+            "jestConfig": "libs/shared/util/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -350,235 +695,509 @@
         }
       }
     },
-    "api-feature-authentication": {
-      "root": "libs/api/feature-authentication",
-      "sourceRoot": "libs/api/feature-authentication/src",
+    "shared-server-util": {
+      "root": "libs/shared-server/util",
+      "sourceRoot": "libs/shared-server/util/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api/feature-authentication/**/*.ts"]
+            "lintFilePatterns": ["libs/shared-server/util/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature-authentication"],
+          "outputs": ["coverage/libs/shared-server/util"],
           "options": {
-            "jestConfig": "libs/api/feature-authentication/jest.config.js",
+            "jestConfig": "libs/shared-server/util/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "api-feature-weekly-photos": {
-      "root": "libs/api/feature-weekly-photos",
-      "sourceRoot": "libs/api/feature-weekly-photos/src",
+    "shared-server-util-testing": {
+      "root": "libs/shared-server/util-testing",
+      "sourceRoot": "libs/shared-server/util-testing/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api/feature-weekly-photos/**/*.ts"]
+            "lintFilePatterns": ["libs/shared-server/util-testing/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature-weekly-photos"],
+          "outputs": ["coverage/libs/shared-server/util-testing"],
           "options": {
-            "jestConfig": "libs/api/feature-weekly-photos/jest.config.js",
+            "jestConfig": "libs/shared-server/util-testing/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "api-feature-stories": {
-      "root": "libs/api/feature-stories",
-      "sourceRoot": "libs/api/feature-stories/src",
+    "website-features-feature-about-page": {
       "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/feature-stories/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature-stories"],
-          "options": {
-            "jestConfig": "libs/api/feature-stories/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "api-feature-destinations": {
-      "root": "libs/api/feature-destinations",
-      "sourceRoot": "libs/api/feature-destinations/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api/feature-destinations/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature-destinations"],
-          "options": {
-            "jestConfig": "libs/api/feature-destinations/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "serverless-feature-social-media-post": {
-      "root": "libs/serverless/feature-social-media-post",
-      "sourceRoot": "libs/serverless/feature-social-media-post/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/serverless/feature-social-media-post/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/serverless/feature-social-media-post"],
-          "options": {
-            "jestConfig": "libs/serverless/feature-social-media-post/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "serverless-feature-image-processing": {
-      "root": "libs/serverless/feature-image-processing",
-      "sourceRoot": "libs/serverless/feature-image-processing/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/serverless/feature-image-processing/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/serverless/feature-image-processing"],
-          "options": {
-            "jestConfig": "libs/serverless/feature-image-processing/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-client-ui": {
-      "projectType": "library",
-      "root": "libs/shared-client/ui",
-      "sourceRoot": "libs/shared-client/ui/src",
+      "root": "libs/website/features/feature-about-page",
+      "sourceRoot": "libs/website/features/feature-about-page/src",
       "prefix": "dark-rush-photography",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/shared-client/ui/src/**/*.ts",
-              "libs/shared-client/ui/src/**/*.html"
+              "libs/website/features/feature-about-page/src/**/*.ts",
+              "libs/website/features/feature-about-page/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-client/ui"],
+          "outputs": ["coverage/libs/website/features/feature-about-page"],
           "options": {
-            "jestConfig": "libs/shared-client/ui/jest.config.js",
+            "jestConfig": "libs/website/features/feature-about-page/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "shared-client-ui-image-custom-elements": {
+    "website-features-feature-destination-page": {
       "projectType": "library",
-      "root": "libs/shared-client/ui-image-custom-elements",
-      "sourceRoot": "libs/shared-client/ui-image-custom-elements/src",
+      "root": "libs/website/features/feature-destination-page",
+      "sourceRoot": "libs/website/features/feature-destination-page/src",
       "prefix": "dark-rush-photography",
       "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "libs/shared-client/ui-image-custom-elements/tsconfig.lib.json",
-            "project": "libs/shared-client/ui-image-custom-elements/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "libs/shared-client/ui-image-custom-elements/tsconfig.lib.prod.json"
-            }
-          }
-        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/shared-client/ui-image-custom-elements/src/**/*.ts",
-              "libs/shared-client/ui-image-custom-elements/src/**/*.html"
+              "libs/website/features/feature-destination-page/src/**/*.ts",
+              "libs/website/features/feature-destination-page/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-client/ui-image-custom-elements"],
+          "outputs": [
+            "coverage/libs/website/features/feature-destination-page"
+          ],
           "options": {
-            "jestConfig": "libs/shared-client/ui-image-custom-elements/jest.config.js",
+            "jestConfig": "libs/website/features/feature-destination-page/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "serverless-utils-testing": {
-      "root": "libs/serverless/utils-testing",
-      "sourceRoot": "libs/serverless/utils-testing/src",
+    "website-features-feature-destinations-admin-page": {
       "projectType": "library",
+      "root": "libs/website/features/feature-destinations-admin-page",
+      "sourceRoot": "libs/website/features/feature-destinations-admin-page/src",
+      "prefix": "dark-rush-photography",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/serverless/utils-testing/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/website/features/feature-destinations-admin-page/src/**/*.ts",
+              "libs/website/features/feature-destinations-admin-page/src/**/*.html"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/serverless/utils-testing"],
+          "outputs": [
+            "coverage/libs/website/features/feature-destinations-admin-page"
+          ],
           "options": {
-            "jestConfig": "libs/serverless/utils-testing/jest.config.js",
+            "jestConfig": "libs/website/features/feature-destinations-admin-page/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "api-utils-testing": {
-      "root": "libs/api/utils-testing",
-      "sourceRoot": "libs/api/utils-testing/src",
+    "website-features-feature-destinations-page": {
       "projectType": "library",
+      "root": "libs/website/features/feature-destinations-page",
+      "sourceRoot": "libs/website/features/feature-destinations-page/src",
+      "prefix": "dark-rush-photography",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api/utils-testing/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/website/features/feature-destinations-page/src/**/*.ts",
+              "libs/website/features/feature-destinations-page/src/**/*.html"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/utils-testing"],
+          "outputs": [
+            "coverage/libs/website/features/feature-destinations-page"
+          ],
           "options": {
-            "jestConfig": "libs/api/utils-testing/jest.config.js",
+            "jestConfig": "libs/website/features/feature-destinations-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-home-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-home-page",
+      "sourceRoot": "libs/website/features/feature-home-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-home-page/src/**/*.ts",
+              "libs/website/features/feature-home-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/features/feature-home-page"],
+          "options": {
+            "jestConfig": "libs/website/features/feature-home-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-review-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-review-page",
+      "sourceRoot": "libs/website/features/feature-review-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-review-page/src/**/*.ts",
+              "libs/website/features/feature-review-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/features/feature-review-page"],
+          "options": {
+            "jestConfig": "libs/website/features/feature-review-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-reviews-admin-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-reviews-admin-page",
+      "sourceRoot": "libs/website/features/feature-reviews-admin-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-reviews-admin-page/src/**/*.ts",
+              "libs/website/features/feature-reviews-admin-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/website/features/feature-reviews-admin-page"
+          ],
+          "options": {
+            "jestConfig": "libs/website/features/feature-reviews-admin-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-reviews-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-reviews-page",
+      "sourceRoot": "libs/website/features/feature-reviews-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-reviews-page/src/**/*.ts",
+              "libs/website/features/feature-reviews-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/features/feature-reviews-page"],
+          "options": {
+            "jestConfig": "libs/website/features/feature-reviews-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-stories-admin-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-stories-admin-page",
+      "sourceRoot": "libs/website/features/feature-stories-admin-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-stories-admin-page/src/**/*.ts",
+              "libs/website/features/feature-stories-admin-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/website/features/feature-stories-admin-page"
+          ],
+          "options": {
+            "jestConfig": "libs/website/features/feature-stories-admin-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-stories-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-stories-page",
+      "sourceRoot": "libs/website/features/feature-stories-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-stories-page/src/**/*.ts",
+              "libs/website/features/feature-stories-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/features/feature-stories-page"],
+          "options": {
+            "jestConfig": "libs/website/features/feature-stories-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-story-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-story-page",
+      "sourceRoot": "libs/website/features/feature-story-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-story-page/src/**/*.ts",
+              "libs/website/features/feature-story-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/features/feature-story-page"],
+          "options": {
+            "jestConfig": "libs/website/features/feature-story-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-weekly-photo-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-weekly-photo-page",
+      "sourceRoot": "libs/website/features/feature-weekly-photo-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-weekly-photo-page/src/**/*.ts",
+              "libs/website/features/feature-weekly-photo-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/website/features/feature-weekly-photo-page"
+          ],
+          "options": {
+            "jestConfig": "libs/website/features/feature-weekly-photo-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-weekly-photos-admin-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-weekly-photos-admin-page",
+      "sourceRoot": "libs/website/features/feature-weekly-photos-admin-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-weekly-photos-admin-page/src/**/*.ts",
+              "libs/website/features/feature-weekly-photos-admin-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/website/features/feature-weekly-photos-admin-page"
+          ],
+          "options": {
+            "jestConfig": "libs/website/features/feature-weekly-photos-admin-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-feature-weekly-photos-page": {
+      "projectType": "library",
+      "root": "libs/website/features/feature-weekly-photos-page",
+      "sourceRoot": "libs/website/features/feature-weekly-photos-page/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/feature-weekly-photos-page/src/**/*.ts",
+              "libs/website/features/feature-weekly-photos-page/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/libs/website/features/feature-weekly-photos-page"
+          ],
+          "options": {
+            "jestConfig": "libs/website/features/feature-weekly-photos-page/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-shared-data": {
+      "projectType": "library",
+      "root": "libs/website/shared/data",
+      "sourceRoot": "libs/website/shared/data/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/shared/data/src/**/*.ts",
+              "libs/website/shared/data/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/shared/data"],
+          "options": {
+            "jestConfig": "libs/website/shared/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-shared-ui": {
+      "projectType": "library",
+      "root": "libs/website/shared/ui",
+      "sourceRoot": "libs/website/shared/ui/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/shared/ui/src/**/*.ts",
+              "libs/website/shared/ui/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/shared/ui"],
+          "options": {
+            "jestConfig": "libs/website/shared/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-shared-util": {
+      "projectType": "library",
+      "root": "libs/website/shared/util",
+      "sourceRoot": "libs/website/shared/util/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/shared/util/src/**/*.ts",
+              "libs/website/shared/util/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/shared/util"],
+          "options": {
+            "jestConfig": "libs/website/shared/util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-shared-util-testing": {
+      "projectType": "library",
+      "root": "libs/website/shared/util-testing",
+      "sourceRoot": "libs/website/shared/util-testing/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/shared/util-testing/src/**/*.ts",
+              "libs/website/shared/util-testing/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/shared/util-testing"],
+          "options": {
+            "jestConfig": "libs/website/shared/util-testing/jest.config.js",
             "passWithNoTests": true
           }
         }
