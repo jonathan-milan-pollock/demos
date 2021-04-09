@@ -19,70 +19,59 @@ import {
 import //  getServerlessFunctionsAsset,
 //  createServerlessFunctionsPlan,
 //  createServerlessFunctionsWebApp,
-'./services/serverless-functions.service';
+'./services/serverless.service';
 
 const resourceGroup = pipe(
   pulumiConfig.resourceGroupName,
   createResourceGroup(pulumiConfig.location)
 );
 
-const mongoDb = pipe(
+const mongoDbCollection = pipe(
   resourceGroup,
   createMongoDbAccount(pulumiConfig.mongoDbAccountName),
   createMongoDbDatabase(pulumiConfig.mongoDbDatabaseName),
   createMongoDbCollection(pulumiConfig.mongoDbCollectionName)('slugType')
 );
-const [, mongoDbAccount, mongoDbDatabase, mongoDbCollection] = mongoDb;
 
-const uploadsStorage = pipe(
+const uploadsStorageAccount = pipe(
   resourceGroup,
   createStorageAccount(pulumiConfig.uploadsStorageAccountName)(false)
   //createPrivateBlobContainer(pulumiConfig.uploadsBlobContainerName)
 );
 //, uploadsBlobContainer
-const [, uploadsStorageAccount] = uploadsStorage;
 
-const contentStorage = pipe(
+const contentStorageAccount = pipe(
   resourceGroup,
   createStorageAccount(pulumiConfig.contentStorageAccountName)(true)
   //createPublicBlobContainer(pulumiConfig.contentBlobContainerName)
 );
 //, contentBlobContainer
-const [, contentStorageAccount] = contentStorage;
 
-//const serverlessFunctionsAsset = getServerlessFunctionsAsset();
+//const serverlessAsset = getServerlessAsset();
 
-const serverlessFunctions = pipe(
+const serverlessStorageAccount = pipe(
   resourceGroup,
-  createStorageAccount(pulumiConfig.serverlessFunctionsStorageAccountName)(
-    false
-  )
-  //createPrivateBlobContainer(pulumiConfig.serverlessFunctionsBlobContainerName)
-  //createBlobWithAsset(pulumiConfig.serverlessFunctionsBlobName)(
-  //  serverlessFunctionsAsset
+  createStorageAccount(pulumiConfig.serverlessStorageAccountName)(false)
+  //createPrivateBlobContainer(pulumiConfig.serverlessBlobContainerName)
+  //createBlobWithAsset(pulumiConfig.serverlessBlobName)(
+  //  serverlessAsset
   //)
 );
-const [
-  ,
-  serverlessFunctionsStorageAccount,
-  //serverlessFunctionsBlobContainer,
-  //serverlessFunctionsBlob,
-] = serverlessFunctions;
 
 export const resourceGroupUrn = resourceGroup.urn;
-export const mongoDbAccountUrn = mongoDbAccount.urn;
-export const mongoDbDatabaseUrn = mongoDbDatabase.urn;
-export const mongoDbCollectionUrn = mongoDbCollection.urn;
+export const mongoDbAccountUrn = mongoDbCollection.databaseAccount.urn;
+export const mongoDbDatabaseUrn = mongoDbCollection.database.urn;
+export const mongoDbCollectionUrn = mongoDbCollection.collection.urn;
+
 export const uploadsStorageAccountUrn = uploadsStorageAccount.urn;
 //export const uploadsBlobContainerUrn = uploadsBlobContainer.urn;
 export const contentStorageAccountUrn = contentStorageAccount.urn;
 //export const contentBlobContainerUrn = contentBlobContainer.urn;
-export const serverlessFunctionsStorageAccountUrn =
-  serverlessFunctionsStorageAccount.urn;
-//export const serverlessFunctionsBlobContainerUrn =
-//  serverlessFunctionsBlobContainer.urn;
+export const serverlessStorageAccountUrn = serverlessStorageAccount.urn;
+//export const serverlessBlobContainerUrn =
+//  serverlessBlobContainer.urn;
 
-//export const serverlessFunctionsBlobUrn = serverlessFunctionsBlob.urn;
+//export const serverlessBlobUrn = serverlessBlob.urn;
 
 //export const endpoint = interpolate`https://${app.defaultHostName}/api/HelloNode?name=Pulumi`;
 
@@ -174,7 +163,7 @@ const getStartedApp = new azure.appservice.AppService("get-started", {
 });
 
 
-export const uploadFunctionsAppPlanUrn = uploadFunctionsAppPlan.urn;
+export const uploadAppPlanUrn = uploadAppPlan.urn;
 
 export const getStartedEndpoint = pulumi.interpolate`https://${getStartedApp.defaultSiteHostname}`;
 */

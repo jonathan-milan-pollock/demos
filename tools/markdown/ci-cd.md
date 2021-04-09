@@ -1,28 +1,35 @@
 # ci-cd
 
-## Recommended Reading
+## recommended reading
 
-[12 Factor App](https://12factor.net/)
-[Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
+- [12 Factor App](https://12factor.net/)
+- [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
 
-## References
+## references
 
 - [Pulumi Azure Setup](https://www.pulumi.com/docs/intro/cloud-providers/azure/setup/)
-- [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
 - [GitHub Azure Pipelines](https://azuredevopslabs.com/labs/vstsextend/github-azurepipelines/)
+- [Automate Cypress tests on BrowserStack](https://www.browserstack.com/docs/automate/cypress)
+- [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
 
-## Install Packages
+---
 
-- npm install -D @pulumi/pulumi
-- npm install -D @pulumi/azure-native
+## install packages
 
-## Windows Installation
+- npm i -D @pulumi/pulumi
+- npm i -D @pulumi/azure-native
+
+## Notes
+
+### Pulumi Azure Windows Installation
 
 1. [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
 2. choco install pulumi (run from elevated cmd window)
 3. when running pulumi up, fixed error to run 'pulumi plugin install resource azure v3.54.0'
 
-## Deployment Steps
+---
+
+## run pulumi locally
 
 1. az login
 2. pulumi login
@@ -34,6 +41,8 @@ It runs lint checks for all the projects affected by a PR/commit.
 It runs unit tests for all the projects affected by a PR/commit.
 It runs e2e tests for all the apps affected by a PR/commit.
 It rebuilds all the apps affected by a PR/commit.
+
+- <https://mariocardinal.wordpress.com/2019/03/05/configuring-cypress-in-ci-with-azure-devops-pipelines/>
 
 ## Post-Deploy
 

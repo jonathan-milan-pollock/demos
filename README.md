@@ -6,12 +6,11 @@
 
 ## Recommended Reading
 
-- [Practical Guide to Fp-ts](https://rlee.dev/writing/practical-guide-to-fp-ts-part-1)
-- [5 Reasons to use Angular Elements](https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89)
-- [Angular Elements and Universal Nx Case Study](https://nrwl.io/pages/t-mobile-case-study)
 - [OnPush Change Detection](https://blog.angular-university.io/onpush-change-detection-how-it-works/)
 - [OnPush Change Detection](https://medium.com/@ManfredSteyer/performance-tuning-data-binding-in-angular-with-onpush-immutables-and-observables-9fb2734dc66e)
-- [10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
+- [Angular 10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
+- [5 Reasons to use Angular Elements](https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89)
+- [Angular Elements and Universal Nx Case Study](https://nrwl.io/pages/t-mobile-case-study)
 
 ## Recommended Videos
 
@@ -27,7 +26,6 @@
 - [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
 - [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
 - [NestJS](https://academind.com/tutorials/nestjs-introduction/)
-- [Cypress](https://www.udemy.com/course/cypress-tutorial)
 
 ## References
 
@@ -35,49 +33,28 @@
 - [Pulumi](https://app.pulumi.com/)
 - [npm trends](https://www.npmtrends.com/)
 
----
+## nx
 
-## Nx Types
+- npx nx
 
-util
-: logic and models the logic works on
+## useful nx commands
 
-ui
-: display only components
+- **_use -d for dry run_**
+- npx nx g c --prefix=drp --project=website-ui --export -d _component-name_
+- npx nx g @nestjs/schematics:controller --path app --source-root apps/api/src -d _controller-name_
+- npm run dev:ssr
 
-data-access
-: access to data
+## nx commands
 
-feature
-: smart UI, display and logic (ex. a page)
-
-### Nx Scope Rules
-
-- Libraries with a scope of an app cannot depend on libraries from other apps
-- Libraries with a scope of shared (shared-server) cannot depend on libraries with a scope of an app
-
-### Nx Type Rules
-
-- data-access type libraries cannot depend on feature or ui libraries
-- ui type libraries cannot depend on feature or data-access type libraries
-- util type libraries can only depend on other util type libraries
-
-## Nx Commands
-
-| command                         | description                |
-| ------------------------------- | -------------------------- |
-| npx nx list                     | lists plugins              |
-| npx nx list plugin-name         | plugin instal land command |
-| npx nx test app-name            |                            |
-| npx nx e2e app-name-e2e --watch |                            |
-| npx nx build app-name --prod    |                            |
-| npx nx serve app-name           |                            |
-| npx nx affected:test            |                            |
-| npx nx affected:e2e             |                            |
-| npx nx dep-graph                |                            |
-
-- npx nx g component todos --prefix=drp --project=ui --export
-  - adjusted eslint rules of ui to allow prefix drp
+- npx nx serve app-name
+- npx nx build app-name --prod
+- npx nx test app-name
+- npx nx e2e app-name-e2e --watch
+- npx nx affected:test
+- npx nx affected:e2e
+- npx nx dep-graph
+- npx nx run website-ui:storybook
+- npx nx run website-ui-e2e:e2e
 
 ---
 
@@ -99,6 +76,8 @@ feature
 5. Keep index.ts exports ordered by file name
 6. Declare return types on functions (TODO: how to enable this?!)
 7. Prefer Trunk-Based Development (Create release branches if necessary)
+8. Prefer pipe over compose
+9. Enable onSave Prettier
 
 ---
 

@@ -8,11 +8,13 @@ import {
   listStorageAccountKeys,
 } from '@pulumi/azure-native/storage';
 
+import { AzureStorageAccount } from '../models/azure-storage-account.model';
+
 export const createStorageAccount = (storageAccountName: string) => (
   allowBlobPublicAccess: boolean
-) => (resourceGroup: ResourceGroup): [ResourceGroup, StorageAccount] => [
+) => (resourceGroup: ResourceGroup): AzureStorageAccount => ({
   resourceGroup,
-  new StorageAccount(storageAccountName, {
+  storageAccount: new StorageAccount(storageAccountName, {
     accountName: storageAccountName,
     resourceGroupName: resourceGroup.name,
     location: resourceGroup.location,
@@ -24,22 +26,22 @@ export const createStorageAccount = (storageAccountName: string) => (
     enableHttpsTrafficOnly: true,
     minimumTlsVersion: 'TLS1_2',
   }),
-];
+});
 
 export const getStorageAccountConnectionString = (
-  storage: [ResourceGroup, StorageAccount]
+  azureStorageAccount: AzureStorageAccount
 ): Output<string> => {
-  const [resourceGroup, storageAccount] = storage;
-
-  const storageAccountKeys = all([
-    resourceGroup.name,
-    storageAccount.name,
-  ]).apply(([resourceGroupName, storageAccountName]) =>
-    listStorageAccountKeys({
-      resourceGroupName,
-      accountName: storageAccountName,
-    })
+  const {
+    resourceGroup: { name: resourceGroupName },
+    storageAccount: { name: storageAccountName },
+  } = azureStorageAccount;
+  const storageAccountKeys = all([resourceGroupName, storageAccountName]).apply(
+    ([resourceGroupName, storageAccountName]) =>
+      listStorageAccountKeys({
+        resourceGroupName,
+        accountName: storageAccountName,
+      })
   );
   const primaryStorageAccountKey = storageAccountKeys.keys[0].value;
-  return interpolate`DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${primaryStorageAccountKey}`;
+  return interpolate`DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${primaryStorageAccountKey}`;
 };
