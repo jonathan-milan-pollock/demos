@@ -16,6 +16,8 @@
 
 ## Notes
 
+- TODO: run 'npm install durable-functions' from the wwwroot folder of your function app in Kudu
+
 ### Pulumi Azure Windows Installation
 
 1. [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
