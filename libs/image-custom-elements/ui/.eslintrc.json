@@ -16,7 +16,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "dark-rush-photography",
+            "prefix": "drp",
             "style": "camelCase"
           }
         ],
@@ -24,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "dark-rush-photography",
+            "prefix": "drp",
             "style": "kebab-case"
           }
         ]

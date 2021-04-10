@@ -44,26 +44,45 @@
 
 - npx nx
 
-## useful nx commands
-
-- **_use -d for dry run_**
-- npx nx g c --prefix=drp --project=website-ui --export -d _component-name_
-- npx nx g @nestjs/schematics:controller --path app --source-root apps/api/src -d _controller-name_
-- npm run dev:ssr
+## **_use -d for dry run_**
 
 ## nx commands
 
-- nx test shared-server-data
+### api
 
-- npx nx serve app-name
-- npx nx build app-name --prod
-- npx nx test app-name
-- npx nx e2e app-name-e2e --watch
+- npm run serve:ssr (to start api)
+- npx nx test api
+- npx nx e2e api
+- npx nx g @nestjs/schematics:controller --path app --source-root apps/api/src -d _controller-name_
+
+### serverless
+
+- npx nx test serverless
+- npx nx e2e api
+
+### website
+
+- npx nx serve website (to start website)
+- npx nx e2e website-e2e
+- npx nx run website-ui:storybook
+- npx nx run website-ui-e2e:e2e (TODO: setup storybook again)
+- npm run gc:ui _component name_
+
+### image-custom-elements
+
+- npm run gc:ce _component name_
+- how to push to npm with tx?
+
+### libs
+
+- npx nx test _lib_ (ex. api-util-testing)
+- npx nx affected:lint
 - npx nx affected:test
 - npx nx affected:e2e
+
+### dep-graph
+
 - npx nx dep-graph
-- npx nx run website-ui:storybook
-- npx nx run website-ui-e2e:e2e
 
 ---
 

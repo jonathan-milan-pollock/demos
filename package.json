@@ -34,7 +34,9 @@
     "serve:ssr": "node dist/website/server/main.js",
     "build:ssr": "ng build website --prod && ng run website:server:production",
     "prerender": "ng run website:prerender",
-    "prebuild:ssr": "ngcc"
+    "prebuild:ssr": "ngcc",
+    "gc:ui": "nx g c --prefix=drp --project=website-ui --export",
+    "gc:ce": "nx g c --prefix=drp --project=image-custom-elements-ui"
   },
   "private": true,
   "dependencies": {

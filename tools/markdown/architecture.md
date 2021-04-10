@@ -45,7 +45,7 @@
 - ? Default linter ESLint [ Modern linting tool ]
 - ? Use Nx Cloud? (It's free and doesn't require registration.) Yes [Faster builds, run details, Github integration. Learn more at <https://nx.app> ]
 
-### **_Restart VSCode TS server (or Reopen VSCode) after adding projects_**
+### **_Restart VSCode TS server (or Reopen VSCode) after adding projects and delete extra README files_**
 
 ## project structure
 
@@ -111,11 +111,6 @@
 
 - npx nx g @nrwl/angular:lib image-custom-elements/ui --publishable --importPath=@dark-rush-photography/image-custom-elements
 
-- image-slide
-- image-grid
-- progressive-image
-- tilt-shift-image
-
 ## Checklist
 
 1. Create draw.io model diagram
@@ -176,10 +171,18 @@ platformBrowserDynamic()
 
 - npx nx g @nrwl/angular:storybook-configuration website-ui --no-interactive
 
+#### tsconfig
+
+- add strict true to tsconfig.base.json
+
+```json
+    /* Strict Type-Checking Options */
+    "strict": true /* Enable all strict type-checking options. */,
+```
+
 #### eslint
 
-- in .eslintrc.json add "plugin:@typescript-eslint/recommended"
-- TODO: Verify this requires the return types from functions
+- add "plugin:@typescript-eslint/recommended" to .eslintrc.json
 
 ```json
       "extends": [
