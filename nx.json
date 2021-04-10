@@ -31,6 +31,7 @@
     "api-data": { "tags": ["scope:api", "type:data-access"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
     "api-util-testing": { "tags": ["scope:api", "type:util"] },
+    "image-custom-elements-data": { "tags": ["scope:api", "type:data-access"] },
     "image-custom-elements-ui": {
       "tags": ["scope:image-custom-elements", "type:ui"]
     },

@@ -1,4 +1,5 @@
 {
+  "window.zoomLevel": 0,
   "cSpell.words": [
     "Buildable",
     "Exif",
@@ -7,6 +8,7 @@
     "appservice",
     "canonicalized",
     "choco",
+    "darkrushphotography",
     "devkit",
     "functionapp",
     "mixins",

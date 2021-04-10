@@ -14,11 +14,6 @@
 
 ---
 
-## install packages
-
-- npm i -D @pulumi/pulumi
-- npm i -D @pulumi/azure-native
-
 ## Notes
 
 ### Pulumi Azure Windows Installation

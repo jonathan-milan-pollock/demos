@@ -8,7 +8,7 @@ import {
   listStorageAccountKeys,
 } from '@pulumi/azure-native/storage';
 
-import { AzureStorageAccount } from '../models/azure-storage-account.model';
+import { AzureStorageAccount } from '../interfaces/azure-storage-account.interface';
 
 export const createStorageAccount = (storageAccountName: string) => (
   allowBlobPublicAccess: boolean

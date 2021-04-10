@@ -6,9 +6,9 @@ import {
   MongoDBResourceMongoDBCollection,
 } from '@pulumi/azure-native/documentdb';
 
-import { AzureMongoDbDatabaseAccount } from '../models/azure-mongodb-database-account.model';
-import { AzureMongoDbDatabase } from '../models/azure-mongodb-database.model';
-import { AzureMongoDbCollection } from '../models/azure-mongodb-collection.model';
+import { AzureMongoDbDatabaseAccount } from '../interfaces/azure-mongodb-database-account.interface';
+import { AzureMongoDbDatabase } from '../interfaces/azure-mongodb-database.interface';
+import { AzureMongoDbCollection } from '../interfaces/azure-mongodb-collection.interface';
 
 export const createMongoDbAccount = (accountName: string) => (
   resourceGroup: ResourceGroup

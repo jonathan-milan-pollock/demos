@@ -1,24 +1,40 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    /* Basic Options */
+    "target": "es2015" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
+    "module": "esnext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
+    "lib": [
+      "es2017",
+      "dom"
+    ] /* Specify library files to be included in the compilation. */,
+    "declaration": false /* Generates corresponding '.d.ts' file. */,
+    "sourceMap": true /* Generates corresponding '.map' file. */,
+    "rootDir": "." /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
+    "importHelpers": true /* Import emit helpers from 'tslib'. */,
+
+    /* Module Resolution Options */
+    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
+
+    /* Experimental Options */
+    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
+    "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */,
+
+    /* Advanced Options */
+    "skipLibCheck": true /* Skip type checking of declaration files. */,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
+
     "paths": {
       "@dark-rush-photography/api/data": ["libs/api/data/src/index.ts"],
       "@dark-rush-photography/api/util": ["libs/api/util/src/index.ts"],
       "@dark-rush-photography/api/util-testing": [
         "libs/api/util-testing/src/index.ts"
+      ],
+      "@dark-rush-photography/image-custom-elements/data": [
+        "libs/image-custom-elements/data/src/index.ts"
       ],
       "@dark-rush-photography/image-custom-elements": [
         "libs/image-custom-elements/ui/src/index.ts"

@@ -45,7 +45,10 @@
               },
               {
                 "sourceTag": "scope:shared-server",
-                "onlyDependOnLibsWithTags": ["scope:shared-server"]
+                "onlyDependOnLibsWithTags": [
+                  "scope:shared",
+                  "scope:shared-server"
+                ]
               },
               {
                 "sourceTag": "type:data-access",
@@ -66,7 +69,10 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "plugin:@typescript-eslint/recommended"
+      ],
       "rules": {}
     },
     {

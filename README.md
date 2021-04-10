@@ -2,6 +2,13 @@
 
 ## **_Workspace for DarkRushPhotography also used for instructional demos_**
 
+## Features
+
+- Reducing the file size of images with TinyPng
+- Adding Exif Metadata to images with ...
+- Changing Image Dimensions with Sharp
+- Publishing to Social Media using Sendible
+
 ## Recommended Books
 
 ## Recommended Reading
@@ -45,6 +52,8 @@
 - npm run dev:ssr
 
 ## nx commands
+
+- nx test shared-server-data
 
 - npx nx serve app-name
 - npx nx build app-name --prod
