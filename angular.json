@@ -371,6 +371,31 @@
         }
       }
     },
+    "image-custom-elements-data": {
+      "projectType": "library",
+      "root": "libs/image-custom-elements/data",
+      "sourceRoot": "libs/image-custom-elements/data/src",
+      "prefix": "dark-rush-photography",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/image-custom-elements/data/src/**/*.ts",
+              "libs/image-custom-elements/data/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/image-custom-elements/data"],
+          "options": {
+            "jestConfig": "libs/image-custom-elements/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "image-custom-elements-ui": {
       "projectType": "library",
       "root": "libs/image-custom-elements/ui",

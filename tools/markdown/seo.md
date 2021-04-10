@@ -10,6 +10,8 @@
 
 ## References
 
+- [Social Media Image Cheat Sheet](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
+- [eslint-config-prettier-standard](https://www.npmjs.com/package/eslint-config-prettier-standard)
 - [ScreamingFrog](https://www.screamingfrog.co.uk/seo-spider/)
 - [KWFinder](https://app.kwfinder.com/)
 - [ahrefs](https://ahrefs.com/)

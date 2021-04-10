@@ -21,9 +21,21 @@
 
 ## install packages
 
+- npx lint
+- npm i fp-ts
+- npm i mongoose
+- npm i @azure/storage-blob
+- npm i exiftool-vendored
+- npm i parse-multipart
+- npm i sharp
+- npm i uuid
 - npm i -D @nrwl/nest
 - npm i -D @nrwl/storybook
-- npx lint
+- npm i -D @pulumi/pulumi
+- npm i -D @pulumi/azure-native
+- npm i -D @types/uuid
+
+- TODO: Make sure to remove bootstrap
 
 ## generate-workspace-with-website-app
 
@@ -60,6 +72,7 @@
 | > util                             | api             | npx nx g @nrwl/nest:lib api/util                                    |
 | > util-testing                     | api             | npx nx g @nrwl/nest:lib api/util-testing                            |
 | image-custom-elements              |                 | npx nx add @angular/elements --project=website                      |
+| > data                             |                 | npx nx g @nrwl/angular:lib image-custom-elements/data               |
 | > ui                               | custom-elements | [image-custom-elements](#image-custom-elements)                     |
 | > util                             | custom-elements | npx nx g @nrwl/angular:lib image-custom-elements/util               |
 | > util-testing                     | custom-elements | npx nx g @nrwl/angular:lib image-custom-elements/util-testing       |
@@ -162,6 +175,18 @@ platformBrowserDynamic()
 #### storybook
 
 - npx nx g @nrwl/angular:storybook-configuration website-ui --no-interactive
+
+#### eslint
+
+- in .eslintrc.json add "plugin:@typescript-eslint/recommended"
+- TODO: Verify this requires the return types from functions
+
+```json
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "plugin:@typescript-eslint/recommended"
+      ],
+```
 
 ---
 

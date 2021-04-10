@@ -5,7 +5,7 @@ import { ResourceGroup } from '@pulumi/azure-native/resources';
 import { WebApp } from '@pulumi/azure-native/web';
 
 import { getStorageAccountConnectionString } from './storage-account.service';
-import { AzureStorageAccount } from '../models/azure-storage-account.model';
+import { AzureStorageAccount } from '../interfaces/azure-storage-account.interface';
 
 interface AzureAppServicePlan {
   resourceGroup: ResourceGroup;

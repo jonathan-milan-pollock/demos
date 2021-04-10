@@ -6,6 +6,7 @@ module.exports = {
     '<rootDir>/libs/api/data',
     '<rootDir>/libs/api/util',
     '<rootDir>/libs/api/util-testing',
+    '<rootDir>/libs/image-custom-elements/data',
     '<rootDir>/libs/image-custom-elements/ui',
     '<rootDir>/libs/image-custom-elements/util',
     '<rootDir>/libs/image-custom-elements/util-testing',

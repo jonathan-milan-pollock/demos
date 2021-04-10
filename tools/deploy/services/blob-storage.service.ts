@@ -10,9 +10,9 @@ import {
   Permissions,
 } from '@pulumi/azure-native/storage';
 
-import { AzureStorageAccount } from '../models/azure-storage-account.model';
-import { AzureBlobContainer } from '../models/azure-blob-container.model';
-import { AzureBlob } from '../models/azure-blob.model';
+import { AzureStorageAccount } from '../interfaces/azure-storage-account.interface';
+import { AzureBlobContainer } from '../interfaces/azure-blob-container.model';
+import { AzureBlob } from '../interfaces/azure-blob.interface';
 
 export const createPrivateBlobContainer = (blobContainerName: string) => (
   azureStorageAccount: AzureStorageAccount
