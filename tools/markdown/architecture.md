@@ -29,11 +29,13 @@
 - npm i parse-multipart
 - npm i sharp
 - npm i uuid
+- npm i durable-functions
 - npm i -D @nrwl/nest
 - npm i -D @nrwl/storybook
 - npm i -D @pulumi/pulumi
 - npm i -D @pulumi/azure-native
 - npm i -D @types/uuid
+- npm i -D @azure/functions
 
 - TODO: Make sure to remove bootstrap
 
@@ -158,10 +160,10 @@
 
 ```ts
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { UiImageGridModule } from './lib/ui-image-grid.module';
+import { ImageCustomElementsUiModule } from './lib/image-custom-elements-ui.module';
 
 platformBrowserDynamic()
-  .bootstrapModule(UiImageGridModule)
+  .bootstrapModule(ImageCustomElementsUiModule)
   .catch((err) => console.error(err));
 ```
 
@@ -176,8 +178,9 @@ platformBrowserDynamic()
 - add strict true to tsconfig.base.json
 
 ```json
-    /* Strict Type-Checking Options */
-    "strict": true /* Enable all strict type-checking options. */,
+  /* Strict Type-Checking Options */
+  "strict": true /* Enable all strict type-checking options. */,
+  "alwaysStrict": false /* Parse in strict mode and emit "use strict" for each source file. */,
 ```
 
 #### eslint
@@ -185,35 +188,31 @@ platformBrowserDynamic()
 - add "plugin:@typescript-eslint/recommended" to .eslintrc.json
 
 ```json
-      "extends": [
-        "plugin:@nrwl/nx/typescript",
-        "plugin:@typescript-eslint/recommended"
-      ],
+  "extends": [
+    "plugin:@nrwl/nx/typescript",
+    "plugin:@typescript-eslint/recommended"
+  ],
 ```
 
----
+- shorten prefix from dark-rush-photography to drp in .eslintrc.json of ui projects
 
-## Nx Types
-
-util
-: logic and models the logic works on
-
-ui
-: display only components
-
-data-access
-: access to data
-
-feature
-: smart UI, display and logic (ex. a page)
-
-### Nx Scope Rules
-
-- Libraries with a scope of an app cannot depend on libraries from other apps
-- Libraries with a scope of shared (shared-server) cannot depend on libraries with a scope of an app
-
-### Nx Type Rules
-
-- data-access type libraries cannot depend on feature or ui libraries
-- ui type libraries cannot depend on feature or data-access type libraries
-- util type libraries can only depend on other util type libraries
+```json
+ "rules": {
+    "@angular-eslint/directive-selector": [
+      "error",
+      {
+        "type": "attribute",
+        "prefix": "drp",
+        "style": "camelCase"
+      }
+    ],
+    "@angular-eslint/component-selector": [
+      "error",
+      {
+        "type": "element",
+        "prefix": "drp",
+        "style": "kebab-case"
+      }
+    ]
+  }
+```

@@ -1,13 +1,6 @@
 # dark-rush-photography
 
-## **_Workspace for DarkRushPhotography also used for instructional demos_**
-
-## Features
-
-- Reducing the file size of images with TinyPng
-- Adding Exif Metadata to images with ...
-- Changing Image Dimensions with Sharp
-- Publishing to Social Media using Sendible
+## **_Workspace for Dark Rush Photography also used for instructional demos_**
 
 ## Recommended Books
 
@@ -21,6 +14,8 @@
 
 ## Recommended Videos
 
+### Nx
+
 - [Step 1 - Create Application](https://nx.dev/latest/angular/tutorial/01-create-application)
 - [Step 2 - Add E2E Test](https://nx.dev/latest/angular/tutorial/02-add-e2e-test)
 - [Step 3 - Display Todos](https://nx.dev/latest/angular/tutorial/03-display-todos)
@@ -32,6 +27,9 @@
 - [Step 9 - Dep Graph](https://nx.dev/latest/angular/tutorial/09-dep-graph)
 - [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
 - [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
+
+### NestJS
+
 - [NestJS](https://academind.com/tutorials/nestjs-introduction/)
 
 ## References
@@ -40,49 +38,13 @@
 - [Pulumi](https://app.pulumi.com/)
 - [npm trends](https://www.npmtrends.com/)
 
-## nx
+---
 
-- npx nx
+### **_Highly Recommended to Use [VSCode Nx Console Plugin](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)_**
 
-## **_use -d for dry run_**
+### TODO: Fix api serve
 
-## nx commands
-
-### api
-
-- npm run serve:ssr (to start api)
-- npx nx test api
-- npx nx e2e api
-- npx nx g @nestjs/schematics:controller --path app --source-root apps/api/src -d _controller-name_
-
-### serverless
-
-- npx nx test serverless
-- npx nx e2e api
-
-### website
-
-- npx nx serve website (to start website)
-- npx nx e2e website-e2e
-- npx nx run website-ui:storybook
-- npx nx run website-ui-e2e:e2e (TODO: setup storybook again)
-- npm run gc:ui _component name_
-
-### image-custom-elements
-
-- npm run gc:ce _component name_
-- how to push to npm with tx?
-
-### libs
-
-- npx nx test _lib_ (ex. api-util-testing)
-- npx nx affected:lint
-- npx nx affected:test
-- npx nx affected:e2e
-
-### dep-graph
-
-- npx nx dep-graph
+- dev:ssr for now
 
 ---
 
@@ -109,12 +71,64 @@
 
 ---
 
+## Nx Types
+
+util
+: logic and models the logic works on
+
+ui
+: display only components
+
+data-access
+: access to data
+
+feature
+: smart UI, display and logic (ex. a page)
+
+### Nx Scope Rules
+
+- Libraries with a scope of an app cannot depend on libraries from other apps
+- Libraries with a scope of shared (shared-server) cannot depend on libraries with a scope of an app
+
+### Nx Type Rules
+
+- data-access type libraries cannot depend on feature or ui libraries
+- ui type libraries cannot depend on feature or data-access type libraries
+- util type libraries can only depend on other util type libraries
+
+---
+
+## Tech Stack
+
+- **Angular Universal** for website development
+- **Angular Elements** to create image custom elements [npm package](https://www.npmjs.com/package/@dark-rush-photography/image-custom-elements)
+- **mongoose** for Azure MongoDB document access
+- **exiftool-vendored** to add metadata to images
+- **Sharp** for creating differently sized images
+- **Sendible** for Social Media publishing
+- **Azure Serverless Functions** to save costs while processing images
+- **Azure Durable Functions** for orchestrating image processing
+- **Azure Blob Storage** for blob storage of images
+- **FFmpeg** for creating image video
+- **Melt** for blending images in image video
+- **TinyPng** to reduce file sizes of image
+- **Pulumi** for deployment
+- **Azure DevOps Pipeline** for CI/CD
+
+---
+
+## Additional Documentation
+
+[architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
+[a11y](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/a11y.md)
+[a11y](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/a11y.md)
+
+---
+
 <!-- markdownlint-disable -->
 
 <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="60">
 
 <!-- markdownlint-restore -->
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
-
-Visit [Nx](https://nx.dev) to learn more.
+This workspace was generated with [Nx](https://nx.dev).
