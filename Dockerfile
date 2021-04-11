@@ -1,4 +1,4 @@
-FROM node:10.24.1 AS builder
+FROM node:14.16.1 AS builder
 LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
 ADD /tools/docker/install-tools.sh /root

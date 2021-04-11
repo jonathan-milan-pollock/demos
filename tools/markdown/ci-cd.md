@@ -8,6 +8,8 @@
 
 - TODO: run 'npm install durable-functions' from the wwwroot folder of your function app in Kudu
 
+#### source map explorer
+
 ---
 
 ## run pulumi locally

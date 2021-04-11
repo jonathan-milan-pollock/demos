@@ -11,22 +11,56 @@
 - [Nx Apps & Libraries Structure](https://medium.com/showpad-engineering/how-to-organize-and-name-applications-and-libraries-in-an-nx-monorepo-for-immediate-team-wide-9876510dbe28)
 - [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
 - [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
+- [Storybook Integration](https://www.youtube.com/watch?v=sFpqyjT7u4s)
 
 ---
+
+## Checklist
+
+1. Create draw.io application diagram
+2. Create architecture.md
+3. Create draw.io components diagram
+4. Create projects from project structure
+5. Add scope and type rules
+6. Create ci/cd
+7. Create feature flags
+8. Create white-box components with <https://www.lipsum.com/> text
 
 ## generate workspace with website
 
 - npx create-nx-workspace dark-rush-photography --preset=empty --cli=angular --nx-cloud=true
 
-### in tsconfig.base.json
+### tsconfig.base.json
 
 - reorder configuration to match tsc init
-- add strictTemplates
+- add strict true to tsconfig.base.json
+
+```json
+  "strict": true,
+  "alwaysStrict": false
+```
+
+- add strictTemplates true
 
 ```json
   "angularCompilerOptions": {
     "strictTemplates": true
   },
+```
+
+### .eslintrc.json
+
+- add "plugin:@typescript-eslint/recommended" to .eslintrc.json
+
+```json
+{
+  "files": ["*.ts", "*.tsx"],
+  "extends": [
+    "plugin:@nrwl/nx/typescript",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {}
+},
 ```
 
 ## install packages
@@ -51,12 +85,11 @@
 ### install development packages
 
 - npm i -D @types/uuid
+- npm i -D source-map-explorer
 - npm i -D azurite
 - npm i -D @azure/functions
 - npm i -D @pulumi/azure-native
 - npm i -D @pulumi/pulumi
-
-## project structure
 
 ### apps
 
@@ -69,6 +102,18 @@
 - npx nx add @angular/elements --project=website
 - in app.module.ts
   - import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
+- update index.ts
+
+###### /custom-elements/ui/src/lib/index.ts
+
+```ts
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ImageCustomElementsUiModule } from './lib/image-custom-elements-ui.module';
+
+platformBrowserDynamic()
+  .bootstrapModule(ImageCustomElementsUiModule)
+  .catch((err) => console.error(err));
+```
 
 ##### angular elements references
 
@@ -88,20 +133,20 @@
   - Update api/src/main.ts
   - Update api/src/app/app.module.ts
   - Update website/server.ts
-- remove server generated files
-  - server.ts
-    - server
+- delete server generated files
+  - server
     - app.module.ts
     - main.ts
+  - server.ts
 
 ###### angular universal references
 
 - [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
 - [NextJS Angular Universal](https://github.com/nestjs/ng-universal)
 
-### libs
-
 ---
+
+### libs
 
 - **api**
   - **data** npx nx g @nrwl/nest:lib api/data --tags=scope:api,type:data-access
@@ -112,7 +157,7 @@
 ---
 
 - **custom-elements**
-  - **ui** npx nx g @nrwl/angular:lib custom-elements/ui --prefix=drp --publishable --importPath=@dark-rush-photography/image-custom-elements --tags=scope:image-custom-elements,type:ui
+  - **ui** npx nx g @nrwl/angular:lib custom-elements/ui --prefix=drp --publishable --importPath=@dark-rush-photography/image-custom-elements --tags=scope:custom-elements,type:ui
   - **util** npx nx g @nrwl/angular:lib custom-elements/util --tags=scope:custom-elements,type:util
   - **util-testing** npx nx g @nrwl/angular:lib custom-elements/util-testing --tags=scope:custom-elements,type:util
 
@@ -127,7 +172,6 @@
 ---
 
 - **shared**
-  - **data** npx nx g @nrwl/workspace:lib shared/data --tags=scope:shared,type:data-access
   - **util** npx nx g @nrwl/workspace:lib shared/util --tags=scope:shared,type:util
 
 ---
@@ -163,90 +207,13 @@
 
 ## **after adding projects**
 
-1. update .eslintrc.json enforce-module-boundaries
-2. delete unnecessary .gitkeep files
+1. Verify the 4 configuration files are in project order
+   a. angular.json
+   b. jest.config.js
+   c. nx.json
+   d. tsconfig.base.json
+2. update .eslintrc.json enforce-module-boundaries depConstraints
 3. delete extra README files from libraries
 4. restart VS Code TS server (or restart VSCode TS sever)
 
 ---
-
-## Checklist
-
-1. Create draw.io model diagram
-2. Create project structure architecture
-3. Create draw.io components diagram
-4. Create projects from project structure
-5. Add scope and type rules
-6. Create deployment
-7. Create feature flags
-8. Create white-box components with <https://www.lipsum.com/> text
-
-### Notes
-
-#### angular-universal
-
-- @Inject(PLATFORM_ID) private platformId and isPlatformBrowser to check if running in browser (browser api such as localstorage not available)
-
-#### custom elements setup
-
-```ts
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { ImageCustomElementsUiModule } from './lib/image-custom-elements-ui.module';
-
-platformBrowserDynamic()
-  .bootstrapModule(ImageCustomElementsUiModule)
-  .catch((err) => console.error(err));
-```
-
-#### source map explorer
-
-#### storybook
-
-- npx nx g @nrwl/angular:storybook-configuration website-ui --no-interactive
-- [Storybook Integration](https://www.youtube.com/watch?v=sFpqyjT7u4s)
-
-#### tsconfig
-
-- add strict true to tsconfig.base.json
-
-```json
-  /* Strict Type-Checking Options */
-  "strict": true /* Enable all strict type-checking options. */,
-  "alwaysStrict": false /* Parse in strict mode and emit "use strict" for each source file. */,
-```
-
-#### eslint
-
-- add "plugin:@typescript-eslint/recommended" to .eslintrc.json
-
-```json
-  "extends": [
-    "plugin:@nrwl/nx/typescript",
-    "plugin:@typescript-eslint/recommended"
-  ],
-```
-
-- shorten prefix from dark-rush-photography to drp in .eslintrc.json of ui projects
-
-```json
- "rules": {
-    "@angular-eslint/directive-selector": [
-      "error",
-      {
-        "type": "attribute",
-        "prefix": "drp",
-        "style": "camelCase"
-      }
-    ],
-    "@angular-eslint/component-selector": [
-      "error",
-      {
-        "type": "element",
-        "prefix": "drp",
-        "style": "kebab-case"
-      }
-    ]
-  }
-```
-
-- TODO: Make sure to remove bootstrap

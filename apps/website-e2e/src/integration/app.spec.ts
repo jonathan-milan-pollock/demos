@@ -10,4 +10,15 @@ describe('website', () => {
     // Function helper example, see `../support/app.po.ts` file
     getGreeting().contains('Welcome to website!');
   });
+
+  /*
+  it('can wait for a comment response', () => {
+    cy.request('https://jsonplaceholder.cypress.io/comments/6').as(
+      'sixthComment'
+    );
+    cy.get('@sixthComment').should((response) => {
+      expect(response.body.id).to.eq(6);
+    });
+  });
+  */
 });

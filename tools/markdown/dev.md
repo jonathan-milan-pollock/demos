@@ -4,7 +4,7 @@
 
 - Enable VSCode onSave Prettier
 
-## guidelines
+## best practices
 
 1. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
 2. Only import what index.ts files of libs export
@@ -12,13 +12,9 @@
 4. Prefer Trunk-Based Development (Create release branches if necessary)
 5. Prefer pipe over compose
 
-## dev install
+## dev installation
 
 - [dev install](http://)
-
-## nx Angular Universal development
-
-- npm run dev:ssr
 
 ### TODO: Fix api serve
 
@@ -37,11 +33,7 @@
 - [Angular Performance Best Patterns](https://www.youtube.com/watch?v=-eH2gCGHcGs)
 - [NestJS](https://academind.com/tutorials/nestjs-introduction/)
 
-### reference
-
-#### seo
-
-#### html
+### references
 
 - [HTML Reference](http://w3c.github.io/html-reference/)
 - [Can I Use](https://caniuse.com/)

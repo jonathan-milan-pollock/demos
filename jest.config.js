@@ -1,7 +1,7 @@
 module.exports = {
   projects: [
-    '<rootDir>/apps/website',
     '<rootDir>/apps/api',
+    '<rootDir>/apps/website',
     '<rootDir>/libs/api/data',
     '<rootDir>/libs/api/feature',
     '<rootDir>/libs/api/util',
@@ -13,7 +13,6 @@ module.exports = {
     '<rootDir>/libs/serverless/feature',
     '<rootDir>/libs/serverless/util',
     '<rootDir>/libs/serverless/util-testing',
-    '<rootDir>/libs/shared/data',
     '<rootDir>/libs/shared/util',
     '<rootDir>/libs/shared-server/data',
     '<rootDir>/libs/shared-server/util',
