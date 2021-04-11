@@ -1,7 +1,7 @@
 {
   "name": "dark-rush-photography",
-  "version": "0.0.0",
-  "license": "MIT",
+  "version": "1.1.1",
+  "description": "Workspace for Dark Rush Photography",
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
@@ -53,7 +53,7 @@
     "@nestjs/ng-universal": "^4.3.0",
     "@nestjs/platform-express": "^7.0.0",
     "@nguniversal/express-engine": "^11.1.2",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.4.0",
     "class-validator": "^0.9.1",
     "document-register-element": "^1.7.2",
     "durable-functions": "^1.4.6",
@@ -111,6 +111,7 @@
     "jest-preset-angular": "8.3.2",
     "ng-packagr": "^11.0.0",
     "prettier": "2.2.1",
+    "source-map-explorer": "^2.5.2",
     "ts-jest": "26.4.0",
     "ts-node": "~9.1.1",
     "typescript": "~4.1.4"

@@ -17,15 +17,15 @@
     }
   },
   "projects": {
+    "api": { "tags": ["scope:api", "type:app"] },
     "website": { "tags": ["scope:website", "type:app"] },
     "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
-    "api": { "tags": ["scope:api", "type:app"] },
     "api-data": { "tags": ["scope:api", "type:data-access"] },
     "api-feature": { "tags": ["scope:api", "type:feature"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
     "api-util-testing": { "tags": ["scope:api", "type:util"] },
     "custom-elements-ui": {
-      "tags": ["scope:image-custom-elements", "type:ui"]
+      "tags": ["scope:custom-elements", "type:ui"]
     },
     "custom-elements-util": { "tags": ["scope:custom-elements", "type:util"] },
     "custom-elements-util-testing": {
@@ -35,7 +35,6 @@
     "serverless-feature": { "tags": ["scope:serverless", "type:feature"] },
     "serverless-util": { "tags": ["scope:serverless", "type:util"] },
     "serverless-util-testing": { "tags": ["scope:serverless", "type:util"] },
-    "shared-data": { "tags": ["scope:shared", "type:data-access"] },
     "shared-util": { "tags": ["scope:shared", "type:util"] },
     "shared-server-data": {
       "tags": ["scope:shared-server", "type:data-access"]

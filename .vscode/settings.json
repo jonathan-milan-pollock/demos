@@ -8,6 +8,7 @@
     "Rockstar",
     "Sendible",
     "appservice",
+    "cacheable",
     "canonicalized",
     "choco",
     "darkrushphotography",
@@ -15,14 +16,17 @@
     "exiftool",
     "functionapp",
     "markdownlint",
+    "microservices",
     "mixins",
     "nestjs",
     "ngcc",
     "nguniversal",
     "nrwl",
+    "packagr",
     "prebuild",
     "prerender",
     "pulumi",
-    "vendored"
+    "vendored",
+    "websockets"
   ]
 }
