@@ -20,13 +20,12 @@
     "api": { "tags": ["scope:api", "type:app"] },
     "website": { "tags": ["scope:website", "type:app"] },
     "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
+    "website-ui-e2e": { "tags": [], "implicitDependencies": ["website-ui"] },
     "api-data": { "tags": ["scope:api", "type:data-access"] },
     "api-feature": { "tags": ["scope:api", "type:feature"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
     "api-util-testing": { "tags": ["scope:api", "type:util"] },
-    "custom-elements-ui": {
-      "tags": ["scope:custom-elements", "type:ui"]
-    },
+    "custom-elements-ui": { "tags": ["scope:custom-elements", "type:ui"] },
     "custom-elements-util": { "tags": ["scope:custom-elements", "type:util"] },
     "custom-elements-util-testing": {
       "tags": ["scope:custom-elements", "type:util"]
