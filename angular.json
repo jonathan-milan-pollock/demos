@@ -71,6 +71,32 @@
         }
       }
     },
+    "elements-ui-e2e": {
+      "root": "apps/elements-ui-e2e",
+      "sourceRoot": "apps/elements-ui-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/elements-ui-e2e/cypress.json",
+            "tsConfig": "apps/elements-ui-e2e/tsconfig.e2e.json",
+            "devServerTarget": "elements-ui:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "elements-ui:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/elements-ui-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
     "website": {
       "projectType": "application",
       "root": "apps/website",
@@ -348,21 +374,21 @@
         }
       }
     },
-    "custom-elements-ui": {
+    "elements-ui": {
       "projectType": "library",
-      "root": "libs/custom-elements/ui",
-      "sourceRoot": "libs/custom-elements/ui/src",
+      "root": "libs/elements/ui",
+      "sourceRoot": "libs/elements/ui/src",
       "prefix": "drp",
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
           "options": {
-            "tsConfig": "libs/custom-elements/ui/tsconfig.lib.json",
-            "project": "libs/custom-elements/ui/ng-package.json"
+            "tsConfig": "libs/elements/ui/tsconfig.lib.json",
+            "project": "libs/elements/ui/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "libs/custom-elements/ui/tsconfig.lib.prod.json"
+              "tsConfig": "libs/elements/ui/tsconfig.lib.prod.json"
             }
           }
         },
@@ -370,66 +396,97 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/custom-elements/ui/src/**/*.ts",
-              "libs/custom-elements/ui/src/**/*.html"
+              "libs/elements/ui/src/**/*.ts",
+              "libs/elements/ui/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/custom-elements/ui"],
+          "outputs": ["coverage/libs/elements/ui"],
           "options": {
-            "jestConfig": "libs/custom-elements/ui/jest.config.js",
+            "jestConfig": "libs/elements/ui/jest.config.js",
             "passWithNoTests": true
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/elements/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/elements-ui",
+            "config": {
+              "configFolder": "libs/elements/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
           }
         }
       }
     },
-    "custom-elements-util": {
+    "elements-util": {
       "projectType": "library",
-      "root": "libs/custom-elements/util",
-      "sourceRoot": "libs/custom-elements/util/src",
+      "root": "libs/elements/util",
+      "sourceRoot": "libs/elements/util/src",
       "prefix": "dark-rush-photography",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/custom-elements/util/src/**/*.ts",
-              "libs/custom-elements/util/src/**/*.html"
+              "libs/elements/util/src/**/*.ts",
+              "libs/elements/util/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/custom-elements/util"],
+          "outputs": ["coverage/libs/elements/util"],
           "options": {
-            "jestConfig": "libs/custom-elements/util/jest.config.js",
+            "jestConfig": "libs/elements/util/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "custom-elements-util-testing": {
+    "elements-util-testing": {
       "projectType": "library",
-      "root": "libs/custom-elements/util-testing",
-      "sourceRoot": "libs/custom-elements/util-testing/src",
+      "root": "libs/elements/util-testing",
+      "sourceRoot": "libs/elements/util-testing/src",
       "prefix": "dark-rush-photography",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/custom-elements/util-testing/src/**/*.ts",
-              "libs/custom-elements/util-testing/src/**/*.html"
+              "libs/elements/util-testing/src/**/*.ts",
+              "libs/elements/util-testing/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/custom-elements/util-testing"],
+          "outputs": ["coverage/libs/elements/util-testing"],
           "options": {
-            "jestConfig": "libs/custom-elements/util-testing/jest.config.js",
+            "jestConfig": "libs/elements/util-testing/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -1091,6 +1148,32 @@
           "options": {
             "jestConfig": "libs/website/util-testing/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "custom-elements-ui-e2e": {
+      "root": "apps/custom-elements-ui-e2e",
+      "sourceRoot": "apps/custom-elements-ui-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/custom-elements-ui-e2e/cypress.json",
+            "tsConfig": "apps/custom-elements-ui-e2e/tsconfig.e2e.json",
+            "devServerTarget": "custom-elements-ui:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "custom-elements-ui:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/custom-elements-ui-e2e/**/*.{js,ts}"]
           }
         }
       }

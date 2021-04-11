@@ -18,6 +18,7 @@
   },
   "projects": {
     "api": { "tags": ["scope:api", "type:app"] },
+    "elements-ui-e2e": { "tags": [], "implicitDependencies": ["elements-ui"] },
     "website": { "tags": ["scope:website", "type:app"] },
     "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
     "website-ui-e2e": { "tags": [], "implicitDependencies": ["website-ui"] },
@@ -25,11 +26,9 @@
     "api-feature": { "tags": ["scope:api", "type:feature"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
     "api-util-testing": { "tags": ["scope:api", "type:util"] },
-    "custom-elements-ui": { "tags": ["scope:custom-elements", "type:ui"] },
-    "custom-elements-util": { "tags": ["scope:custom-elements", "type:util"] },
-    "custom-elements-util-testing": {
-      "tags": ["scope:custom-elements", "type:util"]
-    },
+    "elements-ui": { "tags": ["scope:elements", "type:ui"] },
+    "elements-util": { "tags": ["scope:elements", "type:util"] },
+    "elements-util-testing": { "tags": ["scope:elements", "type:util"] },
     "serverless-data": { "tags": ["scope:serverless", "type:data-access"] },
     "serverless-feature": { "tags": ["scope:serverless", "type:feature"] },
     "serverless-util": { "tags": ["scope:serverless", "type:util"] },

@@ -13,6 +13,7 @@
 - [Install VSCode ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [Install VSCode Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - [Install VSCode Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)
+- [Install VSCode DotENV](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv)
 
 ### markdown
 

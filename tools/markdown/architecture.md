@@ -4,12 +4,11 @@
 
 ## recommended books
 
-- [Enterprise Monorepo Angular Patterns](https://go.nrwl.io/angular-enterprise-monorepo-patterns-new-book)
+- [Nx Enterprise Monorepo Angular Patterns](https://go.nrwl.io/angular-enterprise-monorepo-patterns-new-book)
 
 ## recommended reading
 
 - [Nx Apps & Libraries Structure](https://medium.com/showpad-engineering/how-to-organize-and-name-applications-and-libraries-in-an-nx-monorepo-for-immediate-team-wide-9876510dbe28)
-- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
 - [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
 - [Storybook Integration](https://www.youtube.com/watch?v=sFpqyjT7u4s)
 
@@ -102,28 +101,6 @@
 
 - npx nx add @angular/material --project=website
 
-##### add custom elements to website
-
-- npx nx add @angular/elements --project=website
-- in app.module.ts
-  - import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
-- update index.ts
-
-###### /custom-elements/ui/src/lib/index.ts
-
-```ts
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { ImageCustomElementsUiModule } from './lib/image-custom-elements-ui.module';
-
-platformBrowserDynamic()
-  .bootstrapModule(ImageCustomElementsUiModule)
-  .catch((err) => console.error(err));
-```
-
-##### angular elements references
-
-- [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
-
 #### api
 
 - npx nx g @nrwl/nest:app api --frontendProject=website --tags=scope:api,type:app
@@ -161,10 +138,10 @@ platformBrowserDynamic()
 
 ---
 
-- **custom-elements**
-  - **ui** npx nx g @nrwl/angular:lib custom-elements/ui --prefix=drp --publishable --importPath=@dark-rush-photography/image-custom-elements --tags=scope:custom-elements,type:ui
-  - **util** npx nx g @nrwl/angular:lib custom-elements/util --tags=scope:custom-elements,type:util
-  - **util-testing** npx nx g @nrwl/angular:lib custom-elements/util-testing --tags=scope:custom-elements,type:util
+- **elements**
+  - **ui** npx nx g @nrwl/angular:lib elements/ui --prefix=drp --publishable --importPath=@dark-rush-photography/image-custom-elements --tags=scope:elements,type:ui
+  - **util** npx nx g @nrwl/angular:lib elements/util --tags=scope:elements,type:util
+  - **util-testing** npx nx g @nrwl/angular:lib elements/util-testing --tags=scope:elements,type:util
 
 ---
 
@@ -210,9 +187,35 @@ platformBrowserDynamic()
 
 ---
 
-#### add storybook for website-ui
+#### remove export of website-ui module from index.ts
+
+~~export \* from './lib/website-ui.module';~~
+
+#### add angular elements to website
+
+- npx nx add @angular/elements --project=website
+- in app.module.ts
+  - import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
+
+##### /elements/ui/src/lib/index.ts
+
+```ts
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ElementsUiModule } from './lib/elements-ui.module';
+
+platformBrowserDynamic()
+  .bootstrapModule(ElementsUiModule)
+  .catch((err) => console.error(err));
+```
+
+##### angular elements references
+
+- [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
+
+#### add storybook for website-ui and elements-ui
 
 - npx nx g @nrwl/angular:storybook-configuration website-ui --configureCypress=true --generateCypressSpecs=true --generateStories=true
+- npx nx g @nrwl/angular:storybook-configuration elements-ui --configureCypress=true --generateCypressSpecs=true --generateStories=true
 
 ## **after adding projects**
 
@@ -222,7 +225,24 @@ platformBrowserDynamic()
    c. nx.json
    d. tsconfig.base.json
 2. update .eslintrc.json enforce-module-boundaries depConstraints
-3. delete extra README files from libraries
-4. restart VS Code TS server (or restart VSCode TS sever)
+3. update package.config
+4. delete extra README files from libraries
+5. restart VS Code TS server (or restart VSCode TS sever)
+
+## **TODO**
+
+- connect to nxcloud
+- connect cypress dashboard
+- add prod environment files
+- test mobile sizes with
+
+```json
+  "viewportHeight": 763,
+  "viewportWidth": 700,
+```
+
+- storybook when running npx nx run website-ui:storybook
+  - DeprecationWarning: Default PostCSS plugins are deprecated. When switching to '@storybook/addon-postcss',
+    you will need to add your own plugins, such as 'postcss-flexbugs-fixes' and 'autoprefixer'
 
 ---

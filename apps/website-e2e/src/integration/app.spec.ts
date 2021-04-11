@@ -22,3 +22,13 @@ describe('website', () => {
   });
   */
 });
+
+describe('TODO MVC Application Tests', () => {
+  beforeEach(() => {
+    cy.visit(`${Cypress.env('NX_SCHEME')}todomvc.com/examples/react/#/`);
+  });
+
+  it('can navigate to code repository hosting service', () => {
+    expect(true).to.eq(true);
+  });
+});
