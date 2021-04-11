@@ -4,15 +4,18 @@
 
 - Enable VSCode onSave Prettier
 
+## dev installation
+
+- [dev installation](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev-install.md)
+
 ## best practices
 
-1. From ui only import the component not the module
-2. Select change detection OnPush when creating components
+1. Select change detection OnPush when creating components
+2. Only import what index.ts files of libs export
 3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
-4. Only import what index.ts files of libs export
-5. Keep index.ts exports ordered by file name
-6. Prefer Trunk-Based Development (Create release branches if necessary)
-7. Prefer pipe over compose
+4. Keep index.ts exports ordered by file name
+5. Prefer Trunk-Based Development (Create release branches if necessary)
+6. Prefer pipe over compose
 
 ## recommendations
 
@@ -20,6 +23,7 @@
 
 - [12 Factor App](https://12factor.net/)
 - [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
+- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
 - [OnPush Change Detection](https://blog.angular-university.io/onpush-change-detection-how-it-works/)
 - [OnPush Change Detection](https://medium.com/@ManfredSteyer/performance-tuning-data-binding-in-angular-with-onpush-immutables-and-observables-9fb2734dc66e)
 - [Angular 10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
@@ -28,14 +32,12 @@
 
 - [Angular Performance Best Patterns](https://www.youtube.com/watch?v=-eH2gCGHcGs)
 - [NestJS](https://academind.com/tutorials/nestjs-introduction/)
-- [Storybook](https://www.youtube.com/watch?v=6_oaHuFCBWs)
 
 ### references
 
 - [HTML Reference](http://w3c.github.io/html-reference/)
 - [Can I Use](https://caniuse.com/)
 - [Plyr](https://plyr.io/)
-
 - [GlobalStats](https://gs.statcounter.com/)
 - [Google Analytics](https://analytics.google.com/)
 - [Semantic Elements](https://www.w3schools.com/html/html5_semantic_elements.asp)

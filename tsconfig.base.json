@@ -24,13 +24,13 @@
         "libs/api/util-testing/src/index.ts"
       ],
       "@dark-rush-photography/image-custom-elements": [
-        "libs/custom-elements/ui/src/index.ts"
+        "libs/elements/ui/src/index.ts"
       ],
-      "@dark-rush-photography/custom-elements/util": [
-        "libs/custom-elements/util/src/index.ts"
+      "@dark-rush-photography/elements/util": [
+        "libs/elements/util/src/index.ts"
       ],
-      "@dark-rush-photography/custom-elements/util-testing": [
-        "libs/custom-elements/util-testing/src/index.ts"
+      "@dark-rush-photography/elements/util-testing": [
+        "libs/elements/util-testing/src/index.ts"
       ],
       "@dark-rush-photography/serverless/data": [
         "libs/serverless/data/src/index.ts"

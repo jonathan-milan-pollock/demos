@@ -7,7 +7,6 @@
 ## repo documentation
 
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
-- [dev installation](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev-install.md)
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
 - [ci-cd](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/cicd.md)
 - [accessibility](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/a11y.md)

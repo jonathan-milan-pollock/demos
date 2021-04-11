@@ -31,6 +31,8 @@
     "build:ssr": "ng build --prod && ng run website:server:production",
     "prerender": "ng run website:prerender",
     "prebuild:ssr": "ngcc",
+    "stories:website-ui": "nx generate @nrwl/angular:stories --name=website-ui",
+    "stories:elements-ui": "nx generate @nrwl/angular:stories --name=elements-ui",
     "docker": "npm run build:ssr && npm run docker:build && npm run docker:run",
     "docker:build": "docker build -f Dockerfile -t dark-rush-photography/website:latest --rm .",
     "docker:run": "docker run -it --rm -p 8080:8080 -e PORT=8080 --name website dark-rush-photography/website:latest"
