@@ -19,12 +19,13 @@
 
 1. Create draw.io application diagram
 2. Create architecture.md
-3. Create draw.io components diagram
+3. Create draw.io components diagram with defined routes
 4. Create projects from project structure
 5. Add scope and type rules
-6. Create ci/cd
-7. Create feature flags
-8. Create white-box components with <https://www.lipsum.com/> text
+6. Adjust routes in route order in app.module.ts
+7. Create component for each feature (such as HomeComponent)
+8. Create ci/cd
+9. Create feature flags
 
 ## generate workspace with website
 
@@ -96,6 +97,10 @@
 #### website
 
 - npx nx g @nrwl/angular:app website --style=scss --routing --tags=scope:website,type:app
+
+##### add @angular/material to website
+
+- npx nx add @angular/material --project=website
 
 ##### add custom elements to website
 
@@ -204,6 +209,10 @@ platformBrowserDynamic()
   - **util-testing** npx nx g @nrwl/angular:lib website/util-testing --tags=scope:website,type:util
 
 ---
+
+#### add storybook for website-ui
+
+- npx nx g @nrwl/angular:storybook-configuration website-ui --configureCypress=true --generateCypressSpecs=true --generateStories=true
 
 ## **after adding projects**
 

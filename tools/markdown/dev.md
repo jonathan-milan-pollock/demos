@@ -6,17 +6,13 @@
 
 ## best practices
 
-1. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
-2. Only import what index.ts files of libs export
-3. Keep index.ts exports ordered by file name
-4. Prefer Trunk-Based Development (Create release branches if necessary)
-5. Prefer pipe over compose
-
-## dev installation
-
-- [dev install](http://)
-
-### TODO: Fix api serve
+1. From ui only import the component not the module
+2. Select change detection OnPush when creating components
+3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
+4. Only import what index.ts files of libs export
+5. Keep index.ts exports ordered by file name
+6. Prefer Trunk-Based Development (Create release branches if necessary)
+7. Prefer pipe over compose
 
 ## recommendations
 
@@ -32,6 +28,7 @@
 
 - [Angular Performance Best Patterns](https://www.youtube.com/watch?v=-eH2gCGHcGs)
 - [NestJS](https://academind.com/tutorials/nestjs-introduction/)
+- [Storybook](https://www.youtube.com/watch?v=6_oaHuFCBWs)
 
 ### references
 
