@@ -1,8 +1,10 @@
 {
   "window.zoomLevel": 0,
   "cSpell.words": [
+    "Affordances",
     "Buildable",
     "Exif",
+    "Outliner",
     "Rockstar",
     "Sendible",
     "appservice",
@@ -10,7 +12,9 @@
     "choco",
     "darkrushphotography",
     "devkit",
+    "exiftool",
     "functionapp",
+    "markdownlint",
     "mixins",
     "nestjs",
     "ngcc",
@@ -18,6 +22,7 @@
     "nrwl",
     "prebuild",
     "prerender",
-    "pulumi"
+    "pulumi",
+    "vendored"
   ]
 }

@@ -1,11 +1,7 @@
 {
   "implicitDependencies": {
-    "angular.json": "*",
     "package.json": { "dependencies": "*", "devDependencies": "*" },
-    "tsconfig.base.json": "*",
-    "tslint.json": "*",
-    ".eslintrc.json": "*",
-    "nx.json": "*"
+    ".eslintrc.json": "*"
   },
   "affected": { "defaultBase": "master" },
   "npmScope": "dark-rush-photography",
@@ -14,34 +10,29 @@
       "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "ODA5MDY0NDUtZTQ3ZC00NDAyLTgxOWMtYjIzNDFhOThjZTkwfHJlYWQtd3JpdGU=",
+        "accessToken": "ZjUxOTU3NjgtYzZiYi00MzgxLWIwZGMtZWYzZjcwOTRjMzlkfHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
         "showUsageWarnings": true
       }
     }
   },
   "projects": {
-    "api": { "tags": ["scope:api"] },
-    "serverless": { "tags": ["scope:serverless"] },
-    "website": { "tags": ["scope:website"] },
-    "website-e2e": {
-      "tags": ["scope:website"],
-      "implicitDependencies": ["website"]
-    },
+    "website": { "tags": ["scope:website", "type:app"] },
+    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
+    "api": { "tags": ["scope:api", "type:app"] },
     "api-data": { "tags": ["scope:api", "type:data-access"] },
+    "api-feature": { "tags": ["scope:api", "type:feature"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
     "api-util-testing": { "tags": ["scope:api", "type:util"] },
-    "image-custom-elements-data": { "tags": ["scope:api", "type:data-access"] },
-    "image-custom-elements-ui": {
+    "custom-elements-ui": {
       "tags": ["scope:image-custom-elements", "type:ui"]
     },
-    "image-custom-elements-util": {
-      "tags": ["scope:image-custom-elements", "type:util"]
-    },
-    "image-custom-elements-util-testing": {
-      "tags": ["scope:image-custom-elements", "type:util"]
+    "custom-elements-util": { "tags": ["scope:custom-elements", "type:util"] },
+    "custom-elements-util-testing": {
+      "tags": ["scope:custom-elements", "type:util"]
     },
     "serverless-data": { "tags": ["scope:serverless", "type:data-access"] },
+    "serverless-feature": { "tags": ["scope:serverless", "type:feature"] },
     "serverless-util": { "tags": ["scope:serverless", "type:util"] },
     "serverless-util-testing": { "tags": ["scope:serverless", "type:util"] },
     "shared-data": { "tags": ["scope:shared", "type:data-access"] },
@@ -54,40 +45,34 @@
       "tags": ["scope:shared-server", "type:util"]
     },
     "website-data": { "tags": ["scope:website", "type:data-access"] },
-    "website-feature-about-page": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-destination-page": {
+    "website-feature-about": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-destination": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-destinations-admin-page": {
+    "website-feature-destinations": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-destinations-page": {
+    "website-feature-destinations-admin": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-home-page": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-review-page": {
+    "website-feature-home": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-review": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-reviews": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-reviews-admin": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-reviews-admin-page": {
+    "website-feature-stories": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-stories-admin": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-reviews-page": {
+    "website-feature-story": { "tags": ["scope:website", "type:feature"] },
+    "website-feature-weekly-photo": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-stories-admin-page": {
+    "website-feature-weekly-photos": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-stories-page": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-feature-story-page": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-weekly-photo-page": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-feature-weekly-photos-admin-page": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-feature-weekly-photos-page": {
+    "website-feature-weekly-photos-admin": {
       "tags": ["scope:website", "type:feature"]
     },
     "website-ui": { "tags": ["scope:website", "type:ui"] },

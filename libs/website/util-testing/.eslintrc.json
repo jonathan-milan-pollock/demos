@@ -16,7 +16,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "dark-rush-photography",
+            "prefix": "darkRushPhotography",
             "style": "camelCase"
           }
         ],
