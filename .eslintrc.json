@@ -10,58 +10,9 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
+            "allow": [],
             "depConstraints": [
-              {
-                "sourceTag": "scope:api",
-                "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:shared-server",
-                  "scope:api"
-                ]
-              },
-              {
-                "sourceTag": "scope:serverless",
-                "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:shared-server",
-                  "scope:serverless"
-                ]
-              },
-              {
-                "sourceTag": "scope:website",
-                "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:image-custom-elements",
-                  "scope:website"
-                ]
-              },
-              {
-                "sourceTag": "scope:image-custom-elements",
-                "onlyDependOnLibsWithTags": ["scope:image-custom-elements"]
-              },
-              {
-                "sourceTag": "scope:shared",
-                "onlyDependOnLibsWithTags": ["scope:shared"]
-              },
-              {
-                "sourceTag": "scope:shared-server",
-                "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:shared-server"
-                ]
-              },
-              {
-                "sourceTag": "type:data-access",
-                "onlyDependOnLibsWithTags": ["type:data-access", "type:util"]
-              },
-              {
-                "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": ["type:ui", "type:util"]
-              },
-              {
-                "sourceTag": "type:util",
-                "onlyDependOnLibsWithTags": ["type:util"]
-              }
+              { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
             ]
           }
         ]
@@ -69,10 +20,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": [
-        "plugin:@nrwl/nx/typescript",
-        "plugin:@typescript-eslint/recommended"
-      ],
+      "extends": ["plugin:@nrwl/nx/typescript"],
       "rules": {}
     },
     {

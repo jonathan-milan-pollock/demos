@@ -8,6 +8,7 @@ import { AppServerModule } from './../../../website/src/app/app.server.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+// TODO: Implement caching? https://github.com/nestjs/ng-universal
 @Module({
   imports: [
     AngularUniversalModule.forRoot({
