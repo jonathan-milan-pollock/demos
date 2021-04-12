@@ -3,6 +3,8 @@
 ## setup
 
 - Enable VSCode onSave Prettier
+- chrome://flags/#unsafely-treat-insecure-origin-as-secure
+  - http://my-local-dev-domain.test
 
 ## dev installation
 
@@ -21,9 +23,10 @@
 
 ### recommended reading
 
+- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
 - [12 Factor App](https://12factor.net/)
 - [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
-- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
+
 - [OnPush Change Detection](https://blog.angular-university.io/onpush-change-detection-how-it-works/)
 - [OnPush Change Detection](https://medium.com/@ManfredSteyer/performance-tuning-data-binding-in-angular-with-onpush-immutables-and-observables-9fb2734dc66e)
 - [Angular 10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
@@ -53,5 +56,7 @@
 - [GitHub Azure Pipelines](https://azuredevopslabs.com/labs/vstsextend/github-azurepipelines/)
 - [Automate Cypress tests on BrowserStack](https://www.browserstack.com/docs/automate/cypress)
 - [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
+
+- [Angular Service Worker](https://www.youtube.com/watch?v=5YtNQJQu31Y)
 
 ---

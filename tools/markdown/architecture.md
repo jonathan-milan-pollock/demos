@@ -101,6 +101,10 @@
 
 - npx nx add @angular/material --project=website
 
+##### add @angular/pwa to website
+
+- npx ng add @angular/pwa --project=website
+
 #### api
 
 - npx nx g @nrwl/nest:app api --frontendProject=website --tags=scope:api,type:app
