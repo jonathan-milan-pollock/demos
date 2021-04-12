@@ -114,7 +114,8 @@
             "aot": true,
             "assets": [
               "apps/website/src/favicon.ico",
-              "apps/website/src/assets"
+              "apps/website/src/assets",
+              "apps/website/src/manifest.webmanifest"
             ],
             "styles": ["apps/website/src/styles.scss"],
             "scripts": []
@@ -145,7 +146,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/website/ngsw-config.json"
             }
           }
         },
@@ -1148,32 +1151,6 @@
           "options": {
             "jestConfig": "libs/website/util-testing/jest.config.js",
             "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "custom-elements-ui-e2e": {
-      "root": "apps/custom-elements-ui-e2e",
-      "sourceRoot": "apps/custom-elements-ui-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/custom-elements-ui-e2e/cypress.json",
-            "tsConfig": "apps/custom-elements-ui-e2e/tsconfig.e2e.json",
-            "devServerTarget": "custom-elements-ui:storybook"
-          },
-          "configurations": {
-            "ci": {
-              "devServerTarget": "custom-elements-ui:storybook:ci"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/custom-elements-ui-e2e/**/*.{js,ts}"]
           }
         }
       }
