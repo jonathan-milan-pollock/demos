@@ -15,30 +15,30 @@
               {
                 "sourceTag": "scope:api",
                 "onlyDependOnLibsWithTags": [
-                  "scope:shared",
+                  "scope:api",
                   "scope:shared-server",
-                  "scope:api"
-                ]
-              },
-              {
-                "sourceTag": "scope:serverless",
-                "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:shared-server",
-                  "scope:serverless"
+                  "scope:shared"
                 ]
               },
               {
                 "sourceTag": "scope:website",
                 "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:custom-elements",
-                  "scope:website"
+                  "scope:website",
+                  "scope:elements",
+                  "scope:shared"
                 ]
               },
               {
-                "sourceTag": "scope:custom-elements",
-                "onlyDependOnLibsWithTags": ["scope:custom-elements"]
+                "sourceTag": "scope:elements",
+                "onlyDependOnLibsWithTags": ["scope:elements"]
+              },
+              {
+                "sourceTag": "scope:serverless",
+                "onlyDependOnLibsWithTags": [
+                  "scope:serverless",
+                  "scope:shared-server",
+                  "scope:shared"
+                ]
               },
               {
                 "sourceTag": "scope:shared",
@@ -47,8 +47,8 @@
               {
                 "sourceTag": "scope:shared-server",
                 "onlyDependOnLibsWithTags": [
-                  "scope:shared",
-                  "scope:shared-server"
+                  "scope:shared-server",
+                  "scope:shared"
                 ]
               },
               {
