@@ -1,62 +1,114 @@
 # dev
 
+## reading
+
+- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
+- [Storybook with Angular](https://storybook.js.org/tutorials/intro-to-storybook/angular/en/get-started/)
+
+## videos
+
+### videos nx
+
+- [Step 1 - Create Application](https://nx.dev/latest/angular/tutorial/01-create-application)
+- [Step 2 - Add E2E Test](https://nx.dev/latest/angular/tutorial/02-add-e2e-test)
+- [Step 3 - Display Todos](https://nx.dev/latest/angular/tutorial/03-display-todos)
+- [Step 4 - Connect to API](https://nx.dev/latest/angular/tutorial/04-connect-to-api)
+- [Step 5 - Add Node App](https://nx.dev/latest/angular/tutorial/05-add-node-app)
+- [Step 6 - Proxy](https://nx.dev/latest/angular/tutorial/06-proxy)
+- [Step 7 - Share Code](https://nx.dev/latest/angular/tutorial/07-share-code)
+- [Step 8 - Create Libs](https://nx.dev/latest/angular/tutorial/08-create-libs)
+- [Step 9 - Dep Graph](https://nx.dev/latest/angular/tutorial/09-dep-graph)
+- [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
+- [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
+
+### videos NestJS
+
+- [NestJS](https://academind.com/tutorials/nestjs-introduction/)
+
+## installation
+
+- [dev installation](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev-installation.md)
+
 ## setup
 
-- Enable VSCode onSave Prettier
-- chrome://flags/#unsafely-treat-insecure-origin-as-secure
-  - http://my-local-dev-domain.test
+- setup formatting
+  - In File > Preferences > Settings
+  - Enable Editor: Format On Save
+  - Within a ts file ensure that Prettier is the default Formatter
 
-## dev installation
+## setup pwa
 
-- [dev installation](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev-install.md)
+- when testing pwa features
+  - open chrome://flags/#unsafely-treat-insecure-origin-as-secure
+  - add and enable http://localhost:3333
+
+### start project
+
+- run the website
+  - npx nx serve
+- run the angular universal app
+  - npm run start
+- run the pwa
+  - npm run start:ssr
 
 ## best practices
 
 1. Select change detection OnPush when creating components
 2. Only import what index.ts files of libs export
 3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
-4. Keep index.ts exports ordered by file name
-5. Prefer Trunk-Based Development (Create release branches if necessary)
-6. Prefer pipe over compose
+4. Exports, imports, and declarations should be ordered by file name
+5. Prefer named not default exports to keep names consistent
+6. Write components in templateUrl html file
 
-## recommendations
+## when generating new files
 
-### recommended reading
+### ui, smart ui, and feature components
 
-- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
-- [12 Factor App](https://12factor.net/)
-- [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
+- generate **website:ui** components with Nx Console
 
-- [OnPush Change Detection](https://blog.angular-university.io/onpush-change-detection-how-it-works/)
-- [OnPush Change Detection](https://medium.com/@ManfredSteyer/performance-tuning-data-binding-in-angular-with-onpush-immutables-and-observables-9fb2734dc66e)
-- [Angular 10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
+  1. enter component name and project
+  2. select style scss
+  3. select change detection OnPush
+  4. select SkipTests Do not create "spec.ts" test files for the new component.
 
-### recommended videos
+  - Export component from index.ts file
+  - Write component tests in **website-ui-e2e**
 
-- [Angular Performance Best Patterns](https://www.youtube.com/watch?v=-eH2gCGHcGs)
-- [NestJS](https://academind.com/tutorials/nestjs-introduction/)
+- generate **elements:ui** components with Nx Console
 
-### references
+  1. enter component name and project
+  2. select style scss
+  3. select change detection OnPush
+  4. select view encapsulation ShadowDom
+  5. select SkipTests Do not create "spec.ts" test files for the new component.
 
-- [HTML Reference](http://w3c.github.io/html-reference/)
-- [Can I Use](https://caniuse.com/)
-- [Plyr](https://plyr.io/)
-- [GlobalStats](https://gs.statcounter.com/)
-- [Google Analytics](https://analytics.google.com/)
-- [Semantic Elements](https://www.w3schools.com/html/html5_semantic_elements.asp)
-- [Essential Meta Tags](https://css-tricks.com/essential-meta-tags-social-media/)
-- [Social Media Image Sizes](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
-- [Screen sizes mobile](https://screensiz.es/phone)
-- [Advertising Sizes](https://www.iab.com/wp-content/uploads/2015/11/IAB_Display_Mobile_Creative_Guidelines_HTML5_2015.pdf)
+  - Write component tests in **elements-ui-e2e**
 
-- [iPhone Resolutions](https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions)
-- [npm trends](https://www.npmtrends.com/)
-- [Node.js can HTTP/2 push!](https://medium.com/the-node-js-collection/node-js-can-http-2-push-b491894e1bb1)
-- [Cool Gray](https://medium.com/ge-design/iot-cool-gray-is-a-great-background-color-for-data-visualization-ebf18c318418)
-- [GitHub Azure Pipelines](https://azuredevopslabs.com/labs/vstsextend/github-azurepipelines/)
-- [Automate Cypress tests on BrowserStack](https://www.browserstack.com/docs/automate/cypress)
-- [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
+- generate **smart ui feature** components with Nx Console
 
-- [Angular Service Worker](https://www.youtube.com/watch?v=5YtNQJQu31Y)
+  1. enter component name and project
+  2. select style scss
+  3. select change detection OnPush
+  4. select SkipTests Do not create "spec.ts" test files for the new component.
 
----
+  - Write integration tests in **website-e2e**
+
+### util and data-access types
+
+- generate types manually
+  - add \*.spec.ts file for unit testing
+
+### api feature types
+
+- generate types manually
+  - add \*.spec.ts file for unit testing
+- Write integration tests in **website-e2e**
+
+## testing dev ssr
+
+- npm run dev:ssr
+
+## testing production ssr
+
+- npm run build:ssr
+- npm run serve:ssr

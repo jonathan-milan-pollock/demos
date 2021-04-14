@@ -1,2 +1,1 @@
-export * from './lib/button/button.component';
-export * from './lib/task/task.component';
+export * from './lib/website-ui.module';

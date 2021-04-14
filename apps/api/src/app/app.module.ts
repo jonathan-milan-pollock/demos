@@ -1,14 +1,14 @@
-import { Module } from '@nestjs/common';
-import { AngularUniversalModule } from '@nestjs/ng-universal';
 import { join } from 'path';
 
+import { Module } from '@nestjs/common';
+import { AngularUniversalModule } from '@nestjs/ng-universal';
+
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { AppServerModule } from './../../../website/src/app/app.server.module';
+import { AppServerModule } from './../../../website/src/main.server';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-// TODO: Implement caching? https://github.com/nestjs/ng-universal
 @Module({
   imports: [
     AngularUniversalModule.forRoot({

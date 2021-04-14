@@ -10,21 +10,26 @@
 
 - [Nx Apps & Libraries Structure](https://medium.com/showpad-engineering/how-to-organize-and-name-applications-and-libraries-in-an-nx-monorepo-for-immediate-team-wide-9876510dbe28)
 - [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
+- [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
 - [Storybook Integration](https://www.youtube.com/watch?v=sFpqyjT7u4s)
+- [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
 
 ---
 
-## Checklist
+## best practices
+
+1. Prefer Trunk-Based Development (Create release branches if necessary)
+
+## checklist
 
 1. Create draw.io application diagram
 2. Create architecture.md
 3. Create draw.io components diagram with defined routes
-4. Create projects from project structure
-5. Add scope and type rules
-6. Adjust routes in route order in app.module.ts
-7. Create component for each feature (such as HomeComponent)
-8. Create ci/cd
-9. Create feature flags
+4. Create projects from architecture.md
+5. Adjust routes in route order in app.module.ts
+6. Create component for each feature (such as HomeComponent) and remove selector
+7. Create ci/cd
+8. Create feature flags
 
 ## generate workspace with website
 
@@ -95,7 +100,7 @@
 
 #### website
 
-- npx nx g @nrwl/angular:app website --style=scss --routing --tags=scope:website,type:app
+- npx nx g @nrwl/angular:app website --unitTestRunner=none --style=scss --routing --tags=scope:website,type:app
 
 ##### add @angular/material to website
 
@@ -107,10 +112,7 @@
 
 #### api
 
-- npx nx g @nrwl/nest:app api --frontendProject=website --tags=scope:api,type:app
-
---frontendProject=website
-: adds proxy angular.json > serve > options > proxyConfig to apps/website/proxy.conf.json
+- npx nx g @nrwl/nest:app api --tags=scope:api,type:app
 
 ##### add angular universal
 
@@ -119,16 +121,13 @@
   - Update api/src/main.ts
   - Update api/src/app/app.module.ts
   - Update website/server.ts
+  - Move tsconfig.serve.json into website folder and adjust paths
 - delete server generated files
   - server
     - app.module.ts
     - main.ts
   - server.ts
-
-###### angular universal references
-
-- [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
-- [NextJS Angular Universal](https://github.com/nestjs/ng-universal)
+- remove angular.json api:serve
 
 ---
 
@@ -143,7 +142,7 @@
 ---
 
 - **elements**
-  - **ui** npx nx g @nrwl/angular:lib elements/ui --prefix=drp --publishable --importPath=@dark-rush-photography/image-custom-elements --tags=scope:elements,type:ui
+  - **ui** npx nx g @nrwl/angular:lib elements/ui --prefix=drp --unitTestRunner=none --publishable --importPath=@dark-rush-photography/image-custom-elements --tags=scope:elements,type:ui
   - **util** npx nx g @nrwl/angular:lib elements/util --tags=scope:elements,type:util
   - **util-testing** npx nx g @nrwl/angular:lib elements/util-testing --tags=scope:elements,type:util
 
@@ -171,21 +170,21 @@
 
 - **website**
   - **data** npx nx g @nrwl/angular:lib website/data --tags=scope:website,type:data-access
-  - **feature-about** npx nx g @nrwl/angular:lib website/feature-about --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-destination** npx nx g @nrwl/angular:lib website/feature-destination --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-destinations** npx nx g @nrwl/angular:lib website/feature-destinations --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-destinations-admin** npx nx g @nrwl/angular:lib website/feature-destinations-admin --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-home** npx nx g @nrwl/angular:lib website/feature-home --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-review** npx nx g @nrwl/angular:lib website/feature-review --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-reviews** npx nx g @nrwl/angular:lib website/feature-reviews --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-reviews-admin** npx nx g @nrwl/angular:lib website/feature-reviews-admin --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-stories** npx nx g @nrwl/angular:lib website/feature-stories --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-stories-admin** npx nx g @nrwl/angular:lib website/feature-stories-admin --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-story** npx nx g @nrwl/angular:lib website/feature-story --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-weekly-photo** npx nx g @nrwl/angular:lib website/feature-weekly-photo --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-weekly-photos** npx nx g @nrwl/angular:lib website/feature-weekly-photos --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **feature-weekly-photos-admin** npx nx g @nrwl/angular:lib website/feature-weekly-photos-admin --prefix=drp --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
-  - **ui** npx nx g @nrwl/angular:lib website/ui --prefix=drp --parent-module=website --tags=scope:website,type:ui
+  - **feature-about** npx nx g @nrwl/angular:lib website/feature-about --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-destination** npx nx g @nrwl/angular:lib website/feature-destination --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-destinations** npx nx g @nrwl/angular:lib website/feature-destinations --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-destinations-admin** npx nx g @nrwl/angular:lib website/feature-destinations-admin --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-home** npx nx g @nrwl/angular:lib website/feature-home --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-review** npx nx g @nrwl/angular:lib website/feature-review --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-reviews** npx nx g @nrwl/angular:lib website/feature-reviews --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-reviews-admin** npx nx g @nrwl/angular:lib website/feature-reviews-admin --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-stories** npx nx g @nrwl/angular:lib website/feature-stories --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-stories-admin** npx nx g @nrwl/angular:lib website/feature-stories-admin --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-story** npx nx g @nrwl/angular:lib website/feature-story --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-weekly-photo** npx nx g @nrwl/angular:lib website/feature-weekly-photo --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-weekly-photos** npx nx g @nrwl/angular:lib website/feature-weekly-photos --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **feature-weekly-photos-admin** npx nx g @nrwl/angular:lib website/feature-weekly-photos-admin --prefix=drp --unitTestRunner=none --lazy --parent-module=apps/website/src/app/app.module.ts --routing --tags=scope:website,type:feature
+  - **ui** npx nx g @nrwl/angular:lib website/ui --prefix=drp --unitTestRunner=none --tags=scope:website,type:ui
   - **util** npx nx g @nrwl/angular:lib website/util --tags=scope:website,type:util
   - **util-testing** npx nx g @nrwl/angular:lib website/util-testing --tags=scope:website,type:util
 
@@ -212,16 +211,65 @@ platformBrowserDynamic()
   .catch((err) => console.error(err));
 ```
 
-##### angular elements references
-
 - [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
 
-#### add storybook for website-ui and elements-ui
+#### add storybook
+
+##### website-ui storybook
 
 - npx nx g @nrwl/angular:storybook-configuration website-ui --configureCypress=true --generateCypressSpecs=true --generateStories=true
+
+##### elements-ui storybook
+
 - npx nx g @nrwl/angular:storybook-configuration elements-ui --configureCypress=true --generateCypressSpecs=true --generateStories=true
 
-## **after adding projects**
+##### update storybook packages
+
+- add storybook plugins
+
+  - install package
+
+    - npm i -D @storybook/angular to 6.2.7
+    - npm i -D @storybook/addon-knobs to 6.2.7
+
+    ```json
+    "@storybook/addon-knobs": "^6.2.7",
+    "@storybook/angular": "^6.2.7",
+    ```
+
+    - npm i -D @storybook/addon-actions
+    - npm i -D @storybook/addon-essentials
+    - npm i -D @storybook/addon-links
+    - npm i -D @storybook/addon-postcss
+
+  - update website/ui/.storybook/main.js and elements/ui/.storybook/main.js
+
+```js
+const rootMain = require('../../../../.storybook/main');
+
+rootMain.stories.push(
+  ...['../src/lib/**/*.stories.mdx', '../src/lib/**/*.stories.@(js|jsx|ts|tsx)']
+);
+rootMain.addons.push(
+  ...[
+    '@storybook/addon-actions',
+    '@storybook/addon-essentials',
+    '@storybook/addon-links',
+    {
+      name: '@storybook/addon-postcss',
+      options: {
+        postcssLoaderOptions: {
+          implementation: require('postcss'),
+        },
+      },
+    },
+  ]
+);
+
+module.exports = rootMain;
+```
+
+## after adding projects
 
 1. Verify the 4 configuration files are in project order
    a. angular.json
@@ -235,9 +283,15 @@ platformBrowserDynamic()
 
 ## **TODO**
 
-- connect to nxcloud
+- add postcss
+- add password
+- nestjs add caching (https://reposhub.com/nodejs/frameworks/nestjs-ng-universal.html)
 - connect cypress dashboard
 - add prod environment files
+- test --unitTestRunner=none
+- test website-ui and elements-ui without --parent-module
+  // TODO: Implement caching? https://github.com/nestjs/ng-universal
+
 - test mobile sizes with
 
 ```json
@@ -245,8 +299,28 @@ platformBrowserDynamic()
   "viewportWidth": 700,
 ```
 
-- storybook when running npx nx run website-ui:storybook
-  - DeprecationWarning: Default PostCSS plugins are deprecated. When switching to '@storybook/addon-postcss',
-    you will need to add your own plugins, such as 'postcss-flexbugs-fixes' and 'autoprefixer'
+- implement open api 3
+- implement K8 available and ready services
+- combine storybooks so only one ui-e2e testing
+
+- combine storybooks
+- https://medium.com/front-end-weekly/creating-a-storybook-instance-including-stories-from-multiple-libraries-in-a-nrwl-nx-workspace-89009a2bddf7
+
+```ts
+  @Get('status')
+  status(): any {
+    const { uptime, arch, version, platform } = process
+    return {
+      version: VERSION,
+      stack,
+      server: {
+        uptime: uptime(),
+        arch,
+        version,
+        platform,
+      },
+    }
+  }
+```
 
 ---

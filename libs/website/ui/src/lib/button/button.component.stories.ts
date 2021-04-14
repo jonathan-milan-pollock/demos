@@ -2,16 +2,16 @@ import { text, number } from '@storybook/addon-knobs';
 import { ButtonComponent } from './button.component';
 
 export default {
-  title: 'ButtonComponent',
+  title: 'Button',
 };
 
-interface StorybookButtonComponent {
+interface StorybookComponent {
   moduleMetadata: { imports: [] };
   component: typeof ButtonComponent;
   props: { [key: string]: unknown };
 }
 
-export const primary = (): StorybookButtonComponent => ({
+export const primary = (): StorybookComponent => ({
   moduleMetadata: {
     imports: [],
   },

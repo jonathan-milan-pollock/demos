@@ -10,6 +10,8 @@
 
 #### source map explorer
 
+- connect to nxcloud
+
 ---
 
 ## run pulumi locally

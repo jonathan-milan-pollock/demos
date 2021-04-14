@@ -1,10 +1,12 @@
 # dark-rush-photography
 
-**_Workspace for Dark Rush Photography also used for instructional demos_**
+## Workspace for Dark Rush Photography also used for instructional demos
+
+**_While this repo is MIT, our images and content which are not included in this repo are copyrighted_**
 
 ---
 
-## repo documentation
+### repo documentation
 
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
@@ -13,7 +15,7 @@
 
 ---
 
-## tech stack
+### tech stack
 
 - **Angular Universal** for website development
 - **Angular Elements** to create image custom elements [npm package](https://www.npmjs.com/package/@dark-rush-photography/image-custom-elements)
@@ -32,11 +34,19 @@
 
 ---
 
+### reference
+
+- [Can I Use](https://caniuse.com/)
+- [npm trends](https://www.npmtrends.com/)
+- [GlobalStats](https://gs.statcounter.com/)
+
+---
+
 <!-- markdownlint-disable -->
 
 <div>
    <a href="https://nx.dev">
-      <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="60">
+      <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55">
    </a>
 
    <a href="https://angular.io/">
