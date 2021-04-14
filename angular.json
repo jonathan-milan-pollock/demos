@@ -49,12 +49,6 @@
             }
           }
         },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
-          }
-        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
@@ -147,7 +141,7 @@
                   "maximumError": "10kb"
                 }
               ],
-              "serviceWorker": true,
+              "serviceWorker": false,
               "ngswConfigPath": "apps/website/ngsw-config.json"
             }
           }
@@ -155,8 +149,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "website:build",
-            "proxyConfig": "apps/website/proxy.conf.json"
+            "browserTarget": "website:build"
           },
           "configurations": {
             "production": {
@@ -177,14 +170,6 @@
               "apps/website/src/**/*.ts",
               "apps/website/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/website"],
-          "options": {
-            "jestConfig": "apps/website/jest.config.js",
-            "passWithNoTests": true
           }
         },
         "server": {
@@ -402,14 +387,6 @@
               "libs/elements/ui/src/**/*.ts",
               "libs/elements/ui/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/elements/ui"],
-          "options": {
-            "jestConfig": "libs/elements/ui/jest.config.js",
-            "passWithNoTests": true
           }
         },
         "storybook": {
@@ -713,14 +690,6 @@
               "libs/website/feature-about/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-about"],
-          "options": {
-            "jestConfig": "libs/website/feature-about/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -737,14 +706,6 @@
               "libs/website/feature-destination/src/**/*.ts",
               "libs/website/feature-destination/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-destination"],
-          "options": {
-            "jestConfig": "libs/website/feature-destination/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -763,14 +724,6 @@
               "libs/website/feature-destinations/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-destinations"],
-          "options": {
-            "jestConfig": "libs/website/feature-destinations/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -787,14 +740,6 @@
               "libs/website/feature-destinations-admin/src/**/*.ts",
               "libs/website/feature-destinations-admin/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-destinations-admin"],
-          "options": {
-            "jestConfig": "libs/website/feature-destinations-admin/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -813,14 +758,6 @@
               "libs/website/feature-home/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-home"],
-          "options": {
-            "jestConfig": "libs/website/feature-home/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -837,14 +774,6 @@
               "libs/website/feature-review/src/**/*.ts",
               "libs/website/feature-review/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-review"],
-          "options": {
-            "jestConfig": "libs/website/feature-review/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -863,14 +792,6 @@
               "libs/website/feature-reviews/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-reviews"],
-          "options": {
-            "jestConfig": "libs/website/feature-reviews/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -887,14 +808,6 @@
               "libs/website/feature-reviews-admin/src/**/*.ts",
               "libs/website/feature-reviews-admin/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-reviews-admin"],
-          "options": {
-            "jestConfig": "libs/website/feature-reviews-admin/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -913,14 +826,6 @@
               "libs/website/feature-stories/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-stories"],
-          "options": {
-            "jestConfig": "libs/website/feature-stories/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -937,14 +842,6 @@
               "libs/website/feature-stories-admin/src/**/*.ts",
               "libs/website/feature-stories-admin/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-stories-admin"],
-          "options": {
-            "jestConfig": "libs/website/feature-stories-admin/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -963,14 +860,6 @@
               "libs/website/feature-story/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-story"],
-          "options": {
-            "jestConfig": "libs/website/feature-story/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -987,14 +876,6 @@
               "libs/website/feature-weekly-photo/src/**/*.ts",
               "libs/website/feature-weekly-photo/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-weekly-photo"],
-          "options": {
-            "jestConfig": "libs/website/feature-weekly-photo/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -1013,14 +894,6 @@
               "libs/website/feature-weekly-photos/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-weekly-photos"],
-          "options": {
-            "jestConfig": "libs/website/feature-weekly-photos/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -1038,14 +911,6 @@
               "libs/website/feature-weekly-photos-admin/src/**/*.html"
             ]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/feature-weekly-photos-admin"],
-          "options": {
-            "jestConfig": "libs/website/feature-weekly-photos-admin/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -1062,14 +927,6 @@
               "libs/website/ui/src/**/*.ts",
               "libs/website/ui/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/ui"],
-          "options": {
-            "jestConfig": "libs/website/ui/jest.config.js",
-            "passWithNoTests": true
           }
         },
         "storybook": {
