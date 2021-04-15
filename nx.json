@@ -18,7 +18,6 @@
   },
   "projects": {
     "api": { "tags": ["scope:api", "type:app"] },
-    "elements-ui-e2e": { "tags": [], "implicitDependencies": ["elements-ui"] },
     "website": { "tags": ["scope:website", "type:app"] },
     "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
     "website-ui-e2e": { "tags": [], "implicitDependencies": ["website-ui"] },

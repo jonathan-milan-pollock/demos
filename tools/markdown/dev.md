@@ -1,13 +1,23 @@
 # dev
 
+## best practices
+
+1. Select change detection OnPush when creating components
+2. Only import what index.ts files of libs export
+3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
+4. Exports, imports, and declarations should be ordered by file name
+5. Prefer named not default exports to keep names consistent
+6. Write components in templateUrl html file
+7. Use undefined or unknown instead of null
+8. Interfaces of lifecycle methods should be declared
+
 ## reading
 
 - [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
+- [NestJS](https://docs.nestjs.com/)
 - [Storybook with Angular](https://storybook.js.org/tutorials/intro-to-storybook/angular/en/get-started/)
 
 ## videos
-
-### videos nx
 
 - [Step 1 - Create Application](https://nx.dev/latest/angular/tutorial/01-create-application)
 - [Step 2 - Add E2E Test](https://nx.dev/latest/angular/tutorial/02-add-e2e-test)
@@ -21,10 +31,6 @@
 - [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
 - [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
 
-### videos NestJS
-
-- [NestJS](https://academind.com/tutorials/nestjs-introduction/)
-
 ## installation
 
 - [dev installation](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev-installation.md)
@@ -36,29 +42,18 @@
   - Enable Editor: Format On Save
   - Within a ts file ensure that Prettier is the default Formatter
 
-## setup pwa
+## running dev
 
-- when testing pwa features
-  - open chrome://flags/#unsafely-treat-insecure-origin-as-secure
-  - add and enable http://localhost:3333
+- npx nx run serve
 
-### start project
+## running dev ssr
 
-- run the website
-  - npx nx serve
-- run the angular universal app
-  - npm run start
-- run the pwa
-  - npm run start:ssr
+- npm run dev:ssr
 
-## best practices
+## testing production ssr
 
-1. Select change detection OnPush when creating components
-2. Only import what index.ts files of libs export
-3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
-4. Exports, imports, and declarations should be ordered by file name
-5. Prefer named not default exports to keep names consistent
-6. Write components in templateUrl html file
+- npm run build:ssr
+- npm run serve:ssr
 
 ## when generating new files
 
@@ -82,7 +77,7 @@
   4. select view encapsulation ShadowDom
   5. select SkipTests Do not create "spec.ts" test files for the new component.
 
-  - Write component tests in **elements-ui-e2e**
+  - Write component tests in **website-ui-e2e**
 
 - generate **smart ui feature** components with Nx Console
 
@@ -103,12 +98,3 @@
 - generate types manually
   - add \*.spec.ts file for unit testing
 - Write integration tests in **website-e2e**
-
-## testing dev ssr
-
-- npm run dev:ssr
-
-## testing production ssr
-
-- npm run build:ssr
-- npm run serve:ssr
