@@ -1,1 +1,1 @@
-export * from './lib/serverless-util';
+export * from './lib/serverless-util.module';

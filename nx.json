@@ -1,78 +1,133 @@
 {
   "implicitDependencies": {
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     ".eslintrc.json": "*"
   },
-  "affected": { "defaultBase": "master" },
+  "affected": {
+    "defaultBase": "master"
+  },
   "npmScope": "dark-rush-photography",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "ZjUxOTU3NjgtYzZiYi00MzgxLWIwZGMtZWYzZjcwOTRjMzlkfHJlYWQtd3JpdGU=",
+        "accessToken": "YmNhYmY3NTUtZWY3MS00MGVlLTllMTQtMzIzMDcwNjYzOGYzfHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
         "showUsageWarnings": true
       }
     }
   },
   "projects": {
-    "api": { "tags": ["scope:api", "type:app"] },
-    "website": { "tags": ["scope:website", "type:app"] },
-    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
-    "website-ui-e2e": { "tags": [], "implicitDependencies": ["website-ui"] },
-    "api-data": { "tags": ["scope:api", "type:data-access"] },
-    "api-feature": { "tags": ["scope:api", "type:feature"] },
-    "api-util": { "tags": ["scope:api", "type:util"] },
-    "api-util-testing": { "tags": ["scope:api", "type:util"] },
-    "elements-ui": { "tags": ["scope:elements", "type:ui"] },
-    "elements-util": { "tags": ["scope:elements", "type:util"] },
-    "elements-util-testing": { "tags": ["scope:elements", "type:util"] },
-    "serverless-data": { "tags": ["scope:serverless", "type:data-access"] },
-    "serverless-feature": { "tags": ["scope:serverless", "type:feature"] },
-    "serverless-util": { "tags": ["scope:serverless", "type:util"] },
-    "serverless-util-testing": { "tags": ["scope:serverless", "type:util"] },
-    "shared-util": { "tags": ["scope:shared", "type:util"] },
+    "api": {
+      "tags": ["scope:api", "type:app"]
+    },
+    "serverless": {
+      "tags": ["scope:serverless", "type:app"]
+    },
+    "website": {
+      "tags": ["scope:website", "type:app"]
+    },
+    "website-e2e": {
+      "tags": [],
+      "implicitDependencies": ["website"]
+    },
+    "api-feature": {
+      "tags": ["scope:api", "type:feature"]
+    },
+    "api-util": {
+      "tags": ["scope:api", "type:util"]
+    },
+    "elements-ui": {
+      "tags": ["scope:elements", "type:ui"]
+    },
+    "elements-util": {
+      "tags": ["scope:elements", "type:util"]
+    },
+    "serverless-feature": {
+      "tags": ["scope:serverless", "type:feature"]
+    },
+    "serverless-util": {
+      "tags": ["scope:serverless", "type:util"]
+    },
     "shared-server-data": {
       "tags": ["scope:shared-server", "type:data-access"]
     },
-    "shared-server-util": { "tags": ["scope:shared-server", "type:util"] },
-    "shared-server-util-testing": {
+    "shared-server-util": {
       "tags": ["scope:shared-server", "type:util"]
     },
-    "website-data": { "tags": ["scope:website", "type:data-access"] },
-    "website-feature-about": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-destination": {
+    "website-data": {
+      "tags": ["scope:website", "type:data-access"]
+    },
+    "website-about-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-destinations": {
+    "website-destination-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-destinations-admin": {
+    "website-destinations-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-home": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-review": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-reviews": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-reviews-admin": {
+    "website-destinations-admin-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-stories": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-stories-admin": {
+    "website-home-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-story": { "tags": ["scope:website", "type:feature"] },
-    "website-feature-weekly-photo": {
+    "website-review-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-weekly-photos": {
+    "website-reviews-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-feature-weekly-photos-admin": {
+    "website-reviews-admin-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-ui": { "tags": ["scope:website", "type:ui"] },
-    "website-util": { "tags": ["scope:website", "type:util"] },
-    "website-util-testing": { "tags": ["scope:website", "type:util"] }
+    "website-stories-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-stories-admin-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-story-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-weekly-photo-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-weekly-photos-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-weekly-photos-admin-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-ui-shared": {
+      "tags": ["scope:website", "type:ui"]
+    },
+    "website-ui-shell": {
+      "tags": ["scope:website", "type:ui"]
+    },
+    "website-util": {
+      "tags": ["scope:website", "type:util"]
+    },
+    "ui-storybook": {
+      "tags": ["scope:ui-storybook", "type:ui"]
+    },
+    "ui-storybook-e2e": {
+      "tags": [],
+      "implicitDependencies": ["ui-storybook"]
+    },
+    "shared-types": {
+      "tags": ["scope:shared"]
+    },
+    "shared-server-types": {
+      "tags": ["scope:shared-server"]
+    },
+    "website-types": {
+      "tags": ["scope:website"]
+    }
   }
 }

@@ -1,11 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-//import { TransferHttpCacheModule } from '@nguniversal/common';
-//import { ServiceWorkerModule } from '@angular/service-worker';
 
-//import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,99 +13,99 @@ import { AppComponent } from './app.component';
         {
           path: '',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-home').then(
-              (module) => module.WebsiteFeatureHomeModule
+            import('@dark-rush-photography/website/home/feature').then(
+              (module) => module.WebsiteHomeFeatureModule
             ),
         },
         {
           path: 'photo-of-the-week',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-weekly-photos').then(
-              (module) => module.WebsiteFeatureWeeklyPhotosModule
+            import('@dark-rush-photography/website/weekly-photos/feature').then(
+              (module) => module.WebsiteWeeklyPhotosFeatureModule
             ),
         },
         {
           path: 'photo-of-the-week/image',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-weekly-photo').then(
-              (module) => module.WebsiteFeatureWeeklyPhotoModule
+            import('@dark-rush-photography/website/weekly-photo/feature').then(
+              (module) => module.WebsiteWeeklyPhotoFeatureModule
             ),
         },
         {
           path: 'stories',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-stories').then(
-              (module) => module.WebsiteFeatureStoriesModule
+            import('@dark-rush-photography/website/stories/feature').then(
+              (module) => module.WebsiteStoriesFeatureModule
             ),
         },
         {
           path: 'story',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-story').then(
-              (module) => module.WebsiteFeatureStoryModule
+            import('@dark-rush-photography/website/story/feature').then(
+              (module) => module.WebsiteStoryFeatureModule
             ),
         },
         {
           path: 'destinations',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-destinations').then(
-              (module) => module.WebsiteFeatureDestinationsModule
+            import('@dark-rush-photography/website/destinations/feature').then(
+              (module) => module.WebsiteDestinationsFeatureModule
             ),
         },
         {
           path: 'destination',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-destination').then(
-              (module) => module.WebsiteFeatureDestinationModule
+            import('@dark-rush-photography/website/destination/feature').then(
+              (module) => module.WebsiteDestinationFeatureModule
             ),
         },
         {
           path: 'reviews',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-reviews').then(
-              (module) => module.WebsiteFeatureReviewsModule
+            import('@dark-rush-photography/website/reviews/feature').then(
+              (module) => module.WebsiteReviewsFeatureModule
             ),
         },
         {
           path: 'review',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-review').then(
-              (module) => module.WebsiteFeatureReviewModule
+            import('@dark-rush-photography/website/review/feature').then(
+              (module) => module.WebsiteReviewFeatureModule
             ),
         },
         {
           path: 'about',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-about').then(
-              (module) => module.WebsiteFeatureAboutModule
+            import('@dark-rush-photography/website/about/feature').then(
+              (module) => module.WebsiteAboutFeatureModule
             ),
         },
         {
           path: 'photo-of-the-week/admin',
           loadChildren: () =>
             import(
-              '@dark-rush-photography/website/feature-weekly-photos-admin'
-            ).then((module) => module.WebsiteFeatureWeeklyPhotosAdminModule),
+              '@dark-rush-photography/website/weekly-photos-admin/feature'
+            ).then((module) => module.WebsiteWeeklyPhotosAdminFeatureModule),
         },
         {
           path: 'stories/admin',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-stories-admin').then(
-              (module) => module.WebsiteFeatureStoriesAdminModule
+            import('@dark-rush-photography/website/stories-admin/feature').then(
+              (module) => module.WebsiteStoriesAdminFeatureModule
             ),
         },
         {
           path: 'destinations/admin',
           loadChildren: () =>
             import(
-              '@dark-rush-photography/website/feature-destinations-admin'
-            ).then((module) => module.WebsiteFeatureDestinationsAdminModule),
+              '@dark-rush-photography/website/destinations-admin/feature'
+            ).then((module) => module.WebsiteDestinationsAdminFeatureModule),
         },
         {
           path: 'reviews/admin',
           loadChildren: () =>
-            import('@dark-rush-photography/website/feature-reviews-admin').then(
-              (module) => module.WebsiteFeatureReviewsAdminModule
+            import('@dark-rush-photography/website/reviews-admin/feature').then(
+              (module) => module.WebsiteReviewsAdminFeatureModule
             ),
         },
       ],
@@ -120,14 +117,3 @@ import { AppComponent } from './app.component';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
-
-/*
-   ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
-
-
-*/

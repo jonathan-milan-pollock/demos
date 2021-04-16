@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'dark-rush-photography-root',
+  selector: 'drp-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
