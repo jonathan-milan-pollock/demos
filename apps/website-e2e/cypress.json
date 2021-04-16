@@ -1,9 +1,4 @@
 {
-  "env": {
-    "NX_SCHEME": "https://"
-  },
-  "viewportHeight": 763,
-  "viewportWidth": 700,
   "fileServerFolder": ".",
   "fixturesFolder": "./src/fixtures",
   "integrationFolder": "./src/integration",

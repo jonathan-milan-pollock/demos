@@ -6,7 +6,7 @@
 2. Only import what index.ts files of libs export
 3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
 4. Exports, imports, and declarations should be ordered by file name
-5. Prefer named not default exports to keep names consistent
+5. Prefer named exports to keep names consistent
 6. Write components in templateUrl html file
 7. Use undefined or unknown instead of null
 8. Interfaces of lifecycle methods should be declared
@@ -98,3 +98,13 @@
 - generate types manually
   - add \*.spec.ts file for unit testing
 - Write integration tests in **website-e2e**
+
+## cypress
+
+browsers include edge (chrome, chromium, edge, firefox, electron)
+--headless for ci/cd
+--config-file=/apps/website-e2e/cypress-prod.json
+
+## videos and screenshots are created in the dist folder
+
+npx nx e2e website-e2e --baseUrl=https://frontend.com

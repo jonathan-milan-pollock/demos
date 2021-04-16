@@ -6,8 +6,7 @@ import { AngularUniversalModule } from '@nestjs/ng-universal';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { AppServerModule } from './../../../website/src/main.server';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
 
 @Module({
   imports: [
@@ -15,8 +14,7 @@ import { AppService } from './app.service';
       bootstrap: AppServerModule,
       viewsPath: join(process.cwd(), 'dist/website/browser'),
     }),
+    ApiFeatureModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

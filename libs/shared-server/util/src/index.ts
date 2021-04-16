@@ -1,1 +1,1 @@
-export * from './lib/shared-server-util';
+export * from './lib/shared-server-util.module';

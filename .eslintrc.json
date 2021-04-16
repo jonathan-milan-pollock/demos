@@ -21,6 +21,14 @@
                 ]
               },
               {
+                "sourceTag": "scope:serverless",
+                "onlyDependOnLibsWithTags": [
+                  "scope:serverless",
+                  "scope:shared-server",
+                  "scope:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:website",
                 "onlyDependOnLibsWithTags": [
                   "scope:website",

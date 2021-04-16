@@ -1,1 +1,1 @@
-export * from './lib/serverless-feature';
+export * from './lib/serverless-feature.module';

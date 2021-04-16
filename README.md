@@ -6,6 +6,23 @@
 
 ---
 
+### tech stack
+
+- **Angular Elements** to create image custom elements [npm package]
+- **Angular Universal** for website development
+- **Azure Serverless Functions** to save costs while processing images
+- **Azure Durable Functions** for orchestrating image processing
+- **Azure Blob Storage** for blob storage of images
+- **Pulumi** for deployment
+- **Azure DevOps Pipeline** for CI/CD
+- **TinyPNG** to reducing image sizes
+- **Sendible** for Social Media publishing
+- **mongoose** for Azure MongoDB document access
+- **exiftool-vendored** to add metadata to images
+- **Sharp** for creating differently sized images
+- **FFmpeg** for creating image video
+- **Melt** for blending images in image video
+
 ### repo documentation
 
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
@@ -15,38 +32,21 @@
 
 ---
 
-### tech stack
-
-- **Angular Universal** for website development
-- **Angular Elements** to create image custom elements [npm package](https://www.npmjs.com/package/@dark-rush-photography/image-custom-elements)
-- **mongoose** for Azure MongoDB document access
-- **exiftool-vendored** to add metadata to images
-- **Sharp** for creating differently sized images
-- **Sendible** for Social Media publishing
-- **Azure Serverless Functions** to save costs while processing images
-- **Azure Durable Functions** for orchestrating image processing
-- **Azure Blob Storage** for blob storage of images
-- **FFmpeg** for creating image video
-- **Melt** for blending images in image video
-- **[TinyPNG](https://tinypng.com/)** to reduce file sizes of image
-- **[Pulumi](https://app.pulumi.com/)** for deployment
-- **Azure DevOps Pipeline** for CI/CD
-
----
-
 ### reference
 
 - [Can I Use](https://caniuse.com/)
+- [What Web Can Do](https://whatwebcando.today/)
 - [npm trends](https://www.npmtrends.com/)
 - [GlobalStats](https://gs.statcounter.com/)
+- [Markdown Emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
 
 ---
 
 <!-- markdownlint-disable -->
 
-<div>
+<div style="display: flex; justify-content: center;align-items:baseline;">
    <a href="https://nx.dev">
-      <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55">
+      <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55" style="margin-bottom: 5px;">
    </a>
 
    <a href="https://angular.io/">
