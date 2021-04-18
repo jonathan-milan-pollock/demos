@@ -31,70 +31,73 @@
       "@dark-rush-photography/serverless/util": [
         "libs/serverless/util/src/index.ts"
       ],
+      "@dark-rush-photography/shared-server/types": [
+        "libs/shared-server/types/src/index.ts"
+      ],
       "@dark-rush-photography/shared-server/data": [
         "libs/shared-server/data/src/index.ts"
       ],
       "@dark-rush-photography/shared-server/util": [
         "libs/shared-server/util/src/index.ts"
       ],
-      "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
-      "@dark-rush-photography/website/about/feature": [
-        "libs/website/about/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/destination/feature": [
-        "libs/website/destination/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/destinations/feature": [
-        "libs/website/destinations/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/destinations-admin/feature": [
-        "libs/website/destinations-admin/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/home/feature": [
-        "libs/website/home/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/review/feature": [
-        "libs/website/review/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/reviews/feature": [
-        "libs/website/reviews/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/reviews-admin/feature": [
-        "libs/website/reviews-admin/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/stories/feature": [
-        "libs/website/stories/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/stories-admin/feature": [
-        "libs/website/stories-admin/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/story/feature": [
-        "libs/website/story/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/weekly-photo/feature": [
-        "libs/website/weekly-photo/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/weekly-photos/feature": [
-        "libs/website/weekly-photos/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/weekly-photos-admin/feature": [
-        "libs/website/weekly-photos-admin/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/website/ui-shared": [
-        "libs/website/ui-shared/src/index.ts"
-      ],
-      "@dark-rush-photography/website/ui-shell": [
-        "libs/website/ui-shell/src/index.ts"
-      ],
-      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"],
-      "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
       "@dark-rush-photography/shared-types": ["libs/shared-types/src/index.ts"],
-      "@dark-rush-photography/shared-server/types": [
-        "libs/shared-server/types/src/index.ts"
+      "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
+      "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
+      "@dark-rush-photography/website/features/about/feature": [
+        "libs/website/features/about/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/destination/feature": [
+        "libs/website/features/destination/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/destinations/feature": [
+        "libs/website/features/destinations/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/destinations-admin/feature": [
+        "libs/website/features/destinations-admin/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/home/feature": [
+        "libs/website/features/home/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/review/feature": [
+        "libs/website/features/review/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/reviews/feature": [
+        "libs/website/features/reviews/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/reviews-admin/feature": [
+        "libs/website/features/reviews-admin/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/stories/feature": [
+        "libs/website/features/stories/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/stories-admin/feature": [
+        "libs/website/features/stories-admin/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/story/feature": [
+        "libs/website/features/story/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/weekly-photo/feature": [
+        "libs/website/features/weekly-photo/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/weekly-photos/feature": [
+        "libs/website/features/weekly-photos/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/weekly-photos-admin/feature": [
+        "libs/website/features/weekly-photos-admin/feature/src/index.ts"
       ],
       "@dark-rush-photography/website/types": [
         "libs/website/types/src/index.ts"
-      ]
+      ],
+      "@dark-rush-photography/website/ui/ui-directives": [
+        "libs/website/ui/ui-directives/src/index.ts"
+      ],
+      "@dark-rush-photography/website/ui/ui-shared": [
+        "libs/website/ui/ui-shared/src/index.ts"
+      ],
+      "@dark-rush-photography/website/ui/ui-shell": [
+        "libs/website/ui/ui-shell/src/index.ts"
+      ],
+      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

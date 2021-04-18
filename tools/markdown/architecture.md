@@ -71,6 +71,27 @@ platformBrowserDynamic()
   .catch((err) => console.error(err));
 ```
 
+#### /elements/ui/src/lib/elements-ui.module.ts
+
+- add DoBootstrap and create each custom element
+
+```ts
+  ngDoBootstrap(): void {
+    customElements.define(
+      `drp-image-grid-gallery`,
+      createCustomElement(ImageGridGalleryComponent, {
+        injector: this.injector,
+      })
+    );
+  }
+```
+
+#### update document-register-element deprecated polyfill
+
+- in website polyfills.ts
+  - replace import 'document-register-element;
+  - with import '@ungap/custom-elements';
+
 ### add angular universal
 
 - update generated files
@@ -170,10 +191,6 @@ module.exports = {
   },
 ```
 
-## Remove extraneous auto-generate3d README.md files
-
-- Search for: This library was generated with [Nx](https://nx.dev).
-
 ### add to .gitignore
 
 ```shell
@@ -184,14 +201,15 @@ module.exports = {
 
 ### app then lib order for nx console and reference
 
-- angular.json
-- jest.config.js
-- nx.json
-- tsconfig.base.json
+- order apps then libs in source order
+  - angular.json
+  - jest.config.js
+  - nx.json
+  - tsconfig.base.json
 
 ## update package.json
 
-- change version to to 1.1.1 :mage: :wand:
+- change version to 1.1.1 :mage:
 - add description
 - change:
   - "start": "ng serve"
@@ -203,10 +221,15 @@ module.exports = {
 - remove npm-shrinkwrap.json if it exists
 - npm outdated
 - npm update
+- npm outdated
 - delete node_modules
 - npm i
 - npm shrinkwrap
 
-## finally :beers:
+<!-- markdownlint-disable MD026 -->
 
-- restart VS Code TS server (or restart VSCode TS sever)
+## last step :beers:
+
+<!-- markdownlint-enable MD026 -->
+
+- close and open VS Code (or restart VSCode TS sever)

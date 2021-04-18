@@ -29,6 +29,7 @@
     "prebuild",
     "prerender",
     "pulumi",
+    "ungap",
     "vendored",
     "websockets"
   ]

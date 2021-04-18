@@ -83,6 +83,32 @@
         }
       }
     },
+    "ui-storybook-e2e": {
+      "root": "apps/ui-storybook-e2e",
+      "sourceRoot": "apps/ui-storybook-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/ui-storybook-e2e/cypress.json",
+            "tsConfig": "apps/ui-storybook-e2e/tsconfig.e2e.json",
+            "devServerTarget": "ui-storybook:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "ui-storybook:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/ui-storybook-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
     "website": {
       "projectType": "application",
       "root": "apps/website",
@@ -357,6 +383,14 @@
               "libs/elements/util/src/**/*.html"
             ]
           }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/elements/util"],
+          "options": {
+            "jestConfig": "libs/elements/util/jest.config.js",
+            "passWithNoTests": true
+          }
         }
       }
     },
@@ -423,6 +457,27 @@
         }
       }
     },
+    "shared-server-types": {
+      "root": "libs/shared-server/types",
+      "sourceRoot": "libs/shared-server/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-server/types"],
+          "options": {
+            "jestConfig": "libs/shared-server/types/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-server-util": {
       "root": "libs/shared-server/util",
       "sourceRoot": "libs/shared-server/util/src",
@@ -444,370 +499,23 @@
         }
       }
     },
-    "website-data": {
+    "shared-types": {
+      "root": "libs/shared-types",
+      "sourceRoot": "libs/shared-types/src",
       "projectType": "library",
-      "root": "libs/website/data",
-      "sourceRoot": "libs/website/data/src",
-      "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/website/data/src/**/*.ts",
-              "libs/website/data/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-about-feature": {
-      "projectType": "library",
-      "root": "libs/website/about/feature",
-      "sourceRoot": "libs/website/about/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/about/feature/src/**/*.ts",
-              "libs/website/about/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-destination-feature": {
-      "projectType": "library",
-      "root": "libs/website/destination/feature",
-      "sourceRoot": "libs/website/destination/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/destination/feature/src/**/*.ts",
-              "libs/website/destination/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-destinations-feature": {
-      "projectType": "library",
-      "root": "libs/website/destinations/feature",
-      "sourceRoot": "libs/website/destinations/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/destinations/feature/src/**/*.ts",
-              "libs/website/destinations/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-destinations-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/destinations-admin/feature",
-      "sourceRoot": "libs/website/destinations-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/destinations-admin/feature/src/**/*.ts",
-              "libs/website/destinations-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-home-feature": {
-      "projectType": "library",
-      "root": "libs/website/home/feature",
-      "sourceRoot": "libs/website/home/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/home/feature/src/**/*.ts",
-              "libs/website/home/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-review-feature": {
-      "projectType": "library",
-      "root": "libs/website/review/feature",
-      "sourceRoot": "libs/website/review/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/review/feature/src/**/*.ts",
-              "libs/website/review/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-reviews-feature": {
-      "projectType": "library",
-      "root": "libs/website/reviews/feature",
-      "sourceRoot": "libs/website/reviews/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/reviews/feature/src/**/*.ts",
-              "libs/website/reviews/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-reviews-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/reviews-admin/feature",
-      "sourceRoot": "libs/website/reviews-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/reviews-admin/feature/src/**/*.ts",
-              "libs/website/reviews-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-stories-feature": {
-      "projectType": "library",
-      "root": "libs/website/stories/feature",
-      "sourceRoot": "libs/website/stories/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/stories/feature/src/**/*.ts",
-              "libs/website/stories/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-stories-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/stories-admin/feature",
-      "sourceRoot": "libs/website/stories-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/stories-admin/feature/src/**/*.ts",
-              "libs/website/stories-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-story-feature": {
-      "projectType": "library",
-      "root": "libs/website/story/feature",
-      "sourceRoot": "libs/website/story/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/story/feature/src/**/*.ts",
-              "libs/website/story/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-weekly-photo-feature": {
-      "projectType": "library",
-      "root": "libs/website/weekly-photo/feature",
-      "sourceRoot": "libs/website/weekly-photo/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/weekly-photo/feature/src/**/*.ts",
-              "libs/website/weekly-photo/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-weekly-photos-feature": {
-      "projectType": "library",
-      "root": "libs/website/weekly-photos/feature",
-      "sourceRoot": "libs/website/weekly-photos/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/weekly-photos/feature/src/**/*.ts",
-              "libs/website/weekly-photos/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-weekly-photos-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/weekly-photos-admin/feature",
-      "sourceRoot": "libs/website/weekly-photos-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/weekly-photos-admin/feature/src/**/*.ts",
-              "libs/website/weekly-photos-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-ui-shared": {
-      "projectType": "library",
-      "root": "libs/website/ui-shared",
-      "sourceRoot": "libs/website/ui-shared/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/ui-shared/src/**/*.ts",
-              "libs/website/ui-shared/src/**/*.html"
-            ]
+            "lintFilePatterns": ["libs/shared-types/**/*.ts"]
           }
         },
-        "storybook": {
-          "builder": "@nrwl/storybook:storybook",
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-types"],
           "options": {
-            "uiFramework": "@storybook/angular",
-            "port": 4400,
-            "config": {
-              "configFolder": "libs/website/ui-shared/.storybook"
-            }
-          },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
-          }
-        },
-        "build-storybook": {
-          "builder": "@nrwl/storybook:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "uiFramework": "@storybook/angular",
-            "outputPath": "dist/storybook/website-ui-shared",
-            "config": {
-              "configFolder": "libs/website/ui-shared/.storybook"
-            }
-          },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
-          }
-        }
-      }
-    },
-    "website-ui-shell": {
-      "projectType": "library",
-      "root": "libs/website/ui-shell",
-      "sourceRoot": "libs/website/ui-shell/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/ui-shell/src/**/*.ts",
-              "libs/website/ui-shell/src/**/*.html"
-            ]
-          }
-        },
-        "storybook": {
-          "builder": "@nrwl/storybook:storybook",
-          "options": {
-            "uiFramework": "@storybook/angular",
-            "port": 4400,
-            "config": {
-              "configFolder": "libs/website/ui-shell/.storybook"
-            }
-          },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
-          }
-        },
-        "build-storybook": {
-          "builder": "@nrwl/storybook:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "uiFramework": "@storybook/angular",
-            "outputPath": "dist/storybook/website-ui-shell",
-            "config": {
-              "configFolder": "libs/website/ui-shell/.storybook"
-            }
-          },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
-          }
-        }
-      }
-    },
-    "website-util": {
-      "projectType": "library",
-      "root": "libs/website/util",
-      "sourceRoot": "libs/website/util/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/util/src/**/*.ts",
-              "libs/website/util/src/**/*.html"
-            ]
+            "jestConfig": "libs/shared-types/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
@@ -860,54 +568,265 @@
         }
       }
     },
-    "ui-storybook-e2e": {
-      "root": "apps/ui-storybook-e2e",
-      "sourceRoot": "apps/ui-storybook-e2e/src",
-      "projectType": "application",
+    "website-data": {
+      "projectType": "library",
+      "root": "libs/website/data",
+      "sourceRoot": "libs/website/data/src",
+      "prefix": "drp",
       "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "cypressConfig": "apps/ui-storybook-e2e/cypress.json",
-            "tsConfig": "apps/ui-storybook-e2e/tsconfig.e2e.json",
-            "devServerTarget": "ui-storybook:storybook"
-          },
-          "configurations": {
-            "ci": {
-              "devServerTarget": "ui-storybook:storybook:ci"
-            }
+            "lintFilePatterns": [
+              "libs/website/data/src/**/*.ts",
+              "libs/website/data/src/**/*.html"
+            ]
           }
         },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/data"],
           "options": {
-            "lintFilePatterns": ["apps/ui-storybook-e2e/**/*.{js,ts}"]
+            "jestConfig": "libs/website/data/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
     },
-    "shared-types": {
-      "root": "libs/shared-types",
-      "sourceRoot": "libs/shared-types/src",
+    "website-features-about-feature": {
       "projectType": "library",
+      "root": "libs/website/features/about/feature",
+      "sourceRoot": "libs/website/features/about/feature/src",
+      "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared-types/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/website/features/about/feature/src/**/*.ts",
+              "libs/website/features/about/feature/src/**/*.html"
+            ]
           }
         }
       }
     },
-    "shared-server-types": {
-      "root": "libs/shared-server/types",
-      "sourceRoot": "libs/shared-server/types/src",
+    "website-features-destination-feature": {
       "projectType": "library",
+      "root": "libs/website/features/destination/feature",
+      "sourceRoot": "libs/website/features/destination/feature/src",
+      "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/website/features/destination/feature/src/**/*.ts",
+              "libs/website/features/destination/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-destinations-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/destinations/feature",
+      "sourceRoot": "libs/website/features/destinations/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/destinations/feature/src/**/*.ts",
+              "libs/website/features/destinations/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-destinations-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/destinations-admin/feature",
+      "sourceRoot": "libs/website/features/destinations-admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/destinations-admin/feature/src/**/*.ts",
+              "libs/website/features/destinations-admin/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-home-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/home/feature",
+      "sourceRoot": "libs/website/features/home/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/home/feature/src/**/*.ts",
+              "libs/website/features/home/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-review-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/review/feature",
+      "sourceRoot": "libs/website/features/review/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/review/feature/src/**/*.ts",
+              "libs/website/features/review/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-reviews-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/reviews/feature",
+      "sourceRoot": "libs/website/features/reviews/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/reviews/feature/src/**/*.ts",
+              "libs/website/features/reviews/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-reviews-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/reviews-admin/feature",
+      "sourceRoot": "libs/website/features/reviews-admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/reviews-admin/feature/src/**/*.ts",
+              "libs/website/features/reviews-admin/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-stories-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/stories/feature",
+      "sourceRoot": "libs/website/features/stories/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/stories/feature/src/**/*.ts",
+              "libs/website/features/stories/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-stories-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/stories-admin/feature",
+      "sourceRoot": "libs/website/features/stories-admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/stories-admin/feature/src/**/*.ts",
+              "libs/website/features/stories-admin/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-story-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/story/feature",
+      "sourceRoot": "libs/website/features/story/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/story/feature/src/**/*.ts",
+              "libs/website/features/story/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-weekly-photo-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/weekly-photo/feature",
+      "sourceRoot": "libs/website/features/weekly-photo/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/weekly-photo/feature/src/**/*.ts",
+              "libs/website/features/weekly-photo/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-weekly-photos-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/weekly-photos/feature",
+      "sourceRoot": "libs/website/features/weekly-photos/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/weekly-photos/feature/src/**/*.ts",
+              "libs/website/features/weekly-photos/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-weekly-photos-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/weekly-photos-admin/feature",
+      "sourceRoot": "libs/website/features/weekly-photos-admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/weekly-photos-admin/feature/src/**/*.ts",
+              "libs/website/features/weekly-photos-admin/feature/src/**/*.html"
+            ]
           }
         }
       }
@@ -925,6 +844,160 @@
               "libs/website/types/src/**/*.ts",
               "libs/website/types/src/**/*.html"
             ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/types"],
+          "options": {
+            "jestConfig": "libs/website/types/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-ui-ui-directives": {
+      "projectType": "library",
+      "root": "libs/website/ui/ui-directives",
+      "sourceRoot": "libs/website/ui/ui-directives/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/ui/ui-directives/src/**/*.ts",
+              "libs/website/ui/ui-directives/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/ui/ui-directives"],
+          "options": {
+            "jestConfig": "libs/website/ui/ui-directives/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-ui-ui-shared": {
+      "projectType": "library",
+      "root": "libs/website/ui/ui-shared",
+      "sourceRoot": "libs/website/ui/ui-shared/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/ui/ui-shared/src/**/*.ts",
+              "libs/website/ui/ui-shared/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/website/ui/ui-shared/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/website-ui-ui-shared",
+            "config": {
+              "configFolder": "libs/website/ui/ui-shared/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "website-ui-ui-shell": {
+      "projectType": "library",
+      "root": "libs/website/ui/ui-shell",
+      "sourceRoot": "libs/website/ui/ui-shell/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/ui/ui-shell/src/**/*.ts",
+              "libs/website/ui/ui-shell/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/website/ui/ui-shell/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/website-ui-ui-shell",
+            "config": {
+              "configFolder": "libs/website/ui/ui-shell/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "website-util": {
+      "projectType": "library",
+      "root": "libs/website/util",
+      "sourceRoot": "libs/website/util/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/util/src/**/*.ts",
+              "libs/website/util/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/util"],
+          "options": {
+            "jestConfig": "libs/website/util/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
