@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<header [ngClass]="{ 'light-theme': true }"></header>
+<main [ngClass]="{ 'light-theme': true }">
+  <router-outlet></router-outlet>
+</main>
+<aside class="aside-footer" [ngClass]="{ 'light-theme': true }">
+  <drp-divider [theme]="'Dark'"></drp-divider>
+  <footer></footer>
+</aside>
