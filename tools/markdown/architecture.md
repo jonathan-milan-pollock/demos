@@ -12,8 +12,8 @@
 - [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
 - [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
 - [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
-- [Storybook Integration](https://www.youtube.com/watch?v=sFpqyjT7u4s)
 - [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
+- [Environment Variables without Rebuilding](https://www.jvandemo.com/how-to-use-environment-variables-to-configure-your-angular-application-without-a-rebuild/)
 
 ---
 
@@ -33,6 +33,8 @@
 8. Create ci/cd
 9. Create feature flags
 
+---
+
 ## create workspace
 
 - run from a directory directly above desired workspace directory
@@ -45,7 +47,6 @@
 **_NOTES_**
 
 - each ui command in script uses --prefix=drp for shorter prefixes on Angular selectors
-- util-testing libs can be created based on testing needs
 - website features can have corresponding ui libs based on complexity of interface
 
 ### add angular elements to website
@@ -114,16 +115,7 @@ platformBrowserDynamic()
 - in ui-storybook/.storybook/main.js
 
 ```ts
-const rootMain = require('../../../.storybook/main');
 
-rootMain.stories.push(
-  ...[
-    '../../../libs/**/*.stories.mdx',
-    '../../../libs/**/*.stories.@(js|jsx|ts|tsx)',
-  ]
-);
-
-module.exports = rootMain;
 ```
 
 #### add plugins to root storybook
@@ -150,11 +142,35 @@ module.exports = {
 };
 ```
 
-- remove the following comment in main.js files
+#### remove the following comment in main.js files as they are added at root
 
 ```js
 // Use the following syntax to add addons!
 // rootMain.addons.push('');
+```
+
+#### add background colors to .storybook/preview.js
+
+- elements/ui
+- ui-shared
+- ui-shell
+
+```ts
+export const parameters = {
+  backgrounds: {
+    default: 'dark',
+    values: [
+      {
+        name: 'dark',
+        value: '#1e1e1e',
+      },
+      {
+        name: 'light',
+        value: '#ffffff',
+      },
+    ],
+  },
+};
 ```
 
 ### .eslintrc.json
@@ -194,12 +210,22 @@ module.exports = {
 ### add to .gitignore
 
 ```shell
-# env
-*.env
-!.local.env
+# azurite
+__azurite*
+__blobstorage__
 ```
 
-### app then lib order for nx console and reference
+### delete modules of types libraries
+
+- delete modules, add .gitkeep, and remove module export from index.ts
+  - libs/api/types
+  - libs/elements/types
+  - libs/serverless/types
+  - libs/shared-server/types
+  - libs/shared-types
+  - libs/website/types
+
+### reorder apps and libs so nx console displays projects in logical order
 
 - order apps then libs in source order
   - angular.json
@@ -223,6 +249,7 @@ module.exports = {
 - npm update
 - npm outdated
 - delete node_modules
+- delete dist directory if it exists
 - npm i
 - npm shrinkwrap
 
@@ -232,4 +259,4 @@ module.exports = {
 
 <!-- markdownlint-enable MD026 -->
 
-- close and open VS Code (or restart VSCode TS sever)
+- close and reopen VS Code

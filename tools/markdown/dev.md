@@ -2,20 +2,19 @@
 
 ## best practices
 
-1. Select change detection OnPush when creating components
-2. Only import what index.ts files of libs export
-3. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
-4. Exports, imports, and declarations should be ordered by file name
-5. Prefer named exports to keep names consistent
-6. Write components in templateUrl html file
-7. Use undefined or unknown instead of null
-8. Interfaces of lifecycle methods should be declared
+1. Only import what index.ts files of libs export
+2. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
+3. Exports, imports, and declarations should be ordered by file name
+4. Prefer named exports to keep names consistent
+5. Write components in templateUrl html file
+6. Use undefined or unknown instead of null
 
 ## reading
 
 - [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
-- [NestJS](https://docs.nestjs.com/)
 - [Storybook with Angular](https://storybook.js.org/tutorials/intro-to-storybook/angular/en/get-started/)
+- [Cypress](https://docs.cypress.io/guides/overview/why-cypress)
+- [NestJS](https://docs.nestjs.com/)
 
 ## videos
 

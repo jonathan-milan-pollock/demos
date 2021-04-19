@@ -3,6 +3,7 @@
   "cSpell.words": [
     "Affordances",
     "Buildable",
+    "Chainable",
     "Exif",
     "Focusable",
     "Outliner",
@@ -10,6 +11,7 @@
     "Sendible",
     "Serializers",
     "appservice",
+    "blobstorage",
     "cacheable",
     "canonicalized",
     "choco",
@@ -17,6 +19,7 @@
     "devkit",
     "exiftool",
     "functionapp",
+    "gitkeep",
     "markdownlint",
     "microservices",
     "mixins",
@@ -29,6 +32,7 @@
     "prebuild",
     "prerender",
     "pulumi",
+    "testid",
     "ungap",
     "vendored",
     "websockets"

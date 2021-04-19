@@ -20,6 +20,31 @@ declare namespace Cypress {
 Cypress.Commands.add('login', (email, password) => {
   console.log('Custom command example: Login', email, password);
 });
+
+//
+// -- This is a parent command --
+Cypress.Commands.add('loginWithUI', (email, password) => {
+  cy.get('input[name="email"]').type(email);
+  cy.get('input[name="password"]').type(password);
+  cy.get('#login-button').click();
+});
+
+// directly call the code that does the login
+Cypress.Commands.add('login', (email, password) => {
+  return cy.window().then((win) => {
+    return win.app.$store.dispatch('login', {
+      email: 'amir@cypress.io',
+      password: '1234',
+    });
+  });
+});
+
+Cypress.Commands.add('signup', (email, password) => {
+  cy.get('input[name="email"]').type(email);
+  cy.get('input[name="password"]').type(password);
+  cy.get('input[name="confirm-password"]').type(password);
+  cy.get('#signup-button').click();
+});
 //
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
