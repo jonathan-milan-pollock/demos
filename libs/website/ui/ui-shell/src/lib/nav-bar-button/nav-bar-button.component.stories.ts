@@ -1,20 +1,36 @@
-import { Meta } from '@storybook/angular/types-6-0';
+import { CommonModule } from '@angular/common';
+import { moduleMetadata } from '@storybook/angular';
+import { Meta, Story } from '@storybook/angular/types-6-0';
 
 import { NavBarButtonComponent } from './nav-bar-button.component';
+import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
 
 export default {
   title: 'UI SHELL/Nav Bar Button',
   component: NavBarButtonComponent,
+  decorators: [
+    moduleMetadata({
+      imports: [CommonModule, WebsiteUiUiShellModule],
+    }),
+  ],
 } as Meta;
 
-interface StorybookComponent {
-  moduleMetadata: { imports: [] };
-  props: { [key: string]: unknown };
-}
-
-export const Primary = (): StorybookComponent => ({
-  moduleMetadata: {
-    imports: [],
+const Template: Story<NavBarButtonComponent> = (args) => ({
+  props: {
+    ...args,
   },
-  props: {},
 });
+
+export const WithKnobs = Template.bind({});
+WithKnobs.args = {};
+WithKnobs.parameters = {
+  controls: { hideNoControlsWarning: true },
+  template: '<drp-nav-bar-button></drp-nav-bar-button>',
+};
+
+export const Primary = Template.bind({});
+Primary.args = {};
+Primary.parameters = {
+  ...WithKnobs.parameters,
+  template: '<drp-nav-bar-button></drp-nav-bar-button>',
+};

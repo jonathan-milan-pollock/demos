@@ -1,21 +1,22 @@
 import { CommonModule } from '@angular/common';
+
 import { moduleMetadata } from '@storybook/angular';
 import { Meta, Story } from '@storybook/angular/types-6-0';
 
-import { BottomContactBarComponent } from './bottom-contact-bar.component';
-import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
+import { ActionButtonComponent } from './action-button.component';
+import { WebsiteUiUiSharedModule } from '../website-ui-ui-shared.module';
 
 export default {
-  title: 'UI SHELL/Bottom Contact Bar',
-  component: BottomContactBarComponent,
+  title: 'UI Shared/Image Grid Gallery',
+  component: ActionButtonComponent,
   decorators: [
     moduleMetadata({
-      imports: [CommonModule, WebsiteUiUiShellModule],
+      imports: [CommonModule, WebsiteUiUiSharedModule],
     }),
   ],
 } as Meta;
 
-const Template: Story<BottomContactBarComponent> = (args) => ({
+const Template: Story<ActionButtonComponent> = (args) => ({
   props: {
     ...args,
   },
@@ -25,12 +26,12 @@ export const WithKnobs = Template.bind({});
 WithKnobs.args = {};
 WithKnobs.parameters = {
   controls: { hideNoControlsWarning: true },
-  template: '<drp-bottom-contact-bar></drp-bottom-contact-bar>',
+  template: '<drp-action-button></drp-action-button>',
 };
 
 export const Primary = Template.bind({});
 Primary.args = {};
 Primary.parameters = {
   ...WithKnobs.parameters,
-  template: '<drp-bottom-contact-bar></drp-bottom-contact-bar>',
+  template: '<drp-action-button></drp-action-button>',
 };

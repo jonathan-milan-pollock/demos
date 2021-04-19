@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
+
 import { moduleMetadata } from '@storybook/angular';
 import { Meta, Story } from '@storybook/angular/types-6-0';
 import { select } from '@storybook/addon-knobs';
 
 import { Theme } from '@dark-rush-photography/website/types';
 import { BottomDividerComponent } from './bottom-divider.component';
-import { CommonModule } from '@angular/common';
 import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
 
 export default {
