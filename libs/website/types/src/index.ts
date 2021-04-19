@@ -18,8 +18,5 @@ export * from './lib/interfaces/three-sixty-image-orientation.interface';
 export * from './lib/interfaces/three-sixty-image.interface';
 export * from './lib/interfaces/window-size.interface';
 
-// models
-export * from './lib/models/task.model';
-
 // types
 export * from './lib/enums/theme.type';

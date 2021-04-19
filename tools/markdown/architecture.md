@@ -115,7 +115,16 @@ platformBrowserDynamic()
 - in ui-storybook/.storybook/main.js
 
 ```ts
+const rootMain = require('../../../.storybook/main');
 
+rootMain.stories.push(
+  ...[
+    '../../../libs/**/*.stories.mdx',
+    '../../../libs/**/*.stories.@(js|jsx|ts|tsx)',
+  ]
+);
+
+module.exports = rootMain;
 ```
 
 #### add plugins to root storybook
@@ -151,6 +160,7 @@ module.exports = {
 
 #### add background colors to .storybook/preview.js
 
+- ui-storybook
 - elements/ui
 - ui-shared
 - ui-shell

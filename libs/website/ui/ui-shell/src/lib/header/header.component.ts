@@ -1,6 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-
-import { Task } from '@dark-rush-photography/website/types';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'drp-header',
@@ -8,6 +6,4 @@ import { Task } from '@dark-rush-photography/website/types';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent {
-  task?: Task = undefined;
-}
+export class HeaderComponent {}

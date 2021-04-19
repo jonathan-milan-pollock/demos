@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'drp-progressive-image',
@@ -6,8 +6,4 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./progressive-image.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class ProgressiveImageComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class ProgressiveImageComponent {}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'drp-image-grid-gallery',
@@ -6,8 +6,4 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./image-grid-gallery.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class ImageGridGalleryComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class ImageGridGalleryComponent {}
