@@ -10,6 +10,7 @@
 
 - **Angular Elements** to create image custom elements [npm package]
 - **Angular Universal** for website development
+- **NestJS** for api development
 - **Azure Serverless Functions** to save costs while processing images
 - **Azure Durable Functions** for orchestrating image processing
 - **Azure Blob Storage** for blob storage of images
@@ -22,6 +23,8 @@
 - **Sharp** for creating differently sized images
 - **FFmpeg** for creating image video
 - **Melt** for blending images in image video
+
+---
 
 ### repo documentation
 
@@ -44,17 +47,17 @@
 
 <!-- markdownlint-disable -->
 
-<div style="display: flex; justify-content: center;align-items:baseline;">
+<div>
    <a href="https://nx.dev">
-      <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55" style="margin-bottom: 5px;">
+      <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55">
    </a>
 
    <a href="https://angular.io/">
       <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="50">
    </a>
 
-   <a href="https://www.sendible.com/">
-      <img src="https://f.hubspotusercontent30.net/hubfs/2235233/raw_assets/public/sendible-theme-2020/images/favicon/favicon@512w.png" width="50">
+   <a href="https://angular.io/">
+      <img src="https://docs.nestjs.com/assets/logo-small.svg" width="50">
    </a>
 
    <a href="https://www.pulumi.com/">
@@ -63,3 +66,5 @@
 </div>
 
 <!-- markdownlint-restore -->
+
+[![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)

@@ -17,7 +17,7 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": ["apps/api/src/assets", "apps/api/src/env.js"]
           },
           "configurations": {
             "production": {
@@ -288,6 +288,19 @@
         }
       }
     },
+    "api-types": {
+      "root": "libs/api/types",
+      "sourceRoot": "libs/api/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/types/**/*.ts"]
+          }
+        }
+      }
+    },
     "api-util": {
       "root": "libs/api/util",
       "sourceRoot": "libs/api/util/src",
@@ -305,6 +318,23 @@
           "options": {
             "jestConfig": "libs/api/util/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "elements-types": {
+      "projectType": "library",
+      "root": "libs/elements/types",
+      "sourceRoot": "libs/elements/types/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/elements/types/src/**/*.ts",
+              "libs/elements/types/src/**/*.html"
+            ]
           }
         }
       }
@@ -415,6 +445,19 @@
         }
       }
     },
+    "serverless-types": {
+      "root": "libs/serverless/types",
+      "sourceRoot": "libs/serverless/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/serverless/types/**/*.ts"]
+          }
+        }
+      }
+    },
     "serverless-util": {
       "root": "libs/serverless/util",
       "sourceRoot": "libs/serverless/util/src",
@@ -467,14 +510,6 @@
           "options": {
             "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-server/types"],
-          "options": {
-            "jestConfig": "libs/shared-server/types/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -508,14 +543,6 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/shared-types/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-types"],
-          "options": {
-            "jestConfig": "libs/shared-types/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }
@@ -844,14 +871,6 @@
               "libs/website/types/src/**/*.ts",
               "libs/website/types/src/**/*.html"
             ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/types"],
-          "options": {
-            "jestConfig": "libs/website/types/jest.config.js",
-            "passWithNoTests": true
           }
         }
       }

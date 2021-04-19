@@ -18,7 +18,11 @@
     "skipDefaultLibCheck": true,
     "paths": {
       "@dark-rush-photography/api/feature": ["libs/api/feature/src/index.ts"],
+      "@dark-rush-photography/api/types": ["libs/api/types/src/index.ts"],
       "@dark-rush-photography/api/util": ["libs/api/util/src/index.ts"],
+      "@dark-rush-photography/elements/types": [
+        "libs/elements/types/src/index.ts"
+      ],
       "@dark-rush-photography/image-custom-elements": [
         "libs/elements/ui/src/index.ts"
       ],
@@ -28,14 +32,17 @@
       "@dark-rush-photography/serverless/feature": [
         "libs/serverless/feature/src/index.ts"
       ],
+      "@dark-rush-photography/serverless/types": [
+        "libs/serverless/types/src/index.ts"
+      ],
       "@dark-rush-photography/serverless/util": [
         "libs/serverless/util/src/index.ts"
       ],
-      "@dark-rush-photography/shared-server/types": [
-        "libs/shared-server/types/src/index.ts"
-      ],
       "@dark-rush-photography/shared-server/data": [
         "libs/shared-server/data/src/index.ts"
+      ],
+      "@dark-rush-photography/shared-server/types": [
+        "libs/shared-server/types/src/index.ts"
       ],
       "@dark-rush-photography/shared-server/util": [
         "libs/shared-server/util/src/index.ts"
