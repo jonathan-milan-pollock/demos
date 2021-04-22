@@ -1,5 +1,9 @@
-// constants
+// enums
 
-export * from './lib/constants/environment-variables.constant';
-export * from './lib/constants/image-dimensions.constant';
-export * from './lib/constants/image-exif.constant';
+// errors
+export * from './lib/errors/object-property-undefined.error';
+export * from './lib/errors/object-undefined.error';
+
+// interfaces
+
+// models

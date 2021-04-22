@@ -12,23 +12,42 @@
 declare namespace Cypress {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Chainable<Subject> {
-    login(email: string, password: string): void;
+    login(): void;
   }
 }
-//
-// -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
+
+/*
+
+Cypress.Commands.add('loginClick', () => {
+  cy.visit('/admin');
+  cy.get('[data-testid="email"]').type('milan@darkrush.photo');
+  cy.get('[data-testid="password"]').type('password');
+  cy.get('[data-testid="login-button"]').click();
 });
 
-//
-// -- This is a parent command --
-Cypress.Commands.add('loginWithUI', (email, password) => {
-  cy.get('input[name="email"]').type(email);
-  cy.get('input[name="password"]').type(password);
-  cy.get('#login-button').click();
+Cypress.Commands.add('loginEnter', () => {
+  cy.visit('/admin');
+  cy.get('[data-testid="email"]').type('milan@darkrush.photo');
+  cy.get('[data-testid="password"]').type('password{enter}');
+});
+*/
+
+Cypress.Commands.add('login', () => {
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:3000/api/users/login',
+    body: {
+      user: {
+        email: 'milan@darkrush.photo',
+        password: 'password',
+      },
+    },
+  }).then((resp) => {
+    window.localStorage.setItem('jwt', resp.body.user.token);
+  });
 });
 
+/*
 // directly call the code that does the login
 Cypress.Commands.add('login', (email, password) => {
   return cy.window().then((win) => {
@@ -38,13 +57,8 @@ Cypress.Commands.add('login', (email, password) => {
     });
   });
 });
+*/
 
-Cypress.Commands.add('signup', (email, password) => {
-  cy.get('input[name="email"]').type(email);
-  cy.get('input[name="password"]').type(password);
-  cy.get('input[name="confirm-password"]').type(password);
-  cy.get('#signup-button').click();
-});
 //
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })

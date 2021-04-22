@@ -2,7 +2,7 @@
 
 ## Workspace for Dark Rush Photography also used for instructional demos
 
-**_While this repo is MIT, our images and content which are not included in this repo are copyrighted_**
+**_While this repo is MIT, our images and content which are not included in this repo are copyrighted._**
 
 ---
 
@@ -18,11 +18,11 @@
 - **Azure DevOps Pipeline** for CI/CD
 - **TinyPNG** to reducing image sizes
 - **Sendible** for Social Media publishing
-- **mongoose** for Azure MongoDB document access
 - **exiftool-vendored** to add metadata to images
 - **Sharp** for creating differently sized images
 - **FFmpeg** for creating image video
 - **Melt** for blending images in image video
+- **mongoose** for Azure MongoDB document access
 
 ---
 
@@ -48,7 +48,7 @@
 <!-- markdownlint-disable -->
 
 <div>
-   <a href="https://nx.dev">
+   <a href="https://nx.dev/">
       <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55">
    </a>
 
@@ -56,7 +56,7 @@
       <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="50">
    </a>
 
-   <a href="https://angular.io/">
+   <a href="https://nestjs.com/">
       <img src="https://docs.nestjs.com/assets/logo-small.svg" width="50">
    </a>
 
@@ -66,5 +66,7 @@
 </div>
 
 <!-- markdownlint-restore -->
+
+---
 
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)

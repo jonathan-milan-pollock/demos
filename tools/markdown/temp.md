@@ -1,16 +1,12 @@
 # temp
 
-### references
-
-- [12 Factor App](https://12factor.net/)
-- [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
+## references
 
 - [Angular Performance Best Patterns](https://www.youtube.com/watch?v=-eH2gCGHcGs)
 
 - [OnPush Change Detection](https://blog.angular-university.io/onpush-change-detection-how-it-works/)
 - [OnPush Change Detection](https://medium.com/@ManfredSteyer/performance-tuning-data-binding-in-angular-with-onpush-immutables-and-observables-9fb2734dc66e)
 - [Angular 10 New Features](https://betterprogramming.pub/angular-10-new-features-dbc779061dc8)
-- [Plyr](https://plyr.io/)
 - [Google Analytics](https://analytics.google.com/)
 - [Semantic Elements](https://www.w3schools.com/html/html5_semantic_elements.asp)
 - [Essential Meta Tags](https://css-tricks.com/essential-meta-tags-social-media/)

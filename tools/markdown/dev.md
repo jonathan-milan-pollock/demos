@@ -1,16 +1,47 @@
 # dev
 
+--
+
 ## best practices
 
-1. Only import what index.ts files of libs export
-2. Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
-3. Exports, imports, and declarations should be ordered by file name
-4. Prefer named exports to keep names consistent
-5. Write components in templateUrl html file
-6. Use undefined or unknown instead of null
+- Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
+- Exports, imports, and declarations should be ordered by file name-
+- Prefer named not default exports to keep names consistent
+- Use undefined or unknown instead of null
+- Use # instead of private \_prop
+- Use underscores as number separators
+- Default switch cases and validation should return Either
+- Use ids for ts, classes for styles, and data-testid for tests
+- use ems for measurement
+
+```css
+.img-sized {
+  max-width: 98%;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+```
+
+```html
+<video control width="400" height="300">
+  <source src="mobile.mp4" type="video/mp4" media="(max-device-width: 480px)" />
+  <source src="mobile.mp4" type="video/mp4" />
+  <source src="mobile.ogv" type="video/ogg" />
+</video>
+```
+
+## best practices Cypress
+
+- Set state directly & programmatically, don't need to use the UI to build up state
+- Write specs in isolation without sharing page objects
+- Have access to everything so don't limit to acting like a user
+
+--
 
 ## reading
 
+- [12 Factor App](https://12factor.net/)
+- [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
 - [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
 - [Storybook with Angular](https://storybook.js.org/tutorials/intro-to-storybook/angular/en/get-started/)
 - [Cypress](https://docs.cypress.io/guides/overview/why-cypress)
@@ -29,6 +60,15 @@
 - [Step 9 - Dep Graph](https://nx.dev/latest/angular/tutorial/09-dep-graph)
 - [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
 - [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
+- [Cypress at Assert(JS) 2018 Part 1](https://youtu.be/5XQOK0v_YRE)
+- [Cypress at Assert(JS) 2018 Part 2](https://youtu.be/5FnalKRjpZk)
+
+## references
+
+- [Google Fonts](https://fonts.google.com/)
+- [Adobe Fonts](https://fonts.adobe.com/)
+
+--
 
 ## installation
 
@@ -58,7 +98,7 @@
 
 ### ui, smart ui, and feature components
 
-- generate **website:ui** components with Nx Console
+- generate **website:ui-shared** and **website:ui-shell** components with Nx Console
 
   1. enter component name and project
   2. select style scss
