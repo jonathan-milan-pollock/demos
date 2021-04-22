@@ -312,6 +312,12 @@ const execAddStorybook = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-links'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-postcss'));
 
+const execUpdateCypress = (isReady) =>
+  Promise.resolve(console.log('### update cypress'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm uninstall cypress'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress'));
+
 const execAddAngularElements = (isReady) =>
   Promise.resolve(console.log('### add angular elements'))
     .then(() => console.log())
@@ -361,6 +367,8 @@ const execInstall = (isReady) =>
     .then(() => execGenerateLibs(isReady))
     .then(() => console.log())
     .then(() => execAddStorybook(isReady))
+    .then(() => console.log())
+    .then(() => execUpdateCypress(isReady))
     .then(() => console.log())
     .then(() => execAddAngularElements(isReady))
     .then(() => console.log())

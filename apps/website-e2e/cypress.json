@@ -8,5 +8,6 @@
   "video": true,
   "videosFolder": "../../dist/cypress/apps/website-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/website-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "projectId": "sx8qh5"
 }

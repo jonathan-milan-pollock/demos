@@ -2,15 +2,64 @@
 
 ---
 
-# Add Dockerfile and .dockerignore
+## recommended reading
+
+- [Local Storage in Angular](https://blog.briebug.com/blog/managing-local-storage-in-angular)
+
+---
+
+## best practices
+
+1. verify and enable mime types a necessary
+
+---
+
+## use environment variables from the environment
+
+### delete for api, serverless and website apps the environments folder
+
+- add comment to environment.ts and environment.prod.ts above production: value
+
+  ```js
+  /**                                                    */
+  /** strict separation of config from code - 12 factor  */
+  /** put additional configuration in env.js             */
+  /**                                                    */
+  ```
+
+### add env.js file to website
+
+```js
+(function (window) {
+  window.__env = window.__env || {};
+  window.__env.apiBaseUrl = 'http://localhost:3737';
+})(this);
+```
+
+### add script to the website index.html file
+
+```html
+<script src="env.js"></script>
+```
+
+### add env.js to angular.json website assets
+
+```json
+"apps/website/src/env.js"
+```
+
+### add env services
+
+## Add Docker and .dockerignore files
 
 ## Notes
 
 - TODO: run 'npm install durable-functions' from the wwwroot folder of your function app in Kudu
 
-#### source map explorer
+## source map explorer
 
-- connect to nxcloud
+- connect to nx cloud
+- connect to cypress cloud
 
 ---
 

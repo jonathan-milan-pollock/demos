@@ -1,8 +1,10 @@
-<header [ngClass]="{ 'light-theme': true }"></header>
+<header [ngClass]="{ 'light-theme': true }">
+  <div class="left-column"></div>
+</header>
 <main [ngClass]="{ 'light-theme': true }">
   <router-outlet></router-outlet>
 </main>
 <aside class="aside-footer" [ngClass]="{ 'light-theme': true }">
-  <drp-divide></drp-divider>
+  <div class="bottom-divider" data-testid="bottom-divider"></div>
   <footer></footer>
 </aside>

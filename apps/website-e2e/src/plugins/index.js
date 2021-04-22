@@ -20,6 +20,7 @@ module.exports = (on, config) => {
   // Preprocess Typescript file using Nx helper
   on('file:preprocessor', preprocessTypescript(config));
 
+  /*
   on('task', {
     'clear:db': () => {
       return clearDatabase();
@@ -30,5 +31,5 @@ module.exports = (on, config) => {
     'seed:db': (data) => {
       return seedDatabase(data);
     },
-  });
+  });*/
 };

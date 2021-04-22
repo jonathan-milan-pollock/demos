@@ -1,25 +1,16 @@
-import { Directive, Input, ElementRef, Renderer2, OnInit } from '@angular/core';
+import { Directive, Input, OnInit, HostBinding } from '@angular/core';
 
 import { Theme } from '@dark-rush-photography/website/types';
 
 @Directive({
-  selector: '[drpTheme][drpTheme]',
+  selector: '[drpTheme]',
 })
 export class ThemeDirective implements OnInit {
-  theme?: Theme = undefined;
+  @HostBinding('class.light-theme') lightTheme = false;
 
-  @Input() drpTheme: Theme = Theme.Dark;
-
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
+  @Input() drpTheme = Theme.Dark;
 
   ngOnInit(): void {
-    switch (this.drpTheme) {
-      case 'Dark':
-        this.renderer.removeClass(this.elementRef.nativeElement, 'light-theme');
-        break;
-      case 'Light':
-        this.renderer.addClass(this.elementRef.nativeElement, 'light-theme');
-        break;
-    }
+    this.lightTheme = this.drpTheme == Theme.Light;
   }
 }

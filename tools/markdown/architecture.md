@@ -13,7 +13,6 @@
 - [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
 - [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
 - [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
-- [Environment Variables without Rebuilding](https://www.jvandemo.com/how-to-use-environment-variables-to-configure-your-angular-application-without-a-rebuild/)
 
 ---
 
@@ -24,14 +23,17 @@
 ## checklist
 
 1. Identify aspects of application
+   a. Accessibility
+   b. Browser Support
+   c. Internationalization
+   d. Additional Controls Needed
 2. Create draw.io application diagram
 3. Create architecture.md
 4. Create draw.io components diagram with defined routes
 5. Create projects from install-workspace.js script
 6. Adjust routes in route order in app.module.ts
 7. Create component for each feature (such as HomeComponent) and remove selector
-8. Create ci/cd
-9. Create feature flags
+8. Create e2e Cypress test for each of these components
 
 ---
 
@@ -183,6 +185,22 @@ export const parameters = {
 };
 ```
 
+### setup cypress
+
+- add npm scripts to package.json
+
+```json
+    "cy:story:watch": "nx run ui-storybook-e2e:e2e --watch",
+    "cy:story:headless": "nx run ui-storybook-e2e:e2e --headless",
+    "cy:web:watch": "nx run website-e2e:e2e --watch",
+    "cy:web:headless": "nx run website-e2e:e2e --headless",
+```
+
+- setup cypress dashboard
+  - run cypress and select _runs_ tab for a projectId to be added to cypress.json
+    - ui-storybook-e2e
+    - website-e2e
+
 ### .eslintrc.json
 
 - add .eslintrc.json enforce-module-boundaries depConstraints
@@ -217,7 +235,7 @@ export const parameters = {
   },
 ```
 
-### add to .gitignore
+## add to .gitignore
 
 ```shell
 # azurite
@@ -225,7 +243,7 @@ __azurite*
 __blobstorage__
 ```
 
-### delete modules of types libraries
+## delete modules of types libraries
 
 - delete modules, add .gitkeep, and remove module export from index.ts
   - libs/api/types
@@ -235,7 +253,7 @@ __blobstorage__
   - libs/shared-types
   - libs/website/types
 
-### reorder apps and libs so nx console displays projects in logical order
+## reorder apps and libs so nx console displays projects in logical order
 
 - order apps then libs in source order
   - angular.json
@@ -270,3 +288,14 @@ __blobstorage__
 <!-- markdownlint-enable MD026 -->
 
 - close and reopen VS Code
+
+TODO: Missing website feature admin page
+TODO: ui of elements should be a feature
+TODO: add ui for elements with storybook integration
+TODO: Each custom element should have separate feature
+TODO: Each feature should have a corresponding ui lib
+
+TODO: https://www.npmjs.com/package/nock
+TODO: grapheme-splitter
+
+TODO: Safe deserialization

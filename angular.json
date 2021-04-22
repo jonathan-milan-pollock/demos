@@ -17,7 +17,7 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets", "apps/api/src/env.js"]
+            "assets": ["apps/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -125,6 +125,7 @@
             "tsConfig": "apps/website/tsconfig.app.json",
             "aot": true,
             "assets": [
+              "apps/website/src/env.js",
               "apps/website/src/favicon.ico",
               "apps/website/src/assets"
             ],

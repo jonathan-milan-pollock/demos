@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
-//import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
+import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
 
 @NgModule({
   declarations: [AppComponent],

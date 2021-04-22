@@ -1,0 +1,50 @@
+{
+  "thumbnailImageDimension": {
+    "longestEdge": 16
+  },
+  "tileImageDimension": {
+    "width": 256,
+    "height": 128,
+    "longestEdge": 256
+  },
+  "smallImageDimension": {
+    "longestEdge": 512
+  },
+  "mediumImageDimension": {
+    "longestEdge": 1024
+  },
+  "largeImageDimension": {
+    "longestEdge": 2048
+  },
+  "threeSixtyImageThumbnailDimension": {
+    "longestEdge": 52
+  },
+  "threeSixtyImageSmallDimension": {
+    "longestEdge": 780
+  },
+  "threeSixtyImageMediumDimension": {
+    "longestEdge": 1560
+  },
+  "threeSixtyImageLargeDimension": {
+    "longestEdge": 3120
+  },
+  "facebookImageDimension": {
+    "width": 1200,
+    "height": 630
+  },
+  "googleBusinessImageDimension": {
+    "width": 1200,
+    "height": 900,
+    "resizeToExactDimension": true
+  },
+  "instagramImageDimension": {
+    "width": 1080,
+    "height": 1080,
+    "resizeToExactDimension": true
+  },
+  "linkedInImageDimension": {
+    "width": 1200,
+    "height": 627,
+    "resizeToExactDimension": true
+  }
+}

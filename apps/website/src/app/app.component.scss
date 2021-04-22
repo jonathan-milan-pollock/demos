@@ -2,3 +2,47 @@
   height: 200px;
   background-color: blue;
 }
+
+:host {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    270deg,
+    lightgray 0%,
+    white 20%,
+    gray 70%,
+    black 70%,
+    black 100%
+  );
+}
+
+.bottom-divider {
+  width: 100%;
+  height: 2px;
+  border: 2px solid rgb(0, 0, 0);
+}
+
+.light-theme .bottom-divider {
+  border: 2px solid rgb(182, 195, 204);
+}
+
+@media (orientation: landscape) {
+}
+
+.left-column {
+  width: 20em;
+  height: 20em;
+  background-color: lightblue;
+}
+
+@media (max-width: 480px) {
+  .left-column {
+    background-color: lightcoral;
+  }
+}
+
+@media (max-width: 250px) {
+  .left-column {
+    background-color: lightseagreen;
+  }
+}

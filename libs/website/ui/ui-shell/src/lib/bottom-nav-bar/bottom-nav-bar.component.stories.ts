@@ -29,7 +29,9 @@ WithKnobs.parameters = {
 };
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  ...WithKnobs.args,
+};
 Primary.parameters = {
   ...WithKnobs.parameters,
   template: '<drp-bottom-nav-bar></drp-bottom-nav-bar>',
