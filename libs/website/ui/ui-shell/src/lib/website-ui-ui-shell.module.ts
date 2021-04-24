@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { WebsiteUiUiDirectivesModule } from '@dark-rush-photography/website/ui/ui-directives';
 import { BottomContactBarComponent } from './bottom-contact-bar/bottom-contact-bar.component';
 import { BottomNavBarComponent } from './bottom-nav-bar/bottom-nav-bar.component';
 import { BottomNavBarButtonComponent } from './bottom-nav-bar-button/bottom-nav-bar-button.component';
-import { BottomSocialMediaBarComponent } from './bottom-social-media-bar/bottom-social-media-bar.component';
 import { BottomSocialMediaBarButtonComponent } from './bottom-social-media-bar-button/bottom-social-media-bar-button.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -19,12 +24,19 @@ import { TitleBarKabobMenuComponent } from './title-bar-kabob-menu/title-bar-kab
 import { TitleBarKabobMenuItemComponent } from './title-bar-kabob-menu-item/title-bar-kabob-menu-item.component';
 
 @NgModule({
-  imports: [CommonModule, WebsiteUiUiDirectivesModule],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    MatIconModule,
+    MatButtonModule,
+    FontAwesomeModule,
+    WebsiteUiUiDirectivesModule,
+  ],
   declarations: [
     BottomContactBarComponent,
     BottomNavBarComponent,
     BottomNavBarButtonComponent,
-    BottomSocialMediaBarComponent,
     BottomSocialMediaBarButtonComponent,
     FooterComponent,
     HeaderComponent,
@@ -41,7 +53,6 @@ import { TitleBarKabobMenuItemComponent } from './title-bar-kabob-menu-item/titl
     BottomContactBarComponent,
     BottomNavBarComponent,
     BottomNavBarButtonComponent,
-    BottomSocialMediaBarComponent,
     BottomSocialMediaBarButtonComponent,
     FooterComponent,
     HeaderComponent,

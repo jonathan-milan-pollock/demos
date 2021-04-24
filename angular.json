@@ -971,7 +971,8 @@
             "port": 4400,
             "config": {
               "configFolder": "libs/website/ui/ui-shell/.storybook"
-            }
+            },
+            "styles": ["apps/website/src/styles.scss"]
           },
           "configurations": {
             "ci": {
@@ -987,7 +988,8 @@
             "outputPath": "dist/storybook/website-ui-ui-shell",
             "config": {
               "configFolder": "libs/website/ui/ui-shell/.storybook"
-            }
+            },
+            "styles": ["apps/website/src/styles.scss"]
           },
           "configurations": {
             "ci": {

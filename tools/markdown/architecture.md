@@ -13,6 +13,7 @@
 - [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
 - [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
 - [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
+- [Ngrx to Manage State](https://blog.nrwl.io/using-ngrx-4-to-manage-state-in-angular-applications-64e7a1f84b7b)
 
 ---
 
@@ -23,17 +24,21 @@
 ## checklist
 
 1. Identify aspects of application
-   a. Accessibility
-   b. Browser Support
-   c. Internationalization
-   d. Additional Controls Needed
+   - Security
+   - What libraries will be published
+   - Use of custom elements
+   - Browser Support
+   - Accessibility
+   - Use of PWAs
+   - Internationalization
+   - Additional Controls Needed
 2. Create draw.io application diagram
 3. Create architecture.md
 4. Create draw.io components diagram with defined routes
 5. Create projects from install-workspace.js script
 6. Adjust routes in route order in app.module.ts
 7. Create component for each feature (such as HomeComponent) and remove selector
-8. Create e2e Cypress test for each of these components
+8. Create website-e2e Cypress test for each of these components
 
 ---
 
@@ -217,6 +222,29 @@ export const parameters = {
 },
 ```
 
+## nx.json
+
+- update implicit dependencies to include
+
+```json
+  "implicitDependencies": {
+    ".eslintrc.json": "*",
+    "angular.json": "*",
+    "nx.json": "*",
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "tsconfig.base.json": "*"
+  },
+```
+
+- add to the api an implicit dependency of the website
+
+```json
+    "api": {
+      "tags": ["scope:api", "type:app"],
+      "implicitDependencies": "website"
+    },
+```
+
 ## tsconfig.base.json
 
 - reorder configuration to match tsc init
@@ -270,6 +298,55 @@ __blobstorage__
   - "start": "npm run dev:ssr"
 - add npm scripts for docker
 
+---
+
+## Add Font Awesome
+
+- remove from website index.html
+
+```html
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
+```
+
+### Setup Font Awesome
+
+### Setup Font Awesome Pro
+
+- _NOTE: Installation and running this repo does not require Font Awesome Pro_
+
+#### Add NPM Auth Token to Install Font Awesome PRO
+
+- [Setup Font Awesome Pro globally](https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers)
+- npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+- npm config set "//npm.fontawesome.com/:\_authToken" FONTAWESOME_NPM_AUTH_TOKEN
+
+#### Install Font Awesome Pro Libraries
+
+- npm i --save-optional @fortawesome/pro-regular-svg-icons
+- npm i --save-optional @fortawesome/pro-solid-svg-icons
+
+#### Import FontAwesomeModule
+
+```ts
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+```
+
+- Import in website
+- Import in ui libraries, _also import BrowserModule to these libraries_
+  - ui-shared
+  - ui-shell
+
+#### Add styles to all storybook libraries, angular.json for storybook and build-storybook tasks
+
+```json
+"styles": ["apps/website/src/styles.scss"]
+```
+
+---
+
 ## update npm packages
 
 - remove npm-shrinkwrap.json if it exists
@@ -293,9 +370,10 @@ TODO: Missing website feature admin page
 TODO: ui of elements should be a feature
 TODO: add ui for elements with storybook integration
 TODO: Each custom element should have separate feature
-TODO: Each feature should have a corresponding ui lib
 
 TODO: https://www.npmjs.com/package/nock
 TODO: grapheme-splitter
 
 TODO: Safe deserialization
+
+TODO: Add

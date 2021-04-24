@@ -1,1 +1,10 @@
-<p>bottom-social-media-bar-button works!</p>
+<a
+  href="/"
+  class="icon-button"
+  mat-mini-fab
+  data-testid="bottom-social-media-bar-button"
+  [attr.aria-label]="ariaLabel"
+  (click)="onClick()"
+>
+  <fa-icon class="icon-button-icon" *ngIf="faIcon" [icon]="faIcon"></fa-icon>
+</a>

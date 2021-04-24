@@ -29,10 +29,35 @@ WithKnobs.parameters = {
     '<drp-bottom-social-media-bar-button></drp-bottom-social-media-bar-button>',
 };
 
-export const Primary = Template.bind({});
-Primary.args = {};
-Primary.parameters = {
-  ...WithKnobs.parameters,
+export const Facebook = Template.bind({});
+Facebook.args = {
+  socialMediaType: 'Facebook',
+};
+Facebook.parameters = {
   template:
     '<drp-bottom-social-media-bar-button></drp-bottom-social-media-bar-button>',
+};
+
+export const Instagram = Template.bind({});
+Instagram.args = {
+  socialMediaType: 'Instagram',
+};
+Instagram.parameters = {
+  template: `<drp-bottom-social-media-bar-button></drp-bottom-social-media-bar-button>`,
+};
+
+export const LinkedIn = Template.bind({});
+LinkedIn.args = {
+  socialMediaType: 'LinkedIn',
+};
+LinkedIn.parameters = {
+  template: `<drp-bottom-social-media-bar-button></drp-bottom-social-media-bar-button>`,
+};
+
+export const YouTube = Template.bind({});
+YouTube.args = {
+  socialMediaType: 'YouTube',
+};
+YouTube.parameters = {
+  template: `<drp-bottom-social-media-bar-button></drp-bottom-social-media-bar-button>`,
 };
