@@ -10,8 +10,8 @@
 
 ## References
 
+- [Chrome Lighthouse](https://developers.google.com/web/tools/lighthouse)
 - [Social Media Image Cheat Sheet](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
-- [eslint-config-prettier-standard](https://www.npmjs.com/package/eslint-config-prettier-standard)
 - [ScreamingFrog](https://www.screamingfrog.co.uk/seo-spider/)
 - [KWFinder](https://app.kwfinder.com/)
 - [ahrefs](https://ahrefs.com/)
@@ -22,6 +22,7 @@
 - [SEO Google Developers Doc](https://developers.google.com/search/docs)
 - [Rich Search Results](https://search.google.com/test/rich-results)
 - [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool)
-- [Chrome Lighthouse](https://developers.google.com/web/tools/lighthouse)
 
 ## Topic
+
+https://developers.google.com/speed/pagespeed/insights/

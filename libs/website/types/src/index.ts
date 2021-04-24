@@ -19,3 +19,6 @@ export * from './lib/interfaces/three-sixty-image-orientation.interface';
 export * from './lib/interfaces/three-sixty-image-orientation.interface';
 export * from './lib/interfaces/three-sixty-image.interface';
 export * from './lib/interfaces/window-size.interface';
+
+// types
+export * from './lib/types/social-media.type';

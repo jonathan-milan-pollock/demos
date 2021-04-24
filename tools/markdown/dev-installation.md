@@ -4,6 +4,11 @@
 - [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
 - [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
 
+Chrome Settings
+
+> Open Mobile View and Enable Show Device Frame in Mobile Settings
+> Open Network Settings and enable Capture Screenshots
+
 ## install VSCode plugins
 
 - [Install VSCode Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)

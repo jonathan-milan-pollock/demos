@@ -342,7 +342,7 @@ const execAddAngularUniversal = (isReady) =>
       )
     );
 
-const execAddAngularMaterial = (isReady) => {
+const execAddAngularMaterial = (isReady) =>
   Promise.resolve(console.log('### add angular material'))
     .then(() => console.log())
     .then(() =>
@@ -351,7 +351,22 @@ const execAddAngularMaterial = (isReady) => {
         'npx nx add @angular/material --theme=custom --typography=true --animations=true --project=website'
       )
     );
-};
+
+const execAddFontAwesome = (isReady) =>
+  Promise.resolve(console.log('### add fontawesome'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/angular-fontawesome')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/free-brands-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/free-regular-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/free-solid-svg-icons')
+    );
 
 const execInstall = (isReady) =>
   Promise.resolve(console.log('## install'))
@@ -374,13 +389,15 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddAngularUniversal(isReady))
     .then(() => console.log())
-    .then(() => execAddAngularMaterial(isReady));
+    .then(() => execAddAngularMaterial(isReady))
+    .then(() => console.log())
+    .then(() => execAddFontAwesome(isReady));
 
 let isReady = false;
 Promise.resolve(execInstall(isReady))
   .then(() => console.log())
   .then(() => {
-    rl.question('Are you ready? [y/N]', (ready) => {
+    rl.question('Are you ready [y/N]?', (ready) => {
       if (!['Y', 'y'].includes(ready)) {
         process.exit(0);
       }

@@ -1,8 +1,9 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
@@ -119,6 +120,7 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
       { initialNavigation: 'enabled' }
     ),
     BrowserAnimationsModule,
+    FontAwesomeModule,
     WebsiteUiUiShellModule,
   ],
   providers: [],

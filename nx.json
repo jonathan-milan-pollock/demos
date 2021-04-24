@@ -1,7 +1,10 @@
 {
   "implicitDependencies": {
+    ".eslintrc.json": "*",
+    "angular.json": "*",
+    "nx.json": "*",
     "package.json": { "dependencies": "*", "devDependencies": "*" },
-    ".eslintrc.json": "*"
+    "tsconfig.base.json": "*"
   },
   "affected": { "defaultBase": "master" },
   "npmScope": "dark-rush-photography",
@@ -17,7 +20,10 @@
     }
   },
   "projects": {
-    "api": { "tags": ["scope:api", "type:app"] },
+    "api": {
+      "tags": ["scope:api", "type:app"],
+      "implicitDependencies": "website"
+    },
     "serverless": { "tags": ["scope:serverless", "type:app"] },
     "ui-storybook-e2e": {
       "tags": [],

@@ -11,8 +11,9 @@
 - Use # instead of private \_prop
 - Use underscores as number separators
 - Default switch cases and validation should return Either
-- Use ids for ts, classes for styles, and data-testid for tests
-- use ems for measurement
+- Use ids for js (when needed) classes for css, and data-testid for cypress
+- use ems instead of px for measurement
+- use === not ==
 
 ```css
 .img-sized {
@@ -65,6 +66,7 @@
 
 ## references
 
+- [HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
 - [Google Fonts](https://fonts.google.com/)
 - [Adobe Fonts](https://fonts.adobe.com/)
 
