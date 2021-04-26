@@ -13,6 +13,7 @@
 - [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
 - [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
 - [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
+- [Extend Angular PWA](https://medium.com/@smarth55/extending-the-angular-cli-service-worker-44bfc205894c)
 - [Ngrx to Manage State](https://blog.nrwl.io/using-ngrx-4-to-manage-state-in-angular-applications-64e7a1f84b7b)
 
 ---
@@ -24,27 +25,28 @@
 ## checklist
 
 1. Identify aspects of application
-   - Security
-   - What libraries will be published
-   - Use of custom elements
-   - Browser Support
-   - Accessibility
-   - Use of PWAs
-   - Internationalization
-   - Additional Controls Needed
+   - Security ?
+   - What libraries will be published ?
+   - Use of custom elements ?
+   - Browser support ?
+   - Accessibility ?
+   - Use of PWA ?
+   - Internationalization ?
+   - Error reporting?
+   - Additional Controls Needed ?
 2. Create draw.io application diagram
-3. Create architecture.md
+3. Create architecture md
 4. Create draw.io components diagram with defined routes
 5. Create projects from install-workspace.js script
-6. Adjust routes in route order in app.module.ts
-7. Create component for each feature (such as HomeComponent) and remove selector
+6. Create component for each feature (such as HomeComponent) and remove selector
+7. Adjust routes in route order in app.module.ts and add basic routing between pages
 8. Create website-e2e Cypress test for each of these components
 
 ---
 
 ## create workspace
 
-- run from a directory directly above desired workspace directory
+- from a directory directly above desired workspace directory run
   - npx create-nx-workspace dark-rush-photography --preset=empty --cli=angular --nx-cloud=true
 - open new workspace directory in VSCode
 - copy install-workspace.js into the root of the new workspace directory
@@ -58,6 +60,7 @@
 
 ### add angular elements to website
 
+- services may want instead of provideIn root to be provide in platform
 - in website app.module.ts import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
 
 ```ts
@@ -115,6 +118,12 @@ platformBrowserDynamic()
   - tsconfig.server.json
 - remove api:serve in angular.json file
 
+### Add Preloading Strategy to website app.module
+
+```ts
+preloadingStrategy: PreloadAllModules;
+```
+
 ### update storybook files
 
 #### update ui-storybook to include all other storybooks
@@ -156,6 +165,12 @@ module.exports = {
     },
   ],
 };
+```
+
+#### Add styles to all storybook libraries, angular.json for storybook and build-storybook tasks
+
+```json
+"styles": ["apps/website/src/styles.scss"]
 ```
 
 #### remove the following comment in main.js files as they are added at root
@@ -241,7 +256,7 @@ export const parameters = {
 ```json
     "api": {
       "tags": ["scope:api", "type:app"],
-      "implicitDependencies": "website"
+      "implicitDependencies": ["website"]
     },
 ```
 
@@ -315,7 +330,7 @@ __blobstorage__
 
 ### Setup Font Awesome Pro
 
-- _NOTE: Installation and running this repo does not require Font Awesome Pro_
+- _NOTE: Installing or running this repo does not require Font Awesome Pro_
 
 #### Add NPM Auth Token to Install Font Awesome PRO
 
@@ -328,21 +343,10 @@ __blobstorage__
 - npm i --save-optional @fortawesome/pro-regular-svg-icons
 - npm i --save-optional @fortawesome/pro-solid-svg-icons
 
-#### Import FontAwesomeModule
+#### Import FontAwesomeModule in website
 
 ```ts
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-```
-
-- Import in website
-- Import in ui libraries, _also import BrowserModule to these libraries_
-  - ui-shared
-  - ui-shell
-
-#### Add styles to all storybook libraries, angular.json for storybook and build-storybook tasks
-
-```json
-"styles": ["apps/website/src/styles.scss"]
 ```
 
 ---
@@ -366,14 +370,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 - close and reopen VS Code
 
-TODO: Missing website feature admin page
-TODO: ui of elements should be a feature
-TODO: add ui for elements with storybook integration
-TODO: Each custom element should have separate feature
+TODO: separate custom elements for each components so they can be published independently
 
-TODO: https://www.npmjs.com/package/nock
-TODO: grapheme-splitter
+elements > grid-gallery > types
+elements > grid-gallery > util
+elements > grid-gallery > ui
 
-TODO: Safe deserialization
+- clean up the 4 config files after this is done
+- update architecture doc for the added ui for storybook and modules in types, ...
 
-TODO: Add
+- TODO:

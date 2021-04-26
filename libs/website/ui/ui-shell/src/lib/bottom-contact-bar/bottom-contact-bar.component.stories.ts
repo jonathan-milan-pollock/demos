@@ -1,4 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { moduleMetadata } from '@storybook/angular';
 import { Meta, Story } from '@storybook/angular/types-6-0';
 
@@ -10,7 +12,7 @@ export default {
   component: BottomContactBarComponent,
   decorators: [
     moduleMetadata({
-      imports: [CommonModule, WebsiteUiUiShellModule],
+      imports: [WebsiteUiUiShellModule, BrowserModule, FontAwesomeModule],
     }),
   ],
 } as Meta;

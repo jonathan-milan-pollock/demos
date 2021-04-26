@@ -4,16 +4,16 @@
 
 ## best practices
 
-- Imports should be in 3 sections Platform (ng or node), 3rd Parties, Own Code
+- Imports should be in 3 sections Platform, 3rd Parties, Own Code
 - Exports, imports, and declarations should be ordered by file name-
 - Prefer named not default exports to keep names consistent
 - Use undefined or unknown instead of null
-- Use # instead of private \_prop
 - Use underscores as number separators
 - Default switch cases and validation should return Either
 - Use ids for js (when needed) classes for css, and data-testid for cypress
 - use ems instead of px for measurement
 - use === not ==
+- use a for links to other pages and button for actions
 
 ```css
 .img-sized {

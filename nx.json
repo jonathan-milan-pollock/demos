@@ -2,11 +2,17 @@
   "implicitDependencies": {
     ".eslintrc.json": "*",
     "angular.json": "*",
+    "jest.config.js": "*",
     "nx.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*"
   },
-  "affected": { "defaultBase": "master" },
+  "affected": {
+    "defaultBase": "master"
+  },
   "npmScope": "dark-rush-photography",
   "tasksRunnerOptions": {
     "default": {
@@ -22,32 +28,67 @@
   "projects": {
     "api": {
       "tags": ["scope:api", "type:app"],
-      "implicitDependencies": "website"
+      "implicitDependencies": ["website"]
     },
-    "serverless": { "tags": ["scope:serverless", "type:app"] },
+    "serverless": {
+      "tags": ["scope:serverless", "type:app"]
+    },
     "ui-storybook-e2e": {
       "tags": [],
       "implicitDependencies": ["ui-storybook"]
     },
-    "website": { "tags": ["scope:website", "type:app"] },
-    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
-    "api-feature": { "tags": ["scope:api", "type:feature"] },
-    "api-types": { "tags": ["scope:api", "type:types"] },
-    "api-util": { "tags": ["scope:api", "type:util"] },
-    "elements-types": { "tags": ["scope:elements", "type:types"] },
-    "elements-ui": { "tags": ["scope:elements", "type:ui"] },
-    "elements-util": { "tags": ["scope:elements", "type:util"] },
-    "serverless-feature": { "tags": ["scope:serverless", "type:feature"] },
-    "serverless-types": { "tags": ["scope:serverless", "type:types"] },
-    "serverless-util": { "tags": ["scope:serverless", "type:util"] },
+    "website": {
+      "tags": ["scope:website", "type:app"]
+    },
+    "website-e2e": {
+      "tags": [],
+      "implicitDependencies": ["website"]
+    },
+    "api-feature": {
+      "tags": ["scope:api", "type:feature"]
+    },
+    "api-types": {
+      "tags": ["scope:api", "type:types"]
+    },
+    "api-util": {
+      "tags": ["scope:api", "type:util"]
+    },
+    "elements-types": {
+      "tags": ["scope:elements", "type:types"]
+    },
+    "elements-ui": {
+      "tags": ["scope:elements", "type:ui"]
+    },
+    "elements-util": {
+      "tags": ["scope:elements", "type:util"]
+    },
+    "serverless-feature": {
+      "tags": ["scope:serverless", "type:feature"]
+    },
+    "serverless-types": {
+      "tags": ["scope:serverless", "type:types"]
+    },
+    "serverless-util": {
+      "tags": ["scope:serverless", "type:util"]
+    },
     "shared-server-data": {
       "tags": ["scope:shared-server", "type:data-access"]
     },
-    "shared-server-types": { "tags": ["scope:shared-server", "type:types"] },
-    "shared-server-util": { "tags": ["scope:shared-server", "type:util"] },
-    "shared-types": { "tags": ["scope:shared", "type:types"] },
-    "ui-storybook": { "tags": ["scope:ui-storybook", "type:ui"] },
-    "website-data": { "tags": ["scope:website", "type:data-access"] },
+    "shared-server-types": {
+      "tags": ["scope:shared-server", "type:types"]
+    },
+    "shared-server-util": {
+      "tags": ["scope:shared-server", "type:util"]
+    },
+    "shared-types": {
+      "tags": ["scope:shared", "type:types"]
+    },
+    "ui-storybook": {
+      "tags": ["scope:ui-storybook", "type:ui"]
+    },
+    "website-data": {
+      "tags": ["scope:website", "type:data-access"]
+    },
     "website-features-about-feature": {
       "tags": ["scope:website", "type:feature"]
     },
@@ -90,10 +131,26 @@
     "website-features-weekly-photos-admin-feature": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-types": { "tags": ["scope:website", "type:types"] },
-    "website-ui-ui-directives": { "tags": ["scope:website", "type:ui"] },
-    "website-ui-ui-shared": { "tags": ["scope:website", "type:ui"] },
-    "website-ui-ui-shell": { "tags": ["scope:website", "type:ui"] },
-    "website-util": { "tags": ["scope:website", "type:util"] }
+    "website-types": {
+      "tags": ["scope:website", "type:types"]
+    },
+    "website-ui-ui-directives": {
+      "tags": ["scope:website", "type:ui"]
+    },
+    "website-ui-ui-shared": {
+      "tags": ["scope:website", "type:ui"]
+    },
+    "website-ui-ui-shell": {
+      "tags": ["scope:website", "type:ui"]
+    },
+    "website-util": {
+      "tags": ["scope:website", "type:util"]
+    },
+    "website-features-admin-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-video-admin-feature": {
+      "tags": ["scope:website", "type:feature"]
+    }
   }
 }

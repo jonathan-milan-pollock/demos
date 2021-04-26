@@ -1,12 +1,14 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { PreloadAllModules, RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +31,13 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
             ).then((module) => module.WebsiteFeaturesAboutFeatureModule),
         },
         {
+          path: 'admin',
+          loadChildren: () =>
+            import(
+              '@dark-rush-photography/website/features/admin/feature'
+            ).then((module) => module.WebsiteFeaturesAdminFeatureModule),
+        },
+        {
           path: 'reviews',
           loadChildren: () =>
             import(
@@ -43,7 +52,7 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
             ).then((module) => module.WebsiteFeaturesReviewFeatureModule),
         },
         {
-          path: 'reviews/admin',
+          path: 'admin/reviews',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/reviews-admin/feature'
@@ -57,14 +66,14 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
             ).then((module) => module.WebsiteFeaturesWeeklyPhotosFeatureModule),
         },
         {
-          path: 'photo-of-the-week/image',
+          path: 'photo-of-the-week/:photo-of-the-week',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/weekly-photo/feature'
             ).then((module) => module.WebsiteFeaturesWeeklyPhotoFeatureModule),
         },
         {
-          path: 'photo-of-the-week/admin',
+          path: 'admin/photo-of-the-week',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/weekly-photos-admin/feature'
@@ -80,21 +89,21 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
             ).then((module) => module.WebsiteFeaturesStoriesFeatureModule),
         },
         {
-          path: 'story',
+          path: 'stories/:story',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/story/feature'
             ).then((module) => module.WebsiteFeaturesStoryFeatureModule),
         },
         {
-          path: 'stories/admin',
+          path: 'admin/stories',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/stories-admin/feature'
             ).then((module) => module.WebsiteFeaturesStoriesAdminFeatureModule),
         },
         {
-          path: 'destination',
+          path: 'destinations/:destination',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/destination/feature'
@@ -108,7 +117,7 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
             ).then((module) => module.WebsiteFeaturesDestinationsFeatureModule),
         },
         {
-          path: 'destinations/admin',
+          path: 'admin/destinations',
           loadChildren: () =>
             import(
               '@dark-rush-photography/website/features/destinations-admin/feature'
@@ -116,12 +125,25 @@ import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-she
               (module) => module.WebsiteFeaturesDestinationsAdminFeatureModule
             ),
         },
+        {
+          path: 'admin/video',
+          loadChildren: () =>
+            import(
+              '@dark-rush-photography/website/features/video-admin/feature'
+            ).then((module) => module.WebsiteFeaturesVideoAdminFeatureModule),
+        },
       ],
-      { initialNavigation: 'enabled' }
+      { initialNavigation: 'enabled', preloadingStrategy: PreloadAllModules }
     ),
     BrowserAnimationsModule,
     FontAwesomeModule,
     WebsiteUiUiShellModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

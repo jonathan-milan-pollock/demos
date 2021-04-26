@@ -2,7 +2,7 @@
 
 ## Workspace for Dark Rush Photography also used for instructional demos
 
-**_While this repo is MIT, our images and content which are not included in this repo are copyrighted._**
+**_While this repo is MIT, our images and content maintain their copyrights._**
 
 ---
 
@@ -28,9 +28,9 @@
 
 ### repo documentation
 
-- [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
 - [ci-cd](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/cicd.md)
+- [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
 - [accessibility](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/a11y.md)
 
 ---

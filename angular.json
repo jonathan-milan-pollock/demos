@@ -127,7 +127,8 @@
             "assets": [
               "apps/website/src/env.js",
               "apps/website/src/favicon.ico",
-              "apps/website/src/assets"
+              "apps/website/src/assets",
+              "apps/website/src/manifest.webmanifest"
             ],
             "styles": ["apps/website/src/styles.scss"],
             "scripts": []
@@ -158,7 +159,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/website/ngsw-config.json"
             }
           }
         },
@@ -1020,6 +1023,40 @@
           "options": {
             "jestConfig": "libs/website/util/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "website-features-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/admin/feature",
+      "sourceRoot": "libs/website/features/admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/admin/feature/src/**/*.ts",
+              "libs/website/features/admin/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-video-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/video-admin/feature",
+      "sourceRoot": "libs/website/features/video-admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/video-admin/feature/src/**/*.ts",
+              "libs/website/features/video-admin/feature/src/**/*.html"
+            ]
           }
         }
       }

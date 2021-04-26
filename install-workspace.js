@@ -188,90 +188,94 @@ const execGenerateUiStorybook = (isReady) =>
 
 const execGenerateWebsiteLibs = (isReady) =>
   Promise.resolve(console.log('#### website libraries'))
-    .then(() => console.log())
+    //   .then(() => console.log())
+    //   .then(() =>
+    //     consoleLogOrExec(
+    //       isReady,
+    //       'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data-access --prefix=drp'
+    //    )
+    //  )
+    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('admin')))
+    //  .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('about')))
+    //  .then(() =>
+    //    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('destination'))
+    //  )
+    //  .then(() =>
+    //    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('destinations'))
+    //  )
+    //  .then(() =>
+    //    consoleLogOrExec(
+    //      isReady,
+    //      getWebsiteFeatureLibCommand('destinations-admin')
+    //    )
+    //  )
+    //  .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('home')))
+    //  .then(() =>
+    //   consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('review'))
+    //  )
+    //  .then(() =>
+    //    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('reviews'))
+    //  )
+    //  .then(() =>
+    //    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('reviews-admin'))
+    //  )
+    //  .then(() =>
+    //    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('stories'))
+    //  )
+    //  .then(() =>
+    //    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('stories-admin'))
+    //  )
+    //  .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('story')))
     .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data-access --prefix=drp'
-      )
-    )
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('about')))
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('destination'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('destinations'))
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getWebsiteFeatureLibCommand('destinations-admin')
-      )
-    )
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('home')))
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('review'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('reviews'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('reviews-admin'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('stories'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('stories-admin'))
-    )
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('story')))
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('weekly-photo'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('weekly-photos'))
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getWebsiteFeatureLibCommand('weekly-photos-admin')
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib website/types --unitTestRunner=none --tags=scope:website,type:types --prefix=drp'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getWebsiteUiLibWithUnitTestsCommand('ui-directives')
-      )
-    )
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shared')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shell')))
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib website/util --unitTestRunner=jest --tags=scope:website,type:util --prefix=drp'
-      )
+      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('video-admin'))
     );
+//  .then(() =>
+//    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('weekly-photo'))
+//  )
+//  .then(() =>
+//    consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('weekly-photos'))
+//  )
+//  .then(() =>
+//    consoleLogOrExec(
+//      isReady,
+//      getWebsiteFeatureLibCommand('weekly-photos-admin')
+//   )
+//  )
+//  .then(() =>
+//    consoleLogOrExec(
+//      isReady,
+//      'npx nx g @nrwl/angular:lib website/types --unitTestRunner=none --tags=scope:website,type:types --prefix=drp'
+//    )
+//  )
+//  .then(() =>
+//    consoleLogOrExec(
+//      isReady,
+//      getWebsiteUiLibWithUnitTestsCommand('ui-directives')
+//    )
+//  )
+//  .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shared')))
+//  .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shell')))
+//  .then(() =>
+//    consoleLogOrExec(
+//      isReady,
+//      'npx nx g @nrwl/angular:lib website/util --unitTestRunner=jest --tags=scope:website,type:util --prefix=drp'
+//    )
+//  );
 
 const execGenerateLibs = (isReady) =>
   Promise.resolve(console.log('### libs'))
-    .then(() => console.log())
-    .then(() => execGenerateApiLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateElementsLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateServerlessLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateSharedTypesLib(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateSharedServerLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateUiStorybook(isReady))
+    // .then(() => console.log())
+    // .then(() => execGenerateApiLibs(isReady))
+    // .then(() => console.log())
+    // .then(() => execGenerateElementsLibs(isReady))
+    //.then(() => console.log())
+    //.then(() => execGenerateServerlessLibs(isReady))
+    //.then(() => console.log())
+    //.then(() => execGenerateSharedTypesLib(isReady))
+    //.then(() => console.log())
+    //.then(() => execGenerateSharedServerLibs(isReady))
+    //.then(() => console.log())
+    //.then(() => execGenerateUiStorybook(isReady))
     .then(() => console.log())
     .then(() => execGenerateWebsiteLibs(isReady));
 
@@ -352,6 +356,13 @@ const execAddAngularMaterial = (isReady) =>
       )
     );
 
+const execAddAngularPWA = (isReady) =>
+  Promise.resolve(console.log('### add angular material'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(isReady, 'npx ng add @angular/pwa --project=website')
+    );
+
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
     .then(() => console.log())
@@ -370,28 +381,30 @@ const execAddFontAwesome = (isReady) =>
 
 const execInstall = (isReady) =>
   Promise.resolve(console.log('## install'))
+    //.then(() => console.log())
+    //.then(() => execInstallSchematics(isReady))
+    //.then(() => console.log())
+    //.then(() => execInstallDevDependencies(isReady))
+    //.then(() => console.log())
+    //.then(() => execInstallDependencies(isReady))
+    //.then(() => console.log())
+    //.then(() => execGenerateApps(isReady))
     .then(() => console.log())
-    .then(() => execInstallSchematics(isReady))
-    .then(() => console.log())
-    .then(() => execInstallDevDependencies(isReady))
-    .then(() => console.log())
-    .then(() => execInstallDependencies(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateApps(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateLibs(isReady))
-    .then(() => console.log())
-    .then(() => execAddStorybook(isReady))
-    .then(() => console.log())
-    .then(() => execUpdateCypress(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularElements(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularUniversal(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularMaterial(isReady))
-    .then(() => console.log())
-    .then(() => execAddFontAwesome(isReady));
+    .then(() => execGenerateLibs(isReady));
+//.then(() => console.log())
+//.then(() => execAddStorybook(isReady))
+//.then(() => console.log())
+//.then(() => execUpdateCypress(isReady))
+//.then(() => console.log())
+//.then(() => execAddAngularElements(isReady))
+//.then(() => console.log())
+//.then(() => execAddAngularUniversal(isReady))
+//.then(() => console.log())
+//.then(() => execAddAngularMaterial(isReady))
+//.then(() => console.log())
+//.then(() => execAddAngularPWA(isReady));
+//.then(() => console.log())
+//.then(() => execAddFontAwesome(isReady));
 
 let isReady = false;
 Promise.resolve(execInstall(isReady))

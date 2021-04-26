@@ -1,8 +1,5 @@
 # todo
 
-TODO: add @angular/pwa to website
-npx ng add @angular/pwa --project=website
-
 @angular/google-maps
 @angular/youtube-player
 
@@ -44,3 +41,8 @@ usually run asynchronous processes
 • npm run dep-graph — --file=graph.json emits a json file.
 • npm run dep-graph — --file=graph.dot emits a dot file.
 • npm run dep-graph — --file=graph.svg emits an svg file.
+
+TODO: https://www.npmjs.com/package/nock
+TODO: grapheme-splitter
+
+TODO: Safe deserialization

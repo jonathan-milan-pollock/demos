@@ -26,14 +26,12 @@
 
 - on Emulator bring up Chrome kabob menu click the i for Site Settings and click the Clear & reset button
 
-[Install Criteria for PWA](https://web.dev/install-criteria/)
-[Customize PWA Installation](https://web.dev/customize-install/)
-[Best Practices for Asking for Permission](https://www.youtube.com/watch?v=4QQyjqtHwlY)
-[Remote Debugging](https://developer.chrome.com/docs/devtools/remote-debugging/) -[Communicating with Web Workers (Service Workers)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#sending_messages_to_and_from_a_dedicated_worker)
-
-- application manifest
-
-  - standalone or minimal-ui
+- [Install Criteria for PWA](https://web.dev/install-criteria/)
+- [Customize PWA Installation](https://web.dev/customize-install/)
+- [Safari PWA](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html)
+- [Best Practices for Asking for Permission](https://www.youtube.com/watch?v=4QQyjqtHwlY)
+- [Remote Debugging](https://developer.chrome.com/docs/devtools/remote-debugging/)
+- [Communicating with Web Workers (Service Workers)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#sending_messages_to_and_from_a_dedicated_worker)
 
 - web push notification
 
