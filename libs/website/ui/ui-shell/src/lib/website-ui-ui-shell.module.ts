@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { WebsiteUiUiDirectivesModule } from '@dark-rush-photography/website/ui/ui-directives';
 import { BottomContactBarComponent } from './bottom-contact-bar/bottom-contact-bar.component';
@@ -24,15 +19,7 @@ import { TitleBarKabobMenuComponent } from './title-bar-kabob-menu/title-bar-kab
 import { TitleBarKabobMenuItemComponent } from './title-bar-kabob-menu-item/title-bar-kabob-menu-item.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    MatIconModule,
-    MatButtonModule,
-    FontAwesomeModule,
-    WebsiteUiUiDirectivesModule,
-  ],
+  imports: [CommonModule, MatButtonModule, WebsiteUiUiDirectivesModule],
   declarations: [
     BottomContactBarComponent,
     BottomNavBarComponent,

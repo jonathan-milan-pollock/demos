@@ -7,7 +7,6 @@ import { StoriesComponent } from './stories/stories.component';
 @NgModule({
   imports: [
     CommonModule,
-
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: StoriesComponent },
     ]),

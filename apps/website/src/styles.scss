@@ -1,7 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @import '~@angular/material/theming';
-@import './variables';
 
 // Plus imports for other components in your app.
 
@@ -54,6 +53,8 @@ $light-theme: mat-light-theme(
 
 /* You can add global styles to this file, and also import other style files */
 
+@import './variables';
+
 html,
 body {
   height: 100%;
@@ -61,5 +62,5 @@ body {
 }
 body {
   margin: 0;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }

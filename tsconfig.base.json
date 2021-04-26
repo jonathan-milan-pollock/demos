@@ -104,7 +104,13 @@
       "@dark-rush-photography/website/ui/ui-shell": [
         "libs/website/ui/ui-shell/src/index.ts"
       ],
-      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"]
+      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"],
+      "@dark-rush-photography/website/features/admin/feature": [
+        "libs/website/features/admin/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/video-admin/feature": [
+        "libs/website/features/video-admin/feature/src/index.ts"
+      ]
     }
   },
   "angularCompilerOptions": {
