@@ -1,11 +1,7 @@
-import { addDecorator } from '@storybook/angular';
-import { withKnobs } from '@storybook/addon-knobs';
-
-addDecorator(withKnobs);
-
 export const parameters = {
+  layout: 'fullscreen',
   backgrounds: {
-    default: 'light',
+    default: 'dark',
     values: [
       {
         name: 'dark',
@@ -15,6 +11,13 @@ export const parameters = {
         name: 'light',
         value: '#ffffff',
       },
+    ],
+  },
+  themes: {
+    default: 'dark',
+    list: [
+      { name: 'dark', class: 'dark-theme', color: '#1e1e1e' },
+      { name: 'light', class: 'light-theme', color: '#ffffff' },
     ],
   },
 };

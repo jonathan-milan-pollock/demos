@@ -11,7 +11,6 @@
 - [Semantic Elements](https://www.w3schools.com/html/html5_semantic_elements.asp)
 - [Essential Meta Tags](https://css-tricks.com/essential-meta-tags-social-media/)
 - [Social Media Image Sizes](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
-- [Screen sizes mobile](https://screensiz.es/phone)
 - [Advertising Sizes](https://www.iab.com/wp-content/uploads/2015/11/IAB_Display_Mobile_Creative_Guidelines_HTML5_2015.pdf)
 - [iPhone Resolutions](https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions)
 - [Node.js can HTTP/2 push!](https://medium.com/the-node-js-collection/node-js-can-http-2-push-b491894e1bb1)

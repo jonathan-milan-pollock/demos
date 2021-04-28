@@ -110,6 +110,12 @@
       ],
       "@dark-rush-photography/website/features/video-admin/feature": [
         "libs/website/features/video-admin/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/sitemap-admin/feature": [
+        "libs/website/features/sitemap-admin/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/features/story-image/feature": [
+        "libs/website/features/story-image/feature/src/index.ts"
       ]
     }
   },

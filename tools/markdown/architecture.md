@@ -39,7 +39,7 @@
 4. Create draw.io components diagram with defined routes
 5. Create projects from install-workspace.js script
 6. Create component for each feature (such as HomeComponent) and remove selector
-7. Adjust routes in route order in app.module.ts and add basic routing between pages
+7. Adjust root and child roots and add basic routing between pages
 8. Create website-e2e Cypress test for each of these components
 
 ---
@@ -50,8 +50,8 @@
   - npx create-nx-workspace dark-rush-photography --preset=empty --cli=angular --nx-cloud=true
 - open new workspace directory in VSCode
 - copy install-workspace.js into the root of the new workspace directory
-- run node install-workspace.js
-- move install-workspace.js to tools/scripts directory
+- node install-workspace.js
+- move install-workspace.js to a new tools/scripts directory
 
 **_NOTES_**
 
@@ -124,7 +124,12 @@ platformBrowserDynamic()
 preloadingStrategy: PreloadAllModules;
 ```
 
-### update storybook files
+### adjust storybook
+
+#### add plugins to root storybook
+
+- remove addon-knobs as Storybook is replacing knobs with controls, which is in essentials
+- add plugins in root .storybook/main.js file
 
 #### update ui-storybook to include all other storybooks
 
@@ -143,66 +148,36 @@ rootMain.stories.push(
 module.exports = rootMain;
 ```
 
-#### add plugins to root storybook
+#### in angular.json add styles.scss to all storybook libraries
 
-- in .storybook/main.js
-
-```js
-module.exports = {
-  stories: [],
-  addons: [
-    '@storybook/addon-knobs/register',
-    '@storybook/addon-actions',
-    '@storybook/addon-essentials',
-    '@storybook/addon-links',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
-  ],
-};
-```
-
-#### Add styles to all storybook libraries, angular.json for storybook and build-storybook tasks
+- except for elements add styles to storybook and build-storybook options
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
 ```
 
-#### remove the following comment in main.js files as they are added at root
+#### in .storybook/main.js remove the following comment files as addons added at root
 
 ```js
 // Use the following syntax to add addons!
 // rootMain.addons.push('');
 ```
 
-#### add background colors to .storybook/preview.js
+#### in .storybook/preview.js remove knobs and add background colors
 
 - ui-storybook
 - elements/ui
 - ui-shared
 - ui-shell
 
+- remove decorators
+- add addons configuration
+
 ```ts
-export const parameters = {
-  backgrounds: {
-    default: 'dark',
-    values: [
-      {
-        name: 'dark',
-        value: '#1e1e1e',
-      },
-      {
-        name: 'light',
-        value: '#ffffff',
-      },
-    ],
-  },
-};
+import { addDecorator } from '@storybook/angular';
+import { withKnobs } from '@storybook/addon-knobs';
+
+addDecorator(withKnobs);
 ```
 
 ### setup cypress
@@ -379,4 +354,6 @@ elements > grid-gallery > ui
 - clean up the 4 config files after this is done
 - update architecture doc for the added ui for storybook and modules in types, ...
 
-- TODO:
+TODO:
+
+- make note about deleting website-util.module

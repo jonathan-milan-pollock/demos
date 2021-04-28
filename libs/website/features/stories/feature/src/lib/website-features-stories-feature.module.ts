@@ -8,7 +8,20 @@ import { StoriesComponent } from './stories/stories.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: StoriesComponent },
+      {
+        path: '',
+        pathMatch: 'full',
+        component: StoriesComponent,
+        children: [
+          {
+            path: ':story',
+            loadChildren: () =>
+              import(
+                '@dark-rush-photography/website/features/story/feature'
+              ).then((module) => module.WebsiteFeaturesStoryFeatureModule),
+          },
+        ],
+      },
     ]),
   ],
   declarations: [StoriesComponent],

@@ -151,6 +151,12 @@
     },
     "website-features-video-admin-feature": {
       "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-sitemap-admin-feature": {
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-features-story-image-feature": {
+      "tags": ["scope:website", "type:feature"]
     }
   }
 }

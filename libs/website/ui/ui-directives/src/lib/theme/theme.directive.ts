@@ -1,6 +1,6 @@
 import { Directive, Input, OnInit, HostBinding } from '@angular/core';
 
-import { Theme } from '@dark-rush-photography/website/types';
+import { ThemeType } from '@dark-rush-photography/website/types';
 
 @Directive({
   selector: '[drpTheme]',
@@ -8,9 +8,9 @@ import { Theme } from '@dark-rush-photography/website/types';
 export class ThemeDirective implements OnInit {
   @HostBinding('class.light-theme') lightTheme = false;
 
-  @Input() drpTheme = Theme.Dark;
+  @Input() drpTheme = 'Dark';
 
   ngOnInit(): void {
-    this.lightTheme = this.drpTheme == Theme.Light;
+    this.lightTheme = this.drpTheme == 'Light';
   }
 }

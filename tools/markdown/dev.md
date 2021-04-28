@@ -10,10 +10,12 @@
 - Use undefined or unknown instead of null
 - Use underscores as number separators
 - Default switch cases and validation should return Either
-- Use ids for js (when needed) classes for css, and data-testid for cypress
+- Use ids to match label for, classes for css, and data-testid for cypress
 - use ems instead of px for measurement
 - use === not ==
 - use a for links to other pages and button for actions
+- don't put href on a tags causes the page to reload
+- unsubscribe or takeUntil Subscription
 
 ```css
 .img-sized {

@@ -31,7 +31,6 @@
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
 - [ci-cd](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/cicd.md)
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
-- [accessibility](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/a11y.md)
 
 ---
 
@@ -42,6 +41,7 @@
 - [Is Service Worker Ready?](https://jakearchibald.github.io/isserviceworkerready/)
 - [npm trends](https://www.npmtrends.com/)
 - [GlobalStats](https://gs.statcounter.com/)
+- [Screen sizes](https://screensiz.es)
 - [Markdown Emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
 
 ---
