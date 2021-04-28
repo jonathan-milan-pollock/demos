@@ -8,7 +8,22 @@ import { WeeklyPhotosComponent } from './weekly-photos/weekly-photos.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: WeeklyPhotosComponent },
+      {
+        path: '',
+        pathMatch: 'full',
+        component: WeeklyPhotosComponent,
+        children: [
+          {
+            path: ':photo-of-the-week',
+            loadChildren: () =>
+              import(
+                '@dark-rush-photography/website/features/weekly-photo/feature'
+              ).then(
+                (module) => module.WebsiteFeaturesWeeklyPhotoFeatureModule
+              ),
+          },
+        ],
+      },
     ]),
   ],
   declarations: [WeeklyPhotosComponent],

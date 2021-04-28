@@ -8,7 +8,19 @@ import { ReviewsComponent } from './reviews/reviews.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: ReviewsComponent },
+      {
+        path: '',
+        component: ReviewsComponent,
+        children: [
+          {
+            path: 'review',
+            loadChildren: () =>
+              import(
+                '@dark-rush-photography/website/features/review/feature'
+              ).then((module) => module.WebsiteFeaturesReviewFeatureModule),
+          },
+        ],
+      },
     ]),
   ],
   declarations: [ReviewsComponent],

@@ -9,9 +9,9 @@ import { ThemeDirective } from './theme.directive';
 
 @Component({
   template: `
-    <div [drpTheme]="'Dark'"></div>
-    <div [drpTheme]="'Light'"></div>
-    <div [drpTheme]></div>
+    <div drpTheme="Dark"></div>
+    <div drpTheme="Light"></div>
+    <div drpTheme></div>
   `,
 })
 class TestComponent {}

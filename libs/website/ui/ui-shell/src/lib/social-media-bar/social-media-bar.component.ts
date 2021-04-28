@@ -1,0 +1,39 @@
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { SocialMediaType } from '@dark-rush-photography/website/types';
+
+import {
+  faFacebookSquare,
+  faInstagram,
+  faLinkedin,
+  faYoutube,
+} from '@fortawesome/free-brands-svg-icons';
+
+@Component({
+  selector: 'drp-social-media-bar',
+  templateUrl: './social-media-bar.component.html',
+  styleUrls: ['./social-media-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SocialMediaBarComponent {
+  faFacebookSquare = faFacebookSquare;
+  faInstagram = faInstagram;
+  faLinkedIn = faLinkedin;
+  faYoutube = faYoutube;
+
+  @Input() facebookAriaLabel = '';
+  @Input() instagramAriaLabel = '';
+  @Input() linkedInAriaLabel = '';
+  @Input() youTubeAriaLabel = '';
+
+  @Output() buttonClicked = new EventEmitter<SocialMediaType>();
+
+  onButtonClicked(socialMediaType: SocialMediaType): void {
+    this.buttonClicked.emit(socialMediaType);
+  }
+}

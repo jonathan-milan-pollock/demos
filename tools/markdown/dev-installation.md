@@ -4,11 +4,6 @@
 - [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
 - [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
 
-Chrome Settings
-
-> Open Mobile View and Enable Show Device Frame in Mobile Settings
-> Open Network Settings and enable Capture Screenshots
-
 ## install VSCode plugins
 
 - [Install VSCode Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
@@ -45,10 +40,13 @@ Chrome Settings
 - [Optionally Install open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser&ssr=false#review-details)
 - [Optionally Install VSCode PrintCode](https://marketplace.visualstudio.com/items?itemName=nobuhito.printcoder)
 
-## install Chrome extensions
+## Chrome extensions
 
 - [Install Chrome extension HTML5 Outliner](https://chrome.google.com/webstore/detail/html5-outliner/afoibpobokebhgfnknfndkgemglggomo?hl=en)
-- [Install Chrome extension Structured Data Testing Tool](https://chrome.google.com/webstore/detail/structured-data-testing-t/kfdjeigpgagildmolfanniafmplnplpl?hl=en)
-- [Install Chrome extension HTML Validator](https://chrome.google.com/webstore/detail/html-validator/mpbelhhnfhfjnaehkcnnaknldmnocglk?hl=en-US)
 - [Install Augury](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd?hl=en)
 - **_Temporarily_** [Install ChromeVox When Actively Testing Accessibility](https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en)
+
+## Chrome Settings
+
+> Open Mobile View and Enable Show Device Frame in Mobile Settings
+> Open Network Settings and enable Capture Screenshots

@@ -573,7 +573,8 @@
             "port": 4400,
             "config": {
               "configFolder": "libs/ui-storybook/.storybook"
-            }
+            },
+            "styles": ["apps/website/src/styles.scss"]
           },
           "configurations": {
             "ci": {
@@ -589,7 +590,8 @@
             "outputPath": "dist/storybook/ui-storybook",
             "config": {
               "configFolder": "libs/ui-storybook/.storybook"
-            }
+            },
+            "styles": ["apps/website/src/styles.scss"]
           },
           "configurations": {
             "ci": {
@@ -926,7 +928,8 @@
             "port": 4400,
             "config": {
               "configFolder": "libs/website/ui/ui-shared/.storybook"
-            }
+            },
+            "styles": ["apps/website/src/styles.scss"]
           },
           "configurations": {
             "ci": {
@@ -942,7 +945,8 @@
             "outputPath": "dist/storybook/website-ui-ui-shared",
             "config": {
               "configFolder": "libs/website/ui/ui-shared/.storybook"
-            }
+            },
+            "styles": ["apps/website/src/styles.scss"]
           },
           "configurations": {
             "ci": {
@@ -1056,6 +1060,40 @@
             "lintFilePatterns": [
               "libs/website/features/video-admin/feature/src/**/*.ts",
               "libs/website/features/video-admin/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-sitemap-admin-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/sitemap-admin/feature",
+      "sourceRoot": "libs/website/features/sitemap-admin/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/sitemap-admin/feature/src/**/*.ts",
+              "libs/website/features/sitemap-admin/feature/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
+    "website-features-story-image-feature": {
+      "projectType": "library",
+      "root": "libs/website/features/story-image/feature",
+      "sourceRoot": "libs/website/features/story-image/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/features/story-image/feature/src/**/*.ts",
+              "libs/website/features/story-image/feature/src/**/*.html"
             ]
           }
         }

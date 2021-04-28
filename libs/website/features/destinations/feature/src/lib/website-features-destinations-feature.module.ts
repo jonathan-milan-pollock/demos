@@ -9,6 +9,13 @@ import { DestinationsComponent } from './destinations/destinations.component';
     CommonModule,
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: DestinationsComponent },
+      {
+        path: ':destination',
+        loadChildren: () =>
+          import(
+            '@dark-rush-photography/website/features/destination/feature'
+          ).then((module) => module.WebsiteFeaturesDestinationFeatureModule),
+      },
     ]),
   ],
   declarations: [DestinationsComponent],

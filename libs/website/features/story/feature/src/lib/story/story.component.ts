@@ -1,22 +1,23 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { PageType } from '@dark-rush-photography/website/types';
+import { SeoService } from '@dark-rush-photography/website/util';
+
 @Component({
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoryComponent implements OnInit {
-  story?: { slug: string };
+  storySlug = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private seoService: SeoService) {}
 
   ngOnInit(): void {
-    this.story = { slug: this.route.snapshot.params['slug'] };
+    this.seoService.addMetadataForPage(PageType.Story, '');
     this.route.params.subscribe((params) => {
-      if (this.story) {
-        this.story.slug = params['story'];
-      }
+      this.storySlug = params['story'];
     });
   }
 }

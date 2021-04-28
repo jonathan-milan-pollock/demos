@@ -4,6 +4,7 @@
     "Affordances",
     "Buildable",
     "Chainable",
+    "Codegen",
     "Exif",
     "Focusable",
     "Linkedin",
@@ -40,9 +41,11 @@
     "prerender",
     "pulumi",
     "ruleset",
+    "subcomponents",
     "testid",
     "ungap",
     "vendored",
+    "viewports",
     "websockets"
   ]
 }
