@@ -196,57 +196,7 @@ const execGenerateWebsiteLibs = (isReady) =>
       )
     )
     .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('admin')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('about')))
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('destination'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('destinations'))
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getWebsiteFeatureLibCommand('destinations-admin')
-      )
-    )
     .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('home')))
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('review'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('reviews'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('reviews-admin'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('sitemap-admin'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('stories'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('stories-admin'))
-    )
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('story')))
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('story-image'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('video-admin'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('weekly-photo'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('weekly-photos'))
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getWebsiteFeatureLibCommand('weekly-photos-admin')
-      )
-    )
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -260,7 +210,6 @@ const execGenerateWebsiteLibs = (isReady) =>
       )
     )
     .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shared')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shell')))
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -305,9 +254,6 @@ const execAddStorybook = (isReady) =>
     )
     .then(() =>
       consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-shared'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-shell'))
     )
     .then(() => consoleLogOrExec(isReady, 'npm uninstall @storybook/angular'))
     .then(() =>

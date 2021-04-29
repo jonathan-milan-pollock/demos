@@ -89,46 +89,10 @@
     "website-data": {
       "tags": ["scope:website", "type:data-access"]
     },
-    "website-features-about-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-destination-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-destinations-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-destinations-admin-feature": {
+    "website-features-admin-feature": {
       "tags": ["scope:website", "type:feature"]
     },
     "website-features-home-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-review-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-reviews-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-reviews-admin-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-stories-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-stories-admin-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-story-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-weekly-photo-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-weekly-photos-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-weekly-photos-admin-feature": {
       "tags": ["scope:website", "type:feature"]
     },
     "website-types": {
@@ -140,23 +104,8 @@
     "website-ui-ui-shared": {
       "tags": ["scope:website", "type:ui"]
     },
-    "website-ui-ui-shell": {
-      "tags": ["scope:website", "type:ui"]
-    },
     "website-util": {
       "tags": ["scope:website", "type:util"]
-    },
-    "website-features-admin-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-video-admin-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-sitemap-admin-feature": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-story-image-feature": {
-      "tags": ["scope:website", "type:feature"]
     }
   }
 }

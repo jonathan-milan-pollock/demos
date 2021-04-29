@@ -1,6 +1,6 @@
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser'; //TODO: Should this be here?
 import { createCustomElement } from '@angular/elements';
 
 import { ImageSlideGalleryComponent } from './image-slide-gallery/image-slide-gallery.component';

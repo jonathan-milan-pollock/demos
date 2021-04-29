@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  templateUrl: './home-images.component.html',
-  styleUrls: ['./home-images.component.scss'],
+  templateUrl: './sitemap-admin.component.html',
+  styleUrls: ['./sitemap-admin.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeImagesComponent {}
+export class SitemapAdminComponent {}

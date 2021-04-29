@@ -1,17 +1,17 @@
 import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
-
 import { moduleMetadata } from '@storybook/angular';
+
 import { BrowserModule } from '@angular/platform-browser';
 
 import { CloseButtonComponent } from './close-button.component';
-import { WebsiteUiUiSharedModule } from '../website-ui-ui-shared.module';
+import { WebsiteUiUiSharedModule } from '../website-ui-ui-shared.module.ts';
 
 <Meta
   title="UI SHARED/Close Button"
   component={CloseButtonComponent}
   decorators={[
     moduleMetadata({
-      imports: [WebsiteUiUiSharedModule, BrowserModule],
+      imports: [BrowserModule, WebsiteUiUiSharedModule],
     }),
   ]}
   argTypes={{

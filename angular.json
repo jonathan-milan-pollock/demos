@@ -626,69 +626,18 @@
         }
       }
     },
-    "website-features-about-feature": {
+    "website-features-admin-feature": {
       "projectType": "library",
-      "root": "libs/website/features/about/feature",
-      "sourceRoot": "libs/website/features/about/feature/src",
+      "root": "libs/website/features/admin/feature",
+      "sourceRoot": "libs/website/features/admin/feature/src",
       "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/website/features/about/feature/src/**/*.ts",
-              "libs/website/features/about/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-destination-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/destination/feature",
-      "sourceRoot": "libs/website/features/destination/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/destination/feature/src/**/*.ts",
-              "libs/website/features/destination/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-destinations-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/destinations/feature",
-      "sourceRoot": "libs/website/features/destinations/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/destinations/feature/src/**/*.ts",
-              "libs/website/features/destinations/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-destinations-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/destinations-admin/feature",
-      "sourceRoot": "libs/website/features/destinations-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/destinations-admin/feature/src/**/*.ts",
-              "libs/website/features/destinations-admin/feature/src/**/*.html"
+              "libs/website/features/admin/feature/src/**/*.ts",
+              "libs/website/features/admin/feature/src/**/*.html"
             ]
           }
         }
@@ -706,159 +655,6 @@
             "lintFilePatterns": [
               "libs/website/features/home/feature/src/**/*.ts",
               "libs/website/features/home/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-review-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/review/feature",
-      "sourceRoot": "libs/website/features/review/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/review/feature/src/**/*.ts",
-              "libs/website/features/review/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-reviews-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/reviews/feature",
-      "sourceRoot": "libs/website/features/reviews/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/reviews/feature/src/**/*.ts",
-              "libs/website/features/reviews/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-reviews-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/reviews-admin/feature",
-      "sourceRoot": "libs/website/features/reviews-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/reviews-admin/feature/src/**/*.ts",
-              "libs/website/features/reviews-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-stories-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/stories/feature",
-      "sourceRoot": "libs/website/features/stories/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/stories/feature/src/**/*.ts",
-              "libs/website/features/stories/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-stories-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/stories-admin/feature",
-      "sourceRoot": "libs/website/features/stories-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/stories-admin/feature/src/**/*.ts",
-              "libs/website/features/stories-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-story-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/story/feature",
-      "sourceRoot": "libs/website/features/story/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/story/feature/src/**/*.ts",
-              "libs/website/features/story/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-weekly-photo-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/weekly-photo/feature",
-      "sourceRoot": "libs/website/features/weekly-photo/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/weekly-photo/feature/src/**/*.ts",
-              "libs/website/features/weekly-photo/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-weekly-photos-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/weekly-photos/feature",
-      "sourceRoot": "libs/website/features/weekly-photos/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/weekly-photos/feature/src/**/*.ts",
-              "libs/website/features/weekly-photos/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-weekly-photos-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/weekly-photos-admin/feature",
-      "sourceRoot": "libs/website/features/weekly-photos-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/weekly-photos-admin/feature/src/**/*.ts",
-              "libs/website/features/weekly-photos-admin/feature/src/**/*.html"
             ]
           }
         }
@@ -956,56 +752,6 @@
         }
       }
     },
-    "website-ui-ui-shell": {
-      "projectType": "library",
-      "root": "libs/website/ui/ui-shell",
-      "sourceRoot": "libs/website/ui/ui-shell/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/ui/ui-shell/src/**/*.ts",
-              "libs/website/ui/ui-shell/src/**/*.html"
-            ]
-          }
-        },
-        "storybook": {
-          "builder": "@nrwl/storybook:storybook",
-          "options": {
-            "uiFramework": "@storybook/angular",
-            "port": 4400,
-            "config": {
-              "configFolder": "libs/website/ui/ui-shell/.storybook"
-            },
-            "styles": ["apps/website/src/styles.scss"]
-          },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
-          }
-        },
-        "build-storybook": {
-          "builder": "@nrwl/storybook:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "uiFramework": "@storybook/angular",
-            "outputPath": "dist/storybook/website-ui-ui-shell",
-            "config": {
-              "configFolder": "libs/website/ui/ui-shell/.storybook"
-            },
-            "styles": ["apps/website/src/styles.scss"]
-          },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
-          }
-        }
-      }
-    },
     "website-util": {
       "projectType": "library",
       "root": "libs/website/util",
@@ -1027,74 +773,6 @@
           "options": {
             "jestConfig": "libs/website/util/jest.config.js",
             "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "website-features-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/admin/feature",
-      "sourceRoot": "libs/website/features/admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/admin/feature/src/**/*.ts",
-              "libs/website/features/admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-video-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/video-admin/feature",
-      "sourceRoot": "libs/website/features/video-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/video-admin/feature/src/**/*.ts",
-              "libs/website/features/video-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-sitemap-admin-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/sitemap-admin/feature",
-      "sourceRoot": "libs/website/features/sitemap-admin/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/sitemap-admin/feature/src/**/*.ts",
-              "libs/website/features/sitemap-admin/feature/src/**/*.html"
-            ]
-          }
-        }
-      }
-    },
-    "website-features-story-image-feature": {
-      "projectType": "library",
-      "root": "libs/website/features/story-image/feature",
-      "sourceRoot": "libs/website/features/story-image/feature/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/story-image/feature/src/**/*.ts",
-              "libs/website/features/story-image/feature/src/**/*.html"
-            ]
           }
         }
       }

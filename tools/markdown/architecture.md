@@ -38,7 +38,7 @@
 3. Create architecture md
 4. Create draw.io components diagram with defined routes
 5. Create projects from install-workspace.js script
-6. Create component for each feature (such as HomeComponent) and remove selector
+6. Create component for each feature (such as HomeComponent) and remove selector & verify OnPush
 7. Adjust root and child roots and add basic routing between pages
 8. Create website-e2e Cypress test for each of these components
 
@@ -168,7 +168,6 @@ module.exports = rootMain;
 - ui-storybook
 - elements/ui
 - ui-shared
-- ui-shell
 
 - remove decorators
 - add addons configuration

@@ -7,7 +7,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { environment } from '../environments/environment';
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    WebsiteUiUiShellModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
