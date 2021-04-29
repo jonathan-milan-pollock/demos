@@ -1,51 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { HomeImagesComponent } from './home-images/home-images.component';
+import { MatButtonModule } from '@angular/material/button';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import {
+  SocialMediaButtonComponent,
+  SocialMediaBarComponent,
+} from '@dark-rush-photography/website/ui/ui-shared';
+import { HomeComponent } from './home.component';
+import { HomeRoutingModule } from './home-routing.module';
 
 @NgModule({
+  declarations: [
+    SocialMediaButtonComponent,
+    SocialMediaBarComponent,
+    HomeComponent,
+  ],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: HomeComponent,
-        children: [
-          {
-            path: '',
-            component: HomeImagesComponent,
-          },
-          {
-            path: 'photo-of-the-week',
-            loadChildren: () =>
-              import(
-                '@dark-rush-photography/website/features/weekly-photos/feature'
-              ).then(
-                (module) => module.WebsiteFeaturesWeeklyPhotosFeatureModule
-              ),
-          },
-          {
-            path: 'stories',
-            loadChildren: () =>
-              import(
-                '@dark-rush-photography/website/features/stories/feature'
-              ).then((module) => module.WebsiteFeaturesStoriesFeatureModule),
-          },
-          {
-            path: 'destinations',
-            loadChildren: () =>
-              import(
-                '@dark-rush-photography/website/features/destinations/feature'
-              ).then(
-                (module) => module.WebsiteFeaturesDestinationsFeatureModule
-              ),
-          },
-        ],
-      },
-    ]),
+    MatButtonModule,
+    FontAwesomeModule,
+    HomeRoutingModule,
   ],
-  declarations: [HomeComponent, HomeImagesComponent],
 })
 export class WebsiteFeaturesHomeFeatureModule {}

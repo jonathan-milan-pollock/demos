@@ -1,0 +1,35 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+
+import { SocialMediaBarComponent } from './social-media-bar.component';
+import { WebsiteUiUiSharedModule } from '../website-ui-ui-shared.module.ts';
+
+<Meta
+  title="UI SHELL/Social Media Bar"
+  component={SocialMediaBarComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, WebsiteUiUiSharedModule],
+    }),
+  ]}
+  argTypes={{
+    buttonClicked: { action: 'buttonClicked' },
+  }}
+/>
+
+# Social Media Bar
+
+<Story
+  name="Default"
+  args={{
+    facebookAriaLabel: 'Find out more about Dark Rush Photography on Facebook',
+    instagramAriaLabel:
+      'Find out more about Dark Rush Photography on Instagram',
+    linkedInAriaLabel: 'Find out more about Dark Rush Photography on LinkedIn',
+    youTubeAriaLabel: 'Watch videos from Dark Rush Photography on YouTube',
+  }}
+>
+  {(args) => <drp-social-media-bar {...args} />}
+</Story>

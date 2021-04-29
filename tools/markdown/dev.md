@@ -102,7 +102,7 @@
 
 ### ui, smart ui, and feature components
 
-- generate **website:ui-shared** and **website:ui-shell** components with Nx Console
+- generate **website:ui-shared** components with Nx Console
 
   1. enter component name and project
   2. select style scss
