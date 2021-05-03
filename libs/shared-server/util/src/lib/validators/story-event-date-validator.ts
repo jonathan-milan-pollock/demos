@@ -1,19 +1,19 @@
 import { Validator } from './validator';
 
-export class StoryEventDateValidator implements Validator {
+export class EventDateValidator implements Validator {
   isValid = () => true;
 }
 
 /*
     private readonly DateTime today;
 
-StoryEventDateValidator(DateTime today)
+    EventDateValidator(DateTime today)
     {
         this.today = today;
     }
 
-    bool IsValid(Story story)
+    bool IsValid(Event event)
     {
-        return today >= new DateTime(story.EventDate.Year, story.EventDate.Month, story.EventDate.Day);
+        return today >= new DateTime(event.EventDate.Year, event.EventDate.Month, event.EventDate.Day);
     }
     **/

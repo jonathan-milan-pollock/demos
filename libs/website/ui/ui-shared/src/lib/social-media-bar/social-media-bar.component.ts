@@ -15,7 +15,8 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
-  selector: 'drp-social-media-bar',
+  selector:
+    'drp-social-media-bar[facebookAriaLabel][instagramAriaLabel][linkedInAriaLabel][youTubeAriaLabel]',
   templateUrl: './social-media-bar.component.html',
   styleUrls: ['./social-media-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

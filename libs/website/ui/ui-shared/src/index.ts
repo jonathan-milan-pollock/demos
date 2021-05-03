@@ -1,2 +1,3 @@
-export * from './lib/social-media-bar/social-media-bar.component';
-export * from './lib/social-media-button/social-media-button.component';
+export * from './lib/website-ui-admin.module';
+export * from './lib/website-ui-common.module';
+export * from './lib/website-ui-form-groups.module';

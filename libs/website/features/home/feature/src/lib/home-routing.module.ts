@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { MetaResolver } from '@dark-rush-photography/website/util';
 
 import { HomeComponent } from './home.component';
 
@@ -36,28 +37,31 @@ const routes: Routes = [
       },
       {
         path: 'photo-of-the-week/:photo-of-the-week',
+        resolve: { metadata: MetaResolver },
         loadChildren: () =>
           import(
             './photo-of-the-week-image/photo-of-the-week-image.module'
           ).then((module) => module.PhotoOfTheWeekImageModule),
       },
       {
-        path: 'stories',
+        path: 'events',
         loadChildren: () =>
-          import('./stories/stories.module').then(
-            (module) => module.StoriesModule
+          import('./events/events.module').then(
+            (module) => module.EventsModule
           ),
       },
       {
-        path: 'stories/:story',
+        path: 'events/:event',
+        resolve: { metadata: MetaResolver },
         loadChildren: () =>
-          import('./story/story.module').then((module) => module.StoryModule),
+          import('./event/event.module').then((module) => module.EventModule),
       },
       {
-        path: 'stories/:story/:story-image',
+        path: 'events/:event/:event-image',
+        resolve: { metadata: MetaResolver },
         loadChildren: () =>
-          import('./story-image/story-image.module').then(
-            (module) => module.StoryImageModule
+          import('./event-image/event-image.module').then(
+            (module) => module.EventImageModule
           ),
       },
       {
@@ -69,6 +73,7 @@ const routes: Routes = [
       },
       {
         path: 'destinations/:destination',
+        resolve: { metadata: MetaResolver },
         loadChildren: () =>
           import('./destination/destination.module').then(
             (module) => module.DestinationModule

@@ -36,6 +36,7 @@ const execInstallDevDependencies = (isReady) =>
   Promise.resolve(console.log('### dev dependencies'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D source-map-explorer'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D concurrently'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D azurite'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @azure/functions'))
@@ -265,13 +266,15 @@ const execAddStorybook = (isReady) =>
     )
     .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-a11y'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D storybook-addon-themes'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-postcss'));
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-postcss'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @compodoc/compodoc'));
 
 const execUpdateCypress = (isReady) =>
   Promise.resolve(console.log('### update cypress'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm uninstall cypress'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress'));
+    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress-storybook'));
 
 const execAddAngularElements = (isReady) =>
   Promise.resolve(console.log('### add angular elements'))
@@ -295,6 +298,13 @@ const execAddAngularUniversal = (isReady) =>
         isReady,
         'npx nx add @nestjs/ng-universal --clientProject=website'
       )
+    );
+
+const execAddNgrx = (isReady) =>
+  Promise.resolve(console.log('### add ngrx'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(isReady, 'npx ng add @ngrx/store --project=website')
     );
 
 const execAddAngularMaterial = (isReady) =>
@@ -350,6 +360,8 @@ const execInstall = (isReady) =>
     .then(() => execAddAngularElements(isReady))
     .then(() => console.log())
     .then(() => execAddAngularUniversal(isReady))
+    .then(() => console.log())
+    .then(() => execAddNgrx(isReady))
     .then(() => console.log())
     .then(() => execAddAngularMaterial(isReady))
     .then(() => console.log())

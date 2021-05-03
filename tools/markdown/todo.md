@@ -46,3 +46,13 @@ TODO: https://www.npmjs.com/package/nock
 TODO: grapheme-splitter
 
 TODO: Safe deserialization
+
+IPTC photo metadata
+Alternatively, you can embed IPTC photo metadata directly inside an image. You must include the Web Statement of Rights field for your image to be eligible to be shown with the licensable badge. We recommend that you also add the Licensor URL field if you have that information.
+
+Required properties
+Web Statement of Rights
+A URL to a page that describes the license governing an image's use, and optionally other rights information. For example, it could be the terms and conditions that you have on your website. Where applicable, it could also be a Creative Commons License (for example, BY-NC 4.0).
+
+https://creativecommons.org/licenses/by-nd/4.0/
+https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#web-statement-of-rights

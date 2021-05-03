@@ -4,7 +4,5 @@ export interface Location {
   readonly city?: string;
   readonly stateOrProvince?: string;
   readonly zipCode?: string;
-  readonly latitude?: number;
-  readonly longitude?: number;
   readonly country: string;
 }

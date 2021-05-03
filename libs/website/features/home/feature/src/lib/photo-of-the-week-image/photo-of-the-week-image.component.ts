@@ -12,6 +12,10 @@ export class PhotoOfTheWeekImageComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.route.data.subscribe((data) => {
+      console.log(data['metadata']);
+    });
+
     this.route.params.subscribe((params) => {
       this.photoOfTheWeek = { slug: params['photo-of-the-week'] };
     });

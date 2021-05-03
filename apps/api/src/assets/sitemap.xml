@@ -7,7 +7,25 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories</loc>
+    <loc>https://www.darkrushphotography.com/about</loc>
+    <priority>0.9</priority>
+     <lastmod>2020-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.darkrushphotography.com/reviews</loc>
+    <priority>0.9</priority>
+     <lastmod>2020-04-01</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.darkrushphotography.com/reviews/review</loc>
+    <priority>0.8</priority>
+     <lastmod>2020-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.darkrushphotography.com/events</loc>
     <priority>0.8</priority>
     <lastmod>2020-04-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -19,67 +37,55 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/reviews</loc>
-    <priority>0.9</priority>
-     <lastmod>2020-04-01</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://www.darkrushphotography.com/review</loc>
+    <loc>https://www.darkrushphotography.com/destinations</loc>
     <priority>0.8</priority>
-     <lastmod>2020-04-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2020-04-01</lastmod>
+    <changefreq>weekly</changefreq>
   </url>
   <url>
-  <loc>https://www.darkrushphotography.com/about</loc>
-    <priority>0.9</priority>
-     <lastmod>2020-04-01</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://www.darkrushphotography.com/stories/len-foote-hike-inn-amicalola-falls-2017</loc>
+    <loc>https://www.darkrushphotography.com/events/len-foote-hike-inn-amicalola-falls-2017</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories/sandy-springs-festival-2017</loc>
+    <loc>https://www.darkrushphotography.com/events/sandy-springs-festival-2017</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories/south-cobb-arts-alliance-storytelling-festival-2017</loc>
+    <loc>https://www.darkrushphotography.com/events/south-cobb-arts-alliance-storytelling-festival-2017</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories/classic-cars-1952-pontiac</loc>
-    <priority>0.7</priority>
-     <lastmod>2020-03-10</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-    <url>
-    <loc>https://www.darkrushphotography.com/stories/sarasota-florida-vacation-2019</loc>
+    <loc>https://www.darkrushphotography.com/events/classic-cars-1952-pontiac</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories/macon-international-cherry-blossom-festival-2019</loc>
+    <loc>https://www.darkrushphotography.com/events/sarasota-florida-vacation-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories/midtown-alliance-spring-crawl-2019</loc>
+    <loc>https://www.darkrushphotography.com/events/macon-international-cherry-blossom-festival-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/stories/food-that-rocks-a-celebration-of-sandy-springs-2019</loc>
+    <loc>https://www.darkrushphotography.com/events/midtown-alliance-spring-crawl-2019</loc>
+    <priority>0.7</priority>
+     <lastmod>2020-03-10</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.darkrushphotography.com/events/food-that-rocks-a-celebration-of-sandy-springs-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>

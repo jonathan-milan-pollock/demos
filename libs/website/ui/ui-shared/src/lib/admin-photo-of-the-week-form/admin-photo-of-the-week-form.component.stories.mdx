@@ -1,0 +1,73 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { AdminPhotoOfTheWeekFormComponent } from './admin-photo-of-the-week-form.component';
+import { WebsiteUiFormGroupsModule } from '../website-ui-form-groups.module';
+import * as identifierStories from '../form-identifier-group/form-identifier-group.component.stories.mdx';
+import * as metadataStories from '../form-document-metadata-group/form-document-metadata-group.component.stories.mdx';
+import * as locationStories from '../form-location-group/form-location-group.component.stories.mdx';
+import * as displayStories from '../form-display-group/form-display-group.component.stories.mdx';
+
+<Meta
+  title="UI ADMIN/Admin Photo of the Week Form"
+  component={AdminPhotoOfTheWeekFormComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiFormGroupsModule,
+      ],
+    }),
+  ]}
+/>
+
+export const adminPhotoOfTheWeekForm = new FormGroup({
+  identifier: identifierStories.identifierGroup,
+  metadata: metadataStories.metadataGroup,
+  location: locationStories.locationGroup,
+  display: displayStories.displayGroup,
+});
+
+# Form Admin Photo of the Week Form
+
+<Story
+  height="500px"
+  name="Default"
+  args={{
+    slugFormControlName: identifierStories.slugFormControlName,
+    groupFormControlName: identifierStories.groupFormControlName,
+    groups: identifierStories.groups,
+    titleFormControlName: metadataStories.titleFormControlName,
+    descriptionFormControlName: metadataStories.descriptionFormControlName,
+    keywordsFormControlName: metadataStories.keywordsFormControlName,
+    datePublishedFormControlName: metadataStories.datePublishedFormControlName,
+    placeFormControlName: locationStories.placeFormControlName,
+    streetFormControlName: locationStories.streetFormControlName,
+    cityFormControlName: locationStories.cityFormControlName,
+    stateOrProvinceFormControlName:
+      locationStories.stateOrProvinceFormControlName,
+    zipCodeFormControlName: locationStories.zipCodeFormControlName,
+    countryFormControlName: locationStories.countryFormControlName,
+    useTileImageFormControlName: displayStories.useTileImageFormControlName,
+  }}
+>
+  {(args) => (
+    <drp-admin-photo-of-the-week-form
+      {...args}
+      adminPhotoOfTheWeekForm={adminPhotoOfTheWeekForm}
+      identifierGroup={identifierStories.identifierGroup}
+      metadataGroup={metadataStories.metadataGroup}
+      locationGroup={locationStories.locationGroup}
+      displayGroup={displayStories.displayGroup}
+    />
+  )}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={AdminPhotoOfTheWeekFormComponent} />

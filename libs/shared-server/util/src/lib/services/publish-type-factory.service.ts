@@ -2,7 +2,7 @@ import { BlobPath } from '../interfaces/blob-path';
 import { Image } from '../interfaces/image';
 import { DestinationImage } from '../models/destination-image';
 import { PhotoOfTheWeekImage } from '../models/photo-of-the-week-image';
-import { StoryImage } from '../models/story-image';
+import { EventImage } from '../models/event-image';
 import { WatermarkImage } from '../models/watermark-image';
 import { WithoutWatermarkImage } from '../models/without-watermark-image';
 
@@ -16,8 +16,8 @@ export const publishTypeFromUploadFileName = (
   switch (blobFileNameSections[0].toLowerCase().replace(/\s+/g, '')) {
     case 'photooftheweek':
       return PhotoOfTheWeekImage.fromBlobFileNameSections(blobFileNameSections);
-    case 'stories':
-      return StoryImage.fromBlobFileNameSections(blobFileNameSections);
+    case 'events':
+      return EventImage.fromBlobFileNameSections(blobFileNameSections);
     case 'destinations':
       return DestinationImage.fromBlobFileNameSections(blobFileNameSections);
     case 'watermark':
@@ -36,7 +36,7 @@ export const fromBlobPath = (blobPath: BlobPath): Image => {
     case 'photo-of-the-week':
       return PhotoOfTheWeekImage.fromBlobPath(blobPath);
     case 'stories':
-      return StoryImage.fromBlobPath(blobPath);
+      return EventImage.fromBlobPath(blobPath);
     case 'destinations':
       return DestinationImage.fromBlobPath(blobPath);
     case 'watermarked':

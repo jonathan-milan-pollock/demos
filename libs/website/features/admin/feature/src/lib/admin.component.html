@@ -1,5 +1,8 @@
-<button *ngIf="!loggedIn" (click)="onLogIn()">Log In</button>
-<button *ngIf="loggedIn" (click)="onLogOut()">Log Out</button>
+<header class="page-header">
+  <h1 class="title">Dark Rush Photography</h1>
+</header>
+<button *ngIf="!isAuthenticated" (click)="onSignIn()">Sign In</button>
+<button *ngIf="isAuthenticated" (click)="onSignOut()">Sign Out</button>
 <main>
   <router-outlet></router-outlet>
 </main>

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from '@dark-rush-photography/website/util';
 
 import { AdminComponent } from './admin.component';
 
@@ -18,52 +19,65 @@ const routes: Routes = [
       },
       {
         path: 'reviews',
-        //canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
         //canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
-          import('./reviews-admin/reviews-admin.module').then(
-            (module) => module.ReviewsAdminModule
+          import('./admin-reviews/admin-reviews.module').then(
+            (module) => module.AdminReviewsModule
           ),
       },
       {
         path: 'photo-of-the-week',
-        //canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
         //canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import(
-            './photo-of-the-week-admin/photo-of-the-week-admin.module'
-          ).then((module) => module.PhotoOfTheWeekAdminModule),
+            './admin-photo-of-the-week/admin-photo-of-the-week.module'
+          ).then((module) => module.AdminPhotoOfTheWeekModule),
       },
       {
-        path: 'stories',
+        path: 'events',
+        canActivate: [AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
-          import('./stories-admin/stories-admin.module').then(
-            (module) => module.StoriesAdminModule
+          import('./admin-events/admin-events.module').then(
+            (module) => module.AdminEventsModule
           ),
       },
       {
         path: 'destinations',
+        canActivate: [AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
-          import('./destinations-admin/destinations-admin.module').then(
-            (module) => module.DestinationsAdminModule
+          import('./admin-destinations/admin-destinations.module').then(
+            (module) => module.AdminDestinationsModule
           ),
       },
       {
         path: 'video',
+        canActivate: [AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
-          import('./video-admin/video-admin.module').then(
-            (module) => module.VideoAdminModule
+          import('./admin-video/admin-video.module').then(
+            (module) => module.AdminVideoModule
           ),
       },
       {
         path: 'sitemap',
+        canActivate: [AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
-          import('./sitemap-admin/sitemap-admin.module').then(
-            (module) => module.SitemapAdminModule
+          import('./admin-sitemap/admin-sitemap.module').then(
+            (module) => module.AdminSitemapModule
+          ),
+      },
+      {
+        path: 'settings',
+        canActivate: [AuthGuard],
+        // canDeactivate: [SaveChangesGuard],
+        loadChildren: () =>
+          import('./admin-settings/admin-settings.module').then(
+            (module) => module.AdminSettingsModule
           ),
       },
     ],

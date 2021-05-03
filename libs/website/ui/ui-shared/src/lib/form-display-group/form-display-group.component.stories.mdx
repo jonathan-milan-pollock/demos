@@ -1,0 +1,39 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { FormDisplayGroupComponent } from './form-display-group.component';
+
+<Meta
+  title="UI FORM GROUPS/Form Display Group"
+  component={FormDisplayGroupComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule],
+    }),
+  ]}
+/>
+
+export const displayGroup = new FormGroup({
+  useTileImage: new FormControl(null),
+});
+export const useTileImageFormControlName = 'useTileImage';
+
+# Form Display Group
+
+<Story
+  height="500px"
+  name="Default"
+  args={{
+    useTileImageFormControlName,
+  }}
+>
+  {(args) => <drp-form-display-group {...args} displayGroup={displayGroup} />}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={FormDisplayGroupComponent} />

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { SeoService } from '@dark-rush-photography/website/util';
+import { MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
   templateUrl: './destination.component.html',
@@ -11,14 +11,19 @@ import { SeoService } from '@dark-rush-photography/website/util';
 export class DestinationComponent implements OnInit {
   slug = '';
 
-  constructor(private route: ActivatedRoute, private seoService: SeoService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private metaService: MetaService
+  ) {}
 
   ngOnInit(): void {
-    this.seoService.addMetadata({
-      title: 'destination title',
-      description: 'destination description',
-      url: '',
-    });
+    this.metaService.addMetadata(
+      {
+        title: 'destination title',
+        description: 'destination description',
+      },
+      ''
+    );
     this.route.params.subscribe((params) => {
       this.slug = params['slug'];
     });
