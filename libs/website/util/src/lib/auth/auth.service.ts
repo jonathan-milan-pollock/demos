@@ -1,21 +1,25 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  loggedIn = false;
-  loggedInChanged = new EventEmitter<boolean>();
+  isAuthenticated = false;
+  authenticationChanged = new Subject<boolean>();
 
-  logIn(): void {
-    setTimeout(() => {
-      this.loggedIn = true;
-      this.loggedInChanged.emit(this.loggedIn);
-    }, 3_000);
+  constructor(private router: Router) {}
+
+  signIn(): void {
+    this.isAuthenticated = true;
+    this.authenticationChanged.next(this.isAuthenticated);
   }
 
-  logOut(): void {
-    this.loggedIn = false;
-    this.loggedInChanged.emit(this.loggedIn);
+  signOut(): void {
+    this.isAuthenticated = false;
+    this.authenticationChanged.next(this.isAuthenticated);
+    this.router.navigate(['/admin']);
   }
 }

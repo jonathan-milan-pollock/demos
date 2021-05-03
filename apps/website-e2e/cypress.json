@@ -9,5 +9,6 @@
   "videosFolder": "../../dist/cypress/apps/website-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/website-e2e/screenshots",
   "chromeWebSecurity": false,
+  "baseUrl": "http://localhost:4200",
   "projectId": "sx8qh5"
 }

@@ -4,14 +4,14 @@ import { moduleMetadata } from '@storybook/angular';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { SocialMediaBarComponent } from './social-media-bar.component';
-import { WebsiteUiUiSharedModule } from '../website-ui-ui-shared.module.ts';
+import { WebsiteUiCommonModule } from '../website-ui-common.module';
 
 <Meta
-  title="UI SHELL/Social Media Bar"
+  title="UI COMMON/Social Media Bar"
   component={SocialMediaBarComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, WebsiteUiUiSharedModule],
+      imports: [BrowserModule, WebsiteUiCommonModule],
     }),
   ]}
   argTypes={{

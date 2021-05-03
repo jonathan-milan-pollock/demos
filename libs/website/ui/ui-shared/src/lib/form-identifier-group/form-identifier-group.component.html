@@ -1,0 +1,16 @@
+<fieldset *ngIf="identifierGroup" [formGroup]="identifierGroup">
+  <legend>Identifier</legend>
+  <mat-form-field class="form-field">
+    <mat-label>Slug</mat-label>
+    <input matInput [formControlName]="slugFormControlName" />
+  </mat-form-field>
+
+  <mat-form-field class="form-field" *ngIf="groupFormControlName">
+    <mat-label>Group</mat-label>
+    <mat-select [formControlName]="groupFormControlName">
+      <mat-option *ngFor="let group of groups" [value]="group">
+        {{ group }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</fieldset>

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 
 import { PageType } from '@dark-rush-photography/website/types';
-import { SeoService } from '@dark-rush-photography/website/util';
+import { MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
   templateUrl: './destinations.component.html',
@@ -9,9 +9,9 @@ import { SeoService } from '@dark-rush-photography/website/util';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DestinationsComponent implements OnInit {
-  constructor(private seoService: SeoService) {}
+  constructor(private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.seoService.addMetadataForPage(PageType.Destinations, '');
+    this.metaService.addMetadataForPage(PageType.Destinations, '');
   }
 }

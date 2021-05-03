@@ -1,0 +1,32 @@
+<fieldset *ngIf="formKeywordsGroup" [formGroup]="formKeywordsGroup">
+  <legend>Keywords</legend>
+  <div>
+    <span>
+      <mat-form-field class="form-field">
+        <mat-label>Keyword</mat-label>
+        <input matInput [formControlName]="keywordsFormControlName" #keyword />
+      </mat-form-field>
+      <button
+        type="button"
+        mat-button
+        (click)="onAddKeyword(keyword)"
+        [disabled]="isKeywordInvalid(keyword.value)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        mat-button
+        [disabled]="keywordsList.selectedOptions.selected.length === 0"
+        (click)="onDeleteKeywords(keywordsList.selectedOptions.selected)"
+      >
+        Delete
+      </button>
+    </span>
+  </div>
+  <mat-selection-list #keywordsList>
+    <mat-list-option *ngFor="let keyword of keywords" [value]="keyword">
+      {{ keyword }}
+    </mat-list-option>
+  </mat-selection-list>
+</fieldset>

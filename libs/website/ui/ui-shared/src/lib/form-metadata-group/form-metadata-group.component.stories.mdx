@@ -1,0 +1,44 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { FormMetadataGroupComponent } from './form-metadata-group.component';
+
+<Meta
+  title="UI FORM GROUPS/Form Metadata Group"
+  component={FormMetadataGroupComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule],
+    }),
+  ]}
+/>
+
+export const metadataGroup = new FormGroup({
+  title: new FormControl(null),
+  description: new FormControl(null),
+});
+export const titleFormControlName = 'title';
+export const descriptionFormControlName = 'description';
+
+# Form Metadata Group
+
+<Story
+  height="500px"
+  name="Default"
+  args={{
+    titleFormControlName,
+    descriptionFormControlName,
+  }}
+>
+  {(args) => (
+    <drp-form-metadata-group {...args} metadataGroup={metadataGroup} />
+  )}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={FormMetadataGroupComponent} />

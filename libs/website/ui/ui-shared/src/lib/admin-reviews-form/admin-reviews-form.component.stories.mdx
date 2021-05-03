@@ -1,0 +1,55 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { AdminReviewsFormComponent } from './admin-reviews-form.component';
+import { WebsiteUiFormGroupsModule } from '../website-ui-form-groups.module';
+import * as identifierStories from '../form-identifier-group/form-identifier-group.component.stories.mdx';
+import * as metadataStories from '../form-metadata-group/form-metadata-group.component.stories.mdx';
+
+<Meta
+  title="UI ADMIN/Admin Reviews Form"
+  component={AdminReviewsFormComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiFormGroupsModule,
+      ],
+    }),
+  ]}
+/>
+
+export const adminReviewsForm = new FormGroup({
+  identifier: identifierStories.identifierGroup,
+  metadata: metadataStories.metadataGroup,
+});
+
+# Form Admin Photo of the Week Form
+
+<Story
+  height="500px"
+  name="Default"
+  args={{
+    slugFormControlName: identifierStories.slugFormControlName,
+    titleFormControlName: metadataStories.titleFormControlName,
+    descriptionFormControlName: metadataStories.descriptionFormControlName,
+  }}
+>
+  {(args) => (
+    <drp-admin-reviews-form
+      {...args}
+      adminReviewsForm={adminReviewsForm}
+      identifierGroup={identifierStories.identifierGroup}
+      metadataGroup={metadataStories.metadataGroup}
+    />
+  )}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={AdminReviewsFormComponent} />

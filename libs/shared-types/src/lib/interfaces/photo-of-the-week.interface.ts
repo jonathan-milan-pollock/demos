@@ -1,12 +1,15 @@
+import { Identifier } from './identifier.interface';
+import { DocumentMetadata } from './document-metadata.interface';
 import { Location } from './location.interface';
-import { ReadableDate } from './readable-date.interface';
+import { Display } from './display.interface';
+import { Image } from './image.interface';
 
 export interface PhotoOfTheWeek {
-  readonly slug: string;
-  readonly name: string;
+  readonly identifier: Identifier;
+  readonly metadata: DocumentMetadata;
   readonly location: Location;
-  readonly keywords: Set<string>;
-  readonly publishDate?: ReadableDate;
-  readonly useTitleImage: boolean;
-  readonly isPosted: boolean;
+  readonly display: Display;
+  readonly content: {
+    readonly image?: Image;
+  };
 }

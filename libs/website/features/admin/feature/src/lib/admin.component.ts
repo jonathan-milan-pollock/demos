@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
+
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '@dark-rush-photography/website/util';
 
@@ -7,22 +14,30 @@ import { AuthService } from '@dark-rush-photography/website/util';
   styleUrls: ['./admin.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminComponent implements OnInit {
-  loggedIn = false;
+export class AdminComponent implements OnInit, OnDestroy {
+  private authServiceSub?: Subscription;
+
+  isAuthenticated = false;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.loggedInChanged.subscribe((loggedIn) => {
-      this.loggedIn = loggedIn;
-    });
+    this.authServiceSub = this.authService.authenticationChanged.subscribe(
+      (isAuthenticated) => {
+        this.isAuthenticated = isAuthenticated;
+      }
+    );
   }
 
-  onLogIn(): void {
-    this.authService.logIn();
+  onSignIn(): void {
+    this.authService.signIn();
   }
 
-  onLogOut(): void {
-    this.authService.logOut();
+  onSignOut(): void {
+    this.authService.signOut();
+  }
+
+  ngOnDestroy(): void {
+    this.authServiceSub?.unsubscribe();
   }
 }

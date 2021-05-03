@@ -19,30 +19,11 @@
 - [TinyPNG](https://tinypng.com/)
 - [TinyPNG Analyzer](https://tinypng.com/analyzer)
 - [Bing Webmaster Tools](https://www.bing.com/webmasters/help/home-05a5a164)
-- [SEO Google Developers Doc](https://developers.google.com/search/docs)
 - [Rich Search Results](https://search.google.com/test/rich-results)
 
 ## Topic
 
 https://developers.google.com/speed/pagespeed/insights/
-
-- For each route add meta data
-
-```ts
-import { Title, Meta } from '@angular/platform-browser';
-
-  title = 'Dark Rush Photography';
-  description = 'Specializes in Event Photography, Real Estate Photography, and Extended Reality (XR)';
-
-  constructor(private titleService: Title, private metaService: Meta) {}
-
-  ngOnInit(): void {
-    this.titleService.setTitle(this.title);
-    this.metaService.addTags([
-      { name: 'description', content: 'Photographers ' },
-    ]);
-  }
-```
 
 - add robots.txt file <https://www.robotstxt.org/robotstxt.html>
 - add sitemap.xml file

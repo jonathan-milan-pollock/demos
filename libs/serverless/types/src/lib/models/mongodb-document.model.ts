@@ -1,3 +1,5 @@
+import { ReadableDate } from '@dark-rush-photography/shared-types';
+
 export class MongoDbDocument {
   constructor(
     public slug: string,

@@ -1,6 +1,6 @@
 # dev
 
---
+---
 
 ## best practices
 
@@ -17,62 +17,7 @@
 - don't put href on a tags causes the page to reload
 - unsubscribe or takeUntil Subscription
 
-```css
-.img-sized {
-  max-width: 98%;
-  margin-left: 1%;
-  margin-right: 1%;
-}
-```
-
-```html
-<video control width="400" height="300">
-  <source src="mobile.mp4" type="video/mp4" media="(max-device-width: 480px)" />
-  <source src="mobile.mp4" type="video/mp4" />
-  <source src="mobile.ogv" type="video/ogg" />
-</video>
-```
-
-## best practices Cypress
-
-- Set state directly & programmatically, don't need to use the UI to build up state
-- Write specs in isolation without sharing page objects
-- Have access to everything so don't limit to acting like a user
-
---
-
-## reading
-
-- [12 Factor App](https://12factor.net/)
-- [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
-- [Nx Enforcing Boundaries](https://medium.com/showpad-engineering/how-to-programmatically-enforce-boundaries-between-applications-and-libraries-in-an-nx-monorepo-39bf8fbec6ba)
-- [Storybook with Angular](https://storybook.js.org/tutorials/intro-to-storybook/angular/en/get-started/)
-- [Cypress](https://docs.cypress.io/guides/overview/why-cypress)
-- [NestJS](https://docs.nestjs.com/)
-
-## videos
-
-- [Step 1 - Create Application](https://nx.dev/latest/angular/tutorial/01-create-application)
-- [Step 2 - Add E2E Test](https://nx.dev/latest/angular/tutorial/02-add-e2e-test)
-- [Step 3 - Display Todos](https://nx.dev/latest/angular/tutorial/03-display-todos)
-- [Step 4 - Connect to API](https://nx.dev/latest/angular/tutorial/04-connect-to-api)
-- [Step 5 - Add Node App](https://nx.dev/latest/angular/tutorial/05-add-node-app)
-- [Step 6 - Proxy](https://nx.dev/latest/angular/tutorial/06-proxy)
-- [Step 7 - Share Code](https://nx.dev/latest/angular/tutorial/07-share-code)
-- [Step 8 - Create Libs](https://nx.dev/latest/angular/tutorial/08-create-libs)
-- [Step 9 - Dep Graph](https://nx.dev/latest/angular/tutorial/09-dep-graph)
-- [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
-- [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
-- [Cypress at Assert(JS) 2018 Part 1](https://youtu.be/5XQOK0v_YRE)
-- [Cypress at Assert(JS) 2018 Part 2](https://youtu.be/5FnalKRjpZk)
-
-## references
-
-- [HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
-- [Google Fonts](https://fonts.google.com/)
-- [Adobe Fonts](https://fonts.adobe.com/)
-
---
+---
 
 ## installation
 
@@ -84,70 +29,44 @@
   - In File > Preferences > Settings
   - Enable Editor: Format On Save
   - Within a ts file ensure that Prettier is the default Formatter
+- update material icon theme settings
+  - in settings change material icon theme to angular_ngrx
 
 ## running dev
 
-- npx nx run serve
+- npm run cy:ui
+- npm run cy:web
+- npm run cy:ssr
 
-## running dev ssr
-
-- npm run dev:ssr
-
-## testing production ssr
-
-- npm run build:ssr
-- npm run serve:ssr
+---
 
 ## when generating new files
 
-### ui, smart ui, and feature components
+### ui and ui feature components create with NxConsole
 
-- generate **website:ui-shared** components with Nx Console
+- use these settings:
+  - style: scss
+  - change detections: OnPush
+  - select SkipTests
 
-  1. enter component name and project
-  2. select style scss
-  3. select change detection OnPush
-  4. select SkipTests Do not create "spec.ts" test files for the new component.
+### elements components create with NxConsole
 
-  - Export component from index.ts file
-  - Write component tests in **website-ui-e2e**
+- use these settings:
+  - style: scss
+  - change detections: OnPush
+  - view encapsulation: ShadowDom
+  - select SkipTests
 
-- generate **elements:ui** components with Nx Console
-
-  1. enter component name and project
-  2. select style scss
-  3. select change detection OnPush
-  4. select view encapsulation ShadowDom
-  5. select SkipTests Do not create "spec.ts" test files for the new component.
-
-  - Write component tests in **website-ui-e2e**
-
-- generate **smart ui feature** components with Nx Console
-
-  1. enter component name and project
-  2. select style scss
-  3. select change detection OnPush
-  4. select SkipTests Do not create "spec.ts" test files for the new component.
-
-  - Write integration tests in **website-e2e**
-
-### util and data-access types
+### util, data, and api lib files create manually by feature
 
 - generate types manually
   - add \*.spec.ts file for unit testing
 
-### api feature types
+### types
 
 - generate types manually
   - add \*.spec.ts file for unit testing
-- Write integration tests in **website-e2e**
 
-## cypress
+## additional resources
 
-browsers include edge (chrome, chromium, edge, firefox, electron)
---headless for ci/cd
---config-file=/apps/website-e2e/cypress-prod.json
-
-## videos and screenshots are created in the dist folder
-
-npx nx e2e website-e2e --baseUrl=https://frontend.com
+- [additional resources](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/additional-resources.md)

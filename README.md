@@ -17,7 +17,6 @@
 - **Pulumi** for deployment
 - **Azure DevOps Pipeline** for CI/CD
 - **TinyPNG** to reducing image sizes
-- **Sendible** for Social Media publishing
 - **exiftool-vendored** to add metadata to images
 - **Sharp** for creating differently sized images
 - **FFmpeg** for creating image video
@@ -56,11 +55,12 @@
    <a href="https://angular.io/">
       <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="50">
    </a>
-
    <a href="https://nestjs.com/">
       <img src="https://docs.nestjs.com/assets/logo-small.svg" width="50">
    </a>
-
+   <a href="https://storybook.js.org/">
+      <img src="https://pbs.twimg.com/profile_images/1100804485616566273/sOct-Txm_400x400.png" width="50">
+   </a>
    <a href="https://www.pulumi.com/">
       <img src="https://www.pulumi.com/images/mascot/pulumipus.svg" width="70">
    </a>

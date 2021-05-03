@@ -2,29 +2,15 @@
 
 ---
 
-## recommended books
+## best practices
 
-- [Nx Enterprise Monorepo Angular Patterns](https://go.nrwl.io/angular-enterprise-monorepo-patterns-new-book)
-
-## recommended reading
-
-- [Nx Apps & Libraries Structure](https://medium.com/showpad-engineering/how-to-organize-and-name-applications-and-libraries-in-an-nx-monorepo-for-immediate-team-wide-9876510dbe28)
-- [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
-- [Angular Elements in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
-- [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
-- [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
-- [Extend Angular PWA](https://medium.com/@smarth55/extending-the-angular-cli-service-worker-44bfc205894c)
-- [Ngrx to Manage State](https://blog.nrwl.io/using-ngrx-4-to-manage-state-in-angular-applications-64e7a1f84b7b)
+- prefer Trunk-Based Development (Create release branches if needed)
 
 ---
 
-## best practices
-
-1. Prefer Trunk-Based Development (Create release branches if needed)
-
 ## checklist
 
-1. Identify aspects of application
+1. identify aspects of application
    - Security ?
    - What libraries will be published ?
    - Use of custom elements ?
@@ -34,13 +20,14 @@
    - Internationalization ?
    - Error reporting?
    - Additional Controls Needed ?
-2. Create draw.io application diagram
-3. Create architecture md
-4. Create draw.io components diagram with defined routes
-5. Create projects from install-workspace.js script
-6. Create component for each feature (such as HomeComponent) and remove selector & verify OnPush
-7. Adjust root and child roots and add basic routing between pages
-8. Create website-e2e Cypress test for each of these components
+2. create draw.io application diagram
+3. create architecture md
+4. create draw.io components diagram with defined routes
+5. create projects from install-workspace.js script
+6. create page components (such as HomeComponent) and remove selector & verify OnPush
+7. adjust routes and child child routes
+8. add basic routing between pages
+9. create website-e2e Cypress test for routes
 
 ---
 
@@ -49,16 +36,118 @@
 - from a directory directly above desired workspace directory run
   - npx create-nx-workspace dark-rush-photography --preset=empty --cli=angular --nx-cloud=true
 - open new workspace directory in VSCode
-- copy install-workspace.js into the root of the new workspace directory
+- copy install-workspace.js into tools/scripts directory
 - node install-workspace.js
-- move install-workspace.js to a new tools/scripts directory
 
 **_NOTES_**
 
 - each ui command in script uses --prefix=drp for shorter prefixes on Angular selectors
-- website features can have corresponding ui libs based on complexity of interface
 
-### add angular elements to website
+---
+
+### setup nx project
+
+#### add Preloading Strategy to website app.module
+
+```ts
+preloadingStrategy: PreloadAllModules;
+```
+
+#### delete modules of types, website/utils, and website/data libraries
+
+- delete modules and remove module export from index.ts
+  - libs/api/types
+  - libs/elements/types
+  - libs/serverless/types
+  - libs/shared-server/types
+  - libs/shared-types
+  - libs/website/data
+  - libs/website/types
+  - libs/website/util
+
+#### .eslintrc.json
+
+- add .eslintrc.json enforce-module-boundaries depConstraints
+- add "plugin:@typescript-eslint/recommended" to .eslintrc.json
+
+```json
+{
+  "files": ["*.ts", "*.tsx"],
+  "extends": [
+    "plugin:@nrwl/nx/typescript",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {}
+},
+```
+
+#### nx.json
+
+- update implicit dependencies to include
+
+```json
+  "implicitDependencies": {
+    ".eslintrc.json": "*",
+    "angular.json": "*",
+    "jest.config.js": "*",
+    "nx.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*"
+  },
+```
+
+- add to the api an implicit dependency of the website
+
+```json
+    "api": {
+      "tags": ["scope:api", "type:app"],
+      "implicitDependencies": ["website"]
+    },
+```
+
+#### tsconfig.base.json
+
+- reorder configuration to match tsc init
+- add strict true
+
+```json
+  "strict": true,
+  "alwaysStrict": false
+```
+
+- add strictTemplates true
+
+```json
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
+```
+
+#### add to .gitignore
+
+```shell
+# azurite
+__azurite*
+__blobstorage__
+
+# compodoc
+/libs/ui-storybook/.storybook/documentation.json
+```
+
+#### reorder apps and libs so nx console displays projects in correct order
+
+- order apps then libs in source order
+  - angular.json
+  - jest.config.js
+  - nx.json
+  - tsconfig.base.json
+
+---
+
+### setup angular elements
 
 - services may want instead of provideIn root to be provide in platform
 - in website app.module.ts import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
@@ -103,13 +192,19 @@ platformBrowserDynamic()
   - replace import 'document-register-element;
   - with import '@ungap/custom-elements';
 
-### add angular universal
+---
 
-- update generated files
-  - Update api/src/main.ts
-  - Update api/src/app/app.module.ts
-  - Update website/server.ts
-  - Update website/tsconfig.json adding path to tsconfig.server.json
+### setup angular universal
+
+#### update generated angular universal files
+
+- update api/src/main.ts
+- update api/src/app/app.module.ts
+- update website/server.ts
+- update website/tsconfig.json adding path to tsconfig.server.json
+
+#### delete unneeded angular universal files and commands
+
 - delete auto-generated files and directories
   - server (which contains)
     - app.module.ts
@@ -118,20 +213,53 @@ platformBrowserDynamic()
   - tsconfig.server.json
 - remove api:serve in angular.json file
 
-### Add Preloading Strategy to website app.module
+#### add to website-e2e cypress.json
 
-```ts
-preloadingStrategy: PreloadAllModules;
+```json
+  "baseUrl": "http://localhost:4200",
 ```
 
-### adjust storybook
+#### update angular.json for angular universal
+
+- remove the following two lines from website-e2e task in angular.json
+
+```ts
+ "serverTarget": "website:server"
+```
+
+```ts
+  "devServerTarget": "website:serve:production"
+```
+
+---
+
+### setup storybook
 
 #### add plugins to root storybook
 
 - remove addon-knobs as Storybook is replacing knobs with controls, which is in essentials
-- add plugins in root .storybook/main.js file
+- and add plugins in root .storybook/main.js file
 
-#### update ui-storybook to include all other storybooks
+```js
+module.exports = {
+  stories: [],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-a11y',
+    'storybook-addon-themes',
+    {
+      name: '@storybook/addon-postcss',
+      options: {
+        postcssLoaderOptions: {
+          implementation: require('postcss'),
+        },
+      },
+    },
+  ],
+};
+```
+
+#### update ui-storybook to include all other storybooks and have doc
 
 - in ui-storybook/.storybook/main.js
 
@@ -148,29 +276,35 @@ rootMain.stories.push(
 module.exports = rootMain;
 ```
 
-#### in angular.json add styles.scss to all storybook libraries
+- in ui-storybook/.storybook/preview.js
 
-- except for elements add styles to storybook and build-storybook options
+```ts
+import { setCompodocJson } from '@storybook/addon-docs/angular';
+import docJson from './documentation.json';
+
+setCompodocJson(docJson);
+```
+
+---
+
+#### in all storybook libraries
+
+##### (except for elements) in angular.json add styles.scss
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
 ```
 
-#### in .storybook/main.js remove the following comment files as addons added at root
+##### in .storybook/main.js remove the following comment files as addons added at root
 
 ```js
 // Use the following syntax to add addons!
 // rootMain.addons.push('');
 ```
 
-#### in .storybook/preview.js remove knobs and add background colors
+##### in .storybook/preview.js remove knobs and add background colors
 
-- ui-storybook
-- elements/ui
-- ui-shared
-
-- remove decorators
-- add addons configuration
+- remove knobs
 
 ```ts
 import { addDecorator } from '@storybook/angular';
@@ -179,117 +313,34 @@ import { withKnobs } from '@storybook/addon-knobs';
 addDecorator(withKnobs);
 ```
 
+- add addons configuration
+
 ### setup cypress
 
-- add npm scripts to package.json
-
-```json
-    "cy:story:watch": "nx run ui-storybook-e2e:e2e --watch",
-    "cy:story:headless": "nx run ui-storybook-e2e:e2e --headless",
-    "cy:web:watch": "nx run website-e2e:e2e --watch",
-    "cy:web:headless": "nx run website-e2e:e2e --headless",
-```
+#### setup cypress dashboard
 
 - setup cypress dashboard
-  - run cypress and select _runs_ tab for a projectId to be added to cypress.json
+  - run cypress and select _runs_ tab and create project for a projectId to be added to cypress.json
     - ui-storybook-e2e
     - website-e2e
 
-### .eslintrc.json
+#### setup cypress-storybook
 
-- add .eslintrc.json enforce-module-boundaries depConstraints
-- add "plugin:@typescript-eslint/recommended" to .eslintrc.json
+- in ui-storybook-e2e/src/support/index.ts add:
 
-```json
-{
-  "files": ["*.ts", "*.tsx"],
-  "extends": [
-    "plugin:@nrwl/nx/typescript",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "rules": {}
-},
+```ts
+import 'cypress-storybook/cypress';
 ```
 
-## nx.json
+- ui-storybook/.storybook/preview.js add
 
-- update implicit dependencies to include
-
-```json
-  "implicitDependencies": {
-    ".eslintrc.json": "*",
-    "angular.json": "*",
-    "nx.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
-    "tsconfig.base.json": "*"
-  },
+```js
+import 'cypress-storybook/angular';
 ```
-
-- add to the api an implicit dependency of the website
-
-```json
-    "api": {
-      "tags": ["scope:api", "type:app"],
-      "implicitDependencies": ["website"]
-    },
-```
-
-## tsconfig.base.json
-
-- reorder configuration to match tsc init
-- add strict true
-
-```json
-  "strict": true,
-  "alwaysStrict": false
-```
-
-- add strictTemplates true
-
-```json
-  "angularCompilerOptions": {
-    "strictTemplates": true
-  },
-```
-
-## add to .gitignore
-
-```shell
-# azurite
-__azurite*
-__blobstorage__
-```
-
-## delete modules of types libraries
-
-- delete modules, add .gitkeep, and remove module export from index.ts
-  - libs/api/types
-  - libs/elements/types
-  - libs/serverless/types
-  - libs/shared-server/types
-  - libs/shared-types
-  - libs/website/types
-
-## reorder apps and libs so nx console displays projects in logical order
-
-- order apps then libs in source order
-  - angular.json
-  - jest.config.js
-  - nx.json
-  - tsconfig.base.json
-
-## update package.json
-
-- change version to 1.1.1 :mage:
-- add description
-- change:
-  - "start": "ng serve"
-  - "start": "npm run dev:ssr"
-- add npm scripts for docker
 
 ---
 
-## Add Font Awesome
+### Setup Font Awesome
 
 - remove from website index.html
 
@@ -300,7 +351,7 @@ __blobstorage__
 />
 ```
 
-### Setup Font Awesome
+---
 
 ### Setup Font Awesome Pro
 
@@ -321,6 +372,32 @@ __blobstorage__
 
 ```ts
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+```
+
+---
+
+### add and update package.json scripts
+
+#### update package.json
+
+- change version to 1.1.1 :mage:
+- add description
+- change start script to use ssr:
+  - "start": "ng serve"
+  - "start": "npm run dev:ssr"
+- update scripts using ng with nx
+
+#### add package.json scripts
+
+```json
+  "docs:json": "compodoc -p ./tsconfig.base.json -e json -d ./libs/ui-storybook/.storybook",
+  "cy:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
+  "cy:web": "concurrently \"npx nx serve\" \"nx run website-e2e:e2e --watch\"",
+  "cy:ssr": "concurrently \"npm run dev:ssr\" \"nx run website-e2e:e2e --watch\"",
+  "docker:ssr": "npm run build:ssr && npm run docker:ssr:build && npm run docker:ssr:run",
+  "docker:ssr:build": "docker build -f Dockerfile -t dark-rush-photography/website:latest --rm .",
+  "docker:ssr:remove": "docker rm -f website || true",
+  "docker:ssr:run": "npm run docker:ssr:remove && docker run -it --rm -p 8080:8080 -e PORT=8080 --name website dark-rush-photography/website:latest"
 ```
 
 ---
@@ -349,10 +426,3 @@ TODO: separate custom elements for each components so they can be published inde
 elements > grid-gallery > types
 elements > grid-gallery > util
 elements > grid-gallery > ui
-
-- clean up the 4 config files after this is done
-- update architecture doc for the added ui for storybook and modules in types, ...
-
-TODO:
-
-- make note about deleting website-util.module

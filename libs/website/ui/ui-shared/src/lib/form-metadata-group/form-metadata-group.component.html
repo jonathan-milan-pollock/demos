@@ -1,0 +1,11 @@
+<fieldset *ngIf="metadataGroup" [formGroup]="metadataGroup">
+  <legend>Metadata</legend>
+  <mat-form-field class="form-field">
+    <mat-label>Title</mat-label>
+    <input matInput [formControlName]="titleFormControlName" />
+  </mat-form-field>
+  <mat-form-field class="form-field">
+    <mat-label>Description</mat-label>
+    <input matInput [formControlName]="descriptionFormControlName" />
+  </mat-form-field>
+</fieldset>
