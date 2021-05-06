@@ -3,6 +3,30 @@ describe('/admin', () => {
     cy.visit('/admin');
   });
 
+  it('has the correct title', () => {
+    cy.title().should('eq', 'Admin');
+  });
+
+  it('has the correct description', () => {
+    cy.verifyMetaTag('description', 'Administration for Dark Rush Photography');
+  });
+
+  it('has the correct open graph title', () => {
+    cy.verifyMetaTag('"og:title"', 'Admin');
+  });
+
+  it('has the correct open graph description', () => {
+    cy.verifyMetaTag(
+      '"og:description"',
+      'Administration for Dark Rush Photography'
+    );
+  });
+
+  it('has the correct open graph url', () => {
+    cy.verifyMetaTag('"og:url"', '/admin');
+  });
+
+  /*
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   it('greets with Sign in', () => {
     // should have a button with the text Sign in
@@ -15,7 +39,7 @@ describe('/admin', () => {
   it('links to #/photo-of-the-week/admin', () => {});
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  it('links to #/stories/admin', () => {});
+  it('links to /admin/events', () => {});
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   it('links to #/destinations/admin', () => {});
@@ -36,7 +60,6 @@ describe('/admin', () => {
   if (window.Cypress){
     window.__store__ = store
   }
-  */
 
     //cy
     //   .window()
@@ -49,4 +72,5 @@ describe('/admin', () => {
       .invoke('getItem', 'jwt')
       .should('not.exist');
   });
+  */
 });

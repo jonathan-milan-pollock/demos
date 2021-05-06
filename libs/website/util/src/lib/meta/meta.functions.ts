@@ -1,102 +1,92 @@
-import { Metadata } from '@dark-rush-photography/shared-types';
-import { PageType } from '@dark-rush-photography/website/types';
+import { Metadata, PageType } from '@dark-rush-photography/website/types';
 
-const darkRushPhotography = 'Dark Rush Photography';
-const specialties =
-  'Event Photography, Real Estate Photography, and Extended Reality (XR)';
-const specializingIn = `specializing in ${specialties}`;
-const adminForDarkRushPhotography = 'Admin for Dark Rush Photography';
-
-export const getMetadata = (
-  pageType: PageType,
-  url: string
-): Metadata | undefined => {
-  let metadata = { url: url } as Partial<Metadata>;
+export const getMetadata = (pageType: PageType): Metadata | undefined => {
   switch (pageType) {
     case PageType.Home:
-      metadata = {
-        title: darkRushPhotography,
-        description: `Specializes in ${specialties}`,
+      return {
+        title: 'Dark Rush Photography',
+        description:
+          'Specializes in Event Photography, Real Estate Photography, and Extended Reality (XR)',
       };
-      break;
     case PageType.About:
-      metadata = {
+      return {
         title: 'About',
-        description: `About ${darkRushPhotography}, ${specializingIn}`,
+        description:
+          'About the Photographers of Dark Rush Photography who specialize in Event Photography, Real Estate Photography, and Extended Reality (XR)',
       };
-      break;
     case PageType.Reviews:
-      metadata = {
+      return {
         title: 'Reviews',
-        description: `Reviews for ${darkRushPhotography}, ${specializingIn}`,
+        description:
+          'Reviews for Dark Rush Photography, specializing in Event Photography, Real Estate Photography, and Extended Reality (XR)',
       };
-      break;
     case PageType.Review:
-      metadata = {
+      return {
         title: 'Review',
-        description: `Review ${darkRushPhotography}, ${specializingIn}`,
+        description:
+          'Review Dark Rush Photography, specializing in Event Photography, Real Estate Photography, and Extended Reality (XR)',
       };
-      break;
     case PageType.PhotoOfTheWeek:
-      metadata = {
+      return {
         title: 'Photo of the Week',
-        description: `Photo of the Week by ${darkRushPhotography}, ${specializingIn}`,
+        description:
+          'Photo of the Week by Dark Rush Photography, specializing in Event Photography, Real Estate Photography, and Extended Reality (XR)',
       };
-      break;
     case PageType.Events:
-      metadata = {
-        title: 'Stories',
-        description: `Stories by ${darkRushPhotography}, ${specializingIn}`,
+      return {
+        title: 'Events',
+        description: 'Event Photography by Dark Rush Photography',
       };
-      break;
     case PageType.Destinations:
-      metadata = {
+      return {
         title: 'Destinations',
-        description: `Destinations by ${darkRushPhotography}, ${specializingIn}`,
+        description:
+          'Extended Reality (XR) destinations presented by Dark Rush Photography',
       };
-      break;
     case PageType.Admin:
-      metadata = {
+      return {
         title: 'Admin',
-        description: adminForDarkRushPhotography,
+        description: 'Administration for Dark Rush Photography',
       };
-      break;
-    case PageType.HomeAdmin:
-      metadata = {
-        title: 'Home Admin',
-        description: `Home ${adminForDarkRushPhotography}`,
+    case PageType.AdminHomePage:
+      return {
+        title: 'Admin Home Page',
+        description: 'Administrate Home Page for Dark Rush Photography',
       };
-      break;
-    case PageType.PhotoOfTheWeekAdmin:
-      metadata = {
-        title: 'Photo of the Week Admin',
-        description: `Photo of the Week ${adminForDarkRushPhotography}`,
+    case PageType.AdminReviews:
+      return {
+        title: 'Admin Reviews',
+        description: 'Administrate Reviews for Dark Rush Photography',
       };
-      break;
-    case PageType.StoriesAdmin:
-      metadata = {
-        title: 'Stories Admin',
-        description: `Stories ${adminForDarkRushPhotography}`,
+    case PageType.AdminPhotoOfTheWeek:
+      return {
+        title: 'Admin Photo of the Week',
+        description: 'Administrate Photo of the Week for Dark Rush Photography',
       };
-      break;
-    case PageType.DestinationsAdmin:
-      metadata = {
-        title: 'Destinations Admin',
-        description: `Destinations ${adminForDarkRushPhotography}`,
+    case PageType.AdminEvents:
+      return {
+        title: 'Admin Events',
+        description: 'Administrate Events for Dark Rush Photography',
       };
-      break;
-    case PageType.SitemapAdmin:
-      metadata = {
-        title: 'Sitemap Admin',
-        description: `Sitemap ${adminForDarkRushPhotography}`,
+    case PageType.AdminDestinations:
+      return {
+        title: 'Admin Destinations',
+        description: 'Administrate Destinations for Dark Rush Photography',
       };
-      break;
-    case PageType.VideoAdmin:
-      metadata = {
-        title: 'Video Admin',
-        description: `Video ${adminForDarkRushPhotography}`,
+    case PageType.AdminVideos:
+      return {
+        title: 'Admin Videos',
+        description: 'Administrate Videos for Dark Rush Photography',
       };
-      break;
+    case PageType.AdminSitemap:
+      return {
+        title: 'Admin Sitemap',
+        description: 'Administrate Sitemap for Dark Rush Photography',
+      };
+    case PageType.AdminSettings:
+      return {
+        title: 'Admin Settings',
+        description: 'Administrate Settings for Dark Rush Photography',
+      };
   }
-  return metadata as Metadata;
 };

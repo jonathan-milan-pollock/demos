@@ -1,0 +1,45 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { FormCoordinatesGroupComponent } from './form-coordinates-group.component';
+import { WebsiteUiUiAdminModule } from '../website-ui-ui-admin.module';
+
+<Meta
+  title="UI ADMIN/Form Coordinates Group"
+  component={FormCoordinatesGroupComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiAdminModule],
+    }),
+  ]}
+/>
+
+export const coordinatesGroup = new FormGroup({
+  latitude: new FormControl(null),
+  longitude: new FormControl(null),
+});
+export const latitudeFormControlName = 'latitude';
+export const longitudeFormControlName = 'longitude';
+
+# Form Coordinates Group
+
+<Story
+  height="500px"
+  name="Default"
+  args={{
+    latitudeFormControlName,
+    longitudeFormControlName,
+  }}
+>
+  {(args) => (
+    <drp-form-coordinates-group {...args} coordinatesGroup={coordinatesGroup} />
+  )}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={FormCoordinatesGroupComponent} />

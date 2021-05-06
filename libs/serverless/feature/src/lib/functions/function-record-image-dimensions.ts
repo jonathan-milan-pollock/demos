@@ -77,7 +77,7 @@ export default activityFunction;
 
                 var recordImageDimensionsRequest = new RecordImageDimensionsRequest
                 {
-                    BlobPathPrefix = "stories/2019/oakland-cemetery-illumine-2019/images"
+                    BlobPathPrefix = "events/2019/oakland-cemetery-illumine-2019/images"
                 };
 
                 var instanceId = await starter.StartNewAsync("RecordImageDimensionsOrchestrationFunction",

@@ -1,0 +1,57 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { FormLocationGroupComponent } from './form-location-group.component';
+import { WebsiteUiUiAdminModule } from '../website-ui-ui-admin.module';
+
+<Meta
+  title="UI ADMIN/Form Location Group"
+  component={FormLocationGroupComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiAdminModule],
+    }),
+  ]}
+/>
+
+export const locationGroup = new FormGroup({
+  place: new FormControl(null),
+  street: new FormControl(null),
+  city: new FormControl(null),
+  stateOrProvince: new FormControl(null),
+  zipCode: new FormControl(null),
+  country: new FormControl(null),
+});
+export const placeFormControlName = 'place';
+export const streetFormControlName = 'street';
+export const cityFormControlName = 'city';
+export const stateOrProvinceFormControlName = 'stateOrProvince';
+export const zipCodeFormControlName = 'zipCode';
+export const countryFormControlName = 'country';
+
+# Form Location Group
+
+<Story
+  height="500px"
+  name="Default"
+  args={{
+    placeFormControlName,
+    streetFormControlName,
+    cityFormControlName,
+    stateOrProvinceFormControlName,
+    zipCodeFormControlName,
+    countryFormControlName,
+  }}
+>
+  {(args) => (
+    <drp-form-location-group {...args} locationGroup={locationGroup} />
+  )}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={FormIdentifierGroupComponent} />

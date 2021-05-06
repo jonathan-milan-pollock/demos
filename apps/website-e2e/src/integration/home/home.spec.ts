@@ -3,14 +3,35 @@ describe('/', () => {
     cy.visit('/');
   });
 
-  it('contains a header with home works', () => {
-    cy.contains('p', 'home-images works!');
-  });
-
   it('routes to home for invalid routes', () => {
     cy.visit(`/${Math.random().toString()}`);
-
     cy.location('pathname').should('eq', '/');
+  });
+
+  it('has the correct title', () => {
+    cy.title().should('eq', 'Dark Rush Photography');
+  });
+
+  it('has the correct description', () => {
+    cy.verifyMetaTag(
+      'description',
+      'About the Photographers of Dark Rush Photography who specialize in Event Photography, Real Estate Photography, and Extended Reality (XR)'
+    );
+  });
+
+  it('has the correct open graph title', () => {
+    cy.verifyMetaTag('"og:title"', 'About');
+  });
+
+  it('has the correct open graph description', () => {
+    cy.verifyMetaTag(
+      '"og:description"',
+      'About the Photographers of Dark Rush Photography who specialize in Event Photography, Real Estate Photography, and Extended Reality (XR)'
+    );
+  });
+
+  it('has the correct open graph url', () => {
+    cy.verifyMetaTag('"og:url"', '/about');
   });
 
   it('links to /about', () => {
@@ -33,8 +54,8 @@ describe('/', () => {
     );
   });
 
-  it('links to /stories', () => {
-    cy.contains('Stories').should('have.attr', 'href', '/stories');
+  it('links to /events', () => {
+    cy.contains('Events').should('have.attr', 'href', '/events');
   });
 
   it('links to /destinations', () => {

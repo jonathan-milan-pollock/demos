@@ -19,8 +19,6 @@ const orchestrator = df.orchestrator(function* (context) {
     image
   );
 
-
-
   context.log('************** ExifImage ********************');
   image = yield context.df.callActivity('ExifImageActivityFunction', image);
 

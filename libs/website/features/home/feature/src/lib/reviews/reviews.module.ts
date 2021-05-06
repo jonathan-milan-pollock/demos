@@ -9,19 +9,7 @@ import { ReviewsComponent } from './reviews.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {
-        path: '',
-        component: ReviewsComponent,
-        children: [
-          {
-            path: 'review',
-            loadChildren: () =>
-              import('../review/review.module').then(
-                (module) => module.ReviewModule
-              ),
-          },
-        ],
-      },
+      { path: '', pathMatch: 'full', component: ReviewsComponent },
     ]),
   ],
 })

@@ -1,36 +1,30 @@
 import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
 
 export class BiggerThanILook implements PhotoOfTheWeek {
-  identifier = {
-    slug: 'bigger-than-i-look',
-    group: 1,
-  };
-  metadata = {
-    title: "I'm Bigger than I Look!",
-    description: `
+  slug = 'bigger-than-i-look';
+  group = 1;
+  title = "I'm Bigger than I Look!";
+  description = `
     This a crab on Cumberland Island on Beach. It's kind of a facade,
     reminds me of a tiny kitten looking into the mirror and seeing his
-    reflection as a lion, thinking I am big and great!`,
-    keywords: new Set<string>([
-      'Cumberland Island',
-      'Georgia',
-      'Crab',
-      'Facade',
-      'Beach',
-      'Big and Great',
-      'Reflective',
-    ]),
-    datePublished: { month: Month.July, day: 31, year: 2019 },
-  };
+    reflection as a lion, thinking I am big and great!`;
+  keywords = new Set<string>([
+    'Cumberland Island',
+    'Georgia',
+    'Crab',
+    'Facade',
+    'Beach',
+    'Big and Great',
+    'Reflective',
+  ]);
+  datePublished = { month: Month.July, day: 31, year: 2019 };
   location = {
     place: 'Cumberland Island',
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  display = {
-    useTitleImage: false,
-  };
-  content = {};
+  useTitleImage = false;
+  text = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

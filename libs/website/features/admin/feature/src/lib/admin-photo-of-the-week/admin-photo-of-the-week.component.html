@@ -1,1 +1,35 @@
-<drp-admin-photo-of-the-week-form></drp-admin-photo-of-the-week-form>
+<form
+  *ngIf="adminPhotoOfTheWeekForm"
+  [formGroup]="adminPhotoOfTheWeekForm"
+  (ngSubmit)="onSubmit()"
+>
+  <drp-form-identifier-group
+    [identifierGroup]="identifierGroup"
+    slugFormControlName="slug"
+    groupFormControlName="group"
+    [groups]="groups"
+  ></drp-form-identifier-group>
+  <drp-form-document-metadata-group
+    [metadataGroup]="metadataGroup"
+    titleFormControlName]="title"
+    description="description"
+    keywords="keywords"
+    datePublished="datePublished"
+  >
+  </drp-form-document-metadata-group>
+  <drp-form-location-group
+    [locationGroup]="locationGroup"
+    placeFormControlName="place"
+    streetFormControlName="street"
+    city="city"
+    stateOrProvince="stateOrProvince"
+    zipCode="zipCode"
+    country="country"
+  ></drp-form-location-group>
+  <drp-form-display-group
+    [displayGroup]="displayGroup"
+    useTileImageFormControlName="useTileImage"
+  >
+  </drp-form-display-group>
+  <button type="submit" mat-button color="primary">Submit</button>
+</form>

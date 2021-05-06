@@ -1,15 +1,21 @@
-import { Identifier } from './identifier.interface';
-import { DocumentMetadata } from './document-metadata.interface';
-import { Location } from './location.interface';
-import { Display } from './display.interface';
 import { Image } from './image.interface';
+import { ReadableDate } from './readable-date.interface';
+import { Location } from './location.interface';
 
 export interface PhotoOfTheWeek {
-  readonly identifier: Identifier;
-  readonly metadata: DocumentMetadata;
+  // identifier
+  readonly slug: string;
+  readonly group: number;
+  // metadata
+  readonly title: string;
+  readonly description: string;
+  readonly keywords: ReadonlySet<string>;
+  readonly datePublished?: ReadableDate;
+  // location
   readonly location: Location;
-  readonly display: Display;
-  readonly content: {
-    readonly image?: Image;
-  };
+  // display
+  readonly useTitleImage: boolean;
+  // content
+  readonly text: string[];
+  readonly image?: Image;
 }

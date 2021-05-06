@@ -1,0 +1,30 @@
+import { Meta, Story, Props } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+
+import { CloseButtonComponent } from './close-button.component';
+
+<Meta
+  title="UI COMMON/Close Button"
+  component={CloseButtonComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule],
+    }),
+  ]}
+  argTypes={{
+    clicked: { action: 'clicked' },
+  }}
+/>
+
+# Close Button
+
+<Story
+  name="Default"
+  args={{
+    ariaLabel: 'Close',
+  }}
+>
+  {(args) => <drp-close-button {...args} />}
+</Story>

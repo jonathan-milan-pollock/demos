@@ -1,30 +1,25 @@
 import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
 
 export class BeautifulDay implements PhotoOfTheWeek {
-  identifier = {
-    slug: 'beautiful-day',
-    group: 1,
-  };
-  metadata = {
-    title: "It's a Beautiful Day",
-    keywords: new Set<string>([
-      'Sicily',
-      'Italy',
-      'Beach',
-      'Blue Water',
-      'Mountain',
-      'Beach Homes',
-      'Swimming',
-      'Blue Sky',
-      'Puffy Clouds',
-    ]),
-    datePublished: { month: Month.June, day: 15, year: 2019 },
-  };
+  slug = 'beautiful-day';
+  group = 1;
+  title = "It's a Beautiful Day";
+  description = "It's a Beautiful Day";
+  keywords = new Set<string>([
+    'Sicily',
+    'Italy',
+    'Beach',
+    'Blue Water',
+    'Mountain',
+    'Beach Homes',
+    'Swimming',
+    'Blue Sky',
+    'Puffy Clouds',
+  ]);
+  datePublished = { month: Month.June, day: 15, year: 2019 };
   location = { city: 'Sicily', country: 'Italy' };
-  display = {
-    useTitleImage: false,
-  };
-  content = {};
+  useTitleImage = false;
+  text = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

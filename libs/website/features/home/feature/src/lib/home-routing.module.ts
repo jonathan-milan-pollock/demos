@@ -1,6 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MetaResolver } from '@dark-rush-photography/website/util';
+
+import {
+  MetaPhotoOfTheWeekImageResolver,
+  MetaEventResolver,
+  MetaEventImageResolver,
+  MetaDestinationResolver,
+} from '@dark-rush-photography/website/util';
 
 import { HomeComponent } from './home.component';
 
@@ -29,6 +35,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'reviews/review',
+        loadChildren: () =>
+          import('./review/review.module').then(
+            (module) => module.ReviewModule
+          ),
+      },
+      {
         path: 'photo-of-the-week',
         loadChildren: () =>
           import('./photo-of-the-week/photo-of-the-week.module').then(
@@ -36,8 +49,8 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'photo-of-the-week/:photo-of-the-week',
-        resolve: { metadata: MetaResolver },
+        path: 'photo-of-the-week/:slug',
+        resolve: { metadata: MetaPhotoOfTheWeekImageResolver },
         loadChildren: () =>
           import(
             './photo-of-the-week-image/photo-of-the-week-image.module'
@@ -51,14 +64,14 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'events/:event',
-        resolve: { metadata: MetaResolver },
+        path: 'events/:slug',
+        resolve: { metadata: MetaEventResolver },
         loadChildren: () =>
           import('./event/event.module').then((module) => module.EventModule),
       },
       {
-        path: 'events/:event/:event-image',
-        resolve: { metadata: MetaResolver },
+        path: 'events/:slug/:event-image',
+        resolve: { metadata: MetaEventImageResolver },
         loadChildren: () =>
           import('./event-image/event-image.module').then(
             (module) => module.EventImageModule
@@ -72,8 +85,8 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'destinations/:destination',
-        resolve: { metadata: MetaResolver },
+        path: 'destinations/:slug',
+        resolve: { metadata: MetaDestinationResolver },
         loadChildren: () =>
           import('./destination/destination.module').then(
             (module) => module.DestinationModule

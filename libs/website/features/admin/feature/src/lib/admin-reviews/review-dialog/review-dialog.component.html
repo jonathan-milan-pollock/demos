@@ -1,0 +1,12 @@
+<form *ngIf="reviewForm" [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+  <h2 mat-dialog-title>Add Review</h2>
+  <mat-dialog-content class="mat-typography">
+    <drp-form-review-group [reviewGroup]="reviewGroup"> </drp-form-review-group>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="submit" mat-raised-button [disabled]="reviewForm?.invalid">
+      OK
+    </button>
+    <button mat-raised-button [mat-dialog-close]="undefined">Cancel</button>
+  </mat-dialog-actions>
+</form>

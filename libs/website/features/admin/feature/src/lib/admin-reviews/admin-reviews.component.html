@@ -1,1 +1,11 @@
-<drp-admin-reviews-form></drp-admin-reviews-form>
+<drp-open-review-dialog-button
+  (reviewSubmitted)="onReviewSubmitted($event)"
+></drp-open-review-dialog-button>
+
+<div *ngIf="isLoading">Is isLoading</div>
+
+<mat-selection-list [multiple]="false">
+  <mat-list-option *ngFor="let review of reviews" [value]="review.slug">
+    {{ review.name }}
+  </mat-list-option>
+</mat-selection-list>

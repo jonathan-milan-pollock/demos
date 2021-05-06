@@ -3,7 +3,15 @@ describe('/reviews/review', () => {
     cy.visit('/reviews/review');
   });
 
-  it('contains a header with review works', () => {
-    cy.contains('p', 'review works!');
+  it('has the correct title', () => {
+    cy.title().should('eq', 'About');
+  });
+
+  it('has the correct description', () => {
+    cy.get('head meta[name="description"]').should(
+      'have.attr',
+      'content',
+      'This description is so meta'
+    );
   });
 });

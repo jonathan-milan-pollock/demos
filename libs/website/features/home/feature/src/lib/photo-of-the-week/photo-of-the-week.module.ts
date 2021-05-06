@@ -9,10 +9,7 @@ import { PhotoOfTheWeekComponent } from './photo-of-the-week.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {
-        path: '',
-        component: PhotoOfTheWeekComponent,
-      },
+      { path: '', pathMatch: 'full', component: PhotoOfTheWeekComponent },
     ]),
   ],
 })

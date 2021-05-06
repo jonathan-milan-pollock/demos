@@ -1,0 +1,57 @@
+<fieldset
+  *ngIf="reviewGroup"
+  [formGroup]="reviewGroup"
+  data-testid="review-group"
+>
+  <legend>Review</legend>
+  <mat-form-field class="form-field">
+    <mat-label>Slug</mat-label>
+    <input
+      matInput
+      [formControlName]="slugFormControlName"
+      pattern="[a-z-]*"
+      [errorStateMatcher]="matcher"
+      data-testid="slug-input"
+    />
+    <mat-error
+      *ngIf="reviewGroup.get(slugFormControlName)?.hasError('required')"
+    >
+      Slug is required
+    </mat-error>
+    <mat-error
+      *ngIf="reviewGroup.get(slugFormControlName)?.hasError('pattern')"
+    >
+      Slug allows lowercase and dash (-) characters
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="form-field next-form-field">
+    <mat-label>Name</mat-label>
+    <input
+      matInput
+      [formControlName]="nameFormControlName"
+      data-testid="name-input"
+    />
+    <mat-error
+      *ngIf="reviewGroup.get(nameFormControlName)?.hasError('required')"
+    >
+      Name is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="form-field next-form-field">
+    <mat-label>Text</mat-label>
+    <textarea
+      matInput
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="2"
+      cdkAutosizeMaxRows="6"
+      [formControlName]="textFormControlName"
+      data-testid="text-input"
+    ></textarea>
+    <mat-error
+      *ngIf="reviewGroup.get(textFormControlName)?.hasError('required')"
+    >
+      Text is required
+    </mat-error>
+  </mat-form-field>
+</fieldset>

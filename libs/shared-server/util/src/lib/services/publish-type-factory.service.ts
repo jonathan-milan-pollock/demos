@@ -35,7 +35,7 @@ export const fromBlobPath = (blobPath: BlobPath): Image => {
   switch (blobPath.publishType) {
     case 'photo-of-the-week':
       return PhotoOfTheWeekImage.fromBlobPath(blobPath);
-    case 'stories':
+    case 'events':
       return EventImage.fromBlobPath(blobPath);
     case 'destinations':
       return DestinationImage.fromBlobPath(blobPath);
