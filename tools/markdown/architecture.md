@@ -37,7 +37,7 @@
   - npx create-nx-workspace dark-rush-photography --preset=empty --cli=angular --nx-cloud=true
 - open new workspace directory in VSCode
 - copy install-workspace.js into tools/scripts directory
-- node install-workspace.js
+- node ./tools/scripts/install-workspace.js
 
 **_NOTES_**
 

@@ -12,9 +12,23 @@
 declare namespace Cypress {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Chainable<Subject> {
-    login(): void;
+    login(url: string): void;
+    verifyMetaTag(name: string, text: string): void;
   }
 }
+
+Cypress.Commands.add('login', (url: string) => {
+  cy.visit('/admin');
+  cy.get('[data-testid=sign-in-button]')
+    .click()
+    .contains('Sign Out')
+    .get(`a[href="${url}"]`)
+    .click();
+});
+
+Cypress.Commands.add('verifyMetaTag', (name: string, text: string) => {
+  cy.get(`head meta[name=${name}]`).should('have.attr', 'content', text);
+});
 
 /*
 
@@ -32,7 +46,7 @@ Cypress.Commands.add('loginEnter', () => {
 });
 */
 
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('loginWithSecurity', () => {
   cy.request({
     method: 'POST',
     url: 'http://localhost:3000/api/users/login',

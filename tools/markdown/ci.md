@@ -20,17 +20,6 @@
 
 ## use environment variables from the environment
 
-### delete for api, serverless and website apps the environments folder
-
-- add comment to environment.ts and environment.prod.ts above production: value
-
-  ```js
-  /**                                                    */
-  /** strict separation of config from code - 12 factor  */
-  /** put additional configuration in env.js             */
-  /**                                                    */
-  ```
-
 ### add env.js file to website
 
 ```js

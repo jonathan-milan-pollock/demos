@@ -40,9 +40,7 @@ const reducer = createReducer(
     reviews: [...state.reviews, { ...review }],
   })),
   on(ReviewActions.editReview, (state, { review }) => {
-    const uneditedReviews = state.reviews.filter(
-      (r) => r.identifier.slug !== review.identifier.slug
-    );
+    const uneditedReviews = state.reviews.filter((r) => r.slug !== review.slug);
     return {
       ...state,
       reviews: [...uneditedReviews, { ...review }],
@@ -50,7 +48,7 @@ const reducer = createReducer(
   }),
   on(ReviewActions.deleteReview, (state, { review }) => {
     const nonDeletedReviews = state.reviews.filter(
-      (r) => r.identifier.slug !== review.identifier.slug
+      (r) => r.slug !== review.slug
     );
     return {
       ...state,

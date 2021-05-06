@@ -64,3 +64,27 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
+
+div.great-meter {
+  .mat-progress-bar-fill::after {
+    background-color: lightseagreen;
+  }
+}
+
+div.good-meter {
+  .mat-progress-bar-fill::after {
+    background-color: lightyellow;
+  }
+}
+
+div.warn-meter {
+  .mat-progress-bar-fill::after {
+    background-color: lightsalmon;
+  }
+}
+
+div.error-meter {
+  .mat-progress-bar-fill::after {
+    background-color: lightpink;
+  }
+}

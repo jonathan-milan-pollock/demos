@@ -9,10 +9,7 @@ import { EventComponent } from './event.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {
-        path: '',
-        component: EventComponent,
-      },
+      { path: '', pathMatch: 'full', component: EventComponent },
     ]),
   ],
 })

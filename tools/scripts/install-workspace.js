@@ -210,7 +210,9 @@ const execGenerateWebsiteLibs = (isReady) =>
         getWebsiteUiLibWithUnitTestsCommand('ui-directives')
       )
     )
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shared')))
+    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-admin')))
+    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-common')))
+    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-home')))
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -254,7 +256,13 @@ const execAddStorybook = (isReady) =>
       consoleLogOrExec(isReady, getAddStorybookCommand('elements-ui'))
     )
     .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-shared'))
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-admin'))
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-common'))
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-home'))
     )
     .then(() => consoleLogOrExec(isReady, 'npm uninstall @storybook/angular'))
     .then(() =>

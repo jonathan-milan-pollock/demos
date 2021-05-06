@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PageType } from '@dark-rush-photography/website/types';
 import { MetaService } from '@dark-rush-photography/website/util';
@@ -9,9 +10,9 @@ import { MetaService } from '@dark-rush-photography/website/util';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DestinationsComponent implements OnInit {
-  constructor(private metaService: MetaService) {}
+  constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(PageType.Destinations, '');
+    this.metaService.addMetadataForPage(PageType.Destinations, this.router.url);
   }
 }

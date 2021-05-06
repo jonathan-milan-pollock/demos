@@ -4,7 +4,7 @@
  public static string Load(SocialMediaType socialMediaType, Story story)
          {
              var storyAddress = "";
-             //$"{Constant.STORIES_URL}/{story.Slug}";
+             //$"{Constant.Events_URL}/{story.Slug}";
 
              // Todo: Will need the file path
              var stringWriter = new stringWriter();

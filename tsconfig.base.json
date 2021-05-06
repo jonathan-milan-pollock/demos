@@ -59,11 +59,17 @@
       "@dark-rush-photography/website/types": [
         "libs/website/types/src/index.ts"
       ],
+      "@dark-rush-photography/website/ui/ui-admin": [
+        "libs/website/ui/ui-admin/src/index.ts"
+      ],
+      "@dark-rush-photography/website/ui/ui-common": [
+        "libs/website/ui/ui-common/src/index.ts"
+      ],
       "@dark-rush-photography/website/ui/ui-directives": [
         "libs/website/ui/ui-directives/src/index.ts"
       ],
-      "@dark-rush-photography/website/ui/ui-shared": [
-        "libs/website/ui/ui-shared/src/index.ts"
+      "@dark-rush-photography/website/ui/ui-home": [
+        "libs/website/ui/ui-home/src/index.ts"
       ],
       "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"]
     }

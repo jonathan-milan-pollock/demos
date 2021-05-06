@@ -9,10 +9,7 @@ import { DestinationsComponent } from './destinations.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {
-        path: '',
-        component: DestinationsComponent,
-      },
+      { path: '', pathMatch: 'full', component: DestinationsComponent },
     ]),
   ],
 })

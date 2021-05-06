@@ -18,6 +18,15 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'home',
+        canActivate: [AuthGuard],
+        //canDeactivate: [SaveChangesGuard],
+        loadChildren: () =>
+          import('./admin-home/admin-home.module').then(
+            (module) => module.AdminHomeModule
+          ),
+      },
+      {
         path: 'reviews',
         canActivate: [AuthGuard],
         //canDeactivate: [SaveChangesGuard],
@@ -54,12 +63,12 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'video',
+        path: 'videos',
         canActivate: [AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
-          import('./admin-video/admin-video.module').then(
-            (module) => module.AdminVideoModule
+          import('./admin-videos/admin-videos.module').then(
+            (module) => module.AdminVideosModule
           ),
       },
       {

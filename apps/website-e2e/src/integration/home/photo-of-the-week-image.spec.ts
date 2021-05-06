@@ -3,7 +3,15 @@ describe('/photo-of-the-week/aint-no-mountain-high-enough', () => {
     cy.visit('/photo-of-the-week/aint-no-mountain-high-enough');
   });
 
-  it('contains a header with photo-of-the-week-image works', () => {
-    cy.contains('p', 'photo-of-the-week-image works!');
+  it('has the correct title', () => {
+    cy.title().should('eq', 'About');
+  });
+
+  it('has the correct description', () => {
+    cy.get('head meta[name="description"]').should(
+      'have.attr',
+      'content',
+      'This description is so meta'
+    );
   });
 });

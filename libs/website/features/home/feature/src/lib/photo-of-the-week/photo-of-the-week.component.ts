@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './photo-of-the-week.component.html',
@@ -7,9 +7,20 @@ import { Router, ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoOfTheWeekComponent {
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   onPhotoOfTheWeekClicked(): void {
     this.router.navigate(['1'], { relativeTo: this.route });
   }
+
+  /**
+   *   readonly identifier: Identifier;
+  readonly metadata: Metadata;
+  readonly location: Location;
+  readonly display: Display;
+  readonly content: {
+    readonly image?: Image;
+  };
+   * 
+   */
 }

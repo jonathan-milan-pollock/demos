@@ -1,0 +1,42 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { FormIdentifierGroupComponent } from './form-identifier-group.component';
+import { WebsiteUiUiAdminModule } from '../website-ui-ui-admin.module';
+
+<Meta
+  title="UI ADMIN/Form Identifier Group"
+  component={FormIdentifierGroupComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiAdminModule],
+    }),
+  ]}
+/>
+
+export const identifierGroup = new FormGroup({
+  slug: new FormControl(null, Validators.required),
+  group: new FormControl(null, Validators.required),
+});
+
+# Form Identifier Group
+
+<Story
+  name="Default"
+  height="500px"
+  args={{
+    groups: [1, 2, 3],
+  }}
+>
+  {(args) => (
+    <drp-form-identifier-group {...args} identifierGroup={identifierGroup} />
+  )}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={FormIdentifierGroupComponent} />

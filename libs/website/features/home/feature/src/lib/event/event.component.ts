@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { PageType } from '@dark-rush-photography/website/types';
 import { MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
@@ -10,7 +9,9 @@ import { MetaService } from '@dark-rush-photography/website/util';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventComponent implements OnInit {
-  eventSlug = '';
+  slug = 'classic-1952-pontiac';
+  seoTitle = 'Classic 1952 Pontiac';
+  seoDescription = 'a Classic 1952 Pontiac';
 
   constructor(
     private route: ActivatedRoute,
@@ -18,13 +19,15 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      console.log(data['metadata']);
-    });
-
-    this.metaService.addMetadataForPage(PageType.Event, '');
     this.route.params.subscribe((params) => {
-      this.eventSlug = params['event'];
+      this.slug = params['slug'];
+      this.metaService.addMetadata(
+        {
+          title: 'Classic 1952 Pontiac',
+          description: `Event Photography of ${this.seoDescription} by Dark Rush Photography`,
+        },
+        `/destinations/${this.slug}`
+      );
     });
   }
 }

@@ -1,28 +1,20 @@
 import { Event, Month } from '@dark-rush-photography/shared-types';
 
 export class SparkleSandySprings2018 implements Event {
-  identifier = {
-    slug: 'sparkle-sandy-springs-2018',
-    group: 2018,
-  };
-  metadata = {
-    title: 'Sandy Springs Festival, 2018',
-    description: ``,
-    keywords: new Set<string>([]),
-    dateCreated: { month: Month.October, day: 14, year: 2018 },
-  };
+  slug = 'sparkle-sandy-springs-2018';
+  group = 2018;
+  title = 'Sandy Springs Festival, 2018';
+  description = '';
+  keywords = new Set<string>([]);
+  dateCreated = { month: Month.October, day: 14, year: 2018 };
   location = {
     place: 'Heritage Sandy Springs',
     city: 'Sandy Springs',
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  display = {
-    useTitleImage: false,
-  };
-  content = {
-    text: [],
-  };
+  useTitleImage = false;
+  text = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

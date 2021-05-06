@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { WebsiteUiAdminModule } from '@dark-rush-photography/website/ui/ui-shared';
+import { WebsiteUiUiAdminModule } from '@dark-rush-photography/website/ui/ui-admin';
 
 import { AdminPhotoOfTheWeekComponent } from './admin-photo-of-the-week.component';
 
@@ -15,7 +15,7 @@ import { AdminPhotoOfTheWeekComponent } from './admin-photo-of-the-week.componen
       { path: '', pathMatch: 'full', component: AdminPhotoOfTheWeekComponent },
     ]),
     ReactiveFormsModule,
-    WebsiteUiAdminModule,
+    WebsiteUiUiAdminModule,
   ],
 })
 export class AdminPhotoOfTheWeekModule {}

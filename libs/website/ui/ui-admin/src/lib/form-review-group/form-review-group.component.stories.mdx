@@ -1,0 +1,35 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+import { FormReviewGroupComponent } from './form-review-group.component';
+import { WebsiteUiUiAdminModule } from '../website-ui-ui-admin.module';
+
+<Meta
+  title="UI ADMIN/Form Review Group"
+  component={FormReviewGroupComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiAdminModule],
+    }),
+  ]}
+/>
+
+export const reviewGroup = new FormGroup({
+  slug: new FormControl(null, Validators.required),
+  name: new FormControl(null, Validators.required),
+  text: new FormControl(null, Validators.required),
+});
+
+# Form Review Group
+
+<Story height="500px" name="Default">
+  {(args) => <drp-form-review-group {...args} reviewGroup={reviewGroup} />}
+</Story>
+
+## ArgsTable
+
+<ArgsTable of={FormReviewGroupComponent} />

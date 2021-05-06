@@ -6,7 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
-import { WebsiteUiCommonModule } from '@dark-rush-photography/website/ui/ui-shared';
+import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-common';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -15,7 +15,7 @@ import { WebsiteUiCommonModule } from '@dark-rush-photography/website/ui/ui-shar
     MatButtonModule,
     FontAwesomeModule,
     HomeRoutingModule,
-    WebsiteUiCommonModule,
+    WebsiteUiUiCommonModule,
   ],
 })
 export class WebsiteFeaturesHomeFeatureModule {}

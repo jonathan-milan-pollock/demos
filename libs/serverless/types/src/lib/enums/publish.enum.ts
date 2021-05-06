@@ -1,6 +1,6 @@
 export enum Publish {
   PhotoOfTheWeek,
-  Stories,
+  Events,
   Destinations,
   Watermarked,
   WithoutWatermark,
