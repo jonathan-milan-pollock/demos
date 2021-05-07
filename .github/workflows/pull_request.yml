@@ -13,11 +13,9 @@ jobs:
         with:
           node-version: 14.x
       - name: Configure Azure Credentials
-        uses: az-actions/configure-az-credentials@v1
+        uses: azure/login@v1
         with:
-          arm-client-id: ${{ secrets.ARM_CLIENT_ID }}
-          arm-client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
-          arm-tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Install Pulumi CLI
         uses: pulumi/action-install-pulumi-cli@v1
       - run: npm install
