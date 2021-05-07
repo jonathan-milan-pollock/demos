@@ -45,27 +45,19 @@
 
 ---
 
-### setup nx project
+## setup nx project
 
-#### add Preloading Strategy to website app.module
+### add Preloading Strategy to website app.module
 
 ```ts
 preloadingStrategy: PreloadAllModules;
 ```
 
-#### delete modules of types, website/utils, and website/data libraries
+### delete modules of types, utils, and data libraries
 
-- delete modules and remove module export from index.ts
-  - libs/api/types
-  - libs/elements/types
-  - libs/serverless/types
-  - libs/shared-server/types
-  - libs/shared-types
-  - libs/website/data
-  - libs/website/types
-  - libs/website/util
+- also remove the module export from index.ts
 
-#### .eslintrc.json
+### .eslintrc.json
 
 - add .eslintrc.json enforce-module-boundaries depConstraints
 - add "plugin:@typescript-eslint/recommended" to .eslintrc.json
@@ -81,7 +73,7 @@ preloadingStrategy: PreloadAllModules;
 },
 ```
 
-#### nx.json
+### nx.json
 
 - update implicit dependencies to include
 
@@ -108,7 +100,7 @@ preloadingStrategy: PreloadAllModules;
     },
 ```
 
-#### tsconfig.base.json
+### tsconfig.base.json
 
 - reorder configuration to match tsc init
 - add strict true
@@ -126,7 +118,7 @@ preloadingStrategy: PreloadAllModules;
   },
 ```
 
-#### add to .gitignore
+### add to .gitignore
 
 ```shell
 # azurite
@@ -137,7 +129,7 @@ __blobstorage__
 /libs/ui-storybook/.storybook/documentation.json
 ```
 
-#### reorder apps and libs so nx console displays projects in correct order
+### reorder apps and libs so nx console displays projects in correct order
 
 - order apps then libs in source order
   - angular.json
@@ -147,7 +139,7 @@ __blobstorage__
 
 ---
 
-### setup angular elements
+## setup angular elements
 
 - services may want instead of provideIn root to be provide in platform
 - in website app.module.ts import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
@@ -160,7 +152,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 ```
 
-#### /elements/ui/src/index.ts
+### /elements/ui/src/index.ts
 
 ```ts
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -171,7 +163,7 @@ platformBrowserDynamic()
   .catch((err) => console.error(err));
 ```
 
-#### /elements/ui/src/lib/elements-ui.module.ts
+### /elements/ui/src/lib/elements-ui.module.ts
 
 - add DoBootstrap and create each custom element
 
@@ -186,7 +178,7 @@ platformBrowserDynamic()
   }
 ```
 
-#### update document-register-element deprecated polyfill
+### update document-register-element deprecated polyfill
 
 - in website polyfills.ts
   - replace import 'document-register-element;
@@ -194,16 +186,16 @@ platformBrowserDynamic()
 
 ---
 
-### setup angular universal
+## setup angular universal
 
-#### update generated angular universal files
+### update generated angular universal files
 
 - update api/src/main.ts
 - update api/src/app/app.module.ts
 - update website/server.ts
 - update website/tsconfig.json adding path to tsconfig.server.json
 
-#### delete unneeded angular universal files and commands
+### delete unneeded angular universal files and commands
 
 - delete auto-generated files and directories
   - server (which contains)
@@ -213,13 +205,13 @@ platformBrowserDynamic()
   - tsconfig.server.json
 - remove api:serve in angular.json file
 
-#### add to website-e2e cypress.json
+### add to website-e2e cypress.json
 
 ```json
   "baseUrl": "http://localhost:4200",
 ```
 
-#### update angular.json for angular universal
+### update angular.json for angular universal
 
 - remove the following two lines from website-e2e task in angular.json
 
@@ -233,9 +225,9 @@ platformBrowserDynamic()
 
 ---
 
-### setup storybook
+## setup storybook
 
-#### add plugins to root storybook
+### add plugins to root storybook
 
 - remove addon-knobs as Storybook is replacing knobs with controls, which is in essentials
 - and add plugins in root .storybook/main.js file
@@ -259,7 +251,7 @@ module.exports = {
 };
 ```
 
-#### update ui-storybook to include all other storybooks and have doc
+### update ui-storybook to include all other storybooks and have doc
 
 - in ui-storybook/.storybook/main.js
 
@@ -285,24 +277,22 @@ import docJson from './documentation.json';
 setCompodocJson(docJson);
 ```
 
----
+### in all storybook libraries
 
-#### in all storybook libraries
-
-##### (except for elements) in angular.json add styles.scss
+#### (except for elements) in angular.json add styles.scss
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
 ```
 
-##### in .storybook/main.js remove the following comment files as addons added at root
+#### in .storybook/main.js remove the following comment files as addons added at root
 
 ```js
 // Use the following syntax to add addons!
 // rootMain.addons.push('');
 ```
 
-##### in .storybook/preview.js remove knobs and add background colors
+#### in .storybook/preview.js remove knobs and add background colors
 
 - remove knobs
 
@@ -315,16 +305,18 @@ addDecorator(withKnobs);
 
 - add addons configuration
 
-### setup cypress
+---
 
-#### setup cypress dashboard
+## setup cypress
+
+### setup cypress dashboard
 
 - setup cypress dashboard
   - run cypress and select _runs_ tab and create project for a projectId to be added to cypress.json
     - ui-storybook-e2e
     - website-e2e
 
-#### setup cypress-storybook
+### setup cypress-storybook
 
 - in ui-storybook-e2e/src/support/index.ts add:
 
@@ -340,7 +332,7 @@ import 'cypress-storybook/angular';
 
 ---
 
-### Setup Font Awesome
+## Setup Font Awesome
 
 - remove from website index.html
 
@@ -376,9 +368,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 ---
 
-### add and update package.json scripts
+## add and update package.json scripts
 
-#### update package.json
+### update package.json
 
 - change version to 1.1.1 :mage:
 - add description
@@ -387,7 +379,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   - "start": "npm run dev:ssr"
 - update scripts using ng with nx
 
-#### add package.json scripts
+### add package.json scripts
 
 ```json
   "docs:json": "compodoc -p ./tsconfig.base.json -e json -d ./libs/ui-storybook/.storybook",
@@ -420,6 +412,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <!-- markdownlint-enable MD026 -->
 
 - close and reopen VS Code
+
+---
+
+## additional resources
+
+- [additional resources](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/additional-resources.md)
+
+---
 
 TODO: separate custom elements for each components so they can be published independently
 

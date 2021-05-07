@@ -8,20 +8,23 @@
 
 ### tech stack
 
-- **Angular Elements** to create image custom elements [npm package]
-- **Angular Universal** for website development
-- **NestJS** for api development
-- **Azure Serverless Functions** to save costs while processing images
-- **Azure Durable Functions** for orchestrating image processing
-- **Azure Blob Storage** for blob storage of images
-- **Pulumi** for deployment
-- **Azure DevOps Pipeline** for CI/CD
-- **TinyPNG** to reducing image sizes
-- **exiftool-vendored** to add metadata to images
-- **Sharp** for creating differently sized images
-- **FFmpeg** for creating image video
-- **Melt** for blending images in image video
-- **mongoose** for Azure MongoDB document access
+- **_Nx_**
+- **_Storybook_**
+- **_Cypress_**
+- **_Angular_**
+- **_Angular Elements_**
+- **_Angular Universal_**
+- **_React_**
+- **_NestJS Api_**
+- **_NestJS Mongoose_**
+- **_NestJS Serverless_**
+- **_Azure Durable Functions_**
+- **_Azure Blob Storage_**
+- **_Pulumi_**
+- **_TinyPNG_**
+- **_Pulumi_**
+- **_Sharp_**
+- **_FFmpeg_**
 
 ---
 
@@ -51,9 +54,11 @@
    <a href="https://nx.dev/">
       <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55">
    </a>
-
    <a href="https://angular.io/">
       <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="50">
+   </a>
+   <a href="https://reactjs.org/">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/800px-React-icon.svg.png" width="70">
    </a>
    <a href="https://nestjs.com/">
       <img src="https://docs.nestjs.com/assets/logo-small.svg" width="50">

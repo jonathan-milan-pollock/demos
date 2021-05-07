@@ -1,6 +1,6 @@
 export interface Image {
-  srcPath: string;
-  number: number;
-  width: number;
-  height: number;
+  readonly srcPath: string;
+  readonly number: number;
+  readonly width: number;
+  readonly height: number;
 }

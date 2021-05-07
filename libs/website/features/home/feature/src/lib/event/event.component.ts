@@ -19,15 +19,17 @@ export class EventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.slug = params['slug'];
-      this.metaService.addMetadata(
-        {
+    this.route.data.subscribe((data) => {
+      const { title, description, url } = data['metadata'];
+      this.metaService.addMetadata({ title, description }, url);
+    });
+  }
+
+  /*
+          {
           title: 'Classic 1952 Pontiac',
           description: `Event Photography of ${this.seoDescription} by Dark Rush Photography`,
         },
         `/destinations/${this.slug}`
-      );
-    });
-  }
+  */
 }

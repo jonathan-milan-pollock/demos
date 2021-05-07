@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 
-import { Metadata, PageType } from '@dark-rush-photography/website/types';
+import { Metadata, Page } from '@dark-rush-photography/website/types';
 import { getMetadata } from './meta.functions';
 
 @Injectable({
@@ -10,8 +10,8 @@ import { getMetadata } from './meta.functions';
 export class MetaService {
   constructor(private title: Title, private meta: Meta) {}
 
-  addMetadataForPage(pageType: PageType, url: string): void {
-    this.addMetadata(getMetadata(pageType), url);
+  addMetadataForPage(page: Page, url: string): void {
+    this.addMetadata(getMetadata(page), url);
   }
 
   addMetadata(metadata: Metadata | undefined, url: string): void {

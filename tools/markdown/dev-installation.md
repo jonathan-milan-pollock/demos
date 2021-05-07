@@ -1,10 +1,6 @@
 # dev-installation
 
-- [Install Docker Desktop](https://docs.docker.com/desktop/#download-and-install)
-- [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
-- [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
-
-## install VSCode plugins
+## install VSCode extensions (the following have been added to .vscode extensions.json)
 
 - [Install VSCode Nx Console](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console)
 - [Install VSCode Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
@@ -28,25 +24,3 @@
 
 - [Install VSCode Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
 - [Install and Setup VSCode Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#install-and-run-the-azurite-visual-studio-code-extension)
-
-### Nginx
-
-- [Install VSCode NGINX Configuration](https://marketplace.visualstudio.com/items?itemName=william-voyek.vscode-nginx)
-- [Install VSCode NGINX Configuration Language Support](https://marketplace.visualstudio.com/items?itemName=ahmadalli.vscode-nginx-conf)
-- [Install VSCode nginx-formatter](https://marketplace.visualstudio.com/items?itemName=raynigon.nginx-formatter)
-
-### optional VSCode install
-
-- [Optionally Install open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser&ssr=false#review-details)
-- [Optionally Install VSCode PrintCode](https://marketplace.visualstudio.com/items?itemName=nobuhito.printcoder)
-
-## Chrome extensions
-
-- [Install Chrome extension HTML5 Outliner](https://chrome.google.com/webstore/detail/html5-outliner/afoibpobokebhgfnknfndkgemglggomo?hl=en)
-- [Install Augury](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd?hl=en)
-- **_Temporarily_** [Install ChromeVox When Actively Testing Accessibility](https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en)
-
-## Chrome Settings
-
-> Open Mobile View and Enable Show Device Frame in Mobile Settings
-> Open Network Settings and enable Capture Screenshots

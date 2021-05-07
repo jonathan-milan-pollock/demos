@@ -5,13 +5,14 @@ import { ThreeSixtyImage } from './three-sixty-image.interface';
 import { Video } from './video.interface';
 
 export interface Event {
+  readonly id: string;
   // identifier
   readonly slug: string;
   readonly group: number;
   // metadata
   readonly title: string;
   readonly description: string;
-  readonly keywords: ReadonlySet<string>;
+  readonly keywords: ReadonlyArray<string>;
   readonly dateCreated?: ReadableDate;
   readonly datePublished?: ReadableDate;
   // location
@@ -19,8 +20,8 @@ export interface Event {
   // display
   readonly useTitleImage: boolean;
   // content
-  readonly text: string[];
-  readonly images?: ReadonlySet<Image>;
-  readonly threeSixtyImages?: ReadonlySet<ThreeSixtyImage>;
-  readonly videos?: ReadonlySet<Video>;
+  readonly text: ReadonlyArray<string>;
+  readonly images: ReadonlyArray<Image>;
+  readonly threeSixtyImages: ReadonlyArray<ThreeSixtyImage>;
+  readonly videos: ReadonlyArray<Video>;
 }

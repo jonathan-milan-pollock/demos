@@ -1,15 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import { AnjuChowdhury } from '../../mock/reviews/AnjuChowdhury';
-import { BrianWalkabout } from '../../mock/reviews/BrianWalkabout';
-import { CeliaQuillian } from '../../mock/reviews/CeliaQuillian';
-import { CynthiaSwann } from '../../mock/reviews/CynthiaSwann';
-import { DonnaJeffries } from '../../mock/reviews/DonnaJeffries';
-import { ErikLing } from '../../mock/reviews/ErikLing';
-import { KendraPoe } from '../../mock/reviews/KendraPoe';
-import { LindsayLevin } from '../../mock/reviews/LindsayLevin';
-import { RonnieColquitt } from '../../mock/reviews/RonnieColquitt';
-
 import { Review } from '@dark-rush-photography/shared-types';
 import * as ReviewActions from '../actions/review.actions';
 
@@ -20,17 +10,7 @@ export interface ReviewState {
 }
 
 const initialState: ReviewState = {
-  reviews: [
-    AnjuChowdhury.of(),
-    BrianWalkabout.of(),
-    CeliaQuillian.of(),
-    CynthiaSwann.of(),
-    DonnaJeffries.of(),
-    ErikLing.of(),
-    KendraPoe.of(),
-    LindsayLevin.of(),
-    RonnieColquitt.of(),
-  ],
+  reviews: [],
 };
 
 const reducer = createReducer(
@@ -40,16 +20,14 @@ const reducer = createReducer(
     reviews: [...state.reviews, { ...review }],
   })),
   on(ReviewActions.editReview, (state, { review }) => {
-    const uneditedReviews = state.reviews.filter((r) => r.slug !== review.slug);
+    const uneditedReviews = state.reviews.filter((r) => r.id !== review.id);
     return {
       ...state,
       reviews: [...uneditedReviews, { ...review }],
     };
   }),
   on(ReviewActions.deleteReview, (state, { review }) => {
-    const nonDeletedReviews = state.reviews.filter(
-      (r) => r.slug !== review.slug
-    );
+    const nonDeletedReviews = state.reviews.filter((r) => r.id !== review.id);
     return {
       ...state,
       reviews: [...nonDeletedReviews],

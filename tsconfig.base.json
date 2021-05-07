@@ -41,9 +41,6 @@
       "@dark-rush-photography/shared-server/data": [
         "libs/shared-server/data/src/index.ts"
       ],
-      "@dark-rush-photography/shared-server/types": [
-        "libs/shared-server/types/src/index.ts"
-      ],
       "@dark-rush-photography/shared-server/util": [
         "libs/shared-server/util/src/index.ts"
       ],

@@ -22,7 +22,7 @@ export class EventImage implements Image {
 
   static fromBlobFileNameSections(blobFileNameSections: string[]): EventImage {
     return new EventImage({
-      publishType: 'events',
+      publish: 'events',
       publishedCollectionSetParentName: blobFileNameSections[1],
       publishedCollectionSetName: blobFileNameSections[2],
       publishedCollectionName: blobFileNameSections[3],
@@ -36,7 +36,7 @@ export class EventImage implements Image {
 
   setImageType(imageType: string): Image {
     const {
-      publishType: publishServiceName,
+      publish: publishServiceName,
       publishedCollectionSetParentName,
       publishedCollectionSetName,
       publishedCollectionName,
@@ -55,7 +55,7 @@ export class EventImage implements Image {
 
   get blobName(): string {
     const {
-      publishType: publishServiceName,
+      publish: publishServiceName,
       publishedCollectionSetParentName,
       publishedCollectionSetName,
       publishedCollectionName,

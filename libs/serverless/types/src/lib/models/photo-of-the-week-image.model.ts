@@ -24,7 +24,7 @@ export class PhotoOfTheWeekImage implements Image {
     blobFileNameSections: string[]
   ): PhotoOfTheWeekImage {
     return new PhotoOfTheWeekImage({
-      publishType: 'photo-of-the-week',
+      publish: 'photo-of-the-week',
       publishedCollectionSetName: blobFileNameSections[1],
       publishedCollectionName: blobFileNameSections[2],
       fileName: blobFileNameSections[3],
@@ -41,7 +41,7 @@ export class PhotoOfTheWeekImage implements Image {
 
   get blobName(): string {
     const {
-      publishType: publishServiceName,
+      publish: publishServiceName,
       publishedCollectionSetName,
       publishedCollectionName,
       imageType,

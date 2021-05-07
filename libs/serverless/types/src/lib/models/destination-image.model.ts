@@ -13,7 +13,7 @@ export class DestinationImage implements Image {
     blobFileNameSections: string[]
   ): DestinationImage {
     return new DestinationImage({
-      publishType: 'destinations',
+      publish: 'destinations',
       publishedCollectionSetParentName: blobFileNameSections[1],
       publishedCollectionSetName: blobFileNameSections[2],
       publishedCollectionName: blobFileNameSections[3],
@@ -27,7 +27,7 @@ export class DestinationImage implements Image {
 
   setImageType(imageType: string): Image {
     const {
-      publishType: publishServiceName,
+      publish: publishServiceName,
       publishedCollectionSetParentName,
       publishedCollectionSetName,
       publishedCollectionName,
@@ -35,7 +35,7 @@ export class DestinationImage implements Image {
     } = this.blobPath;
 
     return new DestinationImage({
-      publishType: publishServiceName,
+      publish: publishServiceName,
       publishedCollectionSetParentName,
       publishedCollectionSetName,
       publishedCollectionName,
@@ -46,7 +46,7 @@ export class DestinationImage implements Image {
 
   get blobName(): string {
     const {
-      publishType: publishServiceName,
+      publish: publishServiceName,
       publishedCollectionSetParentName,
       publishedCollectionSetName,
       publishedCollectionName,

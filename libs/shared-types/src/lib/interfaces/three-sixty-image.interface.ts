@@ -1,9 +1,9 @@
-import { ThreeSixtyImageOrientation } from './three-sixty-image-orientation.interface';
+import { ThreeSixtyImageType } from '../types/three-sixty-image.type';
 
 export interface ThreeSixtyImage {
-  srcPath: string;
-  extraSmallOrientation: ThreeSixtyImageOrientation;
-  smallOrientation: ThreeSixtyImageOrientation;
-  mediumOrientation: ThreeSixtyImageOrientation;
-  largeOrientation: ThreeSixtyImageOrientation;
+  readonly type: ThreeSixtyImageType;
+  readonly srcPath: string;
+  readonly pitch: number;
+  readonly yaw: number;
+  readonly hfov: number;
 }

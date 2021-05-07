@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { Review } from '@dark-rush-photography/shared-types';
-import { PageType } from '@dark-rush-photography/website/types';
+import { Page } from '@dark-rush-photography/website/types';
 import { addReview } from '@dark-rush-photography/website/data';
 import { MetaService } from '@dark-rush-photography/website/util';
 
@@ -31,7 +31,7 @@ export class AdminReviewsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(PageType.AdminReviews, this.router.url);
+    this.metaService.addMetadataForPage(Page.AdminReviews, this.router.url);
 
     this.reviewsSub = this.reviewStore
       .select('review')

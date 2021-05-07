@@ -4,24 +4,24 @@ describe('/admin/home', () => {
   });
 
   it('has the correct title', () => {
-    cy.title().should('eq', 'Admin Home');
+    cy.title().should('eq', 'Admin Home Page');
   });
 
   it('has the correct description', () => {
     cy.verifyMetaTag(
       'description',
-      'Administrate Home for Dark Rush Photography'
+      'Administrate Home Page for Dark Rush Photography'
     );
   });
 
   it('has the correct open graph title', () => {
-    cy.verifyMetaTag('"og:title"', 'Admin Home');
+    cy.verifyMetaTag('"og:title"', 'Admin Home Page');
   });
 
   it('has the correct open graph description', () => {
     cy.verifyMetaTag(
       '"og:description"',
-      'Administrate Home for Dark Rush Photography'
+      'Administrate Home Page for Dark Rush Photography'
     );
   });
 

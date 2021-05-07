@@ -1,7 +1,7 @@
-import { PublishType } from '../types/publish-type';
+import { Publish } from '../enums/publish.enum';
 
 export interface BlobPath {
-  readonly publishType: PublishType;
+  readonly publish: Publish;
   readonly publishedCollectionSetParentName?: string;
   readonly publishedCollectionSetName?: string;
   readonly publishedCollectionName?: string;

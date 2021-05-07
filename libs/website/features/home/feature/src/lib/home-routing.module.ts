@@ -4,9 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {
   MetaPhotoOfTheWeekImageResolver,
   MetaEventResolver,
-  MetaEventImageResolver,
   MetaDestinationResolver,
-} from '@dark-rush-photography/website/util';
+} from '@dark-rush-photography/website/data';
 
 import { HomeComponent } from './home.component';
 
@@ -71,7 +70,7 @@ const routes: Routes = [
       },
       {
         path: 'events/:slug/:event-image',
-        resolve: { metadata: MetaEventImageResolver },
+        resolve: { metadata: MetaEventResolver },
         loadChildren: () =>
           import('./event-image/event-image.module').then(
             (module) => module.EventImageModule

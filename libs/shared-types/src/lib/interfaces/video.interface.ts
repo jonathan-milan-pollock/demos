@@ -1,4 +1,4 @@
 export interface Video {
-  srcPath: string;
-  titleTrack?: string;
+  readonly srcPath: string;
+  readonly titleTrack?: string;
 }

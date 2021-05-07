@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { PageType } from '@dark-rush-photography/website/types';
+import { Page } from '@dark-rush-photography/website/types';
 import { AuthService, MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
@@ -28,7 +28,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(PageType.Admin, this.router.url);
+    this.metaService.addMetadataForPage(Page.Admin, this.router.url);
 
     this.authServiceSub = this.authService.authenticationChanged.subscribe(
       (isAuthenticated) => {

@@ -9,6 +9,7 @@
     <input
       matInput
       [formControlName]="slugFormControlName"
+      required
       pattern="[a-z-]*"
       [errorStateMatcher]="matcher"
       data-testid="slug-input"
@@ -28,6 +29,7 @@
     <mat-label>Group</mat-label>
     <mat-select
       [formControlName]="groupFormControlName"
+      required
       data-testid="group-input"
     >
       <mat-option *ngFor="let group of groups" [value]="group">

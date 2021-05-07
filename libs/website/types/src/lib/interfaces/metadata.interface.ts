@@ -1,4 +1,4 @@
 export interface Metadata {
   readonly title: string;
-  readonly description?: string;
+  readonly description: string;
 }

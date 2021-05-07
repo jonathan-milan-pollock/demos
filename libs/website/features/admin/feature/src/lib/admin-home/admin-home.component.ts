@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PageType } from '@dark-rush-photography/website/types';
+import { Page } from '@dark-rush-photography/website/types';
 import { MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
@@ -13,9 +13,6 @@ export class AdminHomeComponent implements OnInit {
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(
-      PageType.AdminHomePage,
-      this.router.url
-    );
+    this.metaService.addMetadataForPage(Page.AdminHomePage, this.router.url);
   }
 }

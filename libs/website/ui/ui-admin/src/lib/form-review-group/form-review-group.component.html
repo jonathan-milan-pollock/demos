@@ -9,6 +9,7 @@
     <input
       matInput
       [formControlName]="slugFormControlName"
+      required
       pattern="[a-z-]*"
       [errorStateMatcher]="matcher"
       data-testid="slug-input"
@@ -29,6 +30,7 @@
     <input
       matInput
       [formControlName]="nameFormControlName"
+      required
       data-testid="name-input"
     />
     <mat-error
@@ -46,6 +48,7 @@
       cdkAutosizeMinRows="2"
       cdkAutosizeMaxRows="6"
       [formControlName]="textFormControlName"
+      required
       data-testid="text-input"
     ></textarea>
     <mat-error

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { PageType } from '@dark-rush-photography/website/types';
+import { Page } from '@dark-rush-photography/website/types';
 
 import { MetaService } from '@dark-rush-photography/website/util';
 
@@ -12,6 +12,6 @@ export class ReviewsComponent implements OnInit {
   constructor(private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(PageType.Reviews, '');
+    this.metaService.addMetadataForPage(Page.Reviews, '');
   }
 }
