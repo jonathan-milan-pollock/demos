@@ -1,4 +1,4 @@
-name: Pulumi
+name: Push
 on:
   push:
     branches:
@@ -14,12 +14,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Configure Azure Credentials
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Install Pulumi CLI
         uses: pulumi/action-install-pulumi-cli@v1
       - run: npm install
