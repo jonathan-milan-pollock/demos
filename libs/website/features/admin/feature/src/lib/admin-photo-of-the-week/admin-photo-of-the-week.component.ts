@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 import {
   CanComponentDeactivate,
-  PageType,
+  Page,
 } from '@dark-rush-photography/website/types';
 import {
   MetaService,
@@ -34,7 +34,7 @@ export class AdminPhotoOfTheWeekComponent
 
   ngOnInit(): void {
     this.metaService.addMetadataForPage(
-      PageType.AdminPhotoOfTheWeek,
+      Page.AdminPhotoOfTheWeek,
       this.router.url
     );
 

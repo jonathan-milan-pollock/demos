@@ -87,15 +87,6 @@ form.addEventListener("submit", searchAddressHandler);
 - Have access to everything so don't limit to acting like a user
 
 /\*
-describe('website', () => {
-it('should display welcome message', () => {
-// Custom command example, see `../support/commands.ts` file
-cy.login('my-email@something.com', 'myPassword');
-
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome to website!');
-
-});
 
 beforeEach(() => {
 cy.task('clear:db');
@@ -163,12 +154,3 @@ cy.url().should('include', '/commands/actions');
       .should('have.value', 'face@email.com');
 
 });
-
-/\*
-it('displays Dark Rush Photography information', () => {});
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-it('displays Dark Rush information', () => {});
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-it('displays Milan Pollock information', () => {});
-\*/

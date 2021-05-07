@@ -5,7 +5,7 @@
 <div *ngIf="isLoading">Is isLoading</div>
 
 <mat-selection-list [multiple]="false">
-  <mat-list-option *ngFor="let review of reviews" [value]="review.slug">
+  <mat-list-option *ngFor="let review of reviews" [value]="review.name">
     {{ review.name }}
   </mat-list-option>
 </mat-selection-list>

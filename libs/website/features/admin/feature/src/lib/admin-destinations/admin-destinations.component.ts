@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MetaService } from '@dark-rush-photography/website/util';
 
-import { PageType } from '@dark-rush-photography/website/types';
+import { Page } from '@dark-rush-photography/website/types';
 
 @Component({
   templateUrl: './admin-destinations.component.html',
@@ -14,7 +14,7 @@ export class AdminDestinationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.metaService.addMetadataForPage(
-      PageType.AdminDestinations,
+      Page.AdminDestinations,
       this.router.url
     );
   }

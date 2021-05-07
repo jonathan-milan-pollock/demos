@@ -501,19 +501,6 @@
         }
       }
     },
-    "shared-server-types": {
-      "root": "libs/shared-server/types",
-      "sourceRoot": "libs/shared-server/types/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
-          }
-        }
-      }
-    },
     "shared-server-util": {
       "root": "libs/shared-server/util",
       "sourceRoot": "libs/shared-server/util/src",

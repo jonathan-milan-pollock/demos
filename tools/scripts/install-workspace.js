@@ -40,8 +40,6 @@ const execInstallDevDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D azurite'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @azure/functions'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @pulumi/azure-native'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @pulumi/pulumi'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'));
 
 const execInstallDependencies = (isReady) =>
@@ -53,6 +51,8 @@ const execInstallDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i exiftool-vendored'))
     .then(() => consoleLogOrExec(isReady, 'npm i parse-multipart'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
+    .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
@@ -162,12 +162,6 @@ const execGenerateSharedServerLibs = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data-access'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
       )
     )
     .then(() =>

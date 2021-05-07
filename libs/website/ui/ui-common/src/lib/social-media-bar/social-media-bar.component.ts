@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { SocialMediaType } from '@dark-rush-photography/website/types';
+import { IconType } from '@dark-rush-photography/website/types';
 
 import {
   faFacebookSquare,
@@ -32,9 +32,9 @@ export class SocialMediaBarComponent {
   @Input() linkedInAriaLabel = '';
   @Input() youTubeAriaLabel = '';
 
-  @Output() buttonClicked = new EventEmitter<SocialMediaType>();
+  @Output() buttonClicked = new EventEmitter<IconType>();
 
-  onButtonClicked(socialMediaType: SocialMediaType): void {
-    this.buttonClicked.emit(socialMediaType);
+  onButtonClicked(iconType: IconType): void {
+    this.buttonClicked.emit(iconType);
   }
 }

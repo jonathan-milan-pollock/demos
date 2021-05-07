@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PageType } from '@dark-rush-photography/website/types';
+import { Page } from '@dark-rush-photography/website/types';
 import { MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
@@ -17,7 +17,7 @@ export class EventsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(PageType.Events, this.router.url);
+    this.metaService.addMetadataForPage(Page.Events, this.router.url);
   }
 
   onEventClicked(): void {

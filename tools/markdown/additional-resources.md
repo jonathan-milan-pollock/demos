@@ -1,10 +1,20 @@
 # additional-resources
 
-## recommended books
+---
+
+---
+
+## recommended reading
+
+- [Local Storage in Angular](https://blog.briebug.com/blog/managing-local-storage-in-angular)
+
+## architecture
+
+## architecture recommended books
 
 - [Nx Enterprise Monorepo Angular Patterns](https://go.nrwl.io/angular-enterprise-monorepo-patterns-new-book)
 
-## recommended reading
+## architecture recommended reading
 
 - [Nx Apps & Libraries Structure](https://medium.com/showpad-engineering/how-to-organize-and-name-applications-and-libraries-in-an-nx-monorepo-for-immediate-team-wide-9876510dbe28)
 - [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
@@ -16,9 +26,13 @@
 
 ---
 
----
+## dev
 
-## reading
+### dev recommended books
+
+- [HTML5: The Missing Manual, 2nd Edition](https://www.oreilly.com/library/view/html5-the-missing/9781449373412/)
+
+### dev recommended reading
 
 - [12 Factor App](https://12factor.net/)
 - [Beyond the 12 Factor App](https://tanzu.vmware.com/content/blog/beyond-the-twelve-factor-app)
@@ -28,35 +42,34 @@
 - [Cypress](https://docs.cypress.io/guides/overview/why-cypress)
 - [NestJS](https://docs.nestjs.com/)
 
-## videos
+### dev recommended videos
 
 - [Cypress at Assert(JS) 2018 Part 1](https://youtu.be/5XQOK0v_YRE)
 - [Cypress at Assert(JS) 2018 Part 2](https://youtu.be/5FnalKRjpZk)
+- [NestJS](https://academind.com/tutorials/nestjs-introduction/)
+- [NestJS With Mongoose](https://www.youtube.com/watch?v=ulfU5vY6I78)
 
-## references
+### dev references
 
 - [Cypress-Storybook](https://www.npmjs.com/package/cypress-storybook)
 - [HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
 - [Google Fonts](https://fonts.google.com/)
 - [Adobe Fonts](https://fonts.adobe.com/)
+- [JSON-LD](https://developers.google.com/search/docs/data-types/image-license-metadata)
+- [JSON-LD Schema List](https://docs.google.com/spreadsheets/d/1Ed6RmI01rx4UdW40ciWgz2oS_Kx37_-sPi7sba_jC3w/edit#gid=0)
 
-## books
+---
 
-- [HTML5: The Missing Manual, 2nd Edition](https://www.oreilly.com/library/view/html5-the-missing/9781449373412/)
+## custom elements
 
-## reading
+## custom elements recommended reading
 
 - [5 Reasons to use Angular Elements](https://blog.nrwl.io/5-reasons-to-use-angular-elements-390c9a629f89)
 - [Angular Elements and Universal Nx Case Study](https://nrwl.io/pages/t-mobile-case-study)
 
-## videos
+---
 
-## reference
-
-- [JSON-LD](https://developers.google.com/search/docs/data-types/image-license-metadata)
-- [JSON-LD Schema List](https://docs.google.com/spreadsheets/d/1Ed6RmI01rx4UdW40ciWgz2oS_Kx37_-sPi7sba_jC3w/edit#gid=0)
-
-### Nx
+## Nx
 
 - [Step 1 - Create Application](https://nx.dev/latest/angular/tutorial/01-create-application)
 - [Step 2 - Add E2E Test](https://nx.dev/latest/angular/tutorial/02-add-e2e-test)
@@ -70,7 +83,11 @@
 - [Step 10 - Computation Caching](https://nx.dev/latest/angular/tutorial/10-computation-caching)
 - [Step 11 - Test Affected Projects](https://nx.dev/latest/angular/tutorial/11-test-affected-projects)
 
-### PWA
+---
+
+## PWA
 
 - [Udemy PWA](https://www.udemy.com/course/progressive-web-app-pwa-the-complete-guide)
 - [Udacity Responsive Images](https://classroom.udacity.com/courses/ud882)
+
+---

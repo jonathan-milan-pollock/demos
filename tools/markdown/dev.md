@@ -21,7 +21,23 @@
 
 ## installation
 
-- [dev installation](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev-installation.md)
+### Chrome extensions
+
+- [Install Chrome extension HTML5 Outliner](https://chrome.google.com/webstore/detail/html5-outliner/afoibpobokebhgfnknfndkgemglggomo?hl=en)
+- [Install Augury](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd?hl=en)
+- **_Temporarily_** [Install ChromeVox When Actively Testing Accessibility](https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en)
+
+### Chrome Settings
+
+> Open Mobile View and Enable Show Device Frame in Mobile Settings
+> Open Network Settings and enable Capture Screenshots
+
+### optional VSCode extensions (other VSCode extensions have been added to .vscode extensions.json)
+
+- [optionally Install open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser&ssr=false#review-details)
+- [optionally Install VSCode PrintCode](https://marketplace.visualstudio.com/items?itemName=nobuhito.printcoder)
+
+---
 
 ## setup
 
@@ -32,11 +48,12 @@
 - update material icon theme settings
   - in settings change material icon theme to angular_ngrx
 
+---
+
 ## running dev
 
 - npm run cy:ui
 - npm run cy:web
-- npm run cy:ssr
 
 ---
 
@@ -66,6 +83,10 @@
 
 - generate types manually
   - add \*.spec.ts file for unit testing
+
+**_generating files with @nrwl/nest schematics does not currently work for nx_**
+
+---
 
 ## additional resources
 
