@@ -21,6 +21,7 @@ jobs:
       - run: npm install
       - uses: pulumi/actions@v3
         with:
+          work-dir: ./tools/ci/
           command: preview
           stack-name: dev
         env:
