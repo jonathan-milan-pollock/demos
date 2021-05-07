@@ -63,11 +63,11 @@ export const mongoDbAccountUrn = mongoDbCollection.databaseAccount.urn;
 export const mongoDbDatabaseUrn = mongoDbCollection.database.urn;
 export const mongoDbCollectionUrn = mongoDbCollection.collection.urn;
 
-export const uploadsStorageAccountUrn = uploadsStorageAccount.urn;
+//export const uploadsStorageAccountUrn = uploadsStorageAccount.urn;
 //export const uploadsBlobContainerUrn = uploadsBlobContainer.urn;
-export const contentStorageAccountUrn = contentStorageAccount.urn;
+//export const contentStorageAccountUrn = contentStorageAccount.urn;
 //export const contentBlobContainerUrn = contentBlobContainer.urn;
-export const serverlessStorageAccountUrn = serverlessStorageAccount.urn;
+//export const serverlessStorageAccountUrn = serverlessStorageAccount.urn;
 //export const serverlessBlobContainerUrn =
 //  serverlessBlobContainer.urn;
 
