@@ -32,6 +32,12 @@
 > Open Mobile View and Enable Show Device Frame in Mobile Settings
 > Open Network Settings and enable Capture Screenshots
 
+### Install Community Edition MongoDB
+
+- <https://www.mongodb.com/try/download/community>
+- When installing make sure to add server for the install
+- Click connect then create database drp-mongo-db-database & collection documents
+
 ### Install Azure Functions
 
 - npm i -g azure-functions-core-tools@3 --unsafe-perm true
