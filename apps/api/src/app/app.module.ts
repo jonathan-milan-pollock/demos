@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { AppServerModule } from './../../../website/src/main.server';
 
+import { environment } from '../environments/environment';
 import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
 
 @Module({
@@ -15,7 +16,7 @@ import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
       bootstrap: AppServerModule,
       viewsPath: join(process.cwd(), 'dist/website/browser'),
     }),
-    MongooseModule.forRoot(''),
+    MongooseModule.forRoot(environment.MONGO_DB_CONNECTION_STRING),
     ApiFeatureModule,
   ],
 })
