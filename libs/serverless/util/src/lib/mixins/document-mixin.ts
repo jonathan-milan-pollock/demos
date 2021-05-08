@@ -7,7 +7,6 @@
             return new()
             {
                 Slug = event.Slug,
-                SlugType = SlugType.PhotoOfTheWeek.Tostring(),
                 Name = event.Name,
                 Location = event.Location,
                 EventDate = event.EventDate,

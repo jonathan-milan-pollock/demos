@@ -31,10 +31,7 @@
       "implicitDependencies": ["ui-storybook"]
     },
     "website": { "tags": ["scope:website", "type:app"] },
-    "website-e2e": {
-      "tags": [],
-      "implicitDependencies": ["website"]
-    },
+    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
     "api-feature": { "tags": ["scope:api", "type:feature"] },
     "api-types": { "tags": ["scope:api", "type:types"] },
     "api-util": { "tags": ["scope:api", "type:util"] },
@@ -62,6 +59,7 @@
     "website-ui-ui-common": { "tags": ["scope:website", "type:ui"] },
     "website-ui-ui-directives": { "tags": ["scope:website", "type:ui"] },
     "website-ui-ui-home": { "tags": ["scope:website", "type:ui"] },
-    "website-util": { "tags": ["scope:website", "type:util"] }
+    "website-util": { "tags": ["scope:website", "type:util"] },
+    "shared-server-types": { "tags": ["scope:shared-server", "type:types"] }
   }
 }

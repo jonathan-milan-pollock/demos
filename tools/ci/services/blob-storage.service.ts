@@ -11,7 +11,7 @@ import {
 } from '@pulumi/azure-native/storage';
 
 import { AzureStorageAccount } from '../interfaces/azure-storage-account.interface';
-import { AzureBlobContainer } from '../interfaces/azure-blob-container.model';
+import { AzureBlobContainer } from '../interfaces/azure-blob-container.interface';
 import { AzureBlob } from '../interfaces/azure-blob.interface';
 
 export const createPrivateBlobContainer = (blobContainerName: string) => (
@@ -67,7 +67,7 @@ export const getSignedBlobUrl = (azureBlob: AzureBlob): Output<string> => {
       return listStorageAccountServiceSAS({
         accountName: storageAccountName,
         protocols: HttpProtocol.Https,
-        sharedAccessExpiryTime: '2030-01-01',
+        sharedAccessExpiryTime: '2080-01-01',
         sharedAccessStartTime: '2021-01-01',
         resourceGroupName: resourceGroupName,
         resource: SignedResource.C,
@@ -80,5 +80,5 @@ export const getSignedBlobUrl = (azureBlob: AzureBlob): Output<string> => {
       });
     }
   );
-  return interpolate`https://${storageAccountName}.blob.core.windows.net/${blobContainerName}/${blob.name}?${blobSAS.serviceSasToken}`;
+  return interpolate`https://${storageAccountName}.blob.core.windows.net/${blobContainerName}/${blobName}?${blobSAS.serviceSasToken}`;
 };

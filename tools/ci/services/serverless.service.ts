@@ -4,13 +4,9 @@ import { AppServicePlan } from '@pulumi/azure-native/web';
 import { ResourceGroup } from '@pulumi/azure-native/resources';
 import { WebApp } from '@pulumi/azure-native/web';
 
-import { getStorageAccountConnectionString } from './storage-account.service';
 import { AzureStorageAccount } from '../interfaces/azure-storage-account.interface';
-
-interface AzureAppServicePlan {
-  resourceGroup: ResourceGroup;
-  appServicePlan: AppServicePlan;
-}
+import { AzureAppServicePlan } from '../interfaces/azure-app-service-plan.interface';
+import { getStorageAccountConnectionString } from './storage-account.service';
 
 export const createServerlessPlan = (serverlessPlanName: string) => (
   resourceGroup: ResourceGroup

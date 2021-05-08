@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class ConcertsByTheSpringsElectricAvenue2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'concerts-by-the-springs-electric-avenue-2018';
   group = 2018;
   title = 'Concerts by the Springs Electric Avenue, 2018';

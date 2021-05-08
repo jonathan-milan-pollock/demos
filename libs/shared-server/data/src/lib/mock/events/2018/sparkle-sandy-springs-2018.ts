@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class SparkleSandySprings2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'sparkle-sandy-springs-2018';
   group = 2018;
   title = 'Sandy Springs Festival, 2018';

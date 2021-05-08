@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class RonnieColquitt implements Review {
   id = '';
-  name = 'Ronnie Colquitt';
+  type: DocumentType = 'Review';
+  title = 'Ronnie Colquitt';
   text = [
     `
     I've been Dark Rush's friend / photography friend for nearly 
@@ -13,6 +14,7 @@ export class RonnieColquitt implements Review {
     as a talented photographer.
   `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

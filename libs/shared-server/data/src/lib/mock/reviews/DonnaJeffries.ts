@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class DonnaJeffries implements Review {
   id = '';
-  name = 'Donna Jeffries';
+  type: DocumentType = 'Review';
+  title = 'Donna Jeffries';
   text = [
     `
     Can not stay enough of how much I love Dark Rush Photography
@@ -11,6 +12,7 @@ export class DonnaJeffries implements Review {
     recommend her to my family and friends.
     `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

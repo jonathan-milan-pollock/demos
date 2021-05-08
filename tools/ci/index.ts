@@ -7,7 +7,7 @@ import { createResourceGroup } from './services/resource-group.service';
 import {
   createMongoDbAccount,
   createMongoDbDatabase,
-  createMongoDbCollection,
+  createMongoDbCollectionWithTypeShardKey,
 } from './services/mongodb.service';
 import { createStorageAccount } from './services/storage-account.service';
 import {
@@ -30,31 +30,27 @@ const mongoDbCollection = pipe(
   resourceGroup,
   createMongoDbAccount(pulumiConfig.mongoDbAccountName),
   createMongoDbDatabase(pulumiConfig.mongoDbDatabaseName),
-  createMongoDbCollection(pulumiConfig.mongoDbCollectionName)('slugType')
+  createMongoDbCollectionWithTypeShardKey(pulumiConfig.mongoDbCollectionName)
 );
 
 const uploadsStorageAccount = pipe(
   resourceGroup,
-  createStorageAccount(pulumiConfig.uploadsStorageAccountName)(false)
-  //createPrivateBlobContainer(pulumiConfig.uploadsBlobContainerName)
+  createStorageAccount(pulumiConfig.uploadsStorageAccountName)(false),
+  createPrivateBlobContainer(pulumiConfig.uploadsBlobContainerName)
 );
-//, uploadsBlobContainer
 
 const contentStorageAccount = pipe(
   resourceGroup,
-  createStorageAccount(pulumiConfig.contentStorageAccountName)(true)
-  //createPublicBlobContainer(pulumiConfig.contentBlobContainerName)
+  createStorageAccount(pulumiConfig.contentStorageAccountName)(true),
+  createPublicBlobContainer(pulumiConfig.contentBlobContainerName)
 );
-//, contentBlobContainer
-
-//const serverlessAsset = getServerlessAsset();
 
 const serverlessStorageAccount = pipe(
   resourceGroup,
-  createStorageAccount(pulumiConfig.serverlessStorageAccountName)(false)
-  //createPrivateBlobContainer(pulumiConfig.serverlessBlobContainerName)
+  createStorageAccount(pulumiConfig.serverlessStorageAccountName)(false),
+  createPrivateBlobContainer(pulumiConfig.serverlessBlobContainerName)
   //createBlobWithAsset(pulumiConfig.serverlessBlobName)(
-  //  serverlessAsset
+  //  getServerlessAsset()
   //)
 );
 
@@ -63,10 +59,14 @@ export const mongoDbAccountUrn = mongoDbCollection.databaseAccount.urn;
 export const mongoDbDatabaseUrn = mongoDbCollection.database.urn;
 export const mongoDbCollectionUrn = mongoDbCollection.collection.urn;
 
-//export const uploadsStorageAccountUrn = uploadsStorageAccount.urn;
-//export const uploadsBlobContainerUrn = uploadsBlobContainer.urn;
-//export const contentStorageAccountUrn = contentStorageAccount.urn;
-//export const contentBlobContainerUrn = contentBlobContainer.urn;
+export const uploadsStorageAccountUrn =
+  uploadsStorageAccount.storageAccount.urn;
+export const uploadsBlobContainerUrn = uploadsStorageAccount.blobContainer.urn;
+
+export const contentStorageAccountUrn =
+  contentStorageAccount.storageAccount.urn;
+export const contentBlobContainerUrn = contentStorageAccount.blobContainer.urn;
+
 //export const serverlessStorageAccountUrn = serverlessStorageAccount.urn;
 //export const serverlessBlobContainerUrn =
 //  serverlessBlobContainer.urn;

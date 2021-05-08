@@ -32,17 +32,17 @@ export class ReviewsController {
   }
 
   @Put(':id')
-  async updateDestination(
+  async updateReview(
     @Param() id: string,
     @Body() review: Review
-  ): Promise<{ id: string }> {
+  ): Promise<{ slug: string }> {
     return {
-      id: await this.reviewsService.updateReviewAsync(id, review),
+      slug: await this.reviewsService.updateReviewAsync(id, review),
     };
   }
 
   @Delete(':id')
-  async deleteDestination(@Param() id: string): Promise<void> {
+  async deleteReview(@Param() id: string): Promise<void> {
     await this.reviewsService.deleteReviewAsync(id);
   }
 }

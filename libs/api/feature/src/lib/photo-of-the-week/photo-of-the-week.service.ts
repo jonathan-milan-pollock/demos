@@ -1,88 +1,58 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { Model } from 'mongoose';
 
 import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
 import {
-  AintNoMountainHighEnough,
-  BeautifulDay,
-  BiggerThanILook,
-  CuriouserAndCuriouser,
-  DancingInTheWind,
-  EenyMeenyMinyMoe,
-  FlowersInTheMist,
-  FuturesSoBright,
-  IllReadYourPalm,
-  PlayMeALoveSong,
-  PurpleHaze,
-  RockAndHardPlace,
-  SarasotaSharkDancers,
-  ShipToComeIn,
-  SweetHomeDressing,
-  ThomasEdisonFuture,
-  TreeHouseToEverywhere,
-  WonderWhereTheRoadLeadsYou,
-  YinAndYangOfArt,
-  YouAlreadyAreHome,
-  YouCanAlmostTouchIt,
-  ZigZags,
-  AsTheWindBlows,
-  LeafInWaiting,
-  RoverRoverPleaseComeOver,
-  StopForTexts,
-  StopLookListen,
-  ThroughTheLookingGlass,
+  DocumentModel,
+  Document,
 } from '@dark-rush-photography/shared-server/data';
 
 @Injectable()
 export class PhotoOfTheWeekService {
-  private weeklyPhotos: PhotoOfTheWeek[] = [
-    AintNoMountainHighEnough.of(),
-    BeautifulDay.of(),
-    BiggerThanILook.of(),
-    CuriouserAndCuriouser.of(),
-    DancingInTheWind.of(),
-    EenyMeenyMinyMoe.of(),
-    FlowersInTheMist.of(),
-    FuturesSoBright.of(),
-    IllReadYourPalm.of(),
-    PlayMeALoveSong.of(),
-    PurpleHaze.of(),
-    RockAndHardPlace.of(),
-    SarasotaSharkDancers.of(),
-    ShipToComeIn.of(),
-    SweetHomeDressing.of(),
-    ThomasEdisonFuture.of(),
-    TreeHouseToEverywhere.of(),
-    WonderWhereTheRoadLeadsYou.of(),
-    YinAndYangOfArt.of(),
-    YouAlreadyAreHome.of(),
-    YouCanAlmostTouchIt.of(),
-    ZigZags.of(),
-    AsTheWindBlows.of(),
-    LeafInWaiting.of(),
-    RoverRoverPleaseComeOver.of(),
-    StopForTexts.of(),
-    StopLookListen.of(),
-    ThroughTheLookingGlass.of(),
-  ];
+  constructor(
+    @InjectModel(Document.name)
+    private readonly photoOfTheWeekModel: Model<DocumentModel>
+  ) {}
 
-  getWeeklyPhotos(): PhotoOfTheWeek[] {
-    return this.weeklyPhotos.slice();
+  async getWeeklyPhotosAsync(): Promise<PhotoOfTheWeek[]> {
+    return await this.photoOfTheWeekModel
+      .find({ type: 'PhotoOfTheWeek' })
+      .exec();
   }
 
-  getPhotoOfTheWeek(slug: string): PhotoOfTheWeek {
-    const product = this.weeklyPhotos.find(
-      (photoOfTheWeek) => photoOfTheWeek.slug === slug
-    );
-
-    if (!product) {
-      throw new NotFoundException(`Could not find photo of the week ${slug}`);
+  async getPhotoOfTheWeekAsync(id: string): Promise<PhotoOfTheWeek> {
+    const photoOfTheWeek = await this.photoOfTheWeekModel.findById(id);
+    if (!photoOfTheWeek) {
+      throw new NotFoundException('Could not find photo of the week');
     }
-
-    return { ...product };
+    return photoOfTheWeek;
   }
 
-  addPhotoOfTheWeek(photoOfTheWeek: PhotoOfTheWeek): string {
-    this.weeklyPhotos.push({ ...photoOfTheWeek });
-    return photoOfTheWeek.slug;
+  async addPhotoOfTheWeekAsync(
+    photoOfTheWeek: PhotoOfTheWeek
+  ): Promise<string> {
+    const addedPhotoOfTheWeek = await new this.photoOfTheWeekModel(
+      photoOfTheWeek
+    ).save();
+    return addedPhotoOfTheWeek.slug;
+  }
+
+  async updatePhotoOfTheWeekAsync(
+    id: string,
+    photoOfTheWeek: PhotoOfTheWeek
+  ): Promise<string> {
+    const foundPhotoOfTheWeek = await this.photoOfTheWeekModel.findById(id);
+    if (!foundPhotoOfTheWeek) {
+      throw new NotFoundException('Could not find photo of the week');
+    }
+    await this.photoOfTheWeekModel.findByIdAndUpdate(id, photoOfTheWeek);
+    foundPhotoOfTheWeek?.save();
+    return id;
+  }
+
+  async deletePhotoOfTheWeekAsync(id: string): Promise<void> {
+    await this.photoOfTheWeekModel.findByIdAndDelete(id);
   }
 }

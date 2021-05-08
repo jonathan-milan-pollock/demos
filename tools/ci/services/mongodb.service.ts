@@ -55,8 +55,8 @@ export const createMongoDbDatabase = (databaseName: string) => (
   }),
 });
 
-export const createMongoDbCollection = (collectionName: string) => (
-  shardKey: string
+export const createMongoDbCollectionWithTypeShardKey = (
+  collectionName: string
 ) => (azureMongoDbDatabase: AzureMongoDbDatabase): AzureMongoDbCollection => ({
   ...azureMongoDbDatabase,
   collection: new MongoDBResourceMongoDBCollection(collectionName, {
@@ -78,7 +78,7 @@ export const createMongoDbCollection = (collectionName: string) => (
         },
         {
           key: {
-            keys: [shardKey],
+            keys: ['type'],
           },
           options: {
             unique: false,
@@ -86,7 +86,7 @@ export const createMongoDbCollection = (collectionName: string) => (
         },
       ],
       shardKey: {
-        slugType: 'Hash',
+        type: 'Hash',
       },
     },
   }),

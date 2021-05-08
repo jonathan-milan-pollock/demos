@@ -1,3 +1,4 @@
+import { DocumentType } from '../types/document.type';
 import { ReadableDate } from './readable-date.interface';
 import { Location } from './location.interface';
 import { Image } from './image.interface';
@@ -6,6 +7,7 @@ import { Video } from './video.interface';
 
 export interface Event {
   readonly id: string;
+  readonly type: DocumentType;
   // identifier
   readonly slug: string;
   readonly group: number;

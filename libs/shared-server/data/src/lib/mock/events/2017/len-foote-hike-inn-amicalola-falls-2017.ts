@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class LenFooteHikeInnAmicalolaFalls2017 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'len-foote-hike-inn-amicalola-falls-2017';
   group = 2017;
   title = 'Len Foote Hike Inn, 2017';

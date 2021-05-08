@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class TasteOfAtlanta2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'taste-of-atlanta-2018';
   group = 2018;
   title = 'Taste of Atlanta 2018';

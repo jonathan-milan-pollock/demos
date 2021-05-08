@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class SouthCobbArtsAllianceStorytellingFestival2017 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'south-cobb-arts-alliance-storytelling-festival-2017';
   group = 2017;
   title = 'South Cobb Arts Alliance, Storytelling Festival, 2017';

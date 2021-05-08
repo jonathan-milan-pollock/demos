@@ -125,7 +125,6 @@
             "tsConfig": "apps/website/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "apps/website/src/env.js",
               "apps/website/src/favicon.ico",
               "apps/website/src/assets",
               "apps/website/src/manifest.webmanifest"
@@ -572,6 +571,7 @@
           "options": {
             "uiFramework": "@storybook/angular",
             "outputPath": "dist/storybook/ui-storybook",
+            "staticDir": ["libs/ui-storybook/.storybook/documentation"],
             "config": {
               "configFolder": "libs/ui-storybook/.storybook"
             },
@@ -857,6 +857,19 @@
           "options": {
             "jestConfig": "libs/website/util/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-server-types": {
+      "root": "libs/shared-server/types",
+      "sourceRoot": "libs/shared-server/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
           }
         }
       }

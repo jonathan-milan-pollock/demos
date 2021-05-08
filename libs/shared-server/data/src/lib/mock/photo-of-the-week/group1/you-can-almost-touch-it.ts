@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class YouCanAlmostTouchIt implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'you-can-almost-touch-it';
   group = 1;
   title = 'You Can Almost Touch It!';
@@ -19,6 +24,7 @@ export class YouCanAlmostTouchIt implements PhotoOfTheWeek {
   location = { city: 'Mexico City', country: 'United States' };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

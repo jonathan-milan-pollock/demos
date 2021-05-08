@@ -2,38 +2,45 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 import {
+  Review,
+  PhotoOfTheWeek,
   Event,
+  Destination,
+  DocumentType,
   ReadableDate,
   Location,
   Image,
   ThreeSixtyImage,
   Video,
+  Flyover,
+  ExtendedReality,
+  SocialMedia,
 } from '@dark-rush-photography/shared-types';
 
-export type EventModel = EventDocument & mongoose.Document;
+export type DocumentModel = Document & mongoose.Document;
 
 @Schema()
-export class EventDocument implements Event {
-  @Prop({ type: String, required: true })
+export class Document implements Review, PhotoOfTheWeek, Event, Destination {
+  @Prop({ type: String })
   id = '';
 
   @Prop({ type: String, required: true })
-  slug = '';
+  type: DocumentType = 'None';
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number })
   group = 0;
+
+  @Prop({ type: String })
+  slug = '';
 
   @Prop({ type: String, required: true })
   title = '';
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   description = '';
 
-  @Prop({ type: [String], required: true })
+  @Prop({ type: [String] })
   keywords: ReadonlyArray<string> = [];
-
-  @Prop({ type: { month: Number, day: Number, year: Number } })
-  dateCreated?: ReadableDate;
 
   @Prop({ type: { month: Number, day: Number, year: Number } })
   datePublished?: ReadableDate;
@@ -47,11 +54,10 @@ export class EventDocument implements Event {
       zipCode: String,
       country: String,
     },
-    required: true,
   })
   location: Location = { country: '' };
 
-  @Prop({ type: Boolean, required: true })
+  @Prop({ type: Boolean })
   useTitleImage = false;
 
   @Prop({ type: [String], required: true })
@@ -94,6 +100,18 @@ export class EventDocument implements Event {
     required: true,
   })
   videos: ReadonlyArray<Video> = [];
+
+  @Prop({ type: { srcPath: String, titleTrackPath: String } })
+  flyOver?: Flyover;
+
+  @Prop({ type: { srcPath: String } })
+  extendedReality?: ExtendedReality;
+
+  @Prop({ type: [{ type: String, url: String }] })
+  socialMedia: ReadonlyArray<SocialMedia> = [];
+
+  @Prop({ type: [mongoose.Schema.Types.ObjectId] })
+  destinations: ReadonlyArray<Destination> = [];
 }
 
-export const EventSchema = SchemaFactory.createForClass(EventDocument);
+export const DocumentSchema = SchemaFactory.createForClass(Document);

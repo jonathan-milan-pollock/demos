@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class FoodThatRocksACelebrationOfSandySprings2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'food-that-rocks-a-celebration-of-sandy-springs-2018';
   group = 2018;
   title = 'Food that Rocks A Celebration of Sandy Springs 2018';

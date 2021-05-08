@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class AnjuChowdhury implements Review {
   id = '';
-  name = 'Anju Chowdhury';
+  type: DocumentType = 'Review';
+  title = 'Anju Chowdhury';
   text = [
     `
     I've known Dark for the past 15 years. She has photographed my life 
@@ -13,6 +14,7 @@ export class AnjuChowdhury implements Review {
     to everyone for excellence in photography.
     `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

@@ -38,6 +38,8 @@ const execInstallDevDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D source-map-explorer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D concurrently'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'))
+    // AZURE
+    .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D azurite'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @azure/functions'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'));
@@ -47,12 +49,11 @@ const execInstallDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i fp-ts'))
     .then(() => consoleLogOrExec(isReady, 'npm i uuid'))
+    // IMAGE HANDLING
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i exiftool-vendored'))
     .then(() => consoleLogOrExec(isReady, 'npm i parse-multipart'))
-    .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
-    .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
+    // AZURE
     .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
@@ -158,18 +159,24 @@ const execGenerateSharedTypesLib = (isReady) =>
 const execGenerateSharedServerLibs = (isReady) =>
   Promise.resolve(console.log('#### shared-server libraries'))
     .then(() => console.log())
+    //.then(() =>
+    //  consoleLogOrExec(
+    //     isReady,
+    //      'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data-access'
+    //    )
+    //  )
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data-access'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
+        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
       )
     );
+//   .then(() =>
+//     consoleLogOrExec(
+//       isReady,
+//       'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
+//     )
+//   );
 
 const execGenerateUiStorybook = (isReady) =>
   Promise.resolve(console.log('#### ui-storybook library'))
@@ -216,20 +223,20 @@ const execGenerateWebsiteLibs = (isReady) =>
 
 const execGenerateLibs = (isReady) =>
   Promise.resolve(console.log('### libs'))
+    //   .then(() => console.log())
+    //   .then(() => execGenerateApiLibs(isReady))
+    //   .then(() => console.log())
+    //   .then(() => execGenerateElementsLibs(isReady))
+    //   .then(() => console.log())
+    //   .then(() => execGenerateServerlessLibs(isReady))
+    //   .then(() => console.log())
+    //   .then(() => execGenerateSharedTypesLib(isReady))
     .then(() => console.log())
-    .then(() => execGenerateApiLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateElementsLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateServerlessLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateSharedTypesLib(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateSharedServerLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateUiStorybook(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateWebsiteLibs(isReady));
+    .then(() => execGenerateSharedServerLibs(isReady));
+//   .then(() => console.log())
+//   .then(() => execGenerateUiStorybook(isReady))
+//   .then(() => console.log())
+//   .then(() => execGenerateWebsiteLibs(isReady));
 
 const getAddStorybookWithCypressCommand = (libName) =>
   `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=true --generateCypressSpecs=true --generateStories=true`;
@@ -326,6 +333,15 @@ const execAddAngularPWA = (isReady) =>
       consoleLogOrExec(isReady, 'npx ng add @angular/pwa --project=website')
     );
 
+const execAddMongoose = (isReady) => {
+  Promise.resolve(console.log('### add mongoose'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
+    .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
+    .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
+    .then(() => consoleLogOrExec(isReady, 'npm i saslprep'));
+};
+
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
     .then(() => console.log())
@@ -344,32 +360,34 @@ const execAddFontAwesome = (isReady) =>
 
 const execInstall = (isReady) =>
   Promise.resolve(console.log('## install'))
-    .then(() => console.log())
-    .then(() => execInstallSchematics(isReady))
-    .then(() => console.log())
-    .then(() => execInstallDevDependencies(isReady))
-    .then(() => console.log())
-    .then(() => execInstallDependencies(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateApps(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execInstallSchematics(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execInstallDevDependencies(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execInstallDependencies(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execGenerateApps(isReady))
     .then(() => console.log())
     .then(() => execGenerateLibs(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execAddStorybook(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execUpdateCypress(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execAddAngularElements(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execAddAngularUniversal(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execAddNgrx(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execAddAngularMaterial(isReady))
+    //  .then(() => console.log())
+    //  .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
-    .then(() => execAddStorybook(isReady))
-    .then(() => console.log())
-    .then(() => execUpdateCypress(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularElements(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularUniversal(isReady))
-    .then(() => console.log())
-    .then(() => execAddNgrx(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularMaterial(isReady))
-    .then(() => console.log())
-    .then(() => execAddAngularPWA(isReady))
-    .then(() => console.log())
-    .then(() => execAddFontAwesome(isReady));
+    .then(() => execAddMongoose(isReady));
+//  .then(() => console.log())
+//  .then(() => execAddFontAwesome(isReady));
 
 let isReady = false;
 Promise.resolve(execInstall(isReady))

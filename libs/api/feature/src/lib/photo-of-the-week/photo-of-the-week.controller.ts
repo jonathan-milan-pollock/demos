@@ -16,18 +16,40 @@ export class PhotoOfTheWeekController {
   constructor(private readonly photoOfTheWeekService: PhotoOfTheWeekService) {}
 
   @Get()
-  getWeeklyPhotos(): PhotoOfTheWeek[] {
-    return this.photoOfTheWeekService.getWeeklyPhotos();
+  async getWeeklyPhotosAsync(): Promise<PhotoOfTheWeek[]> {
+    return await this.photoOfTheWeekService.getWeeklyPhotosAsync();
   }
 
-  @Get(':slug')
-  getPhotoOfTheWeek(@Param() slug: string): PhotoOfTheWeek {
-    return this.photoOfTheWeekService.getPhotoOfTheWeek(slug);
+  @Get(':id')
+  async getPhotoOfTheWeek(@Param() id: string): Promise<PhotoOfTheWeek> {
+    return this.photoOfTheWeekService.getPhotoOfTheWeekAsync(id);
   }
 
   @Post()
-  addPhotoOfTheWeek(@Body() photoOfTheWeek: PhotoOfTheWeek): { slug: string } {
-    const slug = this.photoOfTheWeekService.addPhotoOfTheWeek(photoOfTheWeek);
-    return { slug };
+  async addPhotoOfTheWeekAsync(
+    @Body() photoOfTheWeek: PhotoOfTheWeek
+  ): Promise<{ id: string }> {
+    const id = await this.photoOfTheWeekService.addPhotoOfTheWeekAsync(
+      photoOfTheWeek
+    );
+    return { id };
+  }
+
+  @Put(':id')
+  async updatePhotoOfTheWeek(
+    @Param() id: string,
+    @Body() photoOfTheWeek: PhotoOfTheWeek
+  ): Promise<{ slug: string }> {
+    return {
+      slug: await this.photoOfTheWeekService.updatePhotoOfTheWeekAsync(
+        id,
+        photoOfTheWeek
+      ),
+    };
+  }
+
+  @Delete(':id')
+  async deletePhotoOfTheWeek(@Param() id: string): Promise<void> {
+    await this.photoOfTheWeekService.deletePhotoOfTheWeekAsync(id);
   }
 }

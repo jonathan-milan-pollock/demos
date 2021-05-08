@@ -1,61 +1,49 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { Model } from 'mongoose';
 
 import { Event } from '@dark-rush-photography/shared-types';
-
 import {
-  ClassicCars1952Pontiac,
-  LenFooteHikeInnAmicalolaFalls2017,
-  SandySpringsFestival2017,
-  SouthCobbArtsAllianceStorytellingFestival2017,
-  AtlantaRhythmSectionConcert2018,
-  ConcertsByTheSpringsElectricAvenue2018,
-  EscapeToTheMountains2018,
-  FoodThatRocksACelebrationOfSandySprings2018,
-  NativeAmericanIndianFestival2018,
-  SandySpringsFestival2018,
-  SparkleSandySprings2018,
-  SSPCAnnualGolfInvitational2018,
-  TasteOfAtlanta2018,
-  ThanksgivingInAlexanderCity2018,
-  TheLightsFestAtlanta2018,
+  DocumentModel,
+  Document,
 } from '@dark-rush-photography/shared-server/data';
 
 @Injectable()
 export class EventsService {
-  private events: Event[] = [
-    ClassicCars1952Pontiac.of(),
-    LenFooteHikeInnAmicalolaFalls2017.of(),
-    SandySpringsFestival2017.of(),
-    SouthCobbArtsAllianceStorytellingFestival2017.of(),
-    AtlantaRhythmSectionConcert2018.of(),
-    ConcertsByTheSpringsElectricAvenue2018.of(),
-    EscapeToTheMountains2018.of(),
-    FoodThatRocksACelebrationOfSandySprings2018.of(),
-    NativeAmericanIndianFestival2018.of(),
-    SandySpringsFestival2018.of(),
-    SparkleSandySprings2018.of(),
-    SSPCAnnualGolfInvitational2018.of(),
-    TasteOfAtlanta2018.of(),
-    ThanksgivingInAlexanderCity2018.of(),
-    TheLightsFestAtlanta2018.of(),
-  ];
+  constructor(
+    @InjectModel(Document.name)
+    private readonly eventModel: Model<DocumentModel>
+  ) {}
 
-  getEvents(): Event[] {
-    return this.events.slice();
+  async getEventsAsync(): Promise<Event[]> {
+    return await this.eventModel.find({ type: 'Event' }).exec();
   }
 
-  getEvent(slug: string): Event {
-    const event = this.events.find((event) => event.slug === slug);
-
+  async getEventAsync(id: string): Promise<Event> {
+    const event = await this.eventModel.findById(id);
     if (!event) {
-      throw new NotFoundException(`Could not find event ${slug}`);
+      throw new NotFoundException('Could not find event');
     }
-
-    return { ...event };
+    return event;
   }
 
-  addEvent(event: Event): string {
-    this.events.push({ ...event });
-    return event.slug;
+  async addEventAsync(event: Event): Promise<string> {
+    const addedEvent = await new this.eventModel(event).save();
+    return addedEvent.id;
+  }
+
+  async updateEventAsync(id: string, event: Event): Promise<string> {
+    const foundEvent = await this.eventModel.findById(id);
+    if (!foundEvent) {
+      throw new NotFoundException('Could not find event');
+    }
+    await this.eventModel.findByIdAndUpdate(id, event);
+    foundEvent?.save();
+    return id;
+  }
+
+  async deleteEventAsync(id: string): Promise<void> {
+    await this.eventModel.findByIdAndDelete(id);
   }
 }

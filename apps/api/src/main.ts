@@ -8,7 +8,7 @@ async function bootstrap() {
     methods: 'GET',
     //  maxAge: 3600,
   });
-  await app.listen(process.env.PORT || 3737);
+  await app.listen(process.env.PORT || 1111);
 }
 
 // Webpack will replace 'require' with '__webpack_require__'

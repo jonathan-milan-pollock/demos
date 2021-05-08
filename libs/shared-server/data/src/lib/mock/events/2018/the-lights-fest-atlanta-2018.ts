@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class TheLightsFestAtlanta2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'the-lights-fest-atlanta-2018';
   group = 2018;
   title = 'The Lights Fest Atlanta 2018';

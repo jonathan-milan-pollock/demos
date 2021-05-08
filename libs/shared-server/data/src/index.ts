@@ -64,7 +64,4 @@ export * from './lib/mock/reviews/LindsayLevin';
 export * from './lib/mock/reviews/RonnieColquitt';
 
 // schema
-export * from './lib/schema/destination.schema';
-export * from './lib/schema/event.schema';
-export * from './lib/schema/photo-of-the-week.schema';
-export * from './lib/schema/review.schema';
+export * from './lib/schema/document.schema';
