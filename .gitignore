@@ -43,4 +43,4 @@ __azurite*
 __blobstorage__
 
 # compodoc
-/libs/ui-storybook/.storybook/documentation.json
+/libs/ui-storybook/.storybook/documentation/documentation.json

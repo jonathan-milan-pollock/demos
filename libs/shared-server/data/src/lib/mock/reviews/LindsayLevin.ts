@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class LindsayLevin implements Review {
   id = '';
-  name = 'Lindsay Levin';
+  type: DocumentType = 'Review';
+  title = 'Lindsay Levin';
   text = [
     `
     Dark is such a dynamic and talented professional. She did 
@@ -13,6 +14,7 @@ export class LindsayLevin implements Review {
     pleased.
   `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

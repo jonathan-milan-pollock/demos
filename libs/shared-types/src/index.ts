@@ -22,4 +22,6 @@ export * from './lib/interfaces/three-sixty-image.interface';
 export * from './lib/interfaces/video.interface';
 
 // types
+export * from './lib/types/document.type';
 export * from './lib/types/social-media.type';
+export * from './lib/types/three-sixty-image.type';

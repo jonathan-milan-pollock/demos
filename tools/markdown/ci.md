@@ -2,13 +2,40 @@
 
 ---
 
-## ci installation
+## best practices
+
+- on Pull Request
+  - runs lint
+  - runs format:check
+  - builds the site
+  - runs UI tests headless
+    "cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
+  - runs website e2e - headless
+    "cy:web:headless": "nx run website-e2e:e2e --headless",
+  - runs best of e2e - headless
+    "cy:bestof:headless": "nx run bestof-e2e:e2e --headless",
+  - runs Pulumi Preview
+  - Serverless Deployment
+- on Commit (once Pull Request GitHub Action complete)
+  - runs UI tests headless
+  - runs lint
+  - runs format:check
+  - runs website e2e headless
+  - deploys the site
+  - Cypress e2e Deployment BrowserStack
+- enable mime types a necessary
+
+---
+
+## installation
+
+### ci installation
 
 - [Install Docker Desktop](https://docs.docker.com/desktop/#download-and-install)
 - [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
 - [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
 
-## nginx VSCode extensions
+### nginx VSCode extensions
 
 - [Install VSCode NGINX Configuration](https://marketplace.visualstudio.com/items?itemName=william-voyek.vscode-nginx)
 - [Install VSCode NGINX Configuration Language Support](https://marketplace.visualstudio.com/items?itemName=ahmadalli.vscode-nginx-conf)
@@ -19,7 +46,7 @@
 ## setup Pulumi
 
 - create ci directory under tools
-- setup Pulumi
+- cd tools/ci
 - npm init to create a new package.json file
 - npm i -D @pulumi/pulumi
 - npm i -D @pulumi/azure-native
@@ -33,19 +60,11 @@
 
 ---
 
-## setup Docker compose
-
-- at root create docker-compose.yml and docker-compose.debug.yml files
-- create docker directory under tools
-
----
-
 ## setup GitHub Actions
 
-- Install Pulumi GitHub App https://github.com/apps/pulumi
-- Create GitHub actions secret for Pulumi and described in <https://www.pulumi.com/docs/guides/continuous-delivery/github-actions/>
-- Create GitHub secret for Azure Credentials
-
+- Install Pulumi GitHub App <https://github.com/apps/pulumi>
+- Create GitHub secret for PULUMI_ACCESS_TOKEN at <https://app.pulumi.com/milanpollock/settings/tokens>
+- Create GitHub secrets for Azure Credentials
   - az login
   - az account list
   - az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID"
@@ -57,51 +76,14 @@
 
 ---
 
--- on deployment want to run
-"cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
-"cy:web:headless": "nx run website-e2e:e2e --headless",
+## setup Docker
 
-## best practices
-
-1. verify and enable mime types a necessary
+- at root create docker-compose.yml and .dockerignore file
+- create docker directory under tools and add a Docker file for each service
 
 ---
 
-## use environment variables from the environment
-
-### add env.js file to website
-
-```js
-(function (window) {
-  window.__env = window.__env || {};
-  window.__env.apiBaseUrl = 'http://localhost:3737';
-})(this);
-```
-
-### add script to the website index.html file
-
-```html
-<script src="env.js"></script>
-```
-
-### add env.js to angular.json website assets
-
-```json
-"apps/website/src/env.js"
-```
-
 - Azure Container Registry
-- Nginx
-- Website (Docker)
-- Best Of Website (Docker)
-- Storybook UI Deployment
-- Run the Storybook Cypress Tests Headless
-- Serverless Deployment
-- Cypress e2e Deployment
-
-### add env services
-
-## Add Docker and .dockerignore files
 
 ## Notes
 
@@ -113,13 +95,6 @@
 - connect to cypress cloud
 
 ---
-
--- can use affected to test use NX Cloud locally and from build
-It checks that the changed code is formatted properly. (nx format:check)
-It runs lint checks for all the projects affected by a PR/commit.
-It runs unit tests for all the projects affected by a PR/commit.
-It runs e2e tests for all the apps affected by a PR/commit.
-It rebuilds all the apps affected by a PR/commit.
 
 - <https://mariocardinal.wordpress.com/2019/03/05/configuring-cypress-in-ci-with-azure-devops-pipelines/>
 
@@ -142,7 +117,6 @@ It rebuilds all the apps affected by a PR/commit.
 - Add H2 Enabled CDN
 - Enable GZip (html, js, css)
 - Use H2 Push -allows pushing files that are known to be needed
-- no-cache env.js
 
   ```js
   for (const asset of ['/static/awesome.css', '/static/unicorn.png']) {
@@ -177,7 +151,6 @@ browsers include edge (chrome, chromium, edge, firefox, electron)
 
 - deploy docker images with Pulumi
 
-https://www.youtube.com/watch?v=i7ABlHngi1Q
 https://www.domysee.com/blogposts/reverse-proxy-nginx-docker-compose
 https://docs.microsoft.com/en-us/azure/container-instances/tutorial-docker-compose
 https://www.bogotobogo.com/DevOps/Docker/Docker-Compose-Nginx-Reverse-Proxy-Multiple-Containers.php
@@ -188,3 +161,19 @@ https://www.bogotobogo.com/DevOps/Docker/Docker-Compose-Nginx-Reverse-Proxy-Mult
     - run the unit tests
     - run the storybook-e2e
   - commit
+
+https://github.com/pulumi/pulumi-azure/issues/228
+
+https://docs.microsoft.com/en-us/azure/app-service/faq-app-service-linux#custom-containers
+I want to use web sockets in my Node.js application, any special settings, or configurations to set?
+
+Yes, disable perMessageDeflate in your server-side Node.js code. For example, if you are using socket.io, use the following code:
+
+Node.js
+
+Copy
+const io = require('socket.io')(server,{
+perMessageDeflate :false
+});
+
+- Deploy images to the ACR registry server

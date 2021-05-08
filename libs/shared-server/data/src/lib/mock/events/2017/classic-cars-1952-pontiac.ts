@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class ClassicCars1952Pontiac implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'classic-cars-1952-pontiac';
   group = 2017;
   title = 'Classic 1952 Pontiac';

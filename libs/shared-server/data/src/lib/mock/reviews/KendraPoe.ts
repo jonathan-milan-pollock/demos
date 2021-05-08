@@ -1,13 +1,15 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class KendraPoe implements Review {
   id = '';
-  name = 'Kendra Poe';
+  type: DocumentType = 'Review';
+  title = 'Kendra Poe';
   text = [
     `
     Wonderful Photographer & Person! Just ask and she will deliver!
   `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

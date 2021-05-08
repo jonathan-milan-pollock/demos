@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class TreeHouseToEverywhere implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'tree-house-to-everywhere';
   group = 1;
   title = 'The Tree House to Everywhere';
@@ -30,6 +35,7 @@ export class TreeHouseToEverywhere implements PhotoOfTheWeek {
   };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

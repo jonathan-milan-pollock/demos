@@ -1,13 +1,12 @@
 {
   "name": "ci",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.1",
+  "license": "MIT",
+  "description": "CI for Dark Rush Photography",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@pulumi/azure-native": "^1.4.0",
     "@pulumi/pulumi": "^3.2.1"

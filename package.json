@@ -32,13 +32,13 @@
     "build:ssr": "nx build --prod && nx run website:server:production",
     "prerender": "nx run website:prerender",
     "prebuild:ssr": "ngcc",
-    "docs:json": "compodoc -p ./tsconfig.base.json -e json -d ./libs/ui-storybook/.storybook",
+    "docs:json": "compodoc -p ./tsconfig.base.json -e json -d ./libs/ui-storybook/.storybook/documentation",
     "cy:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
     "cy:web": "concurrently \"npm run dev:ssr\" \"nx run website-e2e:e2e --watch\"",
-    "docker:ssr": "npm run build:ssr && npm run docker:ssr:build && npm run docker:ssr:run",
-    "docker:ssr:build": "docker build -f Dockerfile -t dark-rush-photography/website:latest --rm .",
-    "docker:ssr:remove": "docker rm -f website || true",
-    "docker:ssr:run": "npm run docker:ssr:remove && docker run -it --rm -p 8080:8080 -e PORT=8080 --name website dark-rush-photography/website:latest"
+    "dc:pre": "npm run build:ssr && npm run docs:json && nx run ui-storybook:build-storybook",
+    "dc:build": "docker compose build",
+    "dc:up": "docker compose up",
+    "dc:down": "docker compose down"
   },
   "private": true,
   "dependencies": {
@@ -81,6 +81,7 @@
     "parse-multipart": "^1.0.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.7",
+    "saslprep": "^1.0.3",
     "sharp": "^0.28.1",
     "tslib": "^2.0.0",
     "uuid": "^8.3.2",

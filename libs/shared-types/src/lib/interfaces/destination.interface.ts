@@ -1,3 +1,4 @@
+import { DocumentType } from '../types/document.type';
 import { ReadableDate } from './readable-date.interface';
 import { Location } from './location.interface';
 import { Image } from './image.interface';
@@ -9,6 +10,7 @@ import { SocialMedia } from './social-media.interface';
 
 export interface Destination {
   readonly id: string;
+  readonly type: DocumentType;
   // identifier
   readonly slug: string;
   // metadata

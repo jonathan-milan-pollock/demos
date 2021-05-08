@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class NativeAmericanIndianFestival2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'native-american-indian-festival-2018';
   group = 2018;
   title = 'Native American Indian Festival and Pow Wow, 2018';

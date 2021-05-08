@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class AintNoMountainHighEnough implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'aint-no-mountain-high-enough';
   group = 1;
   title = "Ain't No Mountain High Enough";
@@ -29,6 +34,7 @@ export class AintNoMountainHighEnough implements PhotoOfTheWeek {
     for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park.
   `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

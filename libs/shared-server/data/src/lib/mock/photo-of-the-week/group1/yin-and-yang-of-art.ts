@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class YinAndYangOfArt implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'yin-and-yang-of-art';
   group = 1;
   title = 'Yin and Yang of Art';
@@ -26,6 +31,7 @@ export class YinAndYangOfArt implements PhotoOfTheWeek {
   };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

@@ -32,6 +32,10 @@
 > Open Mobile View and Enable Show Device Frame in Mobile Settings
 > Open Network Settings and enable Capture Screenshots
 
+### Install Azure Functions
+
+- npm i -g azure-functions-core-tools@3 --unsafe-perm true
+
 ### optional VSCode extensions (other VSCode extensions have been added to .vscode extensions.json)
 
 - [optionally Install open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser&ssr=false#review-details)

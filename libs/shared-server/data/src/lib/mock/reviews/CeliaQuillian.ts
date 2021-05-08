@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class CeliaQuillian implements Review {
   id = '';
-  name = 'Celia Quillian';
+  type: DocumentType = 'Review';
+  title = 'Celia Quillian';
   text = [
     `
     Dark has an excellent skill for capturing the essence and
@@ -10,6 +11,7 @@ export class CeliaQuillian implements Review {
     making her subjects feel at ease!
     `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

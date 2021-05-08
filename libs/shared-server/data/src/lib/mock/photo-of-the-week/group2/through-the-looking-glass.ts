@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class ThroughTheLookingGlass implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'through-the-looking-glass';
   group = 2;
   title = 'Through the Looking Glass';
@@ -23,6 +28,7 @@ export class ThroughTheLookingGlass implements PhotoOfTheWeek {
   };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

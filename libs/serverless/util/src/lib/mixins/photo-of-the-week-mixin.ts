@@ -6,7 +6,6 @@
           return new()
           {
               Slug = photoOfTheWeek.Slug,
-              SlugType = SlugType.PhotoOfTheWeek.Tostring(),
               Name = photoOfTheWeek.Name,
               Location = photoOfTheWeek.Location,
               Keywords = photoOfTheWeek.Keywords,

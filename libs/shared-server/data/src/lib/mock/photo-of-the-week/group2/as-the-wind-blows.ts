@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class AsTheWindBlows implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'as-the-wind-blows';
   group = 2;
   title = 'As the Wind Blows';
@@ -16,6 +21,7 @@ export class AsTheWindBlows implements PhotoOfTheWeek {
   };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

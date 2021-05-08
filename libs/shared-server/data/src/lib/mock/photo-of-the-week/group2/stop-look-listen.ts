@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class StopLookListen implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'stop-look-listen';
   group = 2;
   title = 'Stop, Look, and Listen';
@@ -23,6 +28,7 @@ export class StopLookListen implements PhotoOfTheWeek {
   };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

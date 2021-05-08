@@ -68,7 +68,10 @@
       "@dark-rush-photography/website/ui/ui-home": [
         "libs/website/ui/ui-home/src/index.ts"
       ],
-      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"]
+      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"],
+      "@dark-rush-photography/shared-server/types": [
+        "libs/shared-server/types/src/index.ts"
+      ]
     }
   },
   "angularCompilerOptions": {

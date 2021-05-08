@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class EscapeToTheMountains2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'escape-to-the-mountains-2018';
   group = 2018;
   title = 'Escape to the Mountains, 2018';

@@ -2,14 +2,8 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  ReviewDocument,
-  ReviewSchema,
-  PhotoOfTheWeekDocument,
-  PhotoOfTheWeekSchema,
-  DestinationDocument,
-  DestinationSchema,
-  EventDocument,
-  EventSchema,
+  Document,
+  DocumentSchema,
 } from '@dark-rush-photography/shared-server/data';
 import { ReviewsService } from './reviews/reviews.service';
 import { ReviewsController } from './reviews/reviews.controller';
@@ -23,10 +17,7 @@ import { DestinationsController } from './destinations/destinations.controller';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: ReviewDocument.name, schema: ReviewSchema },
-      { name: PhotoOfTheWeekDocument.name, schema: PhotoOfTheWeekSchema },
-      { name: EventDocument.name, schema: EventSchema },
-      { name: DestinationDocument.name, schema: DestinationSchema },
+      { name: Document.name, schema: DocumentSchema },
     ]),
   ],
   controllers: [

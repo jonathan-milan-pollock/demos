@@ -16,18 +16,33 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Get()
-  getEvents(): Event[] {
-    return this.eventsService.getEvents();
+  async getEventsAsync(): Promise<Event[]> {
+    return await this.eventsService.getEventsAsync();
   }
 
-  @Get(':slug')
-  getPhotoOfTheWeek(@Param() slug: string): Event {
-    return this.eventsService.getEvent(slug);
+  @Get(':id')
+  async getEvent(@Param() id: string): Promise<Event> {
+    return this.eventsService.getEventAsync(id);
   }
 
   @Post()
-  addEvent(@Body() event: Event): { slug: string } {
-    const slug = this.eventsService.addEvent(event);
-    return { slug };
+  async addEventAsync(@Body() event: Event): Promise<{ id: string }> {
+    const id = await this.eventsService.addEventAsync(event);
+    return { id };
+  }
+
+  @Put(':id')
+  async updateEvent(
+    @Param() id: string,
+    @Body() event: Event
+  ): Promise<{ slug: string }> {
+    return {
+      slug: await this.eventsService.updateEventAsync(id, event),
+    };
+  }
+
+  @Delete(':id')
+  async deleteEvent(@Param() id: string): Promise<void> {
+    await this.eventsService.deleteEventAsync(id);
   }
 }

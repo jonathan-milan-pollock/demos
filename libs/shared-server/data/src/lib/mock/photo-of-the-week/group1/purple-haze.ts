@@ -1,7 +1,12 @@
-import { PhotoOfTheWeek, Month } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class PurpleHaze implements PhotoOfTheWeek {
   id = '';
+  type: DocumentType = 'PhotoOfTheWeek';
   slug = 'purple-haze';
   group = 1;
   title = 'Purple Haze';
@@ -12,6 +17,7 @@ export class PurpleHaze implements PhotoOfTheWeek {
   location = { stateOrProvince: 'Wisconsin', country: 'United States' };
   useTitleImage = false;
   text = [];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class SSPCAnnualGolfInvitational2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'sspc-annual-golf-invitational-2018';
   group = 2018;
   title = 'SSPC Annual Golf Invitational 2018';

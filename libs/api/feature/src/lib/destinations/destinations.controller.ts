@@ -21,7 +21,7 @@ export class DestinationsController {
   }
 
   @Get(':id')
-  async getPhotoOfTheWeek(@Param() id: string): Promise<Destination> {
+  async getDestination(@Param() id: string): Promise<Destination> {
     return this.destinationsService.getDestinationAsync(id);
   }
 

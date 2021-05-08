@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class ThanksgivingInAlexanderCity2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'thanksgiving-in-alexander-city-2018';
   group = 2018;
   title = `Thanksgiving in Alexander City, 2018`;

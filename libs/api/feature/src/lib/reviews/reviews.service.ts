@@ -5,15 +5,15 @@ import { Model } from 'mongoose';
 
 import { Review } from '@dark-rush-photography/shared-types';
 import {
-  ReviewModel,
-  ReviewDocument,
+  DocumentModel,
+  Document,
 } from '@dark-rush-photography/shared-server/data';
 
 @Injectable()
 export class ReviewsService {
   constructor(
-    @InjectModel(ReviewDocument.name)
-    private readonly reviewModel: Model<ReviewModel>
+    @InjectModel(Document.name)
+    private readonly reviewModel: Model<DocumentModel>
   ) {}
 
   async getReviewsAsync(): Promise<Review[]> {

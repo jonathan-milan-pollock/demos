@@ -5,19 +5,19 @@ import { Model } from 'mongoose';
 
 import { Destination } from '@dark-rush-photography/shared-types';
 import {
-  DestinationModel,
-  DestinationDocument,
+  DocumentModel,
+  Document,
 } from '@dark-rush-photography/shared-server/data';
 
 @Injectable()
 export class DestinationsService {
   constructor(
-    @InjectModel(DestinationDocument.name)
-    private readonly destinationModel: Model<DestinationModel>
+    @InjectModel(Document.name)
+    private readonly destinationModel: Model<DocumentModel>
   ) {}
 
   async getDestinationsAsync(): Promise<Destination[]> {
-    return await this.destinationModel.find().exec();
+    return await this.destinationModel.find({ type: 'Destination' }).exec();
   }
 
   async getDestinationAsync(id: string): Promise<Destination> {
@@ -32,7 +32,7 @@ export class DestinationsService {
     const addedDestination = await new this.destinationModel(
       destination
     ).save();
-    return addedDestination.slug;
+    return addedDestination.id;
   }
 
   async updateDestinationAsync(

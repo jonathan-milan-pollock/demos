@@ -1,9 +1,11 @@
+import { DocumentType } from '../types/document.type';
 import { Image } from './image.interface';
 import { ReadableDate } from './readable-date.interface';
 import { Location } from './location.interface';
 
 export interface PhotoOfTheWeek {
   readonly id: string;
+  readonly type: DocumentType;
   // identifier
   readonly slug: string;
   readonly group: number;
@@ -18,5 +20,5 @@ export interface PhotoOfTheWeek {
   readonly useTitleImage: boolean;
   // content
   readonly text: ReadonlyArray<string>;
-  readonly image?: Image;
+  readonly images: ReadonlyArray<Image>;
 }

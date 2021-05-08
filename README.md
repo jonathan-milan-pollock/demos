@@ -2,8 +2,6 @@
 
 ## Workspace for Dark Rush Photography also used for instructional demos
 
-**_While this repo is MIT, our images and content maintain their copyrights._**
-
 ---
 
 ### tech stack

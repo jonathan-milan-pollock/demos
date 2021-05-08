@@ -1,7 +1,12 @@
-import { Destination, Month } from '@dark-rush-photography/shared-types';
+import {
+  Destination,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class Colorado implements Destination {
   id = '';
+  type: DocumentType = 'Destination';
   slug = 'colorado';
   title = 'Colorado';
   description = `

@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class BrianWalkabout implements Review {
   id = '';
-  name = 'Brian Walkabout';
+  type: DocumentType = 'Review';
+  title = 'Brian Walkabout';
   text = [
     `
     Dark has a keen since of noticing eye catching subject matter as well as composition and 
@@ -12,6 +13,7 @@ export class BrianWalkabout implements Review {
     photographer for your photo needs!
     `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}

@@ -1,7 +1,12 @@
-import { Event, Month } from '@dark-rush-photography/shared-types';
+import {
+  Event,
+  DocumentType,
+  Month,
+} from '@dark-rush-photography/shared-types';
 
 export class AtlantaRhythmSectionConcert2018 implements Event {
   id = '';
+  type: DocumentType = 'Event';
   slug = 'atlanta-rhythm-section-concert-2018';
   group = 2018;
   title = 'Atlanta Rhythm Section (ARS) Concert, 2018';

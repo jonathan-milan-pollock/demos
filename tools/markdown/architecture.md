@@ -205,13 +205,29 @@ platformBrowserDynamic()
   - tsconfig.server.json
 - remove api:serve in angular.json file
 
-### add to website-e2e cypress.json
+---
+
+## setup angular pwa
+
+### as angular pwa and universal do not play nicely together
+
+- remove ServiceWorkerModule from imports of app.module.ts
+- add service worker registration to website main.ts
+- in website ngsw-config.json add
+  - navigationRequestStrategy freshness
+  - TODO: verify this is a requirement!!!
+
+---
+
+### update cypress for ssr
+
+#### add to website-e2e cypress.json
 
 ```json
   "baseUrl": "http://localhost:4200",
 ```
 
-### update angular.json for angular universal
+#### update angular.json so that website e2e does not also serve the website ssr
 
 - remove the following two lines from website-e2e task in angular.json
 
@@ -268,13 +284,13 @@ rootMain.stories.push(
 module.exports = rootMain;
 ```
 
-- in ui-storybook/.storybook/preview.js
+### add compodoc so that inputs are available in ui-storybook
 
-```ts
-import { setCompodocJson } from '@storybook/addon-docs/angular';
-import docJson from './documentation.json';
+- set compodoc in ui-storybook/.storybook/preview.js
+- in angular.json ui-storybook build-storybook add staticDir for deploy
 
-setCompodocJson(docJson);
+```json
+  "staticDir": ["libs/ui-storybook/.storybook/documentation"],
 ```
 
 ### in all storybook libraries
@@ -380,17 +396,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 - update scripts using ng with nx
 
 ### add package.json scripts
-
-```json
-  "docs:json": "compodoc -p ./tsconfig.base.json -e json -d ./libs/ui-storybook/.storybook",
-  "cy:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
-  "cy:web": "concurrently \"npx nx serve\" \"nx run website-e2e:e2e --watch\"",
-  "cy:ssr": "concurrently \"npm run dev:ssr\" \"nx run website-e2e:e2e --watch\"",
-  "docker:ssr": "npm run build:ssr && npm run docker:ssr:build && npm run docker:ssr:run",
-  "docker:ssr:build": "docker build -f Dockerfile -t dark-rush-photography/website:latest --rm .",
-  "docker:ssr:remove": "docker rm -f website || true",
-  "docker:ssr:run": "npm run docker:ssr:remove && docker run -it --rm -p 8080:8080 -e PORT=8080 --name website dark-rush-photography/website:latest"
-```
 
 ---
 

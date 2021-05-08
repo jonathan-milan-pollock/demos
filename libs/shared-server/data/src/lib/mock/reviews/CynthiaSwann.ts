@@ -1,8 +1,9 @@
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 
 export class CynthiaSwann implements Review {
   id = '';
-  name = 'Cynthia Swann';
+  type: DocumentType = 'Review';
+  title = 'Cynthia Swann';
   text = [
     `
     Dark is a very talented professional. She captured the 
@@ -12,6 +13,7 @@ export class CynthiaSwann implements Review {
     with her photographs.
     `,
   ];
+  images = [];
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
