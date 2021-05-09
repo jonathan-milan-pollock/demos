@@ -124,9 +124,10 @@ preloadingStrategy: PreloadAllModules;
 # azurite
 __azurite*
 __blobstorage__
+__queuestorage__
 
 # compodoc
-/libs/ui-storybook/.storybook/documentation.json
+/libs/ui-storybook/.storybook/documentation/documentation.json
 ```
 
 ### reorder apps and libs so nx console displays projects in correct order

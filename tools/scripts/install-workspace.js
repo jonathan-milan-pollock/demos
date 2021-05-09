@@ -37,26 +37,13 @@ const execInstallDevDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D source-map-explorer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D concurrently'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'))
-    // AZURE
-    .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D azurite'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @azure/functions'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'));
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'));
 
 const execInstallDependencies = (isReady) =>
   Promise.resolve(console.log('### dependencies'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i fp-ts'))
-    .then(() => consoleLogOrExec(isReady, 'npm i uuid'))
-    // IMAGE HANDLING
-    .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
-    .then(() => consoleLogOrExec(isReady, 'npm i exiftool-vendored'))
-    .then(() => consoleLogOrExec(isReady, 'npm i parse-multipart'))
-    // AZURE
-    .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
+    .then(() => consoleLogOrExec(isReady, 'npm i uuid'));
 
 const getNgAppCommand = (appName) =>
   `npx nx g @nrwl/angular:app ${appName} --unitTestRunner=none --style=scss --routing=true --tags=scope:${appName},type:app --prefix=drp`;
@@ -69,7 +56,8 @@ const execGenerateApps = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, getNgAppCommand('website')))
     .then(() => consoleLogOrExec(isReady, getNestAppCommand('api')))
-    .then(() => consoleLogOrExec(isReady, getNestAppCommand('serverless')));
+    .then(() => consoleLogOrExec(isReady, getNestAppCommand('serverless/resize-image')) // scope needs to be serverless 
+    .then(() => consoleLogOrExec(isReady, getNestAppCommand('serverless/rename-image')));  // scope needs to be serverless
 
 const getWebsiteFeatureLibCommand = (libName) =>
   `npx nx g @nrwl/angular:lib website/features/${libName}/feature --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
@@ -130,7 +118,13 @@ const execGenerateServerlessLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib serverless/feature --unitTestRunner=jest --tags=scope:serverless,type:feature'
+        'npx nx g @nrwl/nest:lib serverless/features/rename-image --unitTestRunner=none --tags=scope:serverless,type:feature --buildable'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib serverless/features/resize-image --unitTestRunner=none --tags=scope:serverless,type:feature --buildable'
       )
     )
     .then(() =>
@@ -227,12 +221,12 @@ const execGenerateLibs = (isReady) =>
     //   .then(() => execGenerateApiLibs(isReady))
     //   .then(() => console.log())
     //   .then(() => execGenerateElementsLibs(isReady))
-    //   .then(() => console.log())
-    //   .then(() => execGenerateServerlessLibs(isReady))
-    //   .then(() => console.log())
-    //   .then(() => execGenerateSharedTypesLib(isReady))
     .then(() => console.log())
-    .then(() => execGenerateSharedServerLibs(isReady));
+    .then(() => execGenerateServerlessLibs(isReady));
+//   .then(() => console.log())
+//   .then(() => execGenerateSharedTypesLib(isReady))
+//.then(() => console.log())
+//.then(() => execGenerateSharedServerLibs(isReady));
 //   .then(() => console.log())
 //   .then(() => execGenerateUiStorybook(isReady))
 //   .then(() => console.log())
@@ -333,6 +327,15 @@ const execAddAngularPWA = (isReady) =>
       consoleLogOrExec(isReady, 'npx ng add @angular/pwa --project=website')
     );
 
+const execAddServerless = (isReady) => {
+  Promise.resolve(console.log('### add serverless'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @azure/functions'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
+    .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
+};
+
 const execAddMongoose = (isReady) => {
   Promise.resolve(console.log('### add mongoose'))
     .then(() => console.log())
@@ -340,6 +343,20 @@ const execAddMongoose = (isReady) => {
     .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'));
+};
+
+const execAddAzureBlobStorage = (isReady) => {
+  Promise.resolve(console.log('### add azure blob storage'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
+};
+
+const execAddImageProcessing = (isReady) => {
+  Promise.resolve(console.log('### add nest azure (@nestjs/azure-func-http)'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
+    .then(() => consoleLogOrExec(isReady, 'npm i exiftool-vendored'))
+    .then(() => consoleLogOrExec(isReady, 'npm i parse-multipart'));
 };
 
 const execAddFontAwesome = (isReady) =>
@@ -385,7 +402,13 @@ const execInstall = (isReady) =>
     //  .then(() => console.log())
     //  .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
-    .then(() => execAddMongoose(isReady));
+    .then(() => execAddServerless(isReady))
+    //.then(() => console.log())
+    //.then(() => execAddMongoose(isReady))
+    .then(() => console.log())
+    .then(() => execAddAzureBlobStorage(isReady))
+    .then(() => console.log())
+    .then(() => execAddImageProcessing(isReady));
 //  .then(() => console.log())
 //  .then(() => execAddFontAwesome(isReady));
 

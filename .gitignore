@@ -41,6 +41,7 @@ Thumbs.db
 # azurite
 __azurite*
 __blobstorage__
+__queuestorage__
 
 # compodoc
 /libs/ui-storybook/.storybook/documentation/documentation.json
