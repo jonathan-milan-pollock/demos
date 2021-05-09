@@ -55,6 +55,7 @@
     "prebuild",
     "prerender",
     "pulumi",
+    "queuestorage",
     "ruleset",
     "subcomponents",
     "testid",
@@ -62,5 +63,11 @@
     "vendored",
     "viewports",
     "websockets"
-  ]
+  ],
+  "azureFunctions.deploySubpath": ".",
+  "azureFunctions.postDeployTask": "npm install",
+  "azureFunctions.projectLanguage": "TypeScript",
+  "azureFunctions.projectRuntime": "~3",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.preDeployTask": "npm prune"
 }
