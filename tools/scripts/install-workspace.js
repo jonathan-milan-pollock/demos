@@ -37,27 +37,37 @@ const execInstallDevDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D source-map-explorer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D concurrently'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/fs-extra'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'));
 
 const execInstallDependencies = (isReady) =>
   Promise.resolve(console.log('### dependencies'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i fp-ts'))
+    .then(() => consoleLogOrExec(isReady, 'npm i fs-extra'))
     .then(() => consoleLogOrExec(isReady, 'npm i uuid'));
-
-const getNgAppCommand = (appName) =>
-  `npx nx g @nrwl/angular:app ${appName} --unitTestRunner=none --style=scss --routing=true --tags=scope:${appName},type:app --prefix=drp`;
-
-const getNestAppCommand = (appName) =>
-  `npx nx g @nrwl/nest:app ${appName} --unitTestRunner=none --tags=scope:${appName},type:app`;
 
 const execGenerateApps = (isReady) =>
   Promise.resolve(console.log('### apps'))
     .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, getNgAppCommand('website')))
-    .then(() => consoleLogOrExec(isReady, getNestAppCommand('api')))
-    .then(() => consoleLogOrExec(isReady, getNestAppCommand('serverless/resize-image')) // scope needs to be serverless 
-    .then(() => consoleLogOrExec(isReady, getNestAppCommand('serverless/rename-image')));  // scope needs to be serverless
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:app website --unitTestRunner=none --style=scss --routing=true --tags=scope:website,type:app --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:app api --unitTestRunner=none --tags=scope:api,type:app'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:app serverless --unitTestRunner=none --tags=scope:serverless,type:app'
+      )
+    );
 
 const getWebsiteFeatureLibCommand = (libName) =>
   `npx nx g @nrwl/angular:lib website/features/${libName}/feature --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
@@ -71,6 +81,12 @@ const getWebsiteUiLibWithUnitTestsCommand = (libName) =>
 const execGenerateApiLibs = (isReady) =>
   Promise.resolve(console.log('#### api libraries'))
     .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib api/data --unitTestRunner=jest --tags=scope:api,type:data-access'
+      )
+    )
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -118,13 +134,7 @@ const execGenerateServerlessLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib serverless/features/rename-image --unitTestRunner=none --tags=scope:serverless,type:feature --buildable'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/features/resize-image --unitTestRunner=none --tags=scope:serverless,type:feature --buildable'
+        'npx nx g @nrwl/nest:lib serverless/feature --unitTestRunner=none --tags=scope:serverless,type:feature'
       )
     )
     .then(() =>
@@ -140,6 +150,28 @@ const execGenerateServerlessLibs = (isReady) =>
       )
     );
 
+const execGenerateSharedServerLibs = (isReady) =>
+  Promise.resolve(console.log('#### shared-server libraries'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data-access'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
+      )
+    );
+
 const execGenerateSharedTypesLib = (isReady) =>
   Promise.resolve(console.log('#### shared-types library'))
     .then(() => console.log())
@@ -149,28 +181,6 @@ const execGenerateSharedTypesLib = (isReady) =>
         'npx nx g @nrwl/workspace:lib shared-types --unitTestRunner=none --tags=scope:shared,type:types'
       )
     );
-
-const execGenerateSharedServerLibs = (isReady) =>
-  Promise.resolve(console.log('#### shared-server libraries'))
-    .then(() => console.log())
-    //.then(() =>
-    //  consoleLogOrExec(
-    //     isReady,
-    //      'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data-access'
-    //    )
-    //  )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
-      )
-    );
-//   .then(() =>
-//     consoleLogOrExec(
-//       isReady,
-//       'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
-//     )
-//   );
 
 const execGenerateUiStorybook = (isReady) =>
   Promise.resolve(console.log('#### ui-storybook library'))
@@ -217,67 +227,20 @@ const execGenerateWebsiteLibs = (isReady) =>
 
 const execGenerateLibs = (isReady) =>
   Promise.resolve(console.log('### libs'))
-    //   .then(() => console.log())
-    //   .then(() => execGenerateApiLibs(isReady))
-    //   .then(() => console.log())
-    //   .then(() => execGenerateElementsLibs(isReady))
     .then(() => console.log())
-    .then(() => execGenerateServerlessLibs(isReady));
-//   .then(() => console.log())
-//   .then(() => execGenerateSharedTypesLib(isReady))
-//.then(() => console.log())
-//.then(() => execGenerateSharedServerLibs(isReady));
-//   .then(() => console.log())
-//   .then(() => execGenerateUiStorybook(isReady))
-//   .then(() => console.log())
-//   .then(() => execGenerateWebsiteLibs(isReady));
-
-const getAddStorybookWithCypressCommand = (libName) =>
-  `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=true --generateCypressSpecs=true --generateStories=true`;
-
-const getAddStorybookCommand = (libName) =>
-  `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=false`;
-
-const execAddStorybook = (isReady) =>
-  Promise.resolve(console.log('### add storybook'))
+    .then(() => execGenerateApiLibs(isReady))
     .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getAddStorybookWithCypressCommand('ui-storybook')
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('elements-ui'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-admin'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-common'))
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-home'))
-    )
-    .then(() => consoleLogOrExec(isReady, 'npm uninstall @storybook/angular'))
-    .then(() =>
-      consoleLogOrExec(isReady, 'npm uninstall @storybook/addon-knobs')
-    )
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/angular'))
-    .then(() =>
-      consoleLogOrExec(isReady, 'npm i -D @storybook/addon-essentials')
-    )
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-a11y'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D storybook-addon-themes'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-postcss'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @compodoc/compodoc'));
-
-const execUpdateCypress = (isReady) =>
-  Promise.resolve(console.log('### update cypress'))
+    .then(() => execGenerateElementsLibs(isReady))
     .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm uninstall cypress'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress-storybook'));
+    .then(() => execGenerateServerlessLibs(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateSharedServerLibs(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateSharedTypesLib(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateUiStorybook(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateWebsiteLibs(isReady));
 
 const execAddAngularElements = (isReady) =>
   Promise.resolve(console.log('### add angular elements'))
@@ -330,7 +293,7 @@ const execAddAngularPWA = (isReady) =>
 const execAddServerless = (isReady) => {
   Promise.resolve(console.log('### add serverless'))
     .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i -D rimraf'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D copyfiles'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/functions'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
     .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
@@ -348,15 +311,65 @@ const execAddMongoose = (isReady) => {
 const execAddAzureBlobStorage = (isReady) => {
   Promise.resolve(console.log('### add azure blob storage'))
     .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
 };
 
-const execAddImageProcessing = (isReady) => {
-  Promise.resolve(console.log('### add nest azure (@nestjs/azure-func-http)'))
+const getAddStorybookWithCypressCommand = (libName) =>
+  `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=true --generateCypressSpecs=true --generateStories=true`;
+
+const getAddStorybookCommand = (libName) =>
+  `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=false`;
+
+const execAddStorybook = (isReady) =>
+  Promise.resolve(console.log('### add storybook'))
     .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        getAddStorybookWithCypressCommand('ui-storybook')
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('elements-ui'))
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-admin'))
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-common'))
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-home'))
+    )
+    .then(() => consoleLogOrExec(isReady, 'npm uninstall @storybook/angular'))
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm uninstall @storybook/addon-knobs')
+    )
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/angular'))
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i -D @storybook/addon-essentials')
+    )
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-a11y'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D storybook-addon-themes'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @storybook/addon-postcss'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @compodoc/compodoc'));
+
+const execUpdateCypress = (isReady) =>
+  Promise.resolve(console.log('### update cypress'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm uninstall cypress'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D cypress-storybook'));
+
+const execAddImageProcessing = (isReady) => {
+  Promise.resolve(console.log('### add image processing'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/sharp'))
+    .then(() => consoleLogOrExec(isReady, 'npm i tinify'))
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
-    .then(() => consoleLogOrExec(isReady, 'npm i exiftool-vendored'))
-    .then(() => consoleLogOrExec(isReady, 'npm i parse-multipart'));
+    .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
+    .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'));
 };
 
 const execAddFontAwesome = (isReady) =>
@@ -377,40 +390,40 @@ const execAddFontAwesome = (isReady) =>
 
 const execInstall = (isReady) =>
   Promise.resolve(console.log('## install'))
-    //  .then(() => console.log())
-    //  .then(() => execInstallSchematics(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execInstallDevDependencies(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execInstallDependencies(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execGenerateApps(isReady))
+    .then(() => console.log())
+    .then(() => execInstallSchematics(isReady))
+    .then(() => console.log())
+    .then(() => execInstallDevDependencies(isReady))
+    .then(() => console.log())
+    .then(() => execInstallDependencies(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateApps(isReady))
     .then(() => console.log())
     .then(() => execGenerateLibs(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execAddStorybook(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execUpdateCypress(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execAddAngularElements(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execAddAngularUniversal(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execAddNgrx(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execAddAngularMaterial(isReady))
-    //  .then(() => console.log())
-    //  .then(() => execAddAngularPWA(isReady))
+    .then(() => console.log())
+    .then(() => execAddAngularElements(isReady))
+    .then(() => console.log())
+    .then(() => execAddAngularUniversal(isReady))
+    .then(() => console.log())
+    .then(() => execAddNgrx(isReady))
+    .then(() => console.log())
+    .then(() => execAddAngularMaterial(isReady))
+    .then(() => console.log())
+    .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
     .then(() => execAddServerless(isReady))
-    //.then(() => console.log())
-    //.then(() => execAddMongoose(isReady))
+    .then(() => console.log())
+    .then(() => execAddMongoose(isReady))
     .then(() => console.log())
     .then(() => execAddAzureBlobStorage(isReady))
     .then(() => console.log())
-    .then(() => execAddImageProcessing(isReady));
-//  .then(() => console.log())
-//  .then(() => execAddFontAwesome(isReady));
+    .then(() => execAddStorybook(isReady))
+    .then(() => console.log())
+    .then(() => execUpdateCypress(isReady))
+    .then(() => console.log())
+    .then(() => execAddImageProcessing(isReady))
+    .then(() => console.log())
+    .then(() => execAddFontAwesome(isReady));
 
 let isReady = false;
 Promise.resolve(execInstall(isReady))

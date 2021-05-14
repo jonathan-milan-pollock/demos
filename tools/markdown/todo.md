@@ -43,7 +43,6 @@ usually run asynchronous processes
 • npm run dep-graph — --file=graph.svg emits an svg file.
 
 TODO: https://www.npmjs.com/package/nock
-TODO: grapheme-splitter
 
 TODO: Safe deserialization
 
@@ -54,5 +53,10 @@ Required properties
 Web Statement of Rights
 A URL to a page that describes the license governing an image's use, and optionally other rights information. For example, it could be the terms and conditions that you have on your website. Where applicable, it could also be a Creative Commons License (for example, BY-NC 4.0).
 
-https://creativecommons.org/licenses/by-nd/4.0/
 https://www.iptc.org/std/photometadata/specification/IPTC-PhotoMetadata#web-statement-of-rights
+
+https://iptc.org/standards/photo-metadata/quick-guide-to-iptc-photo-metadata-and-google-images/
+
+//https://www.plusregistry.org/cgi-bin/WebObjects/PlusDB.woa/2/wo/ezAOMmoVUXbQ9om8Ur1X8w/45.11.8.1
+
+// OpenSeadragon

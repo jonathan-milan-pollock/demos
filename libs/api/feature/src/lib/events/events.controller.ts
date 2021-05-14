@@ -16,18 +16,18 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Get()
-  async getEventsAsync(): Promise<Event[]> {
-    return await this.eventsService.getEventsAsync();
+  async getEvents(): Promise<Event[]> {
+    return await this.eventsService.getEvents();
   }
 
   @Get(':id')
   async getEvent(@Param() id: string): Promise<Event> {
-    return this.eventsService.getEventAsync(id);
+    return this.eventsService.getEvent(id);
   }
 
   @Post()
-  async addEventAsync(@Body() event: Event): Promise<{ id: string }> {
-    const id = await this.eventsService.addEventAsync(event);
+  async addEvent(@Body() event: Event): Promise<{ id: string }> {
+    const id = await this.eventsService.addEvent(event);
     return { id };
   }
 
@@ -37,12 +37,12 @@ export class EventsController {
     @Body() event: Event
   ): Promise<{ slug: string }> {
     return {
-      slug: await this.eventsService.updateEventAsync(id, event),
+      slug: await this.eventsService.updateEvent(id, event),
     };
   }
 
   @Delete(':id')
   async deleteEvent(@Param() id: string): Promise<void> {
-    await this.eventsService.deleteEventAsync(id);
+    await this.eventsService.deleteEvent(id);
   }
 }

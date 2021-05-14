@@ -16,20 +16,20 @@ export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Get()
-  async getDestinationsAsync(): Promise<Destination[]> {
-    return await this.destinationsService.getDestinationsAsync();
+  async getDestinations(): Promise<Destination[]> {
+    return await this.destinationsService.getDestinations();
   }
 
   @Get(':id')
   async getDestination(@Param() id: string): Promise<Destination> {
-    return this.destinationsService.getDestinationAsync(id);
+    return this.destinationsService.getDestination(id);
   }
 
   @Post()
-  async addDestinationAsync(
+  async addDestination(
     @Body() destination: Destination
   ): Promise<{ id: string }> {
-    const id = await this.destinationsService.addDestinationAsync(destination);
+    const id = await this.destinationsService.addDestination(destination);
     return { id };
   }
 
@@ -39,15 +39,12 @@ export class DestinationsController {
     @Body() destination: Destination
   ): Promise<{ slug: string }> {
     return {
-      slug: await this.destinationsService.updateDestinationAsync(
-        id,
-        destination
-      ),
+      slug: await this.destinationsService.updateDestination(id, destination),
     };
   }
 
   @Delete(':id')
   async deleteDestination(@Param() id: string): Promise<void> {
-    await this.destinationsService.deleteDestinationAsync(id);
+    await this.destinationsService.deleteDestination(id);
   }
 }

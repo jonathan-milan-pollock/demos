@@ -49,6 +49,28 @@ export const createBlobWithAsset = (blobName: string) => (asset: Asset) => (
   }),
 });
 
+export const createSasKey = (accountName: string) => (
+  accountKey: string
+): string => {
+  const startDate = new Date();
+  const expiryDate = new Date();
+  startDate.setTime(startDate.getTime() - 5 * 60 * 1000);
+  expiryDate.setTime(expiryDate.getTime() + 24 * 60 * 60 * 1000);
+  expiryDate.setTime(expiryDate.getTime() + 24 * 60 * 60 * 1000);
+  return generateAccountSASQueryParameters(
+    {
+      expiresOn: expiryDate,
+      permissions: AccountSASPermissions.parse('rwdlac'),
+      protocol: SASProtocol.Https,
+      resourceTypes: AccountSASResourceTypes.parse('sco').toString(),
+      services: AccountSASServices.parse('b').toString(),
+      startsOn: startDate,
+      version: '2018-03-28',
+    },
+    new StorageSharedKeyCredential(accountName, accountKey)
+  ).toString();
+};
+
 export const getSignedBlobUrl = (azureBlob: AzureBlob): Output<string> => {
   const {
     resourceGroup: { name: resourceGroupName },

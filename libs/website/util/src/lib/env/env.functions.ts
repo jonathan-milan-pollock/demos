@@ -6,7 +6,7 @@ import {
   EnvironmentVariables,
 } from '@dark-rush-photography/website/types';
 import { ObjectPropertyUndefinedError } from '@dark-rush-photography/shared-types';
-import { validateBrowserWindow } from '../browser-window/browser-window.functions';
+import { validateBrowserWindow } from '../window/browser-window.functions';
 
 export const environmentVariablesResult = (
   browserWindow: unknown

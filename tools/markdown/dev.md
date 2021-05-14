@@ -32,15 +32,38 @@
 > Open Mobile View and Enable Show Device Frame in Mobile Settings
 > Open Network Settings and enable Capture Screenshots
 
-### Install Community Edition MongoDB
+---
+
+### install serverless
+
+#### in next version azurite table storage will be supported in VSCode
+
+- for now:
+
+> npm install -g azurite@3.12.0
+> azurite start
+> azurite close
+
+#### install msi for Azure Functions Core Tools v3
+
+- <https://www.npmjs.com/package/azure-functions-core-tools>
+
+#### in next version will use Azurite VSCode extension and uninstall global npm installation
+
+- View > Command Palette...
+- Azurite Start
+
+#### for new serverless functions add function and index in tools/serverless folder
+
+---
+
+### install Community Edition MongoDB
 
 - <https://www.mongodb.com/try/download/community>
 - When installing make sure to add server for the install
 - Click connect then create database drp-mongo-db-database & collection documents
 
-### Install Azure Functions
-
-- npm i -g azure-functions-core-tools@3 --unsafe-perm true
+---
 
 ### optional VSCode extensions (other VSCode extensions have been added to .vscode extensions.json)
 

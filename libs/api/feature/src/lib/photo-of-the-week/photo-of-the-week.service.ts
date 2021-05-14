@@ -16,13 +16,13 @@ export class PhotoOfTheWeekService {
     private readonly photoOfTheWeekModel: Model<DocumentModel>
   ) {}
 
-  async getWeeklyPhotosAsync(): Promise<PhotoOfTheWeek[]> {
+  async getWeeklyPhotos(): Promise<PhotoOfTheWeek[]> {
     return await this.photoOfTheWeekModel
       .find({ type: 'PhotoOfTheWeek' })
       .exec();
   }
 
-  async getPhotoOfTheWeekAsync(id: string): Promise<PhotoOfTheWeek> {
+  async getPhotoOfTheWeek(id: string): Promise<PhotoOfTheWeek> {
     const photoOfTheWeek = await this.photoOfTheWeekModel.findById(id);
     if (!photoOfTheWeek) {
       throw new NotFoundException('Could not find photo of the week');
@@ -30,16 +30,14 @@ export class PhotoOfTheWeekService {
     return photoOfTheWeek;
   }
 
-  async addPhotoOfTheWeekAsync(
-    photoOfTheWeek: PhotoOfTheWeek
-  ): Promise<string> {
+  async addPhotoOfTheWeekc(photoOfTheWeek: PhotoOfTheWeek): Promise<string> {
     const addedPhotoOfTheWeek = await new this.photoOfTheWeekModel(
       photoOfTheWeek
     ).save();
     return addedPhotoOfTheWeek.slug;
   }
 
-  async updatePhotoOfTheWeekAsync(
+  async updatePhotoOfTheWeek(
     id: string,
     photoOfTheWeek: PhotoOfTheWeek
   ): Promise<string> {
@@ -52,7 +50,7 @@ export class PhotoOfTheWeekService {
     return id;
   }
 
-  async deletePhotoOfTheWeekAsync(id: string): Promise<void> {
+  async deletePhotoOfTheWeek(id: string): Promise<void> {
     await this.photoOfTheWeekModel.findByIdAndDelete(id);
   }
 }

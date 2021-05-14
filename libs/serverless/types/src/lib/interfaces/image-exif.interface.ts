@@ -1,8 +1,12 @@
-import { Location } from './location';
-
 export interface ImageExif {
-  readonly title: string;
-  readonly location: Location;
-  readonly keywords: Set<string>;
-  readonly releaseDate: Date;
+  readonly Title: string; //'iptc:ObjectName'
+  readonly 'dc:description': string;
+  readonly 'Keywords+': string[];
+  readonly CreateDate: string;
+  readonly 'xmp:MetadataDate': string;
+  readonly FileModifyDate: string;
+  readonly 'Iptc4xmpCore:Location'?: string;
+  readonly City?: string;
+  readonly State?: string;
+  readonly Country: string;
 }

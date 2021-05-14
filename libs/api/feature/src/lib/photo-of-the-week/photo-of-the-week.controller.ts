@@ -16,20 +16,20 @@ export class PhotoOfTheWeekController {
   constructor(private readonly photoOfTheWeekService: PhotoOfTheWeekService) {}
 
   @Get()
-  async getWeeklyPhotosAsync(): Promise<PhotoOfTheWeek[]> {
-    return await this.photoOfTheWeekService.getWeeklyPhotosAsync();
+  async getWeeklyPhotos(): Promise<PhotoOfTheWeek[]> {
+    return await this.photoOfTheWeekService.getWeeklyPhotos();
   }
 
   @Get(':id')
   async getPhotoOfTheWeek(@Param() id: string): Promise<PhotoOfTheWeek> {
-    return this.photoOfTheWeekService.getPhotoOfTheWeekAsync(id);
+    return this.photoOfTheWeekService.getPhotoOfTheWeek(id);
   }
 
   @Post()
-  async addPhotoOfTheWeekAsync(
+  async addPhotoOfTheWeek(
     @Body() photoOfTheWeek: PhotoOfTheWeek
   ): Promise<{ id: string }> {
-    const id = await this.photoOfTheWeekService.addPhotoOfTheWeekAsync(
+    const id = await this.photoOfTheWeekService.addPhotoOfTheWeek(
       photoOfTheWeek
     );
     return { id };
@@ -41,7 +41,7 @@ export class PhotoOfTheWeekController {
     @Body() photoOfTheWeek: PhotoOfTheWeek
   ): Promise<{ slug: string }> {
     return {
-      slug: await this.photoOfTheWeekService.updatePhotoOfTheWeekAsync(
+      slug: await this.photoOfTheWeekService.updatePhotoOfTheWeek(
         id,
         photoOfTheWeek
       ),
@@ -50,6 +50,6 @@ export class PhotoOfTheWeekController {
 
   @Delete(':id')
   async deletePhotoOfTheWeek(@Param() id: string): Promise<void> {
-    await this.photoOfTheWeekService.deletePhotoOfTheWeekAsync(id);
+    await this.photoOfTheWeekService.deletePhotoOfTheWeek(id);
   }
 }

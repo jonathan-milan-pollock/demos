@@ -4,7 +4,7 @@
 
 ## Recommended Reading
 
-- [Practical Guide to Fp-ts](https://rlee.dev/writing/practical-guide-to-fp-ts-part-1)
+- [Practical Guide to Fp-ts](https://dev.to/ryanleecode/series/7325)
 
 ## value can be returned immediately?
 
