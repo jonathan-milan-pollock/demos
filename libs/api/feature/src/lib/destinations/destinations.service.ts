@@ -16,11 +16,11 @@ export class DestinationsService {
     private readonly destinationModel: Model<DocumentModel>
   ) {}
 
-  async getDestinationsAsync(): Promise<Destination[]> {
+  async getDestinations(): Promise<Destination[]> {
     return await this.destinationModel.find({ type: 'Destination' }).exec();
   }
 
-  async getDestinationAsync(id: string): Promise<Destination> {
+  async getDestination(id: string): Promise<Destination> {
     const destination = await this.destinationModel.findById(id);
     if (!destination) {
       throw new NotFoundException('Could not find destination');
@@ -28,14 +28,14 @@ export class DestinationsService {
     return destination;
   }
 
-  async addDestinationAsync(destination: Destination): Promise<string> {
+  async addDestination(destination: Destination): Promise<string> {
     const addedDestination = await new this.destinationModel(
       destination
     ).save();
     return addedDestination.id;
   }
 
-  async updateDestinationAsync(
+  async updateDestination(
     id: string,
     destination: Destination
   ): Promise<string> {
@@ -48,7 +48,7 @@ export class DestinationsService {
     return id;
   }
 
-  async deleteDestinationAsync(id: string): Promise<void> {
+  async deleteDestination(id: string): Promise<void> {
     await this.destinationModel.findByIdAndDelete(id);
   }
 }

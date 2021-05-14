@@ -3,4 +3,5 @@ export type SocialMediaPostType =
   | 'Instagram'
   | 'LinkedIn'
   | 'GoogleBusiness'
-  | 'YouTube';
+  | 'YouTube'
+  | 'Twitter';

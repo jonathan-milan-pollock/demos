@@ -16,11 +16,11 @@ export class ReviewsService {
     private readonly reviewModel: Model<DocumentModel>
   ) {}
 
-  async getReviewsAsync(): Promise<Review[]> {
+  async getReviews(): Promise<Review[]> {
     return await this.reviewModel.find().exec();
   }
 
-  async getReviewAsync(id: string): Promise<Review> {
+  async getReview(id: string): Promise<Review> {
     const review = await this.reviewModel.findById(id);
     if (!review) {
       throw new NotFoundException(`Could not find review`);
@@ -28,12 +28,12 @@ export class ReviewsService {
     return review;
   }
 
-  async addReviewAsync(review: Review): Promise<string> {
+  async addReview(review: Review): Promise<string> {
     const addedReview = await new this.reviewModel(review).save();
     return addedReview.id;
   }
 
-  async updateReviewAsync(id: string, review: Review): Promise<string> {
+  async updateReview(id: string, review: Review): Promise<string> {
     const foundReview = await this.reviewModel.findById(id);
     if (!foundReview) {
       throw new NotFoundException('Could not find review');
@@ -43,7 +43,7 @@ export class ReviewsService {
     return id;
   }
 
-  async deleteReviewAsync(id: string): Promise<void> {
+  async deleteReview(id: string): Promise<void> {
     await this.reviewModel.findByIdAndDelete(id);
   }
 }

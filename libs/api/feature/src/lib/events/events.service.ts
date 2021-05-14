@@ -16,11 +16,11 @@ export class EventsService {
     private readonly eventModel: Model<DocumentModel>
   ) {}
 
-  async getEventsAsync(): Promise<Event[]> {
+  async getEvents(): Promise<Event[]> {
     return await this.eventModel.find({ type: 'Event' }).exec();
   }
 
-  async getEventAsync(id: string): Promise<Event> {
+  async getEvent(id: string): Promise<Event> {
     const event = await this.eventModel.findById(id);
     if (!event) {
       throw new NotFoundException('Could not find event');
@@ -28,12 +28,12 @@ export class EventsService {
     return event;
   }
 
-  async addEventAsync(event: Event): Promise<string> {
+  async addEvent(event: Event): Promise<string> {
     const addedEvent = await new this.eventModel(event).save();
     return addedEvent.id;
   }
 
-  async updateEventAsync(id: string, event: Event): Promise<string> {
+  async updateEvent(id: string, event: Event): Promise<string> {
     const foundEvent = await this.eventModel.findById(id);
     if (!foundEvent) {
       throw new NotFoundException('Could not find event');
@@ -43,7 +43,7 @@ export class EventsService {
     return id;
   }
 
-  async deleteEventAsync(id: string): Promise<void> {
+  async deleteEvent(id: string): Promise<void> {
     await this.eventModel.findByIdAndDelete(id);
   }
 }

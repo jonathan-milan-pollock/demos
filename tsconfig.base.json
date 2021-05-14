@@ -41,6 +41,9 @@
       "@dark-rush-photography/shared-server/data": [
         "libs/shared-server/data/src/index.ts"
       ],
+      "@dark-rush-photography/shared-server/types": [
+        "libs/shared-server/types/src/index.ts"
+      ],
       "@dark-rush-photography/shared-server/util": [
         "libs/shared-server/util/src/index.ts"
       ],
@@ -69,9 +72,7 @@
         "libs/website/ui/ui-home/src/index.ts"
       ],
       "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"],
-      "@dark-rush-photography/shared-server/types": [
-        "libs/shared-server/types/src/index.ts"
-      ]
+      "@dark-rush-photography/api/data": ["libs/api/data/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

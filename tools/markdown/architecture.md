@@ -140,6 +140,12 @@ __queuestorage__
 
 ---
 
+## setup serverless
+
+- remove assets from angular.json
+
+---
+
 ## setup angular elements
 
 - services may want instead of provideIn root to be provide in platform
@@ -217,28 +223,6 @@ platformBrowserDynamic()
 - in website ngsw-config.json add
   - navigationRequestStrategy freshness
   - TODO: verify this is a requirement!!!
-
----
-
-### update cypress for ssr
-
-#### add to website-e2e cypress.json
-
-```json
-  "baseUrl": "http://localhost:4200",
-```
-
-#### update angular.json so that website e2e does not also serve the website ssr
-
-- remove the following two lines from website-e2e task in angular.json
-
-```ts
- "serverTarget": "website:server"
-```
-
-```ts
-  "devServerTarget": "website:serve:production"
-```
 
 ---
 
@@ -325,6 +309,26 @@ addDecorator(withKnobs);
 ---
 
 ## setup cypress
+
+### update cypress for ssr
+
+#### add to website-e2e cypress.json
+
+```json
+  "baseUrl": "http://localhost:4200",
+```
+
+#### update angular.json so that website e2e does not also serve the website ssr
+
+- remove the following two lines from website-e2e task in angular.json
+
+```ts
+ "serverTarget": "website:server"
+```
+
+```ts
+  "devServerTarget": "website:serve:production"
+```
 
 ### setup cypress dashboard
 
