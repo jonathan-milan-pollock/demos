@@ -1,7 +1,5 @@
 import { interpolate } from '@pulumi/pulumi';
 
-import { pipe } from 'fp-ts/lib/function';
-
 import { pulumiConfig } from './pulumi-config';
 import { createResourceGroup } from './services/resource-group.service';
 import {

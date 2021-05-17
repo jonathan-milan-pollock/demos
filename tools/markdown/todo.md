@@ -60,3 +60,26 @@ https://iptc.org/standards/photo-metadata/quick-guide-to-iptc-photo-metadata-and
 //https://www.plusregistry.org/cgi-bin/WebObjects/PlusDB.woa/2/wo/ezAOMmoVUXbQ9om8Ur1X8w/45.11.8.1
 
 // OpenSeadragon
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+
+// TODO: Implement service worker
+
+// ReactGA.initialize('UA-111745461-1');
+//TODO: Check if all of the fontawesome icons are used
+// TODO: Accessiblity
+
+//a:link { color: blue; } /_ Unvisited links _/
+//a:visited { color: purple; } /_ Visited links _/
+//a:hover { background: yellow; } /_ Hovered links _/
+//a:active { color: red; } /_ Active links _/
+
+/_
+rel="noopener" prevents the new page from being able to access the window.opener property and ensures it runs in a separate process. Without this, the target page can potentially redirect your page to a malicious URL.
+rel="noreferrer" has the same effect, but also prevents the Referer header from being sent to the new page. ⚠️ Removing the referrer header will affect analytics.
+_/
+
+//TODO: Roboto or Raleway???

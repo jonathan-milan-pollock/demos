@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/lib/function';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { Readable } from 'node:stream';
 
 import {
@@ -8,49 +8,58 @@ import {
   downloadAzureStorageBlobToFile,
   uploadBufferToAzureStorageBlob,
   uploadStreamToAzureStorageBlob,
+  getAzureStorageBlobNames,
 } from './azure-storage.functions';
 
 export const downloadBlob = (
   azureStorageConnectionString: string,
-  containerName: string,
+  azureStorageContainerType: AzureStorageContainerType,
   blobName: string,
   fileName: string
-): Promise<string> => {
-  return pipe(
+): Promise<string> =>
+  pipe(
     azureStorageConnectionString,
     getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(containerName),
+    getAzureStorageContainerClient(azureStorageContainerType),
     getAzureStorageBlockBlobClient(blobName),
     downloadAzureStorageBlobToFile(fileName)
   );
-};
 
 export const uploadBlobFromBuffer = (
   azureStorageConnectionString: string,
-  containerName: string,
+  azureStorageContainerType: AzureStorageContainerType,
   blobName: string,
   buffer: Buffer
-): Promise<string | undefined> => {
-  return pipe(
+): Promise<string | undefined> =>
+  pipe(
     azureStorageConnectionString,
     getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(containerName),
+    getAzureStorageContainerClient(azureStorageContainerType),
     getAzureStorageBlockBlobClient(blobName),
     uploadBufferToAzureStorageBlob(buffer)
   );
-};
 
 export const uploadBlobFromStream = (
   azureStorageConnectionString: string,
-  containerName: string,
+  azureStorageContainerType: AzureStorageContainerType,
   blobName: string,
   stream: Readable
-): Promise<string | undefined> => {
-  return pipe(
+): Promise<string | undefined> =>
+  pipe(
     azureStorageConnectionString,
     getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(containerName),
+    getAzureStorageContainerClient(azureStorageContainerType),
     getAzureStorageBlockBlobClient(blobName),
     uploadStreamToAzureStorageBlob(stream)
   );
-};
+
+export const getBlobsNames = (
+  azureStorageConnectionString: string,
+  azureStorageContainerType: AzureStorageContainerType
+): Promise<string[]> =>
+  pipe(
+    azureStorageConnectionString,
+    getAzureStorageBlobServiceClient,
+    getAzureStorageContainerClient(azureStorageContainerType),
+    getAzureStorageBlobNames
+  );

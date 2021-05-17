@@ -19,7 +19,6 @@ import { WebsiteUiUiAdminModule } from '../website-ui-ui-admin.module';
 />
 
 export const reviewGroup = new FormGroup({
-  slug: new FormControl(null),
   name: new FormControl(null),
   text: new FormControl(null),
 });
@@ -30,6 +29,6 @@ export const reviewGroup = new FormGroup({
   {(args) => <drp-form-review-group {...args} reviewGroup={reviewGroup} />}
 </Story>
 
-## ArgsTable
+## Args Table
 
 <ArgsTable of={FormReviewGroupComponent} />

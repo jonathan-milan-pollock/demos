@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { Review } from '@dark-rush-photography/shared-types';
+import { Public } from '@dark-rush-photography/api/util';
 import { ReviewsService } from './reviews.service';
 
 @Controller('reviews')
@@ -16,6 +17,7 @@ export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Get()
+  @Public()
   async getReviews(): Promise<Review[]> {
     return await this.reviewsService.getReviews();
   }
@@ -27,6 +29,7 @@ export class ReviewsController {
 
   @Post()
   async addReview(@Body() review: Review): Promise<{ id: string }> {
+    console.log('adding review');
     const id = await this.reviewsService.addReview(review);
     return { id };
   }

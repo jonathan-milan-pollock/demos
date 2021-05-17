@@ -142,7 +142,9 @@ __queuestorage__
 
 ## setup serverless
 
-- remove assets from angular.json
+- in angular.json for app
+  - remove assets from angular.json
+  - add /dist/src at end of output path
 
 ---
 
@@ -364,7 +366,31 @@ import 'cypress-storybook/angular';
 />
 ```
 
----
+### Import FontAwesomeModule in website
+
+```ts
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+```
+
+### In order or FontAwesome icons not to flicker
+
+- in website styles.scss
+
+```scss
+@import '~@fortawesome/fontawesome-svg-core/styles.css';
+```
+
+- in modules that import FontAwesome
+
+```ts
+import { config } from '@fortawesome/fontawesome-svg-core';
+
+export class WebsiteUiUiHomeModule {
+  constructor() {
+    config.autoAddCss = false;
+  }
+}
+```
 
 ### Setup Font Awesome Pro
 
@@ -380,12 +406,6 @@ import 'cypress-storybook/angular';
 
 - npm i --save-optional @fortawesome/pro-regular-svg-icons
 - npm i --save-optional @fortawesome/pro-solid-svg-icons
-
-#### Import FontAwesomeModule in website
-
-```ts
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-```
 
 ---
 

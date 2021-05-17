@@ -1,9 +1,8 @@
+// constants
+export * from './lib/constants/constants';
+
 // enums
 export * from './lib/enums/month.enum';
-
-// errors
-export * from './lib/errors/object-property-undefined.error';
-export * from './lib/errors/object-undefined.error';
 
 // interfaces
 export * from './lib/interfaces/about.interface';

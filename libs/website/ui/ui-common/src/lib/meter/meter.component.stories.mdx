@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/addon-docs/blocks';
 import { moduleMetadata } from '@storybook/angular';
 
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MeterComponent } from './meter.component';
 import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
@@ -11,7 +12,11 @@ import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
   component={MeterComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, WebsiteUiUiCommonModule],
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiUiCommonModule,
+      ],
     }),
   ]}
 />
@@ -29,3 +34,7 @@ import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
 >
   {(args) => <drp-meter {...args} />}
 </Story>
+
+## Args Table
+
+<ArgsTable of={MeterComponent} />

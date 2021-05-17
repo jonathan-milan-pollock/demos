@@ -4,18 +4,17 @@
 
 ## best practices
 
-- Imports should be in 3 sections Platform, 3rd Parties, Own Code
-- Exports, imports, and declarations should be ordered by file name-
-- Prefer named not default exports to keep names consistent
-- Use undefined or unknown instead of null
-- Use underscores as number separators
-- Default switch cases and validation should return Either
-- Use ids to match label for, classes for css, and data-testid for cypress
+- imports should be in 3 sections Platform, 3rd Parties, Own Code
+- exports, imports, and declarations should be ordered by file name
+- prefer named not default exports to keep names consistent
+- use undefined or unknown instead of null
+- use underscores as number separators
+- use ids to match label for, classes for css, and data-testid for cypress
 - use ems instead of px for measurement
-- use === not ==
 - use a for links to other pages and button for actions
 - don't put href on a tags causes the page to reload
 - unsubscribe or takeUntil Subscription
+- only export what is needed from utils index.ts files
 
 ---
 
@@ -85,6 +84,7 @@
 
 ## running dev
 
+- azurite start (for now)
 - npm run cy:ui
 - npm run cy:web
 

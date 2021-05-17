@@ -1,0 +1,16 @@
+<nav mat-tab-nav-bar *ngIf="activeTab">
+  <a
+    mat-tab-link
+    *ngFor="let tab of tabs"
+    [routerLink]="tab.link"
+    (click)="onTabClick(tab.link)"
+    [active]="tab.link === activeTab.link"
+  >
+    <fa-icon
+      class="top-nav-bar-button-icon"
+      [icon]="tab.faIcon"
+      size="lg"
+    ></fa-icon>
+    {{ tab.name }}
+  </a>
+</nav>

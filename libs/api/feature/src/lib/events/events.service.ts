@@ -4,10 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Event } from '@dark-rush-photography/shared-types';
-import {
-  DocumentModel,
-  Document,
-} from '@dark-rush-photography/shared-server/data';
+import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class EventsService {

@@ -7,6 +7,7 @@ import {
   ContainerClient,
 } from '@azure/storage-blob';
 
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   writeStreamToFile,
   createTempFile,
@@ -15,12 +16,15 @@ import {
 export const getAzureStorageBlobServiceClient = (
   azureStorageConnectionString: string
 ): BlobServiceClient => {
-  return BlobServiceClient.fromConnectionString(azureStorageConnectionString);
+  return new BlobServiceClient(
+    'https://127.0.0.1:10000/devstoreaccount1/private'
+  );
 };
 
-export const getAzureStorageContainerClient = (containerName: string) => (
-  blobServiceClient: BlobServiceClient
-): ContainerClient => blobServiceClient.getContainerClient(containerName);
+export const getAzureStorageContainerClient = (
+  azureStorageContainerType: AzureStorageContainerType
+) => (blobServiceClient: BlobServiceClient): ContainerClient =>
+  blobServiceClient.getContainerClient(azureStorageContainerType);
 
 export const getAzureStorageBlockBlobClient = (blobName: string) => (
   containerClient: ContainerClient
@@ -63,3 +67,15 @@ export const uploadStreamToAzureStorageBlob = (stream: Readable) => (
       .then((uploadBlobResponse) => resolve(uploadBlobResponse.requestId))
       .catch(reject);
   });
+
+export async function getAzureStorageBlobNames(
+  containerClient: ContainerClient
+): Promise<string[]> {
+  const blobs: string[] = [];
+  for await (const blob of containerClient.listBlobsFlat({
+    prefix: 'resized-image/Home/images',
+  })) {
+    blobs.push(blob.name);
+  }
+  return blobs;
+}

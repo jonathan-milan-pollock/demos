@@ -1,0 +1,32 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { EmailAddressComponent } from './email-address.component';
+import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
+
+<Meta
+  title="UI COMMON/Email Address"
+  component={EmailAddressComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiUiCommonModule,
+      ],
+    }),
+  ]}
+/>
+
+# Email Address
+
+<Story height="500px" name="Default">
+  {(args) => <drp-email-address {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={EmailAddressComponent} />
