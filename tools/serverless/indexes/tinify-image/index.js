@@ -7,7 +7,7 @@ function default_1(context) {
     req: {
       method: 'GET',
       originalUrl: 'http://localhost/api/tinify-image',
-      body: context.bindingData.data,
+      body: context.bindingData,
     },
   };
 

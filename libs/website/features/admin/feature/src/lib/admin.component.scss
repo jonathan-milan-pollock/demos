@@ -1,5 +1,18 @@
-main {
-  background-color: darkgray;
-  width: 100%;
+.page {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  min-width: 288px;
+}
+
+.page-header {
+  display: none;
+}
+
+.top-navigation-bar {
+  height: 72px;
+}
+
+.content {
+  height: calc(100% - 176px);
 }

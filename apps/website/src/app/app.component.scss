@@ -1,24 +1,172 @@
-.bottom-divider {
+$top-navigation-bar-height: 72px;
+$divider-height: 4;
+$bottom-mobile-height: 56;
+$bottom-navigation-bar-height: 56;
+$bottom-desktop-height: 45px;
+$bottom-social-media-bar-height: 45px;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 288px;
+}
+
+.page-header {
+  display: none;
+}
+
+.top-navigation-bar {
+  height: 72px;
+}
+
+.top-tab-bar-container {
+  background-color: rgb(11, 11, 11);
+  height: 72px;
   width: 100%;
-  height: 2px;
-  border: 2px solid rgb(0, 0, 0);
 }
 
-.light-theme .bottom-divider {
-  border: 2px solid rgb(182, 195, 204);
+top-tab-bar-container {
+  display: 'flex';
+  flex-direction: 'column';
+}
+top-tab-bar {
+  margin-top: 'auto';
 }
 
-@media (orientation: landscape) {
+//$divider-height + $bottom-mobile-height
+.content {
+  height: calc(100% - 176px);
 }
 
-@media (max-width: 480px) {
-  .left-column {
-    background-color: lightcoral;
-  }
+/*
+ [theme.breakpoints.up('lg')]: {
+      height: `calc(100% - ${
+        AppUiConstants.DIVIDER_HEIGHT + BOTTOM_DESKTOP_HEIGHT
+      }px)`,
+    },
+*/
+
+/*
+[theme.breakpoints.up('lg')]: {
+      height: BOTTOM_DESKTOP_HEIGHT,
+    },
+*/
+
+.divider {
+  height: $divider-height;
+  margin-top: auto;
+  background-color: darkgray;
 }
 
-@media (max-width: 250px) {
-  .left-column {
-    background-color: lightseagreen;
-  }
+.fat-footer {
+  height: 50px;
+  background-color: rgb(11, 11, 11);
+}
+
+/*
+ [theme.breakpoints.up('lg')]: {
+      display: 'none',
+    },
+*/
+.bottom-navigation-bar {
+  height: $bottom-navigation-bar-height;
+  background-color: gray;
+}
+
+/*
+    [theme.breakpoints.up('lg')]: {
+      display: 'block',
+    },
+*/
+.bottom-social-media-bar {
+  height: $bottom-social-media-bar-height;
+  background-color: gray;
+  display: none;
+}
+$top-navigation-bar-height: 72px;
+$divider-height: 4;
+$bottom-mobile-height: 56;
+$bottom-navigation-bar-height: 56;
+$bottom-desktop-height: 45px;
+$bottom-social-media-bar-height: 45px;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 288px;
+}
+
+.page-header {
+  display: none;
+}
+
+.top-navigation-bar {
+  height: 72px;
+}
+
+.top-tab-bar-container {
+  background-color: rgb(11, 11, 11);
+  height: 72px;
+  width: 100%;
+}
+
+top-tab-bar-container {
+  display: 'flex';
+  flex-direction: 'column';
+}
+top-tab-bar {
+  margin-top: 'auto';
+}
+
+//$divider-height + $bottom-mobile-height
+.content {
+  height: calc(100% - 176px);
+}
+
+/*
+ [theme.breakpoints.up('lg')]: {
+      height: `calc(100% - ${
+        AppUiConstants.DIVIDER_HEIGHT + BOTTOM_DESKTOP_HEIGHT
+      }px)`,
+    },
+*/
+
+/*
+[theme.breakpoints.up('lg')]: {
+      height: BOTTOM_DESKTOP_HEIGHT,
+    },
+*/
+
+.divider {
+  height: $divider-height;
+  margin-top: auto;
+  background-color: darkgray;
+}
+
+.fat-footer {
+  height: 50px;
+  background-color: rgb(11, 11, 11);
+}
+
+/*
+ [theme.breakpoints.up('lg')]: {
+      display: 'none',
+    },
+*/
+.bottom-navigation-bar {
+  height: $bottom-navigation-bar-height;
+  background-color: gray;
+}
+
+/*
+    [theme.breakpoints.up('lg')]: {
+      display: 'block',
+    },
+*/
+.bottom-social-media-bar {
+  height: $bottom-social-media-bar-height;
+  background-color: gray;
+  display: none;
 }

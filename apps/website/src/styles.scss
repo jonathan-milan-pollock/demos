@@ -1,6 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @import '~@angular/material/theming';
+@import '~@fortawesome/fontawesome-svg-core/styles.css';
 
 // Plus imports for other components in your app.
 
@@ -55,14 +56,55 @@ $light-theme: mat-light-theme(
 
 @import './variables';
 
-html,
-body {
-  height: 100%;
-  font-size: 100%;
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  font-size: 16px;
 }
+
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+//**** Scrollbar Styles *****
+::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(0, 178, 169, 0.9);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 178, 169, 0.9);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #1e1e1e;
+}
+
+//**** Menu *****
+.menu .mat-menu-content:not(:empty) {
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 div.great-meter {

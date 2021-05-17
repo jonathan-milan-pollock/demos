@@ -1,0 +1,32 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { OptionsBarComponent } from './options-bar.component';
+import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
+
+<Meta
+  title="UI COMMON/Options Bar"
+  component={OptionsBarComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiUiCommonModule,
+      ],
+    }),
+  ]}
+/>
+
+# Options Bar
+
+<Story height="500px" name="Default">
+  {(args) => <drp-options-bar {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={OptionsBarComponent} />

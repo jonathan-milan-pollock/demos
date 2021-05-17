@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@dark-rush-photography/website/util';
+import { AuthGuard } from '@auth0/auth0-angular';
 
 import { AdminComponent } from './admin.component';
 
@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        pathMatch: 'full',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('./admin-pages/admin-pages.module').then(
             (module) => module.AdminPagesModule
@@ -89,6 +89,7 @@ const routes: Routes = [
             (module) => module.AdminSettingsModule
           ),
       },
+      { path: '**', redirectTo: '/admin' },
     ],
   },
 ];

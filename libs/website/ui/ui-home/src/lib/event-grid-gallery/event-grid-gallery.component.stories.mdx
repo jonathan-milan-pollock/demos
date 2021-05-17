@@ -1,0 +1,28 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { EventGridGalleryComponent } from './event-grid-gallery.component';
+import { WebsiteUiUiHomeModule } from '../website-ui-ui-home.module';
+
+<Meta
+  title="UI HOME/Event Grid Gallery"
+  component={EventGridGalleryComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiHomeModule],
+    }),
+  ]}
+/>
+
+# Event Grid Gallery
+
+<Story height="500px" name="Default">
+  {(args) => <drp-event-grid-gallery {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={EventGridGalleryComponent} />

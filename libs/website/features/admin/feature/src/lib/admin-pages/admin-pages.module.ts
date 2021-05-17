@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { AdminPagesComponent } from './admin-pages.component';
+import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-common';
 
 @NgModule({
   declarations: [AdminPagesComponent],
@@ -11,6 +12,7 @@ import { AdminPagesComponent } from './admin-pages.component';
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: AdminPagesComponent },
     ]),
+    WebsiteUiUiCommonModule,
   ],
 })
 export class AdminPagesModule {}

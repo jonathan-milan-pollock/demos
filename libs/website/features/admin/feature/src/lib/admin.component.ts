@@ -6,10 +6,11 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AuthService } from '@auth0/auth0-angular';
 import { Subscription } from 'rxjs';
 
 import { Page } from '@dark-rush-photography/website/types';
-import { AuthService, MetaService } from '@dark-rush-photography/website/util';
+import { MetaService } from '@dark-rush-photography/website/util';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -23,26 +24,16 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService,
-    private metaService: MetaService
+    private metaService: MetaService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.metaService.addMetadataForPage(Page.Admin, this.router.url);
-
-    this.authServiceSub = this.authService.authenticationChanged.subscribe(
-      (isAuthenticated) => {
-        this.isAuthenticated = isAuthenticated;
-      }
-    );
   }
 
-  onAuthenticate(): void {
-    if (this.isAuthenticated) {
-      this.authService.signOut();
-    } else {
-      this.authService.signIn();
-    }
+  onSignOut(): void {
+    this.authService.logout();
   }
 
   ngOnDestroy(): void {

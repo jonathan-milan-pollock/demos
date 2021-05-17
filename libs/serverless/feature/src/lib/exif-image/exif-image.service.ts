@@ -1,12 +1,15 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 
-import { ENV } from '@dark-rush-photography/shared-server/types';
+import { ENV } from '@dark-rush-photography/shared-types';
 import { formatMessage } from '@dark-rush-photography/shared-server/util';
-import { Env, PublishedImage } from '@dark-rush-photography/serverless/types';
+import {
+  Env,
+  ImageProcessActivity,
+} from '@dark-rush-photography/serverless/types';
 import {
   exifImage,
   exifImageArtist,
-  getPublishedImageBlobPath,
+  getBlobPath,
 } from '@dark-rush-photography/serverless/util';
 import {
   downloadBlob,
@@ -18,17 +21,17 @@ export class ExifImageService {
   constructor(@Inject(ENV) private readonly env: Env) {}
 
   async exifImage(
-    publishedImage: PublishedImage,
+    imageProcessActivity: ImageProcessActivity,
     year: number
-  ): Promise<PublishedImage> {
+  ): Promise<ImageProcessActivity> {
     Logger.log(formatMessage('ExifImage starting'));
 
     Logger.log(formatMessage('ExifImage downloading image blob'));
     const imageFilePath = await downloadBlob(
       this.env.azureStorageConnectionString,
-      'uploads',
-      getPublishedImageBlobPath(publishedImage),
-      publishedImage.imageName
+      'private',
+      getBlobPath('uploaded-image', imageProcessActivity.publishedImage),
+      imageProcessActivity.publishedImage.imageName
     );
 
     Logger.log(formatMessage('ExifImage executing'));
@@ -38,15 +41,21 @@ export class ExifImageService {
     );
 
     Logger.log(formatMessage('ExifImage uploading exifed image'));
+
+    const exifedImageProcess: ImageProcessActivity = {
+      type: 'exifed-image',
+      publishedImage: imageProcessActivity.publishedImage,
+    };
+
     //const exifedPublishedImage = updatePublishedImageWithImageProcess('exifed', publishedImage);
     //await uploadBlobFromBuffer(
     //  this.env.azureStorageConnectionString,
     //  'uploads',
-    //  getPublishedImageBlobPath(tinifiedPublishedImage),
+    //  getBlobPath(tinifiedPublishedImage),
     //  Buffer.from(buffer)
     //);
 
     Logger.log(formatMessage('ExifImage complete'));
-    return publishedImage;
+    return exifedImageProcess;
   }
 }

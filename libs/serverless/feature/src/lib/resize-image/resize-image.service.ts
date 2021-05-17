@@ -2,23 +2,20 @@ import * as fs from 'fs-extra';
 
 import { Injectable, Inject, Logger } from '@nestjs/common';
 
-import * as E from 'fp-ts/Either';
-
-import { ENV } from '@dark-rush-photography/shared-server/types';
+import { ENV } from '@dark-rush-photography/shared-types';
 import { formatMessage } from '@dark-rush-photography/shared-server/util';
 import {
   Env,
-  PublishedImage,
-  TileImageDimension,
+  ImageProcessActivity,
 } from '@dark-rush-photography/serverless/types';
 import {
-  getPublishedImageBlobPath,
-  resizeImageTile,
-  updatePublishedImageWithImageProcess,
-  updatePublishedImageWithImageDimension,
+  getBlobPath,
+  resizeImage,
+  getBlobPathWithImageDimension,
 } from '@dark-rush-photography/serverless/util';
 import {
   downloadBlob,
+  getBlobsNames,
   uploadBlobFromStream,
 } from '@dark-rush-photography/shared-server/data';
 
@@ -26,49 +23,61 @@ import {
 export class ResizeImageService {
   constructor(@Inject(ENV) private readonly env: Env) {}
 
-  async resizeImage(publishedImage: PublishedImage): Promise<PublishedImage> {
+  async resizeImage(
+    imageProcessActivity: ImageProcessActivity
+  ): Promise<ImageProcessActivity> {
     Logger.log(formatMessage('ResizeImage starting'));
 
-    if (!publishedImage.resizeImageDimensionType) throw new Error();
+    if (imageProcessActivity.data?.resizeImageDimensionType === undefined) {
+      throw new Error(
+        'resize image dimension type must be set for resizing image'
+      );
+    }
+
+    const {
+      type: imageProcessActivityType,
+      publishedImage,
+      data,
+    } = imageProcessActivity;
 
     Logger.log(formatMessage('ResizeImage downloading image blob'));
     const imageFilePath = await downloadBlob(
       this.env.azureStorageConnectionString,
-      'uploads',
-      getPublishedImageBlobPath(publishedImage),
+      'private',
+      getBlobPath(imageProcessActivityType, publishedImage),
       publishedImage.imageName
     );
 
-    const tileImageDimension = this.env.imageDimensionsConfig.find(
-      (imageDimension) => imageDimension.type === 'Tile'
+    const imageDimension = this.env.imageDimensionsConfig.find(
+      (imageDimension) => imageDimension.type === data.resizeImageDimensionType
     );
+    if (!imageDimension) throw new Error('Could not find image dimension');
 
     Logger.log(formatMessage('ResizeImage executing'));
-    const imageFilePathEither = await resizeImageTile(
+    const imageFilePathEither = await resizeImage(
       imageFilePath,
       publishedImage.imageName,
-      tileImageDimension as TileImageDimension
+      imageDimension
     );
+
     if (E.isLeft(imageFilePathEither)) throw imageFilePathEither.left;
 
     Logger.log(formatMessage('ResizeImage uploading resized image'));
-    const resizedPublishedImage = updatePublishedImageWithImageProcess(
-      publishedImage,
-      'resized-image'
-    );
-    const dimensionedPublishedImage = updatePublishedImageWithImageDimension(
-      resizedPublishedImage,
-      publishedImage.resizeImageDimensionType
-    );
-
     await uploadBlobFromStream(
       this.env.azureStorageConnectionString,
-      'uploads',
-      getPublishedImageBlobPath(dimensionedPublishedImage),
+      'private',
+      getBlobPathWithImageDimension(
+        'resized-image',
+        publishedImage,
+        imageDimension.type
+      ),
       fs.createReadStream(imageFilePathEither.right)
     );
 
     Logger.log(formatMessage('ResizeImage complete'));
-    return resizedPublishedImage;
+    return {
+      type: 'resized-image',
+      publishedImage: publishedImage,
+    };
   }
 }

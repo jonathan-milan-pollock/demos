@@ -8,7 +8,7 @@ import { getMetadata } from './meta.functions';
   providedIn: 'root',
 })
 export class MetaService {
-  constructor(private title: Title, private meta: Meta) {}
+  constructor(private readonly title: Title, private readonly meta: Meta) {}
 
   addMetadataForPage(page: Page, url: string): void {
     this.addMetadata(getMetadata(page), url);
@@ -19,6 +19,7 @@ export class MetaService {
 
     const { title, description } = metadata;
 
+    // TODO:  <link key={uuidv1()} rel="canonical" href={pageUrl} />
     if (title && description) {
       this.title.setTitle(title);
       this.meta.updateTag({

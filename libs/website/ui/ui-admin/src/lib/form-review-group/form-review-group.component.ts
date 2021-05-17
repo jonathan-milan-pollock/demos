@@ -11,7 +11,6 @@ import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 })
 export class FormReviewGroupComponent {
   @Input() reviewGroup?: FormGroup;
-  @Input() slugFormControlName = 'slug';
   @Input() nameFormControlName = 'name';
   @Input() textFormControlName = 'text';
 

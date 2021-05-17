@@ -1,0 +1,28 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { VideoComponent } from './video.component';
+import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
+
+<Meta
+  title="UI COMMON/Video"
+  component={VideoComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiAdminModule],
+    }),
+  ]}
+/>
+
+# Video
+
+<Story height="500px" name="Default">
+  {(args) => <drp-video {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={VideoComponent} />

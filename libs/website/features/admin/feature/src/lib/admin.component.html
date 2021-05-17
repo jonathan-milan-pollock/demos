@@ -1,9 +1,21 @@
-<header class="page-header">
-  <h1 class="title">Dark Rush Photography</h1>
-</header>
-<button (click)="onAuthenticate()" data-testid="sign-in-button">
-  {{ isAuthenticated ? 'Sign Out' : 'Sign In' }}
-</button>
-<main>
-  <router-outlet></router-outlet>
-</main>
+<div class="page">
+  <header class="page-header">
+    <h1>Dark Rush Photography</h1>
+  </header>
+  <nav>
+    <div class="top-nav-bar-container">
+      <ul *ngIf="authService.user$ | async as user">
+        <li>{{ user.name }}</li>
+        <li>{{ user.email }}</li>
+      </ul>
+
+      <drp-top-nav-bar (signOut)="onSignOut()"></drp-top-nav-bar>
+    </div>
+  </nav>
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+  <footer class="footer">
+    <div class="copyright-bar"></div>
+  </footer>
+</div>

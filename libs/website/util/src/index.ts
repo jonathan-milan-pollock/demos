@@ -1,5 +1,3 @@
-export * from './lib/auth/auth.guard';
-export * from './lib/auth/auth.service';
 export * from './lib/guards/save-changes.guard';
 
 // meta

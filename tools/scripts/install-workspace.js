@@ -20,11 +20,6 @@ const consoleLogOrExec = (isReady, command) => {
   return execPromise(command);
 };
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
 const execInstallSchematics = (isReady) =>
   Promise.resolve(console.log('### schematics'))
     .then(() => console.log())
@@ -43,7 +38,6 @@ const execInstallDevDependencies = (isReady) =>
 const execInstallDependencies = (isReady) =>
   Promise.resolve(console.log('### dependencies'))
     .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i fp-ts'))
     .then(() => consoleLogOrExec(isReady, 'npm i fs-extra'))
     .then(() => consoleLogOrExec(isReady, 'npm i uuid'));
 
@@ -68,15 +62,6 @@ const execGenerateApps = (isReady) =>
         'npx nx g @nrwl/nest:app serverless --unitTestRunner=none --tags=scope:serverless,type:app'
       )
     );
-
-const getWebsiteFeatureLibCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/features/${libName}/feature --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
-
-const getWebsiteUiLibCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp`;
-
-const getWebsiteUiLibWithUnitTestsCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=jest --tags=scope:website,type:ui --prefix=drp`;
 
 const execGenerateApiLibs = (isReady) =>
   Promise.resolve(console.log('#### api libraries'))
@@ -192,6 +177,15 @@ const execGenerateUiStorybook = (isReady) =>
       )
     );
 
+const getWebsiteFeatureLibCommand = (libName) =>
+  `npx nx g @nrwl/angular:lib website/features/${libName}/feature --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
+
+const getWebsiteUiLibCommand = (libName) =>
+  `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp`;
+
+const getWebsiteUiLibWithUnitTestsCommand = (libName) =>
+  `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=jest --tags=scope:website,type:ui --prefix=drp`;
+
 const execGenerateWebsiteLibs = (isReady) =>
   Promise.resolve(console.log('#### website libraries'))
     .then(() => console.log())
@@ -218,6 +212,7 @@ const execGenerateWebsiteLibs = (isReady) =>
     .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-admin')))
     .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-common')))
     .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-home')))
+    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shell')))
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -342,6 +337,9 @@ const execAddStorybook = (isReady) =>
     .then(() =>
       consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-home'))
     )
+    .then(() =>
+      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-shell'))
+    )
     .then(() => consoleLogOrExec(isReady, 'npm uninstall @storybook/angular'))
     .then(() =>
       consoleLogOrExec(isReady, 'npm uninstall @storybook/addon-knobs')
@@ -369,7 +367,19 @@ const execAddImageProcessing = (isReady) => {
     .then(() => consoleLogOrExec(isReady, 'npm i tinify'))
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
-    .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'));
+    .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
+    .then(() => consoleLogOrExec(isReady, 'npm i datauri'));
+};
+
+const execAddAuthentication = (isReady) => {
+  Promise.resolve(console.log('### add authentication'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/passport-jwt'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @auth0/auth0-angular'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/passport'))
+    .then(() => consoleLogOrExec(isReady, 'npm i passport'))
+    .then(() => consoleLogOrExec(isReady, 'npm i passport-jwt'))
+    .then(() => consoleLogOrExec(isReady, 'npm i jwks-rsa'));
 };
 
 const execAddFontAwesome = (isReady) =>
@@ -423,7 +433,14 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddImageProcessing(isReady))
     .then(() => console.log())
+    .then(() => execAddAuthentication(isReady))
+    .then(() => console.log())
     .then(() => execAddFontAwesome(isReady));
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 let isReady = false;
 Promise.resolve(execInstall(isReady))

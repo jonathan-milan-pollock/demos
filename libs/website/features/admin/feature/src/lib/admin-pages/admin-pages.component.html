@@ -1,10 +1,42 @@
-<ul>
-  <li><a routerLink="home">Home Admin</a></li>
-  <li><a routerLink="reviews">Reviews Admin</a></li>
-  <li><a routerLink="photo-of-the-week">Photo of the Week Admin</a></li>
-  <li><a routerLink="events">Events Admin</a></li>
-  <li><a routerLink="destinations">Destinations Admin</a></li>
-  <li><a routerLink="videos">Videos Admin</a></li>
-  <li><a routerLink="sitemap">Sitemap Admin</a></li>
-  <li><a routerLink="settings">Settings Admin</a></li>
-</ul>
+<div class="container">
+  <drp-icon-tile
+    name="Admin Favorites"
+    [faIcon]="faCameraAlt"
+    (clicked)="onClicked('home')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Reviews"
+    [faIcon]="faEdit"
+    (clicked)="onClicked('reviews')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Photo of the Week"
+    [faIcon]="faCalendar"
+    (clicked)="onClicked('photo-of-the-week')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Events"
+    [faIcon]="faBookOpen"
+    (clicked)="onClicked('events')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Destinations"
+    [faIcon]="faCaravan"
+    (clicked)="onClicked('destinations')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Videos"
+    [faIcon]="faFilmAlt"
+    (clicked)="onClicked('videos')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Sitemap"
+    [faIcon]="faCameraPolaroid"
+    (clicked)="onClicked('sitemap')"
+  ></drp-icon-tile>
+  <drp-icon-tile
+    name="Admin Settings"
+    [faIcon]="faCog"
+    (clicked)="onClicked('settings')"
+  ></drp-icon-tile>
+</div>

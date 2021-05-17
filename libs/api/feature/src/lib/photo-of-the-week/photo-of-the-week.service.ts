@@ -4,10 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
-import {
-  DocumentModel,
-  Document,
-} from '@dark-rush-photography/shared-server/data';
+import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class PhotoOfTheWeekService {
@@ -30,7 +27,7 @@ export class PhotoOfTheWeekService {
     return photoOfTheWeek;
   }
 
-  async addPhotoOfTheWeekc(photoOfTheWeek: PhotoOfTheWeek): Promise<string> {
+  async addPhotoOfTheWeek(photoOfTheWeek: PhotoOfTheWeek): Promise<string> {
     const addedPhotoOfTheWeek = await new this.photoOfTheWeekModel(
       photoOfTheWeek
     ).save();

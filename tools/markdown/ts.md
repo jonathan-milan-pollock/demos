@@ -4,8 +4,6 @@
 
 ## Recommended Reading
 
-- [Practical Guide to Fp-ts](https://dev.to/ryanleecode/series/7325)
-
 ## value can be returned immediately?
 
 - use a generator or async generator, pull based

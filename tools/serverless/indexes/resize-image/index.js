@@ -7,7 +7,7 @@ function default_1(context) {
     req: {
       method: 'GET',
       originalUrl: 'http://localhost/api/resize-image',
-      body: context.bindingData.data,
+      body: context.bindingData,
     },
   };
 
