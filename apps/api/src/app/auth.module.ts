@@ -11,5 +11,6 @@ import { JwtAuthGuard, JwtStrategy } from '@dark-rush-photography/api/util';
       useClass: JwtAuthGuard,
     },
   ],
+  exports: [PassportModule],
 })
 export class AuthModule {}

@@ -4,8 +4,7 @@
       <a
         class="top-nav-bar-button"
         routerLink="/"
-        routerLinkActive="top-nav-bar-button-active"
-        [routerLinkActiveOptions]="{ exact: true }"
+        [ngClass]="{ 'top-nav-bar-button-active': isHomePage }"
         mat-raised-button
         aria-label="Link to Home Page"
         data-testid="home-button"
@@ -54,21 +53,17 @@
         src="/assets/logos/dark-rush-photography-logo.png"
         alt="image"
       />
-      <a
-        class="top-nav-bar-button"
-        routerLinkActive="top-nav-bar-button-active"
-        mat-raised-button
-        aria-label="Sign In"
-        data-testid="sign-in-button"
-      >
-        <fa-icon
-          class="top-nav-bar-button-icon"
-          [icon]="faInfoCircle"
-          size="lg"
-        ></fa-icon>
-        Sign In
-      </a>
-      <drp-kabob-menu></drp-kabob-menu>
+      <div *ngIf="user && user.picture">
+        <div
+          [ngStyle]="{ 'background-image': 'url(' + user.picture + ')' }"
+          class="user-picture"
+        ></div>
+      </div>
+      <drp-kabob-menu
+        [isAuthenticated]="isAuthenticated"
+        (signIn)="onSignIn()"
+        (signOut)="onSignOut()"
+      ></drp-kabob-menu>
     </div>
   </div>
 </mat-toolbar>

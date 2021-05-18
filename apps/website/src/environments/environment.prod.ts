@@ -1,3 +1,5 @@
+import { HttpMethod } from '@auth0/auth0-angular';
+
 import { Env } from '@dark-rush-photography/website/types';
 
 export const environment: Env = {
@@ -6,6 +8,17 @@ export const environment: Env = {
   auth: {
     domain: '%%AUTH_DOMAIN%%',
     clientId: '%%AUTH_CLIENT_ID%%',
-    redirectUri: '%%AUTH_REDIRECT_URI%%',
+    audience: '%%AUTH_AUDIENCE%%',
+    httpInterceptor: {
+      //TODO: Refine this list
+      allowedList: [
+        '/api/*',
+        {
+          uri: '/api/',
+          httpMethod: HttpMethod.Get,
+          allowAnonymous: true,
+        },
+      ],
+    },
   },
 };

@@ -56,4 +56,34 @@
     ></fa-icon>
     <span>YouTube</span>
   </button>
+  <button
+    *ngIf="!isAuthenticated"
+    class="menu-item"
+    mat-menu-item
+    data-testid="sign-in-menu-item"
+    (click)="onSignIn()"
+  >
+    <fa-icon
+      class="menu-item-icon"
+      [icon]="faSignInAlt"
+      size="lg"
+      [fixedWidth]="true"
+    ></fa-icon>
+    <span>Sign In</span>
+  </button>
+  <button
+    *ngIf="isAuthenticated"
+    class="menu-item"
+    mat-menu-item
+    data-testid="sign-out-menu-item"
+    (click)="onSignOut()"
+  >
+    <fa-icon
+      class="menu-item-icon"
+      [icon]="faSignOutAlt"
+      size="lg"
+      [fixedWidth]="true"
+    ></fa-icon>
+    <span>Sign Out</span>
+  </button>
 </mat-menu>

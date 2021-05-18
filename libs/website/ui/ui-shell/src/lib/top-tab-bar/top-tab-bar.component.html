@@ -1,0 +1,58 @@
+<nav mat-tab-nav-bar class="tab-bar">
+  <a
+    class="tab"
+    [ngClass]="{ 'tab-active': activeUrl == '/' }"
+    mat-tab-link
+    routerLink="/"
+    [active]="activeUrl == '/'"
+    aria-label="Link to Favorites"
+  >
+    <fa-icon class="tab-icon" [icon]="faCameraAlt" size="lg"></fa-icon>
+    Favorites
+  </a>
+  <a
+    class="tab"
+    [ngClass]="{ 'tab-active': activeUrl == '/photo-of-the-week' }"
+    mat-tab-link
+    routerLink="/photo-of-the-week"
+    [active]="activeUrl == '/photo-of-the-week'"
+    aria-label="Link to Photo of the Week"
+  >
+    <fa-icon class="tab-icon" [icon]="faCalendar" size="lg"></fa-icon>
+    Photo of the Week
+  </a>
+  <a
+    class="tab"
+    [ngClass]="{ 'tab-active': activeUrl == '/events' }"
+    mat-tab-link
+    routerLink="/events"
+    [active]="activeUrl == '/events'"
+    aria-label="Link to Events"
+  >
+    <fa-icon class="tab-icon" [icon]="faBookOpen" size="lg"></fa-icon>
+    Events
+  </a>
+  <a
+    class="tab"
+    [ngClass]="{ 'tab-active': activeUrl == '/destinations' }"
+    mat-tab-link
+    routerLink="/destinations"
+    [active]="activeUrl == '/destinations'"
+    aria-label="Link to Destinations"
+  >
+    <fa-icon class="tab-icon" [icon]="faCaravan" size="lg"></fa-icon>
+    Destinations
+  </a>
+  <a
+    *ngIf="isAdmin"
+    class="tab"
+    [ngClass]="{ 'tab-active': activeUrl == '/admin' }"
+    mat-tab-link
+    routerLink="/admin"
+    [active]="activeUrl == '/admin'"
+    aria-label="Link to Admin"
+  >
+    <fa-icon class="tab-icon" [icon]="faSlidersVSquare" size="lg"></fa-icon>
+    Admin
+  </a>
+</nav>

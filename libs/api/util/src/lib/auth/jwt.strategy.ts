@@ -1,7 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 
 import { ENV } from '@dark-rush-photography/shared-types';
@@ -15,12 +15,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `${env.auth0IssuerUrl}.well-known/jwks.json`,
+        jwksUri: `https://darkrushphotography.us.auth0.com/.well-known/jwks.json`,
       }),
-
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      audience: env.auth0Audience,
-      issuer: env.auth0IssuerUrl,
+      audience: 'https://www.darkrushphotography.com',
+      issuer: 'https://auth.darkrushphotography.com/',
       algorithms: ['RS256'],
     });
   }

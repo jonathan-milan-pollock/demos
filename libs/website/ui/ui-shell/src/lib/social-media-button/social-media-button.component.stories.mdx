@@ -12,14 +12,14 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 import { SocialMediaButtonComponent } from './social-media-button.component';
-import { WebsiteUiUiHomeModule } from '../website-ui-ui-home.module';
+import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
 
 <Meta
   title="UI SHELL/Social Media Button"
   component={SocialMediaButtonComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiHomeModule],
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiShellModule],
     }),
   ]}
   argTypes={{

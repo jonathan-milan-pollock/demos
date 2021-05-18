@@ -1,7 +1,7 @@
 <p>reviews works!</p>
+<button (click)="onAddReview()">Add Review</button>
 <div>
   <h1>Reviews</h1>
   <div *ngFor="let review of reviews$ | async">{{ review.title }}</div>
 </div>
-<button (click)="onAddReview()">Add Review</button>
 <a routerLink="review">Review</a>

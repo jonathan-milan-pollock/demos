@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@auth0/auth0-angular';
 
+import { Auth0AuthGuard } from '@dark-rush-photography/website/util';
 import { AdminComponent } from './admin.component';
 
 const routes: Routes = [
@@ -11,7 +11,6 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        canActivate: [AuthGuard],
         loadChildren: () =>
           import('./admin-pages/admin-pages.module').then(
             (module) => module.AdminPagesModule
@@ -19,7 +18,7 @@ const routes: Routes = [
       },
       {
         path: 'home',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         //canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-home/admin-home.module').then(
@@ -28,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'reviews',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         //canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-reviews/admin-reviews.module').then(
@@ -37,7 +36,7 @@ const routes: Routes = [
       },
       {
         path: 'photo-of-the-week',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         //canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import(
@@ -46,7 +45,7 @@ const routes: Routes = [
       },
       {
         path: 'events',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-events/admin-events.module').then(
@@ -55,7 +54,7 @@ const routes: Routes = [
       },
       {
         path: 'destinations',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-destinations/admin-destinations.module').then(
@@ -64,7 +63,7 @@ const routes: Routes = [
       },
       {
         path: 'videos',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-videos/admin-videos.module').then(
@@ -73,7 +72,7 @@ const routes: Routes = [
       },
       {
         path: 'sitemap',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-sitemap/admin-sitemap.module').then(
@@ -82,14 +81,14 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        canActivate: [AuthGuard],
+        canActivate: [Auth0AuthGuard],
         // canDeactivate: [SaveChangesGuard],
         loadChildren: () =>
           import('./admin-settings/admin-settings.module').then(
             (module) => module.AdminSettingsModule
           ),
       },
-      { path: '**', redirectTo: '/admin' },
+      { path: '**', redirectTo: '/' },
     ],
   },
 ];

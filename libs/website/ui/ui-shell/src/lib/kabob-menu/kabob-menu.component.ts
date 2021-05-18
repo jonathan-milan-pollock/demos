@@ -10,6 +10,8 @@ import {
   faEllipsisV,
   faCheckSquare,
   faSquare,
+  faSignInAlt,
+  faSignOutAlt,
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faFacebookSquare,
@@ -32,12 +34,25 @@ export class KabobMenuComponent {
   faYoutube = faYoutube;
   faCheckSquare = faCheckSquare;
   faSquare = faSquare;
+  faSignInAlt = faSignInAlt;
+  faSignOutAlt = faSignOutAlt;
 
   @Input() isDarkModeSelected = true;
+  @Input() isAuthenticated = false;
 
   @Output() clicked = new EventEmitter<string>();
+  @Output() signIn = new EventEmitter<void>();
+  @Output() signOut = new EventEmitter<void>();
 
   onClicked(iconName: string): void {
     this.clicked.emit(iconName);
+  }
+
+  onSignIn(): void {
+    this.signIn.emit();
+  }
+
+  onSignOut(): void {
+    this.signOut.emit();
   }
 }

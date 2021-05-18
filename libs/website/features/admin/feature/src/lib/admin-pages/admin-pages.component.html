@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="(isAuthenticated$ | async) == true" class="container">
   <drp-icon-tile
     name="Admin Favorites"
     [faIcon]="faCameraAlt"

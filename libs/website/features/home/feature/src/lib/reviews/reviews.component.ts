@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   Component,
   ChangeDetectionStrategy,
@@ -65,7 +65,6 @@ export class ReviewsComponent implements OnInit {
   }
 
   onAddReview(): void {
-    console.log('add review');
     this.http
       .post<Review[]>('http://localhost:4200/api/reviews', {
         type: 'Review',

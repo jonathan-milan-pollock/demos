@@ -4,17 +4,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { StoreModule } from '@ngrx/store';
-import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
+import {
+  AuthModule,
+  AuthHttpInterceptor,
+  HttpMethod,
+} from '@auth0/auth0-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { config } from '@fortawesome/fontawesome-svg-core';
 
 import { environment } from '../environments/environment';
 import { reviewReducer } from '@dark-rush-photography/website/data';
 import { photoOfTheWeekReducer } from '@dark-rush-photography/website/data';
 import { eventReducer } from '@dark-rush-photography/website/data';
 import { destinationReducer } from '@dark-rush-photography/website/data';
-import { WebsiteUiUiHomeModule } from '@dark-rush-photography/website/ui/ui-home';
+import { Auth0AuthService } from '@dark-rush-photography/website/util';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
+
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,15 +38,26 @@ import { AppRoutingModule } from './app-routing.module';
       destination: destinationReducer,
     }),
     AuthModule.forRoot({
-      ...environment.auth,
+      domain: 'auth.darkrushphotography.com',
+      clientId: 'itlDBOCejY2AxCCR4qNZRnI1AUwWb9O3',
+      audience: 'https://www.darkrushphotography.com',
+      httpInterceptor: {
+        allowedList: ['http://localhost:4200/api/*'],
+      },
     }),
     FontAwesomeModule,
-    WebsiteUiUiHomeModule,
+    WebsiteUiUiShellModule,
+    MatCardModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
+    Auth0AuthService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    config.autoAddCss = false;
+  }
+}
