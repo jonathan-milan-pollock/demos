@@ -73,13 +73,6 @@ function searchAddressHandler(event: Event) {
 form.addEventListener("submit", searchAddressHandler);
 ```
 
-```ts
-/*
-- @Inject(PLATFORM_ID) private platformId and isPlatformBrowser to check if running in browser (browser api such as localstorage not available)
-
-*/
-```
-
 ## best practices Cypress
 
 - Set state directly & programmatically, don't need to use the UI to build up state

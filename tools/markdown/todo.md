@@ -61,15 +61,7 @@ https://iptc.org/standards/photo-metadata/quick-guide-to-iptc-photo-metadata-and
 
 // OpenSeadragon
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
-
-// TODO: Implement service worker
-
 // ReactGA.initialize('UA-111745461-1');
-//TODO: Check if all of the fontawesome icons are used
 // TODO: Accessiblity
 
 //a:link { color: blue; } /_ Unvisited links _/

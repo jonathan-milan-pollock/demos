@@ -5,14 +5,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TitleBarBackButtonComponent } from './title-bar-back-button.component';
-import { WebsiteUiUiHomeModule } from '../website-ui-ui-home.module';
+import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
 
 <Meta
   title="UI SHELL/Title Bar Back Button"
   component={TitleBarBackButtonComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiHomeModule],
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiShellModule],
     }),
   ]}
 />
