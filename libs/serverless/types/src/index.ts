@@ -1,3 +1,8 @@
+// constants
+export * from './lib/constants/image-artist-exif.constants';
+export * from './lib/constants/image-dimensions.constants';
+export * from './lib/constants/image-fit.constants';
+
 // interfaces
 export * from './lib/interfaces/env-dev.interface';
 export * from './lib/interfaces/env.interface';

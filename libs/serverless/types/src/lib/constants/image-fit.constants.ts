@@ -1,0 +1,1 @@
+export const IMAGE_FIT_BACKGROUND_COLOR = '#FFF';

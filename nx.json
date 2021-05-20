@@ -92,10 +92,10 @@
     "website-data": {
       "tags": ["scope:website", "type:data-access"]
     },
-    "website-features-admin-feature": {
+    "website-features-admin": {
       "tags": ["scope:website", "type:feature"]
     },
-    "website-features-home-feature": {
+    "website-features-home": {
       "tags": ["scope:website", "type:feature"]
     },
     "website-types": {
@@ -113,11 +113,11 @@
     "website-ui-ui-home": {
       "tags": ["scope:website", "type:ui"]
     },
-    "website-util": {
-      "tags": ["scope:website", "type:util"]
-    },
     "website-ui-ui-shell": {
       "tags": ["scope:website", "type:ui"]
+    },
+    "website-util": {
+      "tags": ["scope:website", "type:util"]
     }
   }
 }

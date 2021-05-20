@@ -7,6 +7,7 @@ import { formatMessage } from '@dark-rush-photography/shared-server/util';
 import {
   Env,
   ImageProcessActivity,
+  IMAGE_DIMENSIONS,
 } from '@dark-rush-photography/serverless/types';
 import {
   getBlobPath,
@@ -48,19 +49,17 @@ export class ResizeImageService {
       publishedImage.imageName
     );
 
-    const imageDimension = this.env.imageDimensionsConfig.find(
+    const imageDimension = IMAGE_DIMENSIONS.find(
       (imageDimension) => imageDimension.type === data.resizeImageDimensionType
     );
     if (!imageDimension) throw new Error('Could not find image dimension');
 
     Logger.log(formatMessage('ResizeImage executing'));
-    const imageFilePathEither = await resizeImage(
+    const resizedImageFilePath = await resizeImage(
       imageFilePath,
       publishedImage.imageName,
       imageDimension
     );
-
-    if (E.isLeft(imageFilePathEither)) throw imageFilePathEither.left;
 
     Logger.log(formatMessage('ResizeImage uploading resized image'));
     await uploadBlobFromStream(
@@ -71,7 +70,7 @@ export class ResizeImageService {
         publishedImage,
         imageDimension.type
       ),
-      fs.createReadStream(imageFilePathEither.right)
+      fs.createReadStream(resizedImageFilePath)
     );
 
     Logger.log(formatMessage('ResizeImage complete'));

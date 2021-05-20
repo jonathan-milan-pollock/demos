@@ -3,24 +3,31 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { StoreModule } from '@ngrx/store';
-import {
-  AuthModule,
-  AuthHttpInterceptor,
-  HttpMethod,
-} from '@auth0/auth0-angular';
+import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { config } from '@fortawesome/fontawesome-svg-core';
 
-import { environment } from '../environments/environment';
-import { reviewReducer } from '@dark-rush-photography/website/data';
-import { photoOfTheWeekReducer } from '@dark-rush-photography/website/data';
-import { eventReducer } from '@dark-rush-photography/website/data';
-import { destinationReducer } from '@dark-rush-photography/website/data';
-import { Auth0AuthService } from '@dark-rush-photography/website/util';
+import {
+  Auth0AuthService,
+  DestinationsService,
+  ReviewsService,
+  ReviewsServiceMock,
+} from '@dark-rush-photography/website/data';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { RootStoreModule } from './root-store.module';
 import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
+
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
+import {
+  AuthStoreModule,
+  DestinationStoreModule,
+  EventStoreModule,
+  PhotoOfTheWeekStoreModule,
+  ReviewStoreModule,
+} from '@dark-rush-photography/website/data';
 
 import { MatCardModule } from '@angular/material/card';
 
@@ -28,30 +35,33 @@ import { MatCardModule } from '@angular/material/card';
   declarations: [AppComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    StoreModule.forRoot({
-      review: reviewReducer,
-      photoOfTheWeek: photoOfTheWeekReducer,
-      event: eventReducer,
-      destination: destinationReducer,
-    }),
     AuthModule.forRoot({
       domain: 'auth.darkrushphotography.com',
       clientId: 'itlDBOCejY2AxCCR4qNZRnI1AUwWb9O3',
       audience: 'https://www.darkrushphotography.com',
       httpInterceptor: {
-        allowedList: ['http://localhost:4200/api/*'],
+        allowedList: ['http://localhost:4200/api/admin/*'],
       },
     }),
     FontAwesomeModule,
+    AppRoutingModule,
+    //AuthStoreModule,
+    DestinationStoreModule,
+    //EventStoreModule,
+    //PhotoOfTheWeekStoreModule,
+    ReviewStoreModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     WebsiteUiUiShellModule,
     MatCardModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
     Auth0AuthService,
+    DestinationsService,
+    ReviewsService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

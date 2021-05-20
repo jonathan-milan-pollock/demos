@@ -16,50 +16,64 @@ export const downloadBlob = (
   azureStorageContainerType: AzureStorageContainerType,
   blobName: string,
   fileName: string
-): Promise<string> =>
-  pipe(
-    azureStorageConnectionString,
-    getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(azureStorageContainerType),
-    getAzureStorageBlockBlobClient(blobName),
-    downloadAzureStorageBlobToFile(fileName)
+): Promise<string> => {
+  const azureStorageBlobServiceClient = getAzureStorageBlobServiceClient(
+    azureStorageConnectionString
   );
+  const azureStorageContainerClient = getAzureStorageContainerClient(
+    azureStorageContainerType
+  )(azureStorageBlobServiceClient);
+  const azureStorageBlockBlobClient = getAzureStorageBlockBlobClient(blobName)(
+    azureStorageContainerClient
+  );
+  return downloadAzureStorageBlobToFile(fileName)(azureStorageBlockBlobClient);
+};
 
 export const uploadBlobFromBuffer = (
   azureStorageConnectionString: string,
   azureStorageContainerType: AzureStorageContainerType,
   blobName: string,
   buffer: Buffer
-): Promise<string | undefined> =>
-  pipe(
-    azureStorageConnectionString,
-    getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(azureStorageContainerType),
-    getAzureStorageBlockBlobClient(blobName),
-    uploadBufferToAzureStorageBlob(buffer)
+): Promise<string | undefined> => {
+  const azureStorageBlobServiceClient = getAzureStorageBlobServiceClient(
+    azureStorageConnectionString
   );
+  const azureStorageContainerClient = getAzureStorageContainerClient(
+    azureStorageContainerType
+  )(azureStorageBlobServiceClient);
+  const azureStorageBlockBlobClient = getAzureStorageBlockBlobClient(blobName)(
+    azureStorageContainerClient
+  );
+  return uploadBufferToAzureStorageBlob(buffer)(azureStorageBlockBlobClient);
+};
 
 export const uploadBlobFromStream = (
   azureStorageConnectionString: string,
   azureStorageContainerType: AzureStorageContainerType,
   blobName: string,
   stream: Readable
-): Promise<string | undefined> =>
-  pipe(
-    azureStorageConnectionString,
-    getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(azureStorageContainerType),
-    getAzureStorageBlockBlobClient(blobName),
-    uploadStreamToAzureStorageBlob(stream)
+): Promise<string | undefined> => {
+  const azureStorageBlobServiceClient = getAzureStorageBlobServiceClient(
+    azureStorageConnectionString
   );
+  const azureStorageContainerClient = getAzureStorageContainerClient(
+    azureStorageContainerType
+  )(azureStorageBlobServiceClient);
+  const azureStorageBlockBlobClient = getAzureStorageBlockBlobClient(blobName)(
+    azureStorageContainerClient
+  );
+  return uploadStreamToAzureStorageBlob(stream)(azureStorageBlockBlobClient);
+};
 
 export const getBlobsNames = (
   azureStorageConnectionString: string,
   azureStorageContainerType: AzureStorageContainerType
-): Promise<string[]> =>
-  pipe(
-    azureStorageConnectionString,
-    getAzureStorageBlobServiceClient,
-    getAzureStorageContainerClient(azureStorageContainerType),
-    getAzureStorageBlobNames
+): Promise<string[]> => {
+  const azureStorageBlobServiceClient = getAzureStorageBlobServiceClient(
+    azureStorageConnectionString
   );
+  const azureStorageContainerClient = getAzureStorageContainerClient(
+    azureStorageContainerType
+  )(azureStorageBlobServiceClient);
+  return getAzureStorageBlobNames(azureStorageContainerClient);
+};

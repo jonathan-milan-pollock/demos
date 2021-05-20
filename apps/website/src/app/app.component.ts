@@ -4,9 +4,19 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { Auth0User } from '@dark-rush-photography/website/types';
-import { Auth0AuthService } from '@dark-rush-photography/website/util';
+
+import { select, Store } from '@ngrx/store';
 import { EMPTY, Observable, Subscription } from 'rxjs';
+
+import { Auth0User } from '@dark-rush-photography/website/types';
+import {
+  Auth0AuthService,
+  AppState,
+  selectAllReviews,
+  loadReviews,
+} from '@dark-rush-photography/website/data';
+import { Destination, Review } from '@dark-rush-photography/shared-types';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'drp-root',
@@ -15,18 +25,28 @@ import { EMPTY, Observable, Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  isAuthenticated$: Observable<boolean> = EMPTY;
   private auth0UserSubscription?: Subscription;
+
+  isAuthenticated$: Observable<boolean> = EMPTY;
   user?: Auth0User;
 
-  constructor(private readonly auth0AuthService: Auth0AuthService) {}
+  destinations$: Observable<Destination[]> = EMPTY;
+  reviews$: Observable<Review[]> = EMPTY;
 
-  //TODO: Use authService.error$.subscribe((error) => console.log(error));
+  constructor(
+    private readonly auth0AuthService: Auth0AuthService,
+    private readonly store$: Store<AppState>
+  ) {}
+
   ngOnInit(): void {
+    this.reviews$ = this.store$
+      .select('review')
+      .pipe(map((reviewsState) => selectAllReviews(reviewsState)));
     this.isAuthenticated$ = this.auth0AuthService.isAuthenticated$;
     this.auth0UserSubscription = this.auth0AuthService.user$.subscribe(
       (user) => (this.user = user as Auth0User)
     );
+    this.store$.dispatch(loadReviews());
   }
 
   get isAdmin(): boolean {

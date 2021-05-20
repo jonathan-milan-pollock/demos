@@ -15,71 +15,49 @@ import {
   getSocialMediaPublishedImage,
 } from './publish-service-image.functions';
 
-export const getPublishedImageForUploadedImageFileNameSections = (
-  uploadedImageFileNameSections: string[]
-) => (
-  publishServiceType: PublishServiceType
-): E.Either<Error, PublishedImage> => {
-  switch (publishServiceType) {
-    case 'BestOfImages':
-      return E.right(
-        getBestOfImagesPublishedImage(uploadedImageFileNameSections)
-      );
-    case 'Home':
-      return E.right(getHomePublishedImage(uploadedImageFileNameSections));
-    case 'About':
-      return E.right(getAboutPublishedImage(uploadedImageFileNameSections));
-    case 'Reviews':
-      return E.right(getReviewsPublishedImage(uploadedImageFileNameSections));
-    case 'Review':
-      return E.right(getReviewPublishedImage(uploadedImageFileNameSections));
-    case 'PhotoOfTheWeek':
-      return E.right(
-        getPhotoOfTheWeekPublishedImage(uploadedImageFileNameSections)
-      );
-    case 'Events':
-      return E.right(getEventsPublishedImage(uploadedImageFileNameSections));
-    case 'Destinations':
-      return E.right(
-        getDestinationsPublishedImage(uploadedImageFileNameSections)
-      );
-    case 'SocialMedia':
-      return E.right(
-        getSocialMediaPublishedImage(uploadedImageFileNameSections)
-      );
-    default:
-      return E.left(new Error());
-  }
-};
-
 export const getPublishServiceName = (
   firstUploadedImageFileNameSection: string
 ): string =>
   firstUploadedImageFileNameSection.toLowerCase().replace(/\s+/g, '');
 
+const publishServiceNameMap = new Map<string, PublishServiceType>([
+  ['bestofimages', 'BestOfImages'],
+  ['home', 'Home'],
+  ['about', 'About'],
+  ['reviews', 'Reviews'],
+  ['review', 'Review'],
+  ['events', 'Events'],
+  ['photo-of-the-week', 'PhotoOfTheWeek'],
+  ['destinations', 'Destinations'],
+  ['socialmedia', 'SocialMedia'],
+]);
+
 export const getPublishServiceType = (
   publishServiceName: string
-): E.Either<Error, PublishServiceType> => {
-  switch (publishServiceName) {
-    case 'bestofimages':
-      return E.right('BestOfImages');
-    case 'home':
-      return E.right('Home');
-    case 'about':
-      return E.right('About');
-    case 'reviews':
-      return E.right('Reviews');
-    case 'review':
-      return E.right('Reviews');
-    case 'events':
-      return E.right('Events');
-    case 'photo-of-the-week':
-      return E.right('PhotoOfTheWeek');
-    case 'destinations':
-      return E.right('Destinations');
-    case 'socialmedia':
-      return E.right('SocialMedia');
-    default:
-      return E.left(new Error());
-  }
+): PublishServiceType | undefined =>
+  publishServiceNameMap.get(publishServiceName);
+
+const publishedImageMap = new Map<
+  string,
+  (uploadedImageFileNameSections: string[]) => PublishedImage
+>([
+  ['BestOfImages', getBestOfImagesPublishedImage],
+  ['Home', getHomePublishedImage],
+  ['About', getAboutPublishedImage],
+  ['Reviews', getReviewsPublishedImage],
+  ['Review', getReviewPublishedImage],
+  ['Event', getEventsPublishedImage],
+  ['PhotoOfTheWeek', getPhotoOfTheWeekPublishedImage],
+  ['Destinations', getDestinationsPublishedImage],
+  ['SocialMedia', getSocialMediaPublishedImage],
+]);
+
+export const getPublishedImageForUploadedImageFileNameSections = (
+  publishServiceType: PublishServiceType,
+  uploadedImageFileNameSections: string[]
+): PublishedImage | undefined => {
+  const publishedImageFn = publishedImageMap.get(publishServiceType);
+  return publishedImageFn
+    ? publishedImageFn(uploadedImageFileNameSections)
+    : undefined;
 };

@@ -178,7 +178,7 @@ const execGenerateUiStorybook = (isReady) =>
     );
 
 const getWebsiteFeatureLibCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/features/${libName}/feature --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
+  `npx nx g @nrwl/angular:lib website/features/${libName} --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
 
 const getWebsiteUiLibCommand = (libName) =>
   `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp`;
@@ -266,7 +266,10 @@ const execAddNgrx = (isReady) =>
     .then(() => console.log())
     .then(() =>
       consoleLogOrExec(isReady, 'npx ng add @ngrx/store --project=website')
-    );
+    )
+    .then(() => consoleLogOrExec(isReady, 'npm i @ngrx/effects'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @ngrx/entity'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @ngrx/store-devtools'));
 
 const execAddAngularMaterial = (isReady) =>
   Promise.resolve(console.log('### add angular material'))

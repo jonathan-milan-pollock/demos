@@ -313,14 +313,6 @@
           "options": {
             "lintFilePatterns": ["libs/api/feature/**/*.ts"]
           }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/feature"],
-          "options": {
-            "jestConfig": "libs/api/feature/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
@@ -659,35 +651,35 @@
         }
       }
     },
-    "website-features-admin-feature": {
+    "website-features-admin": {
       "projectType": "library",
-      "root": "libs/website/features/admin/feature",
-      "sourceRoot": "libs/website/features/admin/feature/src",
+      "root": "libs/website/features/admin",
+      "sourceRoot": "libs/website/features/admin/src",
       "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/website/features/admin/feature/src/**/*.ts",
-              "libs/website/features/admin/feature/src/**/*.html"
+              "libs/website/features/admin/src/**/*.ts",
+              "libs/website/features/admin/src/**/*.html"
             ]
           }
         }
       }
     },
-    "website-features-home-feature": {
+    "website-features-home": {
       "projectType": "library",
-      "root": "libs/website/features/home/feature",
-      "sourceRoot": "libs/website/features/home/feature/src",
+      "root": "libs/website/features/home",
+      "sourceRoot": "libs/website/features/home/src",
       "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/website/features/home/feature/src/**/*.ts",
-              "libs/website/features/home/feature/src/**/*.html"
+              "libs/website/features/home/src/**/*.ts",
+              "libs/website/features/home/src/**/*.html"
             ]
           }
         }
