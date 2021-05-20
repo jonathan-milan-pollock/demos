@@ -5,6 +5,7 @@ import { formatMessage } from '@dark-rush-photography/shared-server/util';
 import {
   Env,
   ImageProcessActivity,
+  IMAGE_ARTIST_EXIF_FN,
 } from '@dark-rush-photography/serverless/types';
 import {
   exifImage,
@@ -35,10 +36,7 @@ export class ExifImageService {
     );
 
     Logger.log(formatMessage('ExifImage executing'));
-    const buffer = await exifImageArtist(
-      this.env.getImageArtistExifConfig,
-      imageFilePath
-    );
+    const buffer = await exifImageArtist(IMAGE_ARTIST_EXIF_FN, imageFilePath);
 
     Logger.log(formatMessage('ExifImage uploading exifed image'));
 

@@ -10,7 +10,7 @@ export const resizeImage = async (
   imageFilePath: string,
   imageName: string,
   imageDimension: ImageDimension
-): Promise<E.Either<Error, string>> => {
+): Promise<string> => {
   switch (imageDimension.type) {
     case 'Tile':
       return await resizeImageTile(
@@ -19,26 +19,20 @@ export const resizeImage = async (
         imageDimension as TileImageDimension
       );
     case 'Thumbnail':
-      return E.right(
-        await resizeLongestEdge(
-          imageFilePath,
-          imageName,
-          (imageDimension as LongestEdgeImageDimension).longestEdge
-        )
+      return await resizeLongestEdge(
+        imageFilePath,
+        imageName,
+        (imageDimension as LongestEdgeImageDimension).longestEdge
       );
     case 'Small':
-      return E.right(
-        await resizeLongestEdge(
-          imageFilePath,
-          imageName,
-          (imageDimension as LongestEdgeImageDimension).longestEdge
-        )
+      return await resizeLongestEdge(
+        imageFilePath,
+        imageName,
+        (imageDimension as LongestEdgeImageDimension).longestEdge
       );
     default:
-      return E.left(
-        new Error(
-          `Could not find image dimension for the type ${imageDimension.type}`
-        )
+      throw new Error(
+        `Could not find image dimension for the type ${imageDimension.type}`
       );
   }
 };

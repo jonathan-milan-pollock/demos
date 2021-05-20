@@ -29,19 +29,6 @@ This means that the best use case for providedIn: 'platform' is for sharing serv
   ]
 ```
 
-When using NgRx facades, developers should consider three (3) levels of APIs:
-• API for your HTTP REST services: these are simple, public methods invoked by views or facades.
-These methods hide the complexity of using an internal HTTPClient service.
-• API for your NgRx facades: api that is used only at the view component levels to—publish
-query observables as properties: observables to NgRx store selectors—public methods that
-internally dispatch actions to the NgRx store.
-• API for your NgRx Effects: define which effects 'run' for which NgRx action. These effects
-usually run asynchronous processes
-
-• npm run dep-graph — --file=graph.json emits a json file.
-• npm run dep-graph — --file=graph.dot emits a dot file.
-• npm run dep-graph — --file=graph.svg emits an svg file.
-
 TODO: https://www.npmjs.com/package/nock
 
 TODO: Safe deserialization
@@ -75,3 +62,5 @@ rel="noreferrer" has the same effect, but also prevents the Referer header from 
 _/
 
 //TODO: Roboto or Raleway???
+
+TODO: Make note about Auth0 roles and how added to the user

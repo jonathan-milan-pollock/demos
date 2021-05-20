@@ -26,14 +26,14 @@ export class UploadImageService {
   ): Promise<IHttpResponse> {
     Logger.log(formatMessage('UploadImage executing'));
     const fileName = request.body['fileName'];
-    const publishedImageEither = getPublishedImageForUploadedImage(fileName);
+    const publishedImage = getPublishedImageForUploadedImage(fileName);
 
-    if (E.isLeft(publishedImageEither)) throw publishedImageEither.left;
+    if (!publishedImage) throw new Error('Publish image was not from upload');
 
     await uploadBlobFromBuffer(
       this.env.azureStorageConnectionString,
       'private',
-      getBlobPath('uploaded-image', publishedImageEither.right),
+      getBlobPath('uploaded-image', publishedImage),
       image.buffer
     );
 
@@ -44,7 +44,7 @@ export class UploadImageService {
       undefined,
       {
         type: 'uploaded-image',
-        publishedImage: publishedImageEither.right,
+        publishedImage: publishedImage,
       } as ImageProcessActivity
     );
     request.context.log(`Started orchestration with ID = '${instanceId}'.`);

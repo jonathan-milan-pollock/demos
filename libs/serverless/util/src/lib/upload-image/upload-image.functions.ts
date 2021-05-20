@@ -7,21 +7,21 @@ import {
 
 export const getPublishedImageForUploadedImage = (
   uploadImageFileName: string
-): E.Either<Error, PublishedImage> => {
+): PublishedImage | undefined => {
   if (!uploadImageFileName)
-    return E.left(new Error('image upload file name must be provided'));
+    throw new Error('image upload file name must be provided');
 
   const fileNameSections = uploadImageFileName.split('|&|');
   if (fileNameSections.length === 0)
-    return E.left(
-      new Error('|&| must be used to separate publish service segments')
-    );
+    throw new Error('|&| must be used to separate publish service segments');
 
-  return pipe(
-    getPublishServiceName(fileNameSections[0]),
-    getPublishServiceType,
-    E.chainW(
-      getPublishedImageForUploadedImageFileNameSections(fileNameSections)
-    )
+  const publishServiceName = getPublishServiceName(fileNameSections[0]);
+  const publishServiceType = getPublishServiceType(publishServiceName);
+  if (!publishServiceType)
+    throw new Error(`Publish service type ${publishServiceType} was not found`);
+
+  return getPublishedImageForUploadedImageFileNameSections(
+    publishServiceType,
+    fileNameSections
   );
 };

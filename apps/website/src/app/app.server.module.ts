@@ -4,8 +4,12 @@ import { ServerModule } from '@angular/platform-server';
 import { AppModule } from './app.module';
 import {
   Auth0AuthService,
-  MockAuth0AuthService,
-} from '@dark-rush-photography/website/util';
+  Auth0AuthServiceMock,
+  DestinationsService,
+  DestinationsServiceMock,
+  ReviewsService,
+  ReviewsServiceMock,
+} from '@dark-rush-photography/website/data';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -14,7 +18,15 @@ import { AppComponent } from './app.component';
   providers: [
     {
       provide: Auth0AuthService,
-      useClass: MockAuth0AuthService,
+      useClass: Auth0AuthServiceMock,
+    },
+    {
+      provide: DestinationsService,
+      useClass: DestinationsServiceMock,
+    },
+    {
+      provide: ReviewsService,
+      useClass: ReviewsServiceMock,
     },
   ],
 })

@@ -51,11 +51,11 @@
       "@dark-rush-photography/shared-types": ["libs/shared-types/src/index.ts"],
       "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
       "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
-      "@dark-rush-photography/website/features/admin/feature": [
-        "libs/website/features/admin/feature/src/index.ts"
+      "@dark-rush-photography/website/features/admin": [
+        "libs/website/features/admin/src/index.ts"
       ],
-      "@dark-rush-photography/website/features/home/feature": [
-        "libs/website/features/home/feature/src/index.ts"
+      "@dark-rush-photography/website/features/home": [
+        "libs/website/features/home/src/index.ts"
       ],
       "@dark-rush-photography/website/types": [
         "libs/website/types/src/index.ts"
