@@ -3,13 +3,6 @@ import { moduleMetadata } from '@storybook/angular';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  faFacebookF,
-  faFacebookSquare,
-  faInstagram,
-  faLinkedin,
-  faYoutube,
-} from '@fortawesome/free-brands-svg-icons';
 
 import { SocialMediaButtonComponent } from './social-media-button.component';
 import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
@@ -23,22 +16,13 @@ import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
     }),
   ]}
   argTypes={{
-    faIcon: {
-      options: ['Facebook', 'Instagram', 'LinkedIn', 'YouTube'],
-      mapping: {
-        Facebook: faFacebookSquare,
-        Instagram: faInstagram,
-        LinkedIn: faLinkedin,
-        YouTube: faYoutube,
-      },
-    },
     clicked: { action: 'clicked' },
   }}
 />
 
 # Social Media Button
 
-## Facebook
+## Default
 
 <Story
   name="Facebook"
@@ -46,51 +30,7 @@ import { WebsiteUiUiShellModule } from '../website-ui-ui-shell.module';
     ariaLabel: 'Share Image with Dark Rush Photography on Facebook',
   }}
 >
-  {(args) => <drp-social-media-button {...args} faIcon={faFacebookF} />}
-</Story>
-
-## Facebook Square
-
-<Story
-  name="Facebook Square"
-  args={{
-    ariaLabel: 'Find out more about Dark Rush Photography on Facebook',
-  }}
->
-  {(args) => <drp-social-media-button {...args} faIcon={faFacebookSquare} />}
-</Story>
-
-## Instagram
-
-<Story
-  name="Instagram"
-  args={{
-    ariaLabel: 'Find out more about Dark Rush Photography on Instagram',
-  }}
->
-  {(args) => <drp-social-media-button {...args} faIcon={faInstagram} />}
-</Story>
-
-## LinkedIn
-
-<Story
-  name="LinkedIn"
-  args={{
-    ariaLabel: 'Find out more about Dark Rush Photography on LinkedIn',
-  }}
->
-  {(args) => <drp-social-media-button {...args} faIcon={faLinkedin} />}
-</Story>
-
-## YouTube
-
-<Story
-  name="YouTube"
-  args={{
-    ariaLabel: 'Watch videos from Dark Rush Photography on YouTube',
-  }}
->
-  {(args) => <drp-social-media-button {...args} faIcon={faYoutube} />}
+  {(args) => <drp-social-media-button {...args} />}
 </Story>
 
 ## Args Table

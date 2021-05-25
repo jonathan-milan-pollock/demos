@@ -12,12 +12,12 @@
       ></drp-top-nav-bar>
     </div>
     <div class="top-tab-bar-container">
-      <drp-top-tab-bar [isAdmin]="isAdmin"></drp-top-tab-bar>
+      <drp-top-tab-bar
+        [isAdmin]="isAdmin"
+        [activeUrl]="activeUrl"
+      ></drp-top-tab-bar>
     </div>
   </nav>
-  <div *ngFor="let review of reviews$ | async">
-    {{ review.title }}
-  </div>
   <main class="content">
     <router-outlet></router-outlet>
   </main>

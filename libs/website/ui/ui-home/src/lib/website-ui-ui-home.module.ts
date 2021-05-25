@@ -23,6 +23,7 @@ import { ReviewMasterComponent } from './review-master/review-master.component';
 import { ReviewsDetailComponent } from './reviews-detail/reviews-detail.component';
 import { ReviewsMasterComponent } from './reviews-master/reviews-master.component';
 import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-common';
+import { config } from '@fortawesome/fontawesome-svg-core';
 
 @NgModule({
   imports: [

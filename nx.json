@@ -30,6 +30,13 @@
       "tags": ["scope:api", "type:app"],
       "implicitDependencies": ["website"]
     },
+    "best-of": {
+      "tags": ["scope:best-of", "type:app"]
+    },
+    "best-of-e2e": {
+      "tags": [],
+      "implicitDependencies": ["best-of"]
+    },
     "serverless": {
       "tags": ["scope:serverless", "type:app"]
     },
@@ -56,10 +63,34 @@
     "api-util": {
       "tags": ["scope:api", "type:util"]
     },
+    "best-of-data": {
+      "tags": ["scope:best-of", "type:data-access"]
+    },
+    "best-of-feature": {
+      "tags": ["scope:best-of", "type:feature"]
+    },
+    "best-of-types": {
+      "tags": ["scope:best-of", "type:types"]
+    },
+    "best-of-ui": {
+      "tags": ["scope:best-of", "type:ui"]
+    },
+    "best-of-util": {
+      "tags": ["scope:best-of", "type:util"]
+    },
     "elements-types": {
       "tags": ["scope:elements", "type:types"]
     },
-    "elements-ui": {
+    "elements-ui-image-grid-gallery": {
+      "tags": ["scope:elements", "type:ui"]
+    },
+    "elements-ui-image-slide-gallery": {
+      "tags": ["scope:elements", "type:ui"]
+    },
+    "elements-ui-progressive-image": {
+      "tags": ["scope:elements", "type:ui"]
+    },
+    "elements-ui-tilt-shift-image": {
       "tags": ["scope:elements", "type:ui"]
     },
     "elements-util": {

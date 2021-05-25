@@ -21,11 +21,29 @@
       "@dark-rush-photography/api/feature": ["libs/api/feature/src/index.ts"],
       "@dark-rush-photography/api/types": ["libs/api/types/src/index.ts"],
       "@dark-rush-photography/api/util": ["libs/api/util/src/index.ts"],
+      "@dark-rush-photography/best-of/data": ["libs/best-of/data/src/index.ts"],
+      "@dark-rush-photography/best-of/feature": [
+        "libs/best-of/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/best-of/types": [
+        "libs/best-of/types/src/index.ts"
+      ],
+      "@dark-rush-photography/best-of/ui": ["libs/best-of/ui/src/index.ts"],
+      "@dark-rush-photography/best-of/util": ["libs/best-of/util/src/index.ts"],
       "@dark-rush-photography/elements/types": [
         "libs/elements/types/src/index.ts"
       ],
-      "@dark-rush-photography/image-custom-elements": [
-        "libs/elements/ui/src/index.ts"
+      "@dark-rush-photography/image-grid-gallery": [
+        "libs/elements/ui/image-grid-gallery/src/index.ts"
+      ],
+      "@dark-rush-photography/image-slide-gallery": [
+        "libs/elements/ui/image-slide-gallery/src/index.ts"
+      ],
+      "@dark-rush-photography/progressive-image": [
+        "libs/elements/ui/progressive-image/src/index.ts"
+      ],
+      "@dark-rush-photography/tilt-shift-image": [
+        "libs/elements/ui/tilt-shift-image/src/index.ts"
       ],
       "@dark-rush-photography/elements/util": [
         "libs/elements/util/src/index.ts"

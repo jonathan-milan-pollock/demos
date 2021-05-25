@@ -1,0 +1,58 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs/blocks';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ImageSlideGalleryComponent } from './image-slide-gallery.component';
+import { ElementsUiImageSlideGalleryModule } from '../elements-ui-image-slide-gallery.module';
+
+<Meta
+  title="UI CUSTOM ELEMENTS/Image Slide Gallery"
+  component={ImageSlideGalleryComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ElementsUiImageSlideGalleryModule,
+      ],
+    }),
+  ]}
+  argTypes={{
+    previousSlideDisplayed: { action: 'previousSlideDisplayed' },
+    nextSlideDisplayed: { action: 'nextSlideDisplayed' },
+    playedOrPaused: { action: 'playedOrPaused' },
+  }}
+/>
+
+# Image Slide Gallery
+
+<Story
+  name="Default"
+  args={{
+    images: [
+      'https://picsum.photos/id/1/256/128',
+      'https://picsum.photos/id/2/256/128',
+      'https://picsum.photos/id/3/256/128',
+      'https://picsum.photos/id/4/256/128',
+      'https://picsum.photos/id/5/256/128',
+      'https://picsum.photos/id/6/256/128',
+      'https://picsum.photos/id/7/256/128',
+      'https://picsum.photos/id/8/128/256',
+      'https://picsum.photos/id/9/256/128',
+      'https://picsum.photos/id/10/256/128',
+    ],
+    height: '256px',
+    startIndex: 1,
+    showIndex: true,
+    showPlayButton: true,
+    autoPlay: true,
+  }}
+>
+  {(args) => <drp-image-slide-gallery {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={ImageSlideGalleryComponent} />

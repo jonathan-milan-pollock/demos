@@ -1,6 +1,6 @@
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
 
-import { IS_PUBLIC_KEY } from '@dark-rush-photography/api/types';
+import { IS_PUBLIC } from '@dark-rush-photography/api/types';
 
 export const Public = (): CustomDecorator<string> =>
-  SetMetadata(IS_PUBLIC_KEY, true);
+  SetMetadata(IS_PUBLIC, true);

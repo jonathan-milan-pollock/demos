@@ -27,25 +27,30 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KabobMenuComponent {
-  faKabobIconIcon = faEllipsisV;
+  faEllipsisV = faEllipsisV;
+  faCheckSquare = faCheckSquare;
+  faSquare = faSquare;
   faFacebookSquare = faFacebookSquare;
   faInstagram = faInstagram;
   faLinkedin = faLinkedin;
   faYoutube = faYoutube;
-  faCheckSquare = faCheckSquare;
-  faSquare = faSquare;
   faSignInAlt = faSignInAlt;
   faSignOutAlt = faSignOutAlt;
 
   @Input() isDarkModeSelected = true;
   @Input() isAuthenticated = false;
 
-  @Output() clicked = new EventEmitter<string>();
+  @Output() darkModeSelected = new EventEmitter<void>();
+  @Output() menuItemClicked = new EventEmitter<string>();
   @Output() signIn = new EventEmitter<void>();
   @Output() signOut = new EventEmitter<void>();
 
-  onClicked(iconName: string): void {
-    this.clicked.emit(iconName);
+  onDarkModeSelected(): void {
+    this.darkModeSelected.emit();
+  }
+
+  onMenuItemClicked(menuItem: string): void {
+    this.menuItemClicked.emit(menuItem);
   }
 
   onSignIn(): void {
