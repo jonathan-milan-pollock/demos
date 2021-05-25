@@ -1,0 +1,29 @@
+<img class="hidden-image" [src]="imageSrc" #hiddenImage />
+<div
+  class="image-container"
+  [ngStyle]="{
+    width: width,
+    height: height
+  }"
+>
+  <div
+    class="image"
+    [ngStyle]="{
+      width: width,
+      height: height,
+      'background-image': 'url(' + imageSrc + ')'
+    }"
+    [ngClass]="{ 'image-loaded': imageLoaded }"
+    #image
+  ></div>
+  <div
+    class="thumbnail"
+    [ngStyle]="{
+      width: width,
+      height: height,
+      'background-image': 'url(' + thumbnailSrc + ')'
+    }"
+    [ngClass]="{ 'image-loaded': imageLoaded }"
+    #thumbnail
+  ></div>
+</div>

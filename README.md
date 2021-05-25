@@ -29,8 +29,9 @@
 ### repo documentation
 
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
-- [ci-cd](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/cicd.md)
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
+- [ci](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/ci.md)
+- [additional resources](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/additional-resources.md)
 
 ---
 
@@ -57,6 +58,9 @@
    </a>
    <a href="https://reactjs.org/">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/800px-React-icon.svg.png" width="70">
+   </a>
+   <a href="https://nextjs.org/">
+      <img src="https://static.cdnlogo.com/logos/n/80/next-js.svg" width="50">
    </a>
    <a href="https://nestjs.com/">
       <img src="https://docs.nestjs.com/assets/logo-small.svg" width="50">

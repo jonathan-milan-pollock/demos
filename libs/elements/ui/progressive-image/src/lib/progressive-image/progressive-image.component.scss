@@ -1,0 +1,35 @@
+.hidden-image {
+  display: none;
+}
+
+.image-container {
+  position: relative;
+}
+
+.thumbnail {
+  position: absolute;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  overflow: hidden;
+  clip-path: inset(0);
+  filter: blur(1px);
+  opacity: 1;
+  transition: opacity ease-in 1000ms;
+  &.image-loaded {
+    opacity: 0;
+  }
+}
+
+.image {
+  position: absolute;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity ease-in 1000ms;
+  &.image-loaded {
+    opacity: 1;
+  }
+}

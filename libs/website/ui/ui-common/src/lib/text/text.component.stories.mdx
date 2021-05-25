@@ -12,7 +12,11 @@ import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
   component={TextComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiHomeModule],
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiUiCommonModule,
+      ],
     }),
   ]}
 />

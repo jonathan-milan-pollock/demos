@@ -12,6 +12,7 @@ export * from './lib/interfaces/dynamic-page-metadata.interface';
 export * from './lib/interfaces/env-auth.interface';
 export * from './lib/interfaces/env.interface';
 export * from './lib/interfaces/focusable.interface';
+export * from './lib/interfaces/local-storage-data.interface';
 export * from './lib/interfaces/metadata.interface';
 
 // types

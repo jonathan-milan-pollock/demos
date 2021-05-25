@@ -54,8 +54,4 @@ import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-co
     TopNavBarComponent,
   ],
 })
-export class WebsiteUiUiAdminModule {
-  constructor() {
-    config.autoAddCss = false;
-  }
-}
+export class WebsiteUiUiAdminModule {}

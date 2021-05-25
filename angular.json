@@ -18,6 +18,26 @@
     },
     "@nrwl/angular:component": {
       "style": "scss"
+    },
+    "@nrwl/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint"
+      }
     }
   },
   "projects": {
@@ -53,6 +73,75 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        }
+      }
+    },
+    "best-of": {
+      "root": "apps/best-of",
+      "sourceRoot": "apps/best-of",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/best-of",
+            "outputPath": "dist/apps/best-of"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "best-of:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "best-of:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "builder": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "best-of:build:production"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/best-of/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "best-of-e2e": {
+      "root": "apps/best-of-e2e",
+      "sourceRoot": "apps/best-of-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/best-of-e2e/cypress.json",
+            "tsConfig": "apps/best-of-e2e/tsconfig.e2e.json",
+            "devServerTarget": "best-of:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "best-of:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/best-of-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -182,7 +271,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "website:build"
+            "browserTarget": "website:build",
+            "proxyConfig": "apps/website/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -350,6 +440,118 @@
         }
       }
     },
+    "best-of-data": {
+      "root": "libs/best-of/data",
+      "sourceRoot": "libs/best-of/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/data/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/best-of/data"],
+          "options": {
+            "jestConfig": "libs/best-of/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "best-of-feature": {
+      "root": "libs/best-of/feature",
+      "sourceRoot": "libs/best-of/feature/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/feature/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "best-of-types": {
+      "root": "libs/best-of/types",
+      "sourceRoot": "libs/best-of/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/types/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "best-of-ui": {
+      "root": "libs/best-of/ui",
+      "sourceRoot": "libs/best-of/ui/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/ui/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/best-of/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/best-of-ui",
+            "config": {
+              "configFolder": "libs/best-of/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "best-of-util": {
+      "root": "libs/best-of/util",
+      "sourceRoot": "libs/best-of/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/util/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/best-of/util"],
+          "options": {
+            "jestConfig": "libs/best-of/util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "elements-types": {
       "projectType": "library",
       "root": "libs/elements/types",
@@ -367,21 +569,21 @@
         }
       }
     },
-    "elements-ui": {
+    "elements-ui-image-grid-gallery": {
       "projectType": "library",
-      "root": "libs/elements/ui",
-      "sourceRoot": "libs/elements/ui/src",
+      "root": "libs/elements/ui/image-grid-gallery",
+      "sourceRoot": "libs/elements/ui/image-grid-gallery/src",
       "prefix": "drp",
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
           "options": {
-            "tsConfig": "libs/elements/ui/tsconfig.lib.json",
-            "project": "libs/elements/ui/ng-package.json"
+            "tsConfig": "libs/elements/ui/image-grid-gallery/tsconfig.lib.json",
+            "project": "libs/elements/ui/image-grid-gallery/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "libs/elements/ui/tsconfig.lib.prod.json"
+              "tsConfig": "libs/elements/ui/image-grid-gallery/tsconfig.lib.prod.json"
             }
           }
         },
@@ -389,8 +591,8 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/elements/ui/src/**/*.ts",
-              "libs/elements/ui/src/**/*.html"
+              "libs/elements/ui/image-grid-gallery/src/**/*.ts",
+              "libs/elements/ui/image-grid-gallery/src/**/*.html"
             ]
           }
         },
@@ -400,7 +602,7 @@
             "uiFramework": "@storybook/angular",
             "port": 4400,
             "config": {
-              "configFolder": "libs/elements/ui/.storybook"
+              "configFolder": "libs/elements/ui/image-grid-gallery/.storybook"
             }
           },
           "configurations": {
@@ -414,9 +616,189 @@
           "outputs": ["{options.outputPath}"],
           "options": {
             "uiFramework": "@storybook/angular",
-            "outputPath": "dist/storybook/elements-ui",
+            "outputPath": "dist/storybook/elements-ui-image-grid-gallery",
             "config": {
-              "configFolder": "libs/elements/ui/.storybook"
+              "configFolder": "libs/elements/ui/image-grid-gallery/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "elements-ui-image-slide-gallery": {
+      "projectType": "library",
+      "root": "libs/elements/ui/image-slide-gallery",
+      "sourceRoot": "libs/elements/ui/image-slide-gallery/src",
+      "prefix": "drp",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/elements/ui/image-slide-gallery/tsconfig.lib.json",
+            "project": "libs/elements/ui/image-slide-gallery/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/elements/ui/image-slide-gallery/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/elements/ui/image-slide-gallery/src/**/*.ts",
+              "libs/elements/ui/image-slide-gallery/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/elements/ui/image-slide-gallery/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/elements-ui-image-slide-gallery",
+            "config": {
+              "configFolder": "libs/elements/ui/image-slide-gallery/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "elements-ui-progressive-image": {
+      "projectType": "library",
+      "root": "libs/elements/ui/progressive-image",
+      "sourceRoot": "libs/elements/ui/progressive-image/src",
+      "prefix": "drp",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/elements/ui/progressive-image/tsconfig.lib.json",
+            "project": "libs/elements/ui/progressive-image/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/elements/ui/progressive-image/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/elements/ui/progressive-image/src/**/*.ts",
+              "libs/elements/ui/progressive-image/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/elements/ui/progressive-image/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/elements-ui-progressive-image",
+            "config": {
+              "configFolder": "libs/elements/ui/progressive-image/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "elements-ui-tilt-shift-image": {
+      "projectType": "library",
+      "root": "libs/elements/ui/tilt-shift-image",
+      "sourceRoot": "libs/elements/ui/tilt-shift-image/src",
+      "prefix": "drp",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/elements/ui/tilt-shift-image/tsconfig.lib.json",
+            "project": "libs/elements/ui/tilt-shift-image/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/elements/ui/tilt-shift-image/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/elements/ui/tilt-shift-image/src/**/*.ts",
+              "libs/elements/ui/tilt-shift-image/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/elements/ui/tilt-shift-image/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/elements-ui-tilt-shift-image",
+            "config": {
+              "configFolder": "libs/elements/ui/tilt-shift-image/.storybook"
             }
           },
           "configurations": {

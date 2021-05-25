@@ -45,13 +45,7 @@
 
 ---
 
-## setup nx project
-
-### add Preloading Strategy to website app.module
-
-```ts
-preloadingStrategy: PreloadAllModules;
-```
+## setup nx
 
 ### delete modules of types, utils, and data libraries
 
@@ -140,6 +134,26 @@ __queuestorage__
 
 ---
 
+## setup angular
+
+### add Preloading Strategy to website app.module
+
+```ts
+preloadingStrategy: PreloadAllModules;
+```
+
+### in angular.json website serve add proxyConfig
+
+```json
+       "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "website:build",
+            "proxyConfig": "apps/website/proxy.conf.json"
+```
+
+---
+
 ## setup serverless
 
 - in angular.json for app
@@ -212,7 +226,7 @@ platformBrowserDynamic()
     - main.ts
   - server.ts
   - tsconfig.server.json
-- remove api:serve in angular.json file
+- remove api:serve in angular.json file, as api is only used by the website
 
 ---
 
@@ -225,6 +239,10 @@ platformBrowserDynamic()
 - in website ngsw-config.json add
   - navigationRequestStrategy freshness
   - TODO: verify this is a requirement!!!
+
+---
+
+## setup react
 
 ---
 
@@ -282,7 +300,7 @@ module.exports = rootMain;
 
 ### in all storybook libraries
 
-#### (except for elements) in angular.json add styles.scss
+#### for all angular storybook libraries (except for elements) in angular.json add styles.scss
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
@@ -323,6 +341,7 @@ addDecorator(withKnobs);
 #### update angular.json so that website e2e does not also serve the website ssr
 
 - remove the following two lines from website-e2e task in angular.json
+- this is to combine the steps for cy:web command
 
 ```ts
  "serverTarget": "website:server"
@@ -380,12 +399,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @import '~@fortawesome/fontawesome-svg-core/styles.css';
 ```
 
-- in modules that import FontAwesome
+- in app.module
 
 ```ts
 import { config } from '@fortawesome/fontawesome-svg-core';
 
-export class WebsiteUiUiHomeModule {
+export class AppModule {
   constructor() {
     config.autoAddCss = false;
   }
@@ -444,15 +463,3 @@ export class WebsiteUiUiHomeModule {
 - close and reopen VS Code
 
 ---
-
-## additional resources
-
-- [additional resources](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/additional-resources.md)
-
----
-
-TODO: separate custom elements for each components so they can be published independently
-
-elements > grid-gallery > types
-elements > grid-gallery > util
-elements > grid-gallery > ui

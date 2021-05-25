@@ -24,6 +24,8 @@ const execInstallSchematics = (isReady) =>
   Promise.resolve(console.log('### schematics'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/angular'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/react'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/next'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/nest'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/storybook'));
 
@@ -48,6 +50,12 @@ const execGenerateApps = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/angular:app website --unitTestRunner=none --style=scss --routing=true --tags=scope:website,type:app --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/next:app best-of --unitTestRunner=none --style=scss --tags=scope:best-of,type:app'
       )
     )
     .then(() =>
@@ -91,19 +99,71 @@ const execGenerateApiLibs = (isReady) =>
       )
     );
 
+const execGenerateBestOfLibs = (isReady) =>
+  Promise.resolve(console.log('#### best-of libraries'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/react:lib best-of/data --unitTestRunner=jest --tags=scope:best-of,type:data-access'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/react:lib best-of/feature --unitTestRunner=none --tags=scope:best-of,type:feature'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/react:lib best-of/types --unitTestRunner=none --tags=scope:best-of,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/react:lib best-of/ui --unitTestRunner=none --tags=scope:best-of,type:ui'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/react:lib best-of/util --unitTestRunner=jest --tags=scope:best-of,type:util'
+      )
+    );
+
 const execGenerateElementsLibs = (isReady) =>
   Promise.resolve(console.log('#### elements libraries'))
     .then(() => console.log())
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/angular:lib elements/ui --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/image-custom-elements --prefix=drp'
+        'npx nx g @nrwl/angular:lib elements/types --unitTestRunner=none --tags=scope:elements,type:types --prefix=drp'
       )
     )
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/angular:lib elements/types --unitTestRunner=none --tags=scope:elements,type:types --prefix=drp'
+        'npx nx g @nrwl/angular:lib elements/ui/image-grid-gallery --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/image-grid-gallery --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib elements/ui/image-slide-gallery --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/image-slide-gallery --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib elements/ui/progressive-image --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/progressive-image --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib elements/ui/tilt-shift-image --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/tilt-shift-image --prefix=drp'
       )
     )
     .then(() =>
@@ -225,6 +285,8 @@ const execGenerateLibs = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateApiLibs(isReady))
     .then(() => console.log())
+    .then(() => execGenerateBestOfLibs(isReady))
+    .then(() => console.log())
     .then(() => execGenerateElementsLibs(isReady))
     .then(() => console.log())
     .then(() => execGenerateServerlessLibs(isReady))
@@ -288,23 +350,27 @@ const execAddAngularPWA = (isReady) =>
       consoleLogOrExec(isReady, 'npx ng add @angular/pwa --project=website')
     );
 
-const execAddServerless = (isReady) => {
+const execAddServerless = (isReady) =>
   Promise.resolve(console.log('### add serverless'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D copyfiles'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/functions'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
     .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
-};
 
-const execAddMongoose = (isReady) => {
+const execAddSwagger = (isReady) =>
+  Promise.resolve(console.log('### add swagger'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
+    .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'));
+
+const execAddMongoose = (isReady) =>
   Promise.resolve(console.log('### add mongoose'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'));
-};
 
 const execAddAzureBlobStorage = (isReady) => {
   Promise.resolve(console.log('### add azure blob storage'))
@@ -328,8 +394,30 @@ const execAddStorybook = (isReady) =>
         getAddStorybookWithCypressCommand('ui-storybook')
       )
     )
+    .then(() => consoleLogOrExec(isReady, getAddStorybookCommand('best-of-ui')))
     .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('elements-ui'))
+      consoleLogOrExec(
+        isReady,
+        getAddStorybookCommand('elements-ui-image-grid-gallery')
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        getAddStorybookCommand('elements-ui-image-slide-gallery')
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        getAddStorybookCommand('elements-ui-progressive-image')
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        getAddStorybookCommand('elements-ui-tilt-shift-image')
+      )
     )
     .then(() =>
       consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-admin'))
@@ -425,6 +513,8 @@ const execInstall = (isReady) =>
     .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
     .then(() => execAddServerless(isReady))
+    .then(() => console.log())
+    .then(() => execAddSwagger(isReady))
     .then(() => console.log())
     .then(() => execAddMongoose(isReady))
     .then(() => console.log())

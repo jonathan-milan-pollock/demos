@@ -21,6 +21,7 @@ export * from './lib/store/event/event.actions';
 export * from './lib/store/event/event.selectors';
 export * from './lib/store/event/events-mock.service';
 export * from './lib/store/event/events.service';
+export * from './lib/store/local-storage/local-storage.service';
 export * from './lib/store/photo-of-the-week/photo-of-the-week-store.module';
 export * from './lib/store/photo-of-the-week/photo-of-the-week.actions';
 export * from './lib/store/photo-of-the-week/photo-of-the-week.selectors';

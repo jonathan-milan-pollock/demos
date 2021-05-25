@@ -26,9 +26,15 @@ export class TopNavBarComponent {
   @Input() isHomePage = true;
   @Input() isAuthenticated = false;
   @Input() user?: Auth0User | null;
+  @Input() activeLink = '/';
 
+  @Output() linkClicked = new EventEmitter<string>();
   @Output() signIn = new EventEmitter<void>();
   @Output() signOut = new EventEmitter<void>();
+
+  onLinkClicked(link: string): void {
+    this.linkClicked.emit(link);
+  }
 
   onSignIn(): void {
     this.signIn.emit();

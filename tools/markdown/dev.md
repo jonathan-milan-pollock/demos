@@ -120,7 +120,3 @@
 **_generating files with @nrwl/nest schematics does not currently work for nx_**
 
 ---
-
-## additional resources
-
-- [additional resources](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/additional-resources.md)

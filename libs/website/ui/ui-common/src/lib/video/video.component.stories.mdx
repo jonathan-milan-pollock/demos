@@ -12,7 +12,11 @@ import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
   component={VideoComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiAdminModule],
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiUiCommonModule,
+      ],
     }),
   ]}
 />

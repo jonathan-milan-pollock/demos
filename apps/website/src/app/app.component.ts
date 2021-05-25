@@ -4,9 +4,11 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { EMPTY, Observable, Subscription } from 'rxjs';
+import { map, pluck } from 'rxjs/operators';
 
 import { Auth0User } from '@dark-rush-photography/website/types';
 import {
@@ -16,7 +18,6 @@ import {
   loadReviews,
 } from '@dark-rush-photography/website/data';
 import { Destination, Review } from '@dark-rush-photography/shared-types';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'drp-root',
@@ -27,6 +28,7 @@ import { map } from 'rxjs/operators';
 export class AppComponent implements OnInit, OnDestroy {
   private auth0UserSubscription?: Subscription;
 
+  activeUrl = '';
   isAuthenticated$: Observable<boolean> = EMPTY;
   user?: Auth0User;
 
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly auth0AuthService: Auth0AuthService,
+    private readonly router: Router,
     private readonly store$: Store<AppState>
   ) {}
 
@@ -47,6 +50,17 @@ export class AppComponent implements OnInit, OnDestroy {
       (user) => (this.user = user as Auth0User)
     );
     this.store$.dispatch(loadReviews());
+    this.router.events.pipe(pluck('url')).subscribe((url) => {
+      if (url) {
+        this.activeUrl = url as string;
+      }
+    });
+
+    this.initForm();
+  }
+
+  private initForm() {
+    this;
   }
 
   get isAdmin(): boolean {
