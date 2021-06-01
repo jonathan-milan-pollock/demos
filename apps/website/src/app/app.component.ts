@@ -23,7 +23,6 @@ import { Destination, Review } from '@dark-rush-photography/shared-types';
   selector: 'drp-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
   private auth0UserSubscription?: Subscription;
@@ -50,11 +49,14 @@ export class AppComponent implements OnInit, OnDestroy {
       (user) => (this.user = user as Auth0User)
     );
     this.store$.dispatch(loadReviews());
-    this.router.events.pipe(pluck('url')).subscribe((url) => {
-      if (url) {
-        this.activeUrl = url as string;
-      }
-    });
+    this.router.events
+      .pipe(
+        pluck('url'),
+        map((url) => url as string)
+      )
+      .subscribe((url) => {
+        this.activeUrl = url;
+      });
 
     this.initForm();
   }
@@ -76,6 +78,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onSignOut(): void {
     this.auth0AuthService.logout();
+  }
+
+  onTabClicked(activeUrl: string): void {
+    this.router.navigate([activeUrl]);
+  }
+
+  onLinkClicked(link: string): void {
+    this.router.navigate([link]);
   }
 
   ngOnDestroy(): void {

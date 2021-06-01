@@ -9,7 +9,7 @@
   border-color: transparent;
   background-color: rgb(11, 11, 11);
   &:hover {
-    border-color: white;
+    border-color: rgb(200, 200, 200);
   }
 }
 
@@ -18,7 +18,7 @@
   flex-direction: column;
   text-align: center;
   justify-content: center;
-  color: white;
+  color: rgb(200, 200, 200);
   font-size: 1em;
   line-height: 24px;
 }

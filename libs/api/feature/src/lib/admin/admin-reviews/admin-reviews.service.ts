@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { EMPTY, from, Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import { Review } from '@dark-rush-photography/shared-types';
@@ -13,34 +15,25 @@ export class AdminReviewsService {
     private readonly reviewModel: Model<DocumentModel>
   ) {}
 
-  async getReviews(): Promise<Review[]> {
-    return await this.reviewModel.find().exec();
+  addReview(review: Review): Observable<Review> {
+    return of(new this.reviewModel(review)).pipe(switchMap((r) => r.save()));
   }
 
-  async getReview(id: string): Promise<Review> {
-    const review = await this.reviewModel.findById(id);
-    if (!review) {
-      throw new NotFoundException(`Could not find review`);
-    }
-    return review;
+  updateReview(id: string, review: Review): Observable<Review> {
+    return from(this.reviewModel.findById(id)).pipe(
+      tap((d) => {
+        if (!d) {
+          throw new NotFoundException('Could not find review');
+        }
+      }),
+      switchMap(() => this.reviewModel.findByIdAndUpdate(id, review)),
+      map((d) => d as Review)
+    );
   }
 
-  async addReview(review: Review): Promise<string> {
-    const addedReview = await new this.reviewModel(review).save();
-    return addedReview.id;
-  }
-
-  async updateReview(id: string, review: Review): Promise<string> {
-    const foundReview = await this.reviewModel.findById(id);
-    if (!foundReview) {
-      throw new NotFoundException('Could not find review');
-    }
-    await this.reviewModel.findByIdAndUpdate(id, review);
-    foundReview?.save();
-    return id;
-  }
-
-  async deleteReview(id: string): Promise<void> {
-    await this.reviewModel.findByIdAndDelete(id);
+  deleteReview(id: string): Observable<void> {
+    return of(this.reviewModel.findByIdAndDelete(id)).pipe(
+      switchMap(() => EMPTY)
+    );
   }
 }

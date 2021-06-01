@@ -31,7 +31,7 @@
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
 - [ci](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/ci.md)
-- [additional resources](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/additional-resources.md)
+- [references](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/references.md)
 
 ---
 

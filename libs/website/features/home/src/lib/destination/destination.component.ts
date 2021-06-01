@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Metadata } from '@dark-rush-photography/website/types';
 
@@ -7,7 +7,6 @@ import { MetaService } from '@dark-rush-photography/website/data';
 @Component({
   templateUrl: './destination.component.html',
   styleUrls: ['./destination.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DestinationComponent implements OnInit {
   slug = '';

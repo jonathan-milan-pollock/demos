@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { from, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import { Review } from '@dark-rush-photography/shared-types';
@@ -13,34 +15,18 @@ export class ReviewsService {
     private readonly reviewModel: Model<DocumentModel>
   ) {}
 
-  async getReviews(): Promise<Review[]> {
-    return await this.reviewModel.find().exec();
+  getReviews(): Observable<Review[]> {
+    return from(this.reviewModel.find({ type: 'Review' }).exec());
   }
 
-  async getReview(id: string): Promise<Review> {
-    const review = await this.reviewModel.findById(id);
-    if (!review) {
-      throw new NotFoundException(`Could not find review`);
-    }
-    return review;
-  }
-
-  async addReview(review: Review): Promise<string> {
-    const addedReview = await new this.reviewModel(review).save();
-    return addedReview.id;
-  }
-
-  async updateReview(id: string, review: Review): Promise<string> {
-    const foundReview = await this.reviewModel.findById(id);
-    if (!foundReview) {
-      throw new NotFoundException('Could not find review');
-    }
-    await this.reviewModel.findByIdAndUpdate(id, review);
-    foundReview?.save();
-    return id;
-  }
-
-  async deleteReview(id: string): Promise<void> {
-    await this.reviewModel.findByIdAndDelete(id);
+  getReview(id: string): Observable<Review> {
+    return from(this.reviewModel.findById(id)).pipe(
+      tap((r) => {
+        if (!r) {
+          throw new NotFoundException('Could not find review');
+        }
+      }),
+      map((r) => r as Review)
+    );
   }
 }

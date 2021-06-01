@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MetaService } from '@dark-rush-photography/website/data';
@@ -6,7 +6,6 @@ import { MetaService } from '@dark-rush-photography/website/data';
 @Component({
   templateUrl: './photo-of-the-week-image.component.html',
   styleUrls: ['./photo-of-the-week-image.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoOfTheWeekImageComponent implements OnInit {
   constructor(

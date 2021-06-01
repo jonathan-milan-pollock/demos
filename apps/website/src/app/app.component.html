@@ -8,6 +8,7 @@
         [isAuthenticated]="(isAuthenticated$ | async) == true"
         (signIn)="onSignIn()"
         (signOut)="onSignOut()"
+        (linkClicked)="onLinkClicked($event)"
         [user]="user"
       ></drp-top-nav-bar>
     </div>
@@ -15,11 +16,14 @@
       <drp-top-tab-bar
         [isAdmin]="isAdmin"
         [activeUrl]="activeUrl"
+        (tabClicked)="onTabClicked($event)"
       ></drp-top-tab-bar>
     </div>
   </nav>
   <main class="content">
-    <router-outlet></router-outlet>
+    <div class="scroll-container">
+      <router-outlet></router-outlet>
+    </div>
   </main>
   <div class="bottom-divider" style="display: none"></div>
   <div class="fat-footer">

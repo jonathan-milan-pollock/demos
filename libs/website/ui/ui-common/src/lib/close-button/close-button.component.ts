@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,7 +6,6 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
   selector: 'drp-close-button',
   templateUrl: './close-button.component.html',
   styleUrls: ['./close-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CloseButtonComponent {
   faWindowClose = faWindowClose;

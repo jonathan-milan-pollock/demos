@@ -12,8 +12,7 @@
 - use ids to match label for, classes for css, and data-testid for cypress
 - use ems instead of px for measurement
 - use a for links to other pages and button for actions
-- don't put href on a tags causes the page to reload
-- unsubscribe or takeUntil Subscription
+- don't put href on anchor tags causes the page to reload
 - only export what is needed from utils index.ts files
 
 ---
@@ -77,6 +76,7 @@
   - In File > Preferences > Settings
   - Enable Editor: Format On Save
   - Within a ts file ensure that Prettier is the default Formatter
+    - Needed to do this in React file as well
 - update material icon theme settings
   - in settings change material icon theme to angular_ngrx
 
@@ -96,15 +96,6 @@
 
 - use these settings:
   - style: scss
-  - change detections: OnPush
-  - select SkipTests
-
-### elements components create with NxConsole
-
-- use these settings:
-  - style: scss
-  - change detections: OnPush
-  - view encapsulation: ShadowDom
   - select SkipTests
 
 ### util, data, and api lib files create manually by feature

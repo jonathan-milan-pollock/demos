@@ -21,6 +21,14 @@
                 ]
               },
               {
+                "sourceTag": "scope:best-of",
+                "onlyDependOnLibsWithTags": [
+                  "scope:best-of",
+                  "scope:elements",
+                  "scope:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:serverless",
                 "onlyDependOnLibsWithTags": [
                   "scope:serverless",

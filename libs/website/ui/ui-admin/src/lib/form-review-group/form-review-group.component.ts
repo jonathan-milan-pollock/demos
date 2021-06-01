@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
@@ -7,7 +7,6 @@ import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
   selector: 'drp-form-review-group',
   templateUrl: './form-review-group.component.html',
   styleUrls: ['./form-review-group.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormReviewGroupComponent {
   @Input() reviewGroup?: FormGroup;

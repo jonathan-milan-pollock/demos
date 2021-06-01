@@ -106,7 +106,6 @@
 
 ## recommended videos
 
-- [NodeJS - The Complete Guide](https://www.udemy.com/course/nodejs-the-complete-guide)
 - [HTTP/2 (H2)](https://www.youtube.com/watch?v=r5oT_2ndjms)
 
 ## references

@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { EMPTY, from, Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import { Event } from '@dark-rush-photography/shared-types';
@@ -13,22 +15,25 @@ export class AdminEventsService {
     private readonly eventModel: Model<DocumentModel>
   ) {}
 
-  async addEvent(event: Event): Promise<string> {
-    const addedEvent = await new this.eventModel(event).save();
-    return addedEvent.id;
+  addEvent(event: Event): Observable<Event> {
+    return of(new this.eventModel(event)).pipe(switchMap((e) => e.save()));
   }
 
-  async updateEvent(id: string, event: Event): Promise<string> {
-    const foundEvent = await this.eventModel.findById(id);
-    if (!foundEvent) {
-      throw new NotFoundException('Could not find event');
-    }
-    await this.eventModel.findByIdAndUpdate(id, event);
-    foundEvent?.save();
-    return id;
+  updateEvent(id: string, event: Event): Observable<Event> {
+    return from(this.eventModel.findById(id)).pipe(
+      tap((e) => {
+        if (!e) {
+          throw new NotFoundException('Could not find event');
+        }
+      }),
+      switchMap(() => this.eventModel.findByIdAndUpdate(id, event)),
+      map((e) => e as Event)
+    );
   }
 
-  async deleteEvent(id: string): Promise<void> {
-    await this.eventModel.findByIdAndDelete(id);
+  deleteEvent(id: string): Observable<void> {
+    return of(this.eventModel.findByIdAndDelete(id)).pipe(
+      switchMap(() => EMPTY)
+    );
   }
 }

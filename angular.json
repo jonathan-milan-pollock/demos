@@ -501,7 +501,7 @@
         "storybook": {
           "builder": "@nrwl/storybook:storybook",
           "options": {
-            "uiFramework": "@storybook/angular",
+            "uiFramework": "@storybook/react",
             "port": 4400,
             "config": {
               "configFolder": "libs/best-of/ui/.storybook"
@@ -517,7 +517,7 @@
           "builder": "@nrwl/storybook:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "uiFramework": "@storybook/angular",
+            "uiFramework": "@storybook/react",
             "outputPath": "dist/storybook/best-of-ui",
             "config": {
               "configFolder": "libs/best-of/ui/.storybook"
@@ -834,6 +834,27 @@
         }
       }
     },
+    "serverless-data": {
+      "root": "libs/serverless/data",
+      "sourceRoot": "libs/serverless/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/serverless/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/serverless/data"],
+          "options": {
+            "jestConfig": "libs/serverless/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "serverless-feature": {
       "root": "libs/serverless/feature",
       "sourceRoot": "libs/serverless/feature/src",
@@ -868,78 +889,15 @@
         }
       }
     },
-    "serverless-util": {
-      "root": "libs/serverless/util",
-      "sourceRoot": "libs/serverless/util/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/serverless/util/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/serverless/util"],
-          "options": {
-            "jestConfig": "libs/serverless/util/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-server-data": {
-      "root": "libs/shared-server/data",
-      "sourceRoot": "libs/shared-server/data/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared-server/data/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-server/data"],
-          "options": {
-            "jestConfig": "libs/shared-server/data/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "shared-server-types": {
-      "root": "libs/shared-server/types",
-      "sourceRoot": "libs/shared-server/types/src",
+      "root": "libs/shared-server-types",
+      "sourceRoot": "libs/shared-server-types/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
-          }
-        }
-      }
-    },
-    "shared-server-util": {
-      "root": "libs/shared-server/util",
-      "sourceRoot": "libs/shared-server/util/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared-server/util/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-server/util"],
-          "options": {
-            "jestConfig": "libs/shared-server/util/jest.config.js",
-            "passWithNoTests": true
+            "lintFilePatterns": ["libs/shared-server-types/**/*.ts"]
           }
         }
       }

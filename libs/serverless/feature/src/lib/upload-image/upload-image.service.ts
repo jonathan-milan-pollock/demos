@@ -3,18 +3,19 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { getClient } from 'durable-functions';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
+import { from } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { ENV } from '@dark-rush-photography/shared-types';
-import { formatMessage } from '@dark-rush-photography/shared-server/util';
-import { uploadBlobFromBuffer } from '@dark-rush-photography/shared-server/data';
-import {
-  Env,
-  ImageProcessActivity,
-} from '@dark-rush-photography/serverless/types';
+import { Env, ImageProcess } from '@dark-rush-photography/serverless/types';
 import {
   getBlobPath,
   getPublishedImageForUploadedImage,
-} from '@dark-rush-photography/serverless/util';
+} from '@dark-rush-photography/serverless/data';
+import {
+  uploadBufferToAzureStorageBlob$,
+  formatMessage,
+} from '@dark-rush-photography/serverless/data';
 
 @Injectable()
 export class UploadImageService {
@@ -26,32 +27,45 @@ export class UploadImageService {
   ): Promise<IHttpResponse> {
     Logger.log(formatMessage('UploadImage executing'));
     const fileName = request.body['fileName'];
+
     const publishedImage = getPublishedImageForUploadedImage(fileName);
+    if (!publishedImage)
+      throw new Error('Publish image was not created from upload');
 
-    if (!publishedImage) throw new Error('Publish image was not from upload');
+    const client = getClient(request.context);
 
-    await uploadBlobFromBuffer(
+    return uploadBufferToAzureStorageBlob$(
+      image.buffer,
       this.env.azureStorageConnectionString,
       'private',
-      getBlobPath('uploaded-image', publishedImage),
-      image.buffer
-    );
-
-    Logger.log(formatMessage('UploadImage starting image upload orchestrator'));
-    const client = getClient(request.context);
-    const instanceId = await client.startNew(
-      'UploadImageOrchestrator',
-      undefined,
-      {
-        type: 'uploaded-image',
-        publishedImage: publishedImage,
-      } as ImageProcessActivity
-    );
-    request.context.log(`Started orchestration with ID = '${instanceId}'.`);
-
-    return client.createCheckStatusResponse(
-      request.context.bindingData.req,
-      instanceId
-    );
+      getBlobPath('uploaded-image', publishedImage)
+    )
+      .pipe(
+        tap(() =>
+          Logger.log(
+            formatMessage('UploadImage starting image upload orchestrator')
+          )
+        ),
+        switchMap(() =>
+          from(
+            client.startNew('UploadImageOrchestrator', undefined, {
+              type: 'uploaded-image',
+              publishedImage: publishedImage,
+            } as ImageProcess)
+          )
+        ),
+        tap((instanceId) =>
+          Logger.log(
+            formatMessage(`Started orchestration with ID = '${instanceId}'.`)
+          )
+        ),
+        map((instanceId) =>
+          client.createCheckStatusResponse(
+            request.context.bindingData.req,
+            instanceId
+          )
+        )
+      )
+      .toPromise();
   }
 }

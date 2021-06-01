@@ -1,15 +1,9 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'drp-top-nav-bar',
   templateUrl: './top-nav-bar.component.html',
   styleUrls: ['./top-nav-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopNavBarComponent {
   @Output() signOut = new EventEmitter<void>();

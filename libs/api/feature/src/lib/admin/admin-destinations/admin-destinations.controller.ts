@@ -1,37 +1,40 @@
-import { Controller, Body, Param, Post, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Param,
+  Post,
+  Put,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
+
+import { Observable } from 'rxjs';
 
 import { Destination } from '@dark-rush-photography/shared-types';
 import { AdminDestinationsService } from './admin-destinations.service';
 
-@Controller('admin/destinations')
+@Controller('admin/v1/destinations')
 export class AdminDestinationsController {
   constructor(
     private readonly adminDestinationsService: AdminDestinationsService
   ) {}
 
   @Post()
-  async addDestination(
-    @Body() destination: Destination
-  ): Promise<{ id: string }> {
-    const id = await this.adminDestinationsService.addDestination(destination);
-    return { id };
+  addDestination(@Body() destination: Destination): Observable<Destination> {
+    return this.adminDestinationsService.addDestination(destination);
   }
 
   @Put(':id')
-  async updateDestination(
+  updateDestination(
     @Param() id: string,
     @Body() destination: Destination
-  ): Promise<{ slug: string }> {
-    return {
-      slug: await this.adminDestinationsService.updateDestination(
-        id,
-        destination
-      ),
-    };
+  ): Observable<Destination> {
+    return this.adminDestinationsService.updateDestination(id, destination);
   }
 
+  @HttpCode(204)
   @Delete(':id')
-  async deleteDestination(@Param() id: string): Promise<void> {
-    await this.adminDestinationsService.deleteDestination(id);
+  deleteDestination(@Param() id: string): Observable<void> {
+    return this.adminDestinationsService.deleteDestination(id);
   }
 }

@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AdminEventsComponent } from './admin-events.component';
+import { WebsiteUiUiAdminModule } from '@dark-rush-photography/website/ui/ui-admin';
 
 @NgModule({
   declarations: [AdminEventsComponent],
@@ -13,6 +14,7 @@ import { AdminEventsComponent } from './admin-events.component';
       { path: '', pathMatch: 'full', component: AdminEventsComponent },
     ]),
     ReactiveFormsModule,
+    WebsiteUiUiAdminModule,
   ],
 })
 export class AdminEventsModule {}

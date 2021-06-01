@@ -1,7 +1,6 @@
 # nest
 
 - add postcss
-- add password
 - nestjs add caching (https://reposhub.com/nodejs/frameworks/nestjs-ng-universal.html)
 
 - implement open api 3

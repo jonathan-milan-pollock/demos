@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IconType } from '@dark-rush-photography/website/types';
 
 import {
@@ -18,7 +12,6 @@ import {
   selector: 'drp-social-media-bar',
   templateUrl: './social-media-bar.component.html',
   styleUrls: ['./social-media-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialMediaBarComponent {
   faFacebookSquare = faFacebookSquare;

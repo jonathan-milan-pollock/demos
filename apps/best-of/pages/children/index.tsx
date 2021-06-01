@@ -1,14 +1,14 @@
 import React from 'react';
 
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 import styles from './index.module.scss';
+import { TabBar, TopNavigationBar } from '@dark-rush-photography/best-of/ui';
 
 function Index(props): JSX.Element {
-
   const router = useRouter();
 
-  function displayImageHandler(){
+  function displayImageHandler() {
     router.push('/children/image1');
   }
 
@@ -27,10 +27,8 @@ export async function getStaticProps() {
   // fetch data from an API
   return {
     props: {
-      images: [{
-
-      }]
-    }
+      images: [{}],
+    },
   };
 }
 

@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Output,
-  EventEmitter,
-  Input,
-} from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 import {
   faEllipsisV,
@@ -24,7 +18,6 @@ import {
   selector: 'drp-kabob-menu',
   templateUrl: './kabob-menu.component.html',
   styleUrls: ['./kabob-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KabobMenuComponent {
   faEllipsisV = faEllipsisV;

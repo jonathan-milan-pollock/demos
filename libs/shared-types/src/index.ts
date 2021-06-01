@@ -6,9 +6,15 @@ export * from './lib/enums/month.enum';
 
 // interfaces
 export * from './lib/interfaces/about.interface';
+export * from './lib/interfaces/best-of-children.interface';
+export * from './lib/interfaces/best-of-events.interface';
+export * from './lib/interfaces/best-of-landscapes.interface';
+export * from './lib/interfaces/best-of-nature.interface';
+export * from './lib/interfaces/best-of-real-estate.interface';
 export * from './lib/interfaces/destination.interface';
 export * from './lib/interfaces/event.interface';
 export * from './lib/interfaces/extended-reality.interface';
+export * from './lib/interfaces/favorites.interface';
 export * from './lib/interfaces/flyover.interface';
 export * from './lib/interfaces/geo-coordinates.interface';
 export * from './lib/interfaces/image.interface';
@@ -22,5 +28,7 @@ export * from './lib/interfaces/video.interface';
 
 // types
 export * from './lib/types/document.type';
+export * from './lib/types/image-dimension.type';
+export * from './lib/types/image-state.type';
 export * from './lib/types/social-media.type';
 export * from './lib/types/three-sixty-image.type';

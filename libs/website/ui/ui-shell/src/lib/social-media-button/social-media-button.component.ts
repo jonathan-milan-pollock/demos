@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  Input,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 
@@ -12,7 +6,6 @@ import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
   selector: 'drp-social-media-button',
   templateUrl: './social-media-button.component.html',
   styleUrls: ['./social-media-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialMediaButtonComponent {
   @Input() faIcon = faFacebookSquare;

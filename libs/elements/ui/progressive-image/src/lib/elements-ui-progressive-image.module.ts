@@ -1,23 +1,27 @@
 import { NgModule, Injector, DoBootstrap } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
 
+import { ElementsUiProgressiveImageComponentModule } from './elements-ui-progressive-image-component.module';
+
 import { ProgressiveImageComponent } from './progressive-image/progressive-image.component';
-//import { ViewportService } from '@dark-rush-photography/elements/util';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [ProgressiveImageComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    ElementsUiProgressiveImageComponentModule,
+  ],
   entryComponents: [ProgressiveImageComponent],
   exports: [ProgressiveImageComponent],
-  //  providers: [ViewportService],
 })
 export class ElementsUiProgressiveImageModule implements DoBootstrap {
   constructor(private injector: Injector) {}
 
   ngDoBootstrap(): void {
     customElements.define(
-      `progressive-image`,
+      'progressive-image',
       createCustomElement(ProgressiveImageComponent, {
         injector: this.injector,
       })

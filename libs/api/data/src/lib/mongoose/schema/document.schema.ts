@@ -15,12 +15,23 @@ import {
   Flyover,
   ExtendedReality,
   SocialMedia,
+  BestOfChildren,
+  BestOfEvents,
+  Favorites,
 } from '@dark-rush-photography/shared-types';
 
 export type DocumentModel = Document & mongoose.Document;
 
 @Schema()
-export class Document implements Review, PhotoOfTheWeek, Event, Destination {
+export class Document
+  implements
+    BestOfChildren,
+    BestOfEvents,
+    Destination,
+    Event,
+    Favorites,
+    PhotoOfTheWeek,
+    Review {
   @Prop({ type: String })
   id = '';
 

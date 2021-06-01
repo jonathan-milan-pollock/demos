@@ -3,4 +3,9 @@ export type DocumentType =
   | 'Review'
   | 'PhotoOfTheWeek'
   | 'Event'
-  | 'Destination';
+  | 'Destination'
+  | 'BestOfChildren'
+  | 'BestOfEvents'
+  | 'BestOfLandscapes'
+  | 'BestOfNature'
+  | 'BestOfRealEstate';
