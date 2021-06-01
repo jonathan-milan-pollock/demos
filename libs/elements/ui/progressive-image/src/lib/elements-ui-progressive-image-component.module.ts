@@ -5,7 +5,7 @@ import { ProgressiveImageComponent } from './progressive-image/progressive-image
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [ProgressiveImageComponent],
-  exports: [ProgressiveImageComponent],
+  //declarations: [ProgressiveImageComponent],
+  //exports: [ProgressiveImageComponent],
 })
 export class ElementsUiProgressiveImageComponentModule {}

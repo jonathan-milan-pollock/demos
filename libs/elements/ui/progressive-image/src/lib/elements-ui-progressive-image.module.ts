@@ -3,16 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
 
-import { ElementsUiProgressiveImageComponentModule } from './elements-ui-progressive-image-component.module';
-
 import { ProgressiveImageComponent } from './progressive-image/progressive-image.component';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    ElementsUiProgressiveImageComponentModule,
-  ],
+  imports: [BrowserModule, BrowserAnimationsModule],
+  declarations: [ProgressiveImageComponent],
   entryComponents: [ProgressiveImageComponent],
   exports: [ProgressiveImageComponent],
 })
