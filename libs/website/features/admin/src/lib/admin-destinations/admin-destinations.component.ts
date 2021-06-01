@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
@@ -8,7 +8,6 @@ import { MetaService } from '@dark-rush-photography/website/data';
 @Component({
   templateUrl: './admin-destinations.component.html',
   styleUrls: ['./admin-destinations.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminDestinationsComponent implements OnInit {
   constructor(

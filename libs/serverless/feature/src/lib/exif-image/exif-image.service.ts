@@ -1,48 +1,40 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 
 import { ENV } from '@dark-rush-photography/shared-types';
-import { formatMessage } from '@dark-rush-photography/shared-server/util';
 import {
   Env,
-  ImageProcessActivity,
+  ImageProcess,
   IMAGE_ARTIST_EXIF_FN,
 } from '@dark-rush-photography/serverless/types';
 import {
   exifImage,
   exifImageArtist,
   getBlobPath,
-} from '@dark-rush-photography/serverless/util';
-import {
-  downloadBlob,
-  uploadBlobFromBuffer,
-} from '@dark-rush-photography/shared-server/data';
+} from '@dark-rush-photography/serverless/data';
 
 @Injectable()
 export class ExifImageService {
   constructor(@Inject(ENV) private readonly env: Env) {}
 
-  async exifImage(
-    imageProcessActivity: ImageProcessActivity,
-    year: number
-  ): Promise<ImageProcessActivity> {
-    Logger.log(formatMessage('ExifImage starting'));
+  async exifImage(imageProcess: ImageProcess): Promise<ImageProcess> {
+    //  Logger.log(formatMessage('ExifImage starting'));
 
-    Logger.log(formatMessage('ExifImage downloading image blob'));
-    const imageFilePath = await downloadBlob(
-      this.env.azureStorageConnectionString,
-      'private',
-      getBlobPath('uploaded-image', imageProcessActivity.publishedImage),
-      imageProcessActivity.publishedImage.imageName
-    );
+    // Logger.log(formatMessage('ExifImage downloading image blob'));
+    //const imageFilePath = await downloadBlob(
+    //  this.env.azureStorageConnectionString,
+    //  'private',
+    //  getBlobPath('uploaded-image', imageProcess.publishedImage),
+    //  imageProcess.publishedImage.imageName
+    //);
 
-    Logger.log(formatMessage('ExifImage executing'));
-    const buffer = await exifImageArtist(IMAGE_ARTIST_EXIF_FN, imageFilePath);
+    //Logger.log(formatMessage('ExifImage executing'));
+    //const buffer = await exifImageArtist(IMAGE_ARTIST_EXIF_FN, imageFilePath);
 
-    Logger.log(formatMessage('ExifImage uploading exifed image'));
+    //Logger.log(formatMessage('ExifImage uploading exifed image'));
 
-    const exifedImageProcess: ImageProcessActivity = {
+    const exifedImageProcess: ImageProcess = {
       type: 'exifed-image',
-      publishedImage: imageProcessActivity.publishedImage,
+      publishedImage: imageProcess.publishedImage,
     };
 
     //const exifedPublishedImage = updatePublishedImageWithImageProcess('exifed', publishedImage);
@@ -53,7 +45,7 @@ export class ExifImageService {
     //  Buffer.from(buffer)
     //);
 
-    Logger.log(formatMessage('ExifImage complete'));
+    //    Logger.log(formatMessage('ExifImage complete'));
     return exifedImageProcess;
   }
 }

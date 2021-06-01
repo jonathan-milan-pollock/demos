@@ -62,7 +62,6 @@ https://iptc.org/standards/photo-metadata/quick-guide-to-iptc-photo-metadata-and
           rel="noopener noreferrer"
         >
 
-
 /_
 rel="noopener" prevents the new page from being able to access the window.opener property and ensures it runs in a separate process. Without this, the target page can potentially redirect your page to a malicious URL.
 rel="noreferrer" has the same effect, but also prevents the Referer header from being sent to the new page. ⚠️ Removing the referrer header will affect analytics.

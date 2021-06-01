@@ -42,11 +42,17 @@
       "@dark-rush-photography/progressive-image": [
         "libs/elements/ui/progressive-image/src/index.ts"
       ],
+      "@dark-rush-photography/progressive-image-component": [
+        "libs/elements/ui/progressive-image/src/component-index.ts"
+      ],
       "@dark-rush-photography/tilt-shift-image": [
         "libs/elements/ui/tilt-shift-image/src/index.ts"
       ],
       "@dark-rush-photography/elements/util": [
         "libs/elements/util/src/index.ts"
+      ],
+      "@dark-rush-photography/serverless/data": [
+        "libs/serverless/data/src/index.ts"
       ],
       "@dark-rush-photography/serverless/feature": [
         "libs/serverless/feature/src/index.ts"
@@ -54,17 +60,8 @@
       "@dark-rush-photography/serverless/types": [
         "libs/serverless/types/src/index.ts"
       ],
-      "@dark-rush-photography/serverless/util": [
-        "libs/serverless/util/src/index.ts"
-      ],
-      "@dark-rush-photography/shared-server/data": [
-        "libs/shared-server/data/src/index.ts"
-      ],
-      "@dark-rush-photography/shared-server/types": [
-        "libs/shared-server/types/src/index.ts"
-      ],
-      "@dark-rush-photography/shared-server/util": [
-        "libs/shared-server/util/src/index.ts"
+      "@dark-rush-photography/shared-server-types": [
+        "libs/shared-server-types/src/index.ts"
       ],
       "@dark-rush-photography/shared-types": ["libs/shared-types/src/index.ts"],
       "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],

@@ -1,4 +1,4 @@
-import { ImageDimensionType } from '../types/image-dimension.type';
+import { ImageDimensionType } from '@dark-rush-photography/shared-types';
 
 export interface ImageDimension {
   readonly type: ImageDimensionType;

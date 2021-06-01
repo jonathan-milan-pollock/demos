@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { from, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import { Destination } from '@dark-rush-photography/shared-types';
@@ -13,15 +15,18 @@ export class DestinationsService {
     private readonly destinationModel: Model<DocumentModel>
   ) {}
 
-  async getDestinations(): Promise<Destination[]> {
-    return await this.destinationModel.find({ type: 'Destination' }).exec();
+  getDestinations(): Observable<Destination[]> {
+    return from(this.destinationModel.find({ type: 'Destination' }).exec());
   }
 
-  async getDestination(id: string): Promise<Destination> {
-    const destination = await this.destinationModel.findById(id);
-    if (!destination) {
-      throw new NotFoundException('Could not find destination');
-    }
-    return destination;
+  getDestination(id: string): Observable<Destination> {
+    return from(this.destinationModel.findById(id)).pipe(
+      tap((d) => {
+        if (!d) {
+          throw new NotFoundException('Could not find destination');
+        }
+      }),
+      map((d) => d as Destination)
+    );
   }
 }

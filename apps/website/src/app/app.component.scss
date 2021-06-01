@@ -10,6 +10,7 @@ $bottom-social-media-bar-height: 45px;
   flex-direction: column;
   height: 100%;
   min-width: 288px;
+  overflow: hidden;
 }
 
 .page-header {
@@ -41,6 +42,18 @@ top-tab-bar {
 //$divider-height + $bottom-mobile-height
 .content {
   height: calc(100% - 176px);
+}
+
+.scroll-container {
+  position: absolute;
+  top: 125px;
+  left: 0px;
+  width: 100%;
+  height: calc(100% - 173px);
+  margin-left: 0;
+  overflow: hidden;
+  overflow-y: scroll;
+  background-color: rgb(30, 30, 30); //detailBackgroundColor
 }
 
 /*

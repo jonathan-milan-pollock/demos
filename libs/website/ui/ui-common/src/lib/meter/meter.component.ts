@@ -1,10 +1,9 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'drp-meter',
   templateUrl: './meter.component.html',
   styleUrls: ['./meter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeterComponent {
   @Input() value = 10;

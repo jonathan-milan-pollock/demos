@@ -19,12 +19,12 @@
    - Use of PWA ?
    - Internationalization ?
    - Error reporting?
-   - Additional Controls Needed ?
+   - 3rd Party components needed ?
 2. create draw.io application diagram
 3. create architecture md
 4. create draw.io components diagram with defined routes
 5. create projects from install-workspace.js script
-6. create page components (such as HomeComponent) and remove selector & verify OnPush
+6. create page components (such as HomeComponent) and remove selector
 7. adjust routes and child child routes
 8. add basic routing between pages
 9. create website-e2e Cypress test for routes
@@ -164,48 +164,7 @@ preloadingStrategy: PreloadAllModules;
 
 ## setup angular elements
 
-- services may want instead of provideIn root to be provide in platform
-- in website app.module.ts import CUSTOM_ELEMENTS_SCHEMA from @angular/core and add to schemas
-
-```ts
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-```
-
-```ts
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-```
-
-### /elements/ui/src/index.ts
-
-```ts
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { ElementsUiModule } from './lib/elements-ui.module';
-
-platformBrowserDynamic()
-  .bootstrapModule(ElementsUiModule)
-  .catch((err) => console.error(err));
-```
-
-### /elements/ui/src/lib/elements-ui.module.ts
-
-- add DoBootstrap and create each custom element
-
-```ts
-  ngDoBootstrap(): void {
-    customElements.define(
-      `drp-image-grid-gallery`,
-      createCustomElement(ImageGridGalleryComponent, {
-        injector: this.injector,
-      })
-    );
-  }
-```
-
-### update document-register-element deprecated polyfill
-
-- in website polyfills.ts
-  - replace import 'document-register-element;
-  - with import '@ungap/custom-elements';
+- [Angular Elements Setup](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/angular-elements.md)
 
 ---
 
@@ -243,6 +202,14 @@ platformBrowserDynamic()
 ---
 
 ## setup react
+
+- remove the following from best-of feature, types, and ui README.md as projects are not setup for tests
+
+```md
+## Running unit tests
+
+Run `nx test best-of-ui` to execute the unit tests via [Jest](https://jestjs.io).
+```
 
 ---
 

@@ -96,23 +96,17 @@
     "elements-util": {
       "tags": ["scope:elements", "type:util"]
     },
+    "serverless-data": {
+      "tags": ["scope:serverless", "type:data-access"]
+    },
     "serverless-feature": {
       "tags": ["scope:serverless", "type:feature"]
     },
     "serverless-types": {
       "tags": ["scope:serverless", "type:types"]
     },
-    "serverless-util": {
-      "tags": ["scope:serverless", "type:util"]
-    },
-    "shared-server-data": {
-      "tags": ["scope:shared-server", "type:data-access"]
-    },
     "shared-server-types": {
       "tags": ["scope:shared-server", "type:types"]
-    },
-    "shared-server-util": {
-      "tags": ["scope:shared-server", "type:util"]
     },
     "shared-types": {
       "tags": ["scope:shared", "type:types"]

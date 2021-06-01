@@ -3,24 +3,19 @@ import {
   Component,
   ElementRef,
   Input,
-  OnChanges,
   OnDestroy,
-  Renderer2,
-  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
-import { fromEvent, of, Subscription, timer, merge } from 'rxjs';
-import { map, switchMap, timeInterval } from 'rxjs/operators';
+import { Subscription, timer } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
-// OnChanges,
-//import { ViewportService } from '@dark-rush-photography/elements/util';
 @Component({
   selector: 'drp-progressive-image',
   templateUrl: './progressive-image.component.html',
   styleUrls: ['./progressive-image.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated,
+  encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
   private imageLoadSub?: Subscription;
@@ -58,9 +53,10 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
    */
   @Input() transitionMilliseconds?: number;
 
-  constructor(
-    private readonly renderer2: Renderer2 //  private readonly viewportService: ViewportService
-  ) {}
+  //private readonly viewportService: ViewportService
+  //constructor(
+  //
+  //) {}
 
   /*
   ngOnChanges(changes: SimpleChanges): void {
@@ -83,9 +79,9 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
   }*/
 
   ngAfterViewInit(): void {
-    timer(this.transitionMilliseconds).subscribe(
-      () => (this.imageLoaded = true)
-    );
+    this.imageLoadSub = timer(this.transitionMilliseconds)
+      .pipe(tap(() => console.log('timer transitioned')))
+      .subscribe(() => (this.imageLoaded = true));
     //const imageElement = this.hiddenImage?.nativeElement as HTMLImageElement;
     //if (imageElement.loading) {
     //  console.log('after view init if');

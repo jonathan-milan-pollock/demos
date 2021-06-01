@@ -1,15 +1,11 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { Review } from '@dark-rush-photography/shared-types';
+import { Component, OnInit } from '@angular/core';
 import { Page } from '@dark-rush-photography/website/types';
 
 import { MetaService } from '@dark-rush-photography/website/data';
-import { EMPTY, Observable } from 'rxjs';
 
 @Component({
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewsComponent implements OnInit {
   readonly reviewLindsayLevinName = 'Lindsay Levin';

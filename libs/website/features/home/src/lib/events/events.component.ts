@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Page } from '@dark-rush-photography/website/types';
@@ -7,7 +7,6 @@ import { MetaService } from '@dark-rush-photography/website/data';
 @Component({
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventsComponent implements OnInit {
   constructor(

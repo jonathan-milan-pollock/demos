@@ -5,7 +5,7 @@
     mat-tab-link
     [active]="activeUrl == '/'"
     aria-label="Link to Favorites"
-    (click)="onTabClicked(activeUrl)"
+    (click)="onTabClicked('/')"
   >
     <fa-icon class="tab-icon" [icon]="faCameraAlt" size="lg"></fa-icon>
     Favorites
@@ -16,7 +16,7 @@
     mat-tab-link
     [active]="activeUrl == '/photo-of-the-week'"
     aria-label="Link to Photo of the Week"
-    (click)="onTabClicked(activeUrl)"
+    (click)="onTabClicked('/photo-of-the-week')"
   >
     <fa-icon class="tab-icon" [icon]="faCalendar" size="lg"></fa-icon>
     Photo of the Week
@@ -27,7 +27,7 @@
     mat-tab-link
     [active]="activeUrl == '/events'"
     aria-label="Link to Events"
-    (click)="onTabClicked(activeUrl)"
+    (click)="onTabClicked('/events')"
   >
     <fa-icon class="tab-icon" [icon]="faBookOpen" size="lg"></fa-icon>
     Events
@@ -38,7 +38,7 @@
     mat-tab-link
     [active]="activeUrl == '/destinations'"
     aria-label="Link to Destinations"
-    (click)="onTabClicked(activeUrl)"
+    (click)="onTabClicked('/destinations')"
   >
     <fa-icon class="tab-icon" [icon]="faCaravan" size="lg"></fa-icon>
     Destinations
@@ -50,7 +50,7 @@
     mat-tab-link
     [active]="activeUrl == '/admin'"
     aria-label="Link to Admin"
-    (click)="onTabClicked(activeUrl)"
+    (click)="onTabClicked('/admin')"
   >
     <fa-icon class="tab-icon" [icon]="faSlidersVSquare" size="lg"></fa-icon>
     Admin

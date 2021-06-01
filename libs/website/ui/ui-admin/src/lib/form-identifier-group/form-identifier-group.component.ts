@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
@@ -7,7 +7,6 @@ import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
   selector: 'drp-form-identifier-group[slugFormControlName]',
   templateUrl: './form-identifier-group.component.html',
   styleUrls: ['./form-identifier-group.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormIdentifierGroupComponent {
   @Input() identifierGroup?: FormGroup;

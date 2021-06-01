@@ -16,6 +16,9 @@ import { TitleBarBackButtonComponent } from './title-bar-back-button/title-bar-b
 import { TopNavBarComponent } from './top-nav-bar/top-nav-bar.component';
 import { TopTabBarComponent } from './top-tab-bar/top-tab-bar.component';
 import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-common';
+import { ContactBarComponent } from './contact-bar/contact-bar.component';
+import { EmailAddressComponent } from './email-address/email-address.component';
+import { CopyrightComponent } from './copyright/copyright.component';
 
 @NgModule({
   imports: [
@@ -36,6 +39,9 @@ import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-co
     TitleBarBackButtonComponent,
     TopNavBarComponent,
     TopTabBarComponent,
+    ContactBarComponent,
+    EmailAddressComponent,
+    CopyrightComponent,
   ],
   exports: [
     KabobMenuComponent,

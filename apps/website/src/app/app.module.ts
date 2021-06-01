@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -42,7 +42,10 @@ import { MatCardModule } from '@angular/material/card';
       clientId: 'itlDBOCejY2AxCCR4qNZRnI1AUwWb9O3',
       audience: 'https://www.darkrushphotography.com',
       httpInterceptor: {
-        allowedList: ['http://localhost:4200/api/admin/*'],
+        allowedList: [
+          'http://localhost:4200/api/admin/*',
+          'http://localhost:4200/api/user/*',
+        ],
       },
     }),
     FontAwesomeModule,
@@ -64,7 +67,6 @@ import { MatCardModule } from '@angular/material/card';
     ReviewsService,
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
   constructor() {

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Page } from '@dark-rush-photography/website/types';
@@ -7,7 +7,6 @@ import { MetaService } from '@dark-rush-photography/website/data';
 @Component({
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutComponent implements OnInit {
   readonly aboutTitle = 'ABOUT';

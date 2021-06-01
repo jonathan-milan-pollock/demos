@@ -1,0 +1,28 @@
+.outerContainer {
+  background-color: #000000; // topHeaderBackgroundColor
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.imageContainer {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.image {
+  flex: 1;
+  height: 72px;
+  margin-top: 5px;
+  object-fit: contain;
+}

@@ -1,10 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './photo-of-the-week.component.html',
   styleUrls: ['./photo-of-the-week.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PhotoOfTheWeekComponent {
   constructor(private route: ActivatedRoute, private router: Router) {}

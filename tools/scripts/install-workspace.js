@@ -179,6 +179,12 @@ const execGenerateServerlessLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
+        'npx nx g @nrwl/nest:lib serverless/data --unitTestRunner=jest --tags=scope:serverless,type:data-access'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
         'npx nx g @nrwl/nest:lib serverless/feature --unitTestRunner=none --tags=scope:serverless,type:feature'
       )
     )
@@ -187,33 +193,15 @@ const execGenerateServerlessLibs = (isReady) =>
         isReady,
         'npx nx g @nrwl/nest:lib serverless/types --unitTestRunner=none --tags=scope:serverless,type:types'
       )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/util --unitTestRunner=jest --tags=scope:serverless,type:util'
-      )
     );
 
-const execGenerateSharedServerLibs = (isReady) =>
-  Promise.resolve(console.log('#### shared-server libraries'))
+const execGenerateSharedServerTypesLib = (isReady) =>
+  Promise.resolve(console.log('#### shared-server-types library'))
     .then(() => console.log())
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data-access'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
+        'npx nx g @nrwl/nest:lib shared-server-types --unitTestRunner=none --tags=scope:shared-server,type:types'
       )
     );
 
@@ -291,7 +279,7 @@ const execGenerateLibs = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateServerlessLibs(isReady))
     .then(() => console.log())
-    .then(() => execGenerateSharedServerLibs(isReady))
+    .then(() => execGenerateSharedServerTypesLib(isReady))
     .then(() => console.log())
     .then(() => execGenerateSharedTypesLib(isReady))
     .then(() => console.log())
@@ -307,9 +295,6 @@ const execAddAngularElements = (isReady) =>
         isReady,
         'npx nx add @angular/elements --project=website'
       )
-    )
-    .then(() =>
-      consoleLogOrExec(isReady, 'npm uninstall document-register-element')
     )
     .then(() => consoleLogOrExec(isReady, 'npm i @ungap/custom-elements'));
 
@@ -350,6 +335,11 @@ const execAddAngularPWA = (isReady) =>
       consoleLogOrExec(isReady, 'npx ng add @angular/pwa --project=website')
     );
 
+const execAddReactMaterialUi = (isReady) =>
+  Promise.resolve(console.log('### add react material ui'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i @material-ui/core'));
+
 const execAddServerless = (isReady) =>
   Promise.resolve(console.log('### add serverless'))
     .then(() => console.log())
@@ -379,57 +369,68 @@ const execAddAzureBlobStorage = (isReady) => {
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
 };
 
-const getAddStorybookWithCypressCommand = (libName) =>
-  `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=true --generateCypressSpecs=true --generateStories=true`;
-
-const getAddStorybookCommand = (libName) =>
-  `npx nx g @nrwl/angular:storybook-configuration ${libName} --configureCypress=false`;
-
 const execAddStorybook = (isReady) =>
   Promise.resolve(console.log('### add storybook'))
     .then(() => console.log())
     .then(() =>
       consoleLogOrExec(
         isReady,
-        getAddStorybookWithCypressCommand('ui-storybook')
-      )
-    )
-    .then(() => consoleLogOrExec(isReady, getAddStorybookCommand('best-of-ui')))
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        getAddStorybookCommand('elements-ui-image-grid-gallery')
+        'npx nx g @nrwl/angular:storybook-configuration ui-storybook --configureCypress=true --generateCypressSpecs=true --generateStories=true'
       )
     )
     .then(() =>
       consoleLogOrExec(
         isReady,
-        getAddStorybookCommand('elements-ui-image-slide-gallery')
+        'npx nx g @nrwl/react:storybook-configuration best-of-ui --configureCypress=false --generateStories=false --generateCypressSpecs=false'
       )
     )
     .then(() =>
       consoleLogOrExec(
         isReady,
-        getAddStorybookCommand('elements-ui-progressive-image')
+        'npx nx g @nrwl/angular:storybook-configuration elements-ui-image-grid-gallery --configureCypress=false'
       )
     )
     .then(() =>
       consoleLogOrExec(
         isReady,
-        getAddStorybookCommand('elements-ui-tilt-shift-image')
+        'npx nx g @nrwl/angular:storybook-configuration elements-ui-image-slide-gallery --configureCypress=false'
       )
     )
     .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-admin'))
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:storybook-configuration elements-ui-progressive-image --configureCypress=false'
+      )
     )
     .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-common'))
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:storybook-configuration elements-ui-tilt-shift-image --configureCypress=false'
+      )
     )
     .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-home'))
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:storybook-configuration website-ui-ui-admin --configureCypress=false'
+      )
     )
     .then(() =>
-      consoleLogOrExec(isReady, getAddStorybookCommand('website-ui-ui-shell'))
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:storybook-configuration website-ui-ui-common --configureCypress=false'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:storybook-configuration website-ui-ui-home --configureCypress=false'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:storybook-configuration website-ui-ui-shell --configureCypress=false'
+      )
     )
     .then(() => consoleLogOrExec(isReady, 'npm uninstall @storybook/angular'))
     .then(() =>
@@ -480,6 +481,9 @@ const execAddFontAwesome = (isReady) =>
       consoleLogOrExec(isReady, 'npm i @fortawesome/angular-fontawesome')
     )
     .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/react-fontawesome')
+    )
+    .then(() =>
       consoleLogOrExec(isReady, 'npm i @fortawesome/free-brands-svg-icons')
     )
     .then(() =>
@@ -488,6 +492,12 @@ const execAddFontAwesome = (isReady) =>
     .then(() =>
       consoleLogOrExec(isReady, 'npm i @fortawesome/free-solid-svg-icons')
     );
+
+const execUpdateSass = (isReady) =>
+  Promise.resolve(console.log('### update sass'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm uninstall node-sass'))
+    .then(() => consoleLogOrExec(isReady, 'npm i sass'));
 
 const execInstall = (isReady) =>
   Promise.resolve(console.log('## install'))
@@ -512,6 +522,8 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
+    .then(() => execAddReactMaterialUi(isReady))
+    .then(() => console.log())
     .then(() => execAddServerless(isReady))
     .then(() => console.log())
     .then(() => execAddSwagger(isReady))
@@ -528,7 +540,9 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddAuthentication(isReady))
     .then(() => console.log())
-    .then(() => execAddFontAwesome(isReady));
+    .then(() => execAddFontAwesome(isReady))
+    .then(() => console.log())
+    .then(() => execUpdateSass(isReady));
 
 const rl = readline.createInterface({
   input: process.stdin,

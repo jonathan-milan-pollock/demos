@@ -15,7 +15,6 @@ import { faSlidersVSquare } from '@fortawesome/pro-light-svg-icons';
   selector: 'drp-top-tab-bar',
   templateUrl: './top-tab-bar.component.html',
   styleUrls: ['./top-tab-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopTabBarComponent {
   faCameraAlt = faCameraAlt;

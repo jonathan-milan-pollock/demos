@@ -1,21 +1,15 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
 import { Review } from '@dark-rush-photography/shared-types';
 import { Page } from '@dark-rush-photography/website/types';
-import { MetaService } from '@dark-rush-photography/website/data';
+import { addReview, MetaService } from '@dark-rush-photography/website/data';
 
 @Component({
   templateUrl: './admin-reviews.component.html',
   styleUrls: ['./admin-reviews.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminReviewsComponent implements OnInit, OnDestroy {
   reviews?: Review[] = [];
@@ -46,6 +40,6 @@ export class AdminReviewsComponent implements OnInit, OnDestroy {
 
   onReviewSubmitted(review: Review): void {
     this.isLoading = true;
-    // this.reviewStore.dispatch(addReview({ review }));
+    this.reviewStore.dispatch(addReview({ review }));
   }
 }

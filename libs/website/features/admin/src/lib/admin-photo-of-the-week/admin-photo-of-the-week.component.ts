@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -16,7 +16,6 @@ import {
 @Component({
   templateUrl: './admin-photo-of-the-week.component.html',
   styleUrls: ['./admin-photo-of-the-week.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminPhotoOfTheWeekComponent
   implements OnInit, CanComponentDeactivate {

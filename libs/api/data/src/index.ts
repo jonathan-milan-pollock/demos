@@ -1,3 +1,6 @@
+// azure-storage
+export * from './lib/azure-storage/azure-storage-image.functions';
+
 // destinations
 export * from './lib/mock/destinations/colorado';
 

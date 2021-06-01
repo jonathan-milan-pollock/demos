@@ -2,37 +2,34 @@ import {
   Controller,
   Body,
   Param,
-  Get,
   Post,
   Put,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
+
+import { Observable } from 'rxjs';
 
 import { Event } from '@dark-rush-photography/shared-types';
 import { AdminEventsService } from './admin-events.service';
 
-@Controller('admin/events')
+@Controller('admin/v1/events')
 export class AdminEventsController {
   constructor(private readonly adminEventsService: AdminEventsService) {}
 
   @Post()
-  async addEvent(@Body() event: Event): Promise<{ id: string }> {
-    const id = await this.adminEventsService.addEvent(event);
-    return { id };
+  addEvent(@Body() event: Event): Observable<Event> {
+    return this.adminEventsService.addEvent(event);
   }
 
   @Put(':id')
-  async updateEvent(
-    @Param() id: string,
-    @Body() event: Event
-  ): Promise<{ slug: string }> {
-    return {
-      slug: await this.adminEventsService.updateEvent(id, event),
-    };
+  updateEvent(@Param() id: string, @Body() event: Event): Observable<Event> {
+    return this.adminEventsService.updateEvent(id, event);
   }
 
+  @HttpCode(204)
   @Delete(':id')
-  async deleteEvent(@Param() id: string): Promise<void> {
-    await this.adminEventsService.deleteEvent(id);
+  deleteEvent(@Param() id: string): Observable<void> {
+    return this.adminEventsService.deleteEvent(id);
   }
 }

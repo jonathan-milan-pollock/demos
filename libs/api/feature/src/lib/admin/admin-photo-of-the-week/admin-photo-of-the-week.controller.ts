@@ -1,39 +1,45 @@
-import { Controller, Body, Param, Post, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Param,
+  Post,
+  Put,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
+
+import { Observable } from 'rxjs';
 
 import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
 import { AdminPhotoOfTheWeekService } from './admin-photo-of-the-week.service';
 
-@Controller('admin/photo-of-the-week')
+@Controller('admin/v1/photo-of-the-week')
 export class AdminPhotoOfTheWeekController {
   constructor(
     private readonly adminPhotoOfTheWeekService: AdminPhotoOfTheWeekService
   ) {}
 
   @Post()
-  async addPhotoOfTheWeek(
+  addPhotoOfTheWeek(
     @Body() photoOfTheWeek: PhotoOfTheWeek
-  ): Promise<{ id: string }> {
-    const id = await this.adminPhotoOfTheWeekService.addPhotoOfTheWeek(
-      photoOfTheWeek
-    );
-    return { id };
+  ): Observable<PhotoOfTheWeek> {
+    return this.adminPhotoOfTheWeekService.addPhotoOfTheWeek(photoOfTheWeek);
   }
 
   @Put(':id')
-  async updatePhotoOfTheWeek(
+  updatePhotoOfTheWeek(
     @Param() id: string,
     @Body() photoOfTheWeek: PhotoOfTheWeek
-  ): Promise<{ slug: string }> {
-    return {
-      slug: await this.adminPhotoOfTheWeekService.updatePhotoOfTheWeek(
-        id,
-        photoOfTheWeek
-      ),
-    };
+  ): Observable<PhotoOfTheWeek> {
+    return this.adminPhotoOfTheWeekService.updatePhotoOfTheWeek(
+      id,
+      photoOfTheWeek
+    );
   }
 
+  @HttpCode(204)
   @Delete(':id')
-  async deletePhotoOfTheWeek(@Param() id: string): Promise<void> {
-    await this.adminPhotoOfTheWeekService.deletePhotoOfTheWeek(id);
+  deletePhotoOfTheWeek(@Param() id: string): Observable<void> {
+    return this.adminPhotoOfTheWeekService.deletePhotoOfTheWeek(id);
   }
 }
