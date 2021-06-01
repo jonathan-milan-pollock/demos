@@ -31,27 +31,27 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
   /**
    * Source of the thumbnail image
    */
-  @Input() thumbnailSrc?: string;
+  @Input() thumbnailSrc?: string = 'https://picsum.photos/id/2/25/12';
 
   /**
    * Source of the image
    */
-  @Input() imageSrc?: string;
+  @Input() imageSrc?: string = 'https://picsum.photos/id/2/256/128';
 
   /**
    * Width of the the image.
    */
-  @Input() width?: string;
+  @Input() width?: string = '256px';
 
   /**
    * Height of the image.
    */
-  @Input() height?: string;
+  @Input() height?: string = '128px';
 
   /**
    * Transition time between when the image is loaded and is displayed.
    */
-  @Input() transitionMilliseconds?: number;
+  @Input() transitionMilliseconds?: number = 500;
 
   //private readonly viewportService: ViewportService
   //constructor(

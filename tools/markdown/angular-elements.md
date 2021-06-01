@@ -103,4 +103,29 @@ export * from './lib/elements-ui-progressive-image-component.module';
   - view encapsulation: ShadowDom
   - select SkipTests (instead create tests in Cypress with Storybook)
 
+### add angular element to react nextjs
+
+- import the element
+
+```ts
+import '@dark-rush-photography/progressive-image';
+```
+
+- add intrinsic.d.ts file
+
+```ts
+declare namespace JSX {
+  interface IntrinsicElements {
+    [elemName: string]: any;
+  }
+}
+```
+
+- add polyfills to \_app.tsx
+
+```ts
+import 'reflect-metadata';
+import 'zone.js';
+```
+
 ---

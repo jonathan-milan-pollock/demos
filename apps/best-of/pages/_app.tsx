@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-
 import { useRouter } from 'next/router';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
