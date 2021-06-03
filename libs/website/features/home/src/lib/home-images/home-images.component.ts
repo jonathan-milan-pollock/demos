@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   templateUrl: './home-images.component.html',
   styleUrls: ['./home-images.component.scss'],
 })
-export class HomeImagesComponent {
-  transitionMilliseconds = 500;
-}
+export class HomeImagesComponent {}

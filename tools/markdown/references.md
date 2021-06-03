@@ -36,6 +36,21 @@
 
 ---
 
+## js
+
+---
+
+## stenciljs
+
+- :clapper: [StencilJS](https://stenciljs.com/)
+- :clapper: [Custom Elements Everywhere](https://custom-elements-everywhere.com/)
+- :clapper: [StencilJS with Storybook](https://medium.com/@neza.djukic/storybook-stenciljs-ionic-4-angular-under-one-roof-159cc8dab3a4)
+- :clapper: [StencilJS in Nx](https://javascript.plainenglish.io/how-to-use-stencil-web-components-in-react-within-a-nx-monorepo-d6644f6ee858)
+
+- :clapper: [Stencil & Storybook](https://github.com/dutscher/stencil-storybook)
+
+---
+
 ## angular
 
 - :blue_book: [Angular Development with TypeScript, Second Edition](https://www.manning.com/books/angular-development-with-typescript-second-edition)

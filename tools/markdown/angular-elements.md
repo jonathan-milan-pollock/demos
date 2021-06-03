@@ -1,10 +1,12 @@
 # angular elements
 
+## _As Angular Elements does not support Angular Universal now using Stencil to create custom elements_
+
 - @angular/elements allows you to create custom elements in Angular 8+
 
 ---
 
-## resources
+## references
 
 - :page_with_curl: [Angular Elements Guide](https://angular.io/guide/elements)
 - :page_with_curl: [Angular Elements React and Angular in Nx](https://indepth.dev/posts/1030/how-to-talk-with-web-components-in-react-and-angular)
@@ -70,7 +72,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export * from './lib/elements-ui-progressive-image-component.module';
 ```
 
-#### add to index.json the component-index.ts file
+- add component-index.ts file
+- add to tsconfig.base.json
 
 ```json
        "@dark-rush-photography/progressive-image-component": [
@@ -105,10 +108,19 @@ export * from './lib/elements-ui-progressive-image-component.module';
 
 ### add angular element to react nextjs
 
-- import the element
+- add polyfills to \_app.tsx
 
 ```ts
-import '@dark-rush-photography/progressive-image';
+import 'reflect-metadata';
+import 'zone.js';
+```
+
+- import the element with useEffect hook
+
+```ts
+React.useEffect(() => {
+  import('@dark-rush-photography/progressive-image');
+}, []);
 ```
 
 - add intrinsic.d.ts file
@@ -119,13 +131,6 @@ declare namespace JSX {
     [elemName: string]: any;
   }
 }
-```
-
-- add polyfills to \_app.tsx
-
-```ts
-import 'reflect-metadata';
-import 'zone.js';
 ```
 
 ---

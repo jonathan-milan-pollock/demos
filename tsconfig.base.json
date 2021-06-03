@@ -30,26 +30,9 @@
       ],
       "@dark-rush-photography/best-of/ui": ["libs/best-of/ui/src/index.ts"],
       "@dark-rush-photography/best-of/util": ["libs/best-of/util/src/index.ts"],
-      "@dark-rush-photography/elements/types": [
-        "libs/elements/types/src/index.ts"
-      ],
-      "@dark-rush-photography/image-grid-gallery": [
-        "libs/elements/ui/image-grid-gallery/src/index.ts"
-      ],
-      "@dark-rush-photography/image-slide-gallery": [
-        "libs/elements/ui/image-slide-gallery/src/index.ts"
-      ],
-      "@dark-rush-photography/progressive-image": [
-        "libs/elements/ui/progressive-image/src/index.ts"
-      ],
-      "@dark-rush-photography/progressive-image-component": [
-        "libs/elements/ui/progressive-image/src/component-index.ts"
-      ],
-      "@dark-rush-photography/tilt-shift-image": [
-        "libs/elements/ui/tilt-shift-image/src/index.ts"
-      ],
-      "@dark-rush-photography/elements/util": [
-        "libs/elements/util/src/index.ts"
+      "@dark-rush-photography/image-elements": ["dist/libs/image-elements"],
+      "@dark-rush-photography/image-elements/loader": [
+        "dist/libs/image-elements/loader"
       ],
       "@dark-rush-photography/serverless/data": [
         "libs/serverless/data/src/index.ts"

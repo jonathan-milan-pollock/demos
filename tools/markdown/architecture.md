@@ -47,9 +47,10 @@
 
 ## setup nx
 
-### delete modules of types, utils, and data libraries
+### from types, utils, and data libraries
 
-- also remove the module export from index.ts
+- delete module
+- remove the module export from index.ts
 
 ### .eslintrc.json
 
@@ -65,6 +66,9 @@
   ],
   "rules": {}
 },
+
+- add rules for project types
+
 ```
 
 ### nx.json
@@ -124,6 +128,12 @@ __queuestorage__
 /libs/ui-storybook/.storybook/documentation/documentation.json
 ```
 
+### in angular.json add codeCoverage to test tasks
+
+```json
+"codeCoverage": true
+```
+
 ### reorder apps and libs so nx console displays projects in correct order
 
 - order apps then libs in source order
@@ -131,6 +141,77 @@ __queuestorage__
   - jest.config.js
   - nx.json
   - tsconfig.base.json
+
+---
+
+## setup image-elements
+
+- rename generators back to schematics in angular.json
+
+- added to root jest.config.js
+
+```js
+  '<rootDir>/libs/image-elements',
+```
+
+- added jest.config.js to image-elements lib
+
+```js
+module.exports = {
+  displayName: 'image-elements',
+  preset: '@stencil/core/testing',
+  coverageDirectory: '../../coverage/libs/image-elements',
+};
+```
+
+- in angular.json add test target and remove e2e
+
+```json
+"test": {
+  "builder": "@nrwl/jest:jest",
+  "outputs": ["coverage/libs/image-elements"],
+  "options": {
+    "jestConfig": "libs/image-elements/jest.config.js",
+    "passWithNoTests": true,
+    "codeCoverage": true
+  }
+}
+```
+
+- in stencil.config.ts add
+
+```ts
+    {
+      type: 'www',
+      serviceWorker: null, // disable service workers
+    },
+```
+
+- update license with additional licenses of image components converted by lib
+
+- from a jest enabled lib copy
+  - add tsconfig.spec.json
+  - add references to the spec file
+
+```ts
+  "references": [
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+```
+
+- add markdown.d.ts as will be including readme.md from components in storybook stories
+
+- in ui-storybook create preview-head.html
+
+```html
+<script src="/image-elements/www/build/image-elements.js" nomodule></script>
+<script
+  src="/image-elements/www/build/image-elements.esm.js"
+  type="module"
+></script>
+```
 
 ---
 
@@ -159,12 +240,6 @@ preloadingStrategy: PreloadAllModules;
 - in angular.json for app
   - remove assets from angular.json
   - add /dist/src at end of output path
-
----
-
-## setup angular elements
-
-- [Angular Elements Setup](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/angular-elements.md)
 
 ---
 
@@ -203,6 +278,7 @@ preloadingStrategy: PreloadAllModules;
 
 ## setup react
 
+- as react installs node-sass which is deprecated, install-workspace.js uninstalls node-sass and installs sass
 - remove the following from best-of feature, types, and ui README.md as projects are not setup for tests
 
 ```md
@@ -267,7 +343,7 @@ module.exports = rootMain;
 
 ### in all storybook libraries
 
-#### for all angular storybook libraries (except for elements) in angular.json add styles.scss
+#### for all angular storybook libraries in angular.json add styles.scss
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
@@ -385,7 +461,7 @@ export class AppModule {
 #### Add NPM Auth Token to Install Font Awesome PRO
 
 - [Setup Font Awesome Pro globally](https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers)
-- npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+- npm config set "@fortawesome:registry" <https://npm.fontawesome.com/>
 - npm config set "//npm.fontawesome.com/:\_authToken" FONTAWESOME_NPM_AUTH_TOKEN
 
 #### Install Font Awesome Pro Libraries
