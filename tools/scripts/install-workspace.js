@@ -26,6 +26,7 @@ const execInstallSchematics = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/angular'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/react'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/next'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @nxext/stencil'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/nest'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nrwl/storybook'));
 
@@ -133,43 +134,13 @@ const execGenerateBestOfLibs = (isReady) =>
       )
     );
 
-const execGenerateElementsLibs = (isReady) =>
-  Promise.resolve(console.log('#### elements libraries'))
+const execGenerateImageElementsLibs = (isReady) =>
+  Promise.resolve(console.log('#### image elements libraries'))
     .then(() => console.log())
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/angular:lib elements/types --unitTestRunner=none --tags=scope:elements,type:types --prefix=drp'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib elements/ui/image-grid-gallery --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/image-grid-gallery --prefix=drp'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib elements/ui/image-slide-gallery --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/image-slide-gallery --prefix=drp'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib elements/ui/progressive-image --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/progressive-image --prefix=drp'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib elements/ui/tilt-shift-image --unitTestRunner=none --tags=scope:elements,type:ui --publishable --importPath=@dark-rush-photography/tilt-shift-image --prefix=drp'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:lib elements/util --unitTestRunner=jest --tags=scope:elements,type:util --prefix=drp'
+        'npx nx g @nxext/stencil:lib image-elements --style=scss --tags=scope:image-elements,type:ui --publishable --importPath=@dark-rush-photography/image-elements'
       )
     );
 
@@ -225,15 +196,6 @@ const execGenerateUiStorybook = (isReady) =>
       )
     );
 
-const getWebsiteFeatureLibCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/features/${libName} --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp`;
-
-const getWebsiteUiLibCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp`;
-
-const getWebsiteUiLibWithUnitTestsCommand = (libName) =>
-  `npx nx g @nrwl/angular:lib website/ui/${libName} --unitTestRunner=jest --tags=scope:website,type:ui --prefix=drp`;
-
 const execGenerateWebsiteLibs = (isReady) =>
   Promise.resolve(console.log('#### website libraries'))
     .then(() => console.log())
@@ -243,8 +205,18 @@ const execGenerateWebsiteLibs = (isReady) =>
         'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data-access --prefix=drp'
       )
     )
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('admin')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteFeatureLibCommand('home')))
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib website/features/admin --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib website/features/home --unitTestRunner=none --tags=scope:website,type:feature --routing --lazy --parent-module=apps/website/src/app/app.module.ts --prefix=drp'
+      )
+    )
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -254,49 +226,39 @@ const execGenerateWebsiteLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        getWebsiteUiLibWithUnitTestsCommand('ui-directives')
+        'npx nx g @nrwl/angular:lib website/ui/ui-directives --unitTestRunner=jest --tags=scope:website,type:ui --prefix=drp'
       )
     )
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-admin')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-common')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-home')))
-    .then(() => consoleLogOrExec(isReady, getWebsiteUiLibCommand('ui-shell')))
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib website/ui/ui-admin --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib website/ui/ui-common --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib website/ui/ui-home --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/angular:lib website/ui/ui-shell --unitTestRunner=none --tags=scope:website,type:ui --prefix=drp'
+      )
+    )
     .then(() =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/angular:lib website/util --unitTestRunner=jest --tags=scope:website,type:util --prefix=drp'
       )
     );
-
-const execGenerateLibs = (isReady) =>
-  Promise.resolve(console.log('### libs'))
-    .then(() => console.log())
-    .then(() => execGenerateApiLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateBestOfLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateElementsLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateServerlessLibs(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateSharedServerTypesLib(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateSharedTypesLib(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateUiStorybook(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateWebsiteLibs(isReady));
-
-const execAddAngularElements = (isReady) =>
-  Promise.resolve(console.log('### add angular elements'))
-    .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx add @angular/elements --project=website'
-      )
-    )
-    .then(() => consoleLogOrExec(isReady, 'npm i @ungap/custom-elements'));
 
 const execAddAngularUniversal = (isReady) =>
   Promise.resolve(console.log('### add angular universal'))
@@ -362,12 +324,11 @@ const execAddMongoose = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'));
 
-const execAddAzureBlobStorage = (isReady) => {
+const execAddAzureBlobStorage = (isReady) =>
   Promise.resolve(console.log('### add azure blob storage'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
-};
 
 const execAddStorybook = (isReady) =>
   Promise.resolve(console.log('### add storybook'))
@@ -382,30 +343,6 @@ const execAddStorybook = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/react:storybook-configuration best-of-ui --configureCypress=false --generateStories=false --generateCypressSpecs=false'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:storybook-configuration elements-ui-image-grid-gallery --configureCypress=false'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:storybook-configuration elements-ui-image-slide-gallery --configureCypress=false'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:storybook-configuration elements-ui-progressive-image --configureCypress=false'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/angular:storybook-configuration elements-ui-tilt-shift-image --configureCypress=false'
       )
     )
     .then(() =>
@@ -452,7 +389,7 @@ const execUpdateCypress = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D cypress'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D cypress-storybook'));
 
-const execAddImageProcessing = (isReady) => {
+const execAddImageProcessing = (isReady) =>
   Promise.resolve(console.log('### add image processing'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/sharp'))
@@ -461,9 +398,8 @@ const execAddImageProcessing = (isReady) => {
     .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i datauri'));
-};
 
-const execAddAuthentication = (isReady) => {
+const execAddAuthentication = (isReady) =>
   Promise.resolve(console.log('### add authentication'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/passport-jwt'))
@@ -472,7 +408,6 @@ const execAddAuthentication = (isReady) => {
     .then(() => consoleLogOrExec(isReady, 'npm i passport'))
     .then(() => consoleLogOrExec(isReady, 'npm i passport-jwt'))
     .then(() => consoleLogOrExec(isReady, 'npm i jwks-rsa'));
-};
 
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
@@ -510,9 +445,21 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateApps(isReady))
     .then(() => console.log())
-    .then(() => execGenerateLibs(isReady))
+    .then(() => execGenerateApiLibs(isReady))
     .then(() => console.log())
-    .then(() => execAddAngularElements(isReady))
+    .then(() => execGenerateBestOfLibs(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateImageElementsLibs(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateServerlessLibs(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateSharedServerTypesLib(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateSharedTypesLib(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateUiStorybook(isReady))
+    .then(() => console.log())
+    .then(() => execGenerateWebsiteLibs(isReady))
     .then(() => console.log())
     .then(() => execAddAngularUniversal(isReady))
     .then(() => console.log())

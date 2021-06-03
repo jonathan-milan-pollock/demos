@@ -78,23 +78,8 @@
     "best-of-util": {
       "tags": ["scope:best-of", "type:util"]
     },
-    "elements-types": {
-      "tags": ["scope:elements", "type:types"]
-    },
-    "elements-ui-image-grid-gallery": {
-      "tags": ["scope:elements", "type:ui"]
-    },
-    "elements-ui-image-slide-gallery": {
-      "tags": ["scope:elements", "type:ui"]
-    },
-    "elements-ui-progressive-image": {
-      "tags": ["scope:elements", "type:ui"]
-    },
-    "elements-ui-tilt-shift-image": {
-      "tags": ["scope:elements", "type:ui"]
-    },
-    "elements-util": {
-      "tags": ["scope:elements", "type:util"]
+    "image-elements": {
+      "tags": ["scope:image-elements", "type:ui"]
     },
     "serverless-data": {
       "tags": ["scope:serverless", "type:data-access"]
