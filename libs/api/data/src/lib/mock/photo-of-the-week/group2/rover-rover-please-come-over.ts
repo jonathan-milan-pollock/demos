@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class RoverRoverPleaseComeOver implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class RoverRoverPleaseComeOver extends PhotoOfTheWeekDto {
   slug = 'rover-rover-please-come-over';
   group = 2;
   title = 'Rover Rover Please Come Over';
@@ -20,20 +14,20 @@ export class RoverRoverPleaseComeOver implements PhotoOfTheWeek {
     'Happy',
     'Memories',
   ];
-  datePublished = { month: Month.January, day: 27, year: 2020 };
+  dateCreated = new Date(2020, 1, 27).toISOString().substring(0, 10);
+  datePublished = new Date(2020, 1, 27).toISOString().substring(0, 10);
   location = {
     city: 'Englewood',
     stateOrProvince: 'Florida',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new RoverRoverPleaseComeOver();
   }
 }

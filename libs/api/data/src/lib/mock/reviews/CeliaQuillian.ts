@@ -1,8 +1,6 @@
-import { Review, DocumentType } from '@dark-rush-photography/shared-types';
+import { ReviewDto } from '@dark-rush-photography/api/types';
 
-export class CeliaQuillian implements Review {
-  id = '';
-  type: DocumentType = 'Review';
+export class CeliaQuillian extends ReviewDto {
   title = 'Celia Quillian';
   text = [
     `
@@ -11,12 +9,12 @@ export class CeliaQuillian implements Review {
     making her subjects feel at ease!
     `,
   ];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Review {
+  static of(): ReviewDto {
     return new CeliaQuillian();
   }
 }

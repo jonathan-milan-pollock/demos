@@ -5,7 +5,7 @@ import { from, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { Destination } from '@dark-rush-photography/shared-types';
+import { Destination, DocumentType } from '@dark-rush-photography/shared-types';
 import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -15,11 +15,13 @@ export class DestinationsService {
     private readonly destinationModel: Model<DocumentModel>
   ) {}
 
-  getDestinations(): Observable<Destination[]> {
-    return from(this.destinationModel.find({ type: 'Destination' }).exec());
+  findAll(): Observable<Destination[]> {
+    return from(
+      this.destinationModel.find({ type: DocumentType.Destination }).exec()
+    );
   }
 
-  getDestination(id: string): Observable<Destination> {
+  findOne(id: string): Observable<Destination> {
     return from(this.destinationModel.findById(id)).pipe(
       tap((d) => {
         if (!d) {

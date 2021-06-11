@@ -13,25 +13,25 @@ module.exports = df.orchestrator(function* (context) {
 
   context.log(formatMessage('RenameImage'));
   publishedImage = context.df.callActivity('RenameImage', publishedImage);
-  completedProcesses.push(yield publishedImage.imageProcessType);
+  completedProcesses.push(yield publishedImage.imageDimensionState);
 
   context.log(formatMessage('ResizeImageTile'));
   publishedImage = yield context.df.callActivity(
     'ResizeImageTile',
     publishedImage
   );
-  completedProcesses.push(publishedImage.imageProcessType);
+  completedProcesses.push(publishedImage.imageDimensionState);
 
   context.log(formatMessage('ResizeImageThumbnail'));
   publishedImage = yield context.df.callActivity(
     'ResizeImageThumbnail',
     publishedImage
   );
-  completedProcesses.push(publishedImage.imageProcessType);
+  completedProcesses.push(publishedImage.imageDimensionState);
 
   context.log(formatMessage('RevealImage'));
   publishedImage = yield context.df.callActivity('RevealImage', publishedImage);
-  completedProcesses.push(publishedImage.imageProcessType);
+  completedProcesses.push(publishedImage.imageDimensionState);
 
   const completedMessage = `Image Post orchestrator completed 
    ${completedProcesses.join(', ')}`;

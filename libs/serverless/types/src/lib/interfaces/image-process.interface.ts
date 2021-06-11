@@ -1,9 +1,9 @@
-import { ImageProcessType } from '../types/image-process.type';
-import { ImageProcessData } from './image-process-data.interface';
+import { ImageProcessState } from '@dark-rush-photography/shared-types';
 import { PublishedImage } from './published-image.interface';
+import { ImageProcessData } from './image-process-data.interface';
 
 export interface ImageProcess {
-  readonly type: ImageProcessType;
+  readonly state: ImageProcessState;
   readonly publishedImage: PublishedImage;
   readonly data?: ImageProcessData;
 }

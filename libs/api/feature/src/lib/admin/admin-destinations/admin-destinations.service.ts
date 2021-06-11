@@ -5,17 +5,12 @@ import { from, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import {
-  ENV,
-  ImageDimensionType,
-  Destination,
-} from '@dark-rush-photography/shared-types';
+import { ENV, Destination } from '@dark-rush-photography/shared-types';
 import { Env } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  dataUriForAzureBlob$,
-  azureStorageImageNames$,
+  DocumentModelService,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -23,19 +18,15 @@ export class AdminDestinationsService {
   constructor(
     @Inject(ENV) private readonly env: Env,
     @InjectModel(Document.name)
-    private readonly destinationModel: Model<DocumentModel>
+    private readonly destinationModel: Model<DocumentModel>,
+    private readonly documentModelService: DocumentModelService
   ) {}
 
-  addDestination(destination: Destination): Observable<Destination> {
-    return of(new this.destinationModel(destination)).pipe(
-      switchMap((d) => d.save())
-    );
+  create(destination: Destination): Observable<Destination> {
+    return from(new this.destinationModel(destination).save());
   }
 
-  updateDestination(
-    id: string,
-    destination: Destination
-  ): Observable<Destination> {
+  update(id: string, destination: Destination): Observable<Destination> {
     return from(this.destinationModel.findById(id)).pipe(
       tap((d) => {
         if (!d) {
@@ -47,26 +38,7 @@ export class AdminDestinationsService {
     );
   }
 
-  getImages(dimensionType: string): Observable<string[]> {
-    return azureStorageImageNames$(
-      this.env.azureStorageConnectionString,
-      'private',
-      `resized-image/BestOf/children/best37/${dimensionType.toLowerCase()}`
-    );
-  }
-
-  getImage(
-    slug: string,
-    dimensionType: ImageDimensionType
-  ): Observable<string> {
-    return dataUriForAzureBlob$(
-      this.env.azureStorageConnectionString,
-      'private',
-      `resized-image/BestOf/children/best37/${dimensionType.toLowerCase()}/${slug.toLowerCase()}.jpg`
-    );
-  }
-
-  deleteDestination(id: string): Observable<void> {
+  delete(id: string): Observable<void> {
     return of(this.destinationModel.findByIdAndDelete(id)).pipe(
       map(() => undefined)
     );

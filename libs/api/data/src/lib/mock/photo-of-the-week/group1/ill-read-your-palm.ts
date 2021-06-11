@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class IllReadYourPalm implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class IllReadYourPalm extends PhotoOfTheWeekDto {
   slug = 'ill-read-your-palm';
   group = 1;
   title = "I'll Read Your Palm";
@@ -21,7 +15,8 @@ export class IllReadYourPalm implements PhotoOfTheWeek {
     'Manicured Lawn',
     'Landscaping',
   ];
-  datePublished = { month: Month.April, day: 4, year: 2019 };
+  dateCreated = new Date(2019, 4, 4).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 4, 4).toISOString().substring(0, 10);
   location = {
     place: 'Jackson Square',
     city: 'New Orleans',
@@ -29,13 +24,12 @@ export class IllReadYourPalm implements PhotoOfTheWeek {
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new IllReadYourPalm();
   }
 }

@@ -1,4 +1,5 @@
 import { Controller, Param, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -7,18 +8,18 @@ import { Public } from '@dark-rush-photography/api/util';
 import { DestinationsService } from './destinations.service';
 
 @Controller('v1/destinations')
+@Public()
+@ApiTags('Destinations')
 export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
-  @Public()
   @Get()
-  getDestinations(): Observable<Destination[]> {
-    return this.destinationsService.getDestinations();
+  findAll(): Observable<Destination[]> {
+    return this.destinationsService.findAll();
   }
 
-  @Public()
   @Get(':id')
-  getDestination(@Param() id: string): Observable<Destination> {
-    return this.destinationsService.getDestination(id);
+  findOne(@Param() id: string): Observable<Destination> {
+    return this.destinationsService.findOne(id);
   }
 }

@@ -15,11 +15,11 @@ export class AdminEventsService {
     private readonly eventModel: Model<DocumentModel>
   ) {}
 
-  addEvent(event: Event): Observable<Event> {
+  create(event: Event): Observable<Event> {
     return of(new this.eventModel(event)).pipe(switchMap((e) => e.save()));
   }
 
-  updateEvent(id: string, event: Event): Observable<Event> {
+  update(id: string, event: Event): Observable<Event> {
     return from(this.eventModel.findById(id)).pipe(
       tap((e) => {
         if (!e) {
@@ -31,7 +31,7 @@ export class AdminEventsService {
     );
   }
 
-  deleteEvent(id: string): Observable<void> {
+  delete(id: string): Observable<void> {
     return of(this.eventModel.findByIdAndDelete(id)).pipe(
       switchMap(() => EMPTY)
     );

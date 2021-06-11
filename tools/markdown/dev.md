@@ -55,14 +55,6 @@
 
 ---
 
-### install Community Edition MongoDB
-
-- <https://www.mongodb.com/try/download/community>
-- When installing make sure to add server for the install
-- Click connect then create database drp-mongo-db-database & collection documents
-
----
-
 ### optional VSCode extensions (other VSCode extensions have been added to .vscode extensions.json)
 
 - [optionally Install open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser&ssr=false#review-details)

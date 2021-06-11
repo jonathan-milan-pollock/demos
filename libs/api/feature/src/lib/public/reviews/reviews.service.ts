@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { from, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap, toArray } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -15,11 +15,25 @@ export class ReviewsService {
     private readonly reviewModel: Model<DocumentModel>
   ) {}
 
-  getReviews(): Observable<Review[]> {
-    return from(this.reviewModel.find({ type: 'Review' }).exec());
+  findAll(): Observable<Review[]> {
+    return from(
+      this.reviewModel.find({ type: DocumentType.Review }).exec()
+    ).pipe(
+      switchMap((reviews) => from(reviews)),
+      map(
+        (review) =>
+          ({
+            id: review.id,
+            title: review.title,
+            text: review.text,
+            image: review.image,
+          } as Review)
+      ),
+      toArray<Review>()
+    );
   }
 
-  getReview(id: string): Observable<Review> {
+  findOne(id: string): Observable<Review> {
     return from(this.reviewModel.findById(id)).pipe(
       tap((r) => {
         if (!r) {

@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class WonderWhereTheRoadLeadsYou implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class WonderWhereTheRoadLeadsYou extends PhotoOfTheWeekDto {
   slug = 'wonder-where-the-road-leads-you';
   group = 1;
   title = 'Wonder Where the Road Leads You, I Wonder Where the Road Leads Me';
@@ -24,7 +18,8 @@ export class WonderWhereTheRoadLeadsYou implements PhotoOfTheWeek {
     'Nature',
     'Outdoors',
   ];
-  datePublished = { month: Month.July, day: 20, year: 2019 };
+  dateCreated = new Date(2019, 7, 20).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 7, 20).toISOString().substring(0, 10);
   location = {
     place: 'Myakka River State Park',
     city: 'Sarasota',
@@ -32,13 +27,12 @@ export class WonderWhereTheRoadLeadsYou implements PhotoOfTheWeek {
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new WonderWhereTheRoadLeadsYou();
   }
 }

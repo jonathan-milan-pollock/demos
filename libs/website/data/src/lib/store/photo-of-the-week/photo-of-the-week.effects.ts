@@ -72,13 +72,13 @@ export class PhotoOfTheWeekEffects {
       ofType(PhotoOfTheWeekActions.updatePhotoOfTheWeek),
       mergeMap((action) =>
         this.photoOfTheWeeksService
-          .update(action.photoOfTheWeek.id, action.photoOfTheWeek)
+          .update(action.photoOfTheWeek.id ?? '', action.photoOfTheWeek)
           .pipe(
             map(
               ({ id, ...changes }) =>
                 PhotoOfTheWeekActions.updatePhotoOfTheWeekSuccess({
                   updatedPhotoOfTheWeek: {
-                    id,
+                    id: id ?? '',
                     changes,
                   },
                 }),

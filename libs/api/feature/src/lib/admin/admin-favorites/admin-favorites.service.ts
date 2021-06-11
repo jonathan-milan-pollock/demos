@@ -5,16 +5,8 @@ import { from, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import {
-  ENV,
-  ImageDimensionType,
-  Favorites,
-} from '@dark-rush-photography/shared-types';
+import { ENV, Favorites } from '@dark-rush-photography/shared-types';
 import { Env } from '@dark-rush-photography/api/types';
-import {
-  azureStorageImageNames$,
-  dataUriForAzureBlob$,
-} from '@dark-rush-photography/api/data';
 import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -25,13 +17,13 @@ export class AdminFavoritesService {
     private readonly favoritesModel: Model<DocumentModel>
   ) {}
 
-  addFavorites(favorites: Favorites): Observable<Favorites> {
+  create(favorites: Favorites): Observable<Favorites> {
     return of(new this.favoritesModel(favorites)).pipe(
       switchMap((d) => d.save())
     );
   }
 
-  updateFavorites(id: string, favorites: Favorites): Observable<Favorites> {
+  update(id: string, favorites: Favorites): Observable<Favorites> {
     return from(this.favoritesModel.findById(id)).pipe(
       tap((f) => {
         if (!f) {
@@ -43,26 +35,7 @@ export class AdminFavoritesService {
     );
   }
 
-  getImages(dimensionType: ImageDimensionType): Observable<string[]> {
-    return azureStorageImageNames$(
-      this.env.azureStorageConnectionString,
-      'private',
-      `resized-image/favorites/best37/${dimensionType.toLowerCase()}`
-    );
-  }
-
-  getImage(
-    slug: string,
-    dimensionType: ImageDimensionType
-  ): Observable<string> {
-    return dataUriForAzureBlob$(
-      this.env.azureStorageConnectionString,
-      'private',
-      `resized-image/favorites/best37/${dimensionType.toLowerCase()}/${slug.toLowerCase()}.jpg`
-    );
-  }
-
-  deleteFavorites(id: string): Observable<void> {
+  delete(id: string): Observable<void> {
     return of(this.favoritesModel.findByIdAndDelete(id)).pipe(
       map(() => undefined)
     );

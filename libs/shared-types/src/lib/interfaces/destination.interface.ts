@@ -1,23 +1,23 @@
-import { DocumentType } from '../types/document.type';
-import { ReadableDate } from './readable-date.interface';
 import { Location } from './location.interface';
 import { Image } from './image.interface';
-import { ThreeSixtyImage } from './three-sixty-image.interface';
 import { Video } from './video.interface';
-import { Flyover } from './flyover.interface';
+import { FlyOver } from './fly-over.interface';
 import { ExtendedReality } from './extended-reality.interface';
 import { SocialMedia } from './social-media.interface';
+import { Emotion } from './emotion.interface';
+import { Comment } from './comment.interface';
 
 export interface Destination {
-  readonly id: string;
-  readonly type: DocumentType;
+  readonly id?: string;
   // identifier
   readonly slug: string;
+  readonly isPublic: boolean;
   // metadata
   readonly title: string;
   readonly description: string;
   readonly keywords: ReadonlyArray<string>;
-  readonly datePublished?: ReadableDate;
+  readonly dateCreated?: string;
+  readonly datePublished?: string;
   // location
   readonly location: Location;
   // display
@@ -25,10 +25,10 @@ export interface Destination {
   // content
   readonly text: ReadonlyArray<string>;
   readonly images: ReadonlyArray<Image>;
-  readonly threeSixtyImages: ReadonlyArray<ThreeSixtyImage>;
   readonly videos: ReadonlyArray<Video>;
-  readonly flyOver?: Flyover;
+  readonly flyOver?: FlyOver;
   readonly extendedReality?: ExtendedReality;
-  readonly socialMedia: ReadonlyArray<SocialMedia>;
-  readonly destinations: ReadonlyArray<Destination>;
+  readonly socialMediaUrls: ReadonlyArray<SocialMedia>;
+  readonly emotions: ReadonlyArray<Emotion>;
+  readonly comments: ReadonlyArray<Comment>;
 }

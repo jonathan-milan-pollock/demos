@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class YinAndYangOfArt implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class YinAndYangOfArt extends PhotoOfTheWeekDto {
   slug = 'yin-and-yang-of-art';
   group = 1;
   title = 'Yin and Yang of Art';
@@ -22,7 +16,8 @@ export class YinAndYangOfArt implements PhotoOfTheWeek {
     'Pathway',
     'Beauty',
   ];
-  datePublished = { month: Month.March, day: 28, year: 2019 };
+  dateCreated = new Date(2019, 3, 28).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 3, 28).toISOString().substring(0, 10);
   location = {
     place: 'The Tunnel to Nowhere',
     city: 'Bryson City',
@@ -30,13 +25,12 @@ export class YinAndYangOfArt implements PhotoOfTheWeek {
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new YinAndYangOfArt();
   }
 }

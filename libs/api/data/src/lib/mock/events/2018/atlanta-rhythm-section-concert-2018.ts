@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class AtlantaRhythmSectionConcert2018 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class AtlantaRhythmSectionConcert2018 extends EventDto {
   slug = 'atlanta-rhythm-section-concert-2018';
   group = 2018;
   title = 'Atlanta Rhythm Section (ARS) Concert, 2018';
@@ -22,8 +16,8 @@ export class AtlantaRhythmSectionConcert2018 implements Event {
     'Heritage Sandy Springs',
     'Amazing Concert',
   ];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'Heritage Sandy Springs',
     city: 'Sandy Springs',
@@ -42,14 +36,12 @@ export class AtlantaRhythmSectionConcert2018 implements Event {
       Love is kinda crazy with a spooky little girl like me!
     `,
   ];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new AtlantaRhythmSectionConcert2018();
   }
 }

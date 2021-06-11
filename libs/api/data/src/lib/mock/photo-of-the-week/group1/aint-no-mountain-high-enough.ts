@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class AintNoMountainHighEnough implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class AintNoMountainHighEnough extends PhotoOfTheWeekDto {
   slug = 'aint-no-mountain-high-enough';
   group = 1;
   title = "Ain't No Mountain High Enough";
@@ -22,7 +16,8 @@ export class AintNoMountainHighEnough implements PhotoOfTheWeek {
     'Coca-Cola',
     "Ain't no mountain high enough",
   ];
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'Rocky Mountain National Park',
     stateOrProvince: 'Colorado',
@@ -34,12 +29,12 @@ export class AintNoMountainHighEnough implements PhotoOfTheWeek {
     for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park.
   `,
   ];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new AintNoMountainHighEnough();
   }
 }

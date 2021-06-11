@@ -1,6 +1,9 @@
 import { Subscription } from 'rxjs';
 
-import { AZURE_STORAGE_CONNECTION_STRING } from '@dark-rush-photography/shared-server-types';
+import {
+  AzureStorageContainerType,
+  AZURE_STORAGE_CONNECTION_STRING_DEV,
+} from '@dark-rush-photography/shared-server-types';
 
 import {
   getAzureStorageBlockBlobClient$,
@@ -34,8 +37,8 @@ describe('Azure Storage Client Functions', () => {
 
     it('should provide a container client for the private container', () => {
       containerClientSubscription = getAzureStorageContainerClient$(
-        AZURE_STORAGE_CONNECTION_STRING,
-        'private'
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Private
       ).subscribe((containerClient) => {
         expect(containerClient).toBeDefined();
       });
@@ -43,8 +46,8 @@ describe('Azure Storage Client Functions', () => {
 
     it('should provide a container client for the public container', () => {
       containerClientSubscription = getAzureStorageContainerClient$(
-        AZURE_STORAGE_CONNECTION_STRING,
-        'public'
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Public
       ).subscribe((containerClient) => {
         expect(containerClient).toBeDefined();
       });
@@ -62,8 +65,8 @@ describe('Azure Storage Client Functions', () => {
 
     it('should provide a block blob client for the private container', () => {
       blockBlobClientSubscription = getAzureStorageBlockBlobClient$(
-        AZURE_STORAGE_CONNECTION_STRING,
-        'private',
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Private,
         'uploaded-image'
       ).subscribe((blockBlobClient) => {
         expect(blockBlobClient).toBeDefined();
@@ -72,8 +75,8 @@ describe('Azure Storage Client Functions', () => {
 
     it('should provide a block blob client for the public container', () => {
       blockBlobClientSubscription = getAzureStorageBlockBlobClient$(
-        AZURE_STORAGE_CONNECTION_STRING,
-        'public',
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Public,
         'uploaded-image'
       ).subscribe((blockBlobClient) => {
         expect(blockBlobClient).toBeDefined();

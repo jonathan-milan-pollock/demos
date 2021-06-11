@@ -6,33 +6,40 @@ import {
   Put,
   Delete,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
 import { Review } from '@dark-rush-photography/shared-types';
 import { AdminReviewsService } from './admin-reviews.service';
+import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import { ReviewDto } from '@dark-rush-photography/api/types';
 
 @Controller('admin/v1/reviews')
+@UseGuards(RolesGuard)
+@ApiBearerAuth()
+@ApiTags('Reviews')
 export class AdminReviewsController {
   constructor(private readonly adminReviewsService: AdminReviewsService) {}
 
+  @Roles('admin')
   @Post()
-  addReview(@Body() review: Review): Observable<Review> {
-    return this.adminReviewsService.addReview(review);
+  create(@Body() review: ReviewDto): Observable<Review> {
+    return this.adminReviewsService.create(review);
   }
 
+  @Roles('admin')
   @Put(':id')
-  updateReview(
-    @Param() id: string,
-    @Body() review: Review
-  ): Observable<Review> {
-    return this.adminReviewsService.updateReview(id, review);
+  update(@Param() id: string, @Body() review: ReviewDto): Observable<Review> {
+    return this.adminReviewsService.update(id, review);
   }
 
-  @HttpCode(204)
+  @Roles('admin')
   @Delete(':id')
-  deleteReview(@Param() id: string): Observable<void> {
-    return this.adminReviewsService.deleteReview(id);
+  @HttpCode(204)
+  delete(@Param() id: string): Observable<void> {
+    return this.adminReviewsService.delete(id);
   }
 }

@@ -1,32 +1,23 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class TheLightsFestAtlanta2018 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class TheLightsFestAtlanta2018 extends EventDto {
   slug = 'the-lights-fest-atlanta-2018';
   group = 2018;
   title = 'The Lights Fest Atlanta 2018';
   description = '';
   keywords = [];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new TheLightsFestAtlanta2018();
   }
 }

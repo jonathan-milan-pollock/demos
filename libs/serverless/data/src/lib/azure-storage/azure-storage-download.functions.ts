@@ -1,10 +1,13 @@
-import { forkJoin, fromEvent, Observable } from 'rxjs';
-import { map, buffer, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { BlobDownloadResponseParsed } from '@azure/storage-blob';
 
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-client.functions';
-import { createTempFile, writeStreamToFile } from '../file/file.functions';
+import {
+  createTempFile,
+  writeStreamToFile,
+} from '@dark-rush-photography/serverless/util';
 
 export const downloadAzureStorageBlobAsStream$ = (
   azureStorageConnectionString: string,

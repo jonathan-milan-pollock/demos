@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class ThanksgivingInAlexanderCity2018 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class ThanksgivingInAlexanderCity2018 extends EventDto {
   slug = 'thanksgiving-in-alexander-city-2018';
   group = 2018;
   title = `Thanksgiving in Alexander City, 2018`;
@@ -14,8 +8,8 @@ export class ThanksgivingInAlexanderCity2018 implements Event {
     It's beginning to look a lot like Christmas
   `;
   keywords = ['Alexander City', 'Georgia', 'Hometown', 'Christmas'];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     city: 'Alexander City',
     stateOrProvince: 'Alabama',
@@ -27,14 +21,12 @@ export class ThanksgivingInAlexanderCity2018 implements Event {
       It's beginning to look a lot like Christmas
       `,
   ];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new ThanksgivingInAlexanderCity2018();
   }
 }

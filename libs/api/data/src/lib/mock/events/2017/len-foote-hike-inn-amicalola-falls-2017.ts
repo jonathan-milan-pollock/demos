@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class LenFooteHikeInnAmicalolaFalls2017 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class LenFooteHikeInnAmicalolaFalls2017 extends EventDto {
   slug = 'len-foote-hike-inn-amicalola-falls-2017';
   group = 2017;
   title = 'Len Foote Hike Inn, 2017';
@@ -23,8 +17,8 @@ export class LenFooteHikeInnAmicalolaFalls2017 implements Event {
     'Adventure',
     'Retreat',
   ];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'Amicalola Falls',
     city: 'Dawsonville',
@@ -50,14 +44,12 @@ export class LenFooteHikeInnAmicalolaFalls2017 implements Event {
       Canyon National Park in Arizona where he now lives.
     `,
   ];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new LenFooteHikeInnAmicalolaFalls2017();
   }
 }

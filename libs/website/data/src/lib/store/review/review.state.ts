@@ -4,7 +4,7 @@ import { Review } from '@dark-rush-photography/shared-types';
 
 export const reviewAdapter: EntityAdapter<Review> = createEntityAdapter<Review>(
   {
-    selectId: (review: Review): string => review.id,
+    selectId: (review: Review): string => (review.id ? review.id : ''),
     sortComparer: (review1: Review, review2: Review): number =>
       review1.title.localeCompare(review2.title),
   }

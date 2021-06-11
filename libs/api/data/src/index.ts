@@ -67,4 +67,5 @@ export * from './lib/mock/reviews/LindsayLevin';
 export * from './lib/mock/reviews/RonnieColquitt';
 
 // mongoose
-export * from './lib/mongoose/schema/document.schema';
+export * from './lib/mongoose/document-model.service';
+export * from './lib/mongoose/document.schema';

@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class StopLookListen implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class StopLookListen extends PhotoOfTheWeekDto {
   slug = 'stop-look-listen';
   group = 2;
   title = 'Stop, Look, and Listen';
@@ -20,20 +14,20 @@ export class StopLookListen implements PhotoOfTheWeek {
     'Cold Temperature',
     'Puffy Clouds',
   ];
-  datePublished = { month: Month.January, day: 4, year: 2020 };
+  dateCreated = new Date(2020, 1, 4).toISOString().substring(0, 10);
+  datePublished = new Date(2020, 1, 4).toISOString().substring(0, 10);
   location = {
     city: 'Buena Vista',
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new StopLookListen();
   }
 }

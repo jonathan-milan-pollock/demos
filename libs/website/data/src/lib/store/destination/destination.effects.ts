@@ -68,13 +68,13 @@ export class DestinationEffects {
       ofType(DestinationActions.updateDestination),
       mergeMap((action) =>
         this.destinationsService
-          .update(action.destination.id, action.destination)
+          .update(action.destination.id ?? '', action.destination)
           .pipe(
             map(
               ({ id, ...changes }) =>
                 DestinationActions.updateDestinationSuccess({
                   updatedDestination: {
-                    id,
+                    id: id ?? '',
                     changes,
                   },
                 }),

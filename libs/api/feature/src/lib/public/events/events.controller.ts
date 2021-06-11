@@ -1,4 +1,5 @@
 import { Controller, Param, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -7,18 +8,18 @@ import { Public } from '@dark-rush-photography/api/util';
 import { EventsService } from './events.service';
 
 @Controller('v1/events')
+@Public()
+@ApiTags('Events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @Public()
   @Get()
-  getEvents(): Observable<Event[]> {
-    return this.eventsService.getEvents();
+  findAll(): Observable<Event[]> {
+    return this.eventsService.findAll();
   }
 
-  @Public()
   @Get(':id')
-  getEvent(@Param() id: string): Observable<Event> {
-    return this.eventsService.getEvent(id);
+  findOne(@Param() id: string): Observable<Event> {
+    return this.eventsService.findOne(id);
   }
 }

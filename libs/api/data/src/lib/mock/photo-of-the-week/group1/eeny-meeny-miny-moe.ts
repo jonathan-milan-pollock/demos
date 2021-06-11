@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class EenyMeenyMinyMoe implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class EenyMeenyMinyMoe extends PhotoOfTheWeekDto {
   slug = 'eeny-meeny-miny-moe';
   group = 1;
   title = 'Eeny, Meeny, Miny, Moe';
@@ -20,7 +14,8 @@ export class EenyMeenyMinyMoe implements PhotoOfTheWeek {
     'Water',
     'Waiting',
   ];
-  datePublished = { month: Month.June, day: 23, year: 2019 };
+  dateCreated = new Date(2019, 6, 23).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 6, 23).toISOString().substring(0, 10);
   location = {
     place: 'Kowaliga, Lake Martin',
     city: 'Alexander City',
@@ -28,13 +23,12 @@ export class EenyMeenyMinyMoe implements PhotoOfTheWeek {
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new EenyMeenyMinyMoe();
   }
 }

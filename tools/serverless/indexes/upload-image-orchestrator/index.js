@@ -20,7 +20,7 @@ module.exports = df.orchestrator(function* (context) {
     type: 'tinified-image',
     publishedImage: { ...activity.publishedImage },
     data: {
-      resizeImageDimensionType: 'Tile',
+      resizeType: 'Tile',
     },
   };
   activity = yield context.df.callActivity('ResizeImage', tileActivity);
@@ -29,7 +29,7 @@ module.exports = df.orchestrator(function* (context) {
   context.log(formatMessage('ResizeImage Small'));
   activity.type = 'tinified-image';
   activity.data = {
-    resizeImageDimensionType: 'Small',
+    resizeType: 'Small',
   };
   activity = yield context.df.callActivity('ResizeImage', { ...activity });
   completedProcesses.push(activity.type);

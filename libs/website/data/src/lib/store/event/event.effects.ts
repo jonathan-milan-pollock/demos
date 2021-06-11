@@ -56,12 +56,12 @@ export class EventEffects {
     this.actions$.pipe(
       ofType(EventActions.updateEvent),
       mergeMap((action) =>
-        this.eventsService.update(action.event.id, action.event).pipe(
+        this.eventsService.update(action.event.id ?? '', action.event).pipe(
           map(
             ({ id, ...changes }) =>
               EventActions.updateEventSuccess({
                 updatedEvent: {
-                  id,
+                  id: id ?? '',
                   changes,
                 },
               }),
