@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class SouthCobbArtsAllianceStorytellingFestival2017 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class SouthCobbArtsAllianceStorytellingFestival2017 extends EventDto {
   slug = 'south-cobb-arts-alliance-storytelling-festival-2017';
   group = 2017;
   title = 'South Cobb Arts Alliance, Storytelling Festival, 2017';
@@ -29,8 +23,8 @@ export class SouthCobbArtsAllianceStorytellingFestival2017 implements Event {
     'Singing',
     'Children of all Ages',
   ];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'Mable House',
     city: 'Mableton',
@@ -49,14 +43,12 @@ export class SouthCobbArtsAllianceStorytellingFestival2017 implements Event {
         Mable House in Mableton, Georgia.
         `,
   ];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new SouthCobbArtsAllianceStorytellingFestival2017();
   }
 }

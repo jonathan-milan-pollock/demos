@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class FuturesSoBright implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class FuturesSoBright extends PhotoOfTheWeekDto {
   slug = 'futures-so-bright';
   group = 1;
   title = 'My Futures So Bright I Gotta Wear Shades';
@@ -23,20 +17,20 @@ export class FuturesSoBright implements PhotoOfTheWeek {
     'Shades',
     'Sunglasses',
   ];
-  datePublished = { month: Month.March, day: 20, year: 2019 };
+  dateCreated = new Date(2019, 3, 20).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 3, 20).toISOString().substring(0, 10);
   location = {
     city: 'Atlanta',
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new FuturesSoBright();
   }
 }

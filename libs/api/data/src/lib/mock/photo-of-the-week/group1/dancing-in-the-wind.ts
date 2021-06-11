@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class DancingInTheWind implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class DancingInTheWind extends PhotoOfTheWeekDto {
   slug = 'dancing-in-the-wind';
   group = 1;
   title = 'Dancing in the Wind!';
@@ -20,16 +14,16 @@ export class DancingInTheWind implements PhotoOfTheWeek {
     'Blue Sky',
     'Puffy Clouds',
   ];
-  datePublished = { month: Month.May, day: 26, year: 2019 };
+  dateCreated = new Date(2019, 5, 26).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 5, 26).toISOString().substring(0, 10);
   location = { country: 'United States' };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new DancingInTheWind();
   }
 }

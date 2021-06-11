@@ -24,7 +24,7 @@
                 "sourceTag": "scope:best-of",
                 "onlyDependOnLibsWithTags": [
                   "scope:best-of",
-                  "scope:elements",
+                  "scope:image-elements",
                   "scope:shared"
                 ]
               },
@@ -40,13 +40,16 @@
                 "sourceTag": "scope:website",
                 "onlyDependOnLibsWithTags": [
                   "scope:website",
-                  "scope:elements",
+                  "scope:image-elements",
                   "scope:shared"
                 ]
               },
               {
-                "sourceTag": "scope:elements",
-                "onlyDependOnLibsWithTags": ["scope:elements", "scope:shared"]
+                "sourceTag": "scope:image-elements",
+                "onlyDependOnLibsWithTags": [
+                  "scope:image-elements",
+                  "scope:shared"
+                ]
               },
               {
                 "sourceTag": "scope:shared",
@@ -63,16 +66,16 @@
                 "sourceTag": "type:app",
                 "onlyDependOnLibsWithTags": [
                   "type:feature",
-                  "type:data-access",
+                  "type:data",
                   "type:ui",
                   "type:util",
                   "type:types"
                 ]
               },
               {
-                "sourceTag": "type:data-access",
+                "sourceTag": "type:data",
                 "onlyDependOnLibsWithTags": [
-                  "type:data-access",
+                  "type:data",
                   "type:util",
                   "type:types"
                 ]

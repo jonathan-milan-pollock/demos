@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Req } from '@nestjs/common';
+import { AzureRequest } from '@nestjs/azure-func-http';
 
 import { ImageProcess } from '@dark-rush-photography/serverless/types';
 import { ResizeImageService } from './resize-image.service';
-import { AzureRequest } from '@nestjs/azure-func-http';
 
 @Controller('resize-image')
 export class ResizeImageController {

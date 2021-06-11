@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class BiggerThanILook implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class BiggerThanILook extends PhotoOfTheWeekDto {
   slug = 'bigger-than-i-look';
   group = 1;
   title = "I'm Bigger than I Look!";
@@ -23,20 +17,20 @@ export class BiggerThanILook implements PhotoOfTheWeek {
     'Big and Great',
     'Reflective',
   ];
-  datePublished = { month: Month.July, day: 31, year: 2019 };
+  dateCreated = new Date(2019, 7, 31).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 7, 31).toISOString().substring(0, 10);
   location = {
     place: 'Cumberland Island',
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new BiggerThanILook();
   }
 }

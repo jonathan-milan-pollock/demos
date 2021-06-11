@@ -1,27 +1,21 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class StopForTexts implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class StopForTexts extends PhotoOfTheWeekDto {
   slug = 'stop-for-texts';
   group = 2;
   title = 'Stop for Texts';
   description = `I should really stop to read my texts!`;
   keywords = ['Venice', 'Italy', 'Text', 'Cell Phone', 'Vespa', 'Modeling'];
-  datePublished = { month: Month.March, day: 8, year: 2020 };
+  dateCreated = new Date(2020, 3, 8).toISOString().substring(0, 10);
+  datePublished = new Date(2020, 3, 8).toISOString().substring(0, 10);
   location = { city: 'Venice', country: 'Italy' };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new StopForTexts();
   }
 }

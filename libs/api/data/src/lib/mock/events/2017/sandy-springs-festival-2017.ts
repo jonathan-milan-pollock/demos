@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class SandySpringsFestival2017 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class SandySpringsFestival2017 extends EventDto {
   slug = 'sandy-springs-festival-2017';
   group = 2017;
   title = 'Sandy Springs Festival, 2017';
@@ -22,8 +16,8 @@ export class SandySpringsFestival2017 implements Event {
     'Chalk Art',
     'Local Friends',
   ];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     city: 'Sandy Springs',
     stateOrProvince: 'Georgia',
@@ -41,10 +35,11 @@ export class SandySpringsFestival2017 implements Event {
   threeSixtyImages = [];
   videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new SandySpringsFestival2017();
   }
 }

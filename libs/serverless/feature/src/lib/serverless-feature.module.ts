@@ -1,27 +1,22 @@
 import { Module } from '@nestjs/common';
 
-import { ExifImageController } from './exif-image/exif-image.controller';
-import { ExifImageService } from './exif-image/exif-image.service';
-import { ResizeImageController } from './resize-image/resize-image.controller';
-import { ResizeImageService } from './resize-image/resize-image.service';
-import { TinifyImageController } from './tinify-image/tinify-image.controller';
-import { TinifyImageService } from './tinify-image/tinify-image.service';
-import { UploadImageController } from './upload-image/upload-image.controller';
-import { UploadImageService } from './upload-image/upload-image.service';
+import { ExifImageModule } from './exif-image/exif-image.module';
+import { PostImageModule } from './post-image/post-image.module';
+import { ResizeImageModule } from './resize-image/resize-image.module';
+import { SocialMediaPostImageModule } from './social-media-post-image/social-media-post-image.module';
+import { TinifyImageModule } from './tinify-image/tinify-image.module';
+import { UploadImageModule } from './upload-image/upload-image.module';
+import { WebsitePostImageModule } from './website-post-image/website-post-image.module';
 
 @Module({
-  controllers: [
-    ExifImageController,
-    UploadImageController,
-    ResizeImageController,
-    TinifyImageController,
+  imports: [
+    ExifImageModule,
+    PostImageModule,
+    ResizeImageModule,
+    SocialMediaPostImageModule,
+    TinifyImageModule,
+    UploadImageModule,
+    WebsitePostImageModule,
   ],
-  providers: [
-    ExifImageService,
-    UploadImageService,
-    ResizeImageService,
-    TinifyImageService,
-  ],
-  exports: [],
 })
 export class ServerlessFeatureModule {}

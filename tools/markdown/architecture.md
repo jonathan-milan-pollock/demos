@@ -39,23 +39,20 @@
 - copy install-workspace.js into tools/scripts directory
 - node ./tools/scripts/install-workspace.js
 
-**_NOTES_**
-
-- each ui command in script uses --prefix=drp for shorter prefixes on Angular selectors
-
 ---
 
 ## setup nx
 
-### from types, utils, and data libraries
+### in types, utils, and data libraries
 
 - delete module
 - remove the module export from index.ts
+- create .gitkeep files for empty directories
 
 ### .eslintrc.json
 
-- add .eslintrc.json enforce-module-boundaries depConstraints
-- add "plugin:@typescript-eslint/recommended" to .eslintrc.json
+- add enforce-module-boundaries depConstraints
+- add "plugin:@typescript-eslint/recommended"
 
 ```json
 {
@@ -89,12 +86,21 @@
   },
 ```
 
-- add to the api an implicit dependency of the website
+- add to the website-host an implicit dependency of the website
+
+```json
+    "website-host": {
+      "tags": [],
+      "implicitDependencies": ["website"]
+    },
+```
+
+- add to api implicit dependencies of best-of, serverless, and website as they are dependent on the api
 
 ```json
     "api": {
       "tags": ["scope:api", "type:app"],
-      "implicitDependencies": ["website"]
+      "implicitDependencies": ["best-of", "serverless", "website"]
     },
 ```
 
@@ -125,10 +131,10 @@ __blobstorage__
 __queuestorage__
 
 # compodoc
-/libs/ui-storybook/.storybook/documentation/documentation.json
+/libs/ui-storybook/.storybook/public/documentation.json
 ```
 
-### in angular.json add codeCoverage to test tasks
+### in angular.json add codeCoverage to test tasks options
 
 ```json
 "codeCoverage": true
@@ -138,9 +144,9 @@ __queuestorage__
 
 - order apps then libs in source order
   - angular.json
-  - jest.config.js
+  - jest.config.js (only has testable libs)
   - nx.json
-  - tsconfig.base.json
+  - tsconfig.base.json (only has libs)
 
 ---
 
@@ -247,8 +253,8 @@ preloadingStrategy: PreloadAllModules;
 
 ### update generated angular universal files
 
-- update api/src/main.ts
-- update api/src/app/app.module.ts
+- update website-host/src/main.ts
+- update website-host/src/app/app.module.ts
 - update website/server.ts
 - update website/tsconfig.json adding path to tsconfig.server.json
 
@@ -260,7 +266,7 @@ preloadingStrategy: PreloadAllModules;
     - main.ts
   - server.ts
   - tsconfig.server.json
-- remove api:serve in angular.json file, as api is only used by the website
+- remove website-host:serve in angular.json file, as website-host cannot be served without the website
 
 ---
 
@@ -293,8 +299,8 @@ Run `nx test best-of-ui` to execute the unit tests via [Jest](https://jestjs.io)
 
 ### add plugins to root storybook
 
-- remove addon-knobs as Storybook is replacing knobs with controls, which is in essentials
-- and add plugins in root .storybook/main.js file
+- in root .storybook/main.js
+  - remove addon-knobs as Storybook is replacing knobs with controls
 
 ```js
 module.exports = {
@@ -315,9 +321,17 @@ module.exports = {
 };
 ```
 
-### update ui-storybook to include all other storybooks and have doc
+### in ui-storybook lib
 
-- in ui-storybook/.storybook/main.js
+- add public folder
+  - add public folder under .storybook with .gitkeep file
+  - add public folder in angular.json ui-storybook project to storybook and build-storybook task options
+
+```json
+  "staticDir": ["libs/ui-storybook/.storybook/public"],
+```
+
+- in .storybook/main.js
 
 ```ts
 const rootMain = require('../../../.storybook/main');
@@ -332,59 +346,35 @@ rootMain.stories.push(
 module.exports = rootMain;
 ```
 
-### add compodoc so that inputs are available in ui-storybook
+- update .storybook/preview.js with compodoc and plugin setup
 
-- set compodoc in ui-storybook/.storybook/preview.js
-- in angular.json ui-storybook build-storybook add staticDir for deploy
+```js
+import 'cypress-storybook/angular';
+import { setCompodocJson } from '@storybook/addon-docs/angular';
+import docJson from './public/documentation.json';
 
-```json
-  "staticDir": ["libs/ui-storybook/.storybook/documentation"],
+setCompodocJson(docJson);
+
+export const parameters = {
 ```
 
-### in all storybook libraries
-
-#### for all angular storybook libraries in angular.json add styles.scss
+- add styles in angular.json ui-storybook project to storybook and build-storybook task options
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
 ```
 
-#### in .storybook/main.js remove the following comment files as addons added at root
-
-```js
-// Use the following syntax to add addons!
-// rootMain.addons.push('');
-```
-
-#### in .storybook/preview.js remove knobs and add background colors
-
-- remove knobs
-
-```ts
-import { addDecorator } from '@storybook/angular';
-import { withKnobs } from '@storybook/addon-knobs';
-
-addDecorator(withKnobs);
-```
-
-- add addons configuration
-
 ---
 
 ## setup cypress
 
-### update cypress for ssr
-
-#### add to website-e2e cypress.json
+### add to website-e2e cypress.json
 
 ```json
   "baseUrl": "http://localhost:4200",
 ```
 
-#### update angular.json so that website e2e does not also serve the website ssr
-
-- remove the following two lines from website-e2e task in angular.json
-- this is to combine the steps for cy:web command
+### in order to combine the steps for cy:web task remove the following 2 lines from angular.json website-e2e architect task
 
 ```ts
  "serverTarget": "website:server"
@@ -409,10 +399,45 @@ addDecorator(withKnobs);
 import 'cypress-storybook/cypress';
 ```
 
-- ui-storybook/.storybook/preview.js add
+---
+
+## NestJS
+
+### enable swagger for api
+
+- update main.js
+
+- in angular.json add webpack config to build options of api
+
+```json
+"webpackConfig": "apps/api/webpack.config.js"
+```
+
+- add webpack config
 
 ```js
-import 'cypress-storybook/angular';
+module.exports = (config) => {
+  const tsLoader = config.module.rules.find((r) =>
+    r.loader.includes('ts-loader')
+  );
+
+  if (tsLoader) {
+    tsLoader.options.transpileOnly = false;
+    tsLoader.options.getCustomTransformers = (program) => {
+      return {
+        before: [require('@nestjs/swagger/plugin').before({}, program)],
+      };
+    };
+  }
+
+  return config;
+};
+```
+
+-- add webpack.config.js to tsconfig.app.json of api for warning of excluded file in webpack.config.js file
+
+```json
+ "include": ["**/*.ts", "webpack.config.js"]
 ```
 
 ---

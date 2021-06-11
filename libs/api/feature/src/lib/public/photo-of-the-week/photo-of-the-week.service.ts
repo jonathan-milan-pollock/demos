@@ -5,7 +5,10 @@ import { from, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import {
+  PhotoOfTheWeek,
+  DocumentType,
+} from '@dark-rush-photography/shared-types';
 import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -15,13 +18,15 @@ export class PhotoOfTheWeekService {
     private readonly photoOfTheWeekModel: Model<DocumentModel>
   ) {}
 
-  getPhotoOfTheWeek(): Observable<PhotoOfTheWeek[]> {
+  findAll(): Observable<PhotoOfTheWeek[]> {
     return from(
-      this.photoOfTheWeekModel.find({ type: 'PhotoOfTheWeek' }).exec()
+      this.photoOfTheWeekModel
+        .find({ type: DocumentType.PhotoOfTheWeek })
+        .exec()
     );
   }
 
-  getPhotoOfTheWeekImage(id: string): Observable<PhotoOfTheWeek> {
+  findOne(id: string): Observable<PhotoOfTheWeek> {
     return from(this.photoOfTheWeekModel.findById(id)).pipe(
       tap((p) => {
         if (!p) {

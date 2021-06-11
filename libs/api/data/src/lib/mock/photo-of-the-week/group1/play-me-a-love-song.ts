@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class PlayMeALoveSong implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class PlayMeALoveSong extends PhotoOfTheWeekDto {
   slug = 'play-me-a-love-song';
   group = 1;
   title = 'Play Me a Love Song';
@@ -20,20 +14,20 @@ export class PlayMeALoveSong implements PhotoOfTheWeek {
     'Enjoyment',
     'Mountains',
   ];
-  datePublished = { month: Month.September, day: 9, year: 2019 };
+  dateCreated = new Date(2019, 9, 9).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 9, 9).toISOString().substring(0, 10);
   location = {
     city: 'Nederland',
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new PlayMeALoveSong();
   }
 }

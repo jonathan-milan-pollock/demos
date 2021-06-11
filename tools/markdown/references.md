@@ -46,7 +46,6 @@
 - :clapper: [Custom Elements Everywhere](https://custom-elements-everywhere.com/)
 - :clapper: [StencilJS with Storybook](https://medium.com/@neza.djukic/storybook-stenciljs-ionic-4-angular-under-one-roof-159cc8dab3a4)
 - :clapper: [StencilJS in Nx](https://javascript.plainenglish.io/how-to-use-stencil-web-components-in-react-within-a-nx-monorepo-d6644f6ee858)
-
 - :clapper: [Stencil & Storybook](https://github.com/dutscher/stencil-storybook)
 
 ---
@@ -102,12 +101,10 @@
 - :page_with_curl: [NestJS](https://docs.nestjs.com/)
 - :clapper: [NestJS](https://academind.com/tutorials/nestjs-introduction/)
 - :clapper: [NestJS With Mongoose](https://www.youtube.com/watch?v=ulfU5vY6I78)
+- :clapper: [NestJS Auth0](https://auth0.com/blog/developing-a-secure-api-with-nestjs-adding-role-based-access-control/)
+- :page_with_curl: [REST API Best Practices](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 
 ---
-
-## REST API
-
-- :page_with_curl: [REST API Best Practices](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 
 ## JSON-LD
 
@@ -140,3 +137,9 @@
 - [immersed](https://immersedvr.com/)
 
 ---
+
+## ayrshare
+
+https://docs.ayrshare.com/rest-api/endpoints/post
+
+https://facebook360.fb.com/editing-360-photos-injecting-metadata/

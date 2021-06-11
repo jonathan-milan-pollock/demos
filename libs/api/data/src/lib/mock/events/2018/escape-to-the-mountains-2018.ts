@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class EscapeToTheMountains2018 implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class EscapeToTheMountains2018 extends EventDto {
   slug = 'escape-to-the-mountains-2018';
   group = 2018;
   title = 'Escape to the Mountains, 2018';
@@ -25,8 +19,8 @@ export class EscapeToTheMountains2018 implements Event {
     'Smithgall Woods State Park',
     'Castle Inn in Helen',
   ];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'The Mountains',
     stateOrProvince: 'Georgia',
@@ -70,14 +64,12 @@ export class EscapeToTheMountains2018 implements Event {
       Needless to say, I can't wait for my next mountain escape adventure!
       `,
   ];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new EscapeToTheMountains2018();
   }
 }

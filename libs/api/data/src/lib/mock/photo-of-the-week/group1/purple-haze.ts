@@ -1,28 +1,22 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class PurpleHaze implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class PurpleHaze extends PhotoOfTheWeekDto {
   slug = 'purple-haze';
   group = 1;
   title = 'Purple Haze';
   description = `
     This shot is from a Prairie in Wisconsin`;
   keywords = ['Wisconsin', 'Prairie', 'Purple', 'Flowers', 'Yellow'];
-  datePublished = { month: Month.June, day: 29, year: 2019 };
+  dateCreated = new Date(2019, 6, 29).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 6, 29).toISOString().substring(0, 10);
   location = { stateOrProvince: 'Wisconsin', country: 'United States' };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new PurpleHaze();
   }
 }

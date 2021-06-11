@@ -1,4 +1,4 @@
-import { PublishServiceType } from '../types/publish-service.type';
+import { PublishServiceType } from '../enums/publish-service.type';
 
 export interface PublishedImage {
   readonly publishServiceType: PublishServiceType;

@@ -8,7 +8,10 @@ import {
   ContainerClient,
 } from '@azure/storage-blob';
 
-import { AZURE_STORAGE_CONNECTION_STRING } from '@dark-rush-photography/shared-server-types';
+import {
+  AzureStorageContainerType,
+  AZURE_STORAGE_CONNECTION_STRING_DEV,
+} from '@dark-rush-photography/shared-server-types';
 import {
   downloadAzureStorageBlobAsStream$,
   downloadAzureStorageBlobToFile$,
@@ -57,8 +60,8 @@ describe('Azure Storage Download Functions', () => {
     it('should return readable stream', () => {
       mockBlobServiceClient(blockBlobClientStream);
       downloadAsStreamSubscription = downloadAzureStorageBlobAsStream$(
-        AZURE_STORAGE_CONNECTION_STRING,
-        'private',
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Private,
         'uploaded-image'
       ).subscribe((readableStreamBody) => {
         expect(readableStreamBody).toBeDefined();
@@ -68,8 +71,8 @@ describe('Azure Storage Download Functions', () => {
     it('should error when stream undefined', () => {
       mockBlobServiceClient(blockBlobClientUndefinedStream);
       downloadAsStreamSubscription = downloadAzureStorageBlobAsStream$(
-        AZURE_STORAGE_CONNECTION_STRING,
-        'private',
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Private,
         'uploaded-image'
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ).subscribe(

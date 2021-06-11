@@ -56,12 +56,12 @@ export class ReviewEffects {
     this.actions$.pipe(
       ofType(ReviewActions.updateReview),
       mergeMap((action) =>
-        this.reviewsService.update(action.review.id, action.review).pipe(
+        this.reviewsService.update(action.review.id ?? '', action.review).pipe(
           map(
             ({ id, ...changes }) =>
               ReviewActions.updateReviewSuccess({
                 updatedReview: {
-                  id,
+                  id: id ?? '',
                   changes,
                 },
               }),

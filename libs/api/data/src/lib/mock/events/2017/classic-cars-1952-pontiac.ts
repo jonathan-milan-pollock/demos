@@ -1,12 +1,6 @@
-import {
-  Event,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { EventDto } from '@dark-rush-photography/api/types';
 
-export class ClassicCars1952Pontiac implements Event {
-  id = '';
-  type: DocumentType = 'Event';
+export class ClassicCars1952Pontiac extends EventDto {
   slug = 'classic-cars-1952-pontiac';
   group = 2017;
   title = 'Classic 1952 Pontiac';
@@ -15,8 +9,8 @@ export class ClassicCars1952Pontiac implements Event {
     out to capture photos around Goodwater, Alabama.
   `;
   keywords = ['Goodwater', 'Alabama', 'Classic', '1952 Pontiac', 'Car'];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(1, 7, 2018).toISOString().substring(0, 10);
+  datePublished = new Date(1, 7, 2018).toISOString().substring(0, 10);
   location = {
     city: 'Goodwater',
     stateOrProvince: 'Alabama',
@@ -31,14 +25,12 @@ export class ClassicCars1952Pontiac implements Event {
       something (perhaps squirrel), we were in front
       "shooting" their car!`,
   ];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Event {
+  static of(): EventDto {
     return new ClassicCars1952Pontiac();
   }
 }

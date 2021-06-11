@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class CuriouserAndCuriouser implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class CuriouserAndCuriouser extends PhotoOfTheWeekDto {
   slug = 'curiouser-and-curiouser';
   group = 1;
   title = 'Curiouser and Curiouser!';
@@ -19,20 +13,20 @@ export class CuriouserAndCuriouser implements PhotoOfTheWeek {
     'Another World',
     'Colorful',
   ];
-  datePublished = { month: Month.August, day: 18, year: 2019 };
+  dateCreated = new Date(2019, 8, 18).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 8, 18).toISOString().substring(0, 10);
   location = {
     city: 'Buena Vista',
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new CuriouserAndCuriouser();
   }
 }

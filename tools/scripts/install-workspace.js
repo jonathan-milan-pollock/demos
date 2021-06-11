@@ -56,6 +56,12 @@ const execGenerateApps = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
+        'npx nx g @nrwl/nest:app website-host --unitTestRunner=none'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
         'npx nx g @nrwl/next:app best-of --unitTestRunner=none --style=scss --tags=scope:best-of,type:app'
       )
     )
@@ -78,7 +84,7 @@ const execGenerateApiLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib api/data --unitTestRunner=jest --tags=scope:api,type:data-access'
+        'npx nx g @nrwl/nest:lib api/data --unitTestRunner=jest --tags=scope:api,type:data'
       )
     )
     .then(() =>
@@ -106,7 +112,7 @@ const execGenerateBestOfLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/react:lib best-of/data --unitTestRunner=jest --tags=scope:best-of,type:data-access'
+        'npx nx g @nrwl/react:lib best-of/data --unitTestRunner=jest --tags=scope:best-of,type:data'
       )
     )
     .then(() =>
@@ -150,7 +156,7 @@ const execGenerateServerlessLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib serverless/data --unitTestRunner=jest --tags=scope:serverless,type:data-access'
+        'npx nx g @nrwl/nest:lib serverless/data --unitTestRunner=jest --tags=scope:serverless,type:data'
       )
     )
     .then(() =>
@@ -163,6 +169,12 @@ const execGenerateServerlessLibs = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/nest:lib serverless/types --unitTestRunner=none --tags=scope:serverless,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib serverless/util --unitTestRunner=jest --tags=scope:serverless,type:util'
       )
     );
 
@@ -202,7 +214,7 @@ const execGenerateWebsiteLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data-access --prefix=drp'
+        'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data --prefix=drp'
       )
     )
     .then(() =>
@@ -310,9 +322,10 @@ const execAddServerless = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
     .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
 
-const execAddSwagger = (isReady) =>
-  Promise.resolve(console.log('### add swagger'))
+const execAddNestJsDependencies = (isReady) =>
+  Promise.resolve(console.log('### add nestjs dependencies'))
     .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i applicationinsights'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
     .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'));
 
@@ -397,7 +410,8 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
-    .then(() => consoleLogOrExec(isReady, 'npm i datauri'));
+    .then(() => consoleLogOrExec(isReady, 'npm i datauri'))
+    .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'));
 
 const execAddAuthentication = (isReady) =>
   Promise.resolve(console.log('### add authentication'))
@@ -473,7 +487,7 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddServerless(isReady))
     .then(() => console.log())
-    .then(() => execAddSwagger(isReady))
+    .then(() => execAddNestJsDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddMongoose(isReady))
     .then(() => console.log())
@@ -510,10 +524,9 @@ Promise.resolve(execInstall(isReady))
         .then(() => console.log())
         .then(() => execInstall(isReady))
         .then(() => console.log('🥂 installation complete.'))
-        .then(() => process.exit(0))
-        .catch((err) => {
-          console.error(err);
-          process.exit(1);
-        });
+        .then(() => process.exit(0));
+    }).catch((err) => {
+      console.error(err);
+      process.exit(1);
     });
   });

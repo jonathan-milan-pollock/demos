@@ -15,15 +15,13 @@ export class AdminPhotoOfTheWeekService {
     private readonly photoOfTheWeekModel: Model<DocumentModel>
   ) {}
 
-  addPhotoOfTheWeek(
-    photoOfTheWeek: PhotoOfTheWeek
-  ): Observable<PhotoOfTheWeek> {
+  create(photoOfTheWeek: PhotoOfTheWeek): Observable<PhotoOfTheWeek> {
     return of(new this.photoOfTheWeekModel(photoOfTheWeek)).pipe(
       switchMap((p) => p.save())
     );
   }
 
-  updatePhotoOfTheWeek(
+  update(
     id: string,
     photoOfTheWeek: PhotoOfTheWeek
   ): Observable<PhotoOfTheWeek> {
@@ -40,7 +38,7 @@ export class AdminPhotoOfTheWeekService {
     );
   }
 
-  deletePhotoOfTheWeek(id: string): Observable<void> {
+  delete(id: string): Observable<void> {
     return of(this.photoOfTheWeekModel.findByIdAndDelete(id)).pipe(
       switchMap(() => EMPTY)
     );

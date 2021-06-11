@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class ThroughTheLookingGlass implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class ThroughTheLookingGlass extends PhotoOfTheWeekDto {
   slug = 'through-the-looking-glass';
   group = 2;
   title = 'Through the Looking Glass';
@@ -20,20 +14,20 @@ export class ThroughTheLookingGlass implements PhotoOfTheWeek {
     'Marble',
     'Composition',
   ];
-  datePublished = { month: Month.February, day: 22, year: 2020 };
+  dateCreated = new Date(2020, 2, 22).toISOString().substring(0, 10);
+  datePublished = new Date(2020, 2, 22).toISOString().substring(0, 10);
   location = {
     city: 'Palm Beach',
     stateOrProvince: 'Florida',
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new ThroughTheLookingGlass();
   }
 }

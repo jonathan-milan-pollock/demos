@@ -1,70 +1,31 @@
 import { AzureRequest } from '@nestjs/azure-func-http';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpService, Inject, Injectable } from '@nestjs/common';
 
-import { getClient } from 'durable-functions';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
-import { from } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
 
 import { ENV } from '@dark-rush-photography/shared-types';
-import { Env, ImageProcess } from '@dark-rush-photography/serverless/types';
-import {
-  getBlobPath,
-  getPublishedImageForUploadedImage,
-} from '@dark-rush-photography/serverless/data';
-import {
-  uploadBufferToAzureStorageBlob$,
-  formatMessage,
-} from '@dark-rush-photography/serverless/data';
+import { Env } from '@dark-rush-photography/serverless/types';
+import { UploadImageProcessService } from '@dark-rush-photography/serverless/data';
 
 @Injectable()
 export class UploadImageService {
-  constructor(@Inject(ENV) private readonly env: Env) {}
+  constructor(
+    @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
+    private readonly uploadImageProcessService: UploadImageProcessService
+  ) {}
 
   async uploadImage(
-    image: Express.Multer.File,
-    request: AzureRequest
+    request: AzureRequest,
+    image: Express.Multer.File
   ): Promise<IHttpResponse> {
-    Logger.log(formatMessage('UploadImage executing'));
-    const fileName = request.body['fileName'];
-
-    const publishedImage = getPublishedImageForUploadedImage(fileName);
-    if (!publishedImage)
-      throw new Error('Publish image was not created from upload');
-
-    const client = getClient(request.context);
-
-    return uploadBufferToAzureStorageBlob$(
-      image.buffer,
-      this.env.azureStorageConnectionString,
-      'private',
-      getBlobPath('uploaded-image', publishedImage)
-    )
-      .pipe(
-        tap(() =>
-          Logger.log(
-            formatMessage('UploadImage starting image upload orchestrator')
-          )
-        ),
-        switchMap(() =>
-          from(
-            client.startNew('UploadImageOrchestrator', undefined, {
-              type: 'uploaded-image',
-              publishedImage: publishedImage,
-            } as ImageProcess)
-          )
-        ),
-        tap((instanceId) =>
-          Logger.log(
-            formatMessage(`Started orchestration with ID = '${instanceId}'.`)
-          )
-        ),
-        map((instanceId) =>
-          client.createCheckStatusResponse(
-            request.context.bindingData.req,
-            instanceId
-          )
-        )
+    return this.uploadImageProcessService
+      .process$(
+        this.env,
+        this.httpService,
+        request.context,
+        request.body['fileName'],
+        image
       )
       .toPromise();
   }

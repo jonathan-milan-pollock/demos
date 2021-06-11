@@ -1,3 +1,3 @@
-import { loadDevEnvironment } from '@dark-rush-photography/serverless/feature';
+import { loadDevEnvironment } from '@dark-rush-photography/serverless/util';
 
 export const environment = loadDevEnvironment();

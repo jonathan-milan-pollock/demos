@@ -7,7 +7,10 @@ import {
   BlockBlobClient,
   ContainerClient,
 } from '@azure/storage-blob';
-import { AZURE_STORAGE_CONNECTION_STRING } from '@dark-rush-photography/shared-server-types';
+import {
+  AzureStorageContainerType,
+  AZURE_STORAGE_CONNECTION_STRING_DEV,
+} from '@dark-rush-photography/shared-server-types';
 
 import {
   uploadBufferToAzureStorageBlob$,
@@ -52,8 +55,8 @@ describe('Azure Storage Upload Functions', () => {
     it('should upload buffer to azure storage blob', () => {
       uploadBufferSubscription = uploadBufferToAzureStorageBlob$(
         Buffer.concat([]),
-        AZURE_STORAGE_CONNECTION_STRING,
-        'private',
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Private,
         'uploaded-image'
       ).subscribe((requestId) => {
         expect(requestId).toBe('requestId');
@@ -73,8 +76,8 @@ describe('Azure Storage Upload Functions', () => {
     it('should upload stream to azure storage blob', () => {
       uploadStreamSubscription = uploadStreamToAzureStorageBlob$(
         Readable.from(['']),
-        AZURE_STORAGE_CONNECTION_STRING,
-        'private',
+        AZURE_STORAGE_CONNECTION_STRING_DEV,
+        AzureStorageContainerType.Private,
         'uploaded-image'
       ).subscribe((requestId) => {
         expect(requestId).toBe('requestId');

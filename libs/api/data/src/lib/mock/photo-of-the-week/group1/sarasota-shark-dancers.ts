@@ -1,12 +1,6 @@
-import {
-  PhotoOfTheWeek,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
-export class SarasotaSharkDancers implements PhotoOfTheWeek {
-  id = '';
-  type: DocumentType = 'PhotoOfTheWeek';
+export class SarasotaSharkDancers extends PhotoOfTheWeekDto {
   slug = 'sarasota-shark-dancers';
   group = 1;
   title = 'Sarasota Shark Dancers';
@@ -25,7 +19,8 @@ export class SarasotaSharkDancers implements PhotoOfTheWeek {
     'Vacation',
     'Jaws',
   ];
-  datePublished = { month: Month.July, day: 12, year: 2019 };
+  dateCreated = new Date(2019, 7, 12).toISOString().substring(0, 10);
+  datePublished = new Date(2019, 7, 12).toISOString().substring(0, 10);
   location = {
     place: 'Sarasota Ski A Rees Ski Show',
     city: 'Sarasota',
@@ -33,13 +28,12 @@ export class SarasotaSharkDancers implements PhotoOfTheWeek {
     country: 'United States',
   };
   useTitleImage = false;
-  text = [];
-  images = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): PhotoOfTheWeek {
+  static of(): PhotoOfTheWeekDto {
     return new SarasotaSharkDancers();
   }
 }

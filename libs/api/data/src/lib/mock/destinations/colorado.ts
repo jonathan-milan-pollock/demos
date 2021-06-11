@@ -1,36 +1,26 @@
-import {
-  Destination,
-  DocumentType,
-  Month,
-} from '@dark-rush-photography/shared-types';
+import { CreateDestinationDto } from '@dark-rush-photography/api/types';
 
-export class Colorado implements Destination {
-  id = '';
-  type: DocumentType = 'Destination';
+export class Colorado extends CreateDestinationDto {
   slug = 'colorado';
   title = 'Colorado';
   description = `
       An Extended Reality (XR) experience Colorado presented by Dark Rush Photography
   `;
   keywords = ['Colorado', 'Mountains', 'Beautiful'];
-  dateCreated = { month: Month.January, day: 7, year: 2018 };
-  datePublished = { month: Month.January, day: 7, year: 2018 };
+  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
   useTitleImage = false;
   text = ['Please welcome me to Colorado so I can discover you'];
-  images = [];
-  threeSixtyImages = [];
-  videos = [];
-  socialMedia = [];
-  destinations = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
-  static of(): Destination {
+  static of(): CreateDestinationDto {
     return new Colorado();
   }
 }

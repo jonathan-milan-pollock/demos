@@ -5,7 +5,7 @@ import { EMPTY, from, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review, DocumentType } from '@dark-rush-photography/shared-types';
 import { DocumentModel, Document } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -15,11 +15,23 @@ export class AdminReviewsService {
     private readonly reviewModel: Model<DocumentModel>
   ) {}
 
-  addReview(review: Review): Observable<Review> {
-    return of(new this.reviewModel(review)).pipe(switchMap((r) => r.save()));
+  create(review: Review): Observable<Review> {
+    return from(
+      new this.reviewModel({
+        ...review,
+        type: DocumentType.Review,
+      }).save()
+    ).pipe(
+      map((response) => ({
+        id: response.id,
+        title: response.title,
+        text: response.text,
+        image: response.image,
+      }))
+    );
   }
 
-  updateReview(id: string, review: Review): Observable<Review> {
+  update(id: string, review: Review): Observable<Review> {
     return from(this.reviewModel.findById(id)).pipe(
       tap((d) => {
         if (!d) {
@@ -31,7 +43,7 @@ export class AdminReviewsService {
     );
   }
 
-  deleteReview(id: string): Observable<void> {
+  delete(id: string): Observable<void> {
     return of(this.reviewModel.findByIdAndDelete(id)).pipe(
       switchMap(() => EMPTY)
     );

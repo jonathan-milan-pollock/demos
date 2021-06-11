@@ -44,4 +44,4 @@ __blobstorage__
 __queuestorage__
 
 # compodoc
-/libs/ui-storybook/.storybook/documentation/documentation.json
+/libs/ui-storybook/.storybook/public/documentation.json

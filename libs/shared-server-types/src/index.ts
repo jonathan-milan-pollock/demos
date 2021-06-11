@@ -1,5 +1,5 @@
 // constants
 export * from './lib/constants/constants';
 
-// types
-export * from './lib/types/azure-storage-container.type';
+// enums
+export * from './lib/enums/azure-storage-container-type.enum';
