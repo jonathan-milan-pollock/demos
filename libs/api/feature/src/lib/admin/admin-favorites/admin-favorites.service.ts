@@ -30,7 +30,7 @@ export class AdminFavoritesService {
           throw new NotFoundException('Could not find favorites');
         }
       }),
-      switchMap(() => this.favoritesModel.findByIdAndUpdate(id, favorites)),
+      //switchMap(() => this.favoritesModel.findByIdAndUpdate(id, favorites)),
       map((b) => b as Favorites)
     );
   }

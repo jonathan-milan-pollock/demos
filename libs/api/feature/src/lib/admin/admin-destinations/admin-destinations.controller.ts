@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 import { Destination } from '@dark-rush-photography/shared-types';
 import { AdminDestinationsService } from './admin-destinations.service';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
-import { CreateDestinationDto } from '@dark-rush-photography/api/types';
+import { DestinationDto } from '@dark-rush-photography/api/types';
 
 @Controller('admin/v1/destinations')
 @UseGuards(RolesGuard)
@@ -28,7 +28,7 @@ export class AdminDestinationsController {
 
   @Roles('admin')
   @Post()
-  create(@Body() destination: CreateDestinationDto): Observable<Destination> {
+  create(@Body() destination: DestinationDto): Observable<Destination> {
     return this.adminDestinationsService.create(destination);
   }
 
@@ -36,7 +36,7 @@ export class AdminDestinationsController {
   @Put(':id')
   update(
     @Param() id: string,
-    @Body() destination: CreateDestinationDto
+    @Body() destination: DestinationDto
   ): Observable<Destination> {
     return this.adminDestinationsService.update(id, destination);
   }

@@ -25,9 +25,9 @@ export class MetaPhotoOfTheWeekImageResolver implements Resolve<Metadata> {
       map(
         (photoOfTheWeek) =>
           ({
-            title: photoOfTheWeek.photoOfTheWeek[0].image?.title,
-            description: photoOfTheWeek.photoOfTheWeek[0].image?.description,
-            url: route.url.toString(),
+            //title: photoOfTheWeek.photoOfTheWeek[0].images?.title,
+            //description: photoOfTheWeek.photoOfTheWeek[0].image?.description,
+            //url: route.url.toString(),
           } as Metadata)
       )
     );

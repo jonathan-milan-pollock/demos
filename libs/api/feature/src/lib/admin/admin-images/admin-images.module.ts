@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { ImageStateProvider } from '@dark-rush-photography/api/util';
 import {
   Document,
-  DocumentModelService,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { AdminImagesController } from './admin-images.controller';
@@ -17,6 +16,6 @@ import { AdminImagesService } from './admin-images.service';
     ]),
   ],
   controllers: [AdminImagesController],
-  providers: [ImageStateProvider, DocumentModelService, AdminImagesService],
+  providers: [DocumentModelProvider, AdminImagesService],
 })
 export class AdminImagesModule {}

@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelService,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { AdminPhotoOfTheWeekController } from './admin-photo-of-the-week.controller';
@@ -16,6 +16,6 @@ import { AdminPhotoOfTheWeekService } from './admin-photo-of-the-week.service';
     ]),
   ],
   controllers: [AdminPhotoOfTheWeekController],
-  providers: [DocumentModelService, AdminPhotoOfTheWeekService],
+  providers: [DocumentModelProvider, AdminPhotoOfTheWeekService],
 })
 export class AdminPhotoOfTheWeekModule {}

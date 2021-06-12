@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
+import { AboutModule } from './about/about.module';
 import { BestOfModule } from './best-of/best-of.module';
 import { DestinationsModule } from './destinations/destinations.module';
 import { EventsModule } from './events/events.module';
@@ -13,6 +14,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    AboutModule,
     BestOfModule,
     DestinationsModule,
     EventsModule,

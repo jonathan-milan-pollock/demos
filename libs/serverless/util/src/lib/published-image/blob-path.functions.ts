@@ -1,59 +1,39 @@
 import {
+  ImageDimensionState,
   ImageDimensionType,
-  ImageProcessState,
 } from '@dark-rush-photography/shared-types';
 import { PublishedImage } from '@dark-rush-photography/serverless/types';
 
-export const getBlobPath = (
-  imageProcessState: ImageProcessState,
+export const getBlobPrefix = (
+  imageDimensionState: ImageDimensionState,
   publishedImage: PublishedImage
 ): string => {
-  const {
-    publishServiceType,
-    publishedCollectionSetParentName,
-    publishedCollectionSetName,
-    publishedCollectionName,
-    imageName,
-  } = publishedImage;
+  const { publishServiceType, group, slug } = publishedImage;
 
-  let blobPath = `${imageProcessState}/${publishServiceType}/`;
-  if (publishedCollectionSetParentName) {
-    blobPath += `${publishedCollectionSetParentName}/`;
+  let blobPrefix = `${imageDimensionState}/${publishServiceType}/`;
+  if (group) {
+    blobPrefix += `${group}/`;
   }
-  if (publishedCollectionSetName) {
-    blobPath += `${publishedCollectionSetName}/`;
-  }
-  if (publishedCollectionName) {
-    blobPath += `${publishedCollectionName}/`;
-  }
-  blobPath += imageName;
-  return blobPath;
+  return `${blobPrefix}${slug}`;
+};
+
+export const getBlobPath = (
+  imageDimensionState: ImageDimensionState,
+  publishedImage: PublishedImage
+): string => {
+  const { imageName } = publishedImage;
+
+  const blobPrefix = getBlobPrefix(imageDimensionState, publishedImage);
+  return `${blobPrefix}/${imageName}`;
 };
 
 export const getBlobPathWithImageDimension = (
-  imageProcessState: ImageProcessState,
+  imageDimensionState: ImageDimensionState,
   publishedImage: PublishedImage,
   imageDimensionType: ImageDimensionType
 ): string => {
-  const {
-    publishServiceType,
-    publishedCollectionSetParentName,
-    publishedCollectionSetName,
-    publishedCollectionName,
-    imageName,
-  } = publishedImage;
+  const { imageName } = publishedImage;
 
-  let blobPath = `${imageProcessState}/${publishServiceType}/`;
-  if (publishedCollectionSetParentName) {
-    blobPath += `${publishedCollectionSetParentName}/`;
-  }
-  if (publishedCollectionSetName) {
-    blobPath += `${publishedCollectionSetName}/`;
-  }
-  if (publishedCollectionName) {
-    blobPath += `${publishedCollectionName}/`;
-  }
-  blobPath += `${imageDimensionType.toLowerCase()}/`;
-  blobPath += imageName;
-  return blobPath;
+  const blobPrefix = getBlobPrefix(imageDimensionState, publishedImage);
+  return `${blobPrefix}/${imageDimensionType.toLowerCase()}/${imageName}`;
 };

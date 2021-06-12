@@ -26,7 +26,7 @@ export class AdminEventsService {
           throw new NotFoundException('Could not find event');
         }
       }),
-      switchMap(() => this.eventModel.findByIdAndUpdate(id, event)),
+      //switchMap(() => this.eventModel.findByIdAndUpdate(id, event)),
       map((e) => e as Event)
     );
   }

@@ -1,15 +1,15 @@
 import { HttpService } from '@nestjs/common';
 
 import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Env } from '@dark-rush-photography/serverless/types';
 
 export const apiAuth$ = (
   env: Env,
   httpService: HttpService
-): Observable<string> => {
-  return httpService
+): Observable<string> =>
+  httpService
     .post(
       env.auth0TokenApi,
       {
@@ -19,8 +19,9 @@ export const apiAuth$ = (
         grant_type: 'client_credentials',
       },
       {
-        headers: ['content-type', 'application/json'],
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
     )
-    .pipe(pluck('access_token'));
-};
+    .pipe(map((axiosResponse) => axiosResponse.data['access_token']));

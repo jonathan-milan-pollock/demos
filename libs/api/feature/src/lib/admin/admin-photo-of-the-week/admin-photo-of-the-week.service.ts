@@ -31,9 +31,9 @@ export class AdminPhotoOfTheWeekService {
           throw new NotFoundException('Could not find photo of the week');
         }
       }),
-      switchMap(() =>
-        this.photoOfTheWeekModel.findByIdAndUpdate(id, photoOfTheWeek)
-      ),
+      // switchMap(() =>
+      //   this.photoOfTheWeekModel.findByIdAndUpdate(id, photoOfTheWeek)
+      // ),
       map((p) => p as PhotoOfTheWeek)
     );
   }

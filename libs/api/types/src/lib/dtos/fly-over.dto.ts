@@ -1,11 +1,12 @@
-import { IsDefined, IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 import { FlyOver } from '@dark-rush-photography/shared-types';
 
 export class FlyOverDto implements FlyOver {
-  @IsDefined()
+  @IsString()
   slug!: string;
 
+  @IsString()
   @IsOptional()
   titleTrackPath?: string;
 }

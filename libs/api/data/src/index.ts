@@ -66,6 +66,11 @@ export * from './lib/mock/reviews/KendraPoe';
 export * from './lib/mock/reviews/LindsayLevin';
 export * from './lib/mock/reviews/RonnieColquitt';
 
-// mongoose
-export * from './lib/mongoose/document-model.service';
-export * from './lib/mongoose/document.schema';
+// providers
+export * from './lib/providers/best-of-type.provider';
+export * from './lib/providers/document-model.provider';
+export * from './lib/providers/image-dimension-data.provider';
+export * from './lib/providers/posted-state.provider';
+
+// schema
+export * from './lib/schema/document.schema';

@@ -29,10 +29,6 @@ This means that the best use case for providedIn: 'platform' is for sharing serv
   ]
 ```
 
-TODO: https://www.npmjs.com/package/nock
-
-TODO: Safe deserialization
-
 IPTC photo metadata
 Alternatively, you can embed IPTC photo metadata directly inside an image. You must include the Web Statement of Rights field for your image to be eligible to be shown with the licensable badge. We recommend that you also add the Licensor URL field if you have that information.
 

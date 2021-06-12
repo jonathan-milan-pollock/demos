@@ -1,141 +1,80 @@
 import {
   ConflictException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, toArray } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, toArray } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
+import { Image } from '@dark-rush-photography/shared-types';
 import {
-  ENV,
-  BestOf,
-  BestOfType,
-  DocumentType,
-  ImageDimensionType,
-  Image,
-  ImageData,
-  ImageState,
-} from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/api/types';
-import {
-  dataUriForAzureBlob$,
   Document,
   DocumentModel,
-  DocumentModelService,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
-import { ImageStateProvider } from '@dark-rush-photography/api/util';
 
 @Injectable()
 export class AdminImagesService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly imageStateProvider: ImageStateProvider,
     @InjectModel(Document.name)
-    private readonly bestOfModel: Model<DocumentModel>,
-    private readonly documentModelService: DocumentModelService
+    private readonly documentModel: Model<DocumentModel>,
+    private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
-  addOrUpdateImage(id: string, image: Image): Observable<Image> {
-    return from(this.bestOfModel.findById(id).exec()).pipe(
-      map((bestOf) => {
-        if (!bestOf) throw new NotFoundException('Could not find best of');
+  addOrUpdate$(image: Image): Observable<Image> {
+    return from(this.documentModel.findById(image.entityId).exec()).pipe(
+      switchMap((documentModel) => {
+        if (!documentModel)
+          throw new NotFoundException('Could not find entity to add image');
 
-        const { type, bestOfType } = bestOf;
-        return this.bestOfModel.findByIdAndUpdate(bestOf.id, {
-          ...bestOf,
-          type,
-          bestOfType,
-          images: [
-            ...bestOf.images.filter((i) => i.slug !== image.slug),
-            { ...image },
-          ],
-        });
-      }),
-      map(() => image)
-    );
-  }
-
-  findImageData$(
-    bestOfType: BestOfType,
-    slug: string,
-    state: ImageState,
-    dimensionType: ImageDimensionType
-  ): Observable<ImageData> {
-    return from(
-      dataUriForAzureBlob$(
-        this.env.azureStorageConnectionString,
-        this.imageStateProvider.findAzureStorageContainerType(state),
-        `${state.toLowerCase()}/best-of/${bestOfType.toLowerCase()}/${dimensionType.toLowerCase()}/${slug.toLowerCase()}.jpg`
-      )
-    ).pipe(
-      map(
-        (dataUri) =>
-          ({
-            slug,
-            dimensionType,
-            dataUri,
-          } as ImageData)
-      )
-    );
-  }
-
-  findImagesData$(
-    bestOfType: BestOfType,
-    images: Image[],
-    imageDimensionType: ImageDimensionType
-  ): Observable<ImageData[]> {
-    return from(images).pipe(
-      mergeMap((image) =>
-        this.findImageData$(
-          bestOfType,
-          image.slug,
-          image.state,
-          imageDimensionType
-        )
-      ),
-      toArray<ImageData>()
-    );
-  }
-
-  findAllImageData(
-    id: string,
-    imageDimensionType: ImageDimensionType
-  ): Observable<ImageData[]> {
-    return from(this.bestOfModel.findById(id).exec()).pipe(
-      map((bestOf) => {
-        if (!bestOf) throw new NotFoundException('Could not find best of');
-        return {
-          bestOfType: bestOf.bestOfType,
-          images: bestOf.images,
-        };
-      }),
-      switchMap(({ bestOfType, images }) => {
-        return this.findImagesData$(
-          bestOfType,
-          images as Image[],
-          imageDimensionType
+        return from(
+          this.documentModel.findByIdAndUpdate(image.entityId, {
+            images: [
+              ...documentModel.images.filter((i) => i.slug !== image.slug),
+              { ...image },
+            ],
+          })
         );
+      }),
+      map((response) => {
+        if (!response) {
+          throw new ConflictException(`Unable to add image ${image.slug}`);
+        }
+        return image;
       })
     );
   }
 
-  findImage(id: string, imageSlug: string): Observable<Image> {
-    return from(this.bestOfModel.findById(id).exec()).pipe(
-      map((bestOf) => {
-        if (!bestOf) throw new NotFoundException('Could not find best of');
+  findAll$(entityId: string): Observable<Image[]> {
+    return from(this.documentModel.findById(entityId).exec()).pipe(
+      switchMap((documentModel) => {
+        if (!documentModel)
+          throw new NotFoundException('Could not find entity');
 
-        return bestOf.images;
+        return from(documentModel.images);
+      }),
+      map((image) => this.documentModelProvider.toImage(image)),
+      toArray<Image>()
+    );
+  }
+
+  findOne$(slug: string, entityId: string): Observable<Image> {
+    return from(this.documentModel.findById(entityId).exec()).pipe(
+      map((documentModel) => {
+        if (!documentModel)
+          throw new NotFoundException('Could not find entity');
+
+        return documentModel.images;
       }),
       map((images) => {
-        const image = images.find((image) => image.slug === imageSlug);
+        const image = images.find((image) => image.slug === slug);
         if (!image) {
-          throw new NotFoundException(`Could not find image ${imageSlug}`);
+          throw new NotFoundException(`Could not find image ${slug}`);
         }
-        return image;
+        return this.documentModelProvider.toImage(image);
       })
     );
   }

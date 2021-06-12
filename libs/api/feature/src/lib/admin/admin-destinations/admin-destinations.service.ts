@@ -10,7 +10,7 @@ import { Env } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  DocumentModelService,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AdminDestinationsService {
     @Inject(ENV) private readonly env: Env,
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
-    private readonly documentModelService: DocumentModelService
+    private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
   create(destination: Destination): Observable<Destination> {
@@ -33,7 +33,7 @@ export class AdminDestinationsService {
           throw new NotFoundException('Could not find destination');
         }
       }),
-      switchMap(() => this.destinationModel.findByIdAndUpdate(id, destination)),
+      //switchMap(() => this.destinationModel.findByIdAndUpdate(id, destination)),
       map((d) => d as Destination)
     );
   }

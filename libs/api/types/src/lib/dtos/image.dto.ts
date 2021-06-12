@@ -2,7 +2,6 @@ import {
   IsArray,
   IsBoolean,
   IsDateString,
-  IsDefined,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -11,19 +10,22 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Image, ImageState } from '@dark-rush-photography/shared-types';
+import { Image, PostedState } from '@dark-rush-photography/shared-types';
+import { ImageDimensionDto } from './image-dimension.dto';
 import { EmotionDto } from './emotion.dto';
 import { CommentDto } from './comment.dto';
-import { ImageDimensionDto } from './image-dimension.dto';
 
 export class ImageDto implements Image {
-  @IsDefined()
+  @IsString()
+  entityId!: string;
+
+  @IsString()
   slug!: string;
 
-  @IsEnum(ImageState)
-  state!: ImageState;
+  @IsEnum(PostedState)
+  state!: PostedState;
 
-  @IsDefined()
+  @IsNumber()
   order!: number;
 
   @IsBoolean()
@@ -39,39 +41,32 @@ export class ImageDto implements Image {
   @IsOptional()
   title?: string;
 
+  @IsString()
   @IsOptional()
   description?: string;
 
   @IsArray()
-  @IsOptional()
-  keywords!: string[];
+  keywords: string[] = [];
 
   @IsDateString()
-  @IsOptional()
-  dateCreated?: string;
+  dateCreated!: string;
 
   @IsDateString()
   @IsOptional()
   datePublished?: string;
 
-  @IsNumber()
-  width!: number;
-
-  @IsNumber()
-  height!: number;
-
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ImageDimensionDto)
-  imageDimensions!: ReadonlyArray<ImageDimensionDto>;
+  dimensions: ImageDimensionDto[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => EmotionDto)
-  emotions!: EmotionDto[];
+  emotions: EmotionDto[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CommentDto)
-  comments!: CommentDto[];
+  comments: CommentDto[] = [];
 }

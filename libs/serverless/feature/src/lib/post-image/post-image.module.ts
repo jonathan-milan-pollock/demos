@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 
-import { PostImageProcessService } from '@dark-rush-photography/serverless/data';
+import { PostImageActivityProvider } from '@dark-rush-photography/serverless/data';
 import { PostImageController } from './post-image.controller';
 import { PostImageService } from './post-image.service';
 
 @Module({
+  imports: [HttpModule],
   controllers: [PostImageController],
-  providers: [PostImageProcessService, PostImageService],
+  providers: [PostImageActivityProvider, PostImageService],
 })
 export class PostImageModule {}

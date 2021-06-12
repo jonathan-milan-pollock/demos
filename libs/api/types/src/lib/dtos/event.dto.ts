@@ -2,7 +2,6 @@ import {
   IsArray,
   IsBoolean,
   IsDateString,
-  IsDefined,
   IsNumber,
   IsOptional,
   IsString,
@@ -23,17 +22,23 @@ export class EventDto {
   @IsNumber()
   group!: number;
 
-  @IsString()
-  title!: string;
+  @IsBoolean()
+  isPublic!: boolean;
 
   @IsString()
-  description!: string;
+  @IsOptional()
+  title?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
 
   @IsArray()
-  keywords!: string[];
+  keywords: string[] = [];
 
   @IsDateString()
-  dateCreated!: string;
+  @IsOptional()
+  dateCreated?: string;
 
   @IsDateString()
   @IsOptional()
@@ -41,31 +46,32 @@ export class EventDto {
 
   @ValidateNested({ each: true })
   @Type(() => LocationDto)
-  location!: LocationDto;
+  @IsOptional()
+  location?: LocationDto;
 
   @IsBoolean()
   useTitleImage!: boolean;
 
   @IsArray()
-  text!: string[];
+  text: string[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ImageDto)
-  images!: ImageDto[];
+  images: ImageDto[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => VideoDto)
-  videos!: VideoDto[];
+  videos: VideoDto[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => EmotionDto)
-  emotions!: EmotionDto[];
+  emotions: EmotionDto[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CommentDto)
-  comments!: ReadonlyArray<CommentDto>;
+  comments: CommentDto[] = [];
 }

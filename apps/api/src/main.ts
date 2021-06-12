@@ -27,7 +27,11 @@ async function bootstrap() {
     .setDescription('API for Dark Rush Photography')
     .setVersion('1.0')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+
+  const document = SwaggerModule.createDocument(app, config, {
+    operationIdFactory: (_controllerKey: string, methodKey: string) =>
+      methodKey,
+  });
   SwaggerModule.setup('/', app, document, {
     swaggerOptions: {
       persistAuthorization: true,

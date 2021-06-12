@@ -4,7 +4,8 @@ import { from, Observable } from 'rxjs';
 import { map, pluck, switchMap } from 'rxjs/operators';
 
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
-import { getAzureStorageBlockBlobClient$ } from './azure-storage-client.functions';
+import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
+import { Logger } from '@nestjs/common';
 
 export const uploadBufferToAzureStorageBlob$ = (
   buffer: Buffer,
@@ -29,6 +30,9 @@ export const uploadStreamToAzureStorageBlob$ = (
   azureStorageContainerType: AzureStorageContainerType,
   blobPath: string
 ): Observable<string> => {
+  const logContext = 'uploadStreamToAzureStorageBlob$';
+  Logger.log(`Uploading image blob ${blobPath}`, logContext);
+
   return getAzureStorageBlockBlobClient$(
     azureStorageConnectionString,
     azureStorageContainerType,

@@ -2,26 +2,26 @@ import { Injectable, Inject, HttpService } from '@nestjs/common';
 
 import { take } from 'rxjs/operators';
 
-import { ENV, ImageProcessState } from '@dark-rush-photography/shared-types';
-import { Env, ImageProcess } from '@dark-rush-photography/serverless/types';
-import { ExifImageProcessService } from '@dark-rush-photography/serverless/data';
+import { ENV, ImageDimensionState } from '@dark-rush-photography/shared-types';
+import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
+import { ExifImageActivityProvider } from '@dark-rush-photography/serverless/data';
 
 @Injectable()
 export class ExifImageService {
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly httpService: HttpService,
-    private readonly exifImageProcessService: ExifImageProcessService
+    private readonly exifImageActivityProvider: ExifImageActivityProvider
   ) {}
 
-  async exifImage(imageProcess: ImageProcess): Promise<ImageProcess> {
-    return this.exifImageProcessService
-      .process$(this.env, this.httpService, imageProcess)
+  async exifImage(imageActivity: ImageActivity): Promise<ImageActivity> {
+    return this.exifImageActivityProvider
+      .process$(this.env, this.httpService, imageActivity)
       .pipe(take(1))
       .toPromise()
       .then(() => ({
-        state: ImageProcessState.Exifed,
-        publishedImage: imageProcess.publishedImage,
+        state: ImageDimensionState.Exifed,
+        publishedImage: imageActivity.publishedImage,
       }));
   }
 }

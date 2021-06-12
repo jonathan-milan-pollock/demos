@@ -1,4 +1,4 @@
-import { IsDefined, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 import { Location } from '@dark-rush-photography/shared-types';
 
@@ -24,6 +24,5 @@ export class LocationDto implements Location {
   zipCode?: string;
 
   @IsString()
-  @IsDefined()
   country!: string;
 }
