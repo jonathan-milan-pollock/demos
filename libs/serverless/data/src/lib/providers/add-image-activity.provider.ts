@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
@@ -17,7 +17,7 @@ import {
 } from '@dark-rush-photography/serverless/util';
 import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
 import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
-import { apiAddImage$ } from '../apis/api-gateway/add-image.functions';
+import { apiAddImage$ } from '../apis/api-gateway/image-api-gateway.functions';
 
 @Injectable()
 export class AddImageActivityProvider {
@@ -26,42 +26,38 @@ export class AddImageActivityProvider {
   addImage$(
     env: Env,
     httpService: HttpService,
-    publishedImage: PublishedImage,
-    imageFilePath: string
-  ): Observable<void> {
-    return readCreateDateExif$(imageFilePath).pipe(
-      switchMap((createDate) =>
-        apiAddImage$(env, httpService, publishedImage, createDate)
-      ),
-      switchMap(() =>
-        uploadStreamToAzureStorageBlob$(
-          fs.createReadStream(imageFilePath),
-          env.azureStorageConnectionString,
-          AzureStorageContainerType.Private,
-          getBlobPath(ImageDimensionState.Added, publishedImage)
-        )
-      ),
-      map(() => Logger.log('AddImage complete', this.logContext))
-    );
-  }
-
-  process$(
-    env: Env,
-    httpService: HttpService,
     imageActivity: ImageActivity
   ): Observable<void> {
     const { state, publishedImage } = imageActivity;
-    const blobPath = getBlobPath(state, publishedImage);
     return downloadAzureStorageBlobToFile$(
       env.azureStorageConnectionString,
       AzureStorageContainerType.Private,
-      blobPath,
+      getBlobPath(state, publishedImage),
       publishedImage.imageName
     ).pipe(
-      tap(() => Logger.log('Adding image', this.logContext)),
       switchMap((imageFilePath) =>
-        this.addImage$(env, httpService, publishedImage, imageFilePath)
+        this.addImageWithPath$(env, httpService, publishedImage, imageFilePath)
       )
+    );
+  }
+
+  addImageWithPath$(
+    env: Env,
+    httpService: HttpService,
+    publishedImage: PublishedImage,
+    imageFilePath: string
+  ): Observable<void> {
+    return uploadStreamToAzureStorageBlob$(
+      fs.createReadStream(imageFilePath),
+      env.azureStorageConnectionString,
+      AzureStorageContainerType.Private,
+      getBlobPath(ImageDimensionState.Added, publishedImage)
+    ).pipe(
+      switchMap(() => readCreateDateExif$(imageFilePath)),
+      switchMap((createDate) =>
+        apiAddImage$(env, httpService, publishedImage, createDate)
+      ),
+      map(() => Logger.log('AddImage complete', this.logContext))
     );
   }
 }

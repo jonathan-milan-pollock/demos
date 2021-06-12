@@ -13,7 +13,7 @@ import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
 import {
   getBlobPath,
@@ -21,11 +21,11 @@ import {
 } from '@dark-rush-photography/serverless/util';
 import { uploadBufferToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { apiCreateEntity$ } from '../apis/api-gateway/create-entity.functions';
+import { apiCreateEntity$ } from '../apis/api-gateway/entity-api-gateway.functions';
 
 @Injectable()
 export class UploadImageActivityProvider {
-  process$(
+  uploadImage$(
     env: Env,
     httpService: HttpService,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -13,7 +13,7 @@ import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class PostImageActivityProvider {
-  process$(
+  postImage$(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     requestContext: Record<string, any>,
     publishedImage: PublishedImage

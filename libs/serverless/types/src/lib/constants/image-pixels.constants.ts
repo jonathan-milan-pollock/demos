@@ -1,12 +1,12 @@
 import { ImageDimensionType } from '@dark-rush-photography/shared-types';
-import { ImagePixelsStandard } from '../interfaces/image-pixels-standard.interface';
-import { ImagePixelsLongestEdge } from '../interfaces/image-pixels-longest-edge.interface';
-import { ImagePixelsTile } from '../interfaces/image-pixels-tile.interface';
+import { ImageDimensionStandardConfig } from '../interfaces/image-dimension-standard-config.interface';
+import { ImageDimensionLongestEdgeConfig } from '../interfaces/image-dimension-longest-edge-config.interface';
+import { ImageDimensionTileConfig } from '../interfaces/image-dimension-tile-config.interface';
 
 export const IMAGE_DIMENSIONS: (
-  | ImagePixelsStandard
-  | ImagePixelsLongestEdge
-  | ImagePixelsTile
+  | ImageDimensionStandardConfig
+  | ImageDimensionLongestEdgeConfig
+  | ImageDimensionTileConfig
 )[] = [
   {
     type: ImageDimensionType.Tile,

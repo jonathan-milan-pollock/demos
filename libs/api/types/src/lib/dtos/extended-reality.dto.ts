@@ -8,7 +8,7 @@ export class ExtendedRealityDto implements ExtendedReality {
   @IsString()
   slug!: string;
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => GeoCoordinatesDto)
   geo!: GeoCoordinatesDto;
 }

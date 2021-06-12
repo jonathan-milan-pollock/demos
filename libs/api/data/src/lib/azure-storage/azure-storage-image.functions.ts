@@ -5,7 +5,7 @@ import {
 import { fromEvent, Observable, of } from 'rxjs';
 import { buffer, map, mergeMap, pluck, switchMap } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 
 export const azureStorageImageNames$ = (
   azureStorageConnectionString: string,

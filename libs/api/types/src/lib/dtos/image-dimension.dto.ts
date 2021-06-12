@@ -1,10 +1,13 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import {
   ImageDimension,
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
+import { ImageDimensionPixelsDto } from './image-dimension-pixels.dto';
+import { ThreeSixtyImageSettingsDto } from './three-sixty-image-settings.dto';
 
 export class ImageDimensionDto implements ImageDimension {
   @IsString()
@@ -19,21 +22,12 @@ export class ImageDimensionDto implements ImageDimension {
   @IsEnum(ImageDimensionState)
   state!: ImageDimensionState;
 
-  @IsNumber()
-  width!: number;
+  @ValidateNested()
+  @Type(() => ImageDimensionPixelsDto)
+  imageDimensionPixels!: ImageDimensionPixelsDto;
 
-  @IsNumber()
-  height!: number;
-
-  @IsNumber()
+  @ValidateNested()
+  @Type(() => ThreeSixtyImageSettingsDto)
   @IsOptional()
-  pitch?: number;
-
-  @IsNumber()
-  @IsOptional()
-  yaw?: number;
-
-  @IsNumber()
-  @IsOptional()
-  hfov?: number;
+  threeSixtyImageSettings?: ThreeSixtyImageSettingsDto;
 }

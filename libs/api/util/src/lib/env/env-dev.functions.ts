@@ -1,4 +1,4 @@
-import { AZURE_STORAGE_CONNECTION_STRING_DEV } from '@dark-rush-photography/shared-server-types';
+import { AZURE_STORAGE_CONNECTION_STRING_DEV } from '@dark-rush-photography/shared-server/types';
 import { Env } from '@dark-rush-photography/api/types';
 
 export const loadDevEnvironment = (): Env => {

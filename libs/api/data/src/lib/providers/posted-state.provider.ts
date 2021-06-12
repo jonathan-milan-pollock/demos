@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { PostedState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 
 @Injectable()
 export class PostedStateProvider {

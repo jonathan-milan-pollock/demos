@@ -1,13 +1,22 @@
-import { HttpService, Logger } from '@nestjs/common';
+import { BadRequestException, HttpService, Logger } from '@nestjs/common';
 
+import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
-import { About, Image, PostedState } from '@dark-rush-photography/shared-types';
+import {
+  About,
+  Image,
+  ImageDimension,
+  ImageDimensionState,
+  ImageDimensionType,
+} from '@dark-rush-photography/shared-types';
 import { Env } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from './auth-api.functions';
+import { addImage$ } from './images-api.functions';
+import { addOrUpdateImageDimension$ } from './image-dimensions-api.functions';
 
-const logContextCreate = 'createAboutIfNotExists$';
+const logContextEntity = 'createAboutIfNotExists$';
 export const createAboutIfNotExists$ = (
   env: Env,
   httpService: HttpService,
@@ -17,7 +26,7 @@ export const createAboutIfNotExists$ = (
     tap(() =>
       Logger.log(
         `Calling API ${env.darkRushPhotographyApi}/admin/v1/about`,
-        logContextCreate
+        logContextEntity
       )
     ),
     switchMap((authToken) =>
@@ -39,58 +48,19 @@ export const createAboutIfNotExists$ = (
     map((axiosResponse) => axiosResponse.data)
   );
 
-const logContextAddWithAuth = 'putAboutImage$';
-export const addAboutImageWithAuth$ = (
+const logContextGetAbout = 'getAbout$';
+export const getAbout$ = (
   env: Env,
   httpService: HttpService,
-  slug: string,
-  imageName: string,
-  createDate: string,
-  authToken: string
-): Observable<Image> => {
+  slug: string
+): Observable<AxiosResponse<About>> => {
   Logger.log(
     `Calling API ${env.darkRushPhotographyApi}/v1/about/${slug}`,
-    logContextAddWithAuth
+    logContextGetAbout
   );
-  return httpService
-    .get<About>(`${env.darkRushPhotographyApi}/v1/about/${slug}`)
-    .pipe(
-      switchMap((axiosResponse) => {
-        Logger.log(
-          `Calling API ${env.darkRushPhotographyApi}/admin/v1/images`,
-          logContextAddWithAuth
-        );
-
-        return httpService.put<Image>(
-          `${env.darkRushPhotographyApi}/admin/v1/images`,
-          {
-            entityId: axiosResponse.data.id,
-            slug: imageName.substring(0, imageName.indexOf('.')),
-            state: PostedState.New,
-            order: 0,
-            isStared: false,
-            isLoved: false,
-            isLiked: false,
-            keywords: [],
-            dateCreated:
-              createDate.substring(0, 10).replace(/:/g, '-') + 'T00:00:00Z',
-            dimensions: [],
-            emotions: [],
-            comments: [],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
-            },
-          }
-        );
-      }),
-      tap((axiosResponse) =>
-        Logger.log(axiosResponse.data, logContextAddWithAuth)
-      ),
-      map((axiosResponse) => axiosResponse.data)
-    );
+  return httpService.get<About>(
+    `${env.darkRushPhotographyApi}/v1/about/${slug}`
+  );
 };
 
 export const addAboutImage$ = (
@@ -99,16 +69,48 @@ export const addAboutImage$ = (
   slug: string,
   imageName: string,
   createDate: string
-): Observable<Image> =>
-  apiAuth$(env, httpService).pipe(
-    switchMap((authToken) =>
-      addAboutImageWithAuth$(
+): Observable<Image> => {
+  return getAbout$(env, httpService, slug).pipe(
+    switchMap((axiosResponse) => {
+      if (!axiosResponse.data.id)
+        throw new BadRequestException('Could not get About');
+
+      return addImage$(
         env,
         httpService,
-        slug,
+        axiosResponse.data.id,
         imageName,
-        createDate,
-        authToken
-      )
-    )
+        createDate
+      );
+    })
   );
+};
+
+export const addOrUpdateAboutImageDimension$ = (
+  env: Env,
+  httpService: HttpService,
+  slug: string,
+  imageName: string,
+  imageDimensionType: ImageDimensionType,
+  imageDimensionState: ImageDimensionState,
+  width: number,
+  height: number
+): Observable<ImageDimension> => {
+  return getAbout$(env, httpService, slug).pipe(
+    switchMap((axiosResponse) => {
+      if (!axiosResponse.data.id)
+        throw new BadRequestException('Could not get About');
+
+      return addOrUpdateImageDimension$(
+        env,
+        httpService,
+        axiosResponse.data.id,
+        imageName,
+        imageDimensionType,
+        imageDimensionState,
+        width,
+        height
+      );
+    })
+  );
+};

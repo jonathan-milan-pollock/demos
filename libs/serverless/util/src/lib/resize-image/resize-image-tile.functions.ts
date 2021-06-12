@@ -1,17 +1,15 @@
-﻿import { ImagePixelsTile } from '@dark-rush-photography/serverless/types';
+﻿import { ImageDimensionTileConfig } from '@dark-rush-photography/serverless/types';
 import { getImageDimension } from './image-dimension.functions';
 import { resizeLongestEdge } from './resize-longest-edge.functions';
 
 export const resizeImageTile = async (
   imageFilePath: string,
   imageName: string,
-  imagePixelsTile: ImagePixelsTile
+  imageDimensionTileConfig: ImageDimensionTileConfig
 ): Promise<string> => {
-  const { minWidth, minHeight } = imagePixelsTile;
-  let longestEdge = imagePixelsTile.longestEdge;
+  const { minWidth, minHeight } = imageDimensionTileConfig;
+  let longestEdge = imageDimensionTileConfig.longestEdge;
   let dimensions = await getImageDimension(imageFilePath);
-
-  console.log('resizedImageFilePath' + imageFilePath);
 
   let resizedImageFilePath = imageFilePath;
   do {

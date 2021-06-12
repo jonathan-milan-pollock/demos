@@ -100,6 +100,9 @@
     "shared-server-types": {
       "tags": ["scope:shared-server", "type:types"]
     },
+    "shared-server-util": {
+      "tags": ["scope:shared-server", "type:util"]
+    },
     "shared-types": {
       "tags": ["scope:shared", "type:types"]
     },

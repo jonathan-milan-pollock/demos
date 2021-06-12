@@ -17,7 +17,7 @@ export class PostImageService {
     publishedImage: PublishedImage
   ): Promise<IHttpResponse> {
     return this.postImageActivityProvider
-      .process$(request.context, publishedImage)
+      .postImage$(request.context, publishedImage)
       .toPromise();
   }
 }

@@ -3,7 +3,7 @@ import { Readable } from 'node:stream';
 import { from, Observable } from 'rxjs';
 import { map, pluck, switchMap } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
 import { Logger } from '@nestjs/common';
 

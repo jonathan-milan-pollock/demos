@@ -672,19 +672,6 @@
         }
       }
     },
-    "shared-server-types": {
-      "root": "libs/shared-server-types",
-      "sourceRoot": "libs/shared-server-types/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared-server-types/**/*.ts"]
-          }
-        }
-      }
-    },
     "serverless-util": {
       "root": "libs/serverless/util",
       "sourceRoot": "libs/serverless/util/src",
@@ -701,6 +688,40 @@
           "outputs": ["coverage/libs/serverless/util"],
           "options": {
             "jestConfig": "libs/serverless/util/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "shared-server-types": {
+      "root": "libs/shared-server/types",
+      "sourceRoot": "libs/shared-server/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/types/**/*.ts"]
+          }
+        }
+      }
+    },
+    "shared-server-util": {
+      "root": "libs/shared-server/util",
+      "sourceRoot": "libs/shared-server/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-server/util"],
+          "options": {
+            "jestConfig": "libs/shared-server/util/jest.config.js",
             "passWithNoTests": true
           }
         }

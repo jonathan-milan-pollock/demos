@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import {
   AzureStorageContainerType,
   AZURE_STORAGE_CONNECTION_STRING_DEV,
-} from '@dark-rush-photography/shared-server-types';
+} from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
 
 describe('blockBlobClient$', () => {

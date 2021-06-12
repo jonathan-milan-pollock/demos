@@ -21,7 +21,7 @@ export class PhotoOfTheWeekDto {
   @IsBoolean()
   isPublic!: boolean;
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => LocationDto)
   @IsOptional()
   location?: LocationDto;

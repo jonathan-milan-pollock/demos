@@ -1,4 +1,4 @@
-import { Injectable, Inject, HttpService } from '@nestjs/common';
+import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
 
 import { take } from 'rxjs/operators';
 
@@ -8,6 +8,8 @@ import { ResizeImageActivityProvider } from '@dark-rush-photography/serverless/d
 
 @Injectable()
 export class ResizeImageService {
+  readonly logContext = 'ResizeImageService';
+
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly httpService: HttpService,
@@ -15,8 +17,9 @@ export class ResizeImageService {
   ) {}
 
   async resizeImage(imageActivity: ImageActivity): Promise<ImageActivity> {
+    Logger.log('Resizing image', this.logContext);
     return this.resizeImageActivityProvider
-      .process$(this.env, this.httpService, imageActivity)
+      .resizeImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))
       .toPromise()
       .then(() => ({

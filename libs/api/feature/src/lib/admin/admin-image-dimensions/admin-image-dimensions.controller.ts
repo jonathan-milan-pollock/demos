@@ -11,7 +11,7 @@ import { AdminImageDimensionsService } from './admin-image-dimensions.service';
 @Controller('admin/v1/image-dimensions')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Images')
+@ApiTags('Image Dimensions')
 export class AdminImageDimensionsController {
   constructor(
     private readonly adminImageDimensionsService: AdminImageDimensionsService

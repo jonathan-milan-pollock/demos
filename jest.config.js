@@ -7,6 +7,7 @@ module.exports = {
     '<rootDir>/libs/image-elements',
     '<rootDir>/libs/serverless/data',
     '<rootDir>/libs/serverless/util',
+    '<rootDir>/libs/shared-server/util',
     '<rootDir>/libs/website/data',
     '<rootDir>/libs/website/ui/ui-directives',
     '<rootDir>/libs/website/util',

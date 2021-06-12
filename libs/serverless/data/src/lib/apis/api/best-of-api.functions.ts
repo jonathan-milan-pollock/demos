@@ -1,69 +1,74 @@
-import { HttpService } from '@nestjs/common';
+import { BadRequestException, HttpService, Logger } from '@nestjs/common';
 
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import {
+  BestOf,
   BestOfType,
   Image,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
 import { Env } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from './auth-api.functions';
+import { addImage$ } from './images-api.functions';
 
+const logContextCreateEntity = 'createBestOfIfNotExists$';
+export const createBestOfIfNotExists$ = (
+  env: Env,
+  httpService: HttpService,
+  slug: string
+): Observable<BestOf> =>
+  apiAuth$(env, httpService).pipe(
+    tap(() =>
+      Logger.log(
+        `Calling API ${env.darkRushPhotographyApi}/admin/v1/best-of/${slug}`,
+        logContextCreateEntity
+      )
+    ),
+    switchMap((authToken) =>
+      httpService.post<BestOf>(
+        `${env.darkRushPhotographyApi}/admin/v1/best-of/${slug}`,
+        {
+          images: [],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
+          },
+        }
+      )
+    ),
+    map((axiosResponse) => axiosResponse.data)
+  );
+
+const logContextAddImage = 'addBestOfImage$';
 export const addBestOfImage$ = (
   env: Env,
   httpService: HttpService,
-  bestOfType: BestOfType,
-  slug: string
-): Observable<Image> => {
-  return apiAuth$(env, httpService).pipe(
-    switchMap((authToken) =>
-      httpService.put<Image>(
-        `${env.darkRushPhotographyApi}/v1/best-of/image`,
-        {
-          bestOfType,
-          slug,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
-          },
-        }
-      )
-    ),
-    map((axiosResponse) => axiosResponse.data)
-  );
-};
-
-export const addBestOfImageType$ = (
-  env: Env,
-  httpService: HttpService,
-  bestOfType: BestOfType,
   slug: string,
-  imageDimensionType: ImageDimensionType,
-  width: number,
-  height: number
+  imageName: string,
+  createDate: string
 ): Observable<Image> => {
-  return apiAuth$(env, httpService).pipe(
-    switchMap((authToken) =>
-      httpService.put<Image>(
-        `${env.darkRushPhotographyApi}/admin/v1/best-of/image/${slug}`,
-        {
-          bestOfType,
-          type: imageDimensionType,
-          width,
-          height,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
-          },
-        }
-      )
-    ),
-    map((axiosResponse) => axiosResponse.data)
+  Logger.log(
+    `Calling API ${env.darkRushPhotographyApi}/v1/best-of/${slug}`,
+    logContextAddImage
   );
+  return httpService
+    .get<BestOf>(`${env.darkRushPhotographyApi}/v1/best-of/${slug}`)
+    .pipe(
+      switchMap((axiosResponse) => {
+        if (!axiosResponse.data.id)
+          throw new BadRequestException('Could not get best of');
+
+        return addImage$(
+          env,
+          httpService,
+          axiosResponse.data.id,
+          imageName,
+          createDate
+        );
+      })
+    );
 };

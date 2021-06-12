@@ -1,4 +1,4 @@
-import { PostedState } from '../enums/image-state.enum';
+import { PostedState } from '../enums/posted-state.enum';
 import { ImageDimension } from './image-dimension.interface';
 import { Emotion } from './emotion.interface';
 import { Comment } from './comment.interface';

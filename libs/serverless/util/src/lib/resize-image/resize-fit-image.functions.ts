@@ -1,9 +1,9 @@
-﻿import { ImagePixelsStandard } from '@dark-rush-photography/serverless/types';
+﻿import { ImageDimensionStandardConfig } from '@dark-rush-photography/serverless/types';
 import sharp = require('sharp');
 
 export const resizeFitImageDimensions = (
   imageFilePath: string,
-  imagePixelsStandard: ImagePixelsStandard
+  imageDimensionStandardConfig: ImageDimensionStandardConfig
 ) => {
   sharp(imageFilePath)
     .resize(200, 300, {

@@ -9,7 +9,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { Logger } from '@nestjs/common';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageContainerClient$ } from './azure-storage-container-client.functions';
 
 const logContext = 'getAzureStorageBlockBlobClient$';
