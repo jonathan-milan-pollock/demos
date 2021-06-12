@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelService,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { UserBestOfController } from './user-best-of.controller';
@@ -16,6 +16,6 @@ import { UserBestOfService } from './user-best-of.service';
     ]),
   ],
   controllers: [UserBestOfController],
-  providers: [DocumentModelService, UserBestOfService],
+  providers: [DocumentModelProvider, UserBestOfService],
 })
 export class UserBestOfModule {}

@@ -4,19 +4,19 @@ import { Injectable } from '@nestjs/common';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 
 import { PublishedImage } from '@dark-rush-photography/serverless/types';
-import { PostImageProcessService } from '@dark-rush-photography/serverless/data';
+import { PostImageActivityProvider } from '@dark-rush-photography/serverless/data';
 
 @Injectable()
 export class PostImageService {
   constructor(
-    private readonly postImageProcessService: PostImageProcessService
+    private readonly postImageActivityProvider: PostImageActivityProvider
   ) {}
 
   async postImage(
     request: AzureRequest,
     publishedImage: PublishedImage
   ): Promise<IHttpResponse> {
-    return this.postImageProcessService
+    return this.postImageActivityProvider
       .process$(request.context, publishedImage)
       .toPromise();
   }

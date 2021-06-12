@@ -1,20 +1,28 @@
 import {
-  Controller,
   Body,
-  Param,
-  Put,
-  HttpCode,
   Delete,
-  UseGuards,
+  Controller,
+  HttpCode,
+  Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { BestOf } from '@dark-rush-photography/shared-types';
-import { BestOfDto } from '@dark-rush-photography/api/types';
-import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
+import { BestOfDto, BestOfResponseDto } from '@dark-rush-photography/api/types';
+import {
+  BestOfTypeValidationPipe,
+  Roles,
+  RolesGuard,
+} from '@dark-rush-photography/api/util';
 import { AdminBestOfService } from './admin-best-of.service';
 
 @Controller('admin/v1/best-of')
@@ -25,29 +33,27 @@ export class AdminBestOfController {
   constructor(private readonly adminBestOfService: AdminBestOfService) {}
 
   @Roles('admin')
-  @Post()
-  create(@Body() bestOf: BestOfDto): Observable<BestOf> {
-    return this.adminBestOfService.create(bestOf);
-  }
-
-  @Roles('admin')
-  @Put(':id')
+  @Post(':bestOfType')
   @ApiParam({
-    name: 'id',
-    type: String,
+    name: 'bestOfType',
+    enum: BestOfType,
   })
-  update(@Param() id: string, @Body() bestOf: BestOfDto): Observable<BestOf> {
-    return this.adminBestOfService.update(id, bestOf);
+  @ApiCreatedResponse({ type: BestOfResponseDto })
+  createIfNotExists(
+    @Param('bestOfType', new BestOfTypeValidationPipe())
+    bestOfType: BestOfType,
+    @Body() bestOf: BestOfDto
+  ): Observable<BestOf> {
+    return this.adminBestOfService.createIfNotExists$({
+      ...bestOf,
+      slug: bestOfType,
+    });
   }
 
   @Roles('admin')
   @Delete(':id')
-  @ApiParam({
-    name: 'id',
-    type: String,
-  })
   @HttpCode(204)
-  delete(@Param() id: string): Observable<string> {
-    return this.adminBestOfService.delete(id);
+  delete(@Param('id') id: string): Observable<void> {
+    return this.adminBestOfService.delete$(id);
   }
 }

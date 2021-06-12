@@ -43,6 +43,7 @@
     "azurite:close": "azurite close",
     "cy:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
     "cy:web": "concurrently \"npm run dev:ssr\" \"ng serve api\" \"npm run serverless:serve\" \"nx run website-e2e:e2e --watch\"",
+    "api:serve": "concurrently \"nx serve api\" \"npm run serverless:serve\"",
     "dc:pre": "npm run build:ssr && npm run docs:json && nx run ui-storybook:build-storybook",
     "dc:build": "docker compose build",
     "dc:up": "docker compose up",

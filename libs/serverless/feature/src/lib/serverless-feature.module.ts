@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { AddImageModule } from './add-image/add-image.module';
 import { ExifImageModule } from './exif-image/exif-image.module';
 import { PostImageModule } from './post-image/post-image.module';
 import { ResizeImageModule } from './resize-image/resize-image.module';
@@ -10,6 +11,7 @@ import { WebsitePostImageModule } from './website-post-image/website-post-image.
 
 @Module({
   imports: [
+    AddImageModule,
     ExifImageModule,
     PostImageModule,
     ResizeImageModule,

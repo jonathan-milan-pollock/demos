@@ -1,17 +1,23 @@
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 import {
   ImageDimension,
-  ImageProcessState,
+  ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
 
 export class ImageDimensionDto implements ImageDimension {
+  @IsString()
+  entityId!: string;
+
+  @IsString()
+  imageSlug!: string;
+
   @IsEnum(ImageDimensionType)
   type!: ImageDimensionType;
 
-  @IsEnum(ImageProcessState)
-  state!: ImageProcessState;
+  @IsEnum(ImageDimensionState)
+  state!: ImageDimensionState;
 
   @IsNumber()
   width!: number;

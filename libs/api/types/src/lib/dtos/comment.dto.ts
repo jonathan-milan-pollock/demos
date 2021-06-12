@@ -1,4 +1,4 @@
-import { IsArray, IsDefined, IsNumber, ValidateNested } from 'class-validator';
+import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { Comment } from '@dark-rush-photography/shared-types';
@@ -8,17 +8,17 @@ export class CommentDto implements Comment {
   @IsNumber()
   order!: number;
 
-  @IsDefined()
+  @IsString()
   userName!: string;
 
-  @IsDefined()
+  @IsString()
   userImage!: string;
 
-  @IsDefined()
+  @IsString()
   text!: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => EmotionDto)
-  emotions!: EmotionDto[];
+  emotions: EmotionDto[] = [];
 }

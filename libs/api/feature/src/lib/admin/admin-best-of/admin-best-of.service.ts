@@ -1,82 +1,54 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { from, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, toArray } from 'rxjs/operators';
+import { map, mapTo, switchMap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
+import { BestOf } from '@dark-rush-photography/shared-types';
 import {
-  ENV,
-  BestOf,
-  BestOfType,
-  DocumentType,
-  ImageDimensionType,
-  Image,
-  ImageData,
-  ImageState,
-} from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/api/types';
-import {
-  dataUriForAzureBlob$,
+  BestOfTypeProvider,
   Document,
   DocumentModel,
-  DocumentModelService,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
-import { ImageStateProvider } from '@dark-rush-photography/api/util';
 
 @Injectable()
 export class AdminBestOfService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly imageStateProvider: ImageStateProvider,
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly documentModelService: DocumentModelService
+    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly bestOfTypeProvider: BestOfTypeProvider
   ) {}
 
-  create(bestOf: BestOf): Observable<BestOf> {
+  createIfNotExists$(bestOf: BestOf): Observable<BestOf> {
     return from(
-      new this.bestOfModel({
-        ...bestOf,
-        type: DocumentType.BestOf,
-        bestOfType: bestOf.bestOfType,
-        isPublic: true,
-      }).save()
+      this.bestOfModel.findOne({
+        type: this.bestOfTypeProvider.findDocumentType(bestOf.slug),
+      })
     ).pipe(
-      map((documentModel) => this.documentModelService.toBestOf(documentModel))
-    );
-  }
-
-  update(id: string, bestOf: BestOf): Observable<BestOf> {
-    return from(this.bestOfModel.findById(id)).pipe(
       switchMap((documentModel) => {
-        if (!documentModel) {
-          throw new NotFoundException('Could not find best of');
-        }
+        if (documentModel) return of(documentModel);
+
         return from(
-          this.bestOfModel.findByIdAndUpdate(id, {
+          new this.bestOfModel({
             ...bestOf,
-            type: documentModel.type,
-          })
+            type: this.bestOfTypeProvider.findDocumentType(bestOf.slug),
+            isPublic: true,
+          }).save()
         );
       }),
-      map((documentModel) => {
+      map((documentModel: DocumentModel) => {
         if (!documentModel) {
-          throw new ConflictException('Unable to update best of');
+          throw new ConflictException(`Unable to create ${bestOf.slug}`);
         }
-        return this.documentModelService.toBestOf(documentModel);
+        return this.documentModelProvider.toBestOf(documentModel);
       })
     );
   }
 
-  delete(id: string): Observable<string> {
-    return of(this.bestOfModel.findByIdAndDelete(id)).pipe(
-      map(() => id) //TODO: What if this fails???
-    );
+  delete$(id: string): Observable<void> {
+    return from(this.bestOfModel.findByIdAndDelete(id)).pipe(mapTo(undefined));
   }
 }

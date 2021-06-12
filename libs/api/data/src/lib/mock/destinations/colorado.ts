@@ -1,6 +1,6 @@
-import { CreateDestinationDto } from '@dark-rush-photography/api/types';
+import { DestinationDto } from '@dark-rush-photography/api/types';
 
-export class Colorado extends CreateDestinationDto {
+export class Colorado extends DestinationDto {
   slug = 'colorado';
   title = 'Colorado';
   description = `
@@ -20,7 +20,7 @@ export class Colorado extends CreateDestinationDto {
     super();
   }
 
-  static of(): CreateDestinationDto {
+  static of(): DestinationDto {
     return new Colorado();
   }
 }

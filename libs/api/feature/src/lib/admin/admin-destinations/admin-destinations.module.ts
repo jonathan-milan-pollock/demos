@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelService,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { AdminDestinationsController } from './admin-destinations.controller';
@@ -16,6 +16,6 @@ import { AdminDestinationsService } from './admin-destinations.service';
     ]),
   ],
   controllers: [AdminDestinationsController],
-  providers: [DocumentModelService, AdminDestinationsService],
+  providers: [DocumentModelProvider, AdminDestinationsService],
 })
 export class AdminDestinationsModule {}

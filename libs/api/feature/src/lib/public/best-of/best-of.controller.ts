@@ -1,10 +1,14 @@
 import { Controller, Param, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { BestOf } from '@dark-rush-photography/shared-types';
-import { Public } from '@dark-rush-photography/api/util';
+import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
+import { BestOfResponseDto } from '@dark-rush-photography/api/types';
+import {
+  BestOfTypeValidationPipe,
+  Public,
+} from '@dark-rush-photography/api/util';
 import { BestOfService } from './best-of.service';
 
 @Controller('v1/best-of')
@@ -13,13 +17,16 @@ import { BestOfService } from './best-of.service';
 export class BestOfController {
   constructor(private readonly bestOfService: BestOfService) {}
 
-  @Get()
-  findAll(): Observable<BestOf[]> {
-    return this.bestOfService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param() id: string): Observable<BestOf> {
-    return this.bestOfService.findOne(id);
+  @Get(':bestOfType')
+  @ApiParam({
+    name: 'bestOfType',
+    enum: BestOfType,
+  })
+  @ApiOkResponse({ type: BestOfResponseDto })
+  findOne(
+    @Param('bestOfType', new BestOfTypeValidationPipe())
+    bestOfType: BestOfType
+  ): Observable<BestOf> {
+    return this.bestOfService.findOne(bestOfType);
   }
 }

@@ -13,13 +13,12 @@ export interface Destination {
   readonly slug: string;
   readonly isPublic: boolean;
   // metadata
-  readonly title: string;
-  readonly description: string;
+  readonly title?: string;
+  readonly description?: string;
   readonly keywords: ReadonlyArray<string>;
-  readonly dateCreated?: string;
   readonly datePublished?: string;
   // location
-  readonly location: Location;
+  readonly location?: Location;
   // display
   readonly useTitleImage: boolean;
   // content
@@ -28,6 +27,7 @@ export interface Destination {
   readonly videos: ReadonlyArray<Video>;
   readonly flyOver?: FlyOver;
   readonly extendedReality?: ExtendedReality;
+  readonly websiteUrl?: string;
   readonly socialMediaUrls: ReadonlyArray<SocialMedia>;
   readonly emotions: ReadonlyArray<Emotion>;
   readonly comments: ReadonlyArray<Comment>;

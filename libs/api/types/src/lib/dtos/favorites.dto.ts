@@ -13,5 +13,5 @@ export class FavoritesDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => VideoDto)
-  videos: ImageDto[] = [];
+  videos: VideoDto[] = [];
 }

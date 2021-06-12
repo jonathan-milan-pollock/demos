@@ -3,21 +3,20 @@ import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { EmotionType } from '@dark-rush-photography/shared-types';
 
 @Injectable()
-export class EmotionTypeValidationPipe implements PipeTransform {
+export class EmotionTypeValidationPipe
+  implements PipeTransform<string, EmotionType> {
+  readonly emotionTypeMap = new Map<string, EmotionType>([
+    ['like', EmotionType.Like],
+    ['love', EmotionType.Love],
+    ['care', EmotionType.Care],
+    ['haha', EmotionType.Haha],
+    ['wow', EmotionType.Wow],
+  ]);
+
   transform(emotionType: string): EmotionType {
-    switch (emotionType.toLowerCase()) {
-      case EmotionType.Like.toLowerCase():
-        return EmotionType.Like;
-      case EmotionType.Love.toLowerCase():
-        return EmotionType.Love;
-      case EmotionType.Care.toLowerCase():
-        return EmotionType.Care;
-      case EmotionType.Haha.toLowerCase():
-        return EmotionType.Haha;
-      case EmotionType.Wow.toLowerCase():
-        return EmotionType.Wow;
-      default:
-        throw new BadRequestException(`Invalid EmotionType ${emotionType}`);
-    }
+    const emotionTypeEnum = this.emotionTypeMap.get(emotionType.toLowerCase());
+    if (!emotionTypeEnum)
+      throw new BadRequestException(`Invalid EmotionType ${emotionType}`);
+    return emotionTypeEnum;
   }
 }

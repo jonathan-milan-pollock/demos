@@ -22,12 +22,15 @@ export class AdminReviewsService {
         type: DocumentType.Review,
       }).save()
     ).pipe(
-      map((response) => ({
-        id: response.id,
-        title: response.title,
-        text: response.text,
-        image: response.image,
-      }))
+      map(
+        (response) =>
+          ({
+            //id: response.id,
+            // title: response.title,
+            // text: response.text,
+            // image: response.image,
+          } as Review)
+      )
     );
   }
 
@@ -38,7 +41,7 @@ export class AdminReviewsService {
           throw new NotFoundException('Could not find review');
         }
       }),
-      switchMap(() => this.reviewModel.findByIdAndUpdate(id, review)),
+      //switchMap(() => this.reviewModel.findByIdAndUpdate(id, review)),
       map((d) => d as Review)
     );
   }

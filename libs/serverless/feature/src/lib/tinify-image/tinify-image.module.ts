@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 
-import { TinifyImageProcessService } from '@dark-rush-photography/serverless/data';
+import { TinifyImageActivityProvider } from '@dark-rush-photography/serverless/data';
 import { TinifyImageController } from './tinify-image.controller';
 import { TinifyImageService } from './tinify-image.service';
 
 @Module({
+  imports: [HttpModule],
   controllers: [TinifyImageController],
-  providers: [TinifyImageProcessService, TinifyImageService],
+  providers: [TinifyImageActivityProvider, TinifyImageService],
 })
 export class TinifyImageModule {}

@@ -1,42 +1,48 @@
 const df = require('durable-functions');
 
-const formatMessage = (message) => {
-  return `${'*'.repeat(7)} ${message} ${'*'.repeat(7)}`;
-};
-
 module.exports = df.orchestrator(function* (context) {
   const completedProcesses = [];
 
-  context.log(formatMessage('Upload Image orchestrator started'));
+  const logContext = 'UploadImageOrchestrator';
+
+  context.log(`[${logContext}] Upload Image orchestrator started`);
 
   let activity = context.df.getInput();
 
-  context.log(formatMessage('TinifyImage'));
+  context.log(`[${logContext}] AddImage`);
+  activity = yield context.df.callActivity('AddImage', { ...activity });
+  completedProcesses.push(activity.state);
+
+  context.log(`[${logContext}] TinifyImage`);
   activity = yield context.df.callActivity('TinifyImage', { ...activity });
-  completedProcesses.push(activity.type);
+  completedProcesses.push(activity.state);
 
-  context.log(formatMessage('ResizeImage Tile'));
-  const tileActivity = {
-    type: 'tinified-image',
-    publishedImage: { ...activity.publishedImage },
-    data: {
-      resizeType: 'Tile',
-    },
-  };
-  activity = yield context.df.callActivity('ResizeImage', tileActivity);
-  completedProcesses.push(activity.type);
+  //context.log(('ResizeImage Tile'));
+  //const tileActivity = {
+  //  state: 'tinified',
+  //  publishedImage: { ...activity.publishedImage },
+  //  config: {
+  //   resizeImageDimensionType: 'Tile',
+  //  },
+  //};
+  // activity = yield context.df.callActivity('ResizeImage', tileActivity);
+  // completedProcesses.push(activity.state);
 
-  context.log(formatMessage('ResizeImage Small'));
-  activity.type = 'tinified-image';
-  activity.data = {
-    resizeType: 'Small',
-  };
-  activity = yield context.df.callActivity('ResizeImage', { ...activity });
-  completedProcesses.push(activity.type);
+  // context.log(('ResizeImage Small'));
+  // const smallActivity = {
+  //   state: 'tinified',
+  //   publishedImage: { ...activity.publishedImage },
+  //   config: {
+  //     resizeImageDimensionType: 'Small',
+  //   },
+  // };
+  // activity = yield context.df.callActivity('ResizeImage', smallActivity);
+  // completedProcesses.push(activity.state);
 
-  const completedMessage = `Upload Image orchestrator completed 
-   ${completedProcesses.join(', ')}`;
-  context.log(formatMessage(completedMessage));
-
+  context.log(
+    `[${logContext}] Upload Image orchestrator completed ${completedProcesses.join(
+      ', '
+    )}`
+  );
   return completedProcesses;
 });

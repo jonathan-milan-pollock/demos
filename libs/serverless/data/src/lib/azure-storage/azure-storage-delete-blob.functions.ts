@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
-import { getAzureStorageBlockBlobClient$ } from './azure-storage-client.functions';
+import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
 
 export const deleteAzureStorageBlob$ = (
   azureStorageConnectionString: string,

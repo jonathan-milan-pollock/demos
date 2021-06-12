@@ -7,148 +7,71 @@ import {
   getPublishServiceType,
 } from './publish-service.functions';
 
+import { ConflictException, Logger } from '@nestjs/common';
+import {
+  getAboutPublishedImage,
+  getBestOfPublishedImage,
+  getDestinationsPublishedImage,
+  getEventsPublishedImage,
+  getFavoritesPublishedImage,
+  getPhotoOfTheWeekPublishedImage,
+  getReviewPublishedImage,
+  getReviewsPublishedImage,
+  getSocialMediaPublishedImage,
+} from './entity-published-image.functions';
+
+const publishedImageMap = new Map<
+  string,
+  (fileNameSections: string[]) => PublishedImage
+>([
+  [PublishServiceType.About, getAboutPublishedImage],
+  [PublishServiceType.BestOf, getBestOfPublishedImage],
+  [PublishServiceType.Destinations, getDestinationsPublishedImage],
+  [PublishServiceType.Events, getEventsPublishedImage],
+  [PublishServiceType.Favorites, getFavoritesPublishedImage],
+  [PublishServiceType.PhotoOfTheWeek, getPhotoOfTheWeekPublishedImage],
+  [PublishServiceType.Review, getReviewPublishedImage],
+  [PublishServiceType.Reviews, getReviewsPublishedImage],
+  [PublishServiceType.SocialMedia, getSocialMediaPublishedImage],
+]);
+
 export const getPublishedImageForUpload = (
   uploadImageFileName: string
 ): PublishedImage | undefined => {
+  const logContext = 'getPublishedImageForUpload';
+
   if (!uploadImageFileName)
     throw new Error('image upload file name must be provided');
+  Logger.log(`Uploaded image file name: ${uploadImageFileName}`, logContext);
 
   const fileNameSections = uploadImageFileName.split('|&|');
   if (fileNameSections.length === 0)
     throw new Error('|&| must be used to separate publish service segments');
 
   const publishServiceName = getPublishServiceName(fileNameSections[0]);
+  Logger.log(`Publish service name: ${publishServiceName}`, logContext);
+
   const publishServiceType = getPublishServiceType(publishServiceName);
   if (!publishServiceType)
     throw new Error(`Publish service type ${publishServiceType} was not found`);
+  Logger.log(`Publish service type ${publishServiceType}`, logContext);
 
-  return getPublishedImageForUploadedImageFileNameSections(
+  return getPublishedImageFromFileNameSections(
     publishServiceType,
     fileNameSections
   );
 };
 
-export const getPublishedImageForUploadedImageFileNameSections = (
+export const getPublishedImageFromFileNameSections = (
   publishServiceType: PublishServiceType,
-  uploadedImageFileNameSections: string[]
+  fileNameSections: string[]
 ): PublishedImage | undefined => {
+  const logContext = 'getPublishedImageFromFileNameSections';
   const publishedImageFn = publishedImageMap.get(publishServiceType);
-  return publishedImageFn
-    ? publishedImageFn(uploadedImageFileNameSections)
-    : undefined;
-};
+  if (!publishedImageFn) {
+    Logger.log(`Unable to find publishedImageFn`, logContext);
+    throw new ConflictException('Unable to find published image');
+  }
 
-export const getBestOfImagesPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.BestOf,
-    publishedCollectionSetName: uploadedImageFileNameSections[1],
-    publishedCollectionName: uploadedImageFileNameSections[2],
-    imageName: uploadedImageFileNameSections[3],
-  };
+  return publishedImageFn(fileNameSections);
 };
-
-export const getFavoritesPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.Favorites,
-    publishedCollectionName: uploadedImageFileNameSections[1],
-    imageName: uploadedImageFileNameSections[2],
-  };
-};
-
-export const getAboutPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.About,
-    publishedCollectionSetName: uploadedImageFileNameSections[1],
-    publishedCollectionName: uploadedImageFileNameSections[2],
-    imageName: uploadedImageFileNameSections[3],
-  };
-};
-
-export const getReviewsPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.Reviews,
-    publishedCollectionSetName: uploadedImageFileNameSections[1],
-    publishedCollectionName: uploadedImageFileNameSections[2],
-    imageName: uploadedImageFileNameSections[3],
-  };
-};
-
-export const getReviewPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.Review,
-    publishedCollectionSetName: uploadedImageFileNameSections[1],
-    publishedCollectionName: uploadedImageFileNameSections[2],
-    imageName: uploadedImageFileNameSections[3],
-  };
-};
-
-export const getPhotoOfTheWeekPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.PhotoOfTheWeek,
-    publishedCollectionSetName: uploadedImageFileNameSections[1],
-    publishedCollectionName: uploadedImageFileNameSections[2],
-    imageName: uploadedImageFileNameSections[3],
-  };
-};
-
-export const getEventsPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.Events,
-    publishedCollectionSetParentName: uploadedImageFileNameSections[2],
-    publishedCollectionSetName: uploadedImageFileNameSections[3],
-    publishedCollectionName: uploadedImageFileNameSections[4],
-    imageName: uploadedImageFileNameSections[5],
-  };
-};
-
-export const getDestinationsPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.Destinations,
-    publishedCollectionSetParentName: uploadedImageFileNameSections[1],
-    publishedCollectionSetName: uploadedImageFileNameSections[2],
-    publishedCollectionName: uploadedImageFileNameSections[3],
-    imageName: uploadedImageFileNameSections[4],
-  };
-};
-
-export const getSocialMediaPublishedImage = (
-  uploadedImageFileNameSections: string[]
-): PublishedImage => {
-  return {
-    publishServiceType: PublishServiceType.SocialMedia,
-    publishedCollectionSetName: uploadedImageFileNameSections[1],
-    publishedCollectionName: uploadedImageFileNameSections[2],
-    imageName: uploadedImageFileNameSections[3],
-  };
-};
-
-const publishedImageMap = new Map<
-  string,
-  (uploadedImageFileNameSections: string[]) => PublishedImage
->([
-  ['BestOfImages', getBestOfImagesPublishedImage],
-  ['Home', getFavoritesPublishedImage],
-  ['About', getAboutPublishedImage],
-  ['Reviews', getReviewsPublishedImage],
-  ['Review', getReviewPublishedImage],
-  ['Event', getEventsPublishedImage],
-  ['PhotoOfTheWeek', getPhotoOfTheWeekPublishedImage],
-  ['Destinations', getDestinationsPublishedImage],
-  ['SocialMedia', getSocialMediaPublishedImage],
-]);

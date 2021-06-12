@@ -11,11 +11,9 @@ export * from './lib/guards/jwt-auth.guard';
 export * from './lib/guards/roles.guard';
 
 // pipes
+export * from './lib/pipes/best-of-type-validation.pipe';
 export * from './lib/pipes/emotion-type-validation.pipe';
 export * from './lib/pipes/image-dimension-type-validation.pipe';
-
-// providers
-export * from './lib/providers/image-state.provider';
 
 // strategies
 export * from './lib/strategies/jwt.strategy';

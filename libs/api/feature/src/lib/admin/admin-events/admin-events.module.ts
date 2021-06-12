@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelService,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { AdminEventsController } from './admin-events.controller';
@@ -16,6 +16,6 @@ import { AdminEventsService } from './admin-events.service';
     ]),
   ],
   controllers: [AdminEventsController],
-  providers: [DocumentModelService, AdminEventsService],
+  providers: [DocumentModelProvider, AdminEventsService],
 })
 export class AdminEventsModule {}

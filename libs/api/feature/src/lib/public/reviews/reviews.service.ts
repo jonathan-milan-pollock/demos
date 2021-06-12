@@ -23,10 +23,10 @@ export class ReviewsService {
       map(
         (review) =>
           ({
-            id: review.id,
-            title: review.title,
-            text: review.text,
-            image: review.image,
+            //id: review.id,
+            //title: review.title,
+            //text: review.text,
+            //images: [review.image],
           } as Review)
       ),
       toArray<Review>()

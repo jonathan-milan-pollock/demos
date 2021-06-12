@@ -1,9 +1,11 @@
 import { ImageDimensionType } from '../enums/image-dimension-type.enum';
-import { ImageProcessState } from '../enums/image-process-state.enum';
+import { ImageDimensionState } from '../enums/image-dimension-state.enum';
 
 export interface ImageDimension {
+  readonly entityId: string;
+  readonly imageSlug: string;
   readonly type: ImageDimensionType;
-  readonly state: ImageProcessState;
+  readonly state: ImageDimensionState;
 
   // dimension
   readonly width: number;

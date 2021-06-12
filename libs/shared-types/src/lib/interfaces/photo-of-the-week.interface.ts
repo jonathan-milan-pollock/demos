@@ -9,8 +9,7 @@ export interface PhotoOfTheWeek {
   // location
   readonly location?: Location;
   // display
-  readonly useTitleImage?: boolean;
+  readonly useTitleImage: boolean;
   // content
-  readonly text: ReadonlyArray<string>;
-  readonly image?: Image;
+  readonly images: ReadonlyArray<Image>;
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Req } from '@nestjs/common';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
-import { ImageProcess } from '@dark-rush-photography/serverless/types';
+import { ImageActivity } from '@dark-rush-photography/serverless/types';
 import { TinifyImageService } from './tinify-image.service';
 
 @Controller('tinify-image')
@@ -11,11 +11,11 @@ export class TinifyImageController {
   @Get()
   async tinifyImage(
     @Req() request: AzureRequest,
-    @Body() imageProcess: ImageProcess
+    @Body() imageActivity: ImageActivity
   ): Promise<void> {
     request.context.done(
       null,
-      await this.tinifyImageService.tinifyImage(imageProcess)
+      await this.tinifyImageService.tinifyImage(imageActivity)
     );
   }
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Req } from '@nestjs/common';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
-import { ImageProcess } from '@dark-rush-photography/serverless/types';
+import { ImageActivity } from '@dark-rush-photography/serverless/types';
 import { WebsitePostImageService } from './website-post-image.service';
 
 @Controller('website-post-image')
@@ -13,11 +13,11 @@ export class WebsitePostImageController {
   @Get()
   async websitePostImage(
     @Req() request: AzureRequest,
-    @Body() imageProcess: ImageProcess
+    @Body() imageActivity: ImageActivity
   ): Promise<void> {
     request.context.done(
       null,
-      await this.websitePostImageService.websitePostImage(imageProcess)
+      await this.websitePostImageService.websitePostImage(imageActivity)
     );
   }
 }
