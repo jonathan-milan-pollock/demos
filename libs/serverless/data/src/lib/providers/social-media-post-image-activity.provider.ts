@@ -6,7 +6,7 @@ import { from, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { BestOf } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
@@ -22,7 +22,7 @@ import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-
 
 @Injectable()
 export class SocialMediaPostImageActivityProvider {
-  process$(
+  socialMediaPostImage$(
     imageActivity: ImageActivity,
     env: Env,
     httpService: HttpService

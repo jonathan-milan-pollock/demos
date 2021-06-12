@@ -8,6 +8,8 @@ import { AddImageActivityProvider } from '@dark-rush-photography/serverless/data
 
 @Injectable()
 export class AddImageService {
+  readonly logContext = 'AddImageService';
+
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly httpService: HttpService,
@@ -15,11 +17,9 @@ export class AddImageService {
   ) {}
 
   async addImage(imageActivity: ImageActivity): Promise<ImageActivity> {
-    const logContext = 'AddImageService';
-    Logger.log('Adding image', logContext);
-
+    Logger.log('Adding image', this.logContext);
     return this.addImageActivityProvider
-      .process$(this.env, this.httpService, imageActivity)
+      .addImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))
       .toPromise()
       .then(() => ({

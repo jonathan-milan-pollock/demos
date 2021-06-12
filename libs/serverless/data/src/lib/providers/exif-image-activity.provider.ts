@@ -4,7 +4,7 @@ import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
@@ -20,7 +20,7 @@ import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class ExifImageActivityProvider {
-  process$(
+  exifImage$(
     env: Env,
     httpService: HttpService,
     imageActivity: ImageActivity

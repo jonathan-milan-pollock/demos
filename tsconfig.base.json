@@ -46,8 +46,11 @@
       "@dark-rush-photography/serverless/util": [
         "libs/serverless/util/src/index.ts"
       ],
-      "@dark-rush-photography/shared-server-types": [
-        "libs/shared-server-types/src/index.ts"
+      "@dark-rush-photography/shared-server/types": [
+        "libs/shared-server/types/src/index.ts"
+      ],
+      "@dark-rush-photography/shared-server/util": [
+        "libs/shared-server/util/src/index.ts"
       ],
       "@dark-rush-photography/shared-types": ["libs/shared-types/src/index.ts"],
       "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],

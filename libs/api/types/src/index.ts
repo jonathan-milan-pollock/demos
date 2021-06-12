@@ -16,12 +16,14 @@ export * from './lib/dtos/favorites.dto';
 export * from './lib/dtos/fly-over.dto';
 export * from './lib/dtos/geo-coordinates.dto';
 export * from './lib/dtos/image-dimension-data.dto';
+export * from './lib/dtos/image-dimension-pixels.dto';
 export * from './lib/dtos/image-dimension.dto';
 export * from './lib/dtos/image.dto';
 export * from './lib/dtos/location.dto';
 export * from './lib/dtos/photo-of-the-week.dto';
 export * from './lib/dtos/review.dto';
 export * from './lib/dtos/social-media.dto';
+export * from './lib/dtos/three-sixty-image-settings.dto';
 export * from './lib/dtos/video.dto';
 
 // interfaces

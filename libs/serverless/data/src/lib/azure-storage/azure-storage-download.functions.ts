@@ -1,7 +1,7 @@
 import { forkJoin, Observable, of } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   createTempFile,
   writeStreamToFile,

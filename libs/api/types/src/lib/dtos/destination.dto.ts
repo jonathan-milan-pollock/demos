@@ -43,7 +43,7 @@ export class DestinationDto {
   @IsOptional()
   datePublished?: string;
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => LocationDto)
   @IsOptional()
   location?: LocationDto;
@@ -64,12 +64,12 @@ export class DestinationDto {
   @Type(() => VideoDto)
   videos: VideoDto[] = [];
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => FlyOverDto)
   @IsOptional()
   flyOver?: FlyOverDto;
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => ExtendedRealityDto)
   @IsOptional()
   extendedReality?: ExtendedRealityDto;

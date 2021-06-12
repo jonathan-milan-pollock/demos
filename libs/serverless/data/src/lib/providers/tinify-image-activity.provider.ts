@@ -5,7 +5,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import * as tinify from 'tinify';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
 import { getBlobPath } from '@dark-rush-photography/serverless/util';
 import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
@@ -13,7 +13,7 @@ import { uploadBufferToAzureStorageBlob$ } from '../azure-storage/azure-storage-
 
 @Injectable()
 export class TinifyImageActivityProvider {
-  process$(
+  tinifyImage$(
     env: Env,
     httpService: HttpService,
     imageActivity: ImageActivity

@@ -44,7 +44,7 @@ export class EventDto {
   @IsOptional()
   datePublished?: string;
 
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => LocationDto)
   @IsOptional()
   location?: LocationDto;

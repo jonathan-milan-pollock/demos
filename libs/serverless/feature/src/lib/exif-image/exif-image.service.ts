@@ -16,7 +16,7 @@ export class ExifImageService {
 
   async exifImage(imageActivity: ImageActivity): Promise<ImageActivity> {
     return this.exifImageActivityProvider
-      .process$(this.env, this.httpService, imageActivity)
+      .exifImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))
       .toPromise()
       .then(() => ({

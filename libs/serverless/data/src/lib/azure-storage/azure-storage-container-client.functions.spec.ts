@@ -9,7 +9,7 @@ import {
 import {
   AzureStorageContainerType,
   AZURE_STORAGE_CONNECTION_STRING_DEV,
-} from '@dark-rush-photography/shared-server-types';
+} from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageContainerClient$ } from './azure-storage-container-client.functions';
 
 describe('containerClient$', () => {

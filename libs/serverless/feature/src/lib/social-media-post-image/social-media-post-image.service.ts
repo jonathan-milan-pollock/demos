@@ -18,7 +18,7 @@ export class SocialMediaPostImageService {
     imageActivity: ImageActivity
   ): Promise<ImageActivity> {
     return this.socialMediaPostImageActivityProvider
-      .process$(imageActivity, this.env, this.httpService)
+      .socialMediaPostImage$(imageActivity, this.env, this.httpService)
       .pipe(take(1))
       .toPromise()
       .then(() => ({

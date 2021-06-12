@@ -4,7 +4,7 @@ import { ContainerClient, BlobServiceClient } from '@azure/storage-blob';
 import { Observable, of } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 
 const logContext = 'getAzureStorageContainerClient$';
 export const getAzureStorageContainerClient$ = (

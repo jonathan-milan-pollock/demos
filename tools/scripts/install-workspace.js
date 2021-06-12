@@ -184,7 +184,13 @@ const execGenerateSharedServerTypesLib = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:lib shared-server-types --unitTestRunner=none --tags=scope:shared-server,type:types'
+        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
       )
     );
 
@@ -525,8 +531,9 @@ Promise.resolve(execInstall(isReady))
         .then(() => execInstall(isReady))
         .then(() => console.log('🥂 installation complete.'))
         .then(() => process.exit(0));
-    }).catch((err) => {
-      console.error(err);
-      process.exit(1);
     });
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
   });

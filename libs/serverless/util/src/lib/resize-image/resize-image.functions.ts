@@ -1,7 +1,7 @@
 import {
-  ImagePixels,
-  ImagePixelsLongestEdge,
-  ImagePixelsTile,
+  ImageDimensionConfig,
+  ImageDimensionLongestEdgeConfig,
+  ImageDimensionTileConfig,
 } from '@dark-rush-photography/serverless/types';
 
 import { resizeImageTile } from './resize-image-tile.functions';
@@ -10,30 +10,30 @@ import { resizeLongestEdge } from './resize-longest-edge.functions';
 export const resizeImage = async (
   imageFilePath: string,
   imageName: string,
-  imagePixels: ImagePixels
+  imageDimensionConfig: ImageDimensionConfig
 ): Promise<string> => {
-  switch (imagePixels.type) {
+  switch (imageDimensionConfig.type) {
     case 'Tile':
       return await resizeImageTile(
         imageFilePath,
         imageName,
-        imagePixels as ImagePixelsTile
+        imageDimensionConfig as ImageDimensionTileConfig
       );
     case 'Thumbnail':
       return await resizeLongestEdge(
         imageFilePath,
         imageName,
-        (imagePixels as ImagePixelsLongestEdge).longestEdge
+        (imageDimensionConfig as ImageDimensionLongestEdgeConfig).longestEdge
       );
     case 'Small':
       return await resizeLongestEdge(
         imageFilePath,
         imageName,
-        (imagePixels as ImagePixelsLongestEdge).longestEdge
+        (imageDimensionConfig as ImageDimensionLongestEdgeConfig).longestEdge
       );
     default:
       throw new Error(
-        `Could not find image dimension for the type ${imagePixels.type}`
+        `Could not find image dimension for the type ${imageDimensionConfig.type}`
       );
   }
 };

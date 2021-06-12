@@ -2,7 +2,7 @@ import { BlobDownloadResponseParsed } from '@azure/storage-blob';
 import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
 import { Logger } from '@nestjs/common';
 

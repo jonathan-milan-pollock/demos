@@ -19,7 +19,7 @@ export class TinifyImageService {
     Logger.log('Tinifying image', logContext);
 
     return this.tinifyImageActivityProvider
-      .process$(this.env, this.httpService, imageActivity)
+      .tinifyImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))
       .toPromise()
       .then(() => ({

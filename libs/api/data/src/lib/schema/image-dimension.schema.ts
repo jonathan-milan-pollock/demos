@@ -1,3 +1,6 @@
+import { imageDimensionPixelsSchema } from './image-dimension-pixels.schema';
+import { threeSixtyImageSettingsSchema } from './three-sixty-image-settings.schema';
+
 export const imageDimensionSchema = {
   type: {
     type: String,
@@ -33,9 +36,9 @@ export const imageDimensionSchema = {
       'website-posted',
     ],
   },
-  width: { type: Number, required: true },
-  height: { type: Number, required: true },
-  pitch: { type: Number, required: false },
-  yaw: { type: Number, required: false },
-  hfov: { type: Number, required: false },
+  imageDimensionPixels: { type: imageDimensionPixelsSchema, required: true },
+  threeSixtyImageSettings: {
+    type: threeSixtyImageSettingsSchema,
+    required: false,
+  },
 };

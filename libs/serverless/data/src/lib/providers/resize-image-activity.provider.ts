@@ -10,7 +10,7 @@ import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server-types';
+import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
@@ -23,15 +23,17 @@ import {
 } from '@dark-rush-photography/serverless/util';
 import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
 import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
+import { apiAddOrUpdateImageDimension$ } from '../apis/api-gateway/image-dimension-api-gateway.functions';
 
 @Injectable()
 export class ResizeImageActivityProvider {
-  process$(
+  readonly logContext = 'ResizeImageActivityProvider';
+
+  resizeImage$(
     env: Env,
     httpService: HttpService,
     imageActivity: ImageActivity
   ): Observable<void> {
-    const logContext = 'ResizeImageActivityProvider';
     const { state, publishedImage, config } = imageActivity;
 
     if (!config?.resizeImageDimensionType) {
@@ -47,7 +49,6 @@ export class ResizeImageActivityProvider {
     if (!imageDimension)
       throw new BadRequestException('Could not find image dimension');
 
-    Logger.log('Downloading image blob', logContext);
     return downloadAzureStorageBlobToFile$(
       env.azureStorageConnectionString,
       AzureStorageContainerType.Private,
@@ -55,14 +56,13 @@ export class ResizeImageActivityProvider {
       publishedImage.imageName
     ).pipe(
       tap(() =>
-        Logger.log(`Resizing for ${imageDimension.type} image`, logContext)
+        Logger.log(`Resizing ${imageDimension.type} image`, this.logContext)
       ),
       switchMap((imageFilePath) =>
         from(
           resizeImage(imageFilePath, publishedImage.imageName, imageDimension)
         )
       ),
-      tap(() => Logger.log('Uploading resized image', logContext)),
       switchMap((resizedImageFilePath) =>
         uploadStreamToAzureStorageBlob$(
           fs.createReadStream(resizedImageFilePath),
@@ -75,7 +75,18 @@ export class ResizeImageActivityProvider {
           )
         )
       ),
-      map(() => Logger.log('ResizeImage complete', logContext))
+      switchMap(() =>
+        apiAddOrUpdateImageDimension$(
+          env,
+          httpService,
+          publishedImage,
+          imageDimension.type,
+          ImageDimensionState.Resized,
+          0,
+          0
+        )
+      ),
+      map(() => Logger.log('ResizeImage complete', this.logContext))
     );
   }
 }

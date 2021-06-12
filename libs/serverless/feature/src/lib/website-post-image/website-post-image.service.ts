@@ -17,7 +17,7 @@ export class WebsitePostImageService {
 
   async websitePostImage(imageActivity: ImageActivity): Promise<ImageActivity> {
     return this.websitePostImageActivityProvider
-      .process$(this.env, this.httpService, imageActivity)
+      .websitePostImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))
       .toPromise()
       .then(() => ({
