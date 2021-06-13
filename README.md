@@ -7,20 +7,19 @@
 ### tech stack
 
 - **_Nx_**
-- **_Storybook_**
-- **_Cypress_**
 - **_Angular_**
-- **_Angular Elements_**
 - **_Angular Universal_**
 - **_React_**
+- **_StencilJS_**
 - **_NestJS Api_**
 - **_NestJS Mongoose_**
 - **_NestJS Serverless_**
+- **_Storybook_**
+- **_Pulumi_**
+- **_Cypress_**
 - **_Azure Durable Functions_**
 - **_Azure Blob Storage_**
-- **_Pulumi_**
 - **_TinyPNG_**
-- **_Pulumi_**
 - **_Sharp_**
 - **_FFmpeg_**
 
@@ -60,13 +59,16 @@
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/800px-React-icon.svg.png" width="70">
    </a>
    <a href="https://nextjs.org/">
-      <img src="https://static.cdnlogo.com/logos/n/80/next-js.svg" width="50">
+      <img src="https://miro.medium.com/max/1300/1*Hva7hcsFWulFUPhrEWui1A.jpeg" width="70">
+   </a>
+      <a href="https://stenciljs.com/">
+      <img src="https://pbs.twimg.com/profile_images/1135534552137510914/5ZzvOFFp_400x400.png" width="40">
    </a>
    <a href="https://nestjs.com/">
       <img src="https://docs.nestjs.com/assets/logo-small.svg" width="50">
    </a>
    <a href="https://storybook.js.org/">
-      <img src="https://pbs.twimg.com/profile_images/1100804485616566273/sOct-Txm_400x400.png" width="50">
+      <img src="https://pbs.twimg.com/profile_images/1100804485616566273/sOct-Txm_400x400.png" width="47">
    </a>
    <a href="https://www.pulumi.com/">
       <img src="https://www.pulumi.com/images/mascot/pulumipus.svg" width="70">

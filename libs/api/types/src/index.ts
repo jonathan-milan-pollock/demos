@@ -12,7 +12,6 @@ export * from './lib/dtos/destination.dto';
 export * from './lib/dtos/emotion.dto';
 export * from './lib/dtos/event-response.dto';
 export * from './lib/dtos/event.dto';
-export * from './lib/dtos/extended-reality.dto';
 export * from './lib/dtos/favorites-response.dto';
 export * from './lib/dtos/favorites.dto';
 export * from './lib/dtos/geo-coordinates.dto';

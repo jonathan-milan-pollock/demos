@@ -16,10 +16,7 @@ export const imageSchema = {
   isLiked: { type: Boolean, required: true },
   title: { type: String, required: false },
   description: { type: String, required: false },
-  keywords: { type: [String], required: true },
+  keywords: { type: String, required: false },
   dateCreated: { type: String, required: true },
   datePublished: { type: String, required: false },
-  dimensions: { type: [imageDimensionSchema], required: true },
-  emotions: { type: [emotionSchema], required: true },
-  comments: { type: [commentSchema], required: true },
 };

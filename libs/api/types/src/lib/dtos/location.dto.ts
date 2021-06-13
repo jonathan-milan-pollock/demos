@@ -1,6 +1,8 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { Location } from '@dark-rush-photography/shared-types';
+import { GeoCoordinatesDto } from './geo-coordinates.dto';
 
 export class LocationDto implements Location {
   @IsString()
@@ -25,4 +27,9 @@ export class LocationDto implements Location {
 
   @IsString()
   country!: string;
+
+  @ValidateNested()
+  @Type(() => GeoCoordinatesDto)
+  @IsOptional()
+  geo?: GeoCoordinatesDto;
 }

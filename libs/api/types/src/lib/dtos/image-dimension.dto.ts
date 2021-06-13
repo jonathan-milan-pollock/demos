@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsMongoId,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsEnum, IsMongoId, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import {

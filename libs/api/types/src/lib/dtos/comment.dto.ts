@@ -1,17 +1,24 @@
-import { IsInt, IsMongoId, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsMongoId,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 
 import { Comment } from '@dark-rush-photography/shared-types';
 
 export class CommentDto implements Comment {
-  @IsString()
-  id!: string;
-
   @IsMongoId()
   entityId!: string;
 
   @IsString()
   @IsOptional()
   mediaSlug?: string;
+
+  @IsUUID()
+  id!: string;
 
   @IsInt()
   @Min(0)

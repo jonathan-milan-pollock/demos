@@ -2,6 +2,8 @@ import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
 import { imageDimensionSettingsSchema } from './image-dimension-settings.schema';
 
 export const imageDimensionSchema = {
+  entityId: { type: String, required: true },
+  imageSlug: { type: String, required: true },
   type: {
     type: String,
     enum: [
@@ -14,6 +16,7 @@ export const imageDimensionSchema = {
       'Instagram',
       'LinkedIn',
       'GoogleBusiness',
+      'ThreeSixtyTile',
       'ThreeSixtyThumbnail',
       'ThreeSixtySmall',
       'ThreeSixtyMedium',
@@ -22,7 +25,16 @@ export const imageDimensionSchema = {
       'ThreeSixtyInstagram',
       'ThreeSixtyLinkedIn',
       'ThreeSixtyGoogleBusiness',
+      'VideoThumbnail',
+      'VideoSmall',
+      'VideoMedium',
+      'VideoLarge',
+      'VideoFacebook',
+      'VideoInstagram',
+      'VideoLinkedIn',
+      'VideoGoogleBusiness',
     ],
+    required: true,
   },
   state: {
     type: String,
@@ -30,15 +42,17 @@ export const imageDimensionSchema = {
       'added',
       'exifed',
       'posted',
+      'resized',
       'social-media-posted',
       'tinified',
       'uploaded',
       'website-posted',
     ],
+    required: true,
   },
   pixels: { type: mediaDimensionPixelsSchema, required: true },
   settings: {
     type: imageDimensionSettingsSchema,
-    required: false,
+    required: true,
   },
 };

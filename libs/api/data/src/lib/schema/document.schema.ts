@@ -9,7 +9,6 @@ import {
   DocumentType,
   Emotion,
   Event,
-  ExtendedReality,
   Favorites,
   Image,
   ImageDimension,
@@ -22,14 +21,13 @@ import {
   VideoDimension,
 } from '@dark-rush-photography/shared-types';
 import { locationSchema } from './location.schema';
-import { emotionSchema } from './emotion.schema';
-import { commentSchema } from './comment.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
 import { videoSchema } from './video.schema';
 import { videoDimensionSchema } from './video-dimension.schema';
-import { extendedRealitySchema } from './extended-reality.schema';
-import { socialMediaSchema } from './social-media.schema';
+import { socialMediaUrlSchema } from './social-media-url.schema';
+import { commentSchema } from './comment.schema';
+import { emotionSchema } from './emotion.schema';
 
 export type DocumentModel = Document & mongoose.Document;
 
@@ -44,7 +42,7 @@ export class Document
     PhotoOfTheWeek,
     Review,
     Reviews {
-  @Prop({ type: String })
+  @Prop({ type: String, required: false })
   id?: string;
 
   @Prop({
@@ -87,6 +85,9 @@ export class Document
   keywords!: string[];
 
   @Prop({ type: String, required: false })
+  dateCreated?: string;
+
+  @Prop({ type: String, required: false })
   datePublished?: string;
 
   @Prop({
@@ -125,13 +126,10 @@ export class Document
   })
   videoDimensions!: VideoDimension[];
 
-  @Prop({ type: extendedRealitySchema, required: false })
-  extendedReality?: ExtendedReality;
-
   @Prop({ type: String, required: false })
   websiteUrl?: string;
 
-  @Prop({ type: [socialMediaSchema], required: true })
+  @Prop({ type: [socialMediaUrlSchema], required: true })
   socialMediaUrls!: SocialMediaUrl[];
 
   @Prop({ type: [commentSchema], required: true })

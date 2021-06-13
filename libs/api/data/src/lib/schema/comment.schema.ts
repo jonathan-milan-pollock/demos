@@ -1,8 +1,9 @@
 export const commentSchema = {
-  entityId: String,
-  imageSlug: { type: Boolean, required: false },
-  order: Number,
-  userName: String,
-  userImage: String,
-  text: String,
+  entityId: { type: String, required: true },
+  mediaSlug: { type: String, required: false },
+  id: { type: String, required: true },
+  order: { type: Number, required: true },
+  userName: { type: String, required: true },
+  userImage: { type: String, required: true },
+  text: { type: String, required: true },
 };

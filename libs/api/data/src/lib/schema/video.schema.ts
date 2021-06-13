@@ -10,7 +10,7 @@ export const videoSchema = {
   isStared: { type: Boolean, required: true },
   title: { type: String, required: false },
   description: { type: String, required: false },
-  keywords: { type: [String], required: true },
-  dateCreated: { type: String, required: false },
+  keywords: { type: String, required: false },
+  dateCreated: { type: String, required: true },
   datePublished: { type: String, required: false },
 };

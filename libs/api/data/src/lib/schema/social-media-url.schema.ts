@@ -1,7 +1,11 @@
-export const socialMediaSchema = {
+export const socialMediaUrlSchema = {
   type: {
     type: String,
     enum: ['Facebook', 'Instagram', 'LinkedIn', 'GoogleBusiness', 'YouTube'],
+    required: true,
   },
-  url: String,
+  url: {
+    type: String,
+    required: true,
+  },
 };
