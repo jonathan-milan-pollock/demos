@@ -12,7 +12,7 @@ export interface Image {
   // metadata
   readonly title?: string;
   readonly description?: string;
-  readonly keywords: string;
+  readonly keywords?: string;
   readonly dateCreated: string;
   readonly datePublished?: string;
 }

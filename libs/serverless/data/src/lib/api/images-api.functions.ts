@@ -32,13 +32,12 @@ export const addImage$ = (
           isStared: false,
           isLoved: false,
           isLiked: false,
-          keywords: [],
           dateCreated:
             createDate.substring(0, 10).replace(/:/g, '-') + 'T00:00:00Z',
-          dimensions: [],
-          emotions: [],
+          imageDimensions: [],
           comments: [],
-        },
+          emotions: [],
+        } as Image,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,

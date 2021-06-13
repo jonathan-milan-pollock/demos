@@ -1,8 +1,11 @@
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 import { VideoDimensionSettings } from '@dark-rush-photography/shared-types';
 
 export class VideoDimensionSettingsDto implements VideoDimensionSettings {
+  @IsString()
+  imageSlug!: string;
+
   @IsBoolean()
   @IsOptional()
   hasTrackPath?: boolean;

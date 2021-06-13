@@ -1,4 +1,4 @@
 export const mediaDimensionPixelsSchema = {
-  width: Number,
-  height: Number,
+  width: { type: Number, required: true },
+  height: { type: Number, required: true },
 };

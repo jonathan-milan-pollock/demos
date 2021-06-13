@@ -43,7 +43,8 @@ export class ImageDto implements Image {
   description?: string;
 
   @IsString()
-  keywords!: string;
+  @IsOptional()
+  keywords?: string;
 
   @IsISO8601()
   dateCreated!: string;

@@ -15,7 +15,6 @@ import { ImageDto } from './image.dto';
 import { ImageDimensionDto } from './image-dimension.dto';
 import { VideoDto } from './video.dto';
 import { VideoDimensionDto } from './video-dimension.dto';
-import { ExtendedRealityDto } from './extended-reality.dto';
 import { SocialMediaUrlDto } from './social-media-url.dto';
 import { CommentDto } from './comment.dto';
 import { EmotionDto } from './emotion.dto';
@@ -79,11 +78,6 @@ export class DestinationResponseDto implements Destination {
   @ValidateNested({ each: true })
   @Type(() => VideoDimensionDto)
   videoDimensions: VideoDimensionDto[] = [];
-
-  @ValidateNested()
-  @Type(() => ExtendedRealityDto)
-  @IsOptional()
-  extendedReality?: ExtendedRealityDto;
 
   @IsUrl()
   @IsOptional()

@@ -1,11 +1,12 @@
 import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
-import { imageDimensionSettingsSchema } from './image-dimension-settings.schema';
+import { videoDimensionSettingsSchema } from './video-dimension-settings.schema';
 
 export const videoDimensionSchema = {
+  entityId: { type: String, required: true },
+  videoSlug: { type: String, required: true },
   type: {
     type: String,
     enum: [
-      'Tile',
       'Thumbnail',
       'Small',
       'Medium',
@@ -14,6 +15,7 @@ export const videoDimensionSchema = {
       'Instagram',
       'LinkedIn',
       'GoogleBusiness',
+      'YouTube',
       'ThreeSixtyThumbnail',
       'ThreeSixtySmall',
       'ThreeSixtyMedium',
@@ -22,7 +24,9 @@ export const videoDimensionSchema = {
       'ThreeSixtyInstagram',
       'ThreeSixtyLinkedIn',
       'ThreeSixtyGoogleBusiness',
+      'ThreeSixtyYouTube',
     ],
+    required: true,
   },
   state: {
     type: String,
@@ -30,15 +34,16 @@ export const videoDimensionSchema = {
       'added',
       'exifed',
       'posted',
+      'resized',
       'social-media-posted',
-      'tinified',
       'uploaded',
       'website-posted',
     ],
+    required: true,
   },
   pixels: { type: mediaDimensionPixelsSchema, required: true },
   settings: {
-    type: imageDimensionSettingsSchema,
-    required: false,
+    type: videoDimensionSettingsSchema,
+    required: true,
   },
 };

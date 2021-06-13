@@ -1,5 +1,5 @@
 export const imageDimensionSettingsSchema = {
-  pitch: Number,
-  yaw: Number,
-  hfov: Number,
+  pitch: { type: Number, required: false },
+  yaw: { type: Number, required: false },
+  hfov: { type: Number, required: false },
 };

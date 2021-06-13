@@ -12,6 +12,6 @@ export interface Favorites {
   readonly imageDimensions: ReadonlyArray<ImageDimension>;
   readonly videos: ReadonlyArray<Video>;
   readonly videoDimensions: ReadonlyArray<VideoDimension>;
-  readonly emotions: ReadonlyArray<Emotion>;
   readonly comments: ReadonlyArray<Comment>;
+  readonly emotions: ReadonlyArray<Emotion>;
 }

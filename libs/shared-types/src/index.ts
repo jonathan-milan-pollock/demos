@@ -19,7 +19,6 @@ export * from './lib/interfaces/comment.interface';
 export * from './lib/interfaces/destination.interface';
 export * from './lib/interfaces/emotion.interface';
 export * from './lib/interfaces/event.interface';
-export * from './lib/interfaces/extended-reality.interface';
 export * from './lib/interfaces/favorites.interface';
 export * from './lib/interfaces/geo-coordinates.interface';
 export * from './lib/interfaces/image-dimension-data.interface';
