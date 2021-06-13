@@ -8,6 +8,7 @@ import {
   About,
   Image,
   ImageDimension,
+  ImageDimensionPixels,
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
@@ -91,10 +92,9 @@ export const addOrUpdateAboutImageDimension$ = (
   httpService: HttpService,
   slug: string,
   imageName: string,
-  imageDimensionType: ImageDimensionType,
-  imageDimensionState: ImageDimensionState,
-  width: number,
-  height: number
+  type: ImageDimensionType,
+  state: ImageDimensionState,
+  pixels: ImageDimensionPixels
 ): Observable<ImageDimension> => {
   return getAbout$(env, httpService, slug).pipe(
     switchMap((axiosResponse) => {
@@ -106,10 +106,9 @@ export const addOrUpdateAboutImageDimension$ = (
         httpService,
         axiosResponse.data.id,
         imageName,
-        imageDimensionType,
-        imageDimensionState,
-        width,
-        height
+        type,
+        state,
+        pixels
       );
     })
   );

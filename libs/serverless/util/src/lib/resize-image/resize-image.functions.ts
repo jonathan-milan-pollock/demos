@@ -1,32 +1,28 @@
+import { Observable } from 'rxjs';
+
 import {
   ImageDimensionConfig,
   ImageDimensionLongestEdgeConfig,
   ImageDimensionTileConfig,
 } from '@dark-rush-photography/serverless/types';
+import { resizeImageTile$ } from './resize-image-tile.functions';
+import { resizeLongestEdge$ } from './resize-longest-edge.functions';
 
-import { resizeImageTile } from './resize-image-tile.functions';
-import { resizeLongestEdge } from './resize-longest-edge.functions';
-
-export const resizeImage = async (
+export const resizeImage$ = (
   imageFilePath: string,
   imageName: string,
   imageDimensionConfig: ImageDimensionConfig
-): Promise<string> => {
+): Observable<string> => {
   switch (imageDimensionConfig.type) {
     case 'Tile':
-      return await resizeImageTile(
+      return resizeImageTile$(
         imageFilePath,
         imageName,
         imageDimensionConfig as ImageDimensionTileConfig
       );
     case 'Thumbnail':
-      return await resizeLongestEdge(
-        imageFilePath,
-        imageName,
-        (imageDimensionConfig as ImageDimensionLongestEdgeConfig).longestEdge
-      );
     case 'Small':
-      return await resizeLongestEdge(
+      return resizeLongestEdge$(
         imageFilePath,
         imageName,
         (imageDimensionConfig as ImageDimensionLongestEdgeConfig).longestEdge

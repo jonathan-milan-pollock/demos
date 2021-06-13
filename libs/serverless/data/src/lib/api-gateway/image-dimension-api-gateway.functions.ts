@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 
 import {
+  ImageDimensionPixels,
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
@@ -17,10 +18,9 @@ export const apiAddOrUpdateImageDimension$ = (
   env: Env,
   httpService: HttpService,
   publishedImage: PublishedImage,
-  imageDimensionType: ImageDimensionType,
-  imageDimensionState: ImageDimensionState,
-  width: number,
-  height: number
+  type: ImageDimensionType,
+  state: ImageDimensionState,
+  pixels: ImageDimensionPixels
 ): Observable<unknown> => {
   switch (publishedImage.publishServiceType) {
     case PublishServiceType.About:
@@ -29,10 +29,9 @@ export const apiAddOrUpdateImageDimension$ = (
         httpService,
         publishedImage.slug,
         publishedImage.imageName,
-        imageDimensionType,
-        imageDimensionState,
-        width,
-        height
+        type,
+        state,
+        pixels
       );
   }
   return of();

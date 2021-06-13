@@ -7,9 +7,11 @@ import * as tinify from 'tinify';
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
+import {
+  downloadAzureStorageBlobToFile$,
+  uploadBufferToAzureStorageBlob$,
+} from '@dark-rush-photography/shared-server/util';
 import { getBlobPath } from '@dark-rush-photography/serverless/util';
-import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
-import { uploadBufferToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 
 @Injectable()
 export class TinifyImageActivityProvider {
@@ -31,7 +33,6 @@ export class TinifyImageActivityProvider {
     ).pipe(
       tap(() => Logger.log('Tinifying image', logContext)),
       switchMap((imageFilePath) => {
-        Logger.log('Tinifying image', logContext);
         tinify.default.key = env.tinyPngApiKey;
         return from(tinify.fromFile(imageFilePath).toBuffer());
       }),

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { from, fromEvent, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-export const createTempFile = (fileName: string): Observable<string> => {
+export const createTempFile$ = (fileName: string): Observable<string> => {
   const filePath = path.join(os.tmpdir(), uuidv4(), fileName);
   return from(fs.ensureFile(filePath)).pipe(map(() => filePath));
 };

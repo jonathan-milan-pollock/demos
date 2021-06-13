@@ -3,7 +3,7 @@ import { mergeMap, tap } from 'rxjs/operators';
 
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
-  createTempFile,
+  createTempFile$,
   writeStreamToFile,
 } from '@dark-rush-photography/serverless/util';
 import { downloadAzureStorageBlobAsStream$ } from './azure-storage-download-stream.functions';
@@ -22,7 +22,7 @@ export const downloadAzureStorageBlobToFile$ = (
       azureStorageContainerType,
       blobPath
     ),
-    createTempFile(fileName),
+    createTempFile$(fileName),
   ]).pipe(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     tap(([_stream, filePath]) =>

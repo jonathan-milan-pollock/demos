@@ -6,6 +6,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { Env } from '@dark-rush-photography/serverless/types';
 import {
   ImageDimension,
+  ImageDimensionPixels,
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
@@ -17,10 +18,9 @@ export const addOrUpdateImageDimension$ = (
   httpService: HttpService,
   entityId: string,
   imageName: string,
-  imageDimensionType: ImageDimensionType,
-  imageDimensionState: ImageDimensionState,
-  width: number,
-  height: number
+  type: ImageDimensionType,
+  state: ImageDimensionState,
+  pixels: ImageDimensionPixels
 ): Observable<ImageDimension> =>
   apiAuth$(env, httpService).pipe(
     switchMap((authToken) => {
@@ -34,10 +34,9 @@ export const addOrUpdateImageDimension$ = (
         {
           entityId,
           imageSlug: imageName.substring(0, imageName.indexOf('.')),
-          type: imageDimensionType,
-          state: imageDimensionState,
-          width,
-          height,
+          type,
+          state,
+          pixels,
         },
         {
           headers: {

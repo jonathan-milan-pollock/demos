@@ -1,26 +1,25 @@
 import { Readable } from 'node:stream';
+import { Logger } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
-import { map, pluck, switchMap } from 'rxjs/operators';
+import { mapTo, switchMap } from 'rxjs/operators';
 
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
-import { Logger } from '@nestjs/common';
 
 export const uploadBufferToAzureStorageBlob$ = (
   buffer: Buffer,
   azureStorageConnectionString: string,
   azureStorageContainerType: AzureStorageContainerType,
   blobPath: string
-): Observable<string> => {
+): Observable<void> => {
   return getAzureStorageBlockBlobClient$(
     azureStorageConnectionString,
     azureStorageContainerType,
     blobPath
   ).pipe(
     switchMap((blockBlobClient) => from(blockBlobClient.uploadData(buffer))),
-    pluck('requestId'),
-    map((requestId) => requestId as string)
+    mapTo(undefined)
   );
 };
 
@@ -29,7 +28,7 @@ export const uploadStreamToAzureStorageBlob$ = (
   azureStorageConnectionString: string,
   azureStorageContainerType: AzureStorageContainerType,
   blobPath: string
-): Observable<string> => {
+): Observable<void> => {
   const logContext = 'uploadStreamToAzureStorageBlob$';
   Logger.log(`Uploading image blob ${blobPath}`, logContext);
 
@@ -39,7 +38,6 @@ export const uploadStreamToAzureStorageBlob$ = (
     blobPath
   ).pipe(
     switchMap((blockBlobClient) => from(blockBlobClient.uploadStream(stream))),
-    pluck('requestId'),
-    map((requestId) => requestId as string)
+    mapTo(undefined)
   );
 };

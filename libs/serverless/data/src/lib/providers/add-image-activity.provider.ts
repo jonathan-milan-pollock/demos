@@ -12,12 +12,14 @@ import {
   PublishedImage,
 } from '@dark-rush-photography/serverless/types';
 import {
+  downloadAzureStorageBlobToFile$,
+  uploadStreamToAzureStorageBlob$,
+} from '@dark-rush-photography/shared-server/util';
+import {
   getBlobPath,
   readCreateDateExif$,
 } from '@dark-rush-photography/serverless/util';
-import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
-import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
-import { apiAddImage$ } from '../apis/api-gateway/image-api-gateway.functions';
+import { apiAddImage$ } from '../api-gateway/image-api-gateway.functions';
 
 @Injectable()
 export class AddImageActivityProvider {
@@ -35,6 +37,9 @@ export class AddImageActivityProvider {
       getBlobPath(state, publishedImage),
       publishedImage.imageName
     ).pipe(
+      tap(() =>
+        Logger.log(`Adding image for ${publishedImage.slug}`, this.logContext)
+      ),
       switchMap((imageFilePath) =>
         this.addImageWithPath$(env, httpService, publishedImage, imageFilePath)
       )
