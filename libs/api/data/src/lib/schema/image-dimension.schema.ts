@@ -36,7 +36,7 @@ export const imageDimensionSchema = {
       'website-posted',
     ],
   },
-  imageDimensionPixels: { type: imageDimensionPixelsSchema, required: true },
+  pixels: { type: imageDimensionPixelsSchema, required: true },
   threeSixtyImageSettings: {
     type: threeSixtyImageSettingsSchema,
     required: false,

@@ -4,19 +4,21 @@ import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
+import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
   IMAGE_ARTIST_EXIF_FN,
 } from '@dark-rush-photography/serverless/types';
-import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
-import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
+import {
+  downloadAzureStorageBlobToFile$,
+  uploadStreamToAzureStorageBlob$,
+} from '@dark-rush-photography/shared-server/util';
 import {
   exifImageArtist,
   getBlobPath,
 } from '@dark-rush-photography/serverless/util';
-import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class ExifImageActivityProvider {

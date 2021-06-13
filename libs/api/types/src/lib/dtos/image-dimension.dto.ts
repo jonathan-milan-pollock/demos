@@ -24,7 +24,7 @@ export class ImageDimensionDto implements ImageDimension {
 
   @ValidateNested()
   @Type(() => ImageDimensionPixelsDto)
-  imageDimensionPixels!: ImageDimensionPixelsDto;
+  pixels!: ImageDimensionPixelsDto;
 
   @ValidateNested()
   @Type(() => ThreeSixtyImageSettingsDto)

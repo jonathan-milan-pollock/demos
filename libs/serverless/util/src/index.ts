@@ -15,4 +15,5 @@ export * from './lib/published-image/publish-service.functions';
 export * from './lib/published-image/published-image.functions';
 
 // resize-image
+export * from './lib/resize-image/image-dimension-pixels.functions';
 export * from './lib/resize-image/resize-image.functions';

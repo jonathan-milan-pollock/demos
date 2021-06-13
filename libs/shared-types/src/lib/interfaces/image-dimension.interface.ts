@@ -8,6 +8,6 @@ export interface ImageDimension {
   readonly imageSlug: string;
   readonly type: ImageDimensionType;
   readonly state: ImageDimensionState;
-  readonly imageDimensionPixels: ImageDimensionPixels;
+  readonly pixels: ImageDimensionPixels;
   readonly threeSixtyImageSettings?: ThreeSixtyImageSettings;
 }

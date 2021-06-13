@@ -1,59 +1,36 @@
-import sharp = require('sharp');
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
-import { forkJoin, from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { createTempFile$ } from '../file/file.functions';
+import { findImageDimensionPixels$ } from './image-dimension-pixels.functions';
+import { resizeLongestEdgeWidth$ } from './resize-longest-edge-width.functions';
+import { resizeLongestEdgeHeight$ } from './resize-longest-edge-height.functions';
 
-import { createTempFile } from '../file/file.functions';
-import { getImageDimension } from './image-dimension.functions';
-
-const resizeWidthAsLongestEdge$ = (
-  longestEdge: number,
-  imageFilePath: string,
-  tempOutputFilePath: string
-) =>
-  from(
-    sharp(imageFilePath)
-      .resize(longestEdge, undefined)
-      .toFile(tempOutputFilePath)
-  ).pipe(map(() => tempOutputFilePath));
-
-const resizeHeightAsLongestEdge$ = (
-  longestEdge: number,
-  imageFilePath: string,
-  tempOutputFilePath: string
-) =>
-  from(
-    sharp(imageFilePath)
-      .resize(undefined, longestEdge)
-      .toFile(tempOutputFilePath)
-  ).pipe(map(() => tempOutputFilePath));
-
-export const resizeLongestEdge = (
+export const resizeLongestEdge$ = (
   imageFilePath: string,
   imageName: string,
   longestEdge: number
-): Promise<string> => {
-  return forkJoin([
-    createTempFile(imageName),
-    from(getImageDimension(imageFilePath)),
-  ])
-    .pipe(
-      switchMap(([tempOutputFilePath, { width, height }]) => {
-        console.log('imageFilePath' + imageFilePath);
-        console.log('tempOutputFilePath' + tempOutputFilePath);
-        return width > height
-          ? resizeWidthAsLongestEdge$(
-              longestEdge,
-              imageFilePath,
-              tempOutputFilePath
+): Observable<string> =>
+  findImageDimensionPixels$(imageFilePath).pipe(
+    switchMap((imageDimensionPixels) => {
+      return imageDimensionPixels.width > imageDimensionPixels.height
+        ? createTempFile$(imageName).pipe(
+            switchMap((newImageFilePath) =>
+              resizeLongestEdgeWidth$(
+                imageFilePath,
+                newImageFilePath,
+                longestEdge
+              )
             )
-          : resizeHeightAsLongestEdge$(
-              longestEdge,
-              imageFilePath,
-              tempOutputFilePath
-            );
-      }),
-      map((tempOutputFilePath) => tempOutputFilePath)
-    )
-    .toPromise();
-};
+          )
+        : createTempFile$(imageName).pipe(
+            switchMap((newImageFilePath) =>
+              resizeLongestEdgeHeight$(
+                imageFilePath,
+                newImageFilePath,
+                longestEdge
+              )
+            )
+          );
+    })
+  );

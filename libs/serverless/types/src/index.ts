@@ -1,7 +1,7 @@
 // constants
 export * from './lib/constants/exif-image-artist.constants';
 export * from './lib/constants/image-fit.constants';
-export * from './lib/constants/image-pixels.constants';
+export * from './lib/constants/image-dimension-config.constants';
 
 // enums
 export * from './lib/enums/publish-service.type';

@@ -17,27 +17,23 @@ module.exports = df.orchestrator(function* (context) {
   activity = yield context.df.callActivity('TinifyImage', { ...activity });
   completedProcesses.push(activity.state);
 
-  //context.log(('ResizeImage Tile'));
-  //const tileActivity = {
-  //  state: 'tinified',
-  //  publishedImage: { ...activity.publishedImage },
-  //  config: {
-  //   resizeImageDimensionType: 'Tile',
-  //  },
-  //};
-  // activity = yield context.df.callActivity('ResizeImage', tileActivity);
-  // completedProcesses.push(activity.state);
+  const tasks = [];
+  const resizeImageDimensionTypes = ['Tile']; // 'Small'
+  for (const resizeImageDimensionType of resizeImageDimensionTypes) {
+    tasks.push(
+      context.df.callActivity('ResizeImage', {
+        state: 'tinified',
+        publishedImage: { ...activity.publishedImage },
+        config: {
+          resizeImageDimensionType,
+        },
+      })
+    );
+  }
 
-  // context.log(('ResizeImage Small'));
-  // const smallActivity = {
-  //   state: 'tinified',
-  //   publishedImage: { ...activity.publishedImage },
-  //   config: {
-  //     resizeImageDimensionType: 'Small',
-  //   },
-  // };
-  // activity = yield context.df.callActivity('ResizeImage', smallActivity);
-  // completedProcesses.push(activity.state);
+  const results = yield context.df.Task.all(tasks);
+  const states = results.map((result) => result.state);
+  completedProcesses.push(...states);
 
   context.log(
     `[${logContext}] Upload Image orchestrator completed ${completedProcesses.join(

@@ -10,15 +10,13 @@ import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/
 import {
   Env,
   ImageActivity,
-  IMAGE_DIMENSIONS,
+  IMAGE_DIMENSION_CONFIG,
 } from '@dark-rush-photography/serverless/types';
 
 import {
   getBlobPath,
   getBlobPathWithImageDimension,
 } from '@dark-rush-photography/serverless/util';
-import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
-import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 
 @Injectable()
 export class WebsitePostImageActivityProvider {
@@ -37,7 +35,7 @@ export class WebsitePostImageActivityProvider {
 
     const { state, publishedImage, config } = imageActivity;
 
-    const imageDimension = IMAGE_DIMENSIONS.find(
+    const imageDimension = IMAGE_DIMENSION_CONFIG.find(
       (imageDimension) =>
         imageDimension.type === config?.resizeImageDimensionType
     );

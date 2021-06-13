@@ -3,16 +3,16 @@ import { ImageDimensionStandardConfig } from '../interfaces/image-dimension-stan
 import { ImageDimensionLongestEdgeConfig } from '../interfaces/image-dimension-longest-edge-config.interface';
 import { ImageDimensionTileConfig } from '../interfaces/image-dimension-tile-config.interface';
 
-export const IMAGE_DIMENSIONS: (
+export const IMAGE_DIMENSION_CONFIG: (
   | ImageDimensionStandardConfig
   | ImageDimensionLongestEdgeConfig
   | ImageDimensionTileConfig
 )[] = [
   {
     type: ImageDimensionType.Tile,
-    minWidth: 512,
-    minHeight: 256,
-    longestEdge: 512,
+    minWidth: 260,
+    minHeight: 186,
+    longestEdge: 260,
   },
   {
     type: ImageDimensionType.Thumbnail,

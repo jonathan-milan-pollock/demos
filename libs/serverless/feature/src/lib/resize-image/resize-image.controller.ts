@@ -15,7 +15,7 @@ export class ResizeImageController {
   ): Promise<void> {
     request.context.done(
       null,
-      this.resizeImageService.resizeImage(imageActivity)
+      await this.resizeImageService.resizeImage(imageActivity)
     );
   }
 }

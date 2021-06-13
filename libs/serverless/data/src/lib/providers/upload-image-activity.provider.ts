@@ -4,7 +4,6 @@ import {
   HttpService,
   Injectable,
 } from '@nestjs/common';
-import { Express } from 'express';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer';
 
@@ -13,18 +12,20 @@ import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
+import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
+import { uploadBufferToAzureStorageBlob$ } from '@dark-rush-photography/shared-server/util';
 import {
   getBlobPath,
   getPublishedImageForUpload,
 } from '@dark-rush-photography/serverless/util';
-import { uploadBufferToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
-import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { apiCreateEntity$ } from '../apis/api-gateway/entity-api-gateway.functions';
+import { apiCreateEntity$ } from '../api-gateway/entity-api-gateway.functions';
 
 @Injectable()
 export class UploadImageActivityProvider {
+  readonly logContext = 'UploadImageActivityProvider';
+
   uploadImage$(
     env: Env,
     httpService: HttpService,
@@ -33,7 +34,6 @@ export class UploadImageActivityProvider {
     uploadedFileName: string,
     image: Express.Multer.File
   ): Observable<IHttpResponse> {
-    const logContext = 'UploadImageActivityProvider';
     if (!image) {
       throw new BadRequestException('Image must be provided for image upload');
     }
@@ -43,7 +43,7 @@ export class UploadImageActivityProvider {
       throw new BadRequestException(
         'Publish image was not created from upload'
       );
-    Logger.log('Published image was created from upload', logContext);
+    Logger.log('Published image was created from upload', this.logContext);
 
     const client = getClient(requestContext);
     return uploadBufferToAzureStorageBlob$(
@@ -52,7 +52,9 @@ export class UploadImageActivityProvider {
       AzureStorageContainerType.Private,
       getBlobPath(ImageDimensionState.Uploaded, publishedImage)
     ).pipe(
-      tap(() => Logger.log('Starting upload image orchestrator', logContext)),
+      tap(() =>
+        Logger.log('Starting upload image orchestrator', this.logContext)
+      ),
       switchMap(() => apiCreateEntity$(env, httpService, publishedImage)),
       switchMap(() =>
         from(
@@ -65,7 +67,7 @@ export class UploadImageActivityProvider {
       tap((instanceId: string) =>
         Logger.log(
           `UploadImageOrchestrator started orchestration with ID = '${instanceId}'.`,
-          logContext
+          this.logContext
         )
       ),
       map((instanceId: string) =>
