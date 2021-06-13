@@ -1,5 +1,6 @@
 //import * as appInsights from 'applicationinsights';
 //appInsights.setup().start();
+//TODO: app insights
 
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -40,7 +41,7 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 1111;
-  Logger.log(`Api listening on port ${port}`);
+  Logger.log(`API listening on port ${port}`, 'bootstrap');
   await app.listen(port);
 }
 

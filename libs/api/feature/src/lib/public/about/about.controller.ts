@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { About, BestOf } from '@dark-rush-photography/shared-types';
+import { About } from '@dark-rush-photography/shared-types';
 import { AboutResponseDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { AboutService } from './about.service';
@@ -22,7 +22,7 @@ export class AboutController {
 
   @Get(':slug')
   @ApiOkResponse({ type: AboutResponseDto })
-  findOne(@Param('slug') slug: string): Observable<BestOf> {
+  findOne(@Param('slug') slug: string): Observable<About> {
     return this.aboutService.findOne(slug);
   }
 }

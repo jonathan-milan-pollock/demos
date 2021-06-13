@@ -2,18 +2,18 @@
 import { from, Observable } from 'rxjs';
 import { mapTo, switchMap } from 'rxjs/operators';
 
-import { ImageDimensionPixels } from '@dark-rush-photography/shared-types';
+import { MediaDimensionPixels } from '@dark-rush-photography/shared-types';
 import { ImageDimensionStandardConfig } from '@dark-rush-photography/serverless/types';
 import { createTempFile$ } from '../file/file.functions';
 
 export const resizeFitImageDimensionsWithFile = (
   imageFilePath: string,
   newImageFilePath: string,
-  imageDimensionPixels: ImageDimensionPixels
+  pixels: MediaDimensionPixels
 ): Observable<string> => {
   return from(
     sharp(imageFilePath)
-      .resize(imageDimensionPixels.width, imageDimensionPixels.height, {
+      .resize(pixels.width, pixels.height, {
         kernel: sharp.kernel.nearest,
         fit: 'contain',
         //#1E1E1E

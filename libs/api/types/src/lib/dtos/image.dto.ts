@@ -1,22 +1,18 @@
 import {
-  IsArray,
   IsBoolean,
-  IsDateString,
   IsEnum,
-  IsNumber,
+  IsInt,
+  IsISO8601,
+  IsMongoId,
   IsOptional,
   IsString,
-  ValidateNested,
+  Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 import { Image, PostedState } from '@dark-rush-photography/shared-types';
-import { ImageDimensionDto } from './image-dimension.dto';
-import { EmotionDto } from './emotion.dto';
-import { CommentDto } from './comment.dto';
 
 export class ImageDto implements Image {
-  @IsString()
+  @IsMongoId()
   entityId!: string;
 
   @IsString()
@@ -25,7 +21,8 @@ export class ImageDto implements Image {
   @IsEnum(PostedState)
   state!: PostedState;
 
-  @IsNumber()
+  @IsInt()
+  @Min(0)
   order!: number;
 
   @IsBoolean()
@@ -45,28 +42,13 @@ export class ImageDto implements Image {
   @IsOptional()
   description?: string;
 
-  @IsArray()
-  keywords: string[] = [];
+  @IsString()
+  keywords!: string;
 
-  @IsDateString()
+  @IsISO8601()
   dateCreated!: string;
 
-  @IsDateString()
+  @IsISO8601()
   @IsOptional()
   datePublished?: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ImageDimensionDto)
-  dimensions: ImageDimensionDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CommentDto)
-  comments: CommentDto[] = [];
 }

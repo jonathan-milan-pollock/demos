@@ -18,7 +18,7 @@ module.exports = df.orchestrator(function* (context) {
   completedProcesses.push(activity.state);
 
   const tasks = [];
-  const resizeImageDimensionTypes = ['Tile']; // 'Small'
+  const resizeImageDimensionTypes = ['Tile', 'Small'];
   for (const resizeImageDimensionType of resizeImageDimensionTypes) {
     tasks.push(
       context.df.callActivity('ResizeImage', {

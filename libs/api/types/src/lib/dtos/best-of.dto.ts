@@ -1,11 +1,5 @@
-import { IsArray, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { OmitType } from '@nestjs/swagger';
 
-import { ImageDto } from './image.dto';
+import { BestOfResponseDto } from './best-of-response.dto';
 
-export class BestOfDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ImageDto)
-  images: ImageDto[] = [];
-}
+export class BestOfDto extends OmitType(BestOfResponseDto, ['id'] as const) {}

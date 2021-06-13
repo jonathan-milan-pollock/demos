@@ -1,23 +1,26 @@
 import {
   IsArray,
   IsBoolean,
-  IsDateString,
+  IsISO8601,
   IsOptional,
   IsString,
+  IsUrl,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+import { Destination } from '@dark-rush-photography/shared-types';
 import { LocationDto } from './location.dto';
 import { ImageDto } from './image.dto';
+import { ImageDimensionDto } from './image-dimension.dto';
 import { VideoDto } from './video.dto';
-import { FlyOverDto } from './fly-over.dto';
+import { VideoDimensionDto } from './video-dimension.dto';
 import { ExtendedRealityDto } from './extended-reality.dto';
-import { SocialMediaDto } from './social-media.dto';
-import { EmotionDto } from './emotion.dto';
+import { SocialMediaUrlDto } from './social-media-url.dto';
 import { CommentDto } from './comment.dto';
+import { EmotionDto } from './emotion.dto';
 
-export class DestinationResponseDto {
+export class DestinationResponseDto implements Destination {
   @IsString()
   id!: string;
 
@@ -36,9 +39,11 @@ export class DestinationResponseDto {
   description?: string;
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => String)
   keywords: string[] = [];
 
-  @IsDateString()
+  @IsISO8601()
   @IsOptional()
   datePublished?: string;
 
@@ -51,6 +56,8 @@ export class DestinationResponseDto {
   useTitleImage!: boolean;
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => String)
   text: string[] = [];
 
   @IsArray()
@@ -60,35 +67,40 @@ export class DestinationResponseDto {
 
   @IsArray()
   @ValidateNested({ each: true })
+  @Type(() => ImageDimensionDto)
+  imageDimensions: ImageDimensionDto[] = [];
+
+  @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => VideoDto)
   videos: VideoDto[] = [];
 
-  @ValidateNested()
-  @Type(() => FlyOverDto)
-  @IsOptional()
-  flyOver?: FlyOverDto;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => VideoDimensionDto)
+  videoDimensions: VideoDimensionDto[] = [];
 
   @ValidateNested()
   @Type(() => ExtendedRealityDto)
   @IsOptional()
   extendedReality?: ExtendedRealityDto;
 
-  @IsString()
+  @IsUrl()
   @IsOptional()
   websiteUrl?: string;
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => SocialMediaDto)
-  socialMediaUrls: SocialMediaDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
+  @Type(() => SocialMediaUrlDto)
+  socialMediaUrls: SocialMediaUrlDto[] = [];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CommentDto)
   comments: CommentDto[] = [];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EmotionDto)
+  emotions: EmotionDto[] = [];
 }

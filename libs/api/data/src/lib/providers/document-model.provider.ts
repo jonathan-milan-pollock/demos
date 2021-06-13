@@ -10,7 +10,9 @@ export class DocumentModelProvider {
       id: documentModel._id,
       slug: documentModel.slug,
       images: documentModel.images.map((image) => this.toImage(image)),
+      imageDimensions: documentModel.imageDimensions,
       videos: documentModel.videos,
+      videoDimensions: documentModel.videoDimensions,
     } as About;
   }
 
@@ -19,6 +21,9 @@ export class DocumentModelProvider {
       id: documentModel._id,
       slug: documentModel.slug,
       images: documentModel.images.map((image) => this.toImage(image)),
+      imageDimensions: documentModel.imageDimensions,
+      comments: documentModel.comments,
+      emotions: documentModel.emotions,
     } as BestOf;
   }
 
@@ -36,9 +41,6 @@ export class DocumentModelProvider {
       keywords: image.keywords,
       dateCreated: image.dateCreated,
       datePublished: image.datePublished,
-      dimensions: image.dimensions,
-      emotions: image.emotions,
-      comments: image.comments,
     };
   }
 }

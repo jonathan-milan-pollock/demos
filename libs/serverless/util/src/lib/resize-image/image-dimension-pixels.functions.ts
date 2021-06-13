@@ -4,11 +4,11 @@ import sharp = require('sharp');
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ImageDimensionPixels } from '@dark-rush-photography/shared-types';
+import { MediaDimensionPixels } from '@dark-rush-photography/shared-types';
 
 export const findImageDimensionPixels$ = (
   imageFilePath: string
-): Observable<ImageDimensionPixels> =>
+): Observable<MediaDimensionPixels> =>
   from(sharp(imageFilePath).metadata()).pipe(
     map(({ width, height }) => {
       if (!width)
@@ -19,14 +19,14 @@ export const findImageDimensionPixels$ = (
         throw new BadRequestException(
           `Height was not found on ${imageFilePath}`
         );
-      return { width, height } as ImageDimensionPixels;
+      return { width, height } as MediaDimensionPixels;
     })
   );
 
 export const findImageDimensionPixelsWithFileName$ = (
   imageFilePath: string
 ): Observable<{
-  imageDimensionPixels: ImageDimensionPixels;
+  pixels: MediaDimensionPixels;
   imageFilePath: string;
 }> =>
   from(sharp(imageFilePath).metadata()).pipe(
@@ -40,7 +40,7 @@ export const findImageDimensionPixelsWithFileName$ = (
           `Height was not found on ${imageFilePath}`
         );
       return {
-        imageDimensionPixels: { width, height } as ImageDimensionPixels,
+        pixels: { width, height } as MediaDimensionPixels,
         imageFilePath,
       };
     })

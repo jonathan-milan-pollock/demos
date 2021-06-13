@@ -1,6 +1,4 @@
 import { PostedState } from '../enums/posted-state.enum';
-import { Emotion } from './emotion.interface';
-import { Comment } from './comment.interface';
 
 export interface Video {
   readonly entityId: string;
@@ -11,11 +9,7 @@ export interface Video {
   // metadata
   readonly title?: string;
   readonly description?: string;
-  readonly keywords: ReadonlyArray<string>;
-  readonly dateCreated?: string;
+  readonly keywords: string;
+  readonly dateCreated: string;
   readonly datePublished?: string;
-  // content
-  readonly titleTrackPath?: string;
-  readonly emotions: ReadonlyArray<Emotion>;
-  readonly comments: ReadonlyArray<Comment>;
 }

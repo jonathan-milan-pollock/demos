@@ -1,5 +1,5 @@
-import { imageDimensionPixelsSchema } from './image-dimension-pixels.schema';
-import { threeSixtyImageSettingsSchema } from './three-sixty-image-settings.schema';
+import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
+import { imageDimensionSettingsSchema } from './image-dimension-settings.schema';
 
 export const imageDimensionSchema = {
   type: {
@@ -36,9 +36,9 @@ export const imageDimensionSchema = {
       'website-posted',
     ],
   },
-  pixels: { type: imageDimensionPixelsSchema, required: true },
-  threeSixtyImageSettings: {
-    type: threeSixtyImageSettingsSchema,
+  pixels: { type: mediaDimensionPixelsSchema, required: true },
+  settings: {
+    type: imageDimensionSettingsSchema,
     required: false,
   },
 };

@@ -1,11 +1,20 @@
-import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsInt, IsMongoId, IsOptional, IsString, Min } from 'class-validator';
 
 import { Comment } from '@dark-rush-photography/shared-types';
-import { EmotionDto } from './emotion.dto';
 
 export class CommentDto implements Comment {
-  @IsNumber()
+  @IsString()
+  id!: string;
+
+  @IsMongoId()
+  entityId!: string;
+
+  @IsString()
+  @IsOptional()
+  mediaSlug?: string;
+
+  @IsInt()
+  @Min(0)
   order!: number;
 
   @IsString()
@@ -16,9 +25,4 @@ export class CommentDto implements Comment {
 
   @IsString()
   text!: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
 }
