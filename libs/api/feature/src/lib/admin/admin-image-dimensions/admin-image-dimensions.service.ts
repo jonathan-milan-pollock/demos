@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -33,28 +34,21 @@ export class AdminImageDimensionsService {
           throw new NotFoundException('Could not find entity');
 
         const image = documentModel.images.find(
-          (i) => i.slug !== imageDimension.imageSlug
+          (i) => i.slug === imageDimension.imageSlug
         );
+
         if (!image)
           throw new NotFoundException(
             `Could not find image ${imageDimension.imageSlug}`
           );
 
         return from(
-          this.documentModel.findByIdAndUpdate(imageDimension.entityId, {
-            images: [
-              ...documentModel.images.filter(
-                (i) => i.slug !== imageDimension.imageSlug
+          this.documentModel.findByIdAndUpdate(image.entityId, {
+            imageDimensions: [
+              ...documentModel.imageDimensions.filter(
+                (id) => id.imageSlug !== image.slug
               ),
-              {
-                ...image,
-                dimensions: [
-                  ...image.dimensions.filter(
-                    (id) => id.type !== imageDimension.type
-                  ),
-                  { ...imageDimension },
-                ],
-              },
+              { ...imageDimension },
             ],
           })
         );

@@ -1,36 +1,7 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { OmitType } from '@nestjs/swagger';
 
-import { LocationDto } from './location.dto';
-import { ImageDto } from './image.dto';
+import { PhotoOfTheWeekResponseDto } from './photo-of-the-week-response.dto';
 
-export class PhotoOfTheWeekDto {
-  @IsString()
-  slug!: string;
-
-  @IsNumber()
-  group!: number;
-
-  @IsBoolean()
-  isPublic!: boolean;
-
-  @ValidateNested()
-  @Type(() => LocationDto)
-  @IsOptional()
-  location?: LocationDto;
-
-  @IsBoolean()
-  useTitleImage!: boolean;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ImageDto)
-  images: ImageDto[] = [];
-}
+export class PhotoOfTheWeekDto extends OmitType(PhotoOfTheWeekResponseDto, [
+  'id',
+] as const) {}

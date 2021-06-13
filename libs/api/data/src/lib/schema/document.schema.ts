@@ -11,21 +11,23 @@ import {
   Event,
   ExtendedReality,
   Favorites,
-  FlyOver,
   Image,
+  ImageDimension,
   Location,
   PhotoOfTheWeek,
   Review,
   Reviews,
-  SocialMedia,
+  SocialMediaUrl,
   Video,
+  VideoDimension,
 } from '@dark-rush-photography/shared-types';
 import { locationSchema } from './location.schema';
 import { emotionSchema } from './emotion.schema';
 import { commentSchema } from './comment.schema';
 import { imageSchema } from './image.schema';
+import { imageDimensionSchema } from './image-dimension.schema';
 import { videoSchema } from './video.schema';
-import { flyOverSchema } from './fly-over.schema';
+import { videoDimensionSchema } from './video-dimension.schema';
 import { extendedRealitySchema } from './extended-reality.schema';
 import { socialMediaSchema } from './social-media.schema';
 
@@ -106,13 +108,22 @@ export class Document
   images!: Image[];
 
   @Prop({
+    type: [imageDimensionSchema],
+    required: true,
+  })
+  imageDimensions!: ImageDimension[];
+
+  @Prop({
     type: [videoSchema],
     required: true,
   })
   videos!: Video[];
 
-  @Prop({ type: flyOverSchema, required: false })
-  flyOver?: FlyOver;
+  @Prop({
+    type: [videoDimensionSchema],
+    required: true,
+  })
+  videoDimensions!: VideoDimension[];
 
   @Prop({ type: extendedRealitySchema, required: false })
   extendedReality?: ExtendedReality;
@@ -121,13 +132,13 @@ export class Document
   websiteUrl?: string;
 
   @Prop({ type: [socialMediaSchema], required: true })
-  socialMediaUrls!: SocialMedia[];
-
-  @Prop({ type: [emotionSchema], required: true })
-  emotions!: Emotion[];
+  socialMediaUrls!: SocialMediaUrl[];
 
   @Prop({ type: [commentSchema], required: true })
   comments!: Comment[];
+
+  @Prop({ type: [emotionSchema], required: true })
+  emotions!: Emotion[];
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);

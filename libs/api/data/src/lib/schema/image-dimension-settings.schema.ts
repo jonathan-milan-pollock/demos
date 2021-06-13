@@ -1,4 +1,4 @@
-export const threeSixtyImageSettingsSchema = {
+export const imageDimensionSettingsSchema = {
   pitch: Number,
   yaw: Number,
   hfov: Number,

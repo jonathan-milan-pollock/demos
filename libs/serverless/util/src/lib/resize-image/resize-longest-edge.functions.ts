@@ -12,8 +12,8 @@ export const resizeLongestEdge$ = (
   longestEdge: number
 ): Observable<string> =>
   findImageDimensionPixels$(imageFilePath).pipe(
-    switchMap((imageDimensionPixels) => {
-      return imageDimensionPixels.width > imageDimensionPixels.height
+    switchMap((pixels) => {
+      return pixels.width > pixels.height
         ? createTempFile$(imageName).pipe(
             switchMap((newImageFilePath) =>
               resizeLongestEdgeWidth$(

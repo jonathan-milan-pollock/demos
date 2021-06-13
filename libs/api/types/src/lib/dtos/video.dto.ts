@@ -1,21 +1,18 @@
 import {
-  IsArray,
   IsBoolean,
-  IsDateString,
   IsEnum,
-  IsNumber,
+  IsInt,
+  IsISO8601,
+  IsMongoId,
   IsOptional,
   IsString,
-  ValidateNested,
+  Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 import { Video, PostedState } from '@dark-rush-photography/shared-types';
-import { CommentDto } from './comment.dto';
-import { EmotionDto } from './emotion.dto';
 
 export class VideoDto implements Video {
-  @IsString()
+  @IsMongoId()
   entityId!: string;
 
   @IsString()
@@ -24,7 +21,8 @@ export class VideoDto implements Video {
   @IsEnum(PostedState)
   state!: PostedState;
 
-  @IsNumber()
+  @IsInt()
+  @Min(0)
   order!: number;
 
   @IsBoolean()
@@ -38,28 +36,13 @@ export class VideoDto implements Video {
   @IsOptional()
   description?: string;
 
-  @IsArray()
-  keywords: string[] = [];
+  @IsString()
+  keywords!: string;
 
-  @IsDateString()
-  @IsOptional()
-  dateCreated?: string;
+  @IsISO8601()
+  dateCreated!: string;
 
-  @IsDateString()
+  @IsISO8601()
   @IsOptional()
   datePublished?: string;
-
-  @IsString()
-  @IsOptional()
-  titleTrack?: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CommentDto)
-  comments: CommentDto[] = [];
 }

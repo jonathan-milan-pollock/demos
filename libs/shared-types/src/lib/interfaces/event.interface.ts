@@ -1,6 +1,8 @@
 import { Location } from './location.interface';
 import { Image } from './image.interface';
+import { ImageDimension } from './image-dimension.interface';
 import { Video } from './video.interface';
+import { VideoDimension } from './video-dimension.interface';
 import { Emotion } from './emotion.interface';
 import { Comment } from './comment.interface';
 
@@ -9,10 +11,11 @@ export interface Event {
   // identifier
   readonly slug: string;
   readonly group: number;
+  readonly isPublic: boolean;
   // metadata
   readonly title?: string;
   readonly description?: string;
-  readonly keywords?: ReadonlyArray<string>;
+  readonly keywords: ReadonlyArray<string>;
   readonly dateCreated?: string;
   readonly datePublished?: string;
   // location
@@ -22,7 +25,9 @@ export interface Event {
   // content
   readonly text: ReadonlyArray<string>;
   readonly images: ReadonlyArray<Image>;
+  readonly imageDimensions: ReadonlyArray<ImageDimension>;
   readonly videos: ReadonlyArray<Video>;
+  readonly videoDimensions: ReadonlyArray<VideoDimension>;
   readonly emotions: ReadonlyArray<Emotion>;
   readonly comments: ReadonlyArray<Comment>;
 }

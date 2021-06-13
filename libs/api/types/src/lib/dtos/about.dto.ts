@@ -1,20 +1,5 @@
-import { IsArray, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { OmitType } from '@nestjs/swagger';
 
-import { ImageDto } from './image.dto';
-import { VideoDto } from './video.dto';
+import { AboutResponseDto } from './about-response.dto';
 
-export class AboutDto {
-  @IsString()
-  slug!: string;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ImageDto)
-  images: ImageDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => VideoDto)
-  videos: VideoDto[] = [];
-}
+export class AboutDto extends OmitType(AboutResponseDto, ['id'] as const) {}

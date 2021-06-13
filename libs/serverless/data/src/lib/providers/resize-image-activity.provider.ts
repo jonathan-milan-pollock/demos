@@ -87,10 +87,6 @@ export class ResizeImageActivityProvider {
     imageDimensionType: ImageDimensionType,
     imageFilePath: string
   ): Observable<void> {
-    Logger.log(
-      'imageFilePath' + imageFilePath,
-      'uploadAndRecordImageDimension$'
-    );
     return uploadStreamToAzureStorageBlob$(
       fs.createReadStream(imageFilePath),
       env.azureStorageConnectionString,
@@ -102,14 +98,14 @@ export class ResizeImageActivityProvider {
       )
     ).pipe(
       switchMap(() => findImageDimensionPixels$(imageFilePath)),
-      switchMap((imageDimensionPixels) =>
+      switchMap((pixels) =>
         apiAddOrUpdateImageDimension$(
           env,
           httpService,
           publishedImage,
           imageDimensionType,
           ImageDimensionState.Resized,
-          imageDimensionPixels
+          pixels
         )
       ),
       map(() => Logger.log('ResizeImage complete', this.logContext))

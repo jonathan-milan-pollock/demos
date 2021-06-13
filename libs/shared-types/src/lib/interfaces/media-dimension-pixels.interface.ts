@@ -1,4 +1,4 @@
-export interface ImageDimensionPixels {
+export interface MediaDimensionPixels {
   readonly width: number;
   readonly height: number;
 }

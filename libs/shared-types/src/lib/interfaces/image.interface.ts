@@ -1,7 +1,4 @@
 import { PostedState } from '../enums/posted-state.enum';
-import { ImageDimension } from './image-dimension.interface';
-import { Emotion } from './emotion.interface';
-import { Comment } from './comment.interface';
 
 export interface Image {
   // identifier
@@ -15,11 +12,7 @@ export interface Image {
   // metadata
   readonly title?: string;
   readonly description?: string;
-  readonly keywords: ReadonlyArray<string>;
+  readonly keywords: string;
   readonly dateCreated: string;
   readonly datePublished?: string;
-  // content
-  readonly dimensions: ReadonlyArray<ImageDimension>;
-  readonly emotions: ReadonlyArray<Emotion>;
-  readonly comments: ReadonlyArray<Comment>;
 }

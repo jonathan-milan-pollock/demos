@@ -8,7 +8,7 @@ import {
   About,
   Image,
   ImageDimension,
-  ImageDimensionPixels,
+  MediaDimensionPixels,
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
@@ -94,7 +94,7 @@ export const addOrUpdateAboutImageDimension$ = (
   imageName: string,
   type: ImageDimensionType,
   state: ImageDimensionState,
-  pixels: ImageDimensionPixels
+  pixels: MediaDimensionPixels
 ): Observable<ImageDimension> => {
   return getAbout$(env, httpService, slug).pipe(
     switchMap((axiosResponse) => {
