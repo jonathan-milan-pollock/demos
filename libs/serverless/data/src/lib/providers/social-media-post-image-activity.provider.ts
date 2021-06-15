@@ -3,10 +3,7 @@ import * as fs from 'fs-extra';
 
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { from, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
 
-import { BestOf } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
@@ -32,7 +29,6 @@ export class SocialMediaPostImageActivityProvider {
       );
     }
      */
-    const logContext = 'SocialMediaPostImageActivityProvider';
     const { state, publishedImage, config } = imageActivity;
 
     const imageDimension = IMAGE_DIMENSION_CONFIG.find(
@@ -41,7 +37,10 @@ export class SocialMediaPostImageActivityProvider {
     );
     if (!imageDimension) throw new Error('Could not find image dimension');
 
-    Logger.log('ResizeImage downloading image blob', logContext);
+    Logger.log(
+      'ResizeImage downloading image blob',
+      SocialMediaPostImageActivityProvider.name
+    );
 
     return of();
   }

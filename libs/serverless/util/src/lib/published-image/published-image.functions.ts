@@ -38,23 +38,30 @@ const publishedImageMap = new Map<
 export const getPublishedImageForUpload = (
   uploadImageFileName: string
 ): PublishedImage | undefined => {
-  const logContext = 'getPublishedImageForUpload';
-
   if (!uploadImageFileName)
     throw new Error('image upload file name must be provided');
-  Logger.log(`Uploaded image file name: ${uploadImageFileName}`, logContext);
+  Logger.log(
+    `Uploaded image file name: ${uploadImageFileName}`,
+    getPublishedImageForUpload.name
+  );
 
   const fileNameSections = uploadImageFileName.split('|&|');
   if (fileNameSections.length === 0)
     throw new Error('|&| must be used to separate publish service segments');
 
   const publishServiceName = getPublishServiceName(fileNameSections[0]);
-  Logger.log(`Publish service name: ${publishServiceName}`, logContext);
+  Logger.log(
+    `Publish service name: ${publishServiceName}`,
+    getPublishedImageForUpload.name
+  );
 
   const publishServiceType = getPublishServiceType(publishServiceName);
   if (!publishServiceType)
     throw new Error(`Publish service type ${publishServiceType} was not found`);
-  Logger.log(`Publish service type ${publishServiceType}`, logContext);
+  Logger.log(
+    `Publish service type ${publishServiceType}`,
+    getPublishedImageForUpload.name
+  );
 
   return getPublishedImageFromFileNameSections(
     publishServiceType,
@@ -66,10 +73,12 @@ export const getPublishedImageFromFileNameSections = (
   publishServiceType: PublishServiceType,
   fileNameSections: string[]
 ): PublishedImage | undefined => {
-  const logContext = 'getPublishedImageFromFileNameSections';
   const publishedImageFn = publishedImageMap.get(publishServiceType);
   if (!publishedImageFn) {
-    Logger.log(`Unable to find publishedImageFn`, logContext);
+    Logger.log(
+      `Unable to find publishedImageFn`,
+      getPublishedImageFromFileNameSections.name
+    );
     throw new ConflictException('Unable to find published image');
   }
 

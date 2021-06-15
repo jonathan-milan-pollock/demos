@@ -8,8 +8,6 @@ import { TinifyImageActivityProvider } from '@dark-rush-photography/serverless/d
 
 @Injectable()
 export class TinifyImageService {
-  readonly logContext = 'TinifyImageService';
-
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly httpService: HttpService,
@@ -17,7 +15,7 @@ export class TinifyImageService {
   ) {}
 
   async tinifyImage(imageActivity: ImageActivity): Promise<ImageActivity> {
-    Logger.log('Tinifying image', this.logContext);
+    Logger.log('Tinify image', TinifyImageService.name);
     return this.tinifyImageActivityProvider
       .tinifyImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))

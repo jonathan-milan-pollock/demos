@@ -33,8 +33,6 @@ export const resizeImageTile$ = (
   imageName: string,
   imageDimensionTileConfig: ImageDimensionTileConfig
 ): Observable<string> => {
-  const logContext = 'resizeImageTile$';
-
   const { minWidth, minHeight, longestEdge } = imageDimensionTileConfig;
 
   let updatedLongestEdge = longestEdge;
@@ -55,6 +53,6 @@ export const resizeImageTile$ = (
     }),
     filter(({ pixels }) => isValidDimensionPixels(pixels, minWidth, minHeight)),
     map(({ imageFilePath }) => imageFilePath),
-    tap(() => Logger.log(`Returning resized image tile`, logContext))
+    tap(() => Logger.log(`Returning resized image tile`, resizeImageTile$.name))
   );
 };

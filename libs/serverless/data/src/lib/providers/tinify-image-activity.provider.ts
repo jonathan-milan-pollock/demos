@@ -5,13 +5,14 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import * as tinify from 'tinify';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
-import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
 import {
-  downloadAzureStorageBlobToFile$,
-  uploadBufferToAzureStorageBlob$,
-} from '@dark-rush-photography/shared-server/util';
+  AzureStorageContainerType,
+  Env,
+  ImageActivity,
+} from '@dark-rush-photography/serverless/types';
 import { getBlobPath } from '@dark-rush-photography/serverless/util';
+import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
+import { uploadBufferToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 
 @Injectable()
 export class TinifyImageActivityProvider {
@@ -20,18 +21,22 @@ export class TinifyImageActivityProvider {
     httpService: HttpService,
     imageActivity: ImageActivity
   ): Observable<void> {
-    const logContext = 'TinifyImageActivityProvider';
     const { state, publishedImage } = imageActivity;
 
     const blobPath = getBlobPath(state, publishedImage);
-    Logger.log(`Downloading image blob ${blobPath}`, logContext);
+    Logger.log(
+      `Downloading image blob ${blobPath}`,
+      TinifyImageActivityProvider.name
+    );
     return downloadAzureStorageBlobToFile$(
       env.azureStorageConnectionString,
       AzureStorageContainerType.Private,
       blobPath,
       publishedImage.imageName
     ).pipe(
-      tap(() => Logger.log('Tinifying image', logContext)),
+      tap(() =>
+        Logger.log('Tinifying image', TinifyImageActivityProvider.name)
+      ),
       switchMap((imageFilePath) => {
         tinify.default.key = env.tinyPngApiKey;
         return from(tinify.fromFile(imageFilePath).toBuffer());
@@ -42,7 +47,7 @@ export class TinifyImageActivityProvider {
             ImageDimensionState.Tinified,
             publishedImage
           )}`,
-          logContext
+          TinifyImageActivityProvider.name
         )
       ),
       switchMap((uint8Array) =>
@@ -53,7 +58,9 @@ export class TinifyImageActivityProvider {
           getBlobPath(ImageDimensionState.Tinified, publishedImage)
         )
       ),
-      map(() => Logger.log('TinifyImage complete', logContext))
+      map(() =>
+        Logger.log('TinifyImage complete', TinifyImageActivityProvider.name)
+      )
     );
   }
 }

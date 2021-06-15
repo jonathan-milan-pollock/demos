@@ -42,10 +42,7 @@ import { MatCardModule } from '@angular/material/card';
       clientId: 'itlDBOCejY2AxCCR4qNZRnI1AUwWb9O3',
       audience: 'https://www.darkrushphotography.com',
       httpInterceptor: {
-        allowedList: [
-          'http://localhost:4200/api/admin/*',
-          'http://localhost:4200/api/user/*',
-        ],
+        allowedList: ['http://localhost:4200/api/admin/*'],
       },
     }),
     FontAwesomeModule,

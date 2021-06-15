@@ -13,19 +13,20 @@ import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
-import { Env, ImageActivity } from '@dark-rush-photography/serverless/types';
-import { uploadBufferToAzureStorageBlob$ } from '@dark-rush-photography/shared-server/util';
+import {
+  AzureStorageContainerType,
+  Env,
+  ImageActivity,
+} from '@dark-rush-photography/serverless/types';
 import {
   getBlobPath,
   getPublishedImageForUpload,
 } from '@dark-rush-photography/serverless/util';
 import { apiCreateEntity$ } from '../api-gateway/entity-api-gateway.functions';
+import { uploadBufferToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 
 @Injectable()
 export class UploadImageActivityProvider {
-  readonly logContext = 'UploadImageActivityProvider';
-
   uploadImage$(
     env: Env,
     httpService: HttpService,
@@ -43,7 +44,10 @@ export class UploadImageActivityProvider {
       throw new BadRequestException(
         'Publish image was not created from upload'
       );
-    Logger.log('Published image was created from upload', this.logContext);
+    Logger.log(
+      'Published image was created from upload',
+      UploadImageActivityProvider.name
+    );
 
     const client = getClient(requestContext);
     return uploadBufferToAzureStorageBlob$(
@@ -53,7 +57,10 @@ export class UploadImageActivityProvider {
       getBlobPath(ImageDimensionState.Uploaded, publishedImage)
     ).pipe(
       tap(() =>
-        Logger.log('Starting upload image orchestrator', this.logContext)
+        Logger.log(
+          'Starting upload image orchestrator',
+          UploadImageActivityProvider.name
+        )
       ),
       switchMap(() => apiCreateEntity$(env, httpService, publishedImage)),
       switchMap(() =>
@@ -67,7 +74,7 @@ export class UploadImageActivityProvider {
       tap((instanceId: string) =>
         Logger.log(
           `UploadImageOrchestrator started orchestration with ID = '${instanceId}'.`,
-          this.logContext
+          UploadImageActivityProvider.name
         )
       ),
       map((instanceId: string) =>

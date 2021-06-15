@@ -2,7 +2,6 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  Logger,
   Inject,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -11,6 +10,7 @@ import { ENV } from '@dark-rush-photography/shared-types';
 import {
   DRP_ADMIN_KEY,
   DRP_ROLES,
+  ROLES,
   Env,
 } from '@dark-rush-photography/api/types';
 
@@ -22,7 +22,7 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const roles = this.reflector.get<string[]>(ROLES, context.getHandler());
     if (!roles) {
       return true;
     }

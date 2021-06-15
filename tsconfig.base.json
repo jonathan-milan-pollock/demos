@@ -46,6 +46,9 @@
       "@dark-rush-photography/serverless/util": [
         "libs/serverless/util/src/index.ts"
       ],
+      "@dark-rush-photography/shared-server/data": [
+        "libs/shared-server/data/src/index.ts"
+      ],
       "@dark-rush-photography/shared-server/types": [
         "libs/shared-server/types/src/index.ts"
       ],
@@ -54,6 +57,18 @@
       ],
       "@dark-rush-photography/shared-types": ["libs/shared-types/src/index.ts"],
       "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
+      "@dark-rush-photography/web-socket/data": [
+        "libs/web-socket/data/src/index.ts"
+      ],
+      "@dark-rush-photography/web-socket/feature": [
+        "libs/web-socket/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/web-socket/types": [
+        "libs/web-socket/types/src/index.ts"
+      ],
+      "@dark-rush-photography/web-socket/util": [
+        "libs/web-socket/util/src/index.ts"
+      ],
       "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
       "@dark-rush-photography/website/features/admin": [
         "libs/website/features/admin/src/index.ts"

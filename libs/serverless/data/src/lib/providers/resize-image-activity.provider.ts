@@ -13,17 +13,13 @@ import {
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
+  AzureStorageContainerType,
   Env,
   ImageActivity,
   IMAGE_DIMENSION_CONFIG,
   PublishedImage,
 } from '@dark-rush-photography/serverless/types';
-import {
-  downloadAzureStorageBlobToFile$,
-  uploadStreamToAzureStorageBlob$,
-} from '@dark-rush-photography/shared-server/util';
 import {
   findImageDimensionPixels$,
   getBlobPath,
@@ -31,11 +27,11 @@ import {
   resizeImage$,
 } from '@dark-rush-photography/serverless/util';
 import { apiAddOrUpdateImageDimension$ } from '../api-gateway/image-dimension-api-gateway.functions';
+import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
+import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 
 @Injectable()
 export class ResizeImageActivityProvider {
-  readonly logContext = 'ResizeImageActivityProvider';
-
   resizeImage$(
     env: Env,
     httpService: HttpService,
@@ -63,7 +59,10 @@ export class ResizeImageActivityProvider {
       publishedImage.imageName
     ).pipe(
       tap(() =>
-        Logger.log(`Resizing ${imageDimension.type} image`, this.logContext)
+        Logger.log(
+          `Resizing ${imageDimension.type} image`,
+          ResizeImageActivityProvider.name
+        )
       ),
       switchMap((imageFilePath) =>
         resizeImage$(imageFilePath, publishedImage.imageName, imageDimension)
@@ -108,7 +107,9 @@ export class ResizeImageActivityProvider {
           pixels
         )
       ),
-      map(() => Logger.log('ResizeImage complete', this.logContext))
+      map(() =>
+        Logger.log('ResizeImage complete', ResizeImageActivityProvider.name)
+      )
     );
   }
 }

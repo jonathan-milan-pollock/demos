@@ -1,4 +1,6 @@
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
 
+import { ROLES } from '@dark-rush-photography/api/types';
+
 export const Roles = (...roles: string[]): CustomDecorator<string> =>
-  SetMetadata('roles', roles);
+  SetMetadata(ROLES, roles);

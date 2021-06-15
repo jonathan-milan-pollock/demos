@@ -9,8 +9,6 @@ import { UploadImageActivityProvider } from '@dark-rush-photography/serverless/d
 
 @Injectable()
 export class UploadImageService {
-  readonly logContext = 'UploadImageService';
-
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly httpService: HttpService,
@@ -21,7 +19,7 @@ export class UploadImageService {
     request: AzureRequest,
     image: Express.Multer.File
   ): Promise<IHttpResponse> {
-    Logger.log('Uploading image', this.logContext);
+    Logger.log('Upload image', UploadImageService.name);
     return this.uploadImageActivityProvider
       .uploadImage$(
         this.env,

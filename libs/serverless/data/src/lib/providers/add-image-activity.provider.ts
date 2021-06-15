@@ -5,26 +5,22 @@ import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
+  AzureStorageContainerType,
   Env,
   ImageActivity,
   PublishedImage,
 } from '@dark-rush-photography/serverless/types';
 import {
-  downloadAzureStorageBlobToFile$,
-  uploadStreamToAzureStorageBlob$,
-} from '@dark-rush-photography/shared-server/util';
-import {
   getBlobPath,
   readCreateDateExif$,
 } from '@dark-rush-photography/serverless/util';
 import { apiAddImage$ } from '../api-gateway/image-api-gateway.functions';
+import { downloadAzureStorageBlobToFile$ } from '../azure-storage/azure-storage-download.functions';
+import { uploadStreamToAzureStorageBlob$ } from '../azure-storage/azure-storage-upload.functions';
 
 @Injectable()
 export class AddImageActivityProvider {
-  readonly logContext = 'AddImageActivityProvider';
-
   addImage$(
     env: Env,
     httpService: HttpService,
@@ -38,7 +34,10 @@ export class AddImageActivityProvider {
       publishedImage.imageName
     ).pipe(
       tap(() =>
-        Logger.log(`Adding image for ${publishedImage.slug}`, this.logContext)
+        Logger.log(
+          `Adding image for ${publishedImage.slug}`,
+          AddImageActivityProvider.name
+        )
       ),
       switchMap((imageFilePath) =>
         this.addImageWithPath$(env, httpService, publishedImage, imageFilePath)
@@ -62,7 +61,7 @@ export class AddImageActivityProvider {
       switchMap((createDate) =>
         apiAddImage$(env, httpService, publishedImage, createDate)
       ),
-      map(() => Logger.log('AddImage complete', this.logContext))
+      map(() => Logger.log('AddImage complete', AddImageActivityProvider.name))
     );
   }
 }

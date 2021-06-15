@@ -76,6 +76,12 @@ const execGenerateApps = (isReady) =>
         isReady,
         'npx nx g @nrwl/nest:app serverless --unitTestRunner=none --tags=scope:serverless,type:app'
       )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:app web-socket --unitTestRunner=none --tags=scope:web-socket,type:app'
+      )
     );
 
 const execGenerateApiLibs = (isReady) =>
@@ -184,6 +190,12 @@ const execGenerateSharedServerTypesLib = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
+        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
         'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
       )
     )
@@ -193,7 +205,6 @@ const execGenerateSharedServerTypesLib = (isReady) =>
         'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
       )
     );
-
 const execGenerateSharedTypesLib = (isReady) =>
   Promise.resolve(console.log('#### shared-types library'))
     .then(() => console.log())
@@ -211,6 +222,34 @@ const execGenerateUiStorybook = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/angular:lib ui-storybook --unitTestRunner=none --tags=scope:ui-storybook,type:ui --prefix=drp'
+      )
+    );
+
+const execGenerateWebSocketLibs = (isReady) =>
+  Promise.resolve(console.log('#### web socket libraries'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib web-socket/data --unitTestRunner=jest --tags=scope:web-socket,type:data'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib web-socket/feature --unitTestRunner=none --tags=scope:web-socket,type:feature'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib web-socket/types --unitTestRunner=none --tags=scope:web-socket,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib web-socket/util --unitTestRunner=jest --tags=scope:web-socket,type:util'
       )
     );
 
@@ -320,7 +359,14 @@ const execAddReactMaterialUi = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i @material-ui/core'));
 
-const execAddServerless = (isReady) =>
+const execAddApiDependencies = (isReady) =>
+  Promise.resolve(console.log('### add nestjs dependencies'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i applicationinsights'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
+    .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'));
+
+const execAddServerlessDependencies = (isReady) =>
   Promise.resolve(console.log('### add serverless'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D copyfiles'))
@@ -328,12 +374,12 @@ const execAddServerless = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
     .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
 
-const execAddNestJsDependencies = (isReady) =>
-  Promise.resolve(console.log('### add nestjs dependencies'))
+const execAddWebSocketDependencies = (isReady) =>
+  Promise.resolve(console.log('### add websocket dependencies'))
     .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i applicationinsights'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
-    .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'));
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/ws'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/websockets'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/platform-ws'));
 
 const execAddMongoose = (isReady) =>
   Promise.resolve(console.log('### add mongoose'))
@@ -348,6 +394,16 @@ const execAddAzureBlobStorage = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
+
+const execAddAuthentication = (isReady) =>
+  Promise.resolve(console.log('### add authentication'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/passport-jwt'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @auth0/auth0-angular'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/passport'))
+    .then(() => consoleLogOrExec(isReady, 'npm i passport'))
+    .then(() => consoleLogOrExec(isReady, 'npm i passport-jwt'))
+    .then(() => consoleLogOrExec(isReady, 'npm i jwks-rsa'));
 
 const execAddStorybook = (isReady) =>
   Promise.resolve(console.log('### add storybook'))
@@ -419,16 +475,6 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i datauri'))
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'));
 
-const execAddAuthentication = (isReady) =>
-  Promise.resolve(console.log('### add authentication'))
-    .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/passport-jwt'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @auth0/auth0-angular'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/passport'))
-    .then(() => consoleLogOrExec(isReady, 'npm i passport'))
-    .then(() => consoleLogOrExec(isReady, 'npm i passport-jwt'))
-    .then(() => consoleLogOrExec(isReady, 'npm i jwks-rsa'));
-
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
     .then(() => console.log())
@@ -479,6 +525,8 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateUiStorybook(isReady))
     .then(() => console.log())
+    .then(() => execGenerateWebSocketLibs(isReady))
+    .then(() => console.log())
     .then(() => execGenerateWebsiteLibs(isReady))
     .then(() => console.log())
     .then(() => execAddAngularUniversal(isReady))
@@ -491,21 +539,23 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddReactMaterialUi(isReady))
     .then(() => console.log())
-    .then(() => execAddServerless(isReady))
+    .then(() => execAddApiDependencies(isReady))
     .then(() => console.log())
-    .then(() => execAddNestJsDependencies(isReady))
+    .then(() => execAddServerlessDependencies(isReady))
+    .then(() => console.log())
+    .then(() => execAddWebSocketDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddMongoose(isReady))
     .then(() => console.log())
     .then(() => execAddAzureBlobStorage(isReady))
+    .then(() => console.log())
+    .then(() => execAddAuthentication(isReady))
     .then(() => console.log())
     .then(() => execAddStorybook(isReady))
     .then(() => console.log())
     .then(() => execUpdateCypress(isReady))
     .then(() => console.log())
     .then(() => execAddImageProcessing(isReady))
-    .then(() => console.log())
-    .then(() => execAddAuthentication(isReady))
     .then(() => console.log())
     .then(() => execAddFontAwesome(isReady))
     .then(() => console.log())

@@ -25,7 +25,8 @@ export const apiAddOrUpdateImageDimension$ = (
   switch (publishedImage.publishServiceType) {
     case PublishServiceType.About:
       return addOrUpdateAboutImageDimension$(
-        env,
+        env.apiAuth,
+        env.api,
         httpService,
         publishedImage.slug,
         publishedImage.imageName,

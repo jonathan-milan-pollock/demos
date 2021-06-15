@@ -1,5 +1,6 @@
 // constants
 export * from './lib/constants/constants';
 
-// enums
-export * from './lib/enums/azure-storage-container-type.enum';
+// interfaces
+export * from './lib/interfaces/env-api-auth.interface';
+export * from './lib/interfaces/env-api.interface';
