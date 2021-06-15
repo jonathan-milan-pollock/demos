@@ -12,7 +12,8 @@ import {
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
-import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 import { addImage$ } from './images-api.functions';
 import { addOrUpdateImageDimension$ } from './image-dimensions-api.functions';
@@ -26,13 +27,13 @@ export const createAboutIfNotExists$ = (
   apiAuth$(envApiAuth, httpService).pipe(
     tap(() =>
       Logger.log(
-        `Calling API ${envApi.darkRushPhotographyApi}/admin/v1/about`,
+        `Calling API ${envApi.drpApi}/admin/v1/about`,
         createAboutIfNotExists$.name
       )
     ),
     switchMap((authToken) =>
       httpService.post<About>(
-        `${envApi.darkRushPhotographyApi}/admin/v1/about`,
+        `${envApi.drpApi}/admin/v1/about`,
         {
           slug,
           images: [],
@@ -41,7 +42,7 @@ export const createAboutIfNotExists$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       )
@@ -54,13 +55,8 @@ export const getAbout$ = (
   httpService: HttpService,
   slug: string
 ): Observable<AxiosResponse<About>> => {
-  Logger.log(
-    `Calling API ${envApi.darkRushPhotographyApi}/v1/about/${slug}`,
-    getAbout$.name
-  );
-  return httpService.get<About>(
-    `${envApi.darkRushPhotographyApi}/v1/about/${slug}`
-  );
+  Logger.log(`Calling API ${envApi.drpApi}/v1/about/${slug}`, getAbout$.name);
+  return httpService.get<About>(`${envApi.drpApi}/v1/about/${slug}`);
 };
 
 export const addAboutImage$ = (

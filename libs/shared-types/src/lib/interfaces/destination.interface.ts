@@ -20,7 +20,7 @@ export interface Destination {
   // location
   readonly location?: Location;
   // display
-  readonly useTitleImage: boolean;
+  readonly useTileImage: boolean;
   // content
   readonly text: ReadonlyArray<string>;
   readonly images: ReadonlyArray<Image>;

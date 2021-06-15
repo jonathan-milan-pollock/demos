@@ -3,7 +3,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
   ImageDimensionDataProvider,
   PostedStateProvider,
@@ -19,7 +18,6 @@ import { AdminImageDimensionDataService } from './admin-image-dimension-data.ser
   ],
   controllers: [AdminImageDimensionDataController],
   providers: [
-    DocumentModelProvider,
     ImageDimensionDataProvider,
     PostedStateProvider,
     AdminImageDimensionDataService,

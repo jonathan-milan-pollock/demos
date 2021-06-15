@@ -32,4 +32,3 @@ export * from './lib/dtos/video.dto';
 
 // interfaces
 export * from './lib/interfaces/env.interface';
-export * from './lib/interfaces/facebook-carousel-image.interface';

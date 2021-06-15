@@ -11,6 +11,7 @@ export * from './lib/enums/publish-service.type';
 export * from './lib/enums/social-media-post-type.enum';
 
 // interfaces
+export * from './lib/interfaces/env-api.interface';
 export * from './lib/interfaces/env.interface';
 export * from './lib/interfaces/exif-create-date.interface';
 export * from './lib/interfaces/exif-image-artist.interface';

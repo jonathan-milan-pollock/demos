@@ -24,7 +24,7 @@ export class AtlantaRhythmSectionConcert2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTitleImage = false;
+  useTileImage = false;
   text = [
     `
       In the cool of the evenin' when everything is gettin' kind of

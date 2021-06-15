@@ -1,5 +1,5 @@
 import {
-  ConflictException,
+  BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -13,7 +13,7 @@ import { Image } from '@dark-rush-photography/shared-types';
 import {
   Document,
   DocumentModel,
-  DocumentModelProvider,
+  ImageProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class AdminImagesService {
   constructor(
     @InjectModel(Document.name)
     private readonly documentModel: Model<DocumentModel>,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly imageProvider: ImageProvider
   ) {}
 
   addOrUpdate$(image: Image): Observable<Image> {
@@ -41,7 +41,7 @@ export class AdminImagesService {
       }),
       map((response) => {
         if (!response) {
-          throw new ConflictException(`Unable to add image ${image.slug}`);
+          throw new BadRequestException(`Unable to add image ${image.slug}`);
         }
         return image;
       })
@@ -56,7 +56,7 @@ export class AdminImagesService {
 
         return from(documentModel.images);
       }),
-      map((image) => this.documentModelProvider.toImage(image)),
+      map((image) => this.imageProvider.toImage(image)),
       toArray<Image>()
     );
   }
@@ -74,7 +74,7 @@ export class AdminImagesService {
         if (!image) {
           throw new NotFoundException(`Could not find image ${slug}`);
         }
-        return this.documentModelProvider.toImage(image);
+        return this.imageProvider.toImage(image);
       })
     );
   }

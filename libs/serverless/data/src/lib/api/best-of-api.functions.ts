@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { BestOf, Image } from '@dark-rush-photography/shared-types';
-import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 import { addImage$ } from './images-api.functions';
 
@@ -17,20 +18,20 @@ export const createBestOfIfNotExists$ = (
   apiAuth$(envApiAuth, httpService).pipe(
     tap(() =>
       Logger.log(
-        `Calling API ${envApi.darkRushPhotographyApi}/admin/v1/best-of/${slug}`,
+        `Calling API ${envApi.drpApi}/admin/v1/best-of/${slug}`,
         createBestOfIfNotExists$.name
       )
     ),
     switchMap((authToken) =>
       httpService.post<BestOf>(
-        `${envApi.darkRushPhotographyApi}/admin/v1/best-of/${slug}`,
+        `${envApi.drpApi}/admin/v1/best-of/${slug}`,
         {
           images: [],
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       )
@@ -47,24 +48,22 @@ export const addBestOfImage$ = (
   createDate: string
 ): Observable<Image> => {
   Logger.log(
-    `Calling API ${envApi.darkRushPhotographyApi}/v1/best-of/${slug}`,
+    `Calling API ${envApi.drpApi}/v1/best-of/${slug}`,
     addBestOfImage$.name
   );
-  return httpService
-    .get<BestOf>(`${envApi.darkRushPhotographyApi}/v1/best-of/${slug}`)
-    .pipe(
-      switchMap((axiosResponse) => {
-        if (!axiosResponse.data.id)
-          throw new BadRequestException('Could not get best of');
+  return httpService.get<BestOf>(`${envApi.drpApi}/v1/best-of/${slug}`).pipe(
+    switchMap((axiosResponse) => {
+      if (!axiosResponse.data.id)
+        throw new BadRequestException('Could not get best of');
 
-        return addImage$(
-          envApiAuth,
-          envApi,
-          httpService,
-          axiosResponse.data.id,
-          imageName,
-          createDate
-        );
-      })
-    );
+      return addImage$(
+        envApiAuth,
+        envApi,
+        httpService,
+        axiosResponse.data.id,
+        imageName,
+        createDate
+      );
+    })
+  );
 };

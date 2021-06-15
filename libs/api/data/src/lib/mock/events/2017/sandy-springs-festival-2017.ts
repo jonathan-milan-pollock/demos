@@ -23,7 +23,7 @@ export class SandySpringsFestival2017 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTitleImage = false;
+  useTileImage = false;
   text = [
     `
       You could sense the excitement at the 2017 Sandy

@@ -1,7 +1,6 @@
 import {
-  ConflictException,
+  BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -14,7 +13,7 @@ import { ImageDimension } from '@dark-rush-photography/shared-types';
 import {
   Document,
   DocumentModel,
-  DocumentModelProvider,
+  ImageDimensionProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -22,7 +21,7 @@ export class AdminImageDimensionsService {
   constructor(
     @InjectModel(Document.name)
     private readonly documentModel: Model<DocumentModel>,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly imageDimensionProvider: ImageDimensionProvider
   ) {}
 
   addOrUpdate$(imageDimension: ImageDimension): Observable<ImageDimension> {
@@ -55,11 +54,11 @@ export class AdminImageDimensionsService {
       }),
       map((response) => {
         if (!response) {
-          throw new ConflictException(
+          throw new BadRequestException(
             `Unable to add image dimension to image ${imageDimension.imageSlug}`
           );
         }
-        return imageDimension;
+        return this.imageDimensionProvider.toImageDimension(imageDimension);
       })
     );
   }

@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { from, Observable, of } from 'rxjs';
@@ -7,10 +7,10 @@ import { Model } from 'mongoose';
 
 import { BestOf } from '@dark-rush-photography/shared-types';
 import {
+  BestOfProvider,
   BestOfTypeProvider,
   Document,
   DocumentModel,
-  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class AdminBestOfService {
   constructor(
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly bestOfProvider: BestOfProvider,
     private readonly bestOfTypeProvider: BestOfTypeProvider
   ) {}
 
@@ -41,9 +41,9 @@ export class AdminBestOfService {
       }),
       map((documentModel: DocumentModel) => {
         if (!documentModel) {
-          throw new ConflictException(`Unable to create ${bestOf.slug}`);
+          throw new BadRequestException(`Unable to create ${bestOf.slug}`);
         }
-        return this.documentModelProvider.toBestOf(documentModel);
+        return this.bestOfProvider.fromDocumentModel(documentModel);
       })
     );
   }

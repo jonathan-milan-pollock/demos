@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { from, Observable, of } from 'rxjs';
@@ -7,9 +7,9 @@ import { Model } from 'mongoose';
 
 import { About, DocumentType } from '@dark-rush-photography/shared-types';
 import {
+  AboutProvider,
   DocumentModel,
   Document,
-  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AdminAboutService {
   constructor(
     @InjectModel(Document.name)
     private readonly aboutModel: Model<DocumentModel>,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly aboutProvider: AboutProvider
   ) {}
 
   createIfNotExists$(about: About): Observable<About> {
@@ -37,9 +37,9 @@ export class AdminAboutService {
       }),
       map((documentModel: DocumentModel) => {
         if (!documentModel) {
-          throw new ConflictException(`Unable to create about ${about.slug}`);
+          throw new BadRequestException(`Unable to create about ${about.slug}`);
         }
-        return this.documentModelProvider.toAbout(documentModel);
+        return this.aboutProvider.fromDocumentModel(documentModel);
       })
     );
   }

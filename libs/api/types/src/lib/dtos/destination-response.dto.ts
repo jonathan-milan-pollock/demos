@@ -52,7 +52,7 @@ export class DestinationResponseDto implements Destination {
   location?: LocationDto;
 
   @IsBoolean()
-  useTitleImage!: boolean;
+  useTileImage!: boolean;
 
   @IsArray()
   @ValidateNested({ each: true })

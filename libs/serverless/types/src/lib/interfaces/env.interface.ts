@@ -1,4 +1,5 @@
-import { EnvApiAuth, EnvApi } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from './env-api.interface';
 
 export interface Env {
   readonly production: boolean;
@@ -6,4 +7,5 @@ export interface Env {
   readonly api: EnvApi;
   readonly azureStorageConnectionString: string;
   readonly tinyPngApiKey: string;
+  readonly ayrshareApiKey: string;
 }

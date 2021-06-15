@@ -1,3 +1,5 @@
+import { userSchema } from './user.schema';
+
 export const emotionSchema = {
   entityId: { type: String, required: true },
   mediaSlug: { type: String, required: false },
@@ -7,6 +9,5 @@ export const emotionSchema = {
     enum: ['Like', 'Love', 'Care', 'Haha', 'Wow'],
     required: true,
   },
-  userName: { type: String, required: true },
-  userImage: { type: String, required: true },
+  user: { type: userSchema, required: true },
 };
