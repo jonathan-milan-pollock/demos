@@ -7,9 +7,9 @@ import { Model } from 'mongoose';
 
 import { About, DocumentType } from '@dark-rush-photography/shared-types';
 import {
+  AboutProvider,
   Document,
   DocumentModel,
-  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,13 +17,15 @@ export class AboutService {
   constructor(
     @InjectModel(Document.name)
     private readonly aboutModel: Model<DocumentModel>,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly aboutProvider: AboutProvider
   ) {}
 
   findAll(): Observable<About[]> {
     return from(this.aboutModel.find({ type: DocumentType.About }).exec()).pipe(
       switchMap((documentModels) => from(documentModels)),
-      map((documentModel) => this.documentModelProvider.toAbout(documentModel)),
+      map((documentModel) =>
+        this.aboutProvider.fromDocumentModel(documentModel)
+      ),
       toArray<About>()
     );
   }
@@ -35,7 +37,7 @@ export class AboutService {
       map((documentModel) => {
         if (!documentModel) throw new NotFoundException('Could not find About');
 
-        return this.documentModelProvider.toAbout(documentModel);
+        return this.aboutProvider.fromDocumentModel(documentModel);
       })
     );
   }

@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Image, ImageDimensionType } from '@dark-rush-photography/shared-types';
-import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 
 export const addPhotoOfTheWeekImage$ = (
@@ -17,14 +18,14 @@ export const addPhotoOfTheWeekImage$ = (
   return apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) =>
       httpService.put<Image>(
-        `${envApi.darkRushPhotographyApi}/v1/photo-of-the-week/${photoOfTheWeekSlug}/image`,
+        `${envApi.drpApi}/v1/photo-of-the-week/${photoOfTheWeekSlug}/image`,
         {
           slug,
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       )
@@ -46,7 +47,7 @@ export const addPhotoOfTheWeekImageType$ = (
   return apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) =>
       httpService.put<Image>(
-        `${envApi.darkRushPhotographyApi}/v1/photo-of-the-week/${photoOfTheWeekSlug}/image/${slug}`,
+        `${envApi.drpApi}/v1/photo-of-the-week/${photoOfTheWeekSlug}/image/${slug}`,
         {
           type: imageDimensionType,
           width,
@@ -55,7 +56,7 @@ export const addPhotoOfTheWeekImageType$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       )

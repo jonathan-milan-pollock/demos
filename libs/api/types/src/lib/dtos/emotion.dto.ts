@@ -4,9 +4,12 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { Emotion, EmotionType } from '@dark-rush-photography/shared-types';
+import { UserDto } from './user.dto';
 
 export class EmotionDto implements Emotion {
   @IsMongoId()
@@ -23,9 +26,7 @@ export class EmotionDto implements Emotion {
   @IsEnum(EmotionType)
   type!: EmotionType;
 
-  @IsString()
-  userName!: string;
-
-  @IsString()
-  userImage!: string;
+  @ValidateNested()
+  @Type(() => UserDto)
+  user!: UserDto;
 }

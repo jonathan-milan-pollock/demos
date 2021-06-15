@@ -56,7 +56,7 @@ export class PhotoOfTheWeekResponseDto implements PhotoOfTheWeek {
   location?: LocationDto;
 
   @IsBoolean()
-  useTitleImage!: boolean;
+  useTileImage!: boolean;
 
   @IsArray()
   @ValidateNested({ each: true })

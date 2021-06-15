@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
+  ImageDimensionProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminImageDimensionsController } from './admin-image-dimensions.controller';
 import { AdminImageDimensionsService } from './admin-image-dimensions.service';
@@ -16,6 +16,6 @@ import { AdminImageDimensionsService } from './admin-image-dimensions.service';
     ]),
   ],
   controllers: [AdminImageDimensionsController],
-  providers: [DocumentModelProvider, AdminImageDimensionsService],
+  providers: [ImageDimensionProvider, AdminImageDimensionsService],
 })
 export class AdminImageDimensionsModule {}

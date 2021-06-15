@@ -3,7 +3,11 @@ import { HttpService } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_ISSUER,
+  EnvApiAuth,
+} from '@dark-rush-photography/shared-server/types';
 
 export const apiAuth$ = (
   envApiAuth: EnvApiAuth,
@@ -11,11 +15,11 @@ export const apiAuth$ = (
 ): Observable<string> =>
   httpService
     .post(
-      envApiAuth.auth0TokenApi,
+      `${AUTH0_ISSUER}oauth/token`,
       {
         client_id: envApiAuth.auth0ClientId,
         client_secret: envApiAuth.auth0ClientSecret,
-        audience: envApiAuth.auth0Audience,
+        audience: AUTH0_AUDIENCE,
         grant_type: 'client_credentials',
       },
       {

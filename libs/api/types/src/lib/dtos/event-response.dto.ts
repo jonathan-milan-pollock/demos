@@ -60,7 +60,7 @@ export class EventResponseDto implements Event {
   location?: LocationDto;
 
   @IsBoolean()
-  useTitleImage!: boolean;
+  useTileImage!: boolean;
 
   @IsArray()
   @ValidateNested({ each: true })

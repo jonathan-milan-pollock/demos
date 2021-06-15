@@ -11,7 +11,7 @@ export class TheLightsFestAtlanta2018 extends EventDto {
   location = {
     country: 'United States',
   };
-  useTitleImage = false;
+  useTileImage = false;
 
   private constructor() {
     super();

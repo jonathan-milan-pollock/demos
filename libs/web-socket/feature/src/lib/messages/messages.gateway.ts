@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { HttpService, Inject, Logger } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -6,40 +6,52 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import {} from 'ws';
 
-interface WsClient {
-  send(message: string): void;
-}
+import { switchMap, take } from 'rxjs/operators';
+
+import { ENV } from '@dark-rush-photography/shared-types';
+import { Env, WebSocketClient } from '@dark-rush-photography/web-socket/types';
+import { HandleMessageProvider } from '@dark-rush-photography/web-socket/data';
 
 @WebSocketGateway()
 export class MessagesGateway
   implements OnGatewayConnection, OnGatewayDisconnect {
-  readonly wsClients: WsClient[] = [];
+  readonly webSocketClients: WebSocketClient[] = [];
 
-  handleConnection(client: WsClient): void {
-    Logger.log('connecting client', MessagesGateway.name);
-    this.wsClients.push(client);
+  constructor(
+    @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
+    private readonly handleMessageProvider: HandleMessageProvider
+  ) {}
+
+  @SubscribeMessage('messageToServer')
+  async handleMessage(@MessageBody() message: string): Promise<void> {
+    return await this.handleMessageProvider
+      .handleMessage$(this.env, this.httpService, JSON.parse(message))
+      .pipe(
+        switchMap((responseMessage) =>
+          this.handleMessageProvider.broadcastMessage$(
+            this.webSocketClients,
+            responseMessage
+          )
+        ),
+        take(1)
+      )
+      .toPromise();
   }
 
-  handleDisconnect(client: WsClient): void {
+  handleConnection(webSocketClient: WebSocketClient): void {
+    Logger.log('connecting client', MessagesGateway.name);
+    this.webSocketClients.push(webSocketClient);
+  }
+
+  handleDisconnect(webSocketClient: WebSocketClient): void {
     Logger.log('disconnecting client', MessagesGateway.name);
-    for (let i = 0; i < this.wsClients.length; i++) {
-      if (this.wsClients[i] === client) {
-        this.wsClients.splice(i, 1);
+    for (let i = 0; i < this.webSocketClients.length; i++) {
+      if (this.webSocketClients[i] === webSocketClient) {
+        this.webSocketClients.splice(i, 1);
         break;
       }
     }
-  }
-
-  @SubscribeMessage('messageToServer')
-  handleMessage(@MessageBody() message: string): void {
-    this.wsClients.forEach((c) => {
-      // add the comment
-      // send the comment added response back
-      // add the emotion
-      // send the emotion added response back
-      c.send(message);
-    });
   }
 }

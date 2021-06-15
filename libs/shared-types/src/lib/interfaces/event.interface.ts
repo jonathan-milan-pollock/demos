@@ -8,21 +8,16 @@ import { Comment } from './comment.interface';
 
 export interface Event {
   readonly id?: string;
-  // identifier
   readonly slug: string;
   readonly group: number;
   readonly isPublic: boolean;
-  // metadata
   readonly title?: string;
   readonly description?: string;
   readonly keywords: ReadonlyArray<string>;
   readonly dateCreated?: string;
   readonly datePublished?: string;
-  // location
   readonly location?: Location;
-  // display
-  readonly useTitleImage: boolean;
-  // content
+  readonly useTileImage: boolean;
   readonly text: ReadonlyArray<string>;
   readonly images: ReadonlyArray<Image>;
   readonly imageDimensions: ReadonlyArray<ImageDimension>;

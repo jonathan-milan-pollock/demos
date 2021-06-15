@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Image, ImageDimensionType } from '@dark-rush-photography/shared-types';
-import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 
 export const addReviewsImage$ = (
@@ -16,14 +17,14 @@ export const addReviewsImage$ = (
   return apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) =>
       httpService.put<Image>(
-        `${envApi.darkRushPhotographyApi}/v1/reviews/image`,
+        `${envApi.drpApi}/v1/reviews/image`,
         {
           slug,
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       )
@@ -45,7 +46,7 @@ export const addReviewsImageType$ = (
   return apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) =>
       httpService.put<Image>(
-        `${envApi.darkRushPhotographyApi}/v1/reviews/image/${slug}`,
+        `${envApi.drpApi}/v1/reviews/image/${slug}`,
         {
           type: imageDimensionType,
           width,
@@ -54,7 +55,7 @@ export const addReviewsImageType$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       )

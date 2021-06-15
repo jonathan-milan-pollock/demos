@@ -25,7 +25,7 @@ export class LenFooteHikeInnAmicalolaFalls2017 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTitleImage = false;
+  useTileImage = false;
   text = [
     `
       I appreciate my good friend Bill Buford, the manager of

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
 import * as mongoose from 'mongoose';
 
 import {
@@ -97,7 +98,7 @@ export class Document
   location?: Location;
 
   @Prop({ type: Boolean, required: true, default: false })
-  useTitleImage!: boolean;
+  useTileImage!: boolean;
 
   @Prop({ type: [String], required: true })
   text!: string[];

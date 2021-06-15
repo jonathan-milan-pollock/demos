@@ -9,7 +9,8 @@ import {
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
-import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 
 export const addOrUpdateImageDimension$ = (
@@ -25,12 +26,12 @@ export const addOrUpdateImageDimension$ = (
   apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) => {
       Logger.log(
-        `Calling API ${envApi.darkRushPhotographyApi}/admin/v1/image-dimensions`,
+        `Calling API ${envApi.drpApi}/admin/v1/image-dimensions`,
         addOrUpdateImageDimension$.name
       );
 
       return httpService.put<ImageDimension>(
-        `${envApi.darkRushPhotographyApi}/admin/v1/image-dimensions`,
+        `${envApi.drpApi}/admin/v1/image-dimensions`,
         {
           entityId,
           imageSlug: imageName.substring(0, imageName.indexOf('.')),
@@ -41,7 +42,7 @@ export const addOrUpdateImageDimension$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       );

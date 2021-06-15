@@ -7,7 +7,7 @@ import {
   getPublishServiceType,
 } from './publish-service.functions';
 
-import { ConflictException, Logger } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import {
   getAboutPublishedImage,
   getBestOfPublishedImage,
@@ -79,7 +79,7 @@ export const getPublishedImageFromFileNameSections = (
       `Unable to find publishedImageFn`,
       getPublishedImageFromFileNameSections.name
     );
-    throw new ConflictException('Unable to find published image');
+    throw new BadRequestException('Unable to find published image');
   }
 
   return publishedImageFn(fileNameSections);

@@ -3,6 +3,7 @@ import { ImageDimension } from './image-dimension.interface';
 
 export interface Review {
   readonly id?: string;
+  readonly isPublic: boolean;
   readonly title?: string;
   readonly text: ReadonlyArray<string>;
   readonly images: ReadonlyArray<Image>;

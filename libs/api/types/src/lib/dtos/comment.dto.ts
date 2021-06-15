@@ -5,9 +5,12 @@ import {
   IsString,
   IsUUID,
   Min,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { Comment } from '@dark-rush-photography/shared-types';
+import { UserDto } from './user.dto';
 
 export class CommentDto implements Comment {
   @IsMongoId()
@@ -24,11 +27,9 @@ export class CommentDto implements Comment {
   @Min(0)
   order!: number;
 
-  @IsString()
-  userName!: string;
-
-  @IsString()
-  userImage!: string;
+  @ValidateNested()
+  @Type(() => UserDto)
+  user!: UserDto;
 
   @IsString()
   text!: string;

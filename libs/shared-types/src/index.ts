@@ -31,6 +31,7 @@ export * from './lib/interfaces/photo-of-the-week.interface';
 export * from './lib/interfaces/review.interface';
 export * from './lib/interfaces/reviews.interface';
 export * from './lib/interfaces/social-media-url.interface';
+export * from './lib/interfaces/user.interface';
 export * from './lib/interfaces/video-dimension-settings.interface';
 export * from './lib/interfaces/video-dimension.interface';
 export * from './lib/interfaces/video.interface';

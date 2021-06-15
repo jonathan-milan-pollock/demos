@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
 import { Image, PostedState } from '@dark-rush-photography/shared-types';
-import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApi } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 
 export const addImage$ = (
@@ -18,12 +19,12 @@ export const addImage$ = (
   apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) => {
       Logger.log(
-        `Calling API ${envApi.darkRushPhotographyApi}/admin/v1/images`,
+        `Calling API ${envApi.drpApi}/admin/v1/images`,
         addImage$.name
       );
 
       return httpService.put<Image>(
-        `${envApi.darkRushPhotographyApi}/admin/v1/images`,
+        `${envApi.drpApi}/admin/v1/images`,
         {
           entityId,
           slug: imageName.substring(0, imageName.indexOf('.')),
@@ -41,7 +42,7 @@ export const addImage$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.drpAdminKey,
           },
         }
       );

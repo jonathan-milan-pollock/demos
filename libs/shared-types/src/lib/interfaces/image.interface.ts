@@ -1,7 +1,6 @@
 import { PostedState } from '../enums/posted-state.enum';
 
 export interface Image {
-  // identifier
   readonly entityId: string;
   readonly slug: string;
   readonly state: PostedState;
@@ -9,7 +8,6 @@ export interface Image {
   readonly isStared: boolean; //TODO: Can star 1
   readonly isLoved: boolean; //TODO: Can love 5
   readonly isLiked: boolean; //TODO: Can like 5
-  // metadata
   readonly title?: string;
   readonly description?: string;
   readonly keywords?: string;

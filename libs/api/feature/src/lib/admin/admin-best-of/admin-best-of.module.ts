@@ -2,10 +2,14 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
+  BestOfProvider,
   BestOfTypeProvider,
+  CommentProvider,
   Document,
-  DocumentModelProvider,
   DocumentSchema,
+  EmotionProvider,
+  ImageDimensionProvider,
+  ImageProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminBestOfController } from './admin-best-of.controller';
 import { AdminBestOfService } from './admin-best-of.service';
@@ -17,6 +21,14 @@ import { AdminBestOfService } from './admin-best-of.service';
     ]),
   ],
   controllers: [AdminBestOfController],
-  providers: [DocumentModelProvider, BestOfTypeProvider, AdminBestOfService],
+  providers: [
+    BestOfProvider,
+    BestOfTypeProvider,
+    ImageProvider,
+    ImageDimensionProvider,
+    CommentProvider,
+    EmotionProvider,
+    AdminBestOfService,
+  ],
 })
 export class AdminBestOfModule {}

@@ -16,7 +16,7 @@ export class BestOfTypeProvider {
     const documentType = this.bestOfTypeMap.get(bestOfType.toLowerCase());
     if (!documentType)
       throw new BadRequestException(
-        `Unable to find document type for best of type ${bestOfType}`
+        `Unable to find best of type ${bestOfType}`
       );
     return documentType;
   }

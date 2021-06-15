@@ -7,10 +7,10 @@ import { Model } from 'mongoose';
 
 import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
 import {
+  BestOfProvider,
   BestOfTypeProvider,
   Document,
   DocumentModel,
-  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class BestOfService {
   constructor(
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly bestOfProvider: BestOfProvider,
     private readonly bestOfTypeProvider: BestOfTypeProvider
   ) {}
 
@@ -32,7 +32,7 @@ export class BestOfService {
         if (!documentModel)
           throw new NotFoundException(`Could not find ${bestOfType}`);
 
-        return this.documentModelProvider.toBestOf(documentModel);
+        return this.bestOfProvider.fromDocumentModel(documentModel);
       })
     );
   }

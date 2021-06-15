@@ -1,4 +1,10 @@
-import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { Review } from '@dark-rush-photography/shared-types';
@@ -8,6 +14,9 @@ import { ImageDimensionDto } from './image-dimension.dto';
 export class ReviewResponseDto implements Review {
   @IsString()
   id!: string;
+
+  @IsBoolean()
+  isPublic!: boolean;
 
   @IsString()
   @IsOptional()

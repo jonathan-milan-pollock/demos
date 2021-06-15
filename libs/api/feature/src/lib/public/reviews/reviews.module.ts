@@ -1,11 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import {
-  Document,
-  DocumentModelProvider,
-  DocumentSchema,
-} from '@dark-rush-photography/api/data';
+import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
 import { ReviewsController } from './reviews.controller';
 import { ReviewsService } from './reviews.service';
 
@@ -16,6 +12,6 @@ import { ReviewsService } from './reviews.service';
     ]),
   ],
   controllers: [ReviewsController],
-  providers: [DocumentModelProvider, ReviewsService],
+  providers: [ReviewsService],
 })
 export class ReviewsModule {}

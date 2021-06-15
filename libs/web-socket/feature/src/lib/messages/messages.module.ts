@@ -1,7 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule } from '@nestjs/common';
+
+import { HandleMessageProvider } from '@dark-rush-photography/web-socket/data';
 import { MessagesGateway } from './messages.gateway';
 
 @Module({
-  providers: [MessagesGateway],
+  imports: [HttpModule],
+  providers: [HandleMessageProvider, MessagesGateway],
 })
 export class MessagesModule {}

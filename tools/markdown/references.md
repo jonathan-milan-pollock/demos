@@ -92,12 +92,8 @@
 
 ## NestJS websocket
 
-- :clapper: [NestJS WebSockets 1](https://youtu.be/0zyYhm5MjJ4)
-- :clapper: [NestJS WebSockets 2](https://youtu.be/pJlLLW_Bl3c)
-
 - :page_with_curl: [NestJS WebSockets](https://www.joshmorony.com/creating-a-simple-live-chat-server-with-nestjs-websockets/)
 
-- :page_with_curl: [Socket.io React](https://www.valentinog.com/blog/socket-react/)
 - https://stackoverflow.com/questions/58670553/nestjs-gateway-websocket-how-to-send-jwt-access-token-through-socket-emit
 
 ---
