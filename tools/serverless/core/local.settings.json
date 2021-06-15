@@ -3,10 +3,10 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
-    "HOST_NAME": "localhost:7072",
+    "HOST_NAME": "localhost:2222",
     "FUNCTIONS_WORKER_RUNTIME": "node"
   },
   "Host": {
-    "LocalHttpPort": 7072
+    "LocalHttpPort": 2222
   }
 }

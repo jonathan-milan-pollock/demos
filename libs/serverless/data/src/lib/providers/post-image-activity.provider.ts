@@ -18,11 +18,13 @@ export class PostImageActivityProvider {
     requestContext: Record<string, any>,
     publishedImage: PublishedImage
   ): Observable<IHttpResponse> {
-    const logContext = 'PostImageActivityProvider';
     const client = getClient(requestContext);
     return of().pipe(
       tap(() =>
-        Logger.log('PostImage starting post image orchestrator', logContext)
+        Logger.log(
+          'PostImage starting post image orchestrator',
+          PostImageActivityProvider.name
+        )
       ),
       switchMap(() =>
         from(
@@ -35,7 +37,7 @@ export class PostImageActivityProvider {
       tap((instanceId: string) =>
         Logger.log(
           `PostImageOrchestrator started orchestration with ID = '${instanceId}'.`,
-          logContext
+          PostImageActivityProvider.name
         )
       ),
       map((instanceId: string) =>

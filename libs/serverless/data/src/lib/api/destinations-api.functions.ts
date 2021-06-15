@@ -4,26 +4,27 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Image, ImageDimensionType } from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/serverless/types';
-import { apiAuth$ } from './auth-api.functions';
+import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 
 export const addDestinationImage$ = (
-  env: Env,
+  envApiAuth: EnvApiAuth,
+  envApi: EnvApi,
   httpService: HttpService,
   destinationSlug: string,
   slug: string
 ): Observable<Image> => {
-  return apiAuth$(env, httpService).pipe(
+  return apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) =>
       httpService.put<Image>(
-        `${env.darkRushPhotographyApi}/v1/destinations/${destinationSlug}/image`,
+        `${envApi.darkRushPhotographyApi}/v1/destinations/${destinationSlug}/image`,
         {
           slug,
         },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
           },
         }
       )
@@ -33,7 +34,8 @@ export const addDestinationImage$ = (
 };
 
 export const addDestinationImageType$ = (
-  env: Env,
+  envApiAuth: EnvApiAuth,
+  envApi: EnvApi,
   httpService: HttpService,
   destinationSlug: string,
   slug: string,
@@ -41,10 +43,10 @@ export const addDestinationImageType$ = (
   width: number,
   height: number
 ): Observable<Image> => {
-  return apiAuth$(env, httpService).pipe(
+  return apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) =>
       httpService.put<Image>(
-        `${env.darkRushPhotographyApi}/v1/destinations/${destinationSlug}/image/${slug}`,
+        `${envApi.darkRushPhotographyApi}/v1/destinations/${destinationSlug}/image/${slug}`,
         {
           type: imageDimensionType,
           width,
@@ -53,7 +55,7 @@ export const addDestinationImageType$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
           },
         }
       )

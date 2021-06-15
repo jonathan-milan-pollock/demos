@@ -2,7 +2,7 @@
 
 ---
 
-## nx
+## Nx
 
 - :blue_book: [Nx Book](https://go.nrwl.io/angular-enterprise-monorepo-patterns-new-book)
 - :page_with_curl: [Nx Enterprise Recommendations](https://nx.dev/latest/angular/guides/monorepo-nx-enterprise)
@@ -25,22 +25,22 @@
 
 ---
 
-## html
+## Html
 
 - [HTML5: The Missing Manual, 2nd Edition](https://www.oreilly.com/library/view/html5-the-missing/9781449373412/)
 - [HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
 
 ---
 
-## css
+## CSS
 
 ---
 
-## js
+## JS
 
 ---
 
-## stenciljs
+## StencilJS
 
 - :clapper: [StencilJS](https://stenciljs.com/)
 - :clapper: [Custom Elements Everywhere](https://custom-elements-everywhere.com/)
@@ -50,7 +50,7 @@
 
 ---
 
-## angular
+## Angular
 
 - :blue_book: [Angular Development with TypeScript, Second Edition](https://www.manning.com/books/angular-development-with-typescript-second-edition)
 - :blue_book: [Angular in Action](https://www.manning.com/books/angular-in-action)
@@ -59,13 +59,13 @@
 
 ---
 
-## angular universal
+## Angular Universal
 
 - :page_with_curl: [NestJS Angular Universal in an Nx Workspace](https://samosunaz.hashnode.dev/nestjs-angular-universal-in-an-nx-workspace)
 
 ---
 
-## angular pwa
+## Angular PWA
 
 - :page_with_curl: [Angular PWA Setup](https://www.youtube.com/watch?v=5YtNQJQu31Y)
 - :page_with_curl: [Extend Angular PWA](https://medium.com/@smarth55/extending-the-angular-cli-service-worker-44bfc205894c)
@@ -74,9 +74,31 @@
 
 ---
 
-## ngrx
+## Ngrx
 
 - :page_with_curl: [Ngrx Best Practices](https://wesleygrimes.com/angular/2018/05/30/ngrx-best-practices-for-enterprise-angular-applications)
+
+---
+
+## NestJS REST
+
+- :page_with_curl: [NestJS](https://docs.nestjs.com/)
+- :clapper: [NestJS](https://academind.com/tutorials/nestjs-introduction/)
+- :clapper: [NestJS With Mongoose](https://www.youtube.com/watch?v=ulfU5vY6I78)
+- :page_with_curl: [NestJS Auth0](https://auth0.com/blog/developing-a-secure-api-with-nestjs-adding-role-based-access-control/)
+- :page_with_curl: [REST API Best Practices](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
+
+---
+
+## NestJS websocket
+
+- :clapper: [NestJS WebSockets 1](https://youtu.be/0zyYhm5MjJ4)
+- :clapper: [NestJS WebSockets 2](https://youtu.be/pJlLLW_Bl3c)
+
+- :page_with_curl: [NestJS WebSockets](https://www.joshmorony.com/creating-a-simple-live-chat-server-with-nestjs-websockets/)
+
+- :page_with_curl: [Socket.io React](https://www.valentinog.com/blog/socket-react/)
+- https://stackoverflow.com/questions/58670553/nestjs-gateway-websocket-how-to-send-jwt-access-token-through-socket-emit
 
 ---
 
@@ -93,16 +115,6 @@
 - :page_with_curl: [The Right Way to Test Components](https://www.freecodecamp.org/news/the-right-way-to-test-react-components-548a4736ab22/)
 - :clapper: [Cypress at Assert(JS) 2018 Part 1](https://youtu.be/5XQOK0v_YRE)
 - :clapper: [Cypress at Assert(JS) 2018 Part 2](https://youtu.be/5FnalKRjpZk)
-
----
-
-## nestjs
-
-- :page_with_curl: [NestJS](https://docs.nestjs.com/)
-- :clapper: [NestJS](https://academind.com/tutorials/nestjs-introduction/)
-- :clapper: [NestJS With Mongoose](https://www.youtube.com/watch?v=ulfU5vY6I78)
-- :clapper: [NestJS Auth0](https://auth0.com/blog/developing-a-secure-api-with-nestjs-adding-role-based-access-control/)
-- :page_with_curl: [REST API Best Practices](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 
 ---
 
@@ -138,8 +150,7 @@
 
 ---
 
-## ayrshare
+## Image Processing
 
 https://docs.ayrshare.com/rest-api/endpoints/post
-
 https://facebook360.fb.com/editing-360-photos-injecting-metadata/

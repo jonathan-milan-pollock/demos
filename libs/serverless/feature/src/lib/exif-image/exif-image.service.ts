@@ -1,4 +1,4 @@
-import { Injectable, Inject, HttpService } from '@nestjs/common';
+import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
 
 import { take } from 'rxjs/operators';
 
@@ -15,6 +15,7 @@ export class ExifImageService {
   ) {}
 
   async exifImage(imageActivity: ImageActivity): Promise<ImageActivity> {
+    Logger.log('Exif image', ExifImageService.name);
     return this.exifImageActivityProvider
       .exifImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))

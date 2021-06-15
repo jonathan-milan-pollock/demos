@@ -17,9 +17,19 @@ export const apiCreateEntity$ = (
 ): Observable<unknown> => {
   switch (publishedImage.publishServiceType) {
     case PublishServiceType.About:
-      return createAboutIfNotExists$(env, httpService, publishedImage.slug);
+      return createAboutIfNotExists$(
+        env.apiAuth,
+        env.api,
+        httpService,
+        publishedImage.slug
+      );
     case PublishServiceType.BestOf:
-      return createBestOfIfNotExists$(env, httpService, publishedImage.slug);
+      return createBestOfIfNotExists$(
+        env.apiAuth,
+        env.api,
+        httpService,
+        publishedImage.slug
+      );
   }
   return of();
 };

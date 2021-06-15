@@ -1,4 +1,4 @@
-import { Injectable, Inject, HttpService } from '@nestjs/common';
+import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
 
 import { take } from 'rxjs/operators';
 
@@ -16,6 +16,7 @@ export class WebsitePostImageService {
   ) {}
 
   async websitePostImage(imageActivity: ImageActivity): Promise<ImageActivity> {
+    Logger.log('Website Post image', WebsitePostImageService.name);
     return this.websitePostImageActivityProvider
       .websitePostImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))

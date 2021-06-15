@@ -1,5 +1,5 @@
 import { AzureRequest } from '@nestjs/azure-func-http';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 
@@ -16,6 +16,7 @@ export class PostImageService {
     request: AzureRequest,
     publishedImage: PublishedImage
   ): Promise<IHttpResponse> {
+    Logger.log('Post image', PostImageService.name);
     return this.postImageActivityProvider
       .postImage$(request.context, publishedImage)
       .toPromise();

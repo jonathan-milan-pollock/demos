@@ -1,6 +1,3 @@
-// azure-storage
-export * from './lib/azure-storage/azure-storage-image.functions';
-
 // destinations
 export * from './lib/mock/destinations/colorado';
 
@@ -69,8 +66,6 @@ export * from './lib/mock/reviews/RonnieColquitt';
 // providers
 export * from './lib/providers/best-of-type.provider';
 export * from './lib/providers/document-model.provider';
-export * from './lib/providers/image-dimension-data.provider';
-export * from './lib/providers/posted-state.provider';
 
 // schema
 export * from './lib/schema/document.schema';

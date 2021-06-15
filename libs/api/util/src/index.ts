@@ -1,7 +1,6 @@
 // decorators
 export * from './lib/decorators/public.decorator';
 export * from './lib/decorators/roles.decorator';
-export * from './lib/decorators/user.decorator';
 
 // env
 export * from './lib/env/env-dev.functions';

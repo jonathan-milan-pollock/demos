@@ -3,20 +3,12 @@ import * as fs from 'fs-extra';
 
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { from, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
 
-import { BestOf } from '@dark-rush-photography/shared-types';
-import { AzureStorageContainerType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
   ImageActivity,
   IMAGE_DIMENSION_CONFIG,
 } from '@dark-rush-photography/serverless/types';
-
-import {
-  getBlobPath,
-  getBlobPathWithImageDimension,
-} from '@dark-rush-photography/serverless/util';
 
 @Injectable()
 export class WebsitePostImageActivityProvider {

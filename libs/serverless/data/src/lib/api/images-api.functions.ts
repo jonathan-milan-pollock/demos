@@ -3,27 +3,27 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
-import { Env } from '@dark-rush-photography/serverless/types';
 import { Image, PostedState } from '@dark-rush-photography/shared-types';
-import { apiAuth$ } from './auth-api.functions';
+import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 
-const logContext = 'addImage$';
 export const addImage$ = (
-  env: Env,
+  envApiAuth: EnvApiAuth,
+  envApi: EnvApi,
   httpService: HttpService,
   entityId: string,
   imageName: string,
   createDate: string
 ): Observable<Image> =>
-  apiAuth$(env, httpService).pipe(
+  apiAuth$(envApiAuth, httpService).pipe(
     switchMap((authToken) => {
       Logger.log(
-        `Calling API ${env.darkRushPhotographyApi}/admin/v1/images`,
-        logContext
+        `Calling API ${envApi.darkRushPhotographyApi}/admin/v1/images`,
+        addImage$.name
       );
 
       return httpService.put<Image>(
-        `${env.darkRushPhotographyApi}/admin/v1/images`,
+        `${envApi.darkRushPhotographyApi}/admin/v1/images`,
         {
           entityId,
           slug: imageName.substring(0, imageName.indexOf('.')),
@@ -41,7 +41,7 @@ export const addImage$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
           },
         }
       );

@@ -44,6 +44,10 @@
       "tags": [],
       "implicitDependencies": ["ui-storybook"]
     },
+    "web-socket": {
+      "tags": ["scope:web-socket", "type:app"],
+      "implicitDependencies": ["best-of", "website"]
+    },
     "website": {
       "tags": ["scope:website", "type:app"]
     },
@@ -97,6 +101,9 @@
     "serverless-util": {
       "tags": ["scope:serverless", "type:util"]
     },
+    "shared-server-data": {
+      "tags": ["scope:shared-server", "type:data"]
+    },
     "shared-server-types": {
       "tags": ["scope:shared-server", "type:types"]
     },
@@ -108,6 +115,18 @@
     },
     "ui-storybook": {
       "tags": ["scope:ui-storybook", "type:ui"]
+    },
+    "web-socket-data": {
+      "tags": ["scope:web-socket", "type:data"]
+    },
+    "web-socket-feature": {
+      "tags": ["scope:web-socket", "type:feature"]
+    },
+    "web-socket-types": {
+      "tags": ["scope:web-socket", "type:types"]
+    },
+    "web-socket-util": {
+      "tags": ["scope:web-socket", "type:util"]
     },
     "website-data": {
       "tags": ["scope:website", "type:data"]

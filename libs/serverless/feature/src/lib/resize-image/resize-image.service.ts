@@ -8,8 +8,6 @@ import { ResizeImageActivityProvider } from '@dark-rush-photography/serverless/d
 
 @Injectable()
 export class ResizeImageService {
-  readonly logContext = 'ResizeImageService';
-
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly httpService: HttpService,
@@ -17,7 +15,7 @@ export class ResizeImageService {
   ) {}
 
   async resizeImage(imageActivity: ImageActivity): Promise<ImageActivity> {
-    Logger.log('Resizing image', this.logContext);
+    Logger.log('Resize image', ResizeImageService.name);
     return this.resizeImageActivityProvider
       .resizeImage$(this.env, this.httpService, imageActivity)
       .pipe(take(1))

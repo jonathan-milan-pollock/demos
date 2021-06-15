@@ -19,7 +19,8 @@ export const apiAddImage$ = (
   switch (publishedImage.publishServiceType) {
     case PublishServiceType.About:
       return addAboutImage$(
-        env,
+        env.apiAuth,
+        env.api,
         httpService,
         publishedImage.slug,
         publishedImage.imageName,
@@ -27,7 +28,8 @@ export const apiAddImage$ = (
       );
     case PublishServiceType.BestOf:
       return addBestOfImage$(
-        env,
+        env.apiAuth,
+        env.api,
         httpService,
         publishedImage.slug,
         publishedImage.imageName,

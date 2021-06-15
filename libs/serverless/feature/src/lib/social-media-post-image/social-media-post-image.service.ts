@@ -1,4 +1,4 @@
-import { Injectable, Inject, HttpService } from '@nestjs/common';
+import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
 
 import { take } from 'rxjs/operators';
 
@@ -17,6 +17,7 @@ export class SocialMediaPostImageService {
   async socialMediaPostImage(
     imageActivity: ImageActivity
   ): Promise<ImageActivity> {
+    Logger.log('Social Media Post image', SocialMediaPostImageService.name);
     return this.socialMediaPostImageActivityProvider
       .socialMediaPostImage$(imageActivity, this.env, this.httpService)
       .pipe(take(1))

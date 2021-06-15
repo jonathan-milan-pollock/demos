@@ -12,27 +12,27 @@ import {
   ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/serverless/types';
-import { apiAuth$ } from './auth-api.functions';
+import { EnvApi, EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 import { addImage$ } from './images-api.functions';
 import { addOrUpdateImageDimension$ } from './image-dimensions-api.functions';
 
-const logContextEntity = 'createAboutIfNotExists$';
 export const createAboutIfNotExists$ = (
-  env: Env,
+  envApiAuth: EnvApiAuth,
+  envApi: EnvApi,
   httpService: HttpService,
   slug: string
 ): Observable<About> =>
-  apiAuth$(env, httpService).pipe(
+  apiAuth$(envApiAuth, httpService).pipe(
     tap(() =>
       Logger.log(
-        `Calling API ${env.darkRushPhotographyApi}/admin/v1/about`,
-        logContextEntity
+        `Calling API ${envApi.darkRushPhotographyApi}/admin/v1/about`,
+        createAboutIfNotExists$.name
       )
     ),
     switchMap((authToken) =>
       httpService.post<About>(
-        `${env.darkRushPhotographyApi}/admin/v1/about`,
+        `${envApi.darkRushPhotographyApi}/admin/v1/about`,
         {
           slug,
           images: [],
@@ -41,7 +41,7 @@ export const createAboutIfNotExists$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: env.darkRushPhotographyAdminKey,
+            DRP_ADMIN_KEY: envApi.darkRushPhotographyAdminKey,
           },
         }
       )
@@ -49,35 +49,36 @@ export const createAboutIfNotExists$ = (
     map((axiosResponse) => axiosResponse.data)
   );
 
-const logContextGetAbout = 'getAbout$';
 export const getAbout$ = (
-  env: Env,
+  envApi: EnvApi,
   httpService: HttpService,
   slug: string
 ): Observable<AxiosResponse<About>> => {
   Logger.log(
-    `Calling API ${env.darkRushPhotographyApi}/v1/about/${slug}`,
-    logContextGetAbout
+    `Calling API ${envApi.darkRushPhotographyApi}/v1/about/${slug}`,
+    getAbout$.name
   );
   return httpService.get<About>(
-    `${env.darkRushPhotographyApi}/v1/about/${slug}`
+    `${envApi.darkRushPhotographyApi}/v1/about/${slug}`
   );
 };
 
 export const addAboutImage$ = (
-  env: Env,
+  envApiAuth: EnvApiAuth,
+  envApi: EnvApi,
   httpService: HttpService,
   slug: string,
   imageName: string,
   createDate: string
 ): Observable<Image> => {
-  return getAbout$(env, httpService, slug).pipe(
+  return getAbout$(envApi, httpService, slug).pipe(
     switchMap((axiosResponse) => {
       if (!axiosResponse.data.id)
         throw new BadRequestException('Could not get About');
 
       return addImage$(
-        env,
+        envApiAuth,
+        envApi,
         httpService,
         axiosResponse.data.id,
         imageName,
@@ -88,7 +89,8 @@ export const addAboutImage$ = (
 };
 
 export const addOrUpdateAboutImageDimension$ = (
-  env: Env,
+  envApiAuth: EnvApiAuth,
+  envApi: EnvApi,
   httpService: HttpService,
   slug: string,
   imageName: string,
@@ -96,13 +98,14 @@ export const addOrUpdateAboutImageDimension$ = (
   state: ImageDimensionState,
   pixels: MediaDimensionPixels
 ): Observable<ImageDimension> => {
-  return getAbout$(env, httpService, slug).pipe(
+  return getAbout$(envApi, httpService, slug).pipe(
     switchMap((axiosResponse) => {
       if (!axiosResponse.data.id)
         throw new BadRequestException('Could not get About');
 
       return addOrUpdateImageDimension$(
-        env,
+        envApiAuth,
+        envApi,
         httpService,
         axiosResponse.data.id,
         imageName,

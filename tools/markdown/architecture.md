@@ -249,6 +249,28 @@ preloadingStrategy: PreloadAllModules;
 
 ---
 
+## setup web socket
+
+- in main.ts
+
+```ts
+import { WsAdapter } from '@nestjs/platform-ws';
+```
+
+- in main.ts bootstrap function
+
+```ts
+app.useWebSocketAdapter(new WsAdapter(app));
+```
+
+- in nx.json add implicit dependencies
+
+```json
+  "implicitDependencies": ["best-of", "website"]
+```
+
+---
+
 ## setup angular universal
 
 ### update generated angular universal files

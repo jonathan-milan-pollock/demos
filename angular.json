@@ -220,6 +220,48 @@
         }
       }
     },
+    "web-socket": {
+      "root": "apps/web-socket",
+      "sourceRoot": "apps/web-socket/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/web-socket",
+            "main": "apps/web-socket/src/main.ts",
+            "tsConfig": "apps/web-socket/tsconfig.app.json",
+            "assets": ["apps/web-socket/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-socket/src/environments/environment.ts",
+                  "with": "apps/web-socket/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "web-socket:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/web-socket/**/*.ts"]
+          }
+        }
+      }
+    },
     "website": {
       "projectType": "application",
       "root": "apps/website",
@@ -693,6 +735,27 @@
         }
       }
     },
+    "shared-server-data": {
+      "root": "libs/shared-server/data",
+      "sourceRoot": "libs/shared-server/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared-server/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared-server/data"],
+          "options": {
+            "jestConfig": "libs/shared-server/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-server-types": {
       "root": "libs/shared-server/types",
       "sourceRoot": "libs/shared-server/types/src",
@@ -788,6 +851,74 @@
             "ci": {
               "quiet": true
             }
+          }
+        }
+      }
+    },
+    "web-socket-data": {
+      "root": "libs/web-socket/data",
+      "sourceRoot": "libs/web-socket/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web-socket/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web-socket/data"],
+          "options": {
+            "jestConfig": "libs/web-socket/data/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "web-socket-feature": {
+      "root": "libs/web-socket/feature",
+      "sourceRoot": "libs/web-socket/feature/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web-socket/feature/**/*.ts"]
+          }
+        }
+      }
+    },
+    "web-socket-types": {
+      "root": "libs/web-socket/types",
+      "sourceRoot": "libs/web-socket/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web-socket/types/**/*.ts"]
+          }
+        }
+      }
+    },
+    "web-socket-util": {
+      "root": "libs/web-socket/util",
+      "sourceRoot": "libs/web-socket/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/web-socket/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/web-socket/util"],
+          "options": {
+            "jestConfig": "libs/web-socket/util/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
