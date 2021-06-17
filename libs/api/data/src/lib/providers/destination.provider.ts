@@ -44,6 +44,7 @@ export class DestinationProvider {
       videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
         this.videoDimensionProvider.toVideoDimension(videoDimension)
       ),
+      hasExtendedReality: documentModel.hasExtendedReality,
       websiteUrl: documentModel.websiteUrl,
       socialMediaUrls: documentModel.socialMediaUrls,
       comments: documentModel.comments.map((comment) =>

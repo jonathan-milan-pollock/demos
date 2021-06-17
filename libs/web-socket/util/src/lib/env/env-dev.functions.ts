@@ -12,10 +12,6 @@ export const loadDevEnvironment = (): Env => {
     );
   }
 
-  if (!process.env.NX_DRP_ADMIN_KEY) {
-    throw new Error('Please add NX_DRP_ADMIN_KEY to environment variables');
-  }
-
   return {
     production: false,
     apiAuth: {

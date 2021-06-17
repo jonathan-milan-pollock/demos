@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class CuriouserAndCuriouser extends PhotoOfTheWeekDto {
-  slug = 'curiouser-and-curiouser';
   group = 1;
+  slug = 'curiouser-and-curiouser';
   title = 'Curiouser and Curiouser!';
   description = `Curious, What Do You See? I'm Getting Curiouser and Curiouser!`;
   keywords = [

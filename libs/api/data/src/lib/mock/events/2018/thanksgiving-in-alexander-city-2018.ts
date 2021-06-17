@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class ThanksgivingInAlexanderCity2018 extends EventDto {
-  slug = 'thanksgiving-in-alexander-city-2018';
   group = 2018;
+  slug = 'thanksgiving-in-alexander-city-2018';
   title = `Thanksgiving in Alexander City, 2018`;
   description = `
     It's beginning to look a lot like Christmas

@@ -5,7 +5,7 @@ import { EMPTY, Observable } from 'rxjs';
 
 @Injectable()
 export class LocalStorageService {
-  getLocalStorageData(): Observable<LocalStorageData> {
+  getLocalStorageData$(): Observable<LocalStorageData> {
     return EMPTY;
   }
 

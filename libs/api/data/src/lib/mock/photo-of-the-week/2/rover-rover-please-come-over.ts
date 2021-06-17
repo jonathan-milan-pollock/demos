@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class RoverRoverPleaseComeOver extends PhotoOfTheWeekDto {
-  slug = 'rover-rover-please-come-over';
   group = 2;
+  slug = 'rover-rover-please-come-over';
   title = 'Rover Rover Please Come Over';
   description = `Rover is my best customer`;
   keywords = [

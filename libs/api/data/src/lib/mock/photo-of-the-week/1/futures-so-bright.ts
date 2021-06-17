@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class FuturesSoBright extends PhotoOfTheWeekDto {
-  slug = 'futures-so-bright';
   group = 1;
+  slug = 'futures-so-bright';
   title = 'My Futures So Bright I Gotta Wear Shades';
   description = `
     Literally on top of the mountain top, as high as I could be. I

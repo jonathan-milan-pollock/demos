@@ -38,12 +38,12 @@ export class AdminPhotoOfTheWeekComponent
     );
 
     this.identifierGroup = new FormGroup({
+      group: new FormControl(null, Validators.required),
       slug: new FormControl(
         null,
         Validators.required,
         PhotoOfTheWeekValidators.uniqueSlug()
       ),
-      group: new FormControl(null, Validators.required),
     });
 
     this.metadataGroup = new FormGroup({

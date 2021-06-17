@@ -1,7 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
@@ -20,24 +25,32 @@ export class AdminAboutService {
     private readonly aboutProvider: AboutProvider
   ) {}
 
-  createIfNotExists$(about: About): Observable<About> {
+  create$(slug: string): Observable<About> {
     return from(
-      this.aboutModel.findOne({ type: DocumentType.About, slug: about.slug })
+      this.aboutModel.findOne({ type: DocumentType.About, slug })
     ).pipe(
       switchMap((documentModel) => {
-        if (documentModel) return of(documentModel);
+        if (documentModel)
+          throw new ConflictException(
+            `About ${slug} has already been created`,
+            HttpStatus.FOUND
+          );
 
         return from(
           new this.aboutModel({
-            ...about,
             type: DocumentType.About,
+            slug,
             isPublic: true,
-          }).save()
+            images: [],
+            imageDimensions: [],
+            videos: [],
+            videoDimensions: [],
+          } as About).save()
         );
       }),
       map((documentModel: DocumentModel) => {
         if (!documentModel) {
-          throw new BadRequestException(`Unable to create about ${about.slug}`);
+          throw new BadRequestException(`Unable to create about ${slug}`);
         }
         return this.aboutProvider.fromDocumentModel(documentModel);
       })

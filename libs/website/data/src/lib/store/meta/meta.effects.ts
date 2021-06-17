@@ -15,7 +15,7 @@ export class MetaEffects {
       this.actions$.pipe(
         ofType(MetaActions.addMetadataForPage),
         mergeMap((action) =>
-          this.metaService.addMetadataForPage(action.page, action.url)
+          this.metaService.addMetadataForPage$(action.page, action.url)
         )
       ),
     { dispatch: false }
@@ -26,7 +26,7 @@ export class MetaEffects {
       this.actions$.pipe(
         ofType(MetaActions.addMetadata),
         mergeMap((action) =>
-          this.metaService.addMetadata(action.metadata, action.url)
+          this.metaService.addMetadata$(action.metadata, action.url)
         )
       ),
     { dispatch: false }

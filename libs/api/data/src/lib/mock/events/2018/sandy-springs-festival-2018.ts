@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class SandySpringsFestival2018 extends EventDto {
-  slug = 'sandy-springs-festival-2018';
   group = 2018;
+  slug = 'sandy-springs-festival-2018';
   title = 'Sandy Springs Festival, 2018';
   description = '';
   keywords = [];

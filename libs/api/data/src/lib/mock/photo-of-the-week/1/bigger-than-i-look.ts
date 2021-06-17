@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class BiggerThanILook extends PhotoOfTheWeekDto {
-  slug = 'bigger-than-i-look';
   group = 1;
+  slug = 'bigger-than-i-look';
   title = "I'm Bigger than I Look!";
   description = `
     This a crab on Cumberland Island on Beach. It's kind of a facade,

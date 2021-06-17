@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class SouthCobbArtsAllianceStorytellingFestival2017 extends EventDto {
-  slug = 'south-cobb-arts-alliance-storytelling-festival-2017';
   group = 2017;
+  slug = 'south-cobb-arts-alliance-storytelling-festival-2017';
   title = 'South Cobb Arts Alliance, Storytelling Festival, 2017';
   description = `
     The Storytelling Festival was the perfect 

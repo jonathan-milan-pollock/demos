@@ -7,8 +7,8 @@ export const environment: Env = {
     auth0ClientSecret: '%%AUTH0_CLIENT_SECRET%%',
   },
   api: {
-    drpApi: '%%DARK_RUSH_PHOTOGRAPHY_API%%',
-    drpAdminKey: '%%DRP_ADMIN_KEY%%',
+    drpApi: '%%DRP_API%%',
+    drpApiAdminKey: '%%DRP_API_ADMIN_KEY%%',
   },
   azureStorageConnectionString: '%%AZURE_STORAGE_CONNECTION_STRING%%',
   tinyPngApiKey: '%%TINY_PNG_API_KEY%%',

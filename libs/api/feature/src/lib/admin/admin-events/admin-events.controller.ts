@@ -8,14 +8,22 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Event } from '@dark-rush-photography/shared-types';
-import { AdminEventsService } from './admin-events.service';
+import { ADMIN, Event } from '@dark-rush-photography/shared-types';
+import { EventDto, EventUpdateDto } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
-import { EventDto } from '@dark-rush-photography/api/types';
+import { AdminEventsService } from './admin-events.service';
 
 @Controller('admin/v1/events')
 @UseGuards(RolesGuard)
@@ -24,22 +32,30 @@ import { EventDto } from '@dark-rush-photography/api/types';
 export class AdminEventsController {
   constructor(private readonly adminEventsService: AdminEventsService) {}
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Post()
-  create(@Body() event: EventDto): Observable<Event> {
-    return this.adminEventsService.create(event);
+  @ApiCreatedResponse({ type: EventDto })
+  @ApiConflictResponse()
+  @ApiBadRequestResponse()
+  create$(@Body() event: EventUpdateDto): Observable<Event> {
+    return this.adminEventsService.create$(event);
   }
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Put(':id')
-  update(@Param() id: string, @Body() event: EventDto): Observable<Event> {
-    return this.adminEventsService.update(id, event);
+  @ApiOkResponse({ type: EventDto })
+  @ApiNotFoundResponse()
+  update$(
+    @Param('id') id: string,
+    @Body() event: EventUpdateDto
+  ): Observable<Event> {
+    return this.adminEventsService.update$(id, event);
   }
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param() id: string): Observable<void> {
-    return this.adminEventsService.delete(id);
+  delete$(@Param('id') id: string): Observable<void> {
+    return this.adminEventsService.delete$(id);
   }
 }

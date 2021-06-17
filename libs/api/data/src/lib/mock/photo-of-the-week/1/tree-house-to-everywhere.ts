@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class TreeHouseToEverywhere extends PhotoOfTheWeekDto {
-  slug = 'tree-house-to-everywhere';
   group = 1;
+  slug = 'tree-house-to-everywhere';
   title = 'The Tree House to Everywhere';
   description = `
     My cousin Thomas built this tree house when he was in high

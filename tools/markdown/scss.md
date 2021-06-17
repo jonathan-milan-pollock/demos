@@ -93,5 +93,8 @@ _universal selectors and combinators have no effect on specificity_
   - list-style-position
   - list-style-image
 - borders for tables
+
   - border-collapse
   - border-spacing
+
+- TODO: add postcss

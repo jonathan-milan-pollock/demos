@@ -20,7 +20,7 @@ export class AboutService {
     private readonly aboutProvider: AboutProvider
   ) {}
 
-  findAll(): Observable<About[]> {
+  findAll$(): Observable<About[]> {
     return from(this.aboutModel.find({ type: DocumentType.About }).exec()).pipe(
       switchMap((documentModels) => from(documentModels)),
       map((documentModel) =>
@@ -30,7 +30,7 @@ export class AboutService {
     );
   }
 
-  findOne(slug: string): Observable<About> {
+  findOne$(slug: string): Observable<About> {
     return from(
       this.aboutModel.findOne({ type: DocumentType.About, slug }).exec()
     ).pipe(

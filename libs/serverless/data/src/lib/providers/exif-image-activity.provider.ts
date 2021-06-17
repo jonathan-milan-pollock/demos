@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 import {
@@ -58,9 +58,7 @@ export class ExifImageActivityProvider {
           getBlobPath(ImageDimensionState.Exifed, publishedImage)
         )
       ),
-      map(() =>
-        Logger.log('ExifImage complete', ExifImageActivityProvider.name)
-      )
+      mapTo(Logger.log('ExifImage complete', ExifImageActivityProvider.name))
     );
   }
 }

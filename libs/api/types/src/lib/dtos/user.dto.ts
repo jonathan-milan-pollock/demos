@@ -1,12 +1,4 @@
-import {
-  IsEmail,
-  IsInt,
-  IsMongoId,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Min,
-} from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 import { User } from '@dark-rush-photography/shared-types';
 

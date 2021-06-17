@@ -8,8 +8,8 @@ import { Comment } from './comment.interface';
 
 export interface Event {
   readonly id?: string;
-  readonly slug: string;
   readonly group: number;
+  readonly slug: string;
   readonly isPublic: boolean;
   readonly title?: string;
   readonly description?: string;

@@ -4,16 +4,15 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Comment } from '@dark-rush-photography/shared-types';
-import { EnvApi } from '@dark-rush-photography/shared-server/types';
 import { CommentMessage } from '@dark-rush-photography/web-socket/types';
 
 export const createOrUpdateComment$ = (
-  envApi: EnvApi,
+  drpApi: string,
   httpService: HttpService,
   authToken: string,
   commentMessage: CommentMessage
 ): Observable<CommentMessage> => {
-  const apiEndpoint = `${envApi.drpApi}/admin/v1/comment`;
+  const apiEndpoint = `${drpApi}/admin/v1/comment`;
   Logger.log(`Calling API ${apiEndpoint}`, createOrUpdateComment$.name);
   return httpService
     .post<Comment>(
@@ -24,7 +23,6 @@ export const createOrUpdateComment$ = (
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
-          DRP_ADMIN_KEY: envApi.drpAdminKey,
         },
       }
     )

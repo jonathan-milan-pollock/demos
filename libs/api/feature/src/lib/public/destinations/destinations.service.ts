@@ -15,13 +15,13 @@ export class DestinationsService {
     private readonly destinationModel: Model<DocumentModel>
   ) {}
 
-  findAll(): Observable<Destination[]> {
+  findAll$(): Observable<Destination[]> {
     return from(
       this.destinationModel.find({ type: DocumentType.Destination }).exec()
     );
   }
 
-  findOne(id: string): Observable<Destination> {
+  findOne$(id: string): Observable<Destination> {
     return from(this.destinationModel.findById(id)).pipe(
       tap((d) => {
         if (!d) {

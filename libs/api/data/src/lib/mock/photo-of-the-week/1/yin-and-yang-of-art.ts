@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class YinAndYangOfArt extends PhotoOfTheWeekDto {
-  slug = 'yin-and-yang-of-art';
   group = 1;
+  slug = 'yin-and-yang-of-art';
   title = 'Yin and Yang of Art';
   description = `Graffiti reaches the natural world`;
   keywords = [

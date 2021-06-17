@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class LenFooteHikeInnAmicalolaFalls2017 extends EventDto {
-  slug = 'len-foote-hike-inn-amicalola-falls-2017';
   group = 2017;
+  slug = 'len-foote-hike-inn-amicalola-falls-2017';
   title = 'Len Foote Hike Inn, 2017';
   description = `
     The picturesque scenery around the Len Foote Hike Inn made for a

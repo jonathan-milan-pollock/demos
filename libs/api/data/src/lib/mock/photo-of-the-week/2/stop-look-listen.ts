@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class StopLookListen extends PhotoOfTheWeekDto {
-  slug = 'stop-look-listen';
   group = 2;
+  slug = 'stop-look-listen';
   title = 'Stop, Look, and Listen';
   description = `I should really stop to read my texts!`;
   keywords = [

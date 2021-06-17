@@ -1,7 +1,7 @@
 ﻿import { HttpService, Injectable, Logger } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, tap } from 'rxjs/operators';
 import * as tinify from 'tinify';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
@@ -58,7 +58,7 @@ export class TinifyImageActivityProvider {
           getBlobPath(ImageDimensionState.Tinified, publishedImage)
         )
       ),
-      map(() =>
+      mapTo(
         Logger.log('TinifyImage complete', TinifyImageActivityProvider.name)
       )
     );

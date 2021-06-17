@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class PlayMeALoveSong extends PhotoOfTheWeekDto {
-  slug = 'play-me-a-love-song';
   group = 1;
+  slug = 'play-me-a-love-song';
   title = 'Play Me a Love Song';
   description = `Play me a love song, I don't care if you play out of tune`;
   keywords = [

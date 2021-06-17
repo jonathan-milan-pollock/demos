@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class PurpleHaze extends PhotoOfTheWeekDto {
-  slug = 'purple-haze';
   group = 1;
+  slug = 'purple-haze';
   title = 'Purple Haze';
   description = `
     This shot is from a Prairie in Wisconsin`;

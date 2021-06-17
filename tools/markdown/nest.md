@@ -1,9 +1,7 @@
 # nest
 
-- add postcss
 - nestjs add caching (https://reposhub.com/nodejs/frameworks/nestjs-ng-universal.html)
 
-- implement open api 3
 - implement K8 available and ready services
 -
 

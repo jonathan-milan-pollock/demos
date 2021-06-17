@@ -1,13 +1,11 @@
-import { imageDimensionSchema } from './image-dimension.schema';
-import { emotionSchema } from './emotion.schema';
-import { commentSchema } from './comment.schema';
+import { PostedState } from '@dark-rush-photography/shared-types';
 
 export const imageSchema = {
   entityId: { type: String, required: true },
   slug: { type: String, required: true },
   state: {
     type: String,
-    enum: ['New', 'Public', 'Archived'],
+    enum: Object.keys(PostedState),
     required: true,
   },
   order: { type: Number, required: true },

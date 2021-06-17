@@ -19,7 +19,7 @@ export class PhotoOfTheWeekController {
   }
 
   @Get(':id')
-  findOne(@Param() id: string): Observable<PhotoOfTheWeek> {
+  findOne(@Param('id') id: string): Observable<PhotoOfTheWeek> {
     return this.photoOfTheWeekService.findOne(id);
   }
 }

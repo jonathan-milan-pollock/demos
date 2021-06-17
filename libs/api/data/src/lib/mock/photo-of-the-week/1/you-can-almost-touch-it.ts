@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class YouCanAlmostTouchIt extends PhotoOfTheWeekDto {
-  slug = 'you-can-almost-touch-it';
   group = 1;
+  slug = 'you-can-almost-touch-it';
   title = 'You Can Almost Touch It!';
   description = `I'm at a restaurant eating in Mexico City, Mexico. This is what I really saw.`;
   keywords = [

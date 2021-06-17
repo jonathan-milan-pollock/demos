@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap, catchError, mergeMapTo } from 'rxjs/operators';
 
 import * as DestinationActions from './destination.actions';
 import { DestinationsService } from './destinations.service';
@@ -17,8 +17,8 @@ export class DestinationEffects {
   loadDestinations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DestinationActions.loadDestinations),
-      mergeMap(() =>
-        this.destinationsService.getAll().pipe(
+      mergeMapTo(
+        this.destinationsService.getAll$().pipe(
           map((destinations) =>
             DestinationActions.loadDestinationsSuccess({ destinations })
           ),
@@ -34,7 +34,7 @@ export class DestinationEffects {
     this.actions$.pipe(
       ofType(DestinationActions.loadDestination),
       mergeMap((action) =>
-        this.destinationsService.get(action.id).pipe(
+        this.destinationsService.get$(action.id).pipe(
           map((destination) =>
             DestinationActions.loadDestinationSuccess({ destination })
           ),
@@ -50,7 +50,7 @@ export class DestinationEffects {
     this.actions$.pipe(
       ofType(DestinationActions.addDestination),
       mergeMap((action) =>
-        this.destinationsService.add(action.destination).pipe(
+        this.destinationsService.add$(action.destination).pipe(
           map(
             (destination) =>
               DestinationActions.addDestinationSuccess({ destination }),
@@ -68,7 +68,7 @@ export class DestinationEffects {
       ofType(DestinationActions.updateDestination),
       mergeMap((action) =>
         this.destinationsService
-          .update(action.destination.id ?? '', action.destination)
+          .update$(action.destination.id ?? '', action.destination)
           .pipe(
             map(
               ({ id, ...changes }) =>
@@ -91,7 +91,7 @@ export class DestinationEffects {
     this.actions$.pipe(
       ofType(DestinationActions.deleteDestination),
       mergeMap((action) =>
-        this.destinationsService.delete(action.id).pipe(
+        this.destinationsService.delete$(action.id).pipe(
           map(
             (id) => DestinationActions.deleteDestinationSuccess({ id }),
             catchError((error) =>

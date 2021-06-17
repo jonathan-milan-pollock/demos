@@ -10,7 +10,7 @@ import { Multer } from 'multer';
 import { getClient } from 'durable-functions';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 import {
@@ -62,8 +62,8 @@ export class UploadImageActivityProvider {
           UploadImageActivityProvider.name
         )
       ),
-      switchMap(() => apiCreateEntity$(env, httpService, publishedImage)),
-      switchMap(() =>
+      switchMapTo(apiCreateEntity$(env, httpService, publishedImage)),
+      switchMapTo(
         from(
           client.startNew('UploadImageOrchestrator', undefined, {
             state: ImageDimensionState.Uploaded,

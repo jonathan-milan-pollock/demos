@@ -1,5 +1,42 @@
-import { OmitType } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsBoolean,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
-import { ReviewResponseDto } from './review-response.dto';
+import { Review } from '@dark-rush-photography/shared-types';
+import { ImageDto } from './image.dto';
+import { ImageDimensionDto } from './image-dimension.dto';
 
-export class ReviewDto extends OmitType(ReviewResponseDto, ['id'] as const) {}
+export class ReviewDto implements Review {
+  @IsString()
+  id!: string;
+
+  @IsString()
+  slug!: string;
+
+  @IsBoolean()
+  isPublic!: boolean;
+
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => String)
+  text: string[] = [];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ImageDto)
+  images: ImageDto[] = [];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ImageDimensionDto)
+  imageDimensions: ImageDimensionDto[] = [];
+}

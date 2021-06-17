@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class ZigZags extends PhotoOfTheWeekDto {
-  slug = 'zig-zags';
   group = 1;
+  slug = 'zig-zags';
   title = 'Zig Zags';
   description = `Which line takes me where? I like the lines and the zig zags in this photo!`;
   keywords = [

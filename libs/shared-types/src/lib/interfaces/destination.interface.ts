@@ -27,6 +27,7 @@ export interface Destination {
   readonly imageDimensions: ReadonlyArray<ImageDimension>;
   readonly videos: ReadonlyArray<Video>;
   readonly videoDimensions: ReadonlyArray<VideoDimension>;
+  readonly hasExtendedReality: boolean;
   readonly websiteUrl?: string;
   readonly socialMediaUrls: ReadonlyArray<SocialMediaUrl>;
   readonly comments: ReadonlyArray<Comment>;

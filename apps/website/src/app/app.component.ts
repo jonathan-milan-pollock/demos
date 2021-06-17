@@ -17,7 +17,11 @@ import {
   selectAllReviews,
   loadReviews,
 } from '@dark-rush-photography/website/data';
-import { Destination, Review } from '@dark-rush-photography/shared-types';
+import {
+  ADMIN,
+  Destination,
+  Review,
+} from '@dark-rush-photography/shared-types';
 
 @Component({
   selector: 'drp-root',
@@ -69,15 +73,15 @@ export class AppComponent implements OnInit, OnDestroy {
     const rolesUrl = 'https://www.darkrushphotography.com/roles';
     if (!this.user || !this.user[rolesUrl]) return false;
 
-    return this.user[rolesUrl].includes('Admin');
+    return this.user[rolesUrl].includes(ADMIN);
   }
 
   onSignIn(): void {
-    this.auth0AuthService.loginWithRedirect();
+    this.auth0AuthService.loginWithRedirect$();
   }
 
   onSignOut(): void {
-    this.auth0AuthService.logout();
+    this.auth0AuthService.logout$();
   }
 
   onTabClicked(activeUrl: string): void {

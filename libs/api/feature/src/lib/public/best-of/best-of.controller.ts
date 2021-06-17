@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
 import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
-import { BestOfResponseDto } from '@dark-rush-photography/api/types';
+import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
   BestOfTypeValidationPipe,
   Public,
@@ -22,11 +22,11 @@ export class BestOfController {
     name: 'bestOfType',
     enum: BestOfType,
   })
-  @ApiOkResponse({ type: BestOfResponseDto })
-  findOne(
+  @ApiOkResponse({ type: BestOfDto })
+  findOne$(
     @Param('bestOfType', new BestOfTypeValidationPipe())
     bestOfType: BestOfType
   ): Observable<BestOf> {
-    return this.bestOfService.findOne(bestOfType);
+    return this.bestOfService.findOne$(bestOfType);
   }
 }

@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class SSPCAnnualGolfInvitational2018 extends EventDto {
-  slug = 'sspc-annual-golf-invitational-2018';
   group = 2018;
+  slug = 'sspc-annual-golf-invitational-2018';
   title = 'SSPC Annual Golf Invitational 2018';
   description = ``;
   keywords = [];

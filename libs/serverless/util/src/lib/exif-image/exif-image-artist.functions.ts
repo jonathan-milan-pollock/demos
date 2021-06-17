@@ -1,6 +1,6 @@
 import { ImageArtistExif } from '@dark-rush-photography/serverless/types';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 export const exifImageArtist = (
   imageFilePath: string,
@@ -14,7 +14,7 @@ export const exifImageArtist = (
   const imageArtistExif = getImageArtistExifConfig(new Date().getFullYear());
 
   return from(exifTool.open()).pipe(
-    switchMap(() =>
+    switchMapTo(
       from(
         exifTool.writeMetadata(
           imageFilePath,
@@ -26,6 +26,6 @@ export const exifImageArtist = (
       )
     ),
     tap(() => exifTool.close()),
-    map(() => imageFilePath)
+    mapTo(imageFilePath)
   );
 };

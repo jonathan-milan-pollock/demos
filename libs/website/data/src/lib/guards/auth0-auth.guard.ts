@@ -4,6 +4,7 @@ import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { ADMIN } from '@dark-rush-photography/shared-types';
 import { Auth0User } from '@dark-rush-photography/website/types';
 //TODO: Fix this!!!
 import { Auth0AuthService } from '../store/auth/auth0-auth.service';
@@ -16,7 +17,7 @@ export class Auth0AuthGuard implements CanActivate {
 
   isAdmin(user: Auth0User | undefined): boolean {
     const rolesUrl = 'https://www.darkrushphotography.com/roles';
-    return user && user[rolesUrl] ? user[rolesUrl].includes('Admin') : false;
+    return user && user[rolesUrl] ? user[rolesUrl].includes(ADMIN) : false;
   }
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {

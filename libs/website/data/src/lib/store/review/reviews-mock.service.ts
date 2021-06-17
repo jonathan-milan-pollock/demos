@@ -12,24 +12,24 @@ export class ReviewsServiceMock extends ReviewsService {
     super({} as HttpClient);
   }
 
-  getAll(): Observable<Review[]> {
+  getAll$(): Observable<Review[]> {
     return EMPTY;
   }
 
-  get(id: string): Observable<Review> {
+  get$(id: string): Observable<Review> {
     return of({ id: id } as Review);
   }
 
-  add(review: Review): Observable<Review> {
+  add$(review: Review): Observable<Review> {
     return of(review);
   }
 
-  update(id: string, review: Review): Observable<Review> {
+  update$(id: string, review: Review): Observable<Review> {
     const { id: updateId, ...updateReview } = review;
     return of({ id: updateId, ...updateReview });
   }
 
-  delete(id: string): Observable<string> {
+  delete$(id: string): Observable<string> {
     return of(id);
   }
 }

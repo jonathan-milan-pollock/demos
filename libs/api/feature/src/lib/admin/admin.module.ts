@@ -10,7 +10,11 @@ import { AdminFavoritesModule } from './admin-favorites/admin-favorites.module';
 import { AdminImageDimensionsModule } from './admin-image-dimensions/admin-image-dimensions.module';
 import { AdminImagesModule } from './admin-images/admin-images.module';
 import { AdminPhotoOfTheWeekModule } from './admin-photo-of-the-week/admin-photo-of-the-week.module';
+import { AdminReviewModule } from './admin-review/admin-review.module';
 import { AdminReviewsModule } from './admin-reviews/admin-reviews.module';
+import { AdminSocialMediaModule } from './admin-social-media/admin-social-media.module';
+import { AdminVideoDimensionsModule } from './admin-video-dimensions/admin-video-dimensions.module';
+import { AdminVideosModule } from './admin-videos/admin-videos.module';
 
 @Module({
   imports: [
@@ -25,7 +29,11 @@ import { AdminReviewsModule } from './admin-reviews/admin-reviews.module';
     AdminImageDimensionsModule,
     AdminImagesModule,
     AdminPhotoOfTheWeekModule,
+    AdminReviewModule,
     AdminReviewsModule,
+    AdminSocialMediaModule,
+    AdminVideoDimensionsModule,
+    AdminVideosModule,
   ],
 })
 export class AdminModule {}

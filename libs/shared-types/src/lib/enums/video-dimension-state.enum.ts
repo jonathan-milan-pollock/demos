@@ -1,9 +1,9 @@
 export enum VideoDimensionState {
-  Added = 'added',
-  Exifed = 'exifed',
-  Posted = 'posted',
-  Resized = 'resized',
-  SocialMediaPosted = 'social-media-posted',
-  Uploaded = 'uploaded',
-  WebsitePosted = 'website-posted',
+  Added = 'Added',
+  Exifed = 'Exifed',
+  Posted = 'Posted',
+  Resized = 'Resized',
+  SocialMediaPosted = 'SocialMediaPosted',
+  Uploaded = 'Uploaded',
+  WebsitePosted = 'WebsitePosted',
 }

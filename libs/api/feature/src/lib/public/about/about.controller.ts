@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
 import { About } from '@dark-rush-photography/shared-types';
-import { AboutResponseDto } from '@dark-rush-photography/api/types';
+import { AboutDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { AboutService } from './about.service';
 
@@ -15,14 +15,14 @@ export class AboutController {
   constructor(private readonly aboutService: AboutService) {}
 
   @Get()
-  @ApiOkResponse({ type: [AboutResponseDto] })
-  findAll(): Observable<About[]> {
-    return this.aboutService.findAll();
+  @ApiOkResponse({ type: [AboutDto] })
+  findAll$(): Observable<About[]> {
+    return this.aboutService.findAll$();
   }
 
   @Get(':slug')
-  @ApiOkResponse({ type: AboutResponseDto })
-  findOne(@Param('slug') slug: string): Observable<About> {
-    return this.aboutService.findOne(slug);
+  @ApiOkResponse({ type: AboutDto })
+  findOne$(@Param('slug') slug: string): Observable<About> {
+    return this.aboutService.findOne$(slug);
   }
 }

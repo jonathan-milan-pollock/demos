@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class ClassicCars1952Pontiac extends EventDto {
-  slug = 'classic-cars-1952-pontiac';
   group = 2017;
+  slug = 'classic-cars-1952-pontiac';
   title = 'Classic 1952 Pontiac';
   description = `
     Over the holiday, my photographer friends and I went

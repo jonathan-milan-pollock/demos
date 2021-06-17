@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class ConcertsByTheSpringsElectricAvenue2018 extends EventDto {
-  slug = 'concerts-by-the-springs-electric-avenue-2018';
   group = 2018;
+  slug = 'concerts-by-the-springs-electric-avenue-2018';
   title = 'Concerts by the Springs Electric Avenue, 2018';
   description = '';
   keywords = [];

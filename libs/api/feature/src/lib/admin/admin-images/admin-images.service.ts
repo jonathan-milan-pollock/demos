@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, toArray } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { Image } from '@dark-rush-photography/shared-types';
+import { Image, PostedState } from '@dark-rush-photography/shared-types';
 import {
   Document,
   DocumentModel,
@@ -48,26 +48,32 @@ export class AdminImagesService {
     );
   }
 
-  findAll$(entityId: string): Observable<Image[]> {
+  findAll$(entityId: string, postedState: PostedState): Observable<Image[]> {
     return from(this.documentModel.findById(entityId).exec()).pipe(
       switchMap((documentModel) => {
         if (!documentModel)
           throw new NotFoundException('Could not find entity');
 
-        return from(documentModel.images);
+        return from(
+          documentModel.images.filter((i) => i.state === postedState)
+        );
       }),
       map((image) => this.imageProvider.toImage(image)),
       toArray<Image>()
     );
   }
 
-  findOne$(slug: string, entityId: string): Observable<Image> {
+  findOne$(
+    entityId: string,
+    slug: string,
+    postedState: PostedState
+  ): Observable<Image> {
     return from(this.documentModel.findById(entityId).exec()).pipe(
       map((documentModel) => {
         if (!documentModel)
           throw new NotFoundException('Could not find entity');
 
-        return documentModel.images;
+        return documentModel.images.filter((i) => i.state === postedState);
       }),
       map((images) => {
         const image = images.find((image) => image.slug === slug);
@@ -77,5 +83,21 @@ export class AdminImagesService {
         return this.imageProvider.toImage(image);
       })
     );
+  }
+
+  create360Image$(image: Image): Observable<Image> {
+    return of(image);
+  }
+
+  createTinifiedPng$(image: Image): Observable<Image> {
+    return of(image);
+  }
+
+  createAppleIcons$(image: Image): Observable<Image> {
+    return of(image);
+  }
+
+  createAppleImageResources$(image: Image): Observable<Image> {
+    return of(image);
   }
 }

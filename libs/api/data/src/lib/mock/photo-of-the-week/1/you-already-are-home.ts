@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class YouAlreadyAreHome extends PhotoOfTheWeekDto {
-  slug = 'you-already-are-home';
   group = 1;
+  slug = 'you-already-are-home';
   title = 'You Already are Home';
   description = `This reminds me of the movie Almost Famous when the boy says, 'I
     have to go home' and the response is 'You Already are Home' as

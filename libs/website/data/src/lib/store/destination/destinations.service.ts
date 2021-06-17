@@ -9,33 +9,33 @@ import { Destination } from '@dark-rush-photography/shared-types';
 export class DestinationsService {
   constructor(private readonly http: HttpClient) {}
 
-  getAll(): Observable<Destination[]> {
+  getAll$(): Observable<Destination[]> {
     return this.http.get<Destination[]>(
       'http://localhost:4200/api/destinations'
     );
   }
 
-  get(id: string): Observable<Destination> {
+  get$(id: string): Observable<Destination> {
     return this.http.get<Destination>(
       `http://localhost:4200/api/destinations/${id}`
     );
   }
 
-  add(destination: Destination): Observable<Destination> {
+  add$(destination: Destination): Observable<Destination> {
     return this.http.post<Destination>(
       `http://localhost:4200/api/admin/destinations`,
       destination
     );
   }
 
-  update(id: string, destination: Destination): Observable<Destination> {
+  update$(id: string, destination: Destination): Observable<Destination> {
     return this.http.put<Destination>(
       `http://localhost:4200/api/admin/destinations/${id}`,
       destination
     );
   }
 
-  delete(id: string): Observable<string> {
+  delete$(id: string): Observable<string> {
     return this.http.delete<string>(
       `http://localhost:4200/api/admin/destinations/${id}`
     );

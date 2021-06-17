@@ -30,7 +30,9 @@ export class AdminImageDimensionsService {
     ).pipe(
       switchMap((documentModel) => {
         if (!documentModel)
-          throw new NotFoundException('Could not find entity');
+          throw new NotFoundException(
+            'Could not find entity for image dimension'
+          );
 
         const image = documentModel.images.find(
           (i) => i.slug === imageDimension.imageSlug

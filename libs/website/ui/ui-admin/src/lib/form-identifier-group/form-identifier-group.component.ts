@@ -10,8 +10,8 @@ import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 })
 export class FormIdentifierGroupComponent {
   @Input() identifierGroup?: FormGroup;
-  @Input() slugFormControlName = 'slug';
   @Input() groupFormControlName = 'group';
+  @Input() slugFormControlName = 'slug';
   @Input() groups?: number[] = [];
 
   matcher = new ShowOnDirtyErrorStateMatcher();

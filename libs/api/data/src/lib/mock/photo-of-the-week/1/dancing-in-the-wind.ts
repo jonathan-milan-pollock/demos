@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class DancingInTheWind extends PhotoOfTheWeekDto {
-  slug = 'dancing-in-the-wind';
   group = 1;
+  slug = 'dancing-in-the-wind';
   title = 'Dancing in the Wind!';
   description = `Join us, we're dancing in the wind!`;
   keywords = [

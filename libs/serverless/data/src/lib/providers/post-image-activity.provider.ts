@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { getClient } from 'durable-functions';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import {
   ImageActivity,
@@ -26,7 +26,7 @@ export class PostImageActivityProvider {
           PostImageActivityProvider.name
         )
       ),
-      switchMap(() =>
+      switchMapTo(
         from(
           client.startNew('PostImageOrchestrator', undefined, {
             state: ImageDimensionState.WebsitePosted,
