@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class ShipToComeIn extends PhotoOfTheWeekDto {
-  slug = 'ship-to-come-in';
   group = 1;
+  slug = 'ship-to-come-in';
   title = 'Waiting for my Ship to Come In';
   description = `
     This is at Sarasota Florida's Sarasota Ski A Rees Water Ski Show. 

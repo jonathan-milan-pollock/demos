@@ -1,11 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { BestOf } from '@dark-rush-photography/shared-types';
+import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
 import {
   BestOfProvider,
   BestOfTypeProvider,
@@ -22,26 +27,36 @@ export class AdminBestOfService {
     private readonly bestOfTypeProvider: BestOfTypeProvider
   ) {}
 
-  createIfNotExists$(bestOf: BestOf): Observable<BestOf> {
+  create$(bestOfType: BestOfType): Observable<BestOf> {
     return from(
       this.bestOfModel.findOne({
-        type: this.bestOfTypeProvider.findDocumentType(bestOf.slug),
+        type: this.bestOfTypeProvider.findDocumentType(bestOfType),
       })
     ).pipe(
       switchMap((documentModel) => {
-        if (documentModel) return of(documentModel);
+        if (documentModel)
+          throw new ConflictException(
+            `Best of ${bestOfType} has already been created`,
+            HttpStatus.FOUND
+          );
 
         return from(
           new this.bestOfModel({
-            ...bestOf,
-            type: this.bestOfTypeProvider.findDocumentType(bestOf.slug),
+            type: this.bestOfTypeProvider.findDocumentType(bestOfType),
+            slug: bestOfType,
             isPublic: true,
-          }).save()
+            images: [],
+            imageDimensions: [],
+            comments: [],
+            emotions: [],
+          } as BestOf).save()
         );
       }),
       map((documentModel: DocumentModel) => {
         if (!documentModel) {
-          throw new BadRequestException(`Unable to create ${bestOf.slug}`);
+          throw new BadRequestException(
+            `Unable to create best of ${bestOfType}`
+          );
         }
         return this.bestOfProvider.fromDocumentModel(documentModel);
       })

@@ -23,8 +23,8 @@ export class EventProvider {
   fromDocumentModel(documentModel: DocumentModel): Event {
     return {
       id: documentModel._id,
-      slug: documentModel.slug,
       group: documentModel.group,
+      slug: documentModel.slug,
       isPublic: documentModel.isPublic,
       title: documentModel.title,
       description: documentModel.description,

@@ -1,5 +1,4 @@
 import {
-  Body,
   Delete,
   Controller,
   HttpCode,
@@ -7,14 +6,20 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { About } from '@dark-rush-photography/shared-types';
-import { AboutDto, AboutResponseDto } from '@dark-rush-photography/api/types';
-import { AdminAboutService } from './admin-about.service';
+import { About, ADMIN } from '@dark-rush-photography/shared-types';
+import { AboutDto } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import { AdminAboutService } from './admin-about.service';
 
 @Controller('admin/v1/about')
 @UseGuards(RolesGuard)
@@ -23,17 +28,19 @@ import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 export class AdminAboutController {
   constructor(private readonly adminAboutService: AdminAboutService) {}
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Post()
-  @ApiCreatedResponse({ type: AboutResponseDto })
-  createIfNotExists(@Body() about: AboutDto): Observable<About> {
-    return this.adminAboutService.createIfNotExists$(about);
+  @ApiCreatedResponse({ type: AboutDto })
+  @ApiConflictResponse()
+  @ApiBadRequestResponse()
+  create$(@Param('slug') slug: string): Observable<About> {
+    return this.adminAboutService.create$(slug);
   }
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param('id') id: string): Observable<void> {
+  delete$(@Param('id') id: string): Observable<void> {
     return this.adminAboutService.delete$(id);
   }
 }

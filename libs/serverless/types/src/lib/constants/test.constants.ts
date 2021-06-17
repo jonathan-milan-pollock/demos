@@ -16,9 +16,9 @@ export const DESTINATIONS_FILE_NAME_EXAMPLE =
   'Destinations|&|Colorado|&|images|&|00011.jpg';
 export const EVENTS_FILE_NAME_EXAMPLE =
   'Events|&|2007|&|classic-cars-1952-pontiac|&|images|&|00011.jpg';
-export const FAVORITES_FILE_NAME_EXAMPLE = 'Favorites|&|best37|&|00011.jpg';
+export const FAVORITES_FILE_NAME_EXAMPLE = 'Favorites|&|best-37|&|00011.jpg';
 export const PHOTO_OF_THE_WEEK_FILE_NAME_EXAMPLE =
-  'Photo of the Week|&|Group1|&|aint-no-mountain-high-enough|&|00011.jpg';
+  'Photo of the Week|&|1|&|aint-no-mountain-high-enough|&|00011.jpg';
 export const REVIEW_FILE_NAME_EXAMPLE = 'Review|&|images|&|00011.jpg';
 export const REVIEWS_FILE_NAME_EXAMPLE = 'Reviews|&|donna-jeffries|&|00011.jpg';
 export const SOCIAL_MEDIA_HEADER_FILE_NAME_EXAMPLE =

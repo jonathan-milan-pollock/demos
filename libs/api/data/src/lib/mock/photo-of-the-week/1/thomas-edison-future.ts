@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class ThomasEdisonFuture extends PhotoOfTheWeekDto {
-  slug = 'thomas-edison-future';
   group = 1;
+  slug = 'thomas-edison-future';
   title = 'Thomas Edison in the Future';
   description = `
     This is at Stone Mountain, Georgia at the Country Living Magazine

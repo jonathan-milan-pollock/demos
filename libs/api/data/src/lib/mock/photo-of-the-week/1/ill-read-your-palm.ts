@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class IllReadYourPalm extends PhotoOfTheWeekDto {
-  slug = 'ill-read-your-palm';
   group = 1;
+  slug = 'ill-read-your-palm';
   title = "I'll Read Your Palm";
   description = `
     I'll read your palm if you read mine in front of the palm tree.`;

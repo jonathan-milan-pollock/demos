@@ -14,12 +14,12 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Get()
-  findAll(): Observable<Event[]> {
+  findAll$(): Observable<Event[]> {
     return this.eventsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param() id: string): Observable<Event> {
+  findOne$(@Param('id') id: string): Observable<Event> {
     return this.eventsService.findOne(id);
   }
 }

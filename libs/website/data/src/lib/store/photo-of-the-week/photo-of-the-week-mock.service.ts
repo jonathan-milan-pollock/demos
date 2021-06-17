@@ -12,19 +12,19 @@ export class PhotoOfTheWeekServiceMock extends PhotoOfTheWeekService {
     super({} as HttpClient);
   }
 
-  getAll(): Observable<PhotoOfTheWeek[]> {
+  getAll$(): Observable<PhotoOfTheWeek[]> {
     return EMPTY;
   }
 
-  get(id: string): Observable<PhotoOfTheWeek> {
+  get$(id: string): Observable<PhotoOfTheWeek> {
     return of({ id: id } as PhotoOfTheWeek);
   }
 
-  add(photoOfTheWeek: PhotoOfTheWeek): Observable<PhotoOfTheWeek> {
+  add$(photoOfTheWeek: PhotoOfTheWeek): Observable<PhotoOfTheWeek> {
     return of(photoOfTheWeek);
   }
 
-  update(
+  update$(
     id: string,
     photoOfTheWeek: PhotoOfTheWeek
   ): Observable<PhotoOfTheWeek> {
@@ -32,7 +32,7 @@ export class PhotoOfTheWeekServiceMock extends PhotoOfTheWeekService {
     return of({ id: updateId, ...updatePhotoOfTheWeek });
   }
 
-  delete(id: string): Observable<string> {
+  delete$(id: string): Observable<string> {
     return of(id);
   }
 }

@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import { ExifCreateDate } from '@dark-rush-photography/serverless/types';
 
@@ -15,7 +15,7 @@ export const readCreateDateExif$ = (
   const exifTool = new exiftool.ExiftoolProcess(exiftoolBin);
 
   return from(exifTool.open()).pipe(
-    switchMap(() =>
+    switchMapTo(
       from<Observable<ExifCreateDate>>(
         exifTool.readMetadata(imageFilePath, ['-File:all'])
       )

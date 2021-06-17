@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class TheLightsFestAtlanta2018 extends EventDto {
-  slug = 'the-lights-fest-atlanta-2018';
   group = 2018;
+  slug = 'the-lights-fest-atlanta-2018';
   title = 'The Lights Fest Atlanta 2018';
   description = '';
   keywords = [];

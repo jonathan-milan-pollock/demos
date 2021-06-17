@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class FlowersInTheMist extends PhotoOfTheWeekDto {
-  slug = 'flowers-in-the-mist';
   group = 1;
+  slug = 'flowers-in-the-mist';
   title = 'Flowers in the Mist';
   description = `
     Literally on top of the mountain top, as high as I could be. I

@@ -25,7 +25,7 @@ export const addEventImage$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.drpAdminKey,
+            DRP_API_ADMIN_KEY: envApi.drpApiAdminKey,
           },
         }
       )
@@ -56,7 +56,7 @@ export const addEventType$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_ADMIN_KEY: envApi.drpAdminKey,
+            DRP_API_ADMIN_KEY: envApi.drpApiAdminKey,
           },
         }
       )

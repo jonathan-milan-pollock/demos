@@ -22,7 +22,7 @@ export class BestOfService {
     private readonly bestOfTypeProvider: BestOfTypeProvider
   ) {}
 
-  findOne(bestOfType: BestOfType): Observable<BestOf> {
+  findOne$(bestOfType: BestOfType): Observable<BestOf> {
     return from(
       this.bestOfModel
         .findOne({ type: this.bestOfTypeProvider.findDocumentType(bestOfType) })

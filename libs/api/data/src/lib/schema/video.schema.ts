@@ -1,9 +1,11 @@
+import { PostedState } from '@dark-rush-photography/shared-types';
+
 export const videoSchema = {
   entityId: { type: String, required: true },
   slug: { type: String, required: true },
   state: {
     type: String,
-    enum: ['New', 'Public', 'Archived'],
+    enum: Object.keys(PostedState),
     required: true,
   },
   order: { type: Number, required: true },

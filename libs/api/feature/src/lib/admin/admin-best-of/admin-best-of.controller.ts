@@ -1,5 +1,4 @@
 import {
-  Body,
   Delete,
   Controller,
   HttpCode,
@@ -8,7 +7,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiParam,
   ApiTags,
@@ -16,8 +17,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
-import { BestOfDto, BestOfResponseDto } from '@dark-rush-photography/api/types';
+import { ADMIN, BestOf, BestOfType } from '@dark-rush-photography/shared-types';
+import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
   BestOfTypeValidationPipe,
   Roles,
@@ -32,28 +33,26 @@ import { AdminBestOfService } from './admin-best-of.service';
 export class AdminBestOfController {
   constructor(private readonly adminBestOfService: AdminBestOfService) {}
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Post(':bestOfType')
   @ApiParam({
     name: 'bestOfType',
     enum: BestOfType,
   })
-  @ApiCreatedResponse({ type: BestOfResponseDto })
-  createIfNotExists(
+  @ApiCreatedResponse({ type: BestOfDto })
+  @ApiConflictResponse()
+  @ApiBadRequestResponse()
+  create$(
     @Param('bestOfType', new BestOfTypeValidationPipe())
-    bestOfType: BestOfType,
-    @Body() bestOf: BestOfDto
+    bestOfType: BestOfType
   ): Observable<BestOf> {
-    return this.adminBestOfService.createIfNotExists$({
-      ...bestOf,
-      slug: bestOfType,
-    });
+    return this.adminBestOfService.create$(bestOfType);
   }
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param('id') id: string): Observable<void> {
+  delete$(@Param('id') id: string): Observable<void> {
     return this.adminBestOfService.delete$(id);
   }
 }

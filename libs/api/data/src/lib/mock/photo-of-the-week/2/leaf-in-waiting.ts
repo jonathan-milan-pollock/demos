@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class LeafInWaiting extends PhotoOfTheWeekDto {
-  slug = 'leaf-in-waiting';
   group = 2;
+  slug = 'leaf-in-waiting';
   title = 'Leaf in Waiting';
   description = `I'm a leaf waiting for you`;
   keywords = ['Alexander City', 'Alabama', 'Maple Leaf', 'Colorful'];

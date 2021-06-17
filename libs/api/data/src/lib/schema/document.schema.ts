@@ -48,30 +48,16 @@ export class Document
 
   @Prop({
     type: String,
-    enum: [
-      'About',
-      'BestOfChildren',
-      'BestOfEvents',
-      'BestOfLandscapes',
-      'BestOfNature',
-      'BestOfRealEstate',
-      'Destination',
-      'Event',
-      'Favorites',
-      'PhotoOfTheWeek',
-      'Review',
-      'Reviews',
-      'SocialMedia',
-    ],
+    enum: Object.keys(DocumentType),
     required: true,
   })
   type!: DocumentType;
 
-  @Prop({ type: String, required: true })
-  slug!: string;
-
   @Prop({ type: Number, required: true, default: 0 })
   group!: number;
+
+  @Prop({ type: String, required: true })
+  slug!: string;
 
   @Prop({ type: Boolean, required: true })
   isPublic!: boolean;
@@ -126,6 +112,9 @@ export class Document
     required: true,
   })
   videoDimensions!: VideoDimension[];
+
+  @Prop({ type: Boolean, required: true, default: false })
+  hasExtendedReality!: boolean;
 
   @Prop({ type: String, required: false })
   websiteUrl?: string;

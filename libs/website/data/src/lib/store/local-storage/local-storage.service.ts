@@ -8,7 +8,7 @@ import { EMPTY, Observable, of } from 'rxjs';
 
 @Injectable()
 export class LocalStorageService {
-  getLocalStorageData(): Observable<LocalStorageData> {
+  getLocalStorageData$(): Observable<LocalStorageData> {
     const data = localStorage.getItem(LOCAL_STORAGE_DATA);
     return data ? of(JSON.parse(data)) : EMPTY;
   }

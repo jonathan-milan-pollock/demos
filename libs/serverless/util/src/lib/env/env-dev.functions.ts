@@ -15,8 +15,8 @@ export const loadDevEnvironment = (): Env => {
     );
   }
 
-  if (!process.env.NX_DRP_ADMIN_KEY) {
-    throw new Error('Please add NX_DRP_ADMIN_KEY to environment variables');
+  if (!process.env.NX_DRP_API_ADMIN_KEY) {
+    throw new Error('Please add DRP_API_ADMIN_KEY to environment variables');
   }
 
   if (!process.env.NX_TINY_PNG_API_KEY) {
@@ -35,7 +35,7 @@ export const loadDevEnvironment = (): Env => {
     },
     api: {
       drpApi: DRP_API_DEV,
-      drpAdminKey: process.env.NX_DRP_ADMIN_KEY,
+      drpApiAdminKey: process.env.NX_DRP_API_ADMIN_KEY,
     },
     azureStorageConnectionString: AZURE_STORAGE_CONNECTION_STRING_DEV,
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,

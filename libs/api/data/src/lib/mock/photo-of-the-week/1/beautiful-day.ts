@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class BeautifulDay extends PhotoOfTheWeekDto {
-  slug = 'beautiful-day';
   group = 1;
+  slug = 'beautiful-day';
   title = "It's a Beautiful Day";
   description = "It's a Beautiful Day";
   keywords = [

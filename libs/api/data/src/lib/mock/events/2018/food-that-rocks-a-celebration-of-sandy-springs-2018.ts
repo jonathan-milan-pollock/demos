@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class FoodThatRocksACelebrationOfSandySprings2018 extends EventDto {
-  slug = 'food-that-rocks-a-celebration-of-sandy-springs-2018';
   group = 2018;
+  slug = 'food-that-rocks-a-celebration-of-sandy-springs-2018';
   title = 'Food that Rocks A Celebration of Sandy Springs 2018';
   description = '';
   keywords = [

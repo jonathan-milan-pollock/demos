@@ -2,7 +2,7 @@
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 
 import { Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import { ImageDimensionState } from '@dark-rush-photography/shared-types';
 import {
@@ -57,11 +57,11 @@ export class AddImageActivityProvider {
       AzureStorageContainerType.Private,
       getBlobPath(ImageDimensionState.Added, publishedImage)
     ).pipe(
-      switchMap(() => readCreateDateExif$(imageFilePath)),
+      switchMapTo(readCreateDateExif$(imageFilePath)),
       switchMap((createDate) =>
         apiAddImage$(env, httpService, publishedImage, createDate)
       ),
-      map(() => Logger.log('AddImage complete', AddImageActivityProvider.name))
+      mapTo(Logger.log('AddImage complete', AddImageActivityProvider.name))
     );
   }
 }

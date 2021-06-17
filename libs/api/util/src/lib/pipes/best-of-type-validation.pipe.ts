@@ -5,20 +5,13 @@ import { BestOfType } from '@dark-rush-photography/shared-types';
 @Injectable()
 export class BestOfTypeValidationPipe
   implements PipeTransform<string, BestOfType> {
-  readonly bestOfDocumentTypeMap = new Map<string, BestOfType>([
-    ['children', BestOfType.Children],
-    ['events', BestOfType.Events],
-    ['landscapes', BestOfType.Landscapes],
-    ['nature', BestOfType.Nature],
-    ['realestate', BestOfType.RealEstate],
-  ]);
-
   transform(bestOfType: string): BestOfType {
-    const bestOfTypeEnum = this.bestOfDocumentTypeMap.get(
-      bestOfType.toLowerCase()
+    const bestOfTypeKey = Object.keys(BestOfType).find(
+      (b) => b.toLowerCase() === bestOfType.toLowerCase()
     );
-    if (!bestOfTypeEnum)
+    if (!bestOfTypeKey) {
       throw new BadRequestException(`Invalid BestOfType ${bestOfType}`);
-    return bestOfTypeEnum;
+    }
+    return bestOfTypeKey as BestOfType;
   }
 }

@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class SarasotaSharkDancers extends PhotoOfTheWeekDto {
-  slug = 'sarasota-shark-dancers';
   group = 1;
+  slug = 'sarasota-shark-dancers';
   title = 'Sarasota Shark Dancers';
   description = `
     This is at Sarasota Florida's Sarasota Ski A Rees Water Ski Show. 

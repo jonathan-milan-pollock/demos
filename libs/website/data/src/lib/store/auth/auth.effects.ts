@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
 import { Auth0User } from '@dark-rush-photography/website/types';
 import { Auth0AuthService } from './auth0-auth.service';
@@ -17,7 +17,7 @@ export class AuthEffects {
   loadIsAuthenticated$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loadIsAuthenticated),
-      switchMap(() =>
+      switchMapTo(
         this.auth0AuthService.isAuthenticated$.pipe(
           map((isAuthenticated) =>
             AuthActions.loadIsAuthenticatedSuccess({ isAuthenticated })
@@ -30,7 +30,7 @@ export class AuthEffects {
   loadUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loadUser),
-      switchMap(() =>
+      switchMapTo(
         this.auth0AuthService.user$.pipe(
           map((user) =>
             AuthActions.loadUserSuccess({ user: user as Auth0User })
@@ -44,7 +44,7 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.logout),
-        switchMap(() => this.auth0AuthService.logout())
+        switchMapTo(this.auth0AuthService.logout$())
       ),
     { dispatch: false }
   );
@@ -53,7 +53,7 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.loginWithRedirect),
-        switchMap(() => this.auth0AuthService.loginWithRedirect())
+        switchMapTo(this.auth0AuthService.loginWithRedirect$())
       ),
     { dispatch: false }
   );

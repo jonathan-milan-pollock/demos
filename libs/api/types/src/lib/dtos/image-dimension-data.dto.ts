@@ -13,7 +13,7 @@ export class ImageDimensionDataDto implements ImageDimensionData {
   entityId!: string;
 
   @IsString()
-  slug!: string;
+  imageSlug!: string;
 
   @IsString()
   dataUri!: string;

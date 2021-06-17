@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class SweetHomeDressing extends PhotoOfTheWeekDto {
-  slug = 'sweet-home-dressing';
   group = 1;
+  slug = 'sweet-home-dressing';
   title = 'Take Me Home Sweet Southern Dressing';
   description = `
     Oh! Thanksgiving, one of my fondest memories in my hometown. I've

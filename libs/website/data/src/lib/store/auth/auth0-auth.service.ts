@@ -15,11 +15,11 @@ export class Auth0AuthService {
     return this.authService.user$;
   }
 
-  loginWithRedirect(): Observable<void> {
+  loginWithRedirect$(): Observable<void> {
     return this.authService.loginWithRedirect();
   }
 
-  logout(): Observable<void> {
+  logout$(): Observable<void> {
     this.authService.logout();
     return EMPTY;
   }

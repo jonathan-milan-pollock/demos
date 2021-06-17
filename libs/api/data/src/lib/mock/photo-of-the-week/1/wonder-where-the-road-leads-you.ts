@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class WonderWhereTheRoadLeadsYou extends PhotoOfTheWeekDto {
-  slug = 'wonder-where-the-road-leads-you';
   group = 1;
+  slug = 'wonder-where-the-road-leads-you';
   title = 'Wonder Where the Road Leads You, I Wonder Where the Road Leads Me';
   description = `
     This is the bridge at Myakka River State Park near Sarasota. It

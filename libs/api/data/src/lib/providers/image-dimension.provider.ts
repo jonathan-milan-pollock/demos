@@ -4,14 +4,14 @@ import { ImageDimension } from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class ImageDimensionProvider {
-  toImageDimension(imageDimension: ImageDimension): ImageDimension {
+  toImageDimension(videoDimension: ImageDimension): ImageDimension {
     return {
-      entityId: imageDimension.entityId,
-      imageSlug: imageDimension.imageSlug,
-      type: imageDimension.type,
-      state: imageDimension.state,
-      pixels: imageDimension.pixels,
-      settings: imageDimension.settings,
+      entityId: videoDimension.entityId,
+      imageSlug: videoDimension.imageSlug,
+      type: videoDimension.type,
+      state: videoDimension.state,
+      pixels: videoDimension.pixels,
+      settings: videoDimension.settings,
     };
   }
 }

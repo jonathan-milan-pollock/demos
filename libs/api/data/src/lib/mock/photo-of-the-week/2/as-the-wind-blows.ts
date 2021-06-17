@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class AsTheWindBlows extends PhotoOfTheWeekDto {
-  slug = 'as-the-wind-blows';
   group = 2;
+  slug = 'as-the-wind-blows';
   title = 'As the Wind Blows';
   description = `I was getting off the train and saw so many cool lights that I 
     kinda forgot what train I was supposed to get on!`;

@@ -1,43 +1,67 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, mapTo, switchMap } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
-import { ENV, Favorites } from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/api/types';
-import { DocumentModel, Document } from '@dark-rush-photography/api/data';
+import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
+import {
+  DocumentModel,
+  Document,
+  FavoritesProvider,
+} from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class AdminFavoritesService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
     @InjectModel(Document.name)
-    private readonly favoritesModel: Model<DocumentModel>
+    private readonly favoritesModel: Model<DocumentModel>,
+    private readonly favoritesProvider: FavoritesProvider
   ) {}
 
-  create(favorites: Favorites): Observable<Favorites> {
-    return of(new this.favoritesModel(favorites)).pipe(
-      switchMap((d) => d.save())
-    );
-  }
+  create$(): Observable<Favorites> {
+    return from(
+      this.favoritesModel.findOne({ type: DocumentType.Favorites })
+    ).pipe(
+      switchMap((documentModel) => {
+        if (documentModel)
+          throw new ConflictException(
+            `Favorites has already been created`,
+            HttpStatus.FOUND
+          );
 
-  update(id: string, favorites: Favorites): Observable<Favorites> {
-    return from(this.favoritesModel.findById(id)).pipe(
-      tap((f) => {
-        if (!f) {
-          throw new NotFoundException('Could not find favorites');
-        }
+        return from(
+          new this.favoritesModel({
+            type: DocumentType.Favorites,
+            slug: 'best-37',
+            isPublic: true,
+            images: [],
+            imageDimensions: [],
+            videos: [],
+            videoDimensions: [],
+            comments: [],
+            emotions: [],
+          } as Favorites).save()
+        );
       }),
-      //switchMap(() => this.favoritesModel.findByIdAndUpdate(id, favorites)),
-      map((b) => b as Favorites)
+      map((documentModel: DocumentModel) => {
+        if (!documentModel) {
+          throw new BadRequestException(`Unable to create favorites`);
+        }
+        return this.favoritesProvider.fromDocumentModel(documentModel);
+      })
     );
   }
 
-  delete(id: string): Observable<void> {
-    return of(this.favoritesModel.findByIdAndDelete(id)).pipe(
-      map(() => undefined)
+  delete$(id: string): Observable<void> {
+    return from(this.favoritesModel.findByIdAndDelete(id)).pipe(
+      mapTo(undefined)
     );
   }
 }

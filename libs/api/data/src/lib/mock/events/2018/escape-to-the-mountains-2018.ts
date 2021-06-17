@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class EscapeToTheMountains2018 extends EventDto {
-  slug = 'escape-to-the-mountains-2018';
   group = 2018;
+  slug = 'escape-to-the-mountains-2018';
   title = 'Escape to the Mountains, 2018';
   description = `
     Escape to the mountains of Helen, Blue Ridge, and Sautee

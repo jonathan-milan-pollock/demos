@@ -1,3 +1,4 @@
+import { EmotionType } from '@dark-rush-photography/shared-types';
 import { userSchema } from './user.schema';
 
 export const emotionSchema = {
@@ -6,7 +7,7 @@ export const emotionSchema = {
   commentId: { type: String, required: false },
   type: {
     type: String,
-    enum: ['Like', 'Love', 'Care', 'Haha', 'Wow'],
+    enum: Object.keys(EmotionType),
     required: true,
   },
   user: { type: userSchema, required: true },

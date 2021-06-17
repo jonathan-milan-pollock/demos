@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class EenyMeenyMinyMoe extends PhotoOfTheWeekDto {
-  slug = 'eeny-meeny-miny-moe';
   group = 1;
+  slug = 'eeny-meeny-miny-moe';
   title = 'Eeny, Meeny, Miny, Moe';
   description = `Which boat is going first?`;
   keywords = [

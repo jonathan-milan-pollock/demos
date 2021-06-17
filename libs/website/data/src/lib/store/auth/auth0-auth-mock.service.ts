@@ -22,12 +22,12 @@ export class Auth0AuthServiceMock extends Auth0AuthService {
     } as Auth0User);
   }
 
-  loginWithRedirect(): Observable<void> {
+  loginWithRedirect$(): Observable<void> {
     console.log('Login with Redirect from server');
     return EMPTY;
   }
 
-  logout(): Observable<void> {
+  logout$(): Observable<void> {
     console.log('Logout from server');
     return EMPTY;
   }

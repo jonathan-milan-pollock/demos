@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class NativeAmericanIndianFestival2018 extends EventDto {
-  slug = 'native-american-indian-festival-2018';
   group = 2018;
+  slug = 'native-american-indian-festival-2018';
   title = 'Native American Indian Festival and Pow Wow, 2018';
   description = '';
   keywords = [

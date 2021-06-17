@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap, catchError, mergeMapTo } from 'rxjs/operators';
 
 import * as PhotoOfTheWeekActions from './photo-of-the-week.actions';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
@@ -17,8 +17,8 @@ export class PhotoOfTheWeekEffects {
   loadPhotoOfTheWeek$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PhotoOfTheWeekActions.loadPhotoOfTheWeek),
-      mergeMap(() =>
-        this.photoOfTheWeeksService.getAll().pipe(
+      mergeMapTo(
+        this.photoOfTheWeeksService.getAll$().pipe(
           map((photoOfTheWeek) =>
             PhotoOfTheWeekActions.loadPhotoOfTheWeekSuccess({ photoOfTheWeek })
           ),
@@ -34,7 +34,7 @@ export class PhotoOfTheWeekEffects {
     this.actions$.pipe(
       ofType(PhotoOfTheWeekActions.loadPhotoOfTheWeekImage),
       mergeMap((action) =>
-        this.photoOfTheWeeksService.get(action.id).pipe(
+        this.photoOfTheWeeksService.get$(action.id).pipe(
           map((photoOfTheWeek) =>
             PhotoOfTheWeekActions.loadPhotoOfTheWeekImageSuccess({
               photoOfTheWeek,
@@ -52,7 +52,7 @@ export class PhotoOfTheWeekEffects {
     this.actions$.pipe(
       ofType(PhotoOfTheWeekActions.addPhotoOfTheWeek),
       mergeMap((action) =>
-        this.photoOfTheWeeksService.add(action.photoOfTheWeek).pipe(
+        this.photoOfTheWeeksService.add$(action.photoOfTheWeek).pipe(
           map(
             (photoOfTheWeek) =>
               PhotoOfTheWeekActions.addPhotoOfTheWeekSuccess({
@@ -72,7 +72,7 @@ export class PhotoOfTheWeekEffects {
       ofType(PhotoOfTheWeekActions.updatePhotoOfTheWeek),
       mergeMap((action) =>
         this.photoOfTheWeeksService
-          .update(action.photoOfTheWeek.id ?? '', action.photoOfTheWeek)
+          .update$(action.photoOfTheWeek.id ?? '', action.photoOfTheWeek)
           .pipe(
             map(
               ({ id, ...changes }) =>
@@ -95,7 +95,7 @@ export class PhotoOfTheWeekEffects {
     this.actions$.pipe(
       ofType(PhotoOfTheWeekActions.deletePhotoOfTheWeek),
       mergeMap((action) =>
-        this.photoOfTheWeeksService.delete(action.id).pipe(
+        this.photoOfTheWeeksService.delete$(action.id).pipe(
           map(
             (id) => PhotoOfTheWeekActions.deletePhotoOfTheWeekSuccess({ id }),
             catchError((error) =>

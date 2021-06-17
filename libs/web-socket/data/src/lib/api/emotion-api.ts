@@ -4,16 +4,15 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Emotion } from '@dark-rush-photography/shared-types';
-import { EnvApi } from '@dark-rush-photography/shared-server/types';
 import { EmotionMessage } from '@dark-rush-photography/web-socket/types';
 
 export const createOrUpdateEmotion$ = (
-  envApi: EnvApi,
+  drpApi: string,
   httpService: HttpService,
   authToken: string,
   emotionMessage: EmotionMessage
 ): Observable<EmotionMessage> => {
-  const apiEndpoint = `${envApi.drpApi}/admin/v1/emotion`;
+  const apiEndpoint = `${drpApi}/admin/v1/emotion`;
   Logger.log(`Calling API ${apiEndpoint}`, createOrUpdateEmotion$.name);
   return httpService
     .post<Emotion>(
@@ -24,7 +23,6 @@ export const createOrUpdateEmotion$ = (
       {
         headers: {
           Authorization: `Bearer ${authToken}`,
-          DRP_ADMIN_KEY: envApi.drpAdminKey,
         },
       }
     )

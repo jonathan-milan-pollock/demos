@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class RockAndHardPlace extends PhotoOfTheWeekDto {
-  slug = 'rock-and-hard-place';
   group = 1;
+  slug = 'rock-and-hard-place';
   title = 'Between a Rock and a Hard Place';
   description = 'Stuck between a rock and a hard place.';
   keywords = [

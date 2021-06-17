@@ -8,22 +8,6 @@ describe('form-identifier-group', () => {
     cy.verifyRendersDataTestId('identifier-group');
   });
 
-  it('renders a slug input', () => {
-    cy.verifyRendersDataTestId('slug-input');
-  });
-
-  it('renders slug input with slug form control name', () => {
-    cy.verifyFormControlName('slugFormControlName', 'slug2', 'slug-input');
-  });
-
-  it('renders a required error when slug input is not entered', () => {
-    cy.verifyRequiredInputErrorDisplayed(
-      'slug-input',
-      'group-input',
-      'Slug is required'
-    );
-  });
-
   it('renders an invalid pattern error when slug input is not valid', () => {
     cy.verifySlugPatternErrorDisplayed('group-input');
   });
@@ -64,5 +48,21 @@ describe('form-identifier-group', () => {
       .get('mat-error[role=alert]')
       .contains('Group is required')
       .should('be.visible');
+  });
+
+  it('renders a slug input', () => {
+    cy.verifyRendersDataTestId('slug-input');
+  });
+
+  it('renders slug input with slug form control name', () => {
+    cy.verifyFormControlName('slugFormControlName', 'slug2', 'slug-input');
+  });
+
+  it('renders a required error when slug input is not entered', () => {
+    cy.verifyRequiredInputErrorDisplayed(
+      'group-input',
+      'slug-input',
+      'Slug is required'
+    );
   });
 });

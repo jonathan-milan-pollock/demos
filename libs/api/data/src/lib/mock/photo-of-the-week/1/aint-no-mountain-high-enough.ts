@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class AintNoMountainHighEnough extends PhotoOfTheWeekDto {
-  slug = 'aint-no-mountain-high-enough';
   group = 1;
+  slug = 'aint-no-mountain-high-enough';
   title = "Ain't No Mountain High Enough";
   description = `I held onto this Coke bottle like it was my wubby 
     for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park.

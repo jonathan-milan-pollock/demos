@@ -1,5 +1,6 @@
 export interface Env {
   readonly production: boolean;
-  readonly drpAdminKey: string;
+  readonly drpApiAdminKey: string;
+  readonly drpServerlessFunctionsKey: string;
   readonly mongoDbConnectionString: string;
 }

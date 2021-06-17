@@ -12,24 +12,24 @@ export class EventsServiceMock extends EventsService {
     super({} as HttpClient);
   }
 
-  getAll(): Observable<Event[]> {
+  getAll$(): Observable<Event[]> {
     return EMPTY;
   }
 
-  get(id: string): Observable<Event> {
+  get$(id: string): Observable<Event> {
     return of({ id: id } as Event);
   }
 
-  add(event: Event): Observable<Event> {
+  add$(event: Event): Observable<Event> {
     return of(event);
   }
 
-  update(id: string, event: Event): Observable<Event> {
+  update$(id: string, event: Event): Observable<Event> {
     const { id: updateId, ...updateEvent } = event;
     return of({ id: updateId, ...updateEvent });
   }
 
-  delete(id: string): Observable<string> {
+  delete$(id: string): Observable<string> {
     return of(id);
   }
 }

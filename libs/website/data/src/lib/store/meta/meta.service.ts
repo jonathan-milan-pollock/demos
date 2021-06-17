@@ -11,12 +11,12 @@ import { getMetadata } from './meta.functions';
 export class MetaService {
   constructor(private readonly title: Title, private readonly meta: Meta) {}
 
-  addMetadataForPage(page: Page, url: string): Observable<void> {
-    this.addMetadata(getMetadata(page), url);
+  addMetadataForPage$(page: Page, url: string): Observable<void> {
+    this.addMetadata$(getMetadata(page), url);
     return EMPTY;
   }
 
-  addMetadata(metadata: Metadata | undefined, url: string): Observable<void> {
+  addMetadata$(metadata: Metadata | undefined, url: string): Observable<void> {
     if (!metadata) return EMPTY;
 
     const { title, description } = metadata;

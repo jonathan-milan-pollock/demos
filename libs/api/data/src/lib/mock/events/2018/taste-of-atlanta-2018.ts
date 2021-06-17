@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class TasteOfAtlanta2018 extends EventDto {
-  slug = 'taste-of-atlanta-2018';
   group = 2018;
+  slug = 'taste-of-atlanta-2018';
   title = 'Taste of Atlanta 2018';
   description = '';
   keywords = [];

@@ -1,8 +1,8 @@
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 
 export class StopForTexts extends PhotoOfTheWeekDto {
-  slug = 'stop-for-texts';
   group = 2;
+  slug = 'stop-for-texts';
   title = 'Stop for Texts';
   description = `I should really stop to read my texts!`;
   keywords = ['Venice', 'Italy', 'Text', 'Cell Phone', 'Vespa', 'Modeling'];

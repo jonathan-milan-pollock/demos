@@ -1,21 +1,11 @@
 import { Controller, Param, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { from, merge, Observable, of, zip } from 'rxjs';
-import {
-  combineAll,
-  map,
-  mergeAll,
-  mergeMap,
-  reduce,
-  switchMap,
-  toArray,
-} from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { Review } from '@dark-rush-photography/shared-types';
 import { Public } from '@dark-rush-photography/api/util';
 import { ReviewsService } from './reviews.service';
-import { ReviewDto } from '@dark-rush-photography/api/types';
 
 @Controller('v1/reviews')
 @Public()
@@ -29,7 +19,7 @@ export class ReviewsController {
   }
 
   @Get(':id')
-  findOne(@Param() id: string): Observable<Review> {
+  findOne(@Param('id') id: string): Observable<Review> {
     return this.reviewsService.findOne(id);
   }
 }

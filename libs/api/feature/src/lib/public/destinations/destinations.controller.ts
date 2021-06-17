@@ -14,12 +14,12 @@ export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Get()
-  findAll(): Observable<Destination[]> {
-    return this.destinationsService.findAll();
+  findAll$(): Observable<Destination[]> {
+    return this.destinationsService.findAll$();
   }
 
   @Get(':id')
-  findOne(@Param() id: string): Observable<Destination> {
-    return this.destinationsService.findOne(id);
+  findOne$(@Param('id') id: string): Observable<Destination> {
+    return this.destinationsService.findOne$(id);
   }
 }

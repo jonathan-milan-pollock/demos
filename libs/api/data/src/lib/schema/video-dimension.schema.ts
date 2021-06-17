@@ -1,3 +1,7 @@
+import {
+  VideoDimensionState,
+  VideoDimensionType,
+} from '@dark-rush-photography/shared-types';
 import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
 import { videoDimensionSettingsSchema } from './video-dimension-settings.schema';
 
@@ -6,39 +10,12 @@ export const videoDimensionSchema = {
   videoSlug: { type: String, required: true },
   type: {
     type: String,
-    enum: [
-      'Thumbnail',
-      'Small',
-      'Medium',
-      'Large',
-      'Facebook',
-      'Instagram',
-      'LinkedIn',
-      'GoogleBusiness',
-      'YouTube',
-      'ThreeSixtyThumbnail',
-      'ThreeSixtySmall',
-      'ThreeSixtyMedium',
-      'ThreeSixtyLarge',
-      'ThreeSixtyFacebook',
-      'ThreeSixtyInstagram',
-      'ThreeSixtyLinkedIn',
-      'ThreeSixtyGoogleBusiness',
-      'ThreeSixtyYouTube',
-    ],
+    enum: Object.keys(VideoDimensionType),
     required: true,
   },
   state: {
     type: String,
-    enum: [
-      'added',
-      'exifed',
-      'posted',
-      'resized',
-      'social-media-posted',
-      'uploaded',
-      'website-posted',
-    ],
+    enum: Object.keys(VideoDimensionState),
     required: true,
   },
   pixels: { type: mediaDimensionPixelsSchema, required: true },

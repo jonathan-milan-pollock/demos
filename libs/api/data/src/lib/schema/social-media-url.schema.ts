@@ -1,7 +1,9 @@
+import { SocialMediaType } from '@dark-rush-photography/shared-types';
+
 export const socialMediaUrlSchema = {
   type: {
     type: String,
-    enum: ['Facebook', 'Instagram', 'LinkedIn', 'GoogleBusiness', 'YouTube'],
+    enum: Object.keys(SocialMediaType),
     required: true,
   },
   url: {

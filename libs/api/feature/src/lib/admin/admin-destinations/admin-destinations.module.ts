@@ -1,7 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
+import {
+  CommentProvider,
+  DestinationProvider,
+  Document,
+  DocumentSchema,
+  EmotionProvider,
+  ImageDimensionProvider,
+  ImageProvider,
+  VideoDimensionProvider,
+  VideoProvider,
+} from '@dark-rush-photography/api/data';
 import { AdminDestinationsController } from './admin-destinations.controller';
 import { AdminDestinationsService } from './admin-destinations.service';
 
@@ -12,6 +22,15 @@ import { AdminDestinationsService } from './admin-destinations.service';
     ]),
   ],
   controllers: [AdminDestinationsController],
-  providers: [AdminDestinationsService],
+  providers: [
+    DestinationProvider,
+    ImageProvider,
+    ImageDimensionProvider,
+    VideoProvider,
+    VideoDimensionProvider,
+    CommentProvider,
+    EmotionProvider,
+    AdminDestinationsService,
+  ],
 })
 export class AdminDestinationsModule {}

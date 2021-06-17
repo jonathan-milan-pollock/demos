@@ -8,14 +8,25 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Destination } from '@dark-rush-photography/shared-types';
-import { AdminDestinationsService } from './admin-destinations.service';
+import { ADMIN, Destination } from '@dark-rush-photography/shared-types';
+import {
+  DestinationDto,
+  DestinationUpdateDto,
+} from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
-import { DestinationDto } from '@dark-rush-photography/api/types';
+import { AdminDestinationsService } from './admin-destinations.service';
 
 @Controller('admin/v1/destinations')
 @UseGuards(RolesGuard)
@@ -26,25 +37,30 @@ export class AdminDestinationsController {
     private readonly adminDestinationsService: AdminDestinationsService
   ) {}
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Post()
-  create(@Body() destination: DestinationDto): Observable<Destination> {
-    return this.adminDestinationsService.create(destination);
+  @ApiCreatedResponse({ type: DestinationDto })
+  @ApiConflictResponse()
+  @ApiBadRequestResponse()
+  create$(@Param('slug') slug: string): Observable<Destination> {
+    return this.adminDestinationsService.create$(slug);
   }
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Put(':id')
-  update(
-    @Param() id: string,
-    @Body() destination: DestinationDto
+  @ApiOkResponse({ type: DestinationDto })
+  @ApiNotFoundResponse()
+  update$(
+    @Param('id') id: string,
+    @Body() destination: DestinationUpdateDto
   ): Observable<Destination> {
-    return this.adminDestinationsService.update(id, destination);
+    return this.adminDestinationsService.update$(id, destination);
   }
 
-  @Roles('admin')
+  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
-  delete(@Param() id: string): Observable<void> {
-    return this.adminDestinationsService.delete(id);
+  delete$(@Param('id') id: string): Observable<void> {
+    return this.adminDestinationsService.delete$(id);
   }
 }

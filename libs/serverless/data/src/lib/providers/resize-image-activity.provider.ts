@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import {
   ImageDimensionState,
@@ -96,7 +96,7 @@ export class ResizeImageActivityProvider {
         imageDimensionType
       )
     ).pipe(
-      switchMap(() => findImageDimensionPixels$(imageFilePath)),
+      switchMapTo(findImageDimensionPixels$(imageFilePath)),
       switchMap((pixels) =>
         apiAddOrUpdateImageDimension$(
           env,
@@ -107,7 +107,7 @@ export class ResizeImageActivityProvider {
           pixels
         )
       ),
-      map(() =>
+      mapTo(
         Logger.log('ResizeImage complete', ResizeImageActivityProvider.name)
       )
     );

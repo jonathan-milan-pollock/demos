@@ -1,8 +1,8 @@
 import { EventDto } from '@dark-rush-photography/api/types';
 
 export class AtlantaRhythmSectionConcert2018 extends EventDto {
-  slug = 'atlanta-rhythm-section-concert-2018';
   group = 2018;
+  slug = 'atlanta-rhythm-section-concert-2018';
   title = 'Atlanta Rhythm Section (ARS) Concert, 2018';
   description = `
   In the cool of the evenin' when everything is gettin' kind of

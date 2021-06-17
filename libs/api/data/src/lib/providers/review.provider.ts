@@ -15,6 +15,7 @@ export class ReviewProvider {
   fromDocumentModel(documentModel: DocumentModel): Review {
     return {
       id: documentModel._id,
+      slug: documentModel.slug,
       isPublic: documentModel.isPublic,
       title: documentModel.title,
       text: documentModel.text,

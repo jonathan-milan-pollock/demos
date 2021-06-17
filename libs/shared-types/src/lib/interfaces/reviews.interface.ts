@@ -1,7 +1,7 @@
-import { ImageDimension } from './image-dimension.interface';
 import { Image } from './image.interface';
-import { VideoDimension } from './video-dimension.interface';
+import { ImageDimension } from './image-dimension.interface';
 import { Video } from './video.interface';
+import { VideoDimension } from './video-dimension.interface';
 
 export interface Reviews {
   readonly id?: string;
