@@ -5,10 +5,6 @@ import {
   AboutProvider,
   Document,
   DocumentSchema,
-  ImageDimensionProvider,
-  ImageProvider,
-  VideoDimensionProvider,
-  VideoProvider,
 } from '@dark-rush-photography/api/data';
 import { AboutController } from './about.controller';
 import { AboutService } from './about.service';
@@ -20,13 +16,6 @@ import { AboutService } from './about.service';
     ]),
   ],
   controllers: [AboutController],
-  providers: [
-    AboutProvider,
-    ImageProvider,
-    ImageDimensionProvider,
-    VideoProvider,
-    VideoDimensionProvider,
-    AboutService,
-  ],
+  providers: [AboutProvider, AboutService],
 })
 export class AboutModule {}

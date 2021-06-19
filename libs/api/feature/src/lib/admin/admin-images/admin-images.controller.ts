@@ -3,93 +3,128 @@ import {
   Body,
   Param,
   Put,
-  Get,
   UseGuards,
-  Query,
   Post,
+  HttpCode,
+  Delete,
+  Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
-  ApiCreatedResponse,
+  ApiBody,
+  ApiConsumes,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Image, PostedState } from '@dark-rush-photography/shared-types';
-import { ImageDto } from '@dark-rush-photography/api/types';
+import { ADMIN, Image } from '@dark-rush-photography/shared-types';
 import {
-  PostedStateValidationPipe,
-  Roles,
-  RolesGuard,
-} from '@dark-rush-photography/api/util';
+  FileUploadDto,
+  ImageAddDto,
+  ImageDto,
+  ImageUpdateDto,
+} from '@dark-rush-photography/api/types';
+import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminImagesService } from './admin-images.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin/v1/images')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Images')
+@ApiTags('Admin Images')
 export class AdminImagesController {
   constructor(private readonly adminImagesService: AdminImagesService) {}
 
   @Roles(ADMIN)
-  @Put()
+  @Post()
   @ApiOkResponse({ type: ImageDto })
-  addOrUpdate$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminImagesService.addOrUpdate$(image);
-  }
-
-  @Roles(ADMIN)
-  @Get(':postedState')
-  @ApiOkResponse({ type: [ImageDto] })
-  findAll$(
-    @Param('postedState', new PostedStateValidationPipe())
-    postedState: PostedState,
-    @Query('entityId') entityId: string
-  ): Observable<Image[]> {
-    return this.adminImagesService.findAll$(entityId, postedState);
-  }
-
-  @Roles(ADMIN)
-  @Get(':slug/:postedState')
-  @ApiOkResponse({ type: ImageDto })
-  findOne$(
-    @Param('slug') slug: string,
-    @Param('postedState', new PostedStateValidationPipe())
-    postedState: PostedState,
-    @Query('entityId') entityId: string
+  add$(
+    @Query('entityId') entityId: string,
+    @Body() image: ImageAddDto
   ): Observable<Image> {
-    return this.adminImagesService.findOne$(entityId, slug, postedState);
+    return this.adminImagesService.add$(entityId, image);
   }
 
   @Roles(ADMIN)
-  @Post('360')
+  @Put(':imageId')
   @ApiOkResponse({ type: ImageDto })
-  create360Image$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminImagesService.create360Image$(image);
+  update$(
+    @Param('imageId') imageId: string,
+    @Query('entityId') entityId: string,
+    @Body() image: ImageUpdateDto
+  ): Observable<Image> {
+    return this.adminImagesService.update$(entityId, imageId, image);
   }
 
   @Roles(ADMIN)
-  @Post('png')
-  @ApiOkResponse({ type: ImageDto })
-  createTinifiedPng$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminImagesService.createTinifiedPng$(image);
+  @Post('upload-review')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  upload$(
+    @Query('reviewId') reviewId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminImagesService.uploadReview$(reviewId, file);
   }
 
   @Roles(ADMIN)
-  @Post('apple-icons')
-  @ApiOkResponse({ type: ImageDto })
-  createAppleIcons$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminImagesService.createAppleIcons$(image);
+  @Post('upload-three-sixty')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  uploadThreeSixty$(
+    @Query('entityId') entityId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminImagesService.uploadThreeSixty$(entityId, file);
   }
 
   @Roles(ADMIN)
-  @Post('apple-image-resources')
-  @ApiOkResponse({ type: ImageDto })
-  processAppleImageResources$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminImagesService.createAppleImageResources$(image);
+  @Post('upload-media-png')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadPng$(
+    @Query('mediaId') mediaId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminImagesService.uploadMediaPng$(mediaId, file);
+  }
+
+  @Roles(ADMIN)
+  @Post('upload-media-apple-icon')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadAppleIcon$(
+    @Query('mediaId') mediaId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminImagesService.uploadMediaAppleIcon$(mediaId, file);
+  }
+
+  @Roles(ADMIN)
+  @Post('upload-media-apple-resource')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadAppleResource$(
+    @Query('mediaId') mediaId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminImagesService.uploadMediaAppleResource$(mediaId, file);
+  }
+
+  @Roles(ADMIN)
+  @Delete(':imageId')
+  @HttpCode(204)
+  remove$(
+    @Param('imageId') imageId: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminImagesService.remove$(entityId, imageId);
   }
 }

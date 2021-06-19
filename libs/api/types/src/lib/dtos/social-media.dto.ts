@@ -12,6 +12,9 @@ export class SocialMediaDto implements SocialMedia {
   id!: string;
 
   @IsString()
+  group!: string;
+
+  @IsString()
   slug!: string;
 
   @IsArray()

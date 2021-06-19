@@ -3,11 +3,12 @@ import {
   ConflictException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
@@ -30,11 +31,7 @@ export class AdminFavoritesService {
       this.favoritesModel.findOne({ type: DocumentType.Favorites })
     ).pipe(
       switchMap((documentModel) => {
-        if (documentModel)
-          throw new ConflictException(
-            `Favorites has already been created`,
-            HttpStatus.FOUND
-          );
+        if (documentModel) return of(documentModel);
 
         return from(
           new this.favoritesModel({
@@ -54,6 +51,29 @@ export class AdminFavoritesService {
         if (!documentModel) {
           throw new BadRequestException(`Unable to create favorites`);
         }
+        return this.favoritesProvider.fromDocumentModel(documentModel);
+      })
+    );
+  }
+
+  findAll$(): Observable<Favorites[]> {
+    return from(
+      this.favoritesModel.find({ type: DocumentType.Favorites }).exec()
+    ).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map((documentModel) =>
+        this.favoritesProvider.fromDocumentModel(documentModel)
+      ),
+      toArray<Favorites>()
+    );
+  }
+
+  findOne$(id: string): Observable<Favorites> {
+    return from(this.favoritesModel.findById(id).exec()).pipe(
+      map((documentModel) => {
+        if (!documentModel)
+          throw new NotFoundException('Could not find Favorites');
+
         return this.favoritesProvider.fromDocumentModel(documentModel);
       })
     );

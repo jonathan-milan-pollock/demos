@@ -1,5 +1,5 @@
 import { Env } from '@dark-rush-photography/web-socket/types';
-import { DRP_API_DEV } from '@dark-rush-photography/shared-server/types';
+import { DRP_API_URL_DEV } from '@dark-rush-photography/shared-server/types';
 
 export const loadDevEnvironment = (): Env => {
   if (!process.env.NX_AUTH0_CLIENT_ID) {
@@ -18,6 +18,6 @@ export const loadDevEnvironment = (): Env => {
       auth0ClientId: process.env.NX_AUTH0_CLIENT_ID,
       auth0ClientSecret: process.env.NX_AUTH0_CLIENT_SECRET,
     },
-    drpApi: DRP_API_DEV,
+    drpApiUrl: DRP_API_URL_DEV,
   };
 };

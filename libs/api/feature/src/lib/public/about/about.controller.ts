@@ -10,7 +10,7 @@ import { AboutService } from './about.service';
 
 @Controller('v1/about')
 @Public()
-@ApiTags('About')
+@ApiTags('About Public')
 export class AboutController {
   constructor(private readonly aboutService: AboutService) {}
 
@@ -20,9 +20,9 @@ export class AboutController {
     return this.aboutService.findAll$();
   }
 
-  @Get(':slug')
+  @Get(':id')
   @ApiOkResponse({ type: AboutDto })
-  findOne$(@Param('slug') slug: string): Observable<About> {
-    return this.aboutService.findOne$(slug);
+  findOne$(@Param('id') id: string): Observable<About> {
+    return this.aboutService.findOne$(id);
   }
 }

@@ -8,8 +8,12 @@ export enum DocumentType {
   Destination = 'Destination',
   Event = 'Event',
   Favorites = 'Favorites',
+  MediaAppleIcon = 'MediaAppleIcon',
+  MediaAppleResource = 'MediaAppleResource',
+  MediaPng = 'MediaPng',
+  MediaVideo = 'MediaVideo',
   PhotoOfTheWeek = 'PhotoOfTheWeek',
+  ReviewMedia = 'ReviewMedia',
   Review = 'Review',
-  Reviews = 'Reviews',
   SocialMedia = 'SocialMedia',
 }

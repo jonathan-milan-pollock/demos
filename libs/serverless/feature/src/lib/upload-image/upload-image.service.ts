@@ -1,5 +1,10 @@
 import { AzureRequest } from '@nestjs/azure-func-http';
-import { HttpService, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpService,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 
@@ -19,9 +24,23 @@ export class UploadImageService {
     request: AzureRequest,
     image: Express.Multer.File
   ): Promise<IHttpResponse> {
-    Logger.log('Upload image', UploadImageService.name);
     return this.uploadImageActivityProvider
       .uploadImage$(
+        this.env,
+        this.httpService,
+        request.context,
+        request.body['fileName'],
+        image
+      )
+      .toPromise();
+  }
+
+  async upload360(
+    request: AzureRequest,
+    image: Express.Multer.File
+  ): Promise<IHttpResponse> {
+    return this.uploadImageActivityProvider
+      .upload360$(
         this.env,
         this.httpService,
         request.context,

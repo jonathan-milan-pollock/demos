@@ -1,4 +1,4 @@
-import { IsArray, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsMongoId, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { BestOf } from '@dark-rush-photography/shared-types';
@@ -8,7 +8,7 @@ import { CommentDto } from './comment.dto';
 import { EmotionDto } from './emotion.dto';
 
 export class BestOfDto implements BestOf {
-  @IsString()
+  @IsMongoId()
   id!: string;
 
   @IsString()

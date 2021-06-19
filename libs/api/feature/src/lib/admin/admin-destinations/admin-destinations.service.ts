@@ -1,18 +1,22 @@
 import {
   BadRequestException,
-  ConflictException,
-  HttpStatus,
+  HttpService,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
 import { Model } from 'mongoose';
+import { from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
 
-import { Destination, DocumentType } from '@dark-rush-photography/shared-types';
-import { DestinationUpdateDto } from '@dark-rush-photography/api/types';
+import {
+  Destination,
+  DocumentType,
+  ENV,
+} from '@dark-rush-photography/shared-types';
+import { DestinationUpdateDto, Env } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
@@ -22,6 +26,8 @@ import {
 @Injectable()
 export class AdminDestinationsService {
   constructor(
+    @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
     private readonly destinationProvider: DestinationProvider
@@ -32,11 +38,7 @@ export class AdminDestinationsService {
       this.destinationModel.findOne({ type: DocumentType.Destination, slug })
     ).pipe(
       switchMap((documentModel) => {
-        if (documentModel)
-          throw new ConflictException(
-            `Destination ${slug} has already been created`,
-            HttpStatus.FOUND
-          );
+        if (documentModel) return of(documentModel);
 
         return from(
           new this.destinationModel({
@@ -84,7 +86,7 @@ export class AdminDestinationsService {
         hasExtendedReality: destination.hasExtendedReality,
         websiteUrl: destination.websiteUrl,
         socialMediaUrls: destination.socialMediaUrls,
-      })
+      } as DestinationUpdateDto)
     ).pipe(
       map((documentModel) => {
         if (!documentModel)
@@ -94,6 +96,37 @@ export class AdminDestinationsService {
 
         return this.destinationProvider.fromDocumentModel(documentModel);
       })
+    );
+  }
+
+  findAll$(): Observable<Destination[]> {
+    return from(
+      this.destinationModel.find({ type: DocumentType.Destination }).exec()
+    ).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map((documentModel) =>
+        this.destinationProvider.fromDocumentModel(documentModel)
+      ),
+      toArray<Destination>()
+    );
+  }
+
+  findOne$(id: string): Observable<Destination> {
+    return from(this.destinationModel.findById(id).exec()).pipe(
+      map((documentModel) => {
+        if (!documentModel)
+          throw new NotFoundException('Could not find Destination');
+
+        return this.destinationProvider.fromDocumentModel(documentModel);
+      })
+    );
+  }
+
+  post$(id: string): Observable<Destination> {
+    return this.destinationProvider.post$(
+      this.env.serverless,
+      this.httpService,
+      id
     );
   }
 

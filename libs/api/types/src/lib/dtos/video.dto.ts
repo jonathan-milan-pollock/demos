@@ -13,6 +13,9 @@ import { Video, PostedState } from '@dark-rush-photography/shared-types';
 
 export class VideoDto implements Video {
   @IsMongoId()
+  id!: string;
+
+  @IsMongoId()
   entityId!: string;
 
   @IsString()

@@ -1,41 +1,28 @@
-import {
-  Controller,
-  Body,
-  Param,
-  Post,
-  Put,
-  Delete,
-  HttpCode,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Favorites } from '@dark-rush-photography/shared-types';
-import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import { Favorites } from '@dark-rush-photography/shared-types';
+import { FavoritesDto } from '@dark-rush-photography/api/types';
+import { Public } from '@dark-rush-photography/api/util';
 import { FavoritesService } from './favorites.service';
 
 @Controller('v1/favorites')
-@UseGuards(RolesGuard)
-@ApiBearerAuth()
-@ApiTags('Favorites')
+@Public()
+@ApiTags('Favorites Public')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
-  @Roles(ADMIN)
-  @Put(':id')
-  update$(
-    @Param('id') id: string,
-    @Body() favorites: Favorites
-  ): Observable<Favorites> {
-    return this.favoritesService.update$(id, favorites);
+  @Get()
+  @ApiOkResponse({ type: [FavoritesDto] })
+  findAll$(): Observable<Favorites[]> {
+    return this.favoritesService.findAll$();
   }
 
-  @Roles(ADMIN)
-  @Delete(':id')
-  @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.favoritesService.delete$(id);
+  @Get(':id')
+  @ApiOkResponse({ type: FavoritesDto })
+  findOne$(@Param('id') id: string): Observable<Favorites> {
+    return this.favoritesService.findOne$(id);
   }
 }

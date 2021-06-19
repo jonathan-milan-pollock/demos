@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, toArray } from 'rxjs/operators';
-import { Model } from 'mongoose';
 
 import { About, DocumentType } from '@dark-rush-photography/shared-types';
 import {
@@ -30,12 +30,10 @@ export class AboutService {
     );
   }
 
-  findOne$(slug: string): Observable<About> {
-    return from(
-      this.aboutModel.findOne({ type: DocumentType.About, slug }).exec()
-    ).pipe(
+  findOne$(id: string): Observable<About> {
+    return from(this.aboutModel.findById(id).exec()).pipe(
       map((documentModel) => {
-        if (!documentModel) throw new NotFoundException('Could not find About');
+        if (!documentModel) throw new NotFoundException('Could not find about');
 
         return this.aboutProvider.fromDocumentModel(documentModel);
       })

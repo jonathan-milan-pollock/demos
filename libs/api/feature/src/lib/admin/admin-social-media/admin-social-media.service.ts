@@ -16,7 +16,7 @@ import {
   Document,
   SocialMediaProvider,
 } from '@dark-rush-photography/api/data';
-import { SocialMediaDto } from '@dark-rush-photography/api/types';
+import { SocialMediaCreateDto } from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class AdminSocialMediaService {
@@ -26,11 +26,12 @@ export class AdminSocialMediaService {
     private readonly socialMediaProvider: SocialMediaProvider
   ) {}
 
-  create$(slug: string): Observable<SocialMedia> {
+  create$(socialMedia: SocialMediaCreateDto): Observable<SocialMedia> {
     return from(
       this.socialMediaModel.findOne({
         type: DocumentType.SocialMedia,
-        slug,
+        group: socialMedia.group,
+        slug: socialMedia.slug,
       })
     ).pipe(
       switchMap((documentModel) => {
@@ -43,7 +44,8 @@ export class AdminSocialMediaService {
         return from(
           new this.socialMediaModel({
             type: DocumentType.SocialMedia,
-            slug,
+            group: socialMedia.group,
+            slug: socialMedia.slug,
             isPublic: true,
             images: [],
             imageDimensions: [],
@@ -55,7 +57,7 @@ export class AdminSocialMediaService {
       map((documentModel: DocumentModel) => {
         if (!documentModel) {
           throw new BadRequestException(
-            `Unable to create social media ${slug}`
+            `Unable to create social media ${socialMedia.group} ${socialMedia.slug}`
           );
         }
         return this.socialMediaProvider.fromDocumentModel(documentModel);
@@ -67,13 +69,5 @@ export class AdminSocialMediaService {
     return from(this.socialMediaModel.findByIdAndDelete(id)).pipe(
       mapTo(undefined)
     );
-  }
-
-  post$(socialMedia: SocialMediaDto): Observable<SocialMedia> {
-    return of();
-  }
-
-  postMobileImage$(): Observable<SocialMedia> {
-    return of();
   }
 }

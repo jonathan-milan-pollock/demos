@@ -1,4 +1,5 @@
 import { Env } from '@dark-rush-photography/api/types';
+import { DRP_SERVERLESS_URL_DEV } from '@dark-rush-photography/shared-server/types';
 
 export const loadDevEnvironment = (): Env => {
   if (!process.env.NX_DRP_API_ADMIN_KEY) {
@@ -26,7 +27,10 @@ export const loadDevEnvironment = (): Env => {
   return {
     production: false,
     drpApiAdminKey: process.env.NX_DRP_API_ADMIN_KEY,
-    drpServerlessFunctionsKey: process.env.NX_DRP_SERVERLESS_FUNCTIONS_KEY,
+    serverless: {
+      drpServerlessUrl: DRP_SERVERLESS_URL_DEV,
+      drpServerlessFunctionsKey: process.env.NX_DRP_SERVERLESS_FUNCTIONS_KEY,
+    },
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
   };
 };

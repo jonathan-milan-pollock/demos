@@ -82,11 +82,11 @@
 
 ## NestJS REST
 
+- :page_with_curl: [REST API Best Practices](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 - :page_with_curl: [NestJS](https://docs.nestjs.com/)
 - :clapper: [NestJS](https://academind.com/tutorials/nestjs-introduction/)
 - :clapper: [NestJS With Mongoose](https://www.youtube.com/watch?v=ulfU5vY6I78)
 - :page_with_curl: [NestJS Auth0](https://auth0.com/blog/developing-a-secure-api-with-nestjs-adding-role-based-access-control/)
-- :page_with_curl: [REST API Best Practices](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
 
 ---
 

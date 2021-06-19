@@ -1,4 +1,4 @@
-import { DRP_API_DEV } from '@dark-rush-photography/shared-server/types';
+import { DRP_API_URL_DEV } from '@dark-rush-photography/shared-server/types';
 import {
   AZURE_STORAGE_CONNECTION_STRING_DEV,
   Env,
@@ -34,7 +34,7 @@ export const loadDevEnvironment = (): Env => {
       auth0ClientSecret: process.env.NX_AUTH0_CLIENT_SECRET,
     },
     api: {
-      drpApi: DRP_API_DEV,
+      drpApi: DRP_API_URL_DEV,
       drpApiAdminKey: process.env.NX_DRP_API_ADMIN_KEY,
     },
     azureStorageConnectionString: AZURE_STORAGE_CONNECTION_STRING_DEV,

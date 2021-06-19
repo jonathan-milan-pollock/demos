@@ -1,5 +1,27 @@
-import { OmitType } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsBoolean,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
-import { ReviewDto } from './review.dto';
+import { Review } from '@dark-rush-photography/shared-types';
 
-export class ReviewRequestDto extends OmitType(ReviewDto, ['id'] as const) {}
+export class ReviewUpdateDto implements Partial<Review> {
+  @IsString()
+  slug!: string;
+
+  @IsBoolean()
+  isPublic!: boolean;
+
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => String)
+  text: string[] = [];
+}

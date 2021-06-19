@@ -5,43 +5,151 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
-import { Image } from '@dark-rush-photography/shared-types';
-import { Document, DocumentModel } from '@dark-rush-photography/api/data';
+import { Comment } from '@dark-rush-photography/shared-types';
+import {
+  CommentProvider,
+  Document,
+  DocumentModel,
+} from '@dark-rush-photography/api/data';
+import {
+  CommentAddDto,
+  CommentUpdateDto,
+} from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class CommentsService {
   constructor(
     @InjectModel(Document.name)
-    private readonly documentModel: Model<DocumentModel>
+    private readonly entityModel: Model<DocumentModel>,
+    private readonly commentProvider: CommentProvider
   ) {}
 
-  //TODO: Post Mobile Image
-  //TODO: Post Three Sixty Image
+  addEntityComment$(
+    entityId: string,
+    comment: CommentAddDto
+  ): Observable<Comment> {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add comment');
 
-  addOrUpdate$(image: Image): Observable<Image> {
-    return from(this.documentModel.findById(image.entityId).exec()).pipe(
-      switchMap((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity to add image');
+        return this.commentProvider.add$(
+          response,
+          this.entityModel,
+          id,
+          entityId,
+          comment
+        );
+      }),
+      switchMapTo(
+        this.commentProvider.findById$(this.entityModel, entityId, id)
+      )
+    );
+  }
+
+  addMediaComment$(
+    entityId: string,
+    mediaId: string,
+    comment: CommentAddDto
+  ): Observable<Comment> {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add comment');
+
+        const image = response.images.find((i) => i.id === mediaId);
+        if (image) {
+          return this.commentProvider.add$(
+            response,
+            this.entityModel,
+            id,
+            entityId,
+            comment,
+            mediaId
+          );
+        }
+        const video = response.videos.find((v) => v.id === mediaId);
+        if (video) {
+          return this.commentProvider.add$(
+            response,
+            this.entityModel,
+            id,
+            entityId,
+            comment,
+            mediaId
+          );
+        }
+
+        throw new NotFoundException('Could not find media to add comment');
+      }),
+      switchMapTo(
+        this.commentProvider.findById$(this.entityModel, entityId, id)
+      )
+    );
+  }
+
+  update$(
+    entityId: string,
+    commentId: string,
+    comment: CommentUpdateDto
+  ): Observable<Comment> {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException(
+            'Could not find entity to update comment'
+          );
+
+        const foundComment = response.comments.find((c) => c.id === commentId);
+        if (!foundComment)
+          throw new NotFoundException('Could not find comment to update');
 
         return from(
-          this.documentModel.findByIdAndUpdate(image.entityId, {
-            images: [
-              ...documentModel.images.filter((i) => i.slug !== image.slug),
-              { ...image },
+          this.entityModel.findByIdAndUpdate(entityId, {
+            comments: [
+              ...response.comments.filter((c) => c.id !== commentId),
+              {
+                ...foundComment,
+                ...comment,
+              },
+            ],
+          })
+        );
+      }),
+      switchMapTo(
+        this.commentProvider.findById$(this.entityModel, entityId, commentId)
+      )
+    );
+  }
+
+  remove$(entityId: string, commentId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException(
+            'Could not find entity to remove comment'
+          );
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            comments: [...response.comments.filter((c) => c.id !== commentId)],
+            emotions: [
+              ...response.emotions.filter((e) => e.commentId !== commentId),
             ],
           })
         );
       }),
       map((response) => {
         if (!response) {
-          throw new BadRequestException(`Unable to add image ${image.slug}`);
+          throw new BadRequestException('Unable to remove comment');
         }
-        return image;
       })
     );
   }

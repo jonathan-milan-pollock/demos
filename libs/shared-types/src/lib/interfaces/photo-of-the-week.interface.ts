@@ -6,7 +6,7 @@ import { Emotion } from './emotion.interface';
 
 export interface PhotoOfTheWeek {
   readonly id?: string;
-  readonly group: number;
+  readonly group: string;
   readonly slug: string;
   readonly isPublic: boolean;
   readonly title?: string;

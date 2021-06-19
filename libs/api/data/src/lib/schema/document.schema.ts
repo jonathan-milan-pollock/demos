@@ -16,7 +16,7 @@ import {
   Location,
   PhotoOfTheWeek,
   Review,
-  Reviews,
+  ReviewMedia,
   SocialMediaUrl,
   Video,
   VideoDimension,
@@ -42,7 +42,7 @@ export class Document
     Favorites,
     PhotoOfTheWeek,
     Review,
-    Reviews {
+    ReviewMedia {
   @Prop({ type: String, required: false })
   id?: string;
 
@@ -53,8 +53,8 @@ export class Document
   })
   type!: DocumentType;
 
-  @Prop({ type: Number, required: true, default: 0 })
-  group!: number;
+  @Prop({ type: String, required: true, default: ' ' })
+  group!: string;
 
   @Prop({ type: String, required: true })
   slug!: string;

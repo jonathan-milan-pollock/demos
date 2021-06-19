@@ -11,10 +11,13 @@ import { VideoDimensionSettingsDto } from './video-dimension-settings.dto';
 
 export class VideoDimensionDto implements VideoDimension {
   @IsMongoId()
+  id!: string;
+
+  @IsMongoId()
   entityId!: string;
 
   @IsString()
-  videoSlug!: string;
+  videoId!: string;
 
   @IsEnum(VideoDimensionType)
   type!: VideoDimensionType;

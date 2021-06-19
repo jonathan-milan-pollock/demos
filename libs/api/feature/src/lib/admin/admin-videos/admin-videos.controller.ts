@@ -2,55 +2,85 @@ import {
   Controller,
   Body,
   Param,
-  Put,
-  Get,
   UseGuards,
+  Post,
+  Delete,
+  HttpCode,
+  Put,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Image } from '@dark-rush-photography/shared-types';
-import { ImageDto } from '@dark-rush-photography/api/types';
+import { ADMIN, Video } from '@dark-rush-photography/shared-types';
+import {
+  FileUploadDto,
+  VideoAddDto,
+  VideoDto,
+  VideoUpdateDto,
+} from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminVideosService } from './admin-videos.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin/v1/videos')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Videos')
+@ApiTags('Admin Videos')
 export class AdminVideosController {
   constructor(private readonly adminVideosService: AdminVideosService) {}
 
   @Roles(ADMIN)
-  @Put()
-  @ApiOkResponse({ type: ImageDto })
-  addOrUpdate$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminVideosService.addOrUpdate$(image);
+  @Post()
+  @ApiOkResponse({ type: VideoDto })
+  add$(
+    @Query('entityId') entityId: string,
+    @Body() video: VideoAddDto
+  ): Observable<Video> {
+    return this.adminVideosService.add$(entityId, video);
   }
 
   @Roles(ADMIN)
-  @Put('post')
-  @ApiOkResponse({ type: ImageDto })
-  post$(@Body() image: ImageDto): Observable<Image> {
-    return this.adminVideosService.addOrUpdate$(image);
+  @Put(':videoId')
+  @ApiOkResponse({ type: VideoDto })
+  update$(
+    @Param('videoId') videoId: string,
+    @Query('entityId') entityId: string,
+    @Body() video: VideoUpdateDto
+  ): Observable<Video> {
+    return this.adminVideosService.update$(entityId, videoId, video);
   }
 
   @Roles(ADMIN)
-  @Get()
-  @ApiOkResponse({ type: ImageDto })
-  findAll$(@Query('entityId') entityId: string): Observable<Image[]> {
-    return this.adminVideosService.findAll$(entityId);
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  uploadVideo$(
+    @Query('entityId') entityId: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Video> {
+    return this.adminVideosService.upload$(entityId, file);
   }
 
   @Roles(ADMIN)
-  @Get(':slug')
-  @ApiOkResponse({ type: ImageDto })
-  findOne$(
-    @Param('slug') slug: string,
+  @Delete(':videoId')
+  @HttpCode(204)
+  delete$(
+    @Param('videoId') videoId: string,
     @Query('entityId') entityId: string
-  ): Observable<Image> {
-    return this.adminVideosService.findOne$(slug, entityId);
+  ): Observable<void> {
+    return this.adminVideosService.remove$(entityId, videoId);
   }
 }

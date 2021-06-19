@@ -1,11 +1,10 @@
 import {
   IsArray,
   IsBoolean,
-  IsInt,
   IsISO8601,
+  IsNumberString,
   IsOptional,
   IsString,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -21,9 +20,8 @@ export class PhotoOfTheWeekDto implements PhotoOfTheWeek {
   @IsString()
   id!: string;
 
-  @IsInt()
-  @Min(0)
-  group!: number;
+  @IsNumberString()
+  group!: string;
 
   @IsString()
   slug!: string;

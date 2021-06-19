@@ -13,6 +13,9 @@ import { Image, PostedState } from '@dark-rush-photography/shared-types';
 
 export class ImageDto implements Image {
   @IsMongoId()
+  id!: string;
+
+  @IsMongoId()
   entityId!: string;
 
   @IsString()

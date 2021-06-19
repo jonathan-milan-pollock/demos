@@ -1,14 +1,12 @@
 import {
   BadRequestException,
-  ConflictException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { EMPTY, from, Observable, of } from 'rxjs';
-import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import { Event, DocumentType } from '@dark-rush-photography/shared-types';
@@ -39,11 +37,7 @@ export class AdminEventsService {
       })
     ).pipe(
       switchMap((documentModel) => {
-        if (documentModel)
-          throw new ConflictException(
-            `Event ${event.group} ${event.slug} has already been created`,
-            HttpStatus.FOUND
-          );
+        if (documentModel) return of(documentModel);
 
         return from(
           new this.eventModel({
@@ -88,7 +82,7 @@ export class AdminEventsService {
         location: event.location,
         useTileImage: event.useTileImage,
         text: event.text,
-      })
+      } as EventUpdateDto)
     ).pipe(
       map((documentModel) => {
         if (!documentModel)
@@ -101,7 +95,27 @@ export class AdminEventsService {
     );
   }
 
+  findAll$(): Observable<Event[]> {
+    return from(this.eventModel.find({ type: DocumentType.Event }).exec()).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map((documentModel) =>
+        this.eventProvider.fromDocumentModel(documentModel)
+      ),
+      toArray<Event>()
+    );
+  }
+
+  findOne$(id: string): Observable<Event> {
+    return from(this.eventModel.findById(id).exec()).pipe(
+      map((documentModel) => {
+        if (!documentModel) throw new NotFoundException('Could not find Event');
+
+        return this.eventProvider.fromDocumentModel(documentModel);
+      })
+    );
+  }
+
   delete$(id: string): Observable<void> {
-    return of(this.eventModel.findByIdAndDelete(id)).pipe(switchMapTo(EMPTY));
+    return of(this.eventModel.findByIdAndDelete(id)).pipe(mapTo(undefined));
   }
 }

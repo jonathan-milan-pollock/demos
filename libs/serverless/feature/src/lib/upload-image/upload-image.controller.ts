@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Param,
   Post,
   Req,
   UploadedFile,
@@ -24,7 +25,7 @@ export class UploadImageController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
     @Req() request: AzureRequest,
     @UploadedFile() image: Express.Multer.File
@@ -33,5 +34,21 @@ export class UploadImageController {
       null,
       await this.uploadImageService.uploadImage(request, image)
     );
+  }
+
+  @Post(':type')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImageType(
+    @Param('type') type: string,
+    @Req() request: AzureRequest,
+    @UploadedFile() image: Express.Multer.File
+  ): Promise<void> {
+    switch (type) {
+      case '':
+        request.context.done(
+          null,
+          await this.uploadImageService.uploadImage(request, image)
+        );
+    }
   }
 }

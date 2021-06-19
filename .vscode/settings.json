@@ -6,10 +6,15 @@
     "Haha",
     "INSTRUMENTATIONKEY",
     "Tinified",
+    "ayrshare",
     "dtos",
     "hfov",
+    "ihttpresponse",
     "nestjs",
-    "tinify"
+    "originalname",
+    "testid",
+    "tinify",
+    "uuidv"
   ],
   "azureFunctions.deploySubpath": ".",
   "azureFunctions.postDeployTask": "npm install",

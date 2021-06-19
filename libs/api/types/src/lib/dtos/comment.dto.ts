@@ -3,7 +3,6 @@ import {
   IsMongoId,
   IsOptional,
   IsString,
-  IsUUID,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -14,14 +13,14 @@ import { UserDto } from './user.dto';
 
 export class CommentDto implements Comment {
   @IsMongoId()
+  id!: string;
+
+  @IsMongoId()
   entityId!: string;
 
-  @IsString()
+  @IsMongoId()
   @IsOptional()
-  mediaSlug?: string;
-
-  @IsUUID()
-  id!: string;
+  mediaId?: string;
 
   @IsInt()
   @Min(0)

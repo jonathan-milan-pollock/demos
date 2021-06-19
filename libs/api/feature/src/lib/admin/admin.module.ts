@@ -9,8 +9,9 @@ import { AdminEventsModule } from './admin-events/admin-events.module';
 import { AdminFavoritesModule } from './admin-favorites/admin-favorites.module';
 import { AdminImageDimensionsModule } from './admin-image-dimensions/admin-image-dimensions.module';
 import { AdminImagesModule } from './admin-images/admin-images.module';
+import { AdminMediaModule } from './admin-media/admin-media.module';
 import { AdminPhotoOfTheWeekModule } from './admin-photo-of-the-week/admin-photo-of-the-week.module';
-import { AdminReviewModule } from './admin-review/admin-review.module';
+import { AdminReviewMediaModule } from './admin-review-media/admin-review-media.module';
 import { AdminReviewsModule } from './admin-reviews/admin-reviews.module';
 import { AdminSocialMediaModule } from './admin-social-media/admin-social-media.module';
 import { AdminVideoDimensionsModule } from './admin-video-dimensions/admin-video-dimensions.module';
@@ -28,8 +29,9 @@ import { AdminVideosModule } from './admin-videos/admin-videos.module';
     AdminFavoritesModule,
     AdminImageDimensionsModule,
     AdminImagesModule,
+    AdminMediaModule,
     AdminPhotoOfTheWeekModule,
-    AdminReviewModule,
+    AdminReviewMediaModule,
     AdminReviewsModule,
     AdminSocialMediaModule,
     AdminVideoDimensionsModule,
