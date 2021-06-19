@@ -11,10 +11,13 @@ import { ImageDimensionSettingsDto } from './image-dimension-settings.dto';
 
 export class ImageDimensionDto implements ImageDimension {
   @IsMongoId()
+  id!: string;
+
+  @IsMongoId()
   entityId!: string;
 
   @IsString()
-  imageSlug!: string;
+  imageId!: string;
 
   @IsEnum(ImageDimensionType)
   type!: ImageDimensionType;

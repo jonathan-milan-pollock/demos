@@ -7,13 +7,11 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
   ApiCreatedResponse,
-  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -31,17 +29,15 @@ import { AdminDestinationsService } from './admin-destinations.service';
 @Controller('admin/v1/destinations')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Destinations')
+@ApiTags('Admin Destinations')
 export class AdminDestinationsController {
   constructor(
     private readonly adminDestinationsService: AdminDestinationsService
   ) {}
 
   @Roles(ADMIN)
-  @Post()
+  @Post(':slug')
   @ApiCreatedResponse({ type: DestinationDto })
-  @ApiConflictResponse()
-  @ApiBadRequestResponse()
   create$(@Param('slug') slug: string): Observable<Destination> {
     return this.adminDestinationsService.create$(slug);
   }
@@ -49,12 +45,31 @@ export class AdminDestinationsController {
   @Roles(ADMIN)
   @Put(':id')
   @ApiOkResponse({ type: DestinationDto })
-  @ApiNotFoundResponse()
   update$(
     @Param('id') id: string,
     @Body() destination: DestinationUpdateDto
   ): Observable<Destination> {
     return this.adminDestinationsService.update$(id, destination);
+  }
+
+  @Roles(ADMIN)
+  @Get()
+  @ApiOkResponse({ type: [DestinationDto] })
+  findAll$(): Observable<Destination[]> {
+    return this.adminDestinationsService.findAll$();
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: DestinationDto })
+  findOne$(@Param('id') id: string): Observable<Destination> {
+    return this.adminDestinationsService.findOne$(id);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  post$(@Param('id') id: string): Observable<Destination> {
+    return this.adminDestinationsService.post$(id);
   }
 
   @Roles(ADMIN)

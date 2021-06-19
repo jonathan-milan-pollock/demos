@@ -8,7 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 
 import { EMPTY, from, Observable, of } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 import { Model } from 'mongoose';
 
 import {
@@ -108,7 +108,7 @@ export class AdminPhotoOfTheWeekService {
 
   delete$(id: string): Observable<void> {
     return of(this.photoOfTheWeekModel.findByIdAndDelete(id)).pipe(
-      switchMapTo(EMPTY)
+      mapTo(undefined)
     );
   }
 }

@@ -45,9 +45,9 @@ export const getPublishedImageForUpload = (
     getPublishedImageForUpload.name
   );
 
-  const fileNameSections = uploadImageFileName.split('|&|');
+  const fileNameSections = uploadImageFileName.split('---');
   if (fileNameSections.length === 0)
-    throw new Error('|&| must be used to separate publish service segments');
+    throw new Error('--- is required to separate publish service segments');
 
   const publishServiceName = getPublishServiceName(fileNameSections[0]);
   Logger.log(

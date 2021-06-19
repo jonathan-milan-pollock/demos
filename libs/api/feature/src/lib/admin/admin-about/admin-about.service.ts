@@ -1,14 +1,13 @@
 import {
   BadRequestException,
-  ConflictException,
-  HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
 import { Model } from 'mongoose';
+import { from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
 
 import { About, DocumentType } from '@dark-rush-photography/shared-types';
 import {
@@ -30,11 +29,7 @@ export class AdminAboutService {
       this.aboutModel.findOne({ type: DocumentType.About, slug })
     ).pipe(
       switchMap((documentModel) => {
-        if (documentModel)
-          throw new ConflictException(
-            `About ${slug} has already been created`,
-            HttpStatus.FOUND
-          );
+        if (documentModel) return of(documentModel);
 
         return from(
           new this.aboutModel({
@@ -48,10 +43,30 @@ export class AdminAboutService {
           } as About).save()
         );
       }),
-      map((documentModel: DocumentModel) => {
+      map((documentModel) => {
         if (!documentModel) {
           throw new BadRequestException(`Unable to create about ${slug}`);
         }
+        return this.aboutProvider.fromDocumentModel(documentModel);
+      })
+    );
+  }
+
+  findAll$(): Observable<About[]> {
+    return from(this.aboutModel.find({ type: DocumentType.About }).exec()).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map((documentModel) =>
+        this.aboutProvider.fromDocumentModel(documentModel)
+      ),
+      toArray<About>()
+    );
+  }
+
+  findOne$(id: string): Observable<About> {
+    return from(this.aboutModel.findById(id).exec()).pipe(
+      map((documentModel) => {
+        if (!documentModel) throw new NotFoundException('Could not find About');
+
         return this.aboutProvider.fromDocumentModel(documentModel);
       })
     );

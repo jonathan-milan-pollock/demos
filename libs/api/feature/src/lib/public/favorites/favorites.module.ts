@@ -2,15 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  CommentProvider,
   Document,
   DocumentSchema,
-  EmotionProvider,
   FavoritesProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  VideoDimensionProvider,
-  VideoProvider,
 } from '@dark-rush-photography/api/data';
 import { FavoritesController } from './favorites.controller';
 import { FavoritesService } from './favorites.service';
@@ -22,15 +16,6 @@ import { FavoritesService } from './favorites.service';
     ]),
   ],
   controllers: [FavoritesController],
-  providers: [
-    FavoritesProvider,
-    ImageProvider,
-    ImageDimensionProvider,
-    VideoProvider,
-    VideoDimensionProvider,
-    CommentProvider,
-    EmotionProvider,
-    FavoritesService,
-  ],
+  providers: [FavoritesProvider, FavoritesService],
 })
 export class FavoritesModule {}

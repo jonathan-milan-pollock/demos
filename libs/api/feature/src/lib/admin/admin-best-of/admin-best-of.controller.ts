@@ -1,16 +1,16 @@
 import {
   Delete,
   Controller,
-  HttpCode,
   Param,
   Post,
   UseGuards,
+  HttpCode,
+  Get,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
@@ -29,7 +29,7 @@ import { AdminBestOfService } from './admin-best-of.service';
 @Controller('admin/v1/best-of')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Best Of')
+@ApiTags('Admin Best Of')
 export class AdminBestOfController {
   constructor(private readonly adminBestOfService: AdminBestOfService) {}
 
@@ -40,13 +40,24 @@ export class AdminBestOfController {
     enum: BestOfType,
   })
   @ApiCreatedResponse({ type: BestOfDto })
-  @ApiConflictResponse()
-  @ApiBadRequestResponse()
   create$(
     @Param('bestOfType', new BestOfTypeValidationPipe())
     bestOfType: BestOfType
   ): Observable<BestOf> {
     return this.adminBestOfService.create$(bestOfType);
+  }
+
+  @Get(':bestOfType')
+  @ApiParam({
+    name: 'bestOfType',
+    enum: BestOfType,
+  })
+  @ApiOkResponse({ type: BestOfDto })
+  findOne$(
+    @Param('bestOfType', new BestOfTypeValidationPipe())
+    bestOfType: BestOfType
+  ): Observable<BestOf> {
+    return this.adminBestOfService.findOne$(bestOfType);
   }
 
   @Roles(ADMIN)

@@ -1,4 +1,4 @@
-import { IsArray, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsMongoId, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { About } from '@dark-rush-photography/shared-types';
@@ -8,7 +8,7 @@ import { VideoDto } from './video.dto';
 import { VideoDimensionDto } from './video-dimension.dto';
 
 export class AboutDto implements About {
-  @IsString()
+  @IsMongoId()
   id!: string;
 
   @IsString()

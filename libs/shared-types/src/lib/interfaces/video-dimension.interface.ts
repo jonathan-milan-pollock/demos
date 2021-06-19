@@ -4,8 +4,9 @@ import { MediaDimensionPixels } from './media-dimension-pixels.interface';
 import { VideoDimensionSettings } from './video-dimension-settings.interface';
 
 export interface VideoDimension {
+  readonly id: string;
   readonly entityId: string;
-  readonly videoSlug: string;
+  readonly videoId: string;
   readonly type: VideoDimensionType;
   readonly state: VideoDimensionState;
   readonly pixels: MediaDimensionPixels;

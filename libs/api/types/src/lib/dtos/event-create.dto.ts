@@ -1,9 +1,10 @@
-import { IsInt, IsString, Min } from 'class-validator';
+import { IsNumberString, IsString } from 'class-validator';
 
-export class EventCreateDto {
-  @IsInt()
-  @Min(0)
-  group!: number;
+import { Event } from '@dark-rush-photography/shared-types';
+
+export class EventCreateDto implements Partial<Event> {
+  @IsNumberString()
+  group!: string;
 
   @IsString()
   slug!: string;

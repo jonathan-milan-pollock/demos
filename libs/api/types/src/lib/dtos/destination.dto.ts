@@ -2,6 +2,7 @@ import {
   IsArray,
   IsBoolean,
   IsISO8601,
+  IsMongoId,
   IsOptional,
   IsString,
   IsUrl,
@@ -20,7 +21,7 @@ import { CommentDto } from './comment.dto';
 import { EmotionDto } from './emotion.dto';
 
 export class DestinationDto implements Destination {
-  @IsString()
+  @IsMongoId()
   id!: string;
 
   @IsString()

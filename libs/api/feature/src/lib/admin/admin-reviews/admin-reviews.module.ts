@@ -1,7 +1,11 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
+import {
+  Document,
+  DocumentSchema,
+  ReviewProvider,
+} from '@dark-rush-photography/api/data';
 import { AdminReviewsController } from './admin-reviews.controller';
 import { AdminReviewsService } from './admin-reviews.service';
 
@@ -10,8 +14,9 @@ import { AdminReviewsService } from './admin-reviews.service';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [AdminReviewsController],
-  providers: [AdminReviewsService],
+  providers: [ReviewProvider, AdminReviewsService],
 })
 export class AdminReviewsModule {}

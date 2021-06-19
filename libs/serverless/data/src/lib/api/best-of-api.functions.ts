@@ -31,7 +31,7 @@ export const createBestOfIfNotExists$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_API_ADMIN_KEY: envApi.drpApiAdminKey,
+            'X-DRP-API-ADMIN-KEY': envApi.drpApiAdminKey,
           },
         }
       )

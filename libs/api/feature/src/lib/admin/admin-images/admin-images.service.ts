@@ -1,103 +1,178 @@
 import {
   BadRequestException,
+  HttpService,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
-import { Image, PostedState } from '@dark-rush-photography/shared-types';
+import { ENV, Image } from '@dark-rush-photography/shared-types';
 import {
   Document,
   DocumentModel,
   ImageProvider,
 } from '@dark-rush-photography/api/data';
+import {
+  Env,
+  ImageAddDto,
+  ImageUpdateDto,
+} from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class AdminImagesService {
   constructor(
+    @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
     @InjectModel(Document.name)
-    private readonly documentModel: Model<DocumentModel>,
+    private readonly entityModel: Model<DocumentModel>,
     private readonly imageProvider: ImageProvider
   ) {}
 
-  addOrUpdate$(image: Image): Observable<Image> {
-    return from(this.documentModel.findById(image.entityId).exec()).pipe(
-      switchMap((documentModel) => {
-        if (!documentModel)
+  add$(entityId: string, image: ImageAddDto): Observable<Image> {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
           throw new NotFoundException('Could not find entity to add image');
 
         return from(
-          this.documentModel.findByIdAndUpdate(image.entityId, {
+          this.entityModel.findByIdAndUpdate(entityId, {
             images: [
-              ...documentModel.images.filter((i) => i.slug !== image.slug),
-              { ...image },
+              ...response.images,
+              {
+                ...image,
+                id,
+                entityId,
+                order: 0,
+                isStared: false,
+                isLoved: false,
+                isLiked: false,
+              },
+            ],
+          })
+        );
+      }),
+      switchMapTo(this.imageProvider.findById$(this.entityModel, entityId, id))
+    );
+  }
+
+  update$(
+    entityId: string,
+    imageId: string,
+    image: ImageUpdateDto
+  ): Observable<Image> {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to update image');
+
+        const foundImage = response.images.find((i) => i.id === imageId);
+        if (!foundImage)
+          throw new NotFoundException('Could not find image to update');
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            images: [
+              ...response.images.filter((i) => i.id !== imageId),
+              { ...image, id: imageId, entityId },
+            ],
+          })
+        );
+      }),
+      switchMapTo(
+        this.imageProvider.findById$(this.entityModel, entityId, imageId)
+      )
+    );
+  }
+
+  uploadThreeSixty$(
+    entityId: string,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    return this.imageProvider.uploadThreeSixty$(
+      this.env.serverless,
+      this.httpService,
+      entityId,
+      file
+    );
+  }
+
+  uploadReview$(
+    reviewId: string,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    return this.imageProvider.uploadReview$(
+      this.env.serverless,
+      this.httpService,
+      reviewId,
+      file
+    );
+  }
+
+  uploadMediaPng$(
+    mediaId: string,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    return this.imageProvider.uploadMediaPng$(
+      this.env.serverless,
+      this.httpService,
+      mediaId,
+      file
+    );
+  }
+
+  uploadMediaAppleIcon$(
+    mediaId: string,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    return this.imageProvider.uploadMediaAppleIcon$(
+      this.env.serverless,
+      this.httpService,
+      mediaId,
+      file
+    );
+  }
+
+  uploadMediaAppleResource$(
+    mediaId: string,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    return this.imageProvider.uploadMediaAppleResource$(
+      this.env.serverless,
+      this.httpService,
+      mediaId,
+      file
+    );
+  }
+
+  remove$(entityId: string, imageId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to remove image');
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            images: [...response.images.filter((i) => i.id !== imageId)],
+            imageDimensions: [
+              ...response.imageDimensions.filter(
+                (id) => id.imageId !== imageId
+              ),
             ],
           })
         );
       }),
       map((response) => {
         if (!response) {
-          throw new BadRequestException(`Unable to add image ${image.slug}`);
+          throw new BadRequestException('Unable to remove image');
         }
-        return image;
       })
     );
-  }
-
-  findAll$(entityId: string, postedState: PostedState): Observable<Image[]> {
-    return from(this.documentModel.findById(entityId).exec()).pipe(
-      switchMap((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity');
-
-        return from(
-          documentModel.images.filter((i) => i.state === postedState)
-        );
-      }),
-      map((image) => this.imageProvider.toImage(image)),
-      toArray<Image>()
-    );
-  }
-
-  findOne$(
-    entityId: string,
-    slug: string,
-    postedState: PostedState
-  ): Observable<Image> {
-    return from(this.documentModel.findById(entityId).exec()).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity');
-
-        return documentModel.images.filter((i) => i.state === postedState);
-      }),
-      map((images) => {
-        const image = images.find((image) => image.slug === slug);
-        if (!image) {
-          throw new NotFoundException(`Could not find image ${slug}`);
-        }
-        return this.imageProvider.toImage(image);
-      })
-    );
-  }
-
-  create360Image$(image: Image): Observable<Image> {
-    return of(image);
-  }
-
-  createTinifiedPng$(image: Image): Observable<Image> {
-    return of(image);
-  }
-
-  createAppleIcons$(image: Image): Observable<Image> {
-    return of(image);
-  }
-
-  createAppleImageResources$(image: Image): Observable<Image> {
-    return of(image);
   }
 }

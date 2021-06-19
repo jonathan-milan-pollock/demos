@@ -1,38 +1,28 @@
-import {
-  Body,
-  Delete,
-  Controller,
-  HttpCode,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiConflictResponse,
-  ApiCreatedResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { About, ADMIN } from '@dark-rush-photography/shared-types';
-import { AboutDto } from '@dark-rush-photography/api/types';
-import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import { SocialMedia } from '@dark-rush-photography/shared-types';
+import { SocialMediaDto } from '@dark-rush-photography/api/types';
+import { Public } from '@dark-rush-photography/api/util';
 import { SocialMediaService } from './social-media.service';
 
 @Controller('v1/social-media')
-@UseGuards(RolesGuard)
-@ApiBearerAuth()
-@ApiTags('Social Media')
+@Public()
+@ApiTags('Social Media Public')
 export class SocialMediaController {
   constructor(private readonly socialMediaService: SocialMediaService) {}
 
-  @Roles(ADMIN)
-  @Delete(':id')
-  @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.socialMediaService.delete$(id);
+  @Get()
+  @ApiOkResponse({ type: [SocialMediaDto] })
+  findAll$(): Observable<SocialMedia[]> {
+    return this.socialMediaService.findAll$();
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: SocialMediaDto })
+  findOne$(@Param('id') id: string): Observable<SocialMedia> {
+    return this.socialMediaService.findOne$(id);
   }
 }

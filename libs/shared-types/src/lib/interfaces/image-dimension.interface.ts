@@ -4,8 +4,9 @@ import { MediaDimensionPixels } from './media-dimension-pixels.interface';
 import { ImageDimensionSettings } from './image-dimension-settings.interface';
 
 export interface ImageDimension {
+  readonly id: string;
   readonly entityId: string;
-  readonly imageSlug: string;
+  readonly imageId: string;
   readonly type: ImageDimensionType;
   readonly state: ImageDimensionState;
   readonly pixels: MediaDimensionPixels;

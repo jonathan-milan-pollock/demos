@@ -7,14 +7,10 @@ import { BestOfModule } from './best-of/best-of.module';
 import { DestinationsModule } from './destinations/destinations.module';
 import { EventsModule } from './events/events.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { ImageDimensionsModule } from './image-dimensions/image-dimensions.module';
-import { ImagesModule } from './images/images.module';
 import { PhotoOfTheWeekModule } from './photo-of-the-week/photo-of-the-week.module';
-import { ReviewModule } from './review/review.module';
+import { ReviewMediaModule } from './review-media/review-media.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { SocialMediaModule } from './social-media/social-media.module';
-import { VideoDimensionsModule } from './video-dimensions/video-dimensions.module';
-import { VideosModule } from './videos/videos.module';
 
 @Module({
   imports: [
@@ -26,14 +22,10 @@ import { VideosModule } from './videos/videos.module';
     DestinationsModule,
     EventsModule,
     FavoritesModule,
-    ImageDimensionsModule,
-    ImagesModule,
     PhotoOfTheWeekModule,
-    ReviewModule,
+    ReviewMediaModule,
     ReviewsModule,
     SocialMediaModule,
-    VideoDimensionsModule,
-    VideosModule,
   ],
 })
 export class PublicModule {}

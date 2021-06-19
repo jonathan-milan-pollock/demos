@@ -1,6 +1,7 @@
 import { PostedState } from '../enums/posted-state.enum';
 
 export interface Video {
+  readonly id: string;
   readonly entityId: string;
   readonly slug: string;
   readonly state: PostedState;

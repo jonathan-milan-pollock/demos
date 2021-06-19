@@ -4,11 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  ImageDimensionProvider,
-  ImageProvider,
   SocialMediaProvider,
-  VideoDimensionProvider,
-  VideoProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminSocialMediaController } from './admin-social-media.controller';
 import { AdminSocialMediaService } from './admin-social-media.service';
@@ -20,13 +16,6 @@ import { AdminSocialMediaService } from './admin-social-media.service';
     ]),
   ],
   controllers: [AdminSocialMediaController],
-  providers: [
-    SocialMediaProvider,
-    ImageProvider,
-    ImageDimensionProvider,
-    VideoProvider,
-    VideoDimensionProvider,
-    AdminSocialMediaService,
-  ],
+  providers: [SocialMediaProvider, AdminSocialMediaService],
 })
 export class AdminSocialMediaModule {}

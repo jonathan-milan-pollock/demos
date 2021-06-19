@@ -25,7 +25,7 @@ export const addPhotoOfTheWeekImage$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_API_ADMIN_KEY: envApi.drpApiAdminKey,
+            'X-DRP-API-ADMIN-KEY': envApi.drpApiAdminKey,
           },
         }
       )
@@ -56,7 +56,7 @@ export const addPhotoOfTheWeekImageType$ = (
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_API_ADMIN_KEY: envApi.drpApiAdminKey,
+            'X-DRP-API-ADMIN-KEY': envApi.drpApiAdminKey,
           },
         }
       )

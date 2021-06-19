@@ -1,40 +1,45 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, toArray } from 'rxjs/operators';
 
-import { ENV, Favorites } from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/api/types';
-import { DocumentModel, Document } from '@dark-rush-photography/api/data';
+import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
+import {
+  DocumentModel,
+  Document,
+  FavoritesProvider,
+} from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class FavoritesService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
     @InjectModel(Document.name)
-    private readonly favoritesModel: Model<DocumentModel>
+    private readonly favoritesModel: Model<DocumentModel>,
+    private readonly favoritesProvider: FavoritesProvider
   ) {}
 
-  create$(favorites: Favorites): Observable<Favorites> {
-    return of(new this.favoritesModel(favorites)).pipe(
-      switchMap((d) => d.save())
+  findAll$(): Observable<Favorites[]> {
+    return from(
+      this.favoritesModel.find({ type: DocumentType.Favorites }).exec()
+    ).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map((documentModel) =>
+        this.favoritesProvider.fromDocumentModel(documentModel)
+      ),
+      toArray<Favorites>()
     );
   }
 
-  update$(id: string, favorites: Favorites): Observable<Favorites> {
-    return from(this.favoritesModel.findById(id)).pipe(
-      tap((f) => {
-        if (!f) {
+  findOne$(id: string): Observable<Favorites> {
+    return from(this.favoritesModel.findById(id).exec()).pipe(
+      map((documentModel) => {
+        if (!documentModel)
           throw new NotFoundException('Could not find favorites');
-        }
-      }),
-      map((b) => b as Favorites)
-    );
-  }
 
-  delete$(id: string): Observable<void> {
-    return of(this.favoritesModel.findByIdAndDelete(id)).pipe(mapTo(undefined));
+        return this.favoritesProvider.fromDocumentModel(documentModel);
+      })
+    );
   }
 }

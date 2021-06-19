@@ -13,7 +13,7 @@ import { BestOfService } from './best-of.service';
 
 @Controller('v1/best-of')
 @Public()
-@ApiTags('Best Of')
+@ApiTags('Best Of Public')
 export class BestOfController {
   constructor(private readonly bestOfService: BestOfService) {}
 

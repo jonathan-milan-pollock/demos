@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
@@ -14,6 +14,7 @@ import { AdminVideoDimensionsService } from './admin-video-dimensions.service';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [AdminVideoDimensionsController],
   providers: [VideoDimensionProvider, AdminVideoDimensionsService],

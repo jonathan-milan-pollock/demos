@@ -5,11 +5,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
-import { Image } from '@dark-rush-photography/shared-types';
+import { Emotion } from '@dark-rush-photography/shared-types';
+import { EmotionAddDto } from '@dark-rush-photography/api/types';
 import {
   Document,
   DocumentModel,
@@ -20,31 +22,128 @@ import {
 export class EmotionsService {
   constructor(
     @InjectModel(Document.name)
-    private readonly documentModel: Model<DocumentModel>,
+    private readonly entityModel: Model<DocumentModel>,
     private readonly emotionProvider: EmotionProvider
   ) {}
 
-  addOrUpdate$(image: Image): Observable<Image> {
-    return from(this.documentModel.findById(image.entityId).exec()).pipe(
-      switchMap((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity to add image');
+  addEntityEmotion$ = (
+    entityId: string,
+    emotion: EmotionAddDto
+  ): Observable<Emotion> => {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add emotion');
 
         return from(
-          this.documentModel.findByIdAndUpdate(image.entityId, {
-            images: [
-              ...documentModel.images.filter((i) => i.slug !== image.slug),
-              { ...image },
+          this.entityModel.findByIdAndUpdate(entityId, {
+            emotions: [
+              ...response.emotions,
+              {
+                ...emotion,
+                id,
+                entityId,
+              },
             ],
+          })
+        );
+      }),
+      switchMapTo(
+        this.emotionProvider.findById$(this.entityModel, entityId, id)
+      )
+    );
+  };
+
+  addCommentEmotion$ = (
+    entityId: string,
+    commentId: string,
+    emotion: EmotionAddDto
+  ): Observable<Emotion> => {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add emotion');
+
+        const comment = response.comments.find((c) => c.id === commentId);
+        if (!comment)
+          throw new NotFoundException('Could not find comment to add emotion');
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            emotions: [
+              ...response.emotions,
+              {
+                ...emotion,
+                id,
+                entityId,
+                commentId,
+              },
+            ],
+          })
+        );
+      }),
+      switchMapTo(
+        this.emotionProvider.findById$(this.entityModel, entityId, id)
+      )
+    );
+  };
+
+  addMediaEmotion$ = (
+    entityId: string,
+    mediaId: string,
+    emotion: EmotionAddDto
+  ): Observable<Emotion> => {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add emotion');
+        const image = response.images.find((i) => i.id === mediaId);
+        const video = response.videos.find((v) => v.id === mediaId);
+        if (!image && !video) {
+          return from(
+            this.entityModel.findByIdAndUpdate(entityId, {
+              emotions: [
+                ...response.emotions,
+                {
+                  ...emotion,
+                  id,
+                  entityId,
+                  mediaId,
+                },
+              ],
+            })
+          );
+        }
+        throw new NotFoundException('Could not find media to add emotion');
+      }),
+      switchMapTo(
+        this.emotionProvider.findById$(this.entityModel, entityId, id)
+      )
+    );
+  };
+
+  remove$ = (entityId: string, emotionId: string): Observable<void> => {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException(
+            'Could not find entity to remove emotion'
+          );
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            emotions: [...response.emotions.filter((e) => e.id !== emotionId)],
           })
         );
       }),
       map((response) => {
         if (!response) {
-          throw new BadRequestException(`Unable to add image ${image.slug}`);
+          throw new BadRequestException('Unable to remove emotion');
         }
-        return image;
       })
     );
-  }
+  };
 }

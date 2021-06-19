@@ -5,12 +5,16 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  Get,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -24,17 +28,29 @@ import { AdminFavoritesService } from './admin-favorites.service';
 @Controller('admin/v1/favorites')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Favorites')
+@ApiTags('Admin Favorites')
 export class AdminFavoritesController {
   constructor(private readonly adminFavoritesService: AdminFavoritesService) {}
 
   @Roles(ADMIN)
   @Post()
   @ApiCreatedResponse({ type: FavoritesDto })
-  @ApiConflictResponse()
-  @ApiBadRequestResponse()
   create$(): Observable<Favorites> {
     return this.adminFavoritesService.create$();
+  }
+
+  @Roles(ADMIN)
+  @Get()
+  @ApiOkResponse({ type: [FavoritesDto] })
+  findAll$(): Observable<Favorites[]> {
+    return this.adminFavoritesService.findAll$();
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: FavoritesDto })
+  findOne$(@Param('id') id: string): Observable<Favorites> {
+    return this.adminFavoritesService.findOne$(id);
   }
 
   @Roles(ADMIN)

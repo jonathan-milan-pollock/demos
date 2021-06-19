@@ -33,16 +33,15 @@ export const addImage$ = (
           isStared: false,
           isLoved: false,
           isLiked: false,
-          dateCreated:
-            createDate.substring(0, 10).replace(/:/g, '-') + 'T00:00:00Z',
+          dateCreated: createDate.substring(0, 10),
           imageDimensions: [],
           comments: [],
           emotions: [],
-        } as Image,
+        },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            DRP_API_ADMIN_KEY: envApi.drpApiAdminKey,
+            'X-DRP-API-ADMIN-KEY': envApi.drpApiAdminKey,
           },
         }
       );

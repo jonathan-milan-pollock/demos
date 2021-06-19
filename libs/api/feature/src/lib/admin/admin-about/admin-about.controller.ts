@@ -5,12 +5,12 @@ import {
   Param,
   Post,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -24,17 +24,29 @@ import { AdminAboutService } from './admin-about.service';
 @Controller('admin/v1/about')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('About')
+@ApiTags('Admin About')
 export class AdminAboutController {
   constructor(private readonly adminAboutService: AdminAboutService) {}
 
   @Roles(ADMIN)
-  @Post()
+  @Post(':slug')
   @ApiCreatedResponse({ type: AboutDto })
-  @ApiConflictResponse()
-  @ApiBadRequestResponse()
   create$(@Param('slug') slug: string): Observable<About> {
     return this.adminAboutService.create$(slug);
+  }
+
+  @Roles(ADMIN)
+  @Get()
+  @ApiOkResponse({ type: [AboutDto] })
+  findAll$(): Observable<About[]> {
+    return this.adminAboutService.findAll$();
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: AboutDto })
+  findOne$(@Param('id') id: string): Observable<About> {
+    return this.adminAboutService.findOne$(id);
   }
 
   @Roles(ADMIN)

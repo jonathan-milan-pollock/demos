@@ -8,6 +8,10 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
@@ -20,7 +24,7 @@ import { PhotoOfTheWeekUpdateDto } from '@dark-rush-photography/api/types';
 @Controller('admin/v1/photo-of-the-week')
 @UseGuards(RolesGuard)
 @ApiBearerAuth()
-@ApiTags('Photo of the Week')
+@ApiTags('Admin Photo of the Week')
 export class AdminPhotoOfTheWeekController {
   constructor(
     private readonly adminPhotoOfTheWeekService: AdminPhotoOfTheWeekService

@@ -1,80 +1,118 @@
 import {
   BadRequestException,
+  HttpService,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { from, Observable } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
-import { Image } from '@dark-rush-photography/shared-types';
+import { ENV, Video } from '@dark-rush-photography/shared-types';
+import {
+  Env,
+  VideoAddDto,
+  VideoUpdateDto,
+} from '@dark-rush-photography/api/types';
 import {
   Document,
   DocumentModel,
-  ImageProvider,
+  VideoProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class AdminVideosService {
   constructor(
+    @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
     @InjectModel(Document.name)
-    private readonly documentModel: Model<DocumentModel>,
-    private readonly imageProvider: ImageProvider
+    private readonly entityModel: Model<DocumentModel>,
+    private readonly videoProvider: VideoProvider
   ) {}
 
-  addOrUpdate$(image: Image): Observable<Image> {
-    return from(this.documentModel.findById(image.entityId).exec()).pipe(
-      switchMap((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity to add image');
+  add$(entityId: string, video: VideoAddDto): Observable<Video> {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add video');
 
         return from(
-          this.documentModel.findByIdAndUpdate(image.entityId, {
-            images: [
-              ...documentModel.images.filter((i) => i.slug !== image.slug),
-              { ...image },
+          this.entityModel.findByIdAndUpdate(entityId, {
+            videos: [
+              ...response.videos.filter((i) => i.slug !== video.slug),
+              { ...video, id, entityId, order: 0, isStared: false },
+            ],
+          })
+        );
+      }),
+      switchMapTo(this.videoProvider.findById$(this.entityModel, entityId, id))
+    );
+  }
+
+  update$(
+    entityId: string,
+    videoId: string,
+    video: VideoUpdateDto
+  ): Observable<Video> {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to add video');
+
+        const foundVideo = response.images.find((v) => v.id === videoId);
+        if (!foundVideo)
+          throw new NotFoundException('Could not find video to update');
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            videos: [
+              ...response.videos.filter((v) => v.id !== videoId),
+              { ...video, id: videoId, entityId },
+            ],
+          })
+        );
+      }),
+      switchMapTo(
+        this.videoProvider.findById$(this.entityModel, entityId, videoId)
+      )
+    );
+  }
+
+  upload$(entityId: string, file: Express.Multer.File): Observable<Video> {
+    return this.videoProvider.upload$(
+      this.env.serverless,
+      this.httpService,
+      entityId,
+      file
+    );
+  }
+
+  remove$(entityId: string, videoId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId).exec()).pipe(
+      switchMap((response) => {
+        if (!response)
+          throw new NotFoundException('Could not find entity to remove video');
+
+        return from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            videos: [...response.videos.filter((v) => v.id !== videoId)],
+            videoDimensions: [
+              ...response.videoDimensions.filter(
+                (vd) => vd.videoId !== videoId
+              ),
             ],
           })
         );
       }),
       map((response) => {
         if (!response) {
-          throw new BadRequestException(`Unable to add image ${image.slug}`);
+          throw new BadRequestException('Unable to remove video');
         }
-        return image;
-      })
-    );
-  }
-
-  findAll$(entityId: string): Observable<Image[]> {
-    return from(this.documentModel.findById(entityId).exec()).pipe(
-      switchMap((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity');
-
-        return from(documentModel.images);
-      }),
-      map((image) => this.imageProvider.toImage(image)),
-      toArray<Image>()
-    );
-  }
-
-  findOne$(slug: string, entityId: string): Observable<Image> {
-    return from(this.documentModel.findById(entityId).exec()).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find entity');
-
-        return documentModel.images;
-      }),
-      map((images) => {
-        const image = images.find((image) => image.slug === slug);
-        if (!image) {
-          throw new NotFoundException(`Could not find image ${slug}`);
-        }
-        return this.imageProvider.toImage(image);
       })
     );
   }

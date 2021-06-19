@@ -1,11 +1,11 @@
 import {
   IsArray,
   IsBoolean,
-  IsInt,
   IsISO8601,
+  IsMongoId,
+  IsNumberString,
   IsOptional,
   IsString,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -20,12 +20,11 @@ import { CommentDto } from './comment.dto';
 import { EmotionDto } from './emotion.dto';
 
 export class EventDto implements Event {
-  @IsString()
+  @IsMongoId()
   id!: string;
 
-  @IsInt()
-  @Min(0)
-  group!: number;
+  @IsNumberString()
+  group!: string;
 
   @IsString()
   slug!: string;
