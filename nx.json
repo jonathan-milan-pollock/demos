@@ -30,6 +30,10 @@
       "tags": ["scope:api", "type:app"],
       "implicitDependencies": ["best-of", "serverless", "website"]
     },
+    "api-e2e": {
+      "tags": [],
+      "implicitDependencies": ["api"]
+    },
     "best-of": {
       "tags": ["scope:best-of", "type:app"]
     },

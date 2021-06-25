@@ -8,7 +8,10 @@ import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(environment.mongoDbConnectionString),
+    MongooseModule.forRoot(environment.mongoDbConnectionString, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+    }),
     AuthModule,
     EnvModule,
     ApiFeatureModule,

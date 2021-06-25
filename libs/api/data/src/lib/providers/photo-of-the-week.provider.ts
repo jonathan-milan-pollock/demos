@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import {
+  DocumentType,
+  PhotoOfTheWeek,
+} from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekCreateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -10,7 +14,25 @@ import { findPublicContent } from '../functions/public.functions';
 
 @Injectable()
 export class PhotoOfTheWeekProvider {
-  fromDocumentModel(documentModel: DocumentModel): PhotoOfTheWeek {
+  newPhotoOfTheWeek(photoOfTheWeek: PhotoOfTheWeekCreateDto): PhotoOfTheWeek {
+    return {
+      type: DocumentType.PhotoOfTheWeek,
+      group: photoOfTheWeek.group,
+      slug: photoOfTheWeek.slug,
+      isPublic: false,
+      keywords: [],
+      useTileImage: false,
+      text: [],
+      images: [],
+      imageDimensions: [],
+      videos: [],
+      videoDimensions: [],
+      comments: [],
+      emotions: [],
+    } as PhotoOfTheWeek;
+  }
+
+  fromDocumentModel = (documentModel: DocumentModel): PhotoOfTheWeek => {
     return {
       id: documentModel._id,
       group: documentModel.group,
@@ -30,9 +52,9 @@ export class PhotoOfTheWeekProvider {
       comments: documentModel.comments.map((comment) => toComment(comment)),
       emotions: documentModel.emotions.map((emotion) => toEmotion(emotion)),
     };
-  }
+  };
 
-  fromDocumentModelPublic(documentModel: DocumentModel): PhotoOfTheWeek {
+  fromDocumentModelPublic = (documentModel: DocumentModel): PhotoOfTheWeek => {
     const publicContent = findPublicContent(documentModel);
     return {
       id: documentModel._id,
@@ -51,5 +73,5 @@ export class PhotoOfTheWeekProvider {
       comments: publicContent.comments,
       emotions: publicContent.emotions,
     };
-  }
+  };
 }

@@ -6,6 +6,7 @@ import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
 import { imageDimensionSettingsSchema } from './image-dimension-settings.schema';
 
 export const imageDimensionSchema = {
+  id: { type: String, required: false },
   entityId: { type: String, required: true },
   imageSlug: { type: String, required: true },
   type: {

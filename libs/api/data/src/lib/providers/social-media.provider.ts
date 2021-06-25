@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { SocialMedia } from '@dark-rush-photography/shared-types';
+import { DocumentType, SocialMedia } from '@dark-rush-photography/shared-types';
+import { SocialMediaCreateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -10,7 +11,20 @@ import { findPublicContent } from '../functions/public.functions';
 
 @Injectable()
 export class SocialMediaProvider {
-  fromDocumentModel(documentModel: DocumentModel): SocialMedia {
+  newSocialMedia(socialMedia: SocialMediaCreateDto): SocialMedia {
+    return {
+      type: DocumentType.SocialMedia,
+      group: socialMedia.group,
+      slug: socialMedia.slug,
+      isPublic: true,
+      images: [],
+      imageDimensions: [],
+      videos: [],
+      videoDimensions: [],
+    } as SocialMedia;
+  }
+
+  fromDocumentModel = (documentModel: DocumentModel): SocialMedia => {
     return {
       id: documentModel._id,
       group: documentModel.group,
@@ -24,9 +38,9 @@ export class SocialMediaProvider {
         toVideoDimension(videoDimension)
       ),
     };
-  }
+  };
 
-  fromDocumentModelPublic(documentModel: DocumentModel): SocialMedia {
+  fromDocumentModelPublic = (documentModel: DocumentModel): SocialMedia => {
     const publicContent = findPublicContent(documentModel);
     return {
       id: documentModel._id,
@@ -37,5 +51,5 @@ export class SocialMediaProvider {
       videos: publicContent.videos,
       videoDimensions: publicContent.videoDimensions,
     };
-  }
+  };
 }

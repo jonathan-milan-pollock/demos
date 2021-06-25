@@ -1,4 +1,10 @@
-import { IsEnum, IsMongoId, IsString, ValidateNested } from 'class-validator';
+import {
+  IsEnum,
+  IsMongoId,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 import {
@@ -7,16 +13,16 @@ import {
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
 import { MediaDimensionPixelsDto } from './media-dimension-pixels.dto';
-import { ImageDimensionSettingsDto } from './image-dimension-settings.dto';
+import { ThreeSixtyImageSettingsDto } from './three-sixty-image-settings.dto';
 
 export class ImageDimensionDto implements ImageDimension {
-  @IsMongoId()
+  @IsUUID()
   id!: string;
 
   @IsMongoId()
   entityId!: string;
 
-  @IsString()
+  @IsUUID()
   imageId!: string;
 
   @IsEnum(ImageDimensionType)
@@ -30,6 +36,7 @@ export class ImageDimensionDto implements ImageDimension {
   pixels!: MediaDimensionPixelsDto;
 
   @ValidateNested()
-  @Type(() => ImageDimensionSettingsDto)
-  settings!: ImageDimensionSettingsDto;
+  @Type(() => ThreeSixtyImageSettingsDto)
+  @IsOptional()
+  threeSixtyImageSettings?: ThreeSixtyImageSettingsDto;
 }

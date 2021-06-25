@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
   SocialMediaProvider,
 } from '@dark-rush-photography/api/data';
@@ -16,6 +17,10 @@ import { AdminSocialMediaService } from './admin-social-media.service';
     ]),
   ],
   controllers: [AdminSocialMediaController],
-  providers: [SocialMediaProvider, AdminSocialMediaService],
+  providers: [
+    DocumentModelProvider,
+    SocialMediaProvider,
+    AdminSocialMediaService,
+  ],
 })
 export class AdminSocialMediaModule {}

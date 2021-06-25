@@ -26,12 +26,12 @@ export class EmotionsService {
     private readonly emotionProvider: EmotionProvider
   ) {}
 
-  addEntityEmotion$ = (
+  addEntityEmotion$(
     entityId: string,
     emotion: EmotionAddDto
-  ): Observable<Emotion> => {
+  ): Observable<Emotion> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException('Could not find entity to add emotion');
@@ -50,18 +50,18 @@ export class EmotionsService {
         );
       }),
       switchMapTo(
-        this.emotionProvider.findById$(this.entityModel, entityId, id)
+        this.emotionProvider.findById$(this.entityModel, id, entityId)
       )
     );
-  };
+  }
 
-  addCommentEmotion$ = (
+  addCommentEmotion$(
     entityId: string,
     commentId: string,
     emotion: EmotionAddDto
-  ): Observable<Emotion> => {
+  ): Observable<Emotion> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException('Could not find entity to add emotion');
@@ -85,18 +85,18 @@ export class EmotionsService {
         );
       }),
       switchMapTo(
-        this.emotionProvider.findById$(this.entityModel, entityId, id)
+        this.emotionProvider.findById$(this.entityModel, id, entityId)
       )
     );
-  };
+  }
 
-  addMediaEmotion$ = (
+  addMediaEmotion$(
     entityId: string,
     mediaId: string,
     emotion: EmotionAddDto
-  ): Observable<Emotion> => {
+  ): Observable<Emotion> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException('Could not find entity to add emotion');
@@ -120,13 +120,13 @@ export class EmotionsService {
         throw new NotFoundException('Could not find media to add emotion');
       }),
       switchMapTo(
-        this.emotionProvider.findById$(this.entityModel, entityId, id)
+        this.emotionProvider.findById$(this.entityModel, id, entityId)
       )
     );
-  };
+  }
 
-  remove$ = (entityId: string, emotionId: string): Observable<void> => {
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+  remove$(id: string, entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException(
@@ -135,7 +135,7 @@ export class EmotionsService {
 
         return from(
           this.entityModel.findByIdAndUpdate(entityId, {
-            emotions: [...response.emotions.filter((e) => e.id !== emotionId)],
+            emotions: [...response.emotions.filter((e) => e.id !== id)],
           })
         );
       }),
@@ -145,5 +145,5 @@ export class EmotionsService {
         }
       })
     );
-  };
+  }
 }

@@ -12,4 +12,7 @@ export interface Video {
   readonly keywords?: string;
   readonly dateCreated: string;
   readonly datePublished?: string;
+  readonly imageId: string;
+  readonly hasTrack: boolean;
+  readonly isFlyOver: boolean;
 }

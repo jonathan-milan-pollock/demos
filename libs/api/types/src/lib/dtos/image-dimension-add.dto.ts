@@ -7,7 +7,6 @@ import {
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
 import { MediaDimensionPixelsDto } from './media-dimension-pixels.dto';
-import { ImageDimensionSettingsDto } from './image-dimension-settings.dto';
 
 export class ImageDimensionAddDto implements Partial<ImageDimension> {
   @IsEnum(ImageDimensionType)
@@ -19,8 +18,4 @@ export class ImageDimensionAddDto implements Partial<ImageDimension> {
   @ValidateNested()
   @Type(() => MediaDimensionPixelsDto)
   pixels!: MediaDimensionPixelsDto;
-
-  @ValidateNested()
-  @Type(() => ImageDimensionSettingsDto)
-  settings!: ImageDimensionSettingsDto;
 }

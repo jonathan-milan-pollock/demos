@@ -1,142 +1,97 @@
-import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 
-import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { Image } from '@dark-rush-photography/shared-types';
-import { EnvServerless } from '@dark-rush-photography/api/types';
+import {
+  Image,
+  ImageDimension,
+  PostedState,
+} from '@dark-rush-photography/shared-types';
+import { ImageAddDto, ImageUpdateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
-import { getFormData } from '../functions/form-data.functions';
 
 @Injectable()
 export class ImageProvider {
-  findById$(
-    entityModel: Model<DocumentModel>,
+  addImage = (
+    id: string,
     entityId: string,
-    imageId: string
-  ): Observable<Image> {
-    return from(entityModel.findById(entityId).exec()).pipe(
-      map((response) => {
-        if (!response) throw new NotFoundException('Could not find entity');
+    image: ImageAddDto,
+    images: Image[]
+  ): Partial<DocumentModel> => ({
+    images: [
+      ...images,
+      {
+        ...image,
+        id,
+        entityId,
+        state: PostedState.New,
+        order: 0,
+        isStared: false,
+        isLoved: false,
+        isLiked: false,
+      },
+    ],
+  });
 
-        const foundImage = response.images.find((i) => i.id === imageId);
-        if (!foundImage)
-          throw new NotFoundException('Could not find image by id');
-
-        return toImage(foundImage);
-      })
-    );
-  }
-
-  uploadThreeSixty$(
-    envServerless: EnvServerless,
-    httpService: HttpService,
+  updateImage = (
+    id: string,
     entityId: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    const formData = getFormData(file, file.originalname, entityId);
-    return from(
-      httpService.post(
-        `${envServerless.drpServerlessUrl}/upload-three-sixty-image`,
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'Content-Length': formData.getLengthSync(),
-            'x-functions-key': envServerless.drpServerlessFunctionsKey,
-          },
-        }
-      )
-    ).pipe(map((axiosResponse) => axiosResponse.data));
+    image: ImageUpdateDto,
+    images: Image[]
+  ): Partial<DocumentModel> => ({
+    images: [...images.filter((i) => i.id !== id), { ...image, id, entityId }],
+  });
+
+  removeImage = (
+    id: string,
+    images: Image[],
+    imageDimensions: ImageDimension[]
+  ): Partial<DocumentModel> => ({
+    images: [...images.filter((i) => i.id !== id)],
+    imageDimensions: [
+      ...imageDimensions.filter(
+        (imageDimension) => imageDimension.imageId !== id
+      ),
+    ],
+  });
+
+  validateAddImage(id: string, images: Image[]): Image {
+    const foundImage = images.find((i) => i.id === id);
+    if (!foundImage) throw new NotFoundException('Could not find image to add');
+
+    if (foundImage.state !== PostedState.New)
+      throw new NotFoundException('Only new images can be added');
+
+    return toImage(foundImage);
   }
 
-  uploadReview$(
-    envServerless: EnvServerless,
-    httpService: HttpService,
-    reviewId: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    const formData = getFormData(file, file.originalname, reviewId);
-    return from(
-      httpService.post(
-        `${envServerless.drpServerlessUrl}/upload-review-image`,
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'Content-Length': formData.getLengthSync(),
-            'x-functions-key': envServerless.drpServerlessFunctionsKey,
-          },
-        }
-      )
-    ).pipe(map((axiosResponse) => axiosResponse.data));
+  validateUpdateImage(
+    id: string,
+    image: ImageUpdateDto,
+    images: Image[]
+  ): void {
+    const foundImage = images.find((i) => i.id === id);
+    if (!foundImage)
+      throw new NotFoundException('Could not find image to update');
+
+    if (
+      (foundImage.state === PostedState.Public ||
+        foundImage.state === PostedState.Archived) &&
+      image.state === PostedState.New
+    ) {
+      throw new NotAcceptableException(
+        'Images that are public or archived cannot be changed to a state of New'
+      );
+    }
   }
 
-  uploadMediaPng$(
-    envServerless: EnvServerless,
-    httpService: HttpService,
-    mediaId: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    const formData = getFormData(file, file.originalname, mediaId);
-    return from(
-      httpService.post(
-        `${envServerless.drpServerlessUrl}/upload-png-image`,
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'Content-Length': formData.getLengthSync(),
-            'x-functions-key': envServerless.drpServerlessFunctionsKey,
-          },
-        }
-      )
-    ).pipe(map((axiosResponse) => axiosResponse.data));
-  }
+  validateFindImage(id: string, images: Image[]): Image {
+    const foundImage = images.find((i) => i.id === id);
+    if (!foundImage) throw new NotFoundException('Could not find image by id');
 
-  uploadMediaAppleIcon$(
-    envServerless: EnvServerless,
-    httpService: HttpService,
-    mediaId: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    const formData = getFormData(file, file.originalname, mediaId);
-    return from(
-      httpService.post(
-        `${envServerless.drpServerlessUrl}/upload-apple-icon`,
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'Content-Length': formData.getLengthSync(),
-            'x-functions-key': envServerless.drpServerlessFunctionsKey,
-          },
-        }
-      )
-    ).pipe(map((axiosResponse) => axiosResponse.data));
-  }
-
-  uploadMediaAppleResource$(
-    envServerless: EnvServerless,
-    httpService: HttpService,
-    mediaId: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    const formData = getFormData(file, file.originalname, mediaId);
-    return from(
-      httpService.post(
-        `${envServerless.drpServerlessUrl}/upload-apple-resource`,
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(),
-            'Content-Length': formData.getLengthSync(),
-            'x-functions-key': envServerless.drpServerlessFunctionsKey,
-          },
-        }
-      )
-    ).pipe(map((axiosResponse) => axiosResponse.data));
+    return toImage(foundImage);
   }
 }

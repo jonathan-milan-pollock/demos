@@ -66,6 +66,12 @@ export class AdminEventsController {
   }
 
   @Roles(ADMIN)
+  @Post(':id/post')
+  post$(@Param('id') id: string): Observable<Event> {
+    return this.adminEventsService.post$(id);
+  }
+
+  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
   delete$(@Param('id') id: string): Observable<void> {

@@ -3,9 +3,9 @@ import {
   VideoDimensionType,
 } from '@dark-rush-photography/shared-types';
 import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
-import { videoDimensionSettingsSchema } from './video-dimension-settings.schema';
 
 export const videoDimensionSchema = {
+  id: { type: String, required: false },
   entityId: { type: String, required: true },
   videoSlug: { type: String, required: true },
   type: {
@@ -19,8 +19,4 @@ export const videoDimensionSchema = {
     required: true,
   },
   pixels: { type: mediaDimensionPixelsSchema, required: true },
-  settings: {
-    type: videoDimensionSettingsSchema,
-    required: true,
-  },
 };

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
@@ -10,6 +10,7 @@ import {
   BestOfProvider,
   Document,
   DocumentModel,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,21 +18,18 @@ export class BestOfService {
   constructor(
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly bestOfProvider: BestOfProvider
+    private readonly bestOfProvider: BestOfProvider,
+    private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
   findOne$(bestOfType: BestOfType): Observable<BestOf> {
     return from(
-      this.bestOfModel
-        .findOne({ type: this.bestOfProvider.findDocumentType(bestOfType) })
-        .exec()
-    ).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException(`Could not find best of ${bestOfType}`);
-
-        return this.bestOfProvider.fromDocumentModel(documentModel);
+      this.bestOfModel.findOne({
+        type: this.bestOfProvider.findDocumentType(bestOfType),
       })
+    ).pipe(
+      map(this.documentModelProvider.validateFind),
+      map(this.bestOfProvider.fromDocumentModelPublic)
     );
   }
 }

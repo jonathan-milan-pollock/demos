@@ -1,16 +1,10 @@
-import {
-  BadRequestException,
-  HttpService,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
-import { from, Observable } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
 import { Model } from 'mongoose';
+import { from, iif, Observable, of } from 'rxjs';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import {
   ENV,
@@ -25,6 +19,8 @@ import {
 import {
   Document,
   DocumentModel,
+  DocumentModelProvider,
+  ServerlessProvider,
   VideoDimensionProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -35,128 +31,123 @@ export class AdminVideoDimensionsService {
     private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly videoDimensionProvider: VideoDimensionProvider
+    private readonly videoDimensionProvider: VideoDimensionProvider,
+    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly serverlessProvider: ServerlessProvider
   ) {}
 
-  add$ = (
+  add$(
     entityId: string,
     videoId: string,
     videoDimension: VideoDimensionAddDto
-  ): Observable<VideoDimension> => {
+  ): Observable<VideoDimension> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
-      switchMap((response) => {
-        if (!response)
-          throw new NotFoundException(
-            'Could not find entity to add video dimension'
-          );
-
-        return from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            videoDimensions: [
-              ...response.videoDimensions.filter(
-                (vd) => vd.videoId !== videoId
-              ),
-              { ...videoDimension, id, entityId, videoId },
-            ],
-          })
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      switchMap((documentModel) => {
+        const foundVideoDimension = this.videoDimensionProvider.findVideoDimension(
+          videoId,
+          videoDimension.type,
+          documentModel.videoDimensions
         );
-      }),
-      switchMapTo(
-        this.videoDimensionProvider.findById$(this.entityModel, entityId, id)
-      )
-    );
-  };
-
-  update$ = (
-    entityId: string,
-    videoId: string,
-    videoDimensionId: string,
-    videoDimension: VideoDimensionUpdateDto
-  ): Observable<VideoDimension> => {
-    return from(this.entityModel.findById(entityId).exec()).pipe(
-      switchMap((response) => {
-        if (!response)
-          throw new NotFoundException(
-            'Could not find entity to add video dimension'
-          );
-
-        const foundVideoDimension = response.videoDimensions.find(
-          (id) => id.id === videoDimensionId
-        );
-        if (!foundVideoDimension)
-          throw new NotFoundException(
-            'Could not find video dimension to update'
-          );
-
-        return from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            videoDimensions: [
-              ...response.videoDimensions.filter(
-                (vd) => vd.videoId !== videoId
-              ),
-              {
-                ...videoDimension,
-                id: videoDimensionId,
+        return iif(
+          () => !!foundVideoDimension,
+          of(foundVideoDimension),
+          from(
+            this.entityModel.findByIdAndUpdate(
+              entityId,
+              this.videoDimensionProvider.addVideoDimension(
+                id,
                 entityId,
                 videoId,
-                type: foundVideoDimension.type,
-                pixels: foundVideoDimension.pixels,
-              },
-            ],
-          })
+                videoDimension,
+                documentModel.videoDimensions
+              )
+            )
+          )
         );
       }),
-      switchMapTo(
-        this.videoDimensionProvider.findById$(
-          this.entityModel,
-          entityId,
-          videoDimensionId
-        )
-      )
+      switchMapTo(this.findOne$(id, entityId))
     );
-  };
+  }
 
-  getData$ = (
+  update$(
+    id: string,
     entityId: string,
-    videoId: string,
-    videoDimensionId: string
-  ): Observable<VideoDimensionData> => {
-    return from(
-      this.httpService.post(
-        `${this.env.serverless.drpServerlessUrl}/video-dimension-data`,
-        {
-          headers: {
-            'x-functions-key': this.env.serverless.drpServerlessFunctionsKey,
-          },
-        }
-      )
-    ).pipe(map((axiosResponse) => axiosResponse.data));
-  };
-
-  remove$ = (id: string, videoDimensionId: string): Observable<void> => {
-    return from(this.entityModel.findById(id).exec()).pipe(
-      switchMap((response) => {
-        if (!response)
-          throw new NotFoundException(
-            'Could not find entity to remove video dimension'
-          );
-
+    videoDimension: VideoDimensionUpdateDto
+  ): Observable<VideoDimension> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      switchMap((documentModel) => {
+        const foundVideoDimension = this.videoDimensionProvider.validateFindVideoDimension(
+          id,
+          documentModel.videoDimensions
+        );
+        const updateVideoDimension = this.videoDimensionProvider.updateVideoDimension(
+          id,
+          foundVideoDimension,
+          videoDimension,
+          documentModel.videoDimensions
+        );
         return from(
-          this.entityModel.findByIdAndUpdate(id, {
-            videoDimensions: [
-              ...response.videoDimensions.filter(
-                (vd) => vd.id !== videoDimensionId
-              ),
-            ],
-          })
+          this.entityModel.findByIdAndUpdate(entityId, updateVideoDimension)
         );
       }),
-      map((response) => {
-        if (!response) {
-          throw new BadRequestException('Unable to remove video dimension');
-        }
+      switchMapTo(this.findOne$(id, entityId))
+    );
+  }
+
+  findOne$(id: string, entityId: string): Observable<VideoDimension> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      map((documentModel) => {
+        const videoDimension = this.videoDimensionProvider.validateFindVideoDimension(
+          id,
+          documentModel.videoDimensions
+        );
+        return this.videoDimensionProvider.toVideoDimension(videoDimension);
       })
     );
-  };
+  }
+
+  data$(id: string, entityId: string): Observable<VideoDimensionData> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      tap((documentModel) => {
+        this.videoDimensionProvider.validateFindVideoDimension(
+          id,
+          documentModel.videoDimensions
+        );
+      }),
+      switchMap((documentModel) => {
+        return this.serverlessProvider.mediaData$(
+          this.env.serverless,
+          this.httpService,
+          'video-dimension-data',
+          id,
+          entityId,
+          documentModel.type
+        );
+      }),
+      map((response) => response as VideoDimensionData)
+    );
+  }
+
+  remove$(id: string, entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      switchMap((documentModel) =>
+        from(
+          this.entityModel.findByIdAndUpdate(
+            entityId,
+            this.videoDimensionProvider.removeVideoDimension(
+              id,
+              documentModel.videoDimensions
+            )
+          )
+        )
+      ),
+      map(this.documentModelProvider.validateRemove)
+    );
+  }
 }

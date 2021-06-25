@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
@@ -15,14 +15,8 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  @ApiOkResponse({ type: [FavoritesDto] })
-  findAll$(): Observable<Favorites[]> {
-    return this.favoritesService.findAll$();
-  }
-
-  @Get(':id')
   @ApiOkResponse({ type: FavoritesDto })
-  findOne$(@Param('id') id: string): Observable<Favorites> {
-    return this.favoritesService.findOne$(id);
+  findOne$(): Observable<Favorites> {
+    return this.favoritesService.findOne$();
   }
 }

@@ -53,44 +53,47 @@ export class AdminVideoDimensionsController {
   }
 
   @Roles(ADMIN)
-  @Put(':videoDimensionId')
+  @Put(':id')
   @ApiOkResponse({ type: VideoDimensionDto })
   update$(
-    @Param('videoDimensionId') videoDimensionId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string,
-    @Query('videoId') videoId: string,
     @Body() videoDimension: VideoDimensionUpdateDto
   ): Observable<VideoDimension> {
     return this.adminVideoDimensionsService.update$(
+      id,
       entityId,
-      videoId,
-      videoDimensionId,
       videoDimension
     );
   }
 
   @Roles(ADMIN)
-  @Get(':videoDimensionId/data')
-  @ApiOkResponse({ type: VideoDimensionDataDto })
-  find$(
-    @Param('videoDimensionId') videoDimensionId: string,
-    @Query('entityId') entityId: string,
-    @Query('videoId') videoId: string
-  ): Observable<VideoDimensionData> {
-    return this.adminVideoDimensionsService.getData$(
-      entityId,
-      videoId,
-      videoDimensionId
-    );
+  @Get(':id')
+  @ApiOkResponse({ type: VideoDimensionDto })
+  findOne$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<VideoDimension> {
+    return this.adminVideoDimensionsService.findOne$(id, entityId);
   }
 
   @Roles(ADMIN)
-  @Delete(':videoDimensionId')
+  @Get(':id/data')
+  @ApiOkResponse({ type: VideoDimensionDataDto })
+  data$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<VideoDimensionData> {
+    return this.adminVideoDimensionsService.data$(id, entityId);
+  }
+
+  @Roles(ADMIN)
+  @Delete(':id')
   @HttpCode(204)
   delete$(
-    @Param('videoDimensionId') videoDimensionId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<void> {
-    return this.adminVideoDimensionsService.remove$(entityId, videoDimensionId);
+    return this.adminVideoDimensionsService.remove$(id, entityId);
   }
 }

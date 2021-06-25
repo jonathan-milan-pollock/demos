@@ -6,13 +6,14 @@ import {
   IsMongoId,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 
 import { Image, PostedState } from '@dark-rush-photography/shared-types';
 
 export class ImageDto implements Image {
-  @IsMongoId()
+  @IsUUID()
   id!: string;
 
   @IsMongoId()

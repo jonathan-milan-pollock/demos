@@ -1,16 +1,13 @@
-import {
-  BadRequestException,
-  HttpService,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
+import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import { ENV, Video } from '@dark-rush-photography/shared-types';
 import {
@@ -21,6 +18,8 @@ import {
 import {
   Document,
   DocumentModel,
+  DocumentModelProvider,
+  ServerlessProvider,
   VideoProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -31,89 +30,121 @@ export class AdminVideosService {
     private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly videoProvider: VideoProvider
+    private readonly videoProvider: VideoProvider,
+    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly serverlessProvider: ServerlessProvider
   ) {}
 
   add$(entityId: string, video: VideoAddDto): Observable<Video> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
-      switchMap((response) => {
-        if (!response)
-          throw new NotFoundException('Could not find entity to add video');
-
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      switchMap((documentModel) => {
         return from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            videos: [
-              ...response.videos.filter((i) => i.slug !== video.slug),
-              { ...video, id, entityId, order: 0, isStared: false },
-            ],
-          })
+          this.entityModel.findByIdAndUpdate(
+            entityId,
+            this.videoProvider.addVideo(
+              id,
+              entityId,
+              video,
+              documentModel.videos
+            )
+          )
         );
       }),
-      switchMapTo(this.videoProvider.findById$(this.entityModel, entityId, id))
+      map(this.documentModelProvider.validateAdd),
+      switchMapTo(this.findOne$(id, entityId))
     );
   }
 
   update$(
+    id: string,
     entityId: string,
-    videoId: string,
     video: VideoUpdateDto
   ): Observable<Video> {
-    return from(this.entityModel.findById(entityId).exec()).pipe(
-      switchMap((response) => {
-        if (!response)
-          throw new NotFoundException('Could not find entity to add video');
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      tap((documentModel) =>
+        this.videoProvider.validateUpdateVideo(id, video, documentModel.videos)
+      ),
+      switchMap((documentModel) =>
+        from(
+          this.entityModel.findByIdAndUpdate(
+            entityId,
+            this.videoProvider.updateVideo(
+              id,
+              entityId,
+              video,
+              documentModel.videos
+            )
+          )
+        )
+      ),
+      switchMapTo(this.findOne$(id, entityId))
+    );
+  }
 
-        const foundVideo = response.images.find((v) => v.id === videoId);
-        if (!foundVideo)
-          throw new NotFoundException('Could not find video to update');
-
-        return from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            videos: [
-              ...response.videos.filter((v) => v.id !== videoId),
-              { ...video, id: videoId, entityId },
-            ],
-          })
-        );
-      }),
-      switchMapTo(
-        this.videoProvider.findById$(this.entityModel, entityId, videoId)
+  findOne$(id: string, entityId: string): Observable<Video> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      map((documentModel) =>
+        this.videoProvider.validateAddVideo(id, documentModel.videos)
       )
     );
   }
 
   upload$(entityId: string, file: Express.Multer.File): Observable<Video> {
-    return this.videoProvider.upload$(
-      this.env.serverless,
-      this.httpService,
-      entityId,
-      file
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      switchMap((documentModel) =>
+        this.serverlessProvider.upload$(
+          this.env.serverless,
+          this.httpService,
+          'upload-video',
+          entityId,
+          documentModel.type,
+          file
+        )
+      ),
+      map((response) => response as Video)
     );
   }
 
-  remove$(entityId: string, videoId: string): Observable<void> {
-    return from(this.entityModel.findById(entityId).exec()).pipe(
-      switchMap((response) => {
-        if (!response)
-          throw new NotFoundException('Could not find entity to remove video');
+  post$(id: string, entityId: string): Observable<Video> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      tap((documentModel) => {
+        this.videoProvider.validateFindVideo(id, documentModel.videos);
+      }),
+      switchMap((documentModel) =>
+        this.serverlessProvider.post$(
+          this.env.serverless,
+          this.httpService,
+          'post-video',
+          id,
+          documentModel.type
+        )
+      ),
+      map((response) => response as Video)
+    );
+  }
 
+  remove$(id: string, entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.documentModelProvider.validateFind),
+      switchMap((documentModel) => {
         return from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            videos: [...response.videos.filter((v) => v.id !== videoId)],
-            videoDimensions: [
-              ...response.videoDimensions.filter(
-                (vd) => vd.videoId !== videoId
-              ),
-            ],
-          })
+          this.entityModel.findByIdAndUpdate(
+            entityId,
+            this.videoProvider.removeVideo(
+              id,
+              documentModel.videos,
+              documentModel.videoDimensions
+            )
+          )
         );
       }),
-      map((response) => {
-        if (!response) {
-          throw new BadRequestException('Unable to remove video');
-        }
-      })
+      map(this.documentModelProvider.validateRemove)
     );
   }
 }

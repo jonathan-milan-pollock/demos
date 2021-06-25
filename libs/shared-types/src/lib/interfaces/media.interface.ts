@@ -5,8 +5,7 @@ import { VideoDimension } from './video-dimension.interface';
 
 export interface Media {
   readonly id?: string;
-  readonly group?: string;
-  readonly slug?: string;
+  readonly slug: string;
   readonly images: ReadonlyArray<Image>;
   readonly imageDimensions: ReadonlyArray<ImageDimension>;
   readonly videos: ReadonlyArray<Video>;

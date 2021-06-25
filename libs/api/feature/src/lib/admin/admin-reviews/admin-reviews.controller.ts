@@ -1,3 +1,6 @@
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 import {
   Controller,
   Body,
@@ -7,13 +10,15 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  Get,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
@@ -21,8 +26,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Review } from '@dark-rush-photography/shared-types';
-import { ReviewDto, ReviewUpdateDto } from '@dark-rush-photography/api/types';
+import { ADMIN, Image, Review } from '@dark-rush-photography/shared-types';
+import {
+  FileUploadDto,
+  ReviewDto,
+  ReviewUpdateDto,
+} from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminReviewsService } from './admin-reviews.service';
 
@@ -48,6 +57,40 @@ export class AdminReviewsController {
     @Body() review: ReviewUpdateDto
   ): Observable<Review> {
     return this.adminReviewsService.update$(id, review);
+  }
+
+  @Roles(ADMIN)
+  @Get()
+  @ApiOkResponse({ type: [ReviewDto] })
+  findAll$(): Observable<Review[]> {
+    return this.adminReviewsService.findAll$();
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: ReviewDto })
+  findOne$(@Param('id') id: string): Observable<Review> {
+    return this.adminReviewsService.findOne$(id);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/images')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  upload$(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminReviewsService.uploadImage$(id, file);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  post$(@Param('id') id: string): Observable<Review> {
+    return this.adminReviewsService.post$(id);
   }
 
   @Roles(ADMIN)

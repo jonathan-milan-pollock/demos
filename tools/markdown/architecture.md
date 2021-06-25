@@ -239,6 +239,46 @@ preloadingStrategy: PreloadAllModules;
             "proxyConfig": "apps/website/proxy.conf.json"
 ```
 
+## setup api
+
+### for api e2e testing
+
+- copy apps/website-e2e to apps/api-e2e
+- in apps/api-e2e/.eslintrc.json change website-e2e to api-e2e for parserOptions project
+
+```json
+ "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "parserOptions": {
+        "project": "apps/api-e2e/tsconfig.*?.json"
+      },
+      "rules": {}
+    },
+```
+
+- in cypress.json change videos and screenshots folders and baseUrl to localhost:1111
+
+```json
+  "videosFolder": "../../dist/cypress/apps/api-e2e/videos",
+  "screenshotsFolder": "../../dist/cypress/apps/api-e2e/screenshots",
+  "chromeWebSecurity": false,
+  "baseUrl": "http://localhost:1111",
+```
+
+- remove projectId in cypress.json so that a new cypress project id will be created
+- in angular.json copy website-e2e to api-e2e and make corresponding changes to tasks
+- in nx.json add api-e2e project
+
+```json
+  "api-e2e": {
+      "tags": [],
+      "implicitDependencies": ["api"]
+    },
+```
+
+- in package.json add api:e2e to serve:api npm script
+
 ---
 
 ## setup serverless

@@ -13,15 +13,15 @@ import { toComment } from '../functions/comment.functions';
 export class CommentProvider {
   findById$(
     entityModel: Model<DocumentModel>,
-    entityId: string,
-    id: string
+    id: string,
+    entityId: string
   ): Observable<Comment> {
-    return from(entityModel.findById(entityId).exec()).pipe(
+    return from(entityModel.findById(entityId)).pipe(
       map((response) => {
         if (!response)
           throw new NotFoundException('Could not find entity for comment');
 
-        const foundComment = response.comments.find((i) => i.id === id);
+        const foundComment = response.comments.find((c) => c.id === id);
         if (!foundComment)
           throw new NotFoundException('Could not find comment by id');
 
@@ -33,9 +33,9 @@ export class CommentProvider {
   add$(
     response: DocumentModel,
     entityModel: Model<DocumentModel>,
+    comment: CommentAddDto,
     id: string,
     entityId: string,
-    comment: CommentAddDto,
     mediaId?: string
   ): Observable<DocumentModel | null> {
     return combineLatest([

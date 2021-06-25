@@ -9,12 +9,7 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -34,12 +29,16 @@ import { CommentsService } from './comments.service';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @ApiQuery({
-    name: 'mediaId',
-    required: false,
-    type: String,
-  })
-  @Post()
+  @Post('entity')
+  @ApiOkResponse({ type: CommentDto })
+  addEntityComment$(
+    @Query('entityId') entityId: string,
+    @Body() comment: CommentAddDto
+  ): Observable<Comment> {
+    return this.commentsService.addEntityComment$(entityId, comment);
+  }
+
+  @Post('media')
   @ApiOkResponse({ type: CommentDto })
   addMediaComment$(
     @Query('entityId') entityId: string,
@@ -49,22 +48,22 @@ export class CommentsController {
     return this.commentsService.addMediaComment$(entityId, mediaId, comment);
   }
 
-  @Put(':commentId')
+  @Put(':id')
   @ApiOkResponse({ type: CommentDto })
-  updateImage$(
-    @Param('commentId') commentId: string,
+  updateEntityComment$(
+    @Param('id') id: string,
     @Query('entityId') entityId: string,
     @Body() comment: CommentUpdateDto
   ): Observable<Comment> {
-    return this.commentsService.update$(entityId, commentId, comment);
+    return this.commentsService.update$(id, entityId, comment);
   }
 
-  @Delete(':commentId')
+  @Delete(':id')
   @HttpCode(204)
   remove$(
-    @Param('commentId') commentId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<void> {
-    return this.commentsService.remove$(entityId, commentId);
+    return this.commentsService.remove$(id, entityId);
   }
 }

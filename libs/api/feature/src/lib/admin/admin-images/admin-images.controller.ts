@@ -1,3 +1,6 @@
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 import {
   Controller,
   Body,
@@ -10,7 +13,9 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  Get,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -30,7 +35,6 @@ import {
 } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminImagesService } from './admin-images.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin/v1/images')
 @UseGuards(RolesGuard)
@@ -50,28 +54,24 @@ export class AdminImagesController {
   }
 
   @Roles(ADMIN)
-  @Put(':imageId')
+  @Put(':id')
   @ApiOkResponse({ type: ImageDto })
   update$(
-    @Param('imageId') imageId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string,
     @Body() image: ImageUpdateDto
   ): Observable<Image> {
-    return this.adminImagesService.update$(entityId, imageId, image);
+    return this.adminImagesService.update$(id, entityId, image);
   }
 
   @Roles(ADMIN)
-  @Post('upload-review')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: FileUploadDto,
-  })
-  upload$(
-    @Query('reviewId') reviewId: string,
-    @UploadedFile() file: Express.Multer.File
+  @Get(':id')
+  @ApiOkResponse({ type: ImageDto })
+  findOne$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
   ): Observable<Image> {
-    return this.adminImagesService.uploadReview$(reviewId, file);
+    return this.adminImagesService.findOne$(id, entityId);
   }
 
   @Roles(ADMIN)
@@ -81,50 +81,20 @@ export class AdminImagesController {
   @ApiBody({
     type: FileUploadDto,
   })
-  uploadThreeSixty$(
+  uploadThreeSixtyImage$(
     @Query('entityId') entityId: string,
     @UploadedFile() file: Express.Multer.File
   ): Observable<Image> {
-    return this.adminImagesService.uploadThreeSixty$(entityId, file);
+    return this.adminImagesService.uploadThreeSixtyImage$(entityId, file);
   }
 
   @Roles(ADMIN)
-  @Post('upload-media-png')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadPng$(
-    @Query('mediaId') mediaId: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminImagesService.uploadMediaPng$(mediaId, file);
-  }
-
-  @Roles(ADMIN)
-  @Post('upload-media-apple-icon')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadAppleIcon$(
-    @Query('mediaId') mediaId: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminImagesService.uploadMediaAppleIcon$(mediaId, file);
-  }
-
-  @Roles(ADMIN)
-  @Post('upload-media-apple-resource')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadAppleResource$(
-    @Query('mediaId') mediaId: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminImagesService.uploadMediaAppleResource$(mediaId, file);
-  }
-
-  @Roles(ADMIN)
-  @Delete(':imageId')
+  @Delete(':id')
   @HttpCode(204)
   remove$(
-    @Param('imageId') imageId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<void> {
-    return this.adminImagesService.remove$(entityId, imageId);
+    return this.adminImagesService.remove$(id, entityId);
   }
 }

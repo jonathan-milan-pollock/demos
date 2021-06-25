@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   AboutProvider,
   Document,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { AboutController } from './about.controller';
@@ -16,6 +17,6 @@ import { AboutService } from './about.service';
     ]),
   ],
   controllers: [AboutController],
-  providers: [AboutProvider, AboutService],
+  providers: [DocumentModelProvider, AboutProvider, AboutService],
 })
 export class AboutModule {}

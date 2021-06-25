@@ -1,15 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
   FavoritesProvider,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,29 +18,16 @@ export class FavoritesService {
   constructor(
     @InjectModel(Document.name)
     private readonly favoritesModel: Model<DocumentModel>,
-    private readonly favoritesProvider: FavoritesProvider
+    private readonly favoritesProvider: FavoritesProvider,
+    private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
-  findAll$(): Observable<Favorites[]> {
+  findOne$(): Observable<Favorites> {
     return from(
-      this.favoritesModel.find({ type: DocumentType.Favorites }).exec()
+      this.favoritesModel.find({ type: DocumentType.Favorites })
     ).pipe(
-      switchMap((documentModels) => from(documentModels)),
-      map((documentModel) =>
-        this.favoritesProvider.fromDocumentModel(documentModel)
-      ),
-      toArray<Favorites>()
-    );
-  }
-
-  findOne$(id: string): Observable<Favorites> {
-    return from(this.favoritesModel.findById(id).exec()).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find favorites');
-
-        return this.favoritesProvider.fromDocumentModel(documentModel);
-      })
+      map(this.documentModelProvider.validateOne),
+      map(this.favoritesProvider.fromDocumentModelPublic)
     );
   }
 }

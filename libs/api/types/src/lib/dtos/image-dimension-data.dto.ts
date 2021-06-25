@@ -1,4 +1,4 @@
-import { IsEnum, IsMongoId, IsString } from 'class-validator';
+import { IsEnum, IsMongoId, IsString, IsUUID } from 'class-validator';
 
 import {
   ImageDimensionData,
@@ -12,8 +12,8 @@ export class ImageDimensionDataDto implements ImageDimensionData {
   @IsMongoId()
   entityId!: string;
 
-  @IsString()
-  imageSlug!: string;
+  @IsUUID()
+  imageId!: string;
 
   @IsString()
   dataUri!: string;

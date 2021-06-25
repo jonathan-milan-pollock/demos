@@ -5,6 +5,7 @@ import {
   IsISO8601,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 
@@ -42,4 +43,13 @@ export class VideoUpdateDto implements Partial<Video> {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
+
+  @IsUUID()
+  imageId!: string;
+
+  @IsBoolean()
+  hasTrack!: boolean;
+
+  @IsBoolean()
+  isFlyOver!: boolean;
 }

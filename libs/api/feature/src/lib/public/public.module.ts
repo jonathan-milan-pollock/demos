@@ -10,7 +10,6 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { PhotoOfTheWeekModule } from './photo-of-the-week/photo-of-the-week.module';
 import { ReviewMediaModule } from './review-media/review-media.module';
 import { ReviewsModule } from './reviews/reviews.module';
-import { SocialMediaModule } from './social-media/social-media.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { SocialMediaModule } from './social-media/social-media.module';
     PhotoOfTheWeekModule,
     ReviewMediaModule,
     ReviewsModule,
-    SocialMediaModule,
   ],
 })
 export class PublicModule {}

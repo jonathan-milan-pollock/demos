@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
@@ -13,6 +13,7 @@ import {
   DocumentModel,
   Document,
   PhotoOfTheWeekProvider,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -20,31 +21,24 @@ export class PhotoOfTheWeekService {
   constructor(
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider
+    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
+    private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
   findAll$(): Observable<PhotoOfTheWeek[]> {
     return from(
-      this.photoOfTheWeekModel
-        .find({ type: DocumentType.PhotoOfTheWeek })
-        .exec()
+      this.photoOfTheWeekModel.find({ type: DocumentType.PhotoOfTheWeek })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
-      map((documentModel) =>
-        this.photoOfTheWeekProvider.fromDocumentModel(documentModel)
-      ),
+      map(this.photoOfTheWeekProvider.fromDocumentModelPublic),
       toArray<PhotoOfTheWeek>()
     );
   }
 
   findOne$(id: string): Observable<PhotoOfTheWeek> {
-    return from(this.photoOfTheWeekModel.findById(id).exec()).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find photo of the week');
-
-        return this.photoOfTheWeekProvider.fromDocumentModel(documentModel);
-      })
+    return from(this.photoOfTheWeekModel.findById(id)).pipe(
+      map(this.documentModelProvider.validateFind),
+      map(this.photoOfTheWeekProvider.fromDocumentModelPublic)
     );
   }
 }

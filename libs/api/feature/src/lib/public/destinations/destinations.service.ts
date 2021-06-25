@@ -1,15 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, tap, toArray } from 'rxjs/operators';
+import { map, switchMap, toArray } from 'rxjs/operators';
 
 import { Destination, DocumentType } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
   DestinationProvider,
+  DocumentModelProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,29 +18,24 @@ export class DestinationsService {
   constructor(
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
-    private readonly destinationProvider: DestinationProvider
+    private readonly destinationProvider: DestinationProvider,
+    private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
   findAll$(): Observable<Destination[]> {
     return from(
-      this.destinationModel.find({ type: DocumentType.Destination }).exec()
+      this.destinationModel.find({ type: DocumentType.Destination })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
-      map((documentModel) =>
-        this.destinationProvider.fromDocumentModel(documentModel)
-      ),
+      map(this.destinationProvider.fromDocumentModelPublic),
       toArray<Destination>()
     );
   }
 
   findOne$(id: string): Observable<Destination> {
-    return from(this.destinationModel.findById(id).exec()).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find destination');
-
-        return this.destinationProvider.fromDocumentModel(documentModel);
-      })
+    return from(this.destinationModel.findById(id)).pipe(
+      map(this.documentModelProvider.validateFind),
+      map(this.destinationProvider.fromDocumentModelPublic)
     );
   }
 }

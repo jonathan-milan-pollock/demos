@@ -1,15 +1,9 @@
-import {
-  BadRequestException,
-  HttpService,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
+import { from, iif, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
 
 import {
   Destination,
@@ -21,6 +15,8 @@ import {
   DocumentModel,
   Document,
   DestinationProvider,
+  DocumentModelProvider,
+  ServerlessProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -30,41 +26,28 @@ export class AdminDestinationsService {
     private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
-    private readonly destinationProvider: DestinationProvider
+    private readonly destinationProvider: DestinationProvider,
+    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly serverlessProvider: ServerlessProvider
   ) {}
 
   create$(slug: string): Observable<Destination> {
     return from(
       this.destinationModel.findOne({ type: DocumentType.Destination, slug })
     ).pipe(
-      switchMap((documentModel) => {
-        if (documentModel) return of(documentModel);
-
-        return from(
-          new this.destinationModel({
-            type: DocumentType.Destination,
-            slug,
-            isPublic: false,
-            keywords: [],
-            useTileImage: false,
-            text: [],
-            images: [],
-            imageDimensions: [],
-            videos: [],
-            videoDimensions: [],
-            hasExtendedReality: false,
-            socialMediaUrls: [],
-            comments: [],
-            emotions: [],
-          } as Destination).save()
-        );
-      }),
-      map((documentModel: DocumentModel) => {
-        if (!documentModel) {
-          throw new BadRequestException(`Unable to create destination ${slug}`);
-        }
-        return this.destinationProvider.fromDocumentModel(documentModel);
-      })
+      switchMap((documentModel) =>
+        iif(
+          () => documentModel !== null,
+          of(documentModel),
+          from(
+            new this.destinationModel(
+              this.destinationProvider.newDestination(slug)
+            ).save()
+          )
+        )
+      ),
+      map(this.documentModelProvider.validateCreate),
+      map(this.destinationProvider.fromDocumentModel)
     );
   }
 
@@ -73,65 +56,47 @@ export class AdminDestinationsService {
     destination: DestinationUpdateDto
   ): Observable<Destination> {
     return from(
-      this.destinationModel.findByIdAndUpdate(id, {
-        slug: destination.slug,
-        isPublic: destination.isPublic,
-        title: destination.title,
-        description: destination.description,
-        keywords: destination.keywords,
-        datePublished: destination.datePublished,
-        location: destination.location,
-        useTileImage: destination.useTileImage,
-        text: destination.text,
-        hasExtendedReality: destination.hasExtendedReality,
-        websiteUrl: destination.websiteUrl,
-        socialMediaUrls: destination.socialMediaUrls,
-      } as DestinationUpdateDto)
+      this.destinationModel.findByIdAndUpdate(id, { ...destination })
     ).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException(
-            `Unable to update destination ${destination.slug}`
-          );
-
-        return this.destinationProvider.fromDocumentModel(documentModel);
-      })
+      map(this.documentModelProvider.validateFind),
+      switchMapTo(this.findOne$(id))
     );
   }
 
   findAll$(): Observable<Destination[]> {
     return from(
-      this.destinationModel.find({ type: DocumentType.Destination }).exec()
+      this.destinationModel.find({ type: DocumentType.Destination })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
-      map((documentModel) =>
-        this.destinationProvider.fromDocumentModel(documentModel)
-      ),
+      map(this.destinationProvider.fromDocumentModel),
       toArray<Destination>()
     );
   }
 
   findOne$(id: string): Observable<Destination> {
-    return from(this.destinationModel.findById(id).exec()).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException('Could not find Destination');
-
-        return this.destinationProvider.fromDocumentModel(documentModel);
-      })
+    return from(this.destinationModel.findById(id)).pipe(
+      map(this.documentModelProvider.validateFind),
+      map(this.destinationProvider.fromDocumentModel)
     );
   }
 
   post$(id: string): Observable<Destination> {
-    return this.destinationProvider.post$(
-      this.env.serverless,
-      this.httpService,
-      id
+    return this.findOne$(id).pipe(
+      switchMapTo(
+        this.serverlessProvider.post$(
+          this.env.serverless,
+          this.httpService,
+          'post-destination',
+          id,
+          DocumentType.Destination
+        )
+      ),
+      map((response) => response as Destination)
     );
   }
 
   delete$(id: string): Observable<void> {
-    return of(this.destinationModel.findByIdAndDelete(id)).pipe(
+    return from(this.destinationModel.findByIdAndDelete(id)).pipe(
       mapTo(undefined)
     );
   }

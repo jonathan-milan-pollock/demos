@@ -62,12 +62,12 @@ export class EmotionsController {
     throw new BadRequestException('Unable to find method to add emotion');
   }
 
-  @Delete(':emotionId')
+  @Delete(':id')
   @HttpCode(204)
   remove$(
-    @Param('emotionId') emotionId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<void> {
-    return this.emotionsService.remove$(entityId, emotionId);
+    return this.emotionsService.remove$(id, entityId);
   }
 }

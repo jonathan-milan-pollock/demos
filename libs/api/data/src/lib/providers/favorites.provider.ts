@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Favorites } from '@dark-rush-photography/shared-types';
+import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -12,7 +12,21 @@ import { findPublicContent } from '../functions/public.functions';
 
 @Injectable()
 export class FavoritesProvider {
-  fromDocumentModel(documentModel: DocumentModel): Favorites {
+  newFavorites(): Favorites {
+    return {
+      type: DocumentType.Favorites,
+      slug: 'best-37',
+      isPublic: true,
+      images: [],
+      imageDimensions: [],
+      videos: [],
+      videoDimensions: [],
+      comments: [],
+      emotions: [],
+    } as Favorites;
+  }
+
+  fromDocumentModel = (documentModel: DocumentModel): Favorites => {
     return {
       id: documentModel._id,
       images: documentModel.images.map((image) => toImage(image)),
@@ -26,9 +40,9 @@ export class FavoritesProvider {
       comments: documentModel.comments.map((comment) => toComment(comment)),
       emotions: documentModel.emotions.map((emotion) => toEmotion(emotion)),
     };
-  }
+  };
 
-  fromDocumentModelPublic(documentModel: DocumentModel): Favorites {
+  fromDocumentModelPublic = (documentModel: DocumentModel): Favorites => {
     const publicContent = findPublicContent(documentModel);
     return {
       id: documentModel._id,
@@ -39,5 +53,5 @@ export class FavoritesProvider {
       comments: publicContent.comments,
       emotions: publicContent.emotions,
     };
-  }
+  };
 }

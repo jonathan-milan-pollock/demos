@@ -1,31 +1,44 @@
 import { Injectable } from '@nestjs/common';
 
-import { About } from '@dark-rush-photography/shared-types';
+import { About, DocumentType } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
 import { toVideo } from '../functions/video.functions';
 import { toVideoDimension } from '../functions/video-dimension.functions';
 import { findPublicContent } from '../functions/public.functions';
+import { DocumentModelProvider } from './document-model.provider';
 
 @Injectable()
 export class AboutProvider {
-  fromDocumentModel(documentModel: DocumentModel): About {
+  constructor(private readonly documentModelProvider: DocumentModelProvider) {}
+
+  newAbout(slug: string): About {
     return {
-      id: documentModel._id,
-      slug: documentModel.slug,
-      images: documentModel.images.map((image) => toImage(image)),
-      imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
-        toImageDimension(imageDimension)
-      ),
-      videos: documentModel.videos.map((video) => toVideo(video)),
-      videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
-        toVideoDimension(videoDimension)
-      ),
-    };
+      type: DocumentType.About,
+      slug,
+      isPublic: true,
+      images: [],
+      imageDimensions: [],
+      videos: [],
+      videoDimensions: [],
+    } as About;
   }
 
-  fromDocumentModelPublic(documentModel: DocumentModel): About {
+  fromDocumentModel = (documentModel: DocumentModel): About => ({
+    id: documentModel._id,
+    slug: documentModel.slug,
+    images: documentModel.images.map((image) => toImage(image)),
+    imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
+      toImageDimension(imageDimension)
+    ),
+    videos: documentModel.videos.map((video) => toVideo(video)),
+    videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
+      toVideoDimension(videoDimension)
+    ),
+  });
+
+  fromDocumentModelPublic = (documentModel: DocumentModel): About => {
     const publicContent = findPublicContent(documentModel);
     return {
       id: documentModel._id,
@@ -35,5 +48,5 @@ export class AboutProvider {
       videos: publicContent.videos,
       videoDimensions: publicContent.videoDimensions,
     };
-  }
+  };
 }
