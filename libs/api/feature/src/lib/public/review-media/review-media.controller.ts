@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
@@ -15,14 +15,8 @@ export class ReviewMediaController {
   constructor(private readonly reviewMediaService: ReviewMediaService) {}
 
   @Get()
-  @ApiOkResponse({ type: [ReviewMediaDto] })
-  findAll$(): Observable<ReviewMedia[]> {
-    return this.reviewMediaService.findAll$();
-  }
-
-  @Get(':id')
   @ApiOkResponse({ type: ReviewMediaDto })
-  findOne$(@Param('id') id: string): Observable<ReviewMedia> {
-    return this.reviewMediaService.findOne$(id);
+  findOne$(): Observable<ReviewMedia> {
+    return this.reviewMediaService.findOne$();
   }
 }

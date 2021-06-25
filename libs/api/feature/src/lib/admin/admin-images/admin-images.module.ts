@@ -3,8 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
   ImageProvider,
+  ServerlessProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminImagesController } from './admin-images.controller';
 import { AdminImagesService } from './admin-images.service';
@@ -17,6 +19,11 @@ import { AdminImagesService } from './admin-images.service';
     HttpModule,
   ],
   controllers: [AdminImagesController],
-  providers: [ImageProvider, AdminImagesService],
+  providers: [
+    ServerlessProvider,
+    DocumentModelProvider,
+    ImageProvider,
+    AdminImagesService,
+  ],
 })
 export class AdminImagesModule {}

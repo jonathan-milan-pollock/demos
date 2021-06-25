@@ -6,13 +6,14 @@ import {
   IsMongoId,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
 } from 'class-validator';
 
 import { Video, PostedState } from '@dark-rush-photography/shared-types';
 
 export class VideoDto implements Video {
-  @IsMongoId()
+  @IsUUID()
   id!: string;
 
   @IsMongoId()
@@ -49,4 +50,13 @@ export class VideoDto implements Video {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
+
+  @IsUUID()
+  imageId!: string;
+
+  @IsBoolean()
+  hasTrack!: boolean;
+
+  @IsBoolean()
+  isFlyOver!: boolean;
 }

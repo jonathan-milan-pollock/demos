@@ -1,4 +1,5 @@
 export enum VideoDimensionType {
+  Tile = 'Tile',
   Thumbnail = 'Thumbnail',
   Small = 'Small',
   Medium = 'Medium',

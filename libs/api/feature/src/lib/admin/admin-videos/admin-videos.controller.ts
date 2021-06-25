@@ -1,3 +1,6 @@
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 import {
   Controller,
   Body,
@@ -10,7 +13,9 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  Get,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -30,7 +35,6 @@ import {
 } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminVideosService } from './admin-videos.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('admin/v1/videos')
 @UseGuards(RolesGuard)
@@ -50,14 +54,24 @@ export class AdminVideosController {
   }
 
   @Roles(ADMIN)
-  @Put(':videoId')
+  @Put(':id')
   @ApiOkResponse({ type: VideoDto })
   update$(
-    @Param('videoId') videoId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string,
     @Body() video: VideoUpdateDto
   ): Observable<Video> {
-    return this.adminVideosService.update$(entityId, videoId, video);
+    return this.adminVideosService.update$(id, entityId, video);
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: VideoDto })
+  findOne$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<Video> {
+    return this.adminVideosService.findOne$(id, entityId);
   }
 
   @Roles(ADMIN)
@@ -67,7 +81,7 @@ export class AdminVideosController {
   @ApiBody({
     type: FileUploadDto,
   })
-  uploadVideo$(
+  upload$(
     @Query('entityId') entityId: string,
     @UploadedFile() file: Express.Multer.File
   ): Observable<Video> {
@@ -75,12 +89,12 @@ export class AdminVideosController {
   }
 
   @Roles(ADMIN)
-  @Delete(':videoId')
+  @Delete(':id')
   @HttpCode(204)
-  delete$(
-    @Param('videoId') videoId: string,
+  remove$(
+    @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<void> {
-    return this.adminVideosService.remove$(entityId, videoId);
+    return this.adminVideosService.remove$(id, entityId);
   }
 }

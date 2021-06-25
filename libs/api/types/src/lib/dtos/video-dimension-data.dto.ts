@@ -1,4 +1,4 @@
-import { IsEnum, IsMongoId, IsString } from 'class-validator';
+import { IsEnum, IsMongoId, IsString, IsUUID } from 'class-validator';
 
 import {
   VideoDimensionData,
@@ -12,8 +12,8 @@ export class VideoDimensionDataDto implements VideoDimensionData {
   @IsMongoId()
   entityId!: string;
 
-  @IsString()
-  videoSlug!: string;
+  @IsUUID()
+  videoId!: string;
 
   @IsString()
   dataUri!: string;

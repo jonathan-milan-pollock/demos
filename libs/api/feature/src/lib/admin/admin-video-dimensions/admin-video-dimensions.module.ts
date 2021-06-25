@@ -3,7 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
+  ServerlessProvider,
   VideoDimensionProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminVideoDimensionsController } from './admin-video-dimensions.controller';
@@ -17,6 +19,11 @@ import { AdminVideoDimensionsService } from './admin-video-dimensions.service';
     HttpModule,
   ],
   controllers: [AdminVideoDimensionsController],
-  providers: [VideoDimensionProvider, AdminVideoDimensionsService],
+  providers: [
+    ServerlessProvider,
+    DocumentModelProvider,
+    VideoDimensionProvider,
+    AdminVideoDimensionsService,
+  ],
 })
 export class AdminVideoDimensionsModule {}

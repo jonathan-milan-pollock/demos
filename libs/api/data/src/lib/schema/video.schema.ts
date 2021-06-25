@@ -1,6 +1,7 @@
 import { PostedState } from '@dark-rush-photography/shared-types';
 
 export const videoSchema = {
+  id: { type: String, required: false },
   entityId: { type: String, required: true },
   slug: { type: String, required: true },
   state: {

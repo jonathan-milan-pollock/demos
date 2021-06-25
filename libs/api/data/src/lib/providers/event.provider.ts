@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { Event } from '@dark-rush-photography/shared-types';
+import { Event, DocumentType } from '@dark-rush-photography/shared-types';
+import { EventCreateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -12,7 +13,25 @@ import { findPublicContent } from '../functions/public.functions';
 
 @Injectable()
 export class EventProvider {
-  fromDocumentModel(documentModel: DocumentModel): Event {
+  newEvent(event: EventCreateDto): Event {
+    return {
+      type: DocumentType.Event,
+      group: event.group,
+      slug: event.slug,
+      isPublic: false,
+      keywords: [],
+      useTileImage: false,
+      text: [],
+      images: [],
+      imageDimensions: [],
+      videos: [],
+      videoDimensions: [],
+      comments: [],
+      emotions: [],
+    } as Event;
+  }
+
+  fromDocumentModel = (documentModel: DocumentModel): Event => {
     return {
       id: documentModel._id,
       group: documentModel.group,
@@ -37,9 +56,9 @@ export class EventProvider {
       comments: documentModel.comments.map((comment) => toComment(comment)),
       emotions: documentModel.emotions.map((emotion) => toEmotion(emotion)),
     };
-  }
+  };
 
-  fromDocumentModelPublic(documentModel: DocumentModel): Event {
+  fromDocumentModelPublic = (documentModel: DocumentModel): Event => {
     const publicContent = findPublicContent(documentModel);
     return {
       id: documentModel._id,
@@ -61,5 +80,5 @@ export class EventProvider {
       comments: publicContent.comments,
       emotions: publicContent.emotions,
     };
-  }
+  };
 }

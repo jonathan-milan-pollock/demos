@@ -10,15 +10,14 @@ export const toVideoDimension = (
     type: videoDimension.type,
     state: videoDimension.state,
     pixels: videoDimension.pixels,
-    settings: videoDimension.settings,
   };
 };
 
 export const findPublicVideoDimensions = (
-  publicVideoIds: string[],
-  videoDimensions: VideoDimension[]
+  videoDimensions: VideoDimension[],
+  publicVideoIds: string[]
 ): VideoDimension[] => {
   return videoDimensions
-    .filter((vd) => publicVideoIds.includes(vd.id))
+    .filter((vd) => publicVideoIds.includes(vd.videoId))
     .map((vd) => toVideoDimension(vd));
 };

@@ -1,36 +1,38 @@
-import {
-  BadRequestException,
-  ConflictException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { EMPTY, from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 import { Model } from 'mongoose';
+import { from, iif, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
 
 import {
   PhotoOfTheWeek,
   DocumentType,
+  ENV,
 } from '@dark-rush-photography/shared-types';
+import {
+  Env,
+  PhotoOfTheWeekCreateDto,
+  PhotoOfTheWeekUpdateDto,
+} from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
   PhotoOfTheWeekProvider,
+  DocumentModelProvider,
+  ServerlessProvider,
 } from '@dark-rush-photography/api/data';
-import {
-  PhotoOfTheWeekCreateDto,
-  PhotoOfTheWeekUpdateDto,
-} from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class AdminPhotoOfTheWeekService {
   constructor(
+    @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider
+    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
+    private readonly documentModelProvider: DocumentModelProvider,
+    private readonly serverlessProvider: ServerlessProvider
   ) {}
 
   create$(photoOfTheWeek: PhotoOfTheWeekCreateDto): Observable<PhotoOfTheWeek> {
@@ -41,39 +43,19 @@ export class AdminPhotoOfTheWeekService {
         slug: photoOfTheWeek.slug,
       })
     ).pipe(
-      switchMap((documentModel) => {
-        if (documentModel)
-          throw new ConflictException(
-            `Photo of the week ${photoOfTheWeek.group} ${photoOfTheWeek.slug} has already been created`,
-            HttpStatus.FOUND
-          );
-
-        return from(
-          new this.photoOfTheWeekModel({
-            type: DocumentType.PhotoOfTheWeek,
-            group: photoOfTheWeek.group,
-            slug: photoOfTheWeek.slug,
-            isPublic: false,
-            keywords: [],
-            useTileImage: false,
-            text: [],
-            images: [],
-            imageDimensions: [],
-            videos: [],
-            videoDimensions: [],
-            comments: [],
-            emotions: [],
-          } as PhotoOfTheWeek).save()
-        );
-      }),
-      map((documentModel: DocumentModel) => {
-        if (!documentModel) {
-          throw new BadRequestException(
-            `Unable to create event ${photoOfTheWeek.group} ${photoOfTheWeek.slug}`
-          );
-        }
-        return this.photoOfTheWeekProvider.fromDocumentModel(documentModel);
-      })
+      switchMap((documentModel) =>
+        iif(
+          () => documentModel !== null,
+          of(documentModel),
+          from(
+            new this.photoOfTheWeekModel(
+              this.photoOfTheWeekProvider.newPhotoOfTheWeek(photoOfTheWeek)
+            ).save()
+          )
+        )
+      ),
+      map(this.documentModelProvider.validateCreate),
+      map(this.photoOfTheWeekProvider.fromDocumentModel)
     );
   }
 
@@ -82,32 +64,47 @@ export class AdminPhotoOfTheWeekService {
     photoOfTheWeek: PhotoOfTheWeekUpdateDto
   ): Observable<PhotoOfTheWeek> {
     return from(
-      this.photoOfTheWeekModel.findByIdAndUpdate(id, {
-        group: photoOfTheWeek.group,
-        slug: photoOfTheWeek.slug,
-        isPublic: photoOfTheWeek.isPublic,
-        title: photoOfTheWeek.title,
-        description: photoOfTheWeek.description,
-        keywords: photoOfTheWeek.keywords,
-        datePublished: photoOfTheWeek.datePublished,
-        location: photoOfTheWeek.location,
-        useTileImage: photoOfTheWeek.useTileImage,
-        text: photoOfTheWeek.text,
-      })
+      this.photoOfTheWeekModel.findByIdAndUpdate(id, { ...photoOfTheWeek })
     ).pipe(
-      map((documentModel) => {
-        if (!documentModel)
-          throw new NotFoundException(
-            `Unable to update event ${photoOfTheWeek.group} ${photoOfTheWeek.slug}`
-          );
+      map(this.documentModelProvider.validateFind),
+      switchMapTo(this.findOne$(id))
+    );
+  }
 
-        return this.photoOfTheWeekProvider.fromDocumentModel(documentModel);
-      })
+  findAll$(): Observable<PhotoOfTheWeek[]> {
+    return from(
+      this.photoOfTheWeekModel.find({ type: DocumentType.PhotoOfTheWeek })
+    ).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map(this.photoOfTheWeekProvider.fromDocumentModel),
+      toArray<PhotoOfTheWeek>()
+    );
+  }
+
+  findOne$(id: string): Observable<PhotoOfTheWeek> {
+    return from(this.photoOfTheWeekModel.findById(id)).pipe(
+      map(this.documentModelProvider.validateFind),
+      map(this.photoOfTheWeekProvider.fromDocumentModel)
+    );
+  }
+
+  post$(id: string): Observable<PhotoOfTheWeek> {
+    return this.findOne$(id).pipe(
+      switchMapTo(
+        this.serverlessProvider.post$(
+          this.env.serverless,
+          this.httpService,
+          'post-photo-of-the-week',
+          id,
+          DocumentType.PhotoOfTheWeek
+        )
+      ),
+      map((response) => response as PhotoOfTheWeek)
     );
   }
 
   delete$(id: string): Observable<void> {
-    return of(this.photoOfTheWeekModel.findByIdAndDelete(id)).pipe(
+    return from(this.photoOfTheWeekModel.findByIdAndDelete(id)).pipe(
       mapTo(undefined)
     );
   }

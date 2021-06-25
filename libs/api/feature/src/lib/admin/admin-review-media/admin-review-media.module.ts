@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
   ReviewMediaProvider,
 } from '@dark-rush-photography/api/data';
@@ -16,6 +17,10 @@ import { AdminReviewMediaService } from './admin-review-media.service';
     ]),
   ],
   controllers: [AdminReviewMediaController],
-  providers: [ReviewMediaProvider, AdminReviewMediaService],
+  providers: [
+    DocumentModelProvider,
+    ReviewMediaProvider,
+    AdminReviewMediaService,
+  ],
 })
 export class AdminReviewMediaModule {}

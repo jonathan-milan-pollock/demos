@@ -3,8 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
   MediaProvider,
+  ServerlessProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminMediaController } from './admin-media.controller';
 import { AdminMediaService } from './admin-media.service';
@@ -17,6 +19,11 @@ import { AdminMediaService } from './admin-media.service';
     HttpModule,
   ],
   controllers: [AdminMediaController],
-  providers: [MediaProvider, AdminMediaService],
+  providers: [
+    ServerlessProvider,
+    DocumentModelProvider,
+    MediaProvider,
+    AdminMediaService,
+  ],
 })
 export class AdminMediaModule {}

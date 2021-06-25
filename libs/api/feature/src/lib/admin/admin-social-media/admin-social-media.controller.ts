@@ -6,13 +6,14 @@ import {
   Param,
   Post,
   UseGuards,
-  Put,
+  Get,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -38,6 +39,20 @@ export class AdminSocialMediaController {
   @ApiCreatedResponse({ type: SocialMediaDto })
   create$(@Body() socialMedia: SocialMediaCreateDto): Observable<SocialMedia> {
     return this.adminSocialMediaService.create$(socialMedia);
+  }
+
+  @Roles(ADMIN)
+  @Get()
+  @ApiOkResponse({ type: [SocialMediaDto] })
+  findAll$(): Observable<SocialMedia[]> {
+    return this.adminSocialMediaService.findAll$();
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: SocialMediaDto })
+  findOne$(@Param('id') id: string): Observable<SocialMedia> {
+    return this.adminSocialMediaService.findOne$(id);
   }
 
   @Roles(ADMIN)

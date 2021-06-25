@@ -3,6 +3,7 @@ import {
   IsMongoId,
   IsOptional,
   IsString,
+  IsUUID,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -12,13 +13,13 @@ import { Comment } from '@dark-rush-photography/shared-types';
 import { UserDto } from './user.dto';
 
 export class CommentDto implements Comment {
-  @IsMongoId()
+  @IsUUID()
   id!: string;
 
   @IsMongoId()
   entityId!: string;
 
-  @IsMongoId()
+  @IsUUID()
   @IsOptional()
   mediaId?: string;
 

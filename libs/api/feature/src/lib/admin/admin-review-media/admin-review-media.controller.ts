@@ -5,12 +5,14 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  Get,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -33,6 +35,13 @@ export class AdminReviewMediaController {
   @ApiCreatedResponse({ type: ReviewMediaDto })
   create$(): Observable<ReviewMedia> {
     return this.adminReviewMediaService.create$();
+  }
+
+  @Roles(ADMIN)
+  @Get(':id')
+  @ApiOkResponse({ type: ReviewMediaDto })
+  findOne$(): Observable<ReviewMedia> {
+    return this.adminReviewMediaService.findOne$();
   }
 
   @Roles(ADMIN)

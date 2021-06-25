@@ -10,15 +10,15 @@ export const toImageDimension = (
     type: imageDimension.type,
     state: imageDimension.state,
     pixels: imageDimension.pixels,
-    settings: imageDimension.settings,
+    threeSixtyImageSettings: imageDimension.threeSixtyImageSettings,
   };
 };
 
 export const findPublicImageDimensions = (
-  publicImageIds: string[],
-  imageDimensions: ImageDimension[]
+  imageDimensions: ImageDimension[],
+  publicImageIds: string[]
 ): ImageDimension[] => {
   return imageDimensions
-    .filter((id) => publicImageIds.includes(id.id))
+    .filter((id) => publicImageIds.includes(id.imageId))
     .map((id) => toImageDimension(id));
 };

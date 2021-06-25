@@ -1,7 +1,9 @@
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
 import {
   Controller,
   Get,
-  Param,
   Post,
   Req,
   UploadedFile,
@@ -9,9 +11,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AzureRequest } from '@nestjs/azure-func-http';
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 
 import { UploadImageService } from './upload-image.service';
 
@@ -34,21 +33,5 @@ export class UploadImageController {
       null,
       await this.uploadImageService.uploadImage(request, image)
     );
-  }
-
-  @Post(':type')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadImageType(
-    @Param('type') type: string,
-    @Req() request: AzureRequest,
-    @UploadedFile() image: Express.Multer.File
-  ): Promise<void> {
-    switch (type) {
-      case '':
-        request.context.done(
-          null,
-          await this.uploadImageService.uploadImage(request, image)
-        );
-    }
   }
 }

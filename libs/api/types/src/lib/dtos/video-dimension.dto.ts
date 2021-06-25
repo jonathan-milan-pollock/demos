@@ -1,4 +1,4 @@
-import { IsEnum, IsMongoId, IsString, ValidateNested } from 'class-validator';
+import { IsEnum, IsMongoId, IsUUID, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import {
@@ -7,16 +7,15 @@ import {
   VideoDimensionType,
 } from '@dark-rush-photography/shared-types';
 import { MediaDimensionPixelsDto } from './media-dimension-pixels.dto';
-import { VideoDimensionSettingsDto } from './video-dimension-settings.dto';
 
 export class VideoDimensionDto implements VideoDimension {
-  @IsMongoId()
+  @IsUUID()
   id!: string;
 
   @IsMongoId()
   entityId!: string;
 
-  @IsString()
+  @IsUUID()
   videoId!: string;
 
   @IsEnum(VideoDimensionType)
@@ -28,8 +27,4 @@ export class VideoDimensionDto implements VideoDimension {
   @ValidateNested()
   @Type(() => MediaDimensionPixelsDto)
   pixels!: MediaDimensionPixelsDto;
-
-  @ValidateNested()
-  @Type(() => VideoDimensionSettingsDto)
-  settings!: VideoDimensionSettingsDto;
 }

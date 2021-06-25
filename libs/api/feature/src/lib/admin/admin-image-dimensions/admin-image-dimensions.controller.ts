@@ -53,44 +53,47 @@ export class AdminImageDimensionsController {
   }
 
   @Roles(ADMIN)
-  @Put(':imageDimensionId')
+  @Put(':id')
   @ApiOkResponse({ type: ImageDimensionDto })
   update$(
-    @Param('imageDimensionId') imageDimensionId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string,
-    @Query('imageId') imageId: string,
     @Body() imageDimension: ImageDimensionUpdateDto
   ): Observable<ImageDimension> {
     return this.adminImageDimensionsService.update$(
+      id,
       entityId,
-      imageId,
-      imageDimensionId,
       imageDimension
     );
   }
 
   @Roles(ADMIN)
-  @Get(':imageDimensionId/data')
-  @ApiOkResponse({ type: ImageDimensionDataDto })
-  find$(
-    @Param('imageDimensionId') imageDimensionId: string,
-    @Query('entityId') entityId: string,
-    @Query('imageId') imageId: string
-  ): Observable<ImageDimensionData> {
-    return this.adminImageDimensionsService.getData$(
-      entityId,
-      imageId,
-      imageDimensionId
-    );
+  @Get(':id')
+  @ApiOkResponse({ type: ImageDimensionDto })
+  findOne$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<ImageDimension> {
+    return this.adminImageDimensionsService.findOne$(id, entityId);
   }
 
   @Roles(ADMIN)
-  @Delete(':imageDimensionId')
+  @Get(':id/data')
+  @ApiOkResponse({ type: ImageDimensionDataDto })
+  data$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<ImageDimensionData> {
+    return this.adminImageDimensionsService.data$(id, entityId);
+  }
+
+  @Roles(ADMIN)
+  @Delete(':id')
   @HttpCode(204)
   delete$(
-    @Param('imageDimensionId') imageDimensionId: string,
+    @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<void> {
-    return this.adminImageDimensionsService.remove$(entityId, imageDimensionId);
+    return this.adminImageDimensionsService.remove$(id, entityId);
   }
 }

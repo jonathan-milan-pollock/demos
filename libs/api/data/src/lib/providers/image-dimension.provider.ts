@@ -1,32 +1,78 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { ImageDimension } from '@dark-rush-photography/shared-types';
+import {
+  ImageDimension,
+  ImageDimensionType,
+} from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImageDimension } from '../functions/image-dimension.functions';
+import {
+  ImageDimensionAddDto,
+  ImageDimensionUpdateDto,
+} from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class ImageDimensionProvider {
-  findById$(
-    documentModel: Model<DocumentModel>,
-    entityId: string,
-    imageDimensionId: string
-  ): Observable<ImageDimension> {
-    return from(documentModel.findById(entityId).exec()).pipe(
-      map((response) => {
-        if (!response) throw new NotFoundException('Could not find entity');
-
-        const foundImageDimension = response.imageDimensions.find(
-          (id) => id.id === imageDimensionId
-        );
-        if (!foundImageDimension)
-          throw new NotFoundException('Could not find image dimension by id');
-
-        return toImageDimension(foundImageDimension);
-      })
-    );
+  toImageDimension(imageDimension: ImageDimension): ImageDimension {
+    return toImageDimension(imageDimension);
   }
+
+  addImageDimension = (
+    id: string,
+    entityId: string,
+    imageId: string,
+    imageDimension: ImageDimensionAddDto,
+    imageDimensions: ImageDimension[]
+  ): Partial<DocumentModel> => ({
+    imageDimensions: [
+      ...imageDimensions,
+      { ...imageDimension, id, entityId, imageId },
+    ],
+  });
+
+  updateImageDimension = (
+    id: string,
+    foundImageDimension: ImageDimension,
+    imageDimensionUpdate: ImageDimensionUpdateDto,
+    imageDimensions: ImageDimension[]
+  ): Partial<DocumentModel> => ({
+    imageDimensions: [
+      ...imageDimensions.filter((imageDimension) => imageDimension.id !== id),
+      {
+        ...foundImageDimension,
+        ...imageDimensionUpdate,
+      },
+    ],
+  });
+
+  removeImageDimension = (
+    id: string,
+    imageDimensions: ImageDimension[]
+  ): Partial<DocumentModel> => ({
+    imageDimensions: [
+      ...imageDimensions.filter((imageDimension) => imageDimension.id !== id),
+    ],
+  });
+
+  findImageDimension = (
+    imageId: string,
+    imageDimensionType: ImageDimensionType,
+    imageDimensions: ImageDimension[]
+  ): ImageDimension | undefined => {
+    return imageDimensions.find(
+      (id) => id.imageId === imageId && id.type === imageDimensionType
+    );
+  };
+
+  validateFindImageDimension = (
+    id: string,
+    imageDimensions: ImageDimension[]
+  ): ImageDimension => {
+    const foundImageDimension = imageDimensions.find(
+      (imageDimension) => imageDimension.id === id
+    );
+    if (!foundImageDimension)
+      throw new NotFoundException('Could not find image dimension to update');
+    return foundImageDimension;
+  };
 }

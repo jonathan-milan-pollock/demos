@@ -7,10 +7,6 @@ import {
   UseGuards,
   Get,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -41,16 +37,9 @@ export class AdminFavoritesController {
 
   @Roles(ADMIN)
   @Get()
-  @ApiOkResponse({ type: [FavoritesDto] })
-  findAll$(): Observable<Favorites[]> {
-    return this.adminFavoritesService.findAll$();
-  }
-
-  @Roles(ADMIN)
-  @Get(':id')
   @ApiOkResponse({ type: FavoritesDto })
-  findOne$(@Param('id') id: string): Observable<Favorites> {
-    return this.adminFavoritesService.findOne$(id);
+  findOne$(): Observable<Favorites> {
+    return this.adminFavoritesService.findOne$();
   }
 
   @Roles(ADMIN)

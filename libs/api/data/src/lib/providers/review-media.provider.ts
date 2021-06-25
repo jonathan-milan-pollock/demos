@@ -1,16 +1,35 @@
 import { Injectable } from '@nestjs/common';
 
-import { ReviewMedia } from '@dark-rush-photography/shared-types';
+import { Observable, of } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
+
+import { DocumentType, ReviewMedia } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
 import { toVideo } from '../functions/video.functions';
 import { toVideoDimension } from '../functions/video-dimension.functions';
 import { findPublicContent } from '../functions/public.functions';
+import { DocumentModelProvider } from './document-model.provider';
 
 @Injectable()
 export class ReviewMediaProvider {
-  fromDocumentModel(documentModel: DocumentModel): ReviewMedia {
+  constructor(private readonly documentModelProvider: DocumentModelProvider) {}
+
+  newReviewMedia(): ReviewMedia {
+    return {
+      type: DocumentType.ReviewMedia,
+      slug: 'media',
+      isPublic: true,
+      text: [],
+      images: [],
+      imageDimensions: [],
+      videos: [],
+      videoDimensions: [],
+    } as ReviewMedia;
+  }
+
+  fromDocumentModel = (documentModel: DocumentModel): ReviewMedia => {
     return {
       id: documentModel._id,
       images: documentModel.images.map((image) => toImage(image)),
@@ -22,9 +41,9 @@ export class ReviewMediaProvider {
         toVideoDimension(videoDimension)
       ),
     };
-  }
+  };
 
-  fromDocumentModelPublic(documentModel: DocumentModel): ReviewMedia {
+  fromDocumentModelPublic = (documentModel: DocumentModel): ReviewMedia => {
     const publicContent = findPublicContent(documentModel);
     return {
       id: documentModel._id,
@@ -33,5 +52,5 @@ export class ReviewMediaProvider {
       videos: publicContent.videos,
       videoDimensions: publicContent.videoDimensions,
     };
-  }
+  };
 }

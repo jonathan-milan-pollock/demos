@@ -12,14 +12,14 @@ import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
 import { Comment } from '@dark-rush-photography/shared-types';
 import {
+  CommentAddDto,
+  CommentUpdateDto,
+} from '@dark-rush-photography/api/types';
+import {
   CommentProvider,
   Document,
   DocumentModel,
 } from '@dark-rush-photography/api/data';
-import {
-  CommentAddDto,
-  CommentUpdateDto,
-} from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class CommentsService {
@@ -34,7 +34,7 @@ export class CommentsService {
     comment: CommentAddDto
   ): Observable<Comment> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException('Could not find entity to add comment');
@@ -42,13 +42,13 @@ export class CommentsService {
         return this.commentProvider.add$(
           response,
           this.entityModel,
+          comment,
           id,
-          entityId,
-          comment
+          entityId
         );
       }),
       switchMapTo(
-        this.commentProvider.findById$(this.entityModel, entityId, id)
+        this.commentProvider.findById$(this.entityModel, id, entityId)
       )
     );
   }
@@ -59,7 +59,7 @@ export class CommentsService {
     comment: CommentAddDto
   ): Observable<Comment> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException('Could not find entity to add comment');
@@ -69,9 +69,9 @@ export class CommentsService {
           return this.commentProvider.add$(
             response,
             this.entityModel,
+            comment,
             id,
             entityId,
-            comment,
             mediaId
           );
         }
@@ -80,9 +80,9 @@ export class CommentsService {
           return this.commentProvider.add$(
             response,
             this.entityModel,
+            comment,
             id,
             entityId,
-            comment,
             mediaId
           );
         }
@@ -90,31 +90,31 @@ export class CommentsService {
         throw new NotFoundException('Could not find media to add comment');
       }),
       switchMapTo(
-        this.commentProvider.findById$(this.entityModel, entityId, id)
+        this.commentProvider.findById$(this.entityModel, id, entityId)
       )
     );
   }
 
   update$(
+    id: string,
     entityId: string,
-    commentId: string,
     comment: CommentUpdateDto
   ): Observable<Comment> {
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException(
             'Could not find entity to update comment'
           );
 
-        const foundComment = response.comments.find((c) => c.id === commentId);
+        const foundComment = response.comments.find((c) => c.id === id);
         if (!foundComment)
           throw new NotFoundException('Could not find comment to update');
 
         return from(
           this.entityModel.findByIdAndUpdate(entityId, {
             comments: [
-              ...response.comments.filter((c) => c.id !== commentId),
+              ...response.comments.filter((c) => c.id !== id),
               {
                 ...foundComment,
                 ...comment,
@@ -124,13 +124,13 @@ export class CommentsService {
         );
       }),
       switchMapTo(
-        this.commentProvider.findById$(this.entityModel, entityId, commentId)
+        this.commentProvider.findById$(this.entityModel, id, entityId)
       )
     );
   }
 
-  remove$(entityId: string, commentId: string): Observable<void> {
-    return from(this.entityModel.findById(entityId).exec()).pipe(
+  remove$(id: string, entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       switchMap((response) => {
         if (!response)
           throw new NotFoundException(
@@ -139,10 +139,8 @@ export class CommentsService {
 
         return from(
           this.entityModel.findByIdAndUpdate(entityId, {
-            comments: [...response.comments.filter((c) => c.id !== commentId)],
-            emotions: [
-              ...response.emotions.filter((e) => e.commentId !== commentId),
-            ],
+            comments: [...response.comments.filter((c) => c.id !== id)],
+            emotions: [...response.emotions.filter((e) => e.commentId !== id)],
           })
         );
       }),

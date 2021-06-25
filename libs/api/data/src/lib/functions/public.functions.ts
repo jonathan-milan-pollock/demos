@@ -27,14 +27,14 @@ export const findPublicContent = (
   const publicImages = findPublicImages(documentModel.images);
   const publicImageIds = publicImages.map((i) => i.id);
   const publicImageDimensions = findPublicImageDimensions(
+    documentModel.imageDimensions,
     publicImageIds,
-    documentModel.imageDimensions
   );
   const publicVideos = findPublicVideos(documentModel.videos);
   const publicVideoIds = publicVideos.map((v) => v.id);
   const publicVideoDimensions = findPublicVideoDimensions(
+    documentModel.videoDimensions,
     publicVideoIds,
-    documentModel.videoDimensions
   );
   const publicComments = findPublicComments(documentModel.comments, [
     ...publicImageIds,

@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
   FavoritesProvider,
 } from '@dark-rush-photography/api/data';
@@ -16,6 +17,6 @@ import { AdminFavoritesService } from './admin-favorites.service';
     ]),
   ],
   controllers: [AdminFavoritesController],
-  providers: [FavoritesProvider, AdminFavoritesService],
+  providers: [DocumentModelProvider, FavoritesProvider, AdminFavoritesService],
 })
 export class AdminFavoritesModule {}
