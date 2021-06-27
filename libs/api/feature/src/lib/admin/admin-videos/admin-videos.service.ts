@@ -1,15 +1,12 @@
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
-import { ENV, Video } from '@dark-rush-photography/shared-types';
+import { Entity, ENV, Video } from '@dark-rush-photography/shared-types';
 import {
   Env,
   VideoAddDto,
@@ -35,24 +32,29 @@ export class AdminVideosService {
     private readonly serverlessProvider: ServerlessProvider
   ) {}
 
-  add$(entityId: string, video: VideoAddDto): Observable<Video> {
+  add$(entityId: string, videoAdd: VideoAddDto): Observable<Video> {
     const id = uuidv4();
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.documentModelProvider.validateFind),
       switchMap((documentModel) => {
+        const foundVideo = this.videoProvider.findVideoBySlug(
+          videoAdd.fileName,
+          documentModel.videos
+        );
+        if (foundVideo) return of(documentModel);
+
         return from(
           this.entityModel.findByIdAndUpdate(
             entityId,
             this.videoProvider.addVideo(
               id,
               entityId,
-              video,
+              videoAdd,
               documentModel.videos
             )
           )
         );
       }),
-      map(this.documentModelProvider.validateAdd),
       switchMapTo(this.findOne$(id, entityId))
     );
   }
@@ -60,26 +62,29 @@ export class AdminVideosService {
   update$(
     id: string,
     entityId: string,
-    video: VideoUpdateDto
+    videoUpdate: VideoUpdateDto
   ): Observable<Video> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.documentModelProvider.validateFind),
-      tap((documentModel) =>
-        this.videoProvider.validateUpdateVideo(id, video, documentModel.videos)
-      ),
-      switchMap((documentModel) =>
-        from(
+      switchMap((documentModel) => {
+        const foundVideo = this.videoProvider.validateUpdateVideo(
+          id,
+          videoUpdate.postState,
+          documentModel.videos
+        );
+
+        return from(
           this.entityModel.findByIdAndUpdate(
             entityId,
             this.videoProvider.updateVideo(
               id,
-              entityId,
-              video,
+              foundVideo,
+              videoUpdate,
               documentModel.videos
             )
           )
-        )
-      ),
+        );
+      }),
       switchMapTo(this.findOne$(id, entityId))
     );
   }
@@ -88,8 +93,9 @@ export class AdminVideosService {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.documentModelProvider.validateFind),
       map((documentModel) =>
-        this.videoProvider.validateAddVideo(id, documentModel.videos)
-      )
+        this.videoProvider.validateFindVideo(id, documentModel.videos)
+      ),
+      map((video) => this.videoProvider.toVideo(video))
     );
   }
 
@@ -101,7 +107,7 @@ export class AdminVideosService {
           this.env.serverless,
           this.httpService,
           'upload-video',
-          entityId,
+          documentModel as Entity,
           documentModel.type,
           file
         )

@@ -1,3 +1,7 @@
+// activity-media
+export * from './lib/activity-media/blob-path.functions';
+export * from './lib/activity-media/publish-service-media.functions';
+
 // env
 export * from './lib/env/env-dev.functions';
 
@@ -8,11 +12,6 @@ export * from './lib/exif-image/read-create-date-exif.functions';
 
 // file
 export * from './lib/file/file.functions';
-
-// published-image
-export * from './lib/published-image/blob-path.functions';
-export * from './lib/published-image/publish-service.functions';
-export * from './lib/published-image/published-image.functions';
 
 // resize-image
 export * from './lib/resize-image/image-dimension-pixels.functions';

@@ -4,8 +4,8 @@ import { userSchema } from './user.schema';
 export const emotionSchema = {
   id: { type: String, required: false },
   entityId: { type: String, required: true },
-  commentId: { type: String, required: false },
   mediaId: { type: String, required: false },
+  commentId: { type: String, required: false },
   type: {
     type: String,
     enum: Object.keys(EmotionType),

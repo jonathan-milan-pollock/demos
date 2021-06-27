@@ -1,6 +1,5 @@
 import {
   ImageDimension,
-  ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
 import {
@@ -14,7 +13,6 @@ describe('image-dimension.functions', () => {
     entityId: 'entityId',
     imageId: 'imageId',
     type: ImageDimensionType.Tile,
-    state: ImageDimensionState.Uploaded,
     pixels: {
       width: 10,
       height: 20,
@@ -41,37 +39,12 @@ describe('image-dimension.functions', () => {
       expect('_id' in result).toBe(false);
     });
 
-    it('should have an undefined pitch if not provided', () => {
+    it('should have an undefined three sixty image settings if not provided', () => {
       const result = toImageDimension({
         ...imageDimension,
-        threeSixtyImageSettings: {
-          ...imageDimension.threeSixtyImageSettings,
-          pitch: undefined,
-        },
+        threeSixtyImageSettings: undefined,
       });
-      expect(result.threeSixtyImageSettings.pitch).toBeUndefined();
-    });
-
-    it('should have an undefined yaw if not provided', () => {
-      const result = toImageDimension({
-        ...imageDimension,
-        threeSixtyImageSettings: {
-          ...imageDimension.threeSixtyImageSettings,
-          yaw: undefined,
-        },
-      });
-      expect(result.threeSixtyImageSettings.yaw).toBeUndefined();
-    });
-
-    it('should have an undefined hfov if not provided', () => {
-      const result = toImageDimension({
-        ...imageDimension,
-        threeSixtyImageSettings: {
-          ...imageDimension.threeSixtyImageSettings,
-          hfov: undefined,
-        },
-      });
-      expect(result.threeSixtyImageSettings.hfov).toBeUndefined();
+      expect(result.threeSixtyImageSettings).toBeUndefined();
     });
   });
 

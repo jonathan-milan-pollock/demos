@@ -8,7 +8,6 @@ export const toVideoDimension = (
     entityId: videoDimension.entityId,
     videoId: videoDimension.videoId,
     type: videoDimension.type,
-    state: videoDimension.state,
     pixels: videoDimension.pixels,
   };
 };

@@ -1,12 +1,9 @@
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import { HttpService, Injectable } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 
-import { DocumentType } from '@dark-rush-photography/shared-types';
+import { Entity, EntityType } from '@dark-rush-photography/shared-types';
 import { EnvServerless } from '@dark-rush-photography/api/types';
 import { getFormData } from '../functions/form-data.functions';
 
@@ -16,16 +13,16 @@ export class ServerlessProvider {
     envServerless: EnvServerless,
     httpService: HttpService,
     serverlessSlug: string,
-    entityId: string,
-    documentType: DocumentType,
+    entity: Entity,
+    entityType: EntityType,
     file: Express.Multer.File
   ): Observable<unknown> => {
     const { drpServerlessUrl, drpServerlessFunctionsKey } = envServerless;
     const formData = getFormData(
       file.buffer,
       file.originalname,
-      entityId,
-      documentType
+      entity,
+      entityType
     );
 
     return from(
@@ -46,7 +43,7 @@ export class ServerlessProvider {
     httpService: HttpService,
     serverlessSlug: string,
     entityId: string,
-    documentType: DocumentType
+    entityType: EntityType
   ): Observable<unknown> => {
     const { drpServerlessUrl, drpServerlessFunctionsKey } = envServerless;
     return from(
@@ -54,8 +51,8 @@ export class ServerlessProvider {
         .post(
           `${drpServerlessUrl}/${serverlessSlug}`,
           {
-            id: entityId,
-            type: documentType,
+            entityId,
+            entityType,
           },
           {
             headers: {
@@ -72,7 +69,7 @@ export class ServerlessProvider {
     httpService: HttpService,
     serverlessSlug: string,
     entityId: string,
-    documentType: DocumentType
+    entityType: EntityType
   ): Observable<unknown> => {
     const { drpServerlessUrl, drpServerlessFunctionsKey } = envServerless;
     return from(
@@ -80,8 +77,8 @@ export class ServerlessProvider {
         .post(
           `${drpServerlessUrl}/${serverlessSlug}`,
           {
-            id: entityId,
-            type: documentType,
+            entityId,
+            entityType,
           },
           {
             headers: {
@@ -99,7 +96,7 @@ export class ServerlessProvider {
     serverlessSlug: string,
     mediaId: string,
     entityId: string,
-    documentType: DocumentType
+    entityType: EntityType
   ): Observable<unknown> => {
     const { drpServerlessUrl, drpServerlessFunctionsKey } = envServerless;
     return from(
@@ -107,8 +104,8 @@ export class ServerlessProvider {
         .post(
           `${drpServerlessUrl}/${serverlessSlug}`,
           {
-            id: entityId,
-            type: documentType,
+            entityId,
+            entityType,
             mediaId,
           },
           {

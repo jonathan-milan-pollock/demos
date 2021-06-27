@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { Destination, DocumentType } from '@dark-rush-photography/shared-types';
+import { Destination, EntityType } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
 import { toVideo } from '../functions/video.functions';
 import { toVideoDimension } from '../functions/video-dimension.functions';
+import { toSocialMediaUrl } from '../functions/social-media-url.functions';
 import { toComment } from '../functions/comment.functions';
 import { toEmotion } from '../functions/emotion.functions';
 import { findPublicContent } from '../functions/public.functions';
@@ -14,7 +15,7 @@ import { findPublicContent } from '../functions/public.functions';
 export class DestinationProvider {
   newDestination(slug: string): Destination {
     return {
-      type: DocumentType.Destination,
+      type: EntityType.Destination,
       slug,
       isPublic: false,
       keywords: [],
@@ -52,7 +53,9 @@ export class DestinationProvider {
     ),
     hasExtendedReality: documentModel.hasExtendedReality,
     websiteUrl: documentModel.websiteUrl,
-    socialMediaUrls: documentModel.socialMediaUrls,
+    socialMediaUrls: documentModel.socialMediaUrls.map((socialMediaUrl) =>
+      toSocialMediaUrl(socialMediaUrl)
+    ),
     comments: documentModel.comments.map((comment) => toComment(comment)),
     emotions: documentModel.emotions.map((emotion) => toEmotion(emotion)),
   });
@@ -76,7 +79,9 @@ export class DestinationProvider {
       videoDimensions: publicContent.videoDimensions,
       hasExtendedReality: documentModel.hasExtendedReality,
       websiteUrl: documentModel.websiteUrl,
-      socialMediaUrls: documentModel.socialMediaUrls,
+      socialMediaUrls: documentModel.socialMediaUrls.map((socialMediaUrl) =>
+        toSocialMediaUrl(socialMediaUrl)
+      ),
       comments: publicContent.comments,
       emotions: publicContent.emotions,
     };

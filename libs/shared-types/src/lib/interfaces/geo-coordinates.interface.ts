@@ -1,4 +1,4 @@
 export interface GeoCoordinates {
-  readonly latitude: number;
-  readonly longitude: number;
+  readonly latitude: string;
+  readonly longitude: string;
 }

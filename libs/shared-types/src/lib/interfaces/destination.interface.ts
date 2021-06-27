@@ -9,7 +9,7 @@ import { Emotion } from './emotion.interface';
 
 export interface Destination {
   readonly id?: string;
-  // identifier
+  // TODO identifier
   readonly slug: string;
   readonly isPublic: boolean;
   // metadata

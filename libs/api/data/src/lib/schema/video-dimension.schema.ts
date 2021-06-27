@@ -1,7 +1,4 @@
-import {
-  VideoDimensionState,
-  VideoDimensionType,
-} from '@dark-rush-photography/shared-types';
+import { VideoDimensionType } from '@dark-rush-photography/shared-types';
 import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
 
 export const videoDimensionSchema = {
@@ -11,11 +8,6 @@ export const videoDimensionSchema = {
   type: {
     type: String,
     enum: Object.keys(VideoDimensionType),
-    required: true,
-  },
-  state: {
-    type: String,
-    enum: Object.keys(VideoDimensionState),
     required: true,
   },
   pixels: { type: mediaDimensionPixelsSchema, required: true },

@@ -2,12 +2,12 @@ import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
 
 import {
   PhotoOfTheWeek,
-  DocumentType,
+  EntityType,
   ENV,
 } from '@dark-rush-photography/shared-types';
 import {
@@ -35,25 +35,25 @@ export class AdminPhotoOfTheWeekService {
     private readonly serverlessProvider: ServerlessProvider
   ) {}
 
-  create$(photoOfTheWeek: PhotoOfTheWeekCreateDto): Observable<PhotoOfTheWeek> {
+  create$(
+    photoOfTheWeekCreate: PhotoOfTheWeekCreateDto
+  ): Observable<PhotoOfTheWeek> {
     return from(
       this.photoOfTheWeekModel.findOne({
-        type: DocumentType.PhotoOfTheWeek,
-        group: photoOfTheWeek.group,
-        slug: photoOfTheWeek.slug,
+        type: EntityType.PhotoOfTheWeek,
+        group: photoOfTheWeekCreate.group,
+        slug: photoOfTheWeekCreate.slug,
       })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(
-            new this.photoOfTheWeekModel(
-              this.photoOfTheWeekProvider.newPhotoOfTheWeek(photoOfTheWeek)
-            ).save()
-          )
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.photoOfTheWeekModel(
+            this.photoOfTheWeekProvider.newPhotoOfTheWeek(photoOfTheWeekCreate)
+          ).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.photoOfTheWeekProvider.fromDocumentModel)
     );
@@ -61,10 +61,12 @@ export class AdminPhotoOfTheWeekService {
 
   update$(
     id: string,
-    photoOfTheWeek: PhotoOfTheWeekUpdateDto
+    photoOfTheWeekUpdate: PhotoOfTheWeekUpdateDto
   ): Observable<PhotoOfTheWeek> {
     return from(
-      this.photoOfTheWeekModel.findByIdAndUpdate(id, { ...photoOfTheWeek })
+      this.photoOfTheWeekModel.findByIdAndUpdate(id, {
+        ...photoOfTheWeekUpdate,
+      })
     ).pipe(
       map(this.documentModelProvider.validateFind),
       switchMapTo(this.findOne$(id))
@@ -73,7 +75,7 @@ export class AdminPhotoOfTheWeekService {
 
   findAll$(): Observable<PhotoOfTheWeek[]> {
     return from(
-      this.photoOfTheWeekModel.find({ type: DocumentType.PhotoOfTheWeek })
+      this.photoOfTheWeekModel.find({ type: EntityType.PhotoOfTheWeek })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.photoOfTheWeekProvider.fromDocumentModel),
@@ -96,7 +98,7 @@ export class AdminPhotoOfTheWeekService {
           this.httpService,
           'post-photo-of-the-week',
           id,
-          DocumentType.PhotoOfTheWeek
+          EntityType.PhotoOfTheWeek
         )
       ),
       map((response) => response as PhotoOfTheWeek)

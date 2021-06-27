@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 
 import {
-  PostedState,
+  PostState,
   Video,
   VideoDimension,
 } from '@dark-rush-photography/shared-types';
@@ -15,19 +15,21 @@ import { toVideo } from '../functions/video.functions';
 
 @Injectable()
 export class VideoProvider {
+  toVideo = (video: Video): Video => toVideo(video);
+
   addVideo = (
     id: string,
     entityId: string,
-    video: VideoAddDto,
+    videoAdd: VideoAddDto,
     videos: Video[]
   ): Partial<DocumentModel> => ({
     videos: [
       ...videos,
       {
-        ...video,
+        ...videoAdd,
         id,
         entityId,
-        state: PostedState.New,
+        postState: PostState.New,
         order: 0,
         isStared: false,
         hasTrack: false,
@@ -38,11 +40,14 @@ export class VideoProvider {
 
   updateVideo = (
     id: string,
-    entityId: string,
-    video: VideoUpdateDto,
+    foundVideo: Video,
+    videoUpdate: VideoUpdateDto,
     videos: Video[]
   ): Partial<DocumentModel> => ({
-    videos: [...videos.filter((v) => v.id !== id), { ...video, id, entityId }],
+    videos: [
+      ...videos.filter((v) => v.id !== id),
+      { ...foundVideo, ...videoUpdate },
+    ],
   });
 
   removeVideo = (
@@ -54,34 +59,29 @@ export class VideoProvider {
     videoDimensions: [...videoDimensions.filter((vd) => vd.videoId !== id)],
   });
 
-  validateAddVideo = (id: string, videos: Video[]): Video => {
-    const foundVideo = videos.find((v) => v.id === id);
-    if (!foundVideo) throw new NotFoundException('Could not find video to add');
-
-    if (foundVideo.state !== PostedState.New)
-      throw new NotFoundException('Only new videos can be added');
-
-    return toVideo(foundVideo);
-  };
-
   validateUpdateVideo = (
     id: string,
-    video: VideoUpdateDto,
+    videoPostState: PostState,
     videos: Video[]
-  ): void => {
+  ): Video => {
     const foundVideo = videos.find((v) => v.id === id);
     if (!foundVideo)
       throw new NotFoundException('Could not find video to update');
 
     if (
-      (foundVideo.state === PostedState.Public ||
-        foundVideo.state === PostedState.Archived) &&
-      video.state === PostedState.New
+      (foundVideo.postState === PostState.Public ||
+        foundVideo.postState === PostState.Archived) &&
+      videoPostState === PostState.New
     ) {
       throw new NotAcceptableException(
         'Videos that are public or archived cannot be changed to a state of New'
       );
     }
+    return foundVideo;
+  };
+
+  findVideoBySlug = (slug: string, videos: Video[]): Video | undefined => {
+    return videos.find((v) => v.fileName === slug);
   };
 
   validateFindVideo(id: string, videos: Video[]): Video {

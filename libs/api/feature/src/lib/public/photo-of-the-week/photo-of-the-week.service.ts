@@ -7,7 +7,7 @@ import { map, switchMap, toArray } from 'rxjs/operators';
 
 import {
   PhotoOfTheWeek,
-  DocumentType,
+  EntityType,
 } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
@@ -27,7 +27,7 @@ export class PhotoOfTheWeekService {
 
   findAll$(): Observable<PhotoOfTheWeek[]> {
     return from(
-      this.photoOfTheWeekModel.find({ type: DocumentType.PhotoOfTheWeek })
+      this.photoOfTheWeekModel.find({ type: EntityType.PhotoOfTheWeek })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.photoOfTheWeekProvider.fromDocumentModelPublic),

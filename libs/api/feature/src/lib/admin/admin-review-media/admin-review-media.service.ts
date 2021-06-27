@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 
-import { DocumentType, ReviewMedia } from '@dark-rush-photography/shared-types';
+import { EntityType, ReviewMedia } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -24,19 +24,17 @@ export class AdminReviewMediaService {
 
   create$(): Observable<ReviewMedia> {
     return from(
-      this.reviewMediaModel.findOne({ type: DocumentType.ReviewMedia })
+      this.reviewMediaModel.findOne({ type: EntityType.ReviewMedia })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(
-            new this.reviewMediaModel(
-              this.reviewMediaProvider.newReviewMedia()
-            ).save()
-          )
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.reviewMediaModel(
+            this.reviewMediaProvider.newReviewMedia()
+          ).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.reviewMediaProvider.fromDocumentModel)
     );
@@ -44,7 +42,7 @@ export class AdminReviewMediaService {
 
   findOne$(): Observable<ReviewMedia> {
     return from(
-      this.reviewMediaModel.find({ type: DocumentType.ReviewMedia })
+      this.reviewMediaModel.find({ type: EntityType.ReviewMedia })
     ).pipe(
       map(this.documentModelProvider.validateOne),
       map(this.reviewMediaProvider.fromDocumentModel)

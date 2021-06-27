@@ -8,7 +8,6 @@ export const toImageDimension = (
     entityId: imageDimension.entityId,
     imageId: imageDimension.imageId,
     type: imageDimension.type,
-    state: imageDimension.state,
     pixels: imageDimension.pixels,
     threeSixtyImageSettings: imageDimension.threeSixtyImageSettings,
   };

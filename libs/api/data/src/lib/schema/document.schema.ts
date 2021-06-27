@@ -3,23 +3,16 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 import {
-  About,
-  BestOf,
   Comment,
-  Destination,
-  DocumentType,
+  EntityType,
   Emotion,
-  Event,
-  Favorites,
   Image,
   ImageDimension,
   Location,
-  PhotoOfTheWeek,
-  Review,
-  ReviewMedia,
   SocialMediaUrl,
   Video,
   VideoDimension,
+  Entity,
 } from '@dark-rush-photography/shared-types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
@@ -33,25 +26,16 @@ import { emotionSchema } from './emotion.schema';
 export type DocumentModel = Document & mongoose.Document;
 
 @Schema()
-export class Document
-  implements
-    About,
-    BestOf,
-    Destination,
-    Event,
-    Favorites,
-    PhotoOfTheWeek,
-    Review,
-    ReviewMedia {
+export class Document implements Entity {
   @Prop({ type: String, required: false })
   id?: string;
 
   @Prop({
     type: String,
-    enum: Object.keys(DocumentType),
+    enum: Object.keys(EntityType),
     required: true,
   })
-  type!: DocumentType;
+  type!: EntityType;
 
   @Prop({ type: String, required: true, default: ' ' })
   group!: string;

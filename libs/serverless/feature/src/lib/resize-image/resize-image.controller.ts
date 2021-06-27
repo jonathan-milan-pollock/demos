@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Req } from '@nestjs/common';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
-import { ImageActivity } from '@dark-rush-photography/serverless/types';
+import { Activity } from '@dark-rush-photography/serverless/types';
 import { ResizeImageService } from './resize-image.service';
 
 @Controller('resize-image')
@@ -11,7 +11,7 @@ export class ResizeImageController {
   @Get()
   async resizeImage(
     @Req() request: AzureRequest,
-    @Body() imageActivity: ImageActivity
+    @Body() imageActivity: Activity
   ): Promise<void> {
     request.context.done(
       null,

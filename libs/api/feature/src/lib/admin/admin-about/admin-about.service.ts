@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
 
-import { About, DocumentType } from '@dark-rush-photography/shared-types';
+import { About, EntityType } from '@dark-rush-photography/shared-types';
 import {
   AboutProvider,
   DocumentModel,
@@ -23,23 +23,21 @@ export class AdminAboutService {
   ) {}
 
   create$(slug: string): Observable<About> {
-    return from(
-      this.aboutModel.findOne({ type: DocumentType.About, slug })
-    ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(new this.aboutModel(this.aboutProvider.newAbout(slug)).save())
-        )
-      ),
+    return from(this.aboutModel.findOne({ type: EntityType.About, slug })).pipe(
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.aboutModel(this.aboutProvider.newAbout(slug)).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.aboutProvider.fromDocumentModel)
     );
   }
 
   findAll$(): Observable<About[]> {
-    return from(this.aboutModel.find({ type: DocumentType.About })).pipe(
+    return from(this.aboutModel.find({ type: EntityType.About })).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.aboutProvider.fromDocumentModel),
       toArray<About>()

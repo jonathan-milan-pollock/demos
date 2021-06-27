@@ -4,10 +4,7 @@ import {
   VideoDimension,
   VideoDimensionType,
 } from '@dark-rush-photography/shared-types';
-import {
-  VideoDimensionAddDto,
-  VideoDimensionUpdateDto,
-} from '@dark-rush-photography/api/types';
+import { VideoDimensionAddDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toVideoDimension } from '../functions/video-dimension.functions';
 
@@ -21,36 +18,12 @@ export class VideoDimensionProvider {
     id: string,
     entityId: string,
     videoId: string,
-    videoDimension: VideoDimensionAddDto,
+    videoDimensionAdd: VideoDimensionAddDto,
     videoDimensions: VideoDimension[]
   ): Partial<DocumentModel> => ({
     videoDimensions: [
       ...videoDimensions,
-      { ...videoDimension, id, entityId, videoId },
-    ],
-  });
-
-  updateVideoDimension = (
-    id: string,
-    foundVideoDimension: VideoDimension,
-    videoDimensionUpdate: VideoDimensionUpdateDto,
-    videoDimensions: VideoDimension[]
-  ): Partial<DocumentModel> => ({
-    videoDimensions: [
-      ...videoDimensions.filter((videoDimension) => videoDimension.id !== id),
-      {
-        ...foundVideoDimension,
-        ...videoDimensionUpdate,
-      },
-    ],
-  });
-
-  removeVideoDimension = (
-    id: string,
-    videoDimensions: VideoDimension[]
-  ): Partial<DocumentModel> => ({
-    videoDimensions: [
-      ...videoDimensions.filter((videoDimension) => videoDimension.id !== id),
+      { ...videoDimensionAdd, id, entityId, videoId },
     ],
   });
 

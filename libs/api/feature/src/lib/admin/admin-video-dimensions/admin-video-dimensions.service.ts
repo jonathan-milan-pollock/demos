@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import {
@@ -11,11 +11,7 @@ import {
   VideoDimension,
   VideoDimensionData,
 } from '@dark-rush-photography/shared-types';
-import {
-  Env,
-  VideoDimensionAddDto,
-  VideoDimensionUpdateDto,
-} from '@dark-rush-photography/api/types';
+import { Env, VideoDimensionAddDto } from '@dark-rush-photography/api/types';
 import {
   Document,
   DocumentModel,
@@ -39,7 +35,7 @@ export class AdminVideoDimensionsService {
   add$(
     entityId: string,
     videoId: string,
-    videoDimension: VideoDimensionAddDto
+    videoDimensionAdd: VideoDimensionAddDto
   ): Observable<VideoDimension> {
     const id = uuidv4();
     return from(this.entityModel.findById(entityId)).pipe(
@@ -47,50 +43,22 @@ export class AdminVideoDimensionsService {
       switchMap((documentModel) => {
         const foundVideoDimension = this.videoDimensionProvider.findVideoDimension(
           videoId,
-          videoDimension.type,
+          videoDimensionAdd.type,
           documentModel.videoDimensions
         );
-        return iif(
-          () => !!foundVideoDimension,
-          of(foundVideoDimension),
-          from(
-            this.entityModel.findByIdAndUpdate(
+        if (foundVideoDimension) return of(documentModel);
+
+        return from(
+          this.entityModel.findByIdAndUpdate(
+            entityId,
+            this.videoDimensionProvider.addVideoDimension(
+              id,
               entityId,
-              this.videoDimensionProvider.addVideoDimension(
-                id,
-                entityId,
-                videoId,
-                videoDimension,
-                documentModel.videoDimensions
-              )
+              videoId,
+              videoDimensionAdd,
+              documentModel.videoDimensions
             )
           )
-        );
-      }),
-      switchMapTo(this.findOne$(id, entityId))
-    );
-  }
-
-  update$(
-    id: string,
-    entityId: string,
-    videoDimension: VideoDimensionUpdateDto
-  ): Observable<VideoDimension> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      switchMap((documentModel) => {
-        const foundVideoDimension = this.videoDimensionProvider.validateFindVideoDimension(
-          id,
-          documentModel.videoDimensions
-        );
-        const updateVideoDimension = this.videoDimensionProvider.updateVideoDimension(
-          id,
-          foundVideoDimension,
-          videoDimension,
-          documentModel.videoDimensions
-        );
-        return from(
-          this.entityModel.findByIdAndUpdate(entityId, updateVideoDimension)
         );
       }),
       switchMapTo(this.findOne$(id, entityId))
@@ -130,24 +98,6 @@ export class AdminVideoDimensionsService {
         );
       }),
       map((response) => response as VideoDimensionData)
-    );
-  }
-
-  remove$(id: string, entityId: string): Observable<void> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      switchMap((documentModel) =>
-        from(
-          this.entityModel.findByIdAndUpdate(
-            entityId,
-            this.videoDimensionProvider.removeVideoDimension(
-              id,
-              documentModel.videoDimensions
-            )
-          )
-        )
-      ),
-      map(this.documentModelProvider.validateRemove)
     );
   }
 }

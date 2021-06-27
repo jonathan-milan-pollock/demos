@@ -15,11 +15,6 @@ export class DocumentModelProvider {
     return documentModel;
   }
 
-  validateAdd(documentModel: DocumentModel | null): DocumentModel {
-    if (!documentModel) throw new BadRequestException('Unable to add');
-    return documentModel;
-  }
-
   validateFind(documentModel: DocumentModel | null): DocumentModel {
     if (!documentModel) throw new NotFoundException();
     return documentModel;

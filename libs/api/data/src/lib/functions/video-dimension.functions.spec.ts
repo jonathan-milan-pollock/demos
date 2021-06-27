@@ -1,6 +1,5 @@
 import {
   VideoDimension,
-  VideoDimensionState,
   VideoDimensionType,
 } from '@dark-rush-photography/shared-types';
 import {
@@ -14,7 +13,6 @@ describe('video-dimension.functions', () => {
     entityId: 'entityId',
     videoId: 'videoId',
     type: VideoDimensionType.Tile,
-    state: VideoDimensionState.Uploaded,
     pixels: {
       width: 10,
       height: 20,

@@ -1,18 +1,16 @@
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
 
 import {
   Review,
-  DocumentType,
+  EntityType,
   ENV,
   Image,
+  Entity,
 } from '@dark-rush-photography/shared-types';
 import { Env, ReviewUpdateDto } from '@dark-rush-photography/api/types';
 import {
@@ -37,29 +35,31 @@ export class AdminReviewsService {
 
   create$(slug: string): Observable<Review> {
     return from(
-      this.reviewModel.findOne({ type: DocumentType.Review, slug })
+      this.reviewModel.findOne({ type: EntityType.Review, slug })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(new this.reviewModel(this.reviewProvider.newReview(slug)).save())
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.reviewModel(this.reviewProvider.newReview(slug)).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.reviewProvider.fromDocumentModel)
     );
   }
 
-  update$(id: string, review: ReviewUpdateDto): Observable<Review> {
-    return from(this.reviewModel.findByIdAndUpdate(id, { ...review })).pipe(
+  update$(id: string, reviewUpdate: ReviewUpdateDto): Observable<Review> {
+    return from(
+      this.reviewModel.findByIdAndUpdate(id, { ...reviewUpdate })
+    ).pipe(
       map(this.documentModelProvider.validateFind),
       switchMapTo(this.findOne$(id))
     );
   }
 
   findAll$(): Observable<Review[]> {
-    return from(this.reviewModel.find({ type: DocumentType.Review })).pipe(
+    return from(this.reviewModel.find({ type: EntityType.Review })).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.reviewProvider.fromDocumentModel),
       toArray<Review>()
@@ -75,13 +75,13 @@ export class AdminReviewsService {
 
   uploadImage$(id: string, file: Express.Multer.File): Observable<Image> {
     return this.findOne$(id).pipe(
-      switchMapTo(
+      switchMap((review) =>
         this.serverlessProvider.upload$(
           this.env.serverless,
           this.httpService,
-          'upload-review-image',
-          id,
-          DocumentType.Review,
+          'upload-image',
+          review as Entity,
+          EntityType.Review,
           file
         )
       ),
@@ -95,9 +95,9 @@ export class AdminReviewsService {
         this.serverlessProvider.post$(
           this.env.serverless,
           this.httpService,
-          'post-review',
+          'post-entity',
           id,
-          DocumentType.Review
+          EntityType.Review
         )
       ),
       map((response) => response as Review)

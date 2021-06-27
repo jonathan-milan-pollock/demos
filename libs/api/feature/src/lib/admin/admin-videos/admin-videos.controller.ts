@@ -1,6 +1,3 @@
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import {
   Controller,
   Body,

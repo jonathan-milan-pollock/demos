@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DocumentType, Review } from '@dark-rush-photography/shared-types';
+import { EntityType, Review } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -10,7 +10,7 @@ import { findPublicContent } from '../functions/public.functions';
 export class ReviewProvider {
   newReview(slug: string): Review {
     return {
-      type: DocumentType.Review,
+      type: EntityType.Review,
       slug,
       isPublic: false,
       text: [],

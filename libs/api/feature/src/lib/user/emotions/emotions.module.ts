@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
+  DocumentModelProvider,
   DocumentSchema,
   EmotionProvider,
 } from '@dark-rush-photography/api/data';
@@ -16,6 +17,6 @@ import { EmotionsService } from './emotions.service';
     ]),
   ],
   controllers: [EmotionsController],
-  providers: [EmotionProvider, EmotionsService],
+  providers: [DocumentModelProvider, EmotionProvider, EmotionsService],
 })
 export class EmotionsModule {}

@@ -1,11 +1,11 @@
-import { Image, PostedState } from '@dark-rush-photography/shared-types';
+import { Image, PostState } from '@dark-rush-photography/shared-types';
 
 export const toImage = (image: Image): Image => {
   return {
     id: image.id,
     entityId: image.entityId,
-    slug: image.slug,
-    state: image.state,
+    fileName: image.fileName,
+    postState: image.postState,
     order: image.order,
     isStared: image.isStared,
     isLoved: image.isLoved,
@@ -20,6 +20,6 @@ export const toImage = (image: Image): Image => {
 
 export const findPublicImages = (images: Image[]): Image[] => {
   return images
-    .filter((i) => i.state === PostedState.Public)
+    .filter((i) => i.postState === PostState.Public)
     .map((i) => toImage(i));
 };

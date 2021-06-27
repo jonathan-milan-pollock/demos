@@ -1,12 +1,14 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
-import { UploadImageActivityProvider } from '@dark-rush-photography/serverless/data';
-import { UploadImageController } from './upload-image.controller';
+import {
+  AzureStorageProvider,
+  UploadImageProvider,
+} from '@dark-rush-photography/serverless/data';
 import { UploadImageService } from './upload-image.service';
+import { UploadImageController } from './upload-image.controller';
 
 @Module({
-  imports: [HttpModule],
   controllers: [UploadImageController],
-  providers: [UploadImageActivityProvider, UploadImageService],
+  providers: [UploadImageService, UploadImageProvider, AzureStorageProvider],
 })
 export class UploadImageModule {}

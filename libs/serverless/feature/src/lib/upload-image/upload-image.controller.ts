@@ -1,9 +1,5 @@
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import {
   Controller,
-  Get,
   Post,
   Req,
   UploadedFile,
@@ -18,20 +14,15 @@ import { UploadImageService } from './upload-image.service';
 export class UploadImageController {
   constructor(private readonly uploadImageService: UploadImageService) {}
 
-  @Get()
-  get(): string {
-    return 'OK';
-  }
-
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(
+  async upload(
     @Req() request: AzureRequest,
     @UploadedFile() image: Express.Multer.File
   ): Promise<void> {
     request.context.done(
       null,
-      await this.uploadImageService.uploadImage(request, image)
+      await this.uploadImageService.upload(request, image)
     );
   }
 }

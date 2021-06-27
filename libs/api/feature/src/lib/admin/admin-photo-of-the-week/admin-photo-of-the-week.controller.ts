@@ -9,12 +9,18 @@ import {
   UseGuards,
   Get,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
 import { ADMIN, PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
 import {
+  PhotoOfTheWeekCreateDto,
   PhotoOfTheWeekDto,
   PhotoOfTheWeekUpdateDto,
 } from '@dark-rush-photography/api/types';
@@ -32,7 +38,10 @@ export class AdminPhotoOfTheWeekController {
 
   @Roles(ADMIN)
   @Post()
-  create$(@Body() photoOfTheWeek: PhotoOfTheWeek): Observable<PhotoOfTheWeek> {
+  @ApiCreatedResponse({ type: PhotoOfTheWeekDto })
+  create$(
+    @Body() photoOfTheWeek: PhotoOfTheWeekCreateDto
+  ): Observable<PhotoOfTheWeek> {
     return this.adminPhotoOfTheWeekService.create$(photoOfTheWeek);
   }
 

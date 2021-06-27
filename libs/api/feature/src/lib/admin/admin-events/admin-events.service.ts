@@ -2,10 +2,10 @@ import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
 
-import { Event, DocumentType, ENV } from '@dark-rush-photography/shared-types';
+import { Event, EntityType, ENV } from '@dark-rush-photography/shared-types';
 import {
   Env,
   EventCreateDto,
@@ -31,35 +31,35 @@ export class AdminEventsService {
     private readonly serverlessProvider: ServerlessProvider
   ) {}
 
-  create$(event: EventCreateDto): Observable<Event> {
+  create$(eventCreate: EventCreateDto): Observable<Event> {
     return from(
       this.eventModel.findOne({
-        type: DocumentType.Event,
-        group: event.group,
-        slug: event.slug,
+        type: EntityType.Event,
+        group: eventCreate.group,
+        slug: eventCreate.slug,
       })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(new this.eventModel(this.eventProvider.newEvent(event)).save())
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.eventModel(this.eventProvider.newEvent(eventCreate)).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.eventProvider.fromDocumentModel)
     );
   }
 
-  update$(id: string, event: EventUpdateDto): Observable<Event> {
-    return from(this.eventModel.findByIdAndUpdate(id, { ...event })).pipe(
+  update$(id: string, eventUpdate: EventUpdateDto): Observable<Event> {
+    return from(this.eventModel.findByIdAndUpdate(id, { ...eventUpdate })).pipe(
       map(this.documentModelProvider.validateFind),
       switchMapTo(this.findOne$(id))
     );
   }
 
   findAll$(): Observable<Event[]> {
-    return from(this.eventModel.find({ type: DocumentType.Event })).pipe(
+    return from(this.eventModel.find({ type: EntityType.Event })).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.eventProvider.fromDocumentModel),
       toArray<Event>()
@@ -81,7 +81,7 @@ export class AdminEventsService {
           this.httpService,
           'post-event',
           id,
-          DocumentType.Event
+          EntityType.Event
         )
       ),
       map((response) => response as Event)

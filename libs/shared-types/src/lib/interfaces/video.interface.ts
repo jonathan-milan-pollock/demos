@@ -1,10 +1,10 @@
-import { PostedState } from '../enums/posted-state.enum';
+import { PostState } from '../enums/post-state.enum';
 
 export interface Video {
   readonly id: string;
   readonly entityId: string;
-  readonly slug: string;
-  readonly state: PostedState;
+  readonly fileName: string;
+  readonly postState: PostState;
   readonly order: number;
   readonly isStared: boolean; //TODO: Can star 1
   readonly title?: string;

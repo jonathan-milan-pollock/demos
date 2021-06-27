@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 
 import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
@@ -25,20 +25,16 @@ export class AdminBestOfService {
   create$(bestOfType: BestOfType): Observable<BestOf> {
     return from(
       this.bestOfModel.findOne({
-        type: this.bestOfProvider.findDocumentType(bestOfType),
+        type: this.bestOfProvider.findEntityType(bestOfType),
       })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(
-            new this.bestOfModel(
-              this.bestOfProvider.newBestOf(bestOfType)
-            ).save()
-          )
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.bestOfModel(this.bestOfProvider.newBestOf(bestOfType)).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.bestOfProvider.fromDocumentModel)
     );
@@ -47,7 +43,7 @@ export class AdminBestOfService {
   findOne$(bestOfType: BestOfType): Observable<BestOf> {
     return from(
       this.bestOfModel.findOne({
-        type: this.bestOfProvider.findDocumentType(bestOfType),
+        type: this.bestOfProvider.findEntityType(bestOfType),
       })
     ).pipe(
       map(this.documentModelProvider.validateFind),
@@ -55,7 +51,11 @@ export class AdminBestOfService {
     );
   }
 
-  delete$(id: string): Observable<void> {
-    return from(this.bestOfModel.findByIdAndDelete(id)).pipe(mapTo(undefined));
+  delete$(bestOfType: BestOfType): Observable<void> {
+    return from(
+      this.bestOfModel.findOneAndDelete({
+        type: this.bestOfProvider.findEntityType(bestOfType),
+      })
+    ).pipe(mapTo(undefined));
   }
 }

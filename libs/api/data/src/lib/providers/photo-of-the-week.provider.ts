@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import {
-  DocumentType,
+  EntityType,
   PhotoOfTheWeek,
 } from '@dark-rush-photography/shared-types';
 import { PhotoOfTheWeekCreateDto } from '@dark-rush-photography/api/types';
@@ -16,7 +16,7 @@ import { findPublicContent } from '../functions/public.functions';
 export class PhotoOfTheWeekProvider {
   newPhotoOfTheWeek(photoOfTheWeek: PhotoOfTheWeekCreateDto): PhotoOfTheWeek {
     return {
-      type: DocumentType.PhotoOfTheWeek,
+      type: EntityType.PhotoOfTheWeek,
       group: photoOfTheWeek.group,
       slug: photoOfTheWeek.slug,
       isPublic: false,

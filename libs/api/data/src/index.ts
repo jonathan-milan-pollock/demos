@@ -1,3 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
+
 // providers
 export * from './lib/providers/about.provider';
 export * from './lib/providers/best-of.provider';
@@ -9,7 +14,7 @@ export * from './lib/providers/event.provider';
 export * from './lib/providers/favorites.provider';
 export * from './lib/providers/image-dimension.provider';
 export * from './lib/providers/image.provider';
-export * from './lib/providers/media.provider';
+export * from './lib/providers/media-process.provider';
 export * from './lib/providers/photo-of-the-week.provider';
 export * from './lib/providers/review-media.provider';
 export * from './lib/providers/review.provider';

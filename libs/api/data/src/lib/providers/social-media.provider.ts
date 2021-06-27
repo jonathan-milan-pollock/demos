@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { DocumentType, SocialMedia } from '@dark-rush-photography/shared-types';
+import { EntityType, SocialMedia } from '@dark-rush-photography/shared-types';
 import { SocialMediaCreateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
@@ -13,7 +13,7 @@ import { findPublicContent } from '../functions/public.functions';
 export class SocialMediaProvider {
   newSocialMedia(socialMedia: SocialMediaCreateDto): SocialMedia {
     return {
-      type: DocumentType.SocialMedia,
+      type: EntityType.SocialMedia,
       group: socialMedia.group,
       slug: socialMedia.slug,
       isPublic: true,

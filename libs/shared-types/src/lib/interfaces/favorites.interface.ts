@@ -7,6 +7,7 @@ import { Comment } from './comment.interface';
 
 export interface Favorites {
   readonly id?: string;
+  readonly slug: string;
   readonly images: ReadonlyArray<Image>;
   readonly imageDimensions: ReadonlyArray<ImageDimension>;
   readonly videos: ReadonlyArray<Video>;

@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   CommentProvider,
   Document,
+  DocumentModelProvider,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
 import { CommentsController } from './comments.controller';
@@ -16,6 +17,6 @@ import { CommentsService } from './comments.service';
     ]),
   ],
   controllers: [CommentsController],
-  providers: [CommentProvider, CommentsService],
+  providers: [DocumentModelProvider, CommentProvider, CommentsService],
 })
 export class CommentsModule {}

@@ -4,7 +4,7 @@ import { Video } from '@dark-rush-photography/shared-types';
 
 export class VideoAddDto implements Partial<Video> {
   @IsString()
-  slug!: string;
+  fileName!: string;
 
   @IsISO8601()
   dateCreated!: string;

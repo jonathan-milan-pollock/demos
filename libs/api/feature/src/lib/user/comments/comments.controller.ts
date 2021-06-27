@@ -8,6 +8,7 @@ import {
   HttpCode,
   Delete,
   Query,
+  Get,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -50,12 +51,21 @@ export class CommentsController {
 
   @Put(':id')
   @ApiOkResponse({ type: CommentDto })
-  updateEntityComment$(
+  update$(
     @Param('id') id: string,
     @Query('entityId') entityId: string,
     @Body() comment: CommentUpdateDto
   ): Observable<Comment> {
     return this.commentsService.update$(id, entityId, comment);
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: CommentDto })
+  findOne$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<Comment> {
+    return this.commentsService.findOne$(id, entityId);
   }
 
   @Delete(':id')

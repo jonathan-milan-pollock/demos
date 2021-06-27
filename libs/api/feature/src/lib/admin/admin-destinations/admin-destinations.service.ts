@@ -2,12 +2,12 @@ import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
 
 import {
   Destination,
-  DocumentType,
+  EntityType,
   ENV,
 } from '@dark-rush-photography/shared-types';
 import { DestinationUpdateDto, Env } from '@dark-rush-photography/api/types';
@@ -33,19 +33,17 @@ export class AdminDestinationsService {
 
   create$(slug: string): Observable<Destination> {
     return from(
-      this.destinationModel.findOne({ type: DocumentType.Destination, slug })
+      this.destinationModel.findOne({ type: EntityType.Destination, slug })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(
-            new this.destinationModel(
-              this.destinationProvider.newDestination(slug)
-            ).save()
-          )
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.destinationModel(
+            this.destinationProvider.newDestination(slug)
+          ).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.destinationProvider.fromDocumentModel)
     );
@@ -53,10 +51,10 @@ export class AdminDestinationsService {
 
   update$(
     id: string,
-    destination: DestinationUpdateDto
+    destinationUpdate: DestinationUpdateDto
   ): Observable<Destination> {
     return from(
-      this.destinationModel.findByIdAndUpdate(id, { ...destination })
+      this.destinationModel.findByIdAndUpdate(id, { ...destinationUpdate })
     ).pipe(
       map(this.documentModelProvider.validateFind),
       switchMapTo(this.findOne$(id))
@@ -65,7 +63,7 @@ export class AdminDestinationsService {
 
   findAll$(): Observable<Destination[]> {
     return from(
-      this.destinationModel.find({ type: DocumentType.Destination })
+      this.destinationModel.find({ type: EntityType.Destination })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.destinationProvider.fromDocumentModel),
@@ -88,7 +86,7 @@ export class AdminDestinationsService {
           this.httpService,
           'post-destination',
           id,
-          DocumentType.Destination
+          EntityType.Destination
         )
       ),
       map((response) => response as Destination)

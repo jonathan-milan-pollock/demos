@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DocumentType, ReviewMedia } from '@dark-rush-photography/shared-types';
+import { EntityType, ReviewMedia } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -24,7 +24,7 @@ export class ReviewMediaService {
 
   findOne$(): Observable<ReviewMedia> {
     return from(
-      this.reviewMediaModel.find({ type: DocumentType.ReviewMedia })
+      this.reviewMediaModel.find({ type: EntityType.ReviewMedia })
     ).pipe(
       map(this.documentModelProvider.validateOne),
       map(this.reviewMediaProvider.fromDocumentModelPublic)

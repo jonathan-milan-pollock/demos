@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { About, DocumentType } from '@dark-rush-photography/shared-types';
+import { About, EntityType } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -15,7 +15,7 @@ export class AboutProvider {
 
   newAbout(slug: string): About {
     return {
-      type: DocumentType.About,
+      type: EntityType.About,
       slug,
       isPublic: true,
       images: [],

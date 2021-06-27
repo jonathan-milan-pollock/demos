@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 
-import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
+import { EntityType, Favorites } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -24,28 +24,22 @@ export class AdminFavoritesService {
 
   create$(): Observable<Favorites> {
     return from(
-      this.favoritesModel.findOne({ type: DocumentType.Favorites })
+      this.favoritesModel.findOne({ type: EntityType.Favorites })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(
-            new this.favoritesModel(
-              this.favoritesProvider.newFavorites()
-            ).save()
-          )
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.favoritesModel(this.favoritesProvider.newFavorites()).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.favoritesProvider.fromDocumentModel)
     );
   }
 
   findOne$(): Observable<Favorites> {
-    return from(
-      this.favoritesModel.find({ type: DocumentType.Favorites })
-    ).pipe(
+    return from(this.favoritesModel.find({ type: EntityType.Favorites })).pipe(
       map(this.documentModelProvider.validateOne),
       map(this.favoritesProvider.fromDocumentModel)
     );

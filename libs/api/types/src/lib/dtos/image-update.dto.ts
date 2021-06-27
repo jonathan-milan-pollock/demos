@@ -8,14 +8,14 @@ import {
   Min,
 } from 'class-validator';
 
-import { Image, PostedState } from '@dark-rush-photography/shared-types';
+import { Image, PostState } from '@dark-rush-photography/shared-types';
 
 export class ImageUpdateDto implements Partial<Image> {
   @IsString()
-  slug!: string;
+  fileName!: string;
 
-  @IsEnum(PostedState)
-  state!: PostedState;
+  @IsEnum(PostState)
+  postState!: PostState;
 
   @IsInt()
   @Min(0)

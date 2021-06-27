@@ -10,4 +10,4 @@ export * from './lib/env/env-dev.functions';
 
 // pipes
 export * from './lib/pipes/best-of-type-validation.pipe';
-export * from './lib/pipes/media-type-validation.pipe';
+export * from './lib/pipes/media-process-type-validation.pipe';
