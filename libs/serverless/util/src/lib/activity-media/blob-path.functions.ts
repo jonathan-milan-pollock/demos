@@ -15,7 +15,7 @@ export const getBlobPrefix = (
     blobPrefix = `new/${entityType.toLowerCase()}/`;
   }
 
-  if (entityGroup) {
+  if (entityGroup && entityGroup !== '0') {
     blobPrefix += `${entityGroup}/`;
   }
   return `${blobPrefix}${entitySlug}`;

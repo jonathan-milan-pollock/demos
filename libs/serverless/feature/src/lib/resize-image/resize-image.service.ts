@@ -7,7 +7,6 @@ import {
   Env,
   Activity,
   ActivityType,
-  ActivityOrchestratorType,
 } from '@dark-rush-photography/serverless/types';
 import { ResizeImageProvider } from '@dark-rush-photography/serverless/data';
 

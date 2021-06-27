@@ -1,7 +1,6 @@
 import { Logger, BadRequestException, Injectable } from '@nestjs/common';
-import { AzureRequest } from '@nestjs/azure-func-http';
 
-import { PostState } from '@dark-rush-photography/shared-types';
+import { EntityType, PostState } from '@dark-rush-photography/shared-types';
 import {
   Activity,
   ActivityMedia,
@@ -14,7 +13,11 @@ import { getBlobPath } from '@dark-rush-photography/serverless/util';
 @Injectable()
 export class UploadThreeSixtyImageProvider {
   validateUpload(
-    request: AzureRequest,
+    fileName: string,
+    entityId: string,
+    entityType: EntityType,
+    entityGroup: string,
+    entitySlug: string,
     threeSixtyImage: Express.Multer.File
   ): ActivityUpload {
     if (!threeSixtyImage) {
@@ -25,11 +28,11 @@ export class UploadThreeSixtyImageProvider {
 
     return {
       media: {
-        fileName: request.body['fileName'],
-        entityId: request.body['entityId'],
-        entityType: request.body['entityType'],
-        entityGroup: request.body['entityGroup'],
-        entitySlug: request.body['entitySlug'],
+        fileName,
+        entityId,
+        entityType,
+        entityGroup,
+        entitySlug,
       },
       file: threeSixtyImage,
     };

@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "name": "context",
+      "type": "orchestrationTrigger",
+      "direction": "in"
+    }
+  ],
+  "scriptFile": "../dist/upload-lightroom-image-orchestrator/index.js"
+}

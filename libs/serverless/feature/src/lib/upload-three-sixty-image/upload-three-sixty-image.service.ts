@@ -1,12 +1,12 @@
-import { AzureRequest } from '@nestjs/azure-func-http';
 import { Inject, Injectable } from '@nestjs/common';
+import { AzureRequest } from '@nestjs/azure-func-http';
 
 import { getClient } from 'durable-functions';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from } from 'rxjs';
 import { map, switchMapTo, tap } from 'rxjs/operators';
 
-import { ENV } from '@dark-rush-photography/shared-types';
+import { EntityType, ENV } from '@dark-rush-photography/shared-types';
 import {
   ActivityOrchestratorType,
   AzureStorageContainerType,
@@ -26,13 +26,21 @@ export class UploadThreeSixtyImageService {
   ) {}
 
   async upload(
+    entityId: string,
+    entityType: EntityType,
+    entityGroup: string,
+    entitySlug: string,
     request: AzureRequest,
-    image: Express.Multer.File
+    threeSixtyImage: Express.Multer.File
   ): Promise<IHttpResponse> {
     const client = getClient(request.context);
     const activityUpload = this.uploadThreeSixtyImageProvider.validateUpload(
-      request,
-      image
+      request.body['fileName'],
+      entityId,
+      entityType,
+      entityGroup,
+      entitySlug,
+      threeSixtyImage
     );
 
     return this.azureStorageProvider
@@ -47,7 +55,7 @@ export class UploadThreeSixtyImageService {
         switchMapTo(
           from(
             client.startNew(
-              ActivityOrchestratorType.UploadImage,
+              ActivityOrchestratorType.UploadThreeSixtyImage,
               undefined,
               this.uploadThreeSixtyImageProvider.getOrchestratorInput(
                 activityUpload.media

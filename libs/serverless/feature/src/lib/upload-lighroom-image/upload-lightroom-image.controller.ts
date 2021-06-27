@@ -26,11 +26,11 @@ export class UploadLightroomImageController {
   @UseInterceptors(FileInterceptor('file'))
   async upload(
     @Req() request: AzureRequest,
-    @UploadedFile() image: Express.Multer.File
+    @UploadedFile() lightroomImage: Express.Multer.File
   ): Promise<void> {
     request.context.done(
       null,
-      await this.uploadLightroomImageService.upload(request, image)
+      await this.uploadLightroomImageService.upload(request, lightroomImage)
     );
   }
 }

@@ -5,7 +5,7 @@
       "name": "req",
       "type": "httpTrigger",
       "direction": "in",
-      "route": "upload-image",
+      "route": "upload-video",
       "methods": ["post"],
       "dataType": "binary"
     },
@@ -20,5 +20,5 @@
       "direction": "in"
     }
   ],
-  "scriptFile": "../dist/upload-image/index.js"
+  "scriptFile": "../dist/upload-video/index.js"
 }
