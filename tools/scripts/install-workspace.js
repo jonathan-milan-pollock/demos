@@ -35,6 +35,8 @@ const execInstallDevDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D source-map-explorer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D concurrently'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D faker'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/faker'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/fs-extra'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'));
 

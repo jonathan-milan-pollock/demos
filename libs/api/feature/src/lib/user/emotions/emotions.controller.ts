@@ -7,19 +7,14 @@ import {
   Param,
   HttpCode,
   Query,
-  BadRequestException,
+  Get,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
 import { Emotion } from '@dark-rush-photography/shared-types';
-import { EmotionAddDto } from '@dark-rush-photography/api/types';
+import { EmotionAddDto, EmotionDto } from '@dark-rush-photography/api/types';
 import { RolesGuard } from '@dark-rush-photography/api/util';
 import { EmotionsService } from './emotions.service';
 
@@ -30,36 +25,46 @@ import { EmotionsService } from './emotions.service';
 export class EmotionsController {
   constructor(private readonly emotionsService: EmotionsService) {}
 
-  @ApiQuery({
-    name: 'commentId',
-    required: false,
-    type: String,
-  })
-  @ApiQuery({
-    name: 'mediaId',
-    required: false,
-    type: String,
-  })
-  @Post()
-  @ApiOkResponse({ type: EmotionAddDto })
+  @Post('entity')
+  @ApiOkResponse({ type: EmotionDto })
+  addEntityEmotion$(
+    @Query('entityId') entityId: string,
+    @Body() emotion: EmotionAddDto
+  ): Observable<Emotion> {
+    return this.emotionsService.addEntityEmotion$(entityId, emotion);
+  }
+
+  @Post('media')
+  @ApiOkResponse({ type: EmotionDto })
   addEntityComment$(
     @Query('entityId') entityId: string,
-    @Query('commentId') commentId: string,
     @Query('mediaId') mediaId: string,
     @Body() emotion: EmotionAddDto
   ): Observable<Emotion> {
-    if (!commentId && !mediaId)
-      return this.emotionsService.addEntityEmotion$(entityId, emotion);
-    if (commentId)
-      return this.emotionsService.addCommentEmotion$(
-        entityId,
-        commentId,
-        emotion
-      );
-    if (mediaId)
-      return this.emotionsService.addMediaEmotion$(entityId, mediaId, emotion);
+    return this.emotionsService.addMediaEmotion$(entityId, mediaId, emotion);
+  }
 
-    throw new BadRequestException('Unable to find method to add emotion');
+  @Post('comment')
+  @ApiOkResponse({ type: EmotionDto })
+  addCommentEmotion$(
+    @Query('entityId') entityId: string,
+    @Query('commentId') commentId: string,
+    @Body() emotion: EmotionAddDto
+  ): Observable<Emotion> {
+    return this.emotionsService.addCommentEmotion$(
+      entityId,
+      commentId,
+      emotion
+    );
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: EmotionDto })
+  findOne$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<Emotion> {
+    return this.emotionsService.findOne$(id, entityId);
   }
 
   @Delete(':id')

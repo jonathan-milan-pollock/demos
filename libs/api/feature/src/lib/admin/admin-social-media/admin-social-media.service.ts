@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
-import { map, mapTo, mergeMap, switchMap, toArray } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, toArray } from 'rxjs/operators';
 
-import { DocumentType, SocialMedia } from '@dark-rush-photography/shared-types';
+import { EntityType, SocialMedia } from '@dark-rush-photography/shared-types';
 import { SocialMediaCreateDto } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
@@ -23,25 +23,23 @@ export class AdminSocialMediaService {
     private readonly documentModelProvider: DocumentModelProvider
   ) {}
 
-  create$(socialMedia: SocialMediaCreateDto): Observable<SocialMedia> {
+  create$(socialMediaCreate: SocialMediaCreateDto): Observable<SocialMedia> {
     return from(
       this.socialMediaModel.findOne({
-        type: DocumentType.SocialMedia,
-        group: socialMedia.group,
-        slug: socialMedia.slug,
+        type: EntityType.SocialMedia,
+        group: socialMediaCreate.group,
+        slug: socialMediaCreate.slug,
       })
     ).pipe(
-      switchMap((documentModel) =>
-        iif(
-          () => documentModel !== null,
-          of(documentModel),
-          from(
-            new this.socialMediaModel(
-              this.socialMediaProvider.newSocialMedia(socialMedia)
-            ).save()
-          )
-        )
-      ),
+      switchMap((documentModel) => {
+        if (documentModel) return of(documentModel);
+
+        return from(
+          new this.socialMediaModel(
+            this.socialMediaProvider.newSocialMedia(socialMediaCreate)
+          ).save()
+        );
+      }),
       map(this.documentModelProvider.validateCreate),
       map(this.socialMediaProvider.fromDocumentModel)
     );
@@ -49,7 +47,7 @@ export class AdminSocialMediaService {
 
   findAll$(): Observable<SocialMedia[]> {
     return from(
-      this.socialMediaModel.find({ type: DocumentType.SocialMedia })
+      this.socialMediaModel.find({ type: EntityType.SocialMedia })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.socialMediaProvider.fromDocumentModel),

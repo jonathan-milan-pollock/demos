@@ -21,12 +21,12 @@ export class ImageDimensionProvider {
     id: string,
     entityId: string,
     imageId: string,
-    imageDimension: ImageDimensionAddDto,
+    imageDimensionAdd: ImageDimensionAddDto,
     imageDimensions: ImageDimension[]
   ): Partial<DocumentModel> => ({
     imageDimensions: [
       ...imageDimensions,
-      { ...imageDimension, id, entityId, imageId },
+      { ...imageDimensionAdd, id, entityId, imageId },
     ],
   });
 
@@ -42,15 +42,6 @@ export class ImageDimensionProvider {
         ...foundImageDimension,
         ...imageDimensionUpdate,
       },
-    ],
-  });
-
-  removeImageDimension = (
-    id: string,
-    imageDimensions: ImageDimension[]
-  ): Partial<DocumentModel> => ({
-    imageDimensions: [
-      ...imageDimensions.filter((imageDimension) => imageDimension.id !== id),
     ],
   });
 

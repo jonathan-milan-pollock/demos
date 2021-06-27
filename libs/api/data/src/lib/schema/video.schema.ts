@@ -1,4 +1,4 @@
-import { PostedState } from '@dark-rush-photography/shared-types';
+import { PostState } from '@dark-rush-photography/shared-types';
 
 export const videoSchema = {
   id: { type: String, required: false },
@@ -6,7 +6,7 @@ export const videoSchema = {
   slug: { type: String, required: true },
   state: {
     type: String,
-    enum: Object.keys(PostedState),
+    enum: Object.keys(PostState),
     required: true,
   },
   order: { type: Number, required: true },

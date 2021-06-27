@@ -1,34 +1,67 @@
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
 import { AzureRequest } from '@nestjs/azure-func-http';
-import { HttpService, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
+import { getClient } from 'durable-functions';
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
+import { from } from 'rxjs';
+import { map, switchMapTo, tap } from 'rxjs/operators';
 
 import { ENV } from '@dark-rush-photography/shared-types';
-import { Env } from '@dark-rush-photography/serverless/types';
-import { UploadImageActivityProvider } from '@dark-rush-photography/serverless/data';
+import {
+  ActivityOrchestratorType,
+  AzureStorageContainerType,
+  Env,
+} from '@dark-rush-photography/serverless/types';
+import {
+  AzureStorageProvider,
+  UploadImageProvider,
+} from '@dark-rush-photography/serverless/data';
 
 @Injectable()
 export class UploadImageService {
   constructor(
     @Inject(ENV) private readonly env: Env,
-    private readonly httpService: HttpService,
-    private readonly uploadImageActivityProvider: UploadImageActivityProvider
+    private readonly uploadImageProvider: UploadImageProvider,
+    private readonly azureStorageProvider: AzureStorageProvider
   ) {}
 
-  async uploadImage(
+  async upload(
     request: AzureRequest,
     image: Express.Multer.File
   ): Promise<IHttpResponse> {
-    return this.uploadImageActivityProvider
-      .uploadImage$(
-        this.env,
-        this.httpService,
-        request.context,
-        request.body['fileName'],
-        image
+    const client = getClient(request.context);
+    const activityUpload = this.uploadImageProvider.validateUpload(
+      request,
+      image
+    );
+
+    return this.azureStorageProvider
+      .uploadBufferToBlob$(
+        this.env.azureStorageConnectionString,
+        AzureStorageContainerType.Private,
+        activityUpload.file.buffer,
+        this.uploadImageProvider.getBlobPath(activityUpload.media)
+      )
+      .pipe(
+        tap(this.uploadImageProvider.logStart),
+        switchMapTo(
+          from(
+            client.startNew(
+              ActivityOrchestratorType.UploadImage,
+              undefined,
+              this.uploadImageProvider.getOrchestratorInput(
+                activityUpload.media
+              )
+            )
+          )
+        ),
+        tap(this.uploadImageProvider.logOrchestrationStart),
+        map((instanceId: string) =>
+          client.createCheckStatusResponse(
+            request.context.bindingData.req,
+            instanceId
+          )
+        )
       )
       .toPromise();
   }

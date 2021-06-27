@@ -4,7 +4,7 @@ import { Image } from '@dark-rush-photography/shared-types';
 
 export class ImageAddDto implements Partial<Image> {
   @IsString()
-  slug!: string;
+  fileName!: string;
 
   @IsISO8601()
   dateCreated!: string;

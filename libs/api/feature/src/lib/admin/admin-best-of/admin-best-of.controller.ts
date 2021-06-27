@@ -61,9 +61,16 @@ export class AdminBestOfController {
   }
 
   @Roles(ADMIN)
-  @Delete(':id')
+  @Delete(':bestOfType')
+  @ApiParam({
+    name: 'bestOfType',
+    enum: BestOfType,
+  })
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminBestOfService.delete$(id);
+  delete$(
+    @Param('bestOfType', new BestOfTypeValidationPipe())
+    bestOfType: BestOfType
+  ): Observable<void> {
+    return this.adminBestOfService.delete$(bestOfType);
   }
 }

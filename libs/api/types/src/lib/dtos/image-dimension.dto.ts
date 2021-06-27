@@ -9,7 +9,6 @@ import { Type } from 'class-transformer';
 
 import {
   ImageDimension,
-  ImageDimensionState,
   ImageDimensionType,
 } from '@dark-rush-photography/shared-types';
 import { MediaDimensionPixelsDto } from './media-dimension-pixels.dto';
@@ -27,9 +26,6 @@ export class ImageDimensionDto implements ImageDimension {
 
   @IsEnum(ImageDimensionType)
   type!: ImageDimensionType;
-
-  @IsEnum(ImageDimensionState)
-  state!: ImageDimensionState;
 
   @ValidateNested()
   @Type(() => MediaDimensionPixelsDto)

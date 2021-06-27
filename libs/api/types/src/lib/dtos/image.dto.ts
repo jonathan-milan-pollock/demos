@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { Image, PostedState } from '@dark-rush-photography/shared-types';
+import { Image, PostState } from '@dark-rush-photography/shared-types';
 
 export class ImageDto implements Image {
   @IsUUID()
@@ -20,10 +20,10 @@ export class ImageDto implements Image {
   entityId!: string;
 
   @IsString()
-  slug!: string;
+  fileName!: string;
 
-  @IsEnum(PostedState)
-  state!: PostedState;
+  @IsEnum(PostState)
+  postState!: PostState;
 
   @IsInt()
   @Min(0)

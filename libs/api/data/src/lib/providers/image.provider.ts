@@ -7,7 +7,7 @@ import {
 import {
   Image,
   ImageDimension,
-  PostedState,
+  PostState,
 } from '@dark-rush-photography/shared-types';
 import { ImageAddDto, ImageUpdateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -15,19 +15,21 @@ import { toImage } from '../functions/image.functions';
 
 @Injectable()
 export class ImageProvider {
+  toImage = (image: Image): Image => toImage(image);
+
   addImage = (
     id: string,
     entityId: string,
-    image: ImageAddDto,
+    imageAdd: ImageAddDto,
     images: Image[]
   ): Partial<DocumentModel> => ({
     images: [
       ...images,
       {
-        ...image,
+        ...imageAdd,
         id,
         entityId,
-        state: PostedState.New,
+        postState: PostState.New,
         order: 0,
         isStared: false,
         isLoved: false,
@@ -38,12 +40,47 @@ export class ImageProvider {
 
   updateImage = (
     id: string,
-    entityId: string,
-    image: ImageUpdateDto,
+    foundImage: Image,
+    imageUpdate: ImageUpdateDto,
     images: Image[]
   ): Partial<DocumentModel> => ({
-    images: [...images.filter((i) => i.id !== id), { ...image, id, entityId }],
+    images: [
+      ...images.filter((i) => i.id !== id),
+      { ...foundImage, ...imageUpdate },
+    ],
   });
+
+  validateUpdateImage(
+    id: string,
+    imagePostState: PostState,
+    images: Image[]
+  ): Image {
+    const foundImage = images.find((i) => i.id === id);
+    if (!foundImage)
+      throw new NotFoundException('Could not find image to update');
+
+    if (
+      (foundImage.postState === PostState.Public ||
+        foundImage.postState === PostState.Archived) &&
+      imagePostState === PostState.New
+    ) {
+      throw new NotAcceptableException(
+        'Images that are public or archived cannot be changed to a state of New'
+      );
+    }
+    return foundImage;
+  }
+
+  findImageBySlug = (slug: string, images: Image[]): Image | undefined => {
+    return images.find((i) => i.fileName === slug);
+  };
+
+  validateFindImage(id: string, images: Image[]): Image {
+    const foundImage = images.find((i) => i.id === id);
+    if (!foundImage) throw new NotFoundException('Could not find image by id');
+
+    return foundImage;
+  }
 
   removeImage = (
     id: string,
@@ -57,41 +94,4 @@ export class ImageProvider {
       ),
     ],
   });
-
-  validateAddImage(id: string, images: Image[]): Image {
-    const foundImage = images.find((i) => i.id === id);
-    if (!foundImage) throw new NotFoundException('Could not find image to add');
-
-    if (foundImage.state !== PostedState.New)
-      throw new NotFoundException('Only new images can be added');
-
-    return toImage(foundImage);
-  }
-
-  validateUpdateImage(
-    id: string,
-    image: ImageUpdateDto,
-    images: Image[]
-  ): void {
-    const foundImage = images.find((i) => i.id === id);
-    if (!foundImage)
-      throw new NotFoundException('Could not find image to update');
-
-    if (
-      (foundImage.state === PostedState.Public ||
-        foundImage.state === PostedState.Archived) &&
-      image.state === PostedState.New
-    ) {
-      throw new NotAcceptableException(
-        'Images that are public or archived cannot be changed to a state of New'
-      );
-    }
-  }
-
-  validateFindImage(id: string, images: Image[]): Image {
-    const foundImage = images.find((i) => i.id === id);
-    if (!foundImage) throw new NotFoundException('Could not find image by id');
-
-    return toImage(foundImage);
-  }
 }

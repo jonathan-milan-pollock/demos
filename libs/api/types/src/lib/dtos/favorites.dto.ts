@@ -1,4 +1,4 @@
-import { IsArray, IsMongoId, ValidateNested } from 'class-validator';
+import { IsArray, IsMongoId, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { Favorites } from '@dark-rush-photography/shared-types';
@@ -12,6 +12,9 @@ import { EmotionDto } from './emotion.dto';
 export class FavoritesDto implements Favorites {
   @IsMongoId()
   id!: string;
+
+  @IsString()
+  slug!: string;
 
   @IsArray()
   @ValidateNested({ each: true })

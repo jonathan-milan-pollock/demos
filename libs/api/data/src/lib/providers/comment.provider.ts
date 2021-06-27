@@ -1,63 +1,81 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { Model } from 'mongoose';
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, max, switchMap } from 'rxjs/operators';
-
-import { Comment } from '@dark-rush-photography/shared-types';
-import { CommentAddDto } from '@dark-rush-photography/api/types';
+import { Comment, Emotion } from '@dark-rush-photography/shared-types';
+import {
+  CommentAddDto,
+  CommentUpdateDto,
+} from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toComment } from '../functions/comment.functions';
 
 @Injectable()
 export class CommentProvider {
-  findById$(
-    entityModel: Model<DocumentModel>,
-    id: string,
-    entityId: string
-  ): Observable<Comment> {
-    return from(entityModel.findById(entityId)).pipe(
-      map((response) => {
-        if (!response)
-          throw new NotFoundException('Could not find entity for comment');
+  toComment = (comment: Comment): Comment => toComment(comment);
 
-        const foundComment = response.comments.find((c) => c.id === id);
-        if (!foundComment)
-          throw new NotFoundException('Could not find comment by id');
-
-        return toComment(foundComment);
-      })
-    );
-  }
-
-  add$(
-    response: DocumentModel,
-    entityModel: Model<DocumentModel>,
-    comment: CommentAddDto,
+  addEntityComment = (
     id: string,
     entityId: string,
-    mediaId?: string
-  ): Observable<DocumentModel | null> {
-    return combineLatest([
-      of(response),
-      from(response.comments).pipe(max((comment) => comment.order)),
-    ]).pipe(
-      switchMap(([response, maxComment]) => {
-        return from(
-          entityModel.findByIdAndUpdate(entityId, {
-            comments: [
-              ...response.comments,
-              {
-                ...comment,
-                id,
-                entityId,
-                mediaId,
-                order: maxComment.order + 1,
-              },
-            ],
-          })
-        );
-      })
-    );
+    maxOrder: number,
+    commentAdd: CommentAddDto,
+    comments: Comment[]
+  ): Partial<DocumentModel> => ({
+    comments: [
+      ...comments,
+      {
+        ...commentAdd,
+        id,
+        entityId,
+        order: maxOrder + 1,
+      },
+    ],
+  });
+
+  addMediaComment = (
+    id: string,
+    entityId: string,
+    mediaId: string,
+    maxOrder: number,
+    commentAdd: CommentAddDto,
+    comments: Comment[]
+  ): Partial<DocumentModel> => ({
+    comments: [
+      ...comments,
+      {
+        ...commentAdd,
+        id,
+        entityId,
+        mediaId,
+        order: maxOrder + 1,
+      },
+    ],
+  });
+
+  updateComment = (
+    id: string,
+    foundComment: Comment,
+    commentUpdate: CommentUpdateDto,
+    comments: Comment[]
+  ): Partial<DocumentModel> => ({
+    comments: [
+      ...comments.filter((i) => i.id !== id),
+      { ...foundComment, ...commentUpdate },
+    ],
+  });
+
+  validateFindComment(id: string, comments: Comment[]): Comment {
+    const foundComment = comments.find((c) => c.id === id);
+    if (!foundComment)
+      throw new NotFoundException('Could not find comment by id');
+
+    return foundComment;
   }
+
+  removeComment = (
+    id: string,
+    comments: Comment[],
+    emotions: Emotion[]
+  ): Partial<DocumentModel> => ({
+    comments: [...comments.filter((c) => c.id !== id)],
+    emotions: [...emotions.filter((e) => e.commentId !== id)],
+  });
 }

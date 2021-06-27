@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import {
@@ -39,7 +39,7 @@ export class AdminImageDimensionsService {
   add$(
     entityId: string,
     imageId: string,
-    imageDimension: ImageDimensionAddDto
+    imageDimensionAdd: ImageDimensionAddDto
   ): Observable<ImageDimension> {
     const id = uuidv4();
     return from(this.entityModel.findById(entityId)).pipe(
@@ -47,22 +47,20 @@ export class AdminImageDimensionsService {
       switchMap((documentModel) => {
         const foundImageDimension = this.imageDimensionProvider.findImageDimension(
           imageId,
-          imageDimension.type,
+          imageDimensionAdd.type,
           documentModel.imageDimensions
         );
-        return iif(
-          () => !!foundImageDimension,
-          of(foundImageDimension),
-          from(
-            this.entityModel.findByIdAndUpdate(
+        if (foundImageDimension) return of(documentModel);
+
+        return from(
+          this.entityModel.findByIdAndUpdate(
+            entityId,
+            this.imageDimensionProvider.addImageDimension(
+              id,
               entityId,
-              this.imageDimensionProvider.addImageDimension(
-                id,
-                entityId,
-                imageId,
-                imageDimension,
-                documentModel.imageDimensions
-              )
+              imageId,
+              imageDimensionAdd,
+              documentModel.imageDimensions
             )
           )
         );
@@ -130,24 +128,6 @@ export class AdminImageDimensionsService {
         );
       }),
       map((response) => response as ImageDimensionData)
-    );
-  }
-
-  remove$(id: string, entityId: string): Observable<void> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      switchMap((documentModel) =>
-        from(
-          this.entityModel.findByIdAndUpdate(
-            entityId,
-            this.imageDimensionProvider.removeImageDimension(
-              id,
-              documentModel.imageDimensions
-            )
-          )
-        )
-      ),
-      map(this.documentModelProvider.validateRemove)
     );
   }
 }

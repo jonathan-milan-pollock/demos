@@ -9,14 +9,14 @@ import {
   Min,
 } from 'class-validator';
 
-import { PostedState, Video } from '@dark-rush-photography/shared-types';
+import { PostState, Video } from '@dark-rush-photography/shared-types';
 
 export class VideoUpdateDto implements Partial<Video> {
   @IsString()
-  slug!: string;
+  fileName!: string;
 
-  @IsEnum(PostedState)
-  state!: PostedState;
+  @IsEnum(PostState)
+  postState!: PostState;
 
   @IsInt()
   @Min(0)

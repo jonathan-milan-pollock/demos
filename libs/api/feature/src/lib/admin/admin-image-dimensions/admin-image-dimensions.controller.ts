@@ -6,8 +6,6 @@ import {
   Param,
   Get,
   Post,
-  Delete,
-  HttpCode,
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -85,15 +83,5 @@ export class AdminImageDimensionsController {
     @Query('entityId') entityId: string
   ): Observable<ImageDimensionData> {
     return this.adminImageDimensionsService.data$(id, entityId);
-  }
-
-  @Roles(ADMIN)
-  @Delete(':id')
-  @HttpCode(204)
-  delete$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
-  ): Observable<void> {
-    return this.adminImageDimensionsService.remove$(id, entityId);
   }
 }

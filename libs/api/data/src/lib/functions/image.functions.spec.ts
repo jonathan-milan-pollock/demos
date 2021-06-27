@@ -1,12 +1,12 @@
-import { Image, PostedState } from '@dark-rush-photography/shared-types';
+import { Image, PostState } from '@dark-rush-photography/shared-types';
 import { findPublicImages, toImage } from './image.functions';
 
 describe('image.functions', () => {
   const image = {
     id: 'id',
     entityId: 'entityId',
-    slug: 'slug',
-    state: PostedState.New,
+    fileName: 'fileName',
+    postState: PostState.New,
     order: 10,
     isStared: true,
     isLoved: true,
@@ -69,8 +69,8 @@ describe('image.functions', () => {
   describe('findPublicImages', () => {
     it('should include images that are public', () => {
       const images = [
-        { ...image, state: PostedState.New },
-        { ...image, state: PostedState.Public },
+        { ...image, state: PostState.New },
+        { ...image, state: PostState.Public },
       ];
 
       const result = findPublicImages(images);
@@ -79,8 +79,8 @@ describe('image.functions', () => {
 
     it('should not include any images if none are public', () => {
       const images = [
-        { ...image, state: PostedState.New },
-        { ...image, state: PostedState.New },
+        { ...image, state: PostState.New },
+        { ...image, state: PostState.New },
       ];
 
       const result = findPublicImages(images);

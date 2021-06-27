@@ -1,4 +1,4 @@
-import { PostedState } from '@dark-rush-photography/shared-types';
+import { PostState } from '@dark-rush-photography/shared-types';
 
 export const imageSchema = {
   id: { type: String, required: false },
@@ -6,7 +6,7 @@ export const imageSchema = {
   slug: { type: String, required: true },
   state: {
     type: String,
-    enum: Object.keys(PostedState),
+    enum: Object.keys(PostState),
     required: true,
   },
   order: { type: Number, required: true },

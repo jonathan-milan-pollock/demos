@@ -1,11 +1,11 @@
-import { IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 
 import { GeoCoordinates } from '@dark-rush-photography/shared-types';
 
 export class GeoCoordinatesDto implements GeoCoordinates {
-  @IsNumber()
-  latitude!: number;
+  @IsString()
+  latitude!: string;
 
-  @IsNumber()
-  longitude!: number;
+  @IsString()
+  longitude!: string;
 }

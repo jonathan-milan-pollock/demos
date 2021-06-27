@@ -5,8 +5,8 @@ describe('emotion.functions', () => {
   const emotion = {
     id: 'id',
     entityId: 'entityId',
-    commentId: 'commentId',
     mediaId: 'mediaId',
+    commentId: 'commentId',
     type: EmotionType.Care,
     user: {
       email: 'email',
@@ -30,38 +30,26 @@ describe('emotion.functions', () => {
       expect('_id' in result).toBe(false);
     });
 
-    it('should have an undefined comment id if not provided', () => {
-      const result = toEmotion({ ...emotion, commentId: undefined });
-      expect(result.commentId).toBeUndefined();
-    });
-
     it('should have an undefined media id if not provided', () => {
       const result = toEmotion({ ...emotion, mediaId: undefined });
       expect(result.mediaId).toBeUndefined();
+    });
+
+    it('should have an undefined comment id if not provided', () => {
+      const result = toEmotion({ ...emotion, commentId: undefined });
+      expect(result.commentId).toBeUndefined();
     });
   });
 
   describe('findPublicEmotions', () => {
     it('should return emotions that are on the entity', () => {
       const entityEmotions = [
-        { ...emotion, commentId: undefined, mediaId: undefined },
-        { ...emotion, commentId: undefined, mediaId: undefined },
+        { ...emotion, mediaId: undefined, commentId: undefined },
+        { ...emotion, mediaId: undefined, commentId: undefined },
       ];
 
       const result = findPublicEmotions(entityEmotions, [], []);
       expect(result).toEqual(entityEmotions);
-    });
-
-    it('should exclude emotions if they have comment ids that are not public', () => {
-      const emotions = [
-        { ...emotion, commentId: '0001' },
-        { ...emotion, commentId: '0002' },
-      ];
-
-      const publicCommentIds = ['0001'];
-
-      const result = findPublicEmotions(emotions, publicCommentIds, []);
-      expect(result.length).toBe(1);
     });
 
     it('should exclude emotions if they have media ids that are not public', () => {
@@ -72,27 +60,39 @@ describe('emotion.functions', () => {
 
       const publicMediaIds = ['0001'];
 
-      const result = findPublicEmotions(emotions, [], publicMediaIds);
+      const result = findPublicEmotions(emotions, publicMediaIds, []);
       expect(result.length).toBe(1);
     });
 
-    it('should include comments if media id is undefined or have public image or video ids', () => {
+    it('should exclude emotions if they have comment ids that are not public', () => {
       const emotions = [
-        { ...emotion, commentId: undefined, mediaId: undefined },
-        { ...emotion, commentId: undefined, mediaId: undefined },
         { ...emotion, commentId: '0001' },
         { ...emotion, commentId: '0002' },
-        { ...emotion, mediaId: '0003' },
-        { ...emotion, mediaId: '0004' },
       ];
 
-      const publicCommentIds = ['0001', '0002'];
-      const publicMediaIds = ['0003', '0004'];
+      const publicCommentIds = ['0001'];
+
+      const result = findPublicEmotions(emotions, [], publicCommentIds);
+      expect(result.length).toBe(1);
+    });
+
+    it('should include emotions if media or comment id is undefined or have public image or video ids', () => {
+      const emotions = [
+        { ...emotion, mediaId: undefined, commentId: undefined },
+        { ...emotion, mediaId: undefined, commentId: undefined },
+        { ...emotion, mediaId: '0001' },
+        { ...emotion, mediaId: '0002' },
+        { ...emotion, commentId: '0003' },
+        { ...emotion, commentId: '0004' },
+      ];
+
+      const publicMediaIds = ['0001', '0002'];
+      const publicCommentIds = ['0003', '0004'];
 
       const result = findPublicEmotions(
         emotions,
-        publicCommentIds,
-        publicMediaIds
+        publicMediaIds,
+        publicCommentIds
       );
       expect(result).toEqual(emotions);
     });

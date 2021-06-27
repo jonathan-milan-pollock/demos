@@ -28,13 +28,13 @@ export const findPublicContent = (
   const publicImageIds = publicImages.map((i) => i.id);
   const publicImageDimensions = findPublicImageDimensions(
     documentModel.imageDimensions,
-    publicImageIds,
+    publicImageIds
   );
   const publicVideos = findPublicVideos(documentModel.videos);
   const publicVideoIds = publicVideos.map((v) => v.id);
   const publicVideoDimensions = findPublicVideoDimensions(
     documentModel.videoDimensions,
-    publicVideoIds,
+    publicVideoIds
   );
   const publicComments = findPublicComments(documentModel.comments, [
     ...publicImageIds,
@@ -42,8 +42,8 @@ export const findPublicContent = (
   ]);
   const publicEmotions = findPublicEmotions(
     documentModel.emotions,
-    publicComments.map((c) => c.id),
-    [...publicImageIds, ...publicVideoIds]
+    [...publicImageIds, ...publicVideoIds],
+    publicComments.map((c) => c.id)
   );
 
   return {

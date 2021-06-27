@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, toArray } from 'rxjs/operators';
 
-import { Event, DocumentType } from '@dark-rush-photography/shared-types';
+import { Event, EntityType } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -23,7 +23,7 @@ export class EventsService {
   ) {}
 
   findAll$(): Observable<Event[]> {
-    return from(this.eventModel.find({ type: DocumentType.Event })).pipe(
+    return from(this.eventModel.find({ type: EntityType.Event })).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.eventProvider.fromDocumentModelPublic),
       toArray<Event>()

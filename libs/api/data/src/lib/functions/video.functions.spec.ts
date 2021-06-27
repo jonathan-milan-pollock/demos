@@ -1,12 +1,12 @@
-import { PostedState, Video } from '@dark-rush-photography/shared-types';
+import { PostState, Video } from '@dark-rush-photography/shared-types';
 import { findPublicVideos, toVideo } from './video.functions';
 
 describe('video.functions', () => {
   const video = {
     id: 'id',
     entityId: 'entityId',
-    slug: 'slug',
-    state: PostedState.New,
+    fileName: 'fileName',
+    postState: PostState.New,
     order: 10,
     isStared: true,
     title: 'title',
@@ -70,8 +70,8 @@ describe('video.functions', () => {
   describe('findPublicVideos', () => {
     it('should include videos that are public', () => {
       const videos = [
-        { ...video, state: PostedState.New },
-        { ...video, state: PostedState.Public },
+        { ...video, state: PostState.New },
+        { ...video, state: PostState.Public },
       ];
 
       const result = findPublicVideos(videos);
@@ -80,8 +80,8 @@ describe('video.functions', () => {
 
     it('should not include any videos if none are public', () => {
       const videos = [
-        { ...video, state: PostedState.New },
-        { ...video, state: PostedState.New },
+        { ...video, state: PostState.New },
+        { ...video, state: PostState.New },
       ];
 
       const result = findPublicVideos(videos);

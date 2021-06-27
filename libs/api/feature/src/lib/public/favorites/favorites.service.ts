@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { DocumentType, Favorites } from '@dark-rush-photography/shared-types';
+import { EntityType, Favorites } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -23,9 +23,7 @@ export class FavoritesService {
   ) {}
 
   findOne$(): Observable<Favorites> {
-    return from(
-      this.favoritesModel.find({ type: DocumentType.Favorites })
-    ).pipe(
+    return from(this.favoritesModel.find({ type: EntityType.Favorites })).pipe(
       map(this.documentModelProvider.validateOne),
       map(this.favoritesProvider.fromDocumentModelPublic)
     );

@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, toArray } from 'rxjs/operators';
 
-import { Review, DocumentType } from '@dark-rush-photography/shared-types';
+import { Review, EntityType } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -23,7 +23,7 @@ export class ReviewsService {
   ) {}
 
   findAll$(): Observable<Review[]> {
-    return from(this.reviewModel.find({ type: DocumentType.Review })).pipe(
+    return from(this.reviewModel.find({ type: EntityType.Review })).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.reviewProvider.fromDocumentModelPublic),
       toArray<Review>()

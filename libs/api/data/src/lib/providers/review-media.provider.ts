@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 
-import { DocumentType, ReviewMedia } from '@dark-rush-photography/shared-types';
+import { EntityType, ReviewMedia } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
 import { toImageDimension } from '../functions/image-dimension.functions';
@@ -18,7 +18,7 @@ export class ReviewMediaProvider {
 
   newReviewMedia(): ReviewMedia {
     return {
-      type: DocumentType.ReviewMedia,
+      type: EntityType.ReviewMedia,
       slug: 'media',
       isPublic: true,
       text: [],

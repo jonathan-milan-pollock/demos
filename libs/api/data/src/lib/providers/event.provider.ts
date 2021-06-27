@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Event, DocumentType } from '@dark-rush-photography/shared-types';
+import { Event, EntityType } from '@dark-rush-photography/shared-types';
 import { EventCreateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
@@ -15,7 +15,7 @@ import { findPublicContent } from '../functions/public.functions';
 export class EventProvider {
   newEvent(event: EventCreateDto): Event {
     return {
-      type: DocumentType.Event,
+      type: EntityType.Event,
       group: event.group,
       slug: event.slug,
       isPublic: false,

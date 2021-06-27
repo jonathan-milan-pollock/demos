@@ -241,6 +241,17 @@ preloadingStrategy: PreloadAllModules;
 
 ## setup api
 
+### add type definition for multer
+
+- add the following to index.ts of shared-server/types and api/data for Express.Multer.File
+
+```ts
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
+```
+
 ### for api e2e testing
 
 - copy apps/website-e2e to apps/api-e2e

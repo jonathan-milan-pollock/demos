@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, toArray } from 'rxjs/operators';
 
-import { Destination, DocumentType } from '@dark-rush-photography/shared-types';
+import { Destination, EntityType } from '@dark-rush-photography/shared-types';
 import {
   DocumentModel,
   Document,
@@ -24,7 +24,7 @@ export class DestinationsService {
 
   findAll$(): Observable<Destination[]> {
     return from(
-      this.destinationModel.find({ type: DocumentType.Destination })
+      this.destinationModel.find({ type: EntityType.Destination })
     ).pipe(
       switchMap((documentModels) => from(documentModels)),
       map(this.destinationProvider.fromDocumentModelPublic),

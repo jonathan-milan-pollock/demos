@@ -25,7 +25,7 @@ export class BestOfService {
   findOne$(bestOfType: BestOfType): Observable<BestOf> {
     return from(
       this.bestOfModel.findOne({
-        type: this.bestOfProvider.findDocumentType(bestOfType),
+        type: this.bestOfProvider.findEntityType(bestOfType),
       })
     ).pipe(
       map(this.documentModelProvider.validateFind),

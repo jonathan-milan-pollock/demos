@@ -1,10 +1,10 @@
-import { DocumentType } from '@dark-rush-photography/shared-types';
+import { Entity, EntityType } from '@dark-rush-photography/shared-types';
 
 export const getFormData = (
   fileBuffer: Buffer,
   fileName: string,
-  entityId: string,
-  documentType: DocumentType
+  entity: Entity,
+  entityType: EntityType
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -13,7 +13,9 @@ export const getFormData = (
 
   formData.append('file', fileBuffer, fileName);
   formData.append('fileName', fileName);
-  formData.append('id', entityId);
-  formData.append('type', documentType);
+  formData.append('entityId', entity.id);
+  formData.append('entityType', entityType);
+  formData.append('entityGroup', entity.group);
+  formData.append('entitySlug', entity.slug);
   return formData;
 };

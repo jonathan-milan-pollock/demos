@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   BestOf,
   BestOfType,
-  DocumentType,
+  EntityType,
 } from '@dark-rush-photography/shared-types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../functions/image.functions';
@@ -14,26 +14,26 @@ import { findPublicContent } from '../functions/public.functions';
 
 @Injectable()
 export class BestOfProvider {
-  readonly bestOfTypeMap = new Map<BestOfType, DocumentType>([
-    [BestOfType.Children, DocumentType.BestOfChildren],
-    [BestOfType.Events, DocumentType.BestOfEvents],
-    [BestOfType.Landscapes, DocumentType.BestOfLandscapes],
-    [BestOfType.Nature, DocumentType.BestOfNature],
-    [BestOfType.RealEstate, DocumentType.BestOfRealEstate],
+  readonly bestOfTypeMap = new Map<BestOfType, EntityType>([
+    [BestOfType.Children, EntityType.BestOfChildren],
+    [BestOfType.Events, EntityType.BestOfEvents],
+    [BestOfType.Landscapes, EntityType.BestOfLandscapes],
+    [BestOfType.Nature, EntityType.BestOfNature],
+    [BestOfType.RealEstate, EntityType.BestOfRealEstate],
   ]);
 
-  findDocumentType = (bestOfType: BestOfType): DocumentType => {
-    const documentType = this.bestOfTypeMap.get(bestOfType);
-    if (!documentType)
+  findEntityType = (bestOfType: BestOfType): EntityType => {
+    const entityType = this.bestOfTypeMap.get(bestOfType);
+    if (!entityType)
       throw new BadRequestException(
         `Unable to find best of type ${bestOfType}`
       );
-    return documentType;
+    return entityType;
   };
 
   newBestOf(bestOfType: BestOfType): BestOf {
     return {
-      type: this.findDocumentType(bestOfType),
+      type: this.findEntityType(bestOfType),
       slug: bestOfType,
       isPublic: true,
       images: [],

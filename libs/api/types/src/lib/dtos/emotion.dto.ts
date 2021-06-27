@@ -19,11 +19,11 @@ export class EmotionDto implements Emotion {
 
   @IsUUID()
   @IsOptional()
-  commentId?: string;
+  mediaId?: string;
 
   @IsUUID()
   @IsOptional()
-  mediaId?: string;
+  commentId?: string;
 
   @IsEnum(EmotionType)
   type!: EmotionType;

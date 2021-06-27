@@ -1,61 +1,61 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { BestOfType, DocumentType } from '@dark-rush-photography/shared-types';
+import { BestOfType, EntityType } from '@dark-rush-photography/shared-types';
 
 describe('best-of-type.functions', () => {
-  describe('findDocumentTypeFromBestOfType', () => {
+  describe('findEntityTypeFromBestOfType', () => {
     /*
     it('should return best of children document type for children best of type', () => {
       const bestOfType = BestOfType.Children;
-      const documentType = DocumentType.BestOfChildren;
+      const entityType = EntityType.BestOfChildren;
 
-      const result = findDocumentTypeFromBestOfType(bestOfType);
-      expect(result).toBe(documentType);
+      const result = findEntityTypeFromBestOfType(bestOfType);
+      expect(result).toBe(entityType);
     });
 
     it('should return best of events document type for events best of type', () => {
       const bestOfType = BestOfType.Events;
-      const documentType = DocumentType.BestOfEvents;
+      const entityType = EntityType.BestOfEvents;
 
-      const result = findDocumentTypeFromBestOfType(bestOfType);
-      expect(result).toBe(documentType);
+      const result = findEntityTypeFromBestOfType(bestOfType);
+      expect(result).toBe(entityType);
     });
 
     it('should return best of landscapes document type for landscapes best of type', () => {
       const bestOfType = BestOfType.Landscapes;
-      const documentType = DocumentType.BestOfLandscapes;
+      const entityType = EntityType.BestOfLandscapes;
 
-      const result = findDocumentTypeFromBestOfType(bestOfType);
-      expect(result).toBe(documentType);
+      const result = findEntityTypeFromBestOfType(bestOfType);
+      expect(result).toBe(entityType);
     });
 
     it('should return best of nature document type for nature best of type', () => {
       const bestOfType = BestOfType.Nature;
-      const documentType = DocumentType.BestOfNature;
+      const entityType = EntityType.BestOfNature;
 
-      const result = findDocumentTypeFromBestOfType(bestOfType);
-      expect(result).toBe(documentType);
+      const result = findEntityTypeFromBestOfType(bestOfType);
+      expect(result).toBe(entityType);
     });
 
     it('should return best of real estate document type for real estate best of type', () => {
       const bestOfType = BestOfType.RealEstate;
-      const documentType = DocumentType.BestOfRealEstate;
+      const entityType = EntityType.BestOfRealEstate;
 
-      const result = findDocumentTypeFromBestOfType(bestOfType);
-      expect(result).toBe(documentType);
+      const result = findEntityTypeFromBestOfType(bestOfType);
+      expect(result).toBe(entityType);
     });
 
     it('should throw a bad request exception if the best of type is not valid', () => {
       const bestOfType = '' as BestOfType;
       expect(() => {
-        findDocumentTypeFromBestOfType(bestOfType);
+        findEntityTypeFromBestOfType(bestOfType);
       }).toThrow(BadRequestException);
     });
 
     it('should throw message unable to find best of type when not valid', () => {
       const bestOfType = 'invalidBestOfType' as BestOfType;
       expect(() => {
-        findDocumentTypeFromBestOfType(bestOfType);
+        findEntityTypeFromBestOfType(bestOfType);
       }).toThrow(`Unable to find best of type invalidBestOfType`);
     });*/
   });

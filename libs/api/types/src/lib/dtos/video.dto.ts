@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { Video, PostedState } from '@dark-rush-photography/shared-types';
+import { Video, PostState } from '@dark-rush-photography/shared-types';
 
 export class VideoDto implements Video {
   @IsUUID()
@@ -20,10 +20,10 @@ export class VideoDto implements Video {
   entityId!: string;
 
   @IsString()
-  slug!: string;
+  fileName!: string;
 
-  @IsEnum(PostedState)
-  state!: PostedState;
+  @IsEnum(PostState)
+  postState!: PostState;
 
   @IsInt()
   @Min(0)
