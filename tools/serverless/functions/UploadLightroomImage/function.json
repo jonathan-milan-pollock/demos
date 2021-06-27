@@ -5,8 +5,8 @@
       "name": "req",
       "type": "httpTrigger",
       "direction": "in",
-      "route": "upload-image",
-      "methods": ["post"],
+      "route": "upload-lightroom-image",
+      "methods": ["get", "post"],
       "dataType": "binary"
     },
     {
@@ -20,5 +20,5 @@
       "direction": "in"
     }
   ],
-  "scriptFile": "../dist/upload-image/index.js"
+  "scriptFile": "../dist/upload-lightroom-image/index.js"
 }

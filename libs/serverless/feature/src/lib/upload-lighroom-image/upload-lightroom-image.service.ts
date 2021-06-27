@@ -30,12 +30,12 @@ export class UploadLightroomImageService {
 
   async upload(
     request: AzureRequest,
-    image: Express.Multer.File
+    lightroomImage: Express.Multer.File
   ): Promise<IHttpResponse> {
     const client = getClient(request.context);
     const activityUpload = this.uploadLightroomImageProvider.validateUpload(
       request.body['fileName'],
-      image
+      lightroomImage
     );
 
     return this.azureStorageProvider

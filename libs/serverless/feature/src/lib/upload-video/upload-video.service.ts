@@ -6,7 +6,7 @@ import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from } from 'rxjs';
 import { map, switchMapTo, tap } from 'rxjs/operators';
 
-import { ENV } from '@dark-rush-photography/shared-types';
+import { EntityType, ENV } from '@dark-rush-photography/shared-types';
 import {
   ActivityOrchestratorType,
   AzureStorageContainerType,
@@ -26,13 +26,21 @@ export class UploadVideoService {
   ) {}
 
   async upload(
+    entityId: string,
+    entityType: EntityType,
+    entityGroup: string,
+    entitySlug: string,
     request: AzureRequest,
-    image: Express.Multer.File
+    video: Express.Multer.File
   ): Promise<IHttpResponse> {
     const client = getClient(request.context);
     const activityUpload = this.uploadVideoProvider.validateUpload(
-      request,
-      image
+      request.body['fileName'],
+      entityId,
+      entityType,
+      entityGroup,
+      entitySlug,
+      video
     );
 
     return this.azureStorageProvider

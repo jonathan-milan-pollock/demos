@@ -2,7 +2,7 @@ import { Readable } from 'node:stream';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { forkJoin, from, fromEvent, Observable, of } from 'rxjs';
-import { buffer, map, mapTo, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { buffer, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
 
 import { AzureStorageContainerType } from '@dark-rush-photography/serverless/types';
 import { getAzureStorageBlockBlobClient$ } from '../functions/azure-storage-block-blob-client.functions';
@@ -93,13 +93,6 @@ export class AzureStorageProvider {
       this.downloadBlobAsStream$(connectionString, containerType, blobPath),
       createTempFile$(fileName),
     ]).pipe(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      tap(([_stream, filePath]) =>
-        Logger.log(
-          `Writing stream to file ${filePath}`,
-          AzureStorageProvider.name
-        )
-      ),
       mergeMap(([stream, filePath]) => writeStreamToFile(stream, filePath))
     );
 

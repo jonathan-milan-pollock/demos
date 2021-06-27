@@ -1,6 +1,6 @@
 import { Logger, BadRequestException, Injectable } from '@nestjs/common';
-import { AzureRequest } from '@nestjs/azure-func-http';
 
+import { EntityType, PostState } from '@dark-rush-photography/shared-types';
 import {
   Activity,
   ActivityMedia,
@@ -9,12 +9,15 @@ import {
   ActivityUpload,
 } from '@dark-rush-photography/serverless/types';
 import { getBlobPath } from '@dark-rush-photography/serverless/util';
-import { PostState } from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class UploadImageProvider {
   validateUpload(
-    request: AzureRequest,
+    fileName: string,
+    entityId: string,
+    entityType: EntityType,
+    entityGroup: string,
+    entitySlug: string,
     image: Express.Multer.File
   ): ActivityUpload {
     if (!image) {
@@ -22,11 +25,11 @@ export class UploadImageProvider {
     }
     return {
       media: {
-        fileName: request.body['fileName'],
-        entityId: request.body['entityId'],
-        entityType: request.body['entityType'],
-        entityGroup: request.body['entityGroup'],
-        entitySlug: request.body['entitySlug'],
+        fileName,
+        entityId,
+        entityType,
+        entityGroup,
+        entitySlug,
       },
       file: image,
     };

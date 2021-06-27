@@ -1,6 +1,6 @@
 import { Logger, BadRequestException, Injectable } from '@nestjs/common';
-import { AzureRequest } from '@nestjs/azure-func-http';
 
+import { EntityType, PostState } from '@dark-rush-photography/shared-types';
 import {
   Activity,
   ActivityMedia,
@@ -9,12 +9,15 @@ import {
   ActivityUpload,
 } from '@dark-rush-photography/serverless/types';
 import { getBlobPath } from '@dark-rush-photography/serverless/util';
-import { PostState } from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class UploadVideoProvider {
   validateUpload(
-    request: AzureRequest,
+    fileName: string,
+    entityId: string,
+    entityType: EntityType,
+    entityGroup: string,
+    entitySlug: string,
     video: Express.Multer.File
   ): ActivityUpload {
     if (!video) {
@@ -22,11 +25,11 @@ export class UploadVideoProvider {
     }
     return {
       media: {
-        fileName: request.body['fileName'],
-        entityId: request.body['entityId'],
-        entityType: request.body['entityType'],
-        entityGroup: request.body['entityGroup'],
-        entitySlug: request.body['entitySlug'],
+        fileName,
+        entityId,
+        entityType,
+        entityGroup,
+        entitySlug,
       },
       file: video,
     };
@@ -39,19 +42,19 @@ export class UploadVideoProvider {
   getOrchestratorInput(media: ActivityMedia): Activity {
     return {
       type: ActivityType.Upload,
-      orchestratorType: ActivityOrchestratorType.UploadImage,
+      orchestratorType: ActivityOrchestratorType.UploadVideo,
       postState: PostState.New,
       media,
     };
   }
 
   logStart(): void {
-    Logger.log('Starting upload image orchestrator', UploadVideoProvider.name);
+    Logger.log('Starting upload video orchestrator', UploadVideoProvider.name);
   }
 
   logOrchestrationStart(instanceId: string): void {
     Logger.log(
-      `${ActivityOrchestratorType.UploadThreeSixtyImage} started orchestration with ID = '${instanceId}'.`,
+      `${ActivityOrchestratorType.UploadVideo} started orchestration with ID = '${instanceId}'.`,
       UploadVideoProvider.name
     );
   }

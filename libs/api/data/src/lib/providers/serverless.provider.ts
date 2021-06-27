@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Injectable, Logger } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
@@ -18,20 +18,20 @@ export class ServerlessProvider {
     file: Express.Multer.File
   ): Observable<unknown> => {
     const { drpServerlessUrl, drpServerlessFunctionsKey } = envServerless;
-    const formData = getFormData(
-      file.buffer,
-      file.originalname,
-      entity,
-      entityType
-    );
-
+    const formData = getFormData(file.buffer, file.originalname);
+    const url = `${drpServerlessUrl}/${serverlessSlug}`;
+    Logger.log(url, ServerlessProvider.name);
     return from(
       httpService
-        .post(`${drpServerlessUrl}/${serverlessSlug}`, formData, {
+        .post(url, formData, {
           headers: {
             ...formData.getHeaders(),
             'Content-Length': formData.getLengthSync(),
             'x-functions-key': drpServerlessFunctionsKey,
+            'x-entity-id': entity.id,
+            'x-entity-type': entityType,
+            'x-entity-group': entity.group ? entity.group : 0,
+            'x-entity-slug': entity.slug,
           },
         })
         .pipe(map((axiosResponse) => axiosResponse.data))

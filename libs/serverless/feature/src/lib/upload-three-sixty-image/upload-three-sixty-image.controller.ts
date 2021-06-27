@@ -1,5 +1,6 @@
 import {
   Controller,
+  Headers,
   Post,
   Req,
   UploadedFile,
@@ -8,6 +9,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
+import { EntityType } from '@dark-rush-photography/shared-types';
 import { UploadThreeSixtyImageService } from './upload-three-sixty-image.service';
 
 @Controller('upload-three-sixty-image')
@@ -19,12 +21,23 @@ export class UploadThreeSixtyImageController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async upload(
+    @Headers('x-entity-id') entityId: string,
+    @Headers('x-entity-type') entityType: EntityType,
+    @Headers('x-entity-group') entityGroup: string,
+    @Headers('x-entity-slug') entitySlug: string,
     @Req() request: AzureRequest,
-    @UploadedFile() image: Express.Multer.File
+    @UploadedFile() threeSixtyImage: Express.Multer.File
   ): Promise<void> {
     request.context.done(
       null,
-      await this.uploadThreeSixtyImageService.upload(request, image)
+      await this.uploadThreeSixtyImageService.upload(
+        entityId,
+        entityType,
+        entityGroup,
+        entitySlug,
+        request,
+        threeSixtyImage
+      )
     );
   }
 }
