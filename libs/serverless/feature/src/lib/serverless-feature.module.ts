@@ -1,24 +1,22 @@
 import { Module } from '@nestjs/common';
 
-import { AddImageModule } from './add-image/add-image.module';
+import { DimensionImageModule } from './dimension-image/dimension-image.module';
 import { ExifImageModule } from './exif-image/exif-image.module';
 import { PostImageModule } from './post-image/post-image.module';
-import { ResizeImageModule } from './resize-image/resize-image.module';
 import { SocialMediaPostImageModule } from './social-media-post-image/social-media-post-image.module';
 import { TinifyImageModule } from './tinify-image/tinify-image.module';
 import { UploadImageModule } from './upload-image/upload-image.module';
-import { WebsitePostImageModule } from './website-post-image/website-post-image.module';
+import { UploadLightroomImageModule } from './upload-lightroom-image/upload-lightroom-image.module';
 
 @Module({
   imports: [
-    AddImageModule,
     ExifImageModule,
     PostImageModule,
-    ResizeImageModule,
+    DimensionImageModule,
     SocialMediaPostImageModule,
     TinifyImageModule,
     UploadImageModule,
-    WebsitePostImageModule,
+    UploadLightroomImageModule,
   ],
 })
 export class ServerlessFeatureModule {}

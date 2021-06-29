@@ -48,4 +48,10 @@ export class ImageUpdateDto implements Partial<Image> {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
+
+  @IsBoolean()
+  isProcessed!: boolean;
+
+  @IsBoolean()
+  isLocked!: boolean;
 }

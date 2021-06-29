@@ -1,22 +1,49 @@
 import { Readable } from 'node:stream';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
 import { forkJoin, from, fromEvent, Observable, of } from 'rxjs';
 import { buffer, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/serverless/types';
-import { getAzureStorageBlockBlobClient$ } from '../functions/azure-storage-block-blob-client.functions';
+import {
+  ActivityMedia,
+  AzureStorageContainerType,
+} from '@dark-rush-photography/serverless/types';
 import {
   createTempFile$,
+  getAzureStorageBlockBlobClient$,
+  getBlobPrefix,
   writeStreamToFile,
 } from '@dark-rush-photography/serverless/util';
 import {
   BlobDownloadResponseParsed,
   BlobServiceClient,
 } from '@azure/storage-blob';
+import {
+  ImageDimensionType,
+  PostState,
+} from '@dark-rush-photography/shared-types';
 
 @Injectable()
 export class AzureStorageProvider {
+  getBlobPath = (
+    postState: PostState,
+    activityMedia: ActivityMedia
+  ): string => {
+    const blobPrefix = getBlobPrefix(postState, activityMedia);
+    return `${blobPrefix}/${activityMedia.fileName}`;
+  };
+
+  getBlobPathWithImageDimension = (
+    postState: PostState,
+    activityMedia: ActivityMedia,
+    imageDimensionType: ImageDimensionType
+  ): string => {
+    const blobPrefix = getBlobPrefix(postState, activityMedia);
+    return `${blobPrefix}/${imageDimensionType.toLowerCase()}/${
+      activityMedia.fileName
+    }`;
+  };
+
   uploadBufferToBlob$ = (
     connectionString: string,
     containerType: AzureStorageContainerType,
@@ -76,7 +103,7 @@ export class AzureStorageProvider {
       switchMap((blockBlobClient) => blockBlobClient.download()),
       map((blobDownloadResponseParsed: BlobDownloadResponseParsed) => {
         if (!blobDownloadResponseParsed.readableStreamBody) {
-          throw new Error('Readable stream body was undefined');
+          throw new BadRequestException('Readable stream body was undefined');
         }
         return blobDownloadResponseParsed.readableStreamBody;
       })
@@ -111,7 +138,7 @@ export class AzureStorageProvider {
       switchMap((blockBlobClient) => blockBlobClient.download()),
       map((blobDownloadResponseParsed: BlobDownloadResponseParsed) => {
         if (!blobDownloadResponseParsed.readableStreamBody) {
-          throw new Error('Readable stream body was undefined');
+          throw new BadRequestException('Readable stream body was undefined');
         }
         return blobDownloadResponseParsed.readableStreamBody;
       }),

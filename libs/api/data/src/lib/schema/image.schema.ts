@@ -3,8 +3,8 @@ import { PostState } from '@dark-rush-photography/shared-types';
 export const imageSchema = {
   id: { type: String, required: false },
   entityId: { type: String, required: true },
-  slug: { type: String, required: true },
-  state: {
+  fileName: { type: String, required: true },
+  postState: {
     type: String,
     enum: Object.keys(PostState),
     required: true,

@@ -1,46 +1,127 @@
-import { Injectable } from '@nestjs/common';
+import { Logger, Injectable, HttpService } from '@nestjs/common';
+
+import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
+import {
+  EntityType,
+  ImageDimensionType,
+  Image,
+  PostState,
+} from '@dark-rush-photography/shared-types';
+import {
+  ActivityMedia,
+  ActivityOrchestratorType,
+  ActivityProcess,
+  ActivityType,
+  ActivityUpload,
+  AzureStorageContainerType,
+  Env,
+} from '@dark-rush-photography/serverless/types';
+import {
+  addImage$,
+  readCreateDateExif$,
+} from '@dark-rush-photography/serverless/util';
+import { AzureStorageProvider } from './azure-storage.provider';
 
 @Injectable()
-export class MediaProcessProvider {}
-/*
-async Task<string> Create(string videoTitle, string imagesDirectory, string publishingDirectory)
-{
-  foreach (var image in imagesArray)
-      await _tinyPngDomain.TinifyImage(image).ConfigureAwait(false);
+export class MediaProcessProvider {
+  constructor(private readonly azureStorageProvider: AzureStorageProvider) {}
 
-  var videoName = _videoTypeDomain.FindName(VideoType.YouTube);
-  var videoDimension = _videoTypeDomain.FindDimension(VideoType.YouTube);
+  validateUpload(
+    fileName: string,
+    entityId: string,
+    entityType: EntityType,
+    entityGroup: string,
+    entitySlug: string
+  ): ActivityUpload {
+    return {
+      media: {
+        fileName,
+        entityId,
+        entityType,
+        entityGroup,
+        entitySlug,
+      },
+    } as ActivityUpload;
+  }
 
-  var imageFullNames = _imageDomain.Copy(imagesArray, publishingDirectory);
-  imageFullNames = _imageDomain.Resize(imageFullNames, videoDimension, true);
+  getOrchestratorInput(
+    postState: PostState,
+    activityMedia: ActivityMedia
+  ): ActivityProcess {
+    return {
+      orchestratorType: ActivityOrchestratorType.UploadImage,
+      activityGroups: [
+        {
+          sequential: [
+            {
+              type: ActivityType.TinifyImage,
+              postState,
+              media: activityMedia,
+            },
+          ],
+          parallel: [
+            {
+              type: ActivityType.DimensionImage,
+              postState,
+              media: activityMedia,
+              config: {
+                imageDimensionType: ImageDimensionType.Tile,
+              },
+            },
+            {
+              type: ActivityType.DimensionImage,
+              postState,
+              media: activityMedia,
+              config: {
+                imageDimensionType: ImageDimensionType.Small,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
 
-  var logoFrame = Path.Combine(Directory.GetCurrentDirectory(),
-      _videoTypeDomain.FindLogoFrame(VideoType.YouTube));
+  logStart(): void {
+    Logger.log(
+      'Starting media process orchestrator',
+      MediaProcessProvider.name
+    );
+  }
 
-  var meltVideo = Path.Combine(publishingDirectory, $"{videoName}-melt.mp4");
-  var fFmpegVideo =
-      Path.Combine(publishingDirectory, $"{videoName}-FFmpeg.mp4");
-  var video = Path.Combine(publishingDirectory, $"{videoName}.mp4");
+  logOrchestrationStart(instanceId: string): void {
+    Logger.log(
+      `${ActivityOrchestratorType.MediaProcess} started orchestration with ID = '${instanceId}'.`,
+      MediaProcessProvider.name
+    );
+  }
 
-  var imageFullNamesArray = imageFullNames.ToArray();
-  _meltVideoDomain.MeltVideo(imageFullNamesArray, videoDimension, meltVideo, logoFrame);
-  _fFmpegVideoDomain.FfMpegVideo(meltVideo, fFmpegVideo, videoTitle);
-
-  _tagVideoDomain.AddCover(imageFullNamesArray.First(), fFmpegVideo);
-  File.Copy(fFmpegVideo, video, true);
-  return video;
+  mediaProcess$ = (
+    env: Env,
+    httpService: HttpService,
+    activityUpload: ActivityUpload,
+    blobPath: string
+  ): Observable<Image> => {
+    return this.azureStorageProvider
+      .downloadBlobToFile$(
+        env.azureStorageConnectionString,
+        AzureStorageContainerType.Private,
+        blobPath,
+        activityUpload.media.fileName
+      )
+      .pipe(
+        switchMap((filePath) => readCreateDateExif$(filePath)),
+        switchMap((createDate) =>
+          addImage$(env, httpService, activityUpload.media, createDate)
+        ),
+        tap((image) => {
+          activityUpload.media = {
+            ...activityUpload.media,
+            id: image.id,
+          };
+        })
+      );
+  };
 }
-*/
-
-/*
-var metadata = new stringBuilder();
-metadata.Append($" -metadata title=\"{videoTitle}\"");
-metadata.Append($" -metadata copyright=\"{dateTime.Year} Dark Rush Photography - All Rights Reserved\"");
-
-var processFileName = $@"{_localDirectoryConfiguration.Value.GitHubDirectory}\tools\ffmpeg\ffmpeg";
-
-// -y Overwrites existing file without asking
-// -an Removes audio
-var processArguments = $"-i \"{meltVideo}\" {metadata} -y -an \"{fFmpegVideo}\"";
-_processDomain.Run(processFileName, Directory.GetCurrentDirectory(), processArguments);
-*/

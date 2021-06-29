@@ -14,10 +14,10 @@ import { toVideoDimension } from '../functions/video-dimension.functions';
 @Injectable()
 export class MediaProcessProvider {
   readonly mediaProcessTypeMap = new Map<MediaProcessType, EntityType>([
-    [MediaProcessType.AppleIcon, EntityType.MediaProcessAppleIcon],
     [MediaProcessType.AppleResource, EntityType.MediaProcessAppleResource],
+    [MediaProcessType.Icon, EntityType.MediaProcessIcon],
     [MediaProcessType.ImageVideo, EntityType.MediaProcessImageVideo],
-    [MediaProcessType.PostMobileImage, EntityType.MediaProcessPostMobileImage],
+    [MediaProcessType.MobileImage, EntityType.MediaProcessMobileImage],
     [MediaProcessType.Png, EntityType.MediaProcessPng],
   ]);
 

@@ -4,8 +4,8 @@ import {
   AzureStorageProvider,
   SocialMediaPostImageProvider,
 } from '@dark-rush-photography/serverless/data';
-import { SocialMediaPostImageController } from './social-media-post-image.controller';
 import { SocialMediaPostImageService } from './social-media-post-image.service';
+import { SocialMediaPostImageController } from './social-media-post-image.controller';
 
 @Module({
   imports: [HttpModule],

@@ -20,7 +20,7 @@ export class UploadThreeSixtyImageController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async upload(
+  async uploadThreeSixtyImage(
     @Headers('x-entity-id') entityId: string,
     @Headers('x-entity-type') entityType: EntityType,
     @Headers('x-entity-group') entityGroup: string,
@@ -30,7 +30,7 @@ export class UploadThreeSixtyImageController {
   ): Promise<void> {
     request.context.done(
       null,
-      await this.uploadThreeSixtyImageService.upload(
+      await this.uploadThreeSixtyImageService.uploadThreeSixtyImage(
         entityId,
         entityType,
         entityGroup,

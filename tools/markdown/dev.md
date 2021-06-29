@@ -69,9 +69,18 @@
   - In File > Preferences > Settings
   - Enable Editor: Format On Save
   - Within a ts file ensure that Prettier is the default Formatter
-    - Needed to do this in React file as well
+    - Needed to do this separately in a React file as well
 - update material icon theme settings
   - in settings change material icon theme to angular_ngrx
+- add ffmpeg
+  - on Windows
+    - Download <https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z>
+    - Drag and Drop contents to Program Files > ffmpeg
+    - Add Path C:\Program Files\ffmpeg\bin to System Variables Path
+- install Shotcut
+  - on Windows use installer
+    - <https://shotcut.org/download/>
+    - Add C:\Program Files\Shotcut to System Variables Path to use melt.exe
 
 ---
 

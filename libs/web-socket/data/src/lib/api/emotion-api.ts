@@ -12,11 +12,11 @@ export const createOrUpdateEmotion$ = (
   authToken: string,
   emotionMessage: EmotionMessage
 ): Observable<EmotionMessage> => {
-  const apiEndpoint = `${drpApi}/admin/v1/emotion`;
-  Logger.log(`Calling API ${apiEndpoint}`, createOrUpdateEmotion$.name);
+  const url = `${drpApi}/admin/v1/emotion`;
+  Logger.log(url, createOrUpdateEmotion$.name);
   return httpService
     .post<Emotion>(
-      apiEndpoint,
+      url,
       {
         ...emotionMessage,
       },

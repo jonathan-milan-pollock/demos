@@ -12,7 +12,7 @@ import {
 } from '@dark-rush-photography/shared-types';
 import { Env } from '@dark-rush-photography/serverless/types';
 import { AzureStorageProvider } from './azure-storage.provider';
-import { findAzureStorageContainerType } from '../functions/post-state.functions';
+import { findAzureStorageContainerType } from '@dark-rush-photography/serverless/util';
 
 @Injectable()
 export class DataUriImageProvider {
@@ -21,7 +21,7 @@ export class DataUriImageProvider {
     private readonly azureStorageProvider: AzureStorageProvider
   ) {}
 
-  findImageDimensionData$(
+  findData$(
     imageDimensionType: ImageDimensionType,
     entityId: string,
     entityType: EntityType,

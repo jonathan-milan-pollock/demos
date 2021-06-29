@@ -1,22 +1,8 @@
 {
   "bindings": [
     {
-      "authLevel": "anonymous",
-      "name": "req",
-      "type": "httpTrigger",
-      "direction": "in",
-      "route": "post-image",
-      "methods": ["post", "get"],
-      "dataType": "binary"
-    },
-    {
-      "name": "$return",
-      "type": "http",
-      "direction": "out"
-    },
-    {
-      "name": "starter",
-      "type": "orchestrationClient",
+      "name": "name",
+      "type": "activityTrigger",
       "direction": "in"
     }
   ],

@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "authLevel": "function",
+      "name": "req",
+      "type": "httpTrigger",
+      "direction": "in",
+      "route": "data-uri-video",
+      "methods": ["get"]
+    },
+    {
+      "name": "res",
+      "type": "http",
+      "direction": "out"
+    }
+  ],
+  "scriptFile": "../dist/data-uri-video/index.js"
+}

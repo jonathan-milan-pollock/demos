@@ -1,5 +1,9 @@
-import { ImageDimensionType } from '@dark-rush-photography/shared-types';
+import {
+  ImageDimensionType,
+  VideoDimensionType,
+} from '@dark-rush-photography/shared-types';
 
 export interface ActivityConfig {
-  resizeImageDimensionType?: ImageDimensionType;
+  imageDimensionType?: ImageDimensionType;
+  videoDimensionType?: VideoDimensionType;
 }

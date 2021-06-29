@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
 import { getClient } from 'durable-functions';
@@ -6,7 +6,11 @@ import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from } from 'rxjs';
 import { map, switchMapTo, tap } from 'rxjs/operators';
 
-import { EntityType, ENV } from '@dark-rush-photography/shared-types';
+import {
+  EntityType,
+  ENV,
+  PostState,
+} from '@dark-rush-photography/shared-types';
 import {
   ActivityOrchestratorType,
   AzureStorageContainerType,
@@ -25,7 +29,7 @@ export class UploadThreeSixtyImageService {
     private readonly azureStorageProvider: AzureStorageProvider
   ) {}
 
-  async upload(
+  async uploadThreeSixtyImage(
     entityId: string,
     entityType: EntityType,
     entityGroup: string,
@@ -33,6 +37,8 @@ export class UploadThreeSixtyImageService {
     request: AzureRequest,
     threeSixtyImage: Express.Multer.File
   ): Promise<IHttpResponse> {
+    Logger.log('Upload Three Sixty Image', UploadThreeSixtyImageService.name);
+
     const client = getClient(request.context);
     const activityUpload = this.uploadThreeSixtyImageProvider.validateUpload(
       request.body['fileName'],
@@ -48,14 +54,17 @@ export class UploadThreeSixtyImageService {
         this.env.azureStorageConnectionString,
         AzureStorageContainerType.Private,
         activityUpload.file.buffer,
-        this.uploadThreeSixtyImageProvider.getBlobPath(activityUpload.media)
+        this.azureStorageProvider.getBlobPath(
+          PostState.New,
+          activityUpload.media
+        )
       )
       .pipe(
         tap(this.uploadThreeSixtyImageProvider.logStart),
         switchMapTo(
           from(
             client.startNew(
-              ActivityOrchestratorType.UploadThreeSixtyImage,
+              ActivityOrchestratorType.UploadImage,
               undefined,
               this.uploadThreeSixtyImageProvider.getOrchestratorInput(
                 activityUpload.media

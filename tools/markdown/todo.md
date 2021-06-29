@@ -1,14 +1,8 @@
 # todo
 
 @angular/google-maps
-@angular/youtube-player
 
 - [Plyr](https://plyr.io/)
-
-https://github.com/cypress-io/cypress-example-recipes
-
-https://dev.to/christiankohler/improved-dependeny-injection-with-the-new-providedin-scopes-any-and-platform-30bb
-This means that the best use case for providedIn: 'platform' is for sharing services over application boundaries. E.g. with Angular Elements.
 
 - test mobile sizes with
 
@@ -66,3 +60,27 @@ _/
 //TODO: Roboto or Raleway???
 
 TODO: Make note about Auth0 roles and how added to the user
+
+# nest
+
+- nestjs add caching (https://reposhub.com/nodejs/frameworks/nestjs-ng-universal.html)
+
+- implement K8 available and ready services
+-
+
+```ts
+  @Get('status')
+  status(): any {
+    const { uptime, arch, version, platform } = process
+    return {
+      version: VERSION,
+      stack,
+      server: {
+        uptime: uptime(),
+        arch,
+        version,
+        platform,
+      },
+    }
+  }
+```

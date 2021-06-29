@@ -10,6 +10,7 @@ export * from './lib/providers/comment.provider';
 export * from './lib/providers/destination.provider';
 export * from './lib/providers/document-model.provider';
 export * from './lib/providers/emotion.provider';
+export * from './lib/providers/entity.provider';
 export * from './lib/providers/event.provider';
 export * from './lib/providers/favorites.provider';
 export * from './lib/providers/image-dimension.provider';

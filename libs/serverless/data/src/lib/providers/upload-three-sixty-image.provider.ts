@@ -1,17 +1,38 @@
-import { Logger, BadRequestException, Injectable } from '@nestjs/common';
-
-import { EntityType, PostState } from '@dark-rush-photography/shared-types';
 import {
-  Activity,
+  Logger,
+  BadRequestException,
+  Injectable,
+  HttpService,
+} from '@nestjs/common';
+
+import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
+import {
+  EntityType,
+  ImageDimensionType,
+  Image,
+  PostState,
+} from '@dark-rush-photography/shared-types';
+import {
   ActivityMedia,
   ActivityOrchestratorType,
+  ActivityProcess,
   ActivityType,
   ActivityUpload,
+  AzureStorageContainerType,
+  Env,
 } from '@dark-rush-photography/serverless/types';
-import { getBlobPath } from '@dark-rush-photography/serverless/util';
+import { AzureStorageProvider } from './azure-storage.provider';
+import {
+  addImage$,
+  readCreateDateExif$,
+} from '@dark-rush-photography/serverless/util';
 
 @Injectable()
 export class UploadThreeSixtyImageProvider {
+  constructor(private readonly azureStorageProvider: AzureStorageProvider) {}
+
   validateUpload(
     fileName: string,
     entityId: string,
@@ -38,16 +59,38 @@ export class UploadThreeSixtyImageProvider {
     };
   }
 
-  getBlobPath(activityMedia: ActivityMedia): string {
-    return getBlobPath(PostState.New, activityMedia);
-  }
-
-  getOrchestratorInput(media: ActivityMedia): Activity {
+  getOrchestratorInput(media: ActivityMedia): ActivityProcess {
     return {
-      type: ActivityType.Upload,
-      orchestratorType: ActivityOrchestratorType.UploadThreeSixtyImage,
-      postState: PostState.New,
-      media,
+      orchestratorType: ActivityOrchestratorType.UploadImage,
+      activityGroups: [
+        {
+          sequential: [
+            {
+              type: ActivityType.TinifyImage,
+              postState: PostState.New,
+              media,
+            },
+          ],
+          parallel: [
+            {
+              type: ActivityType.DimensionImage,
+              postState: PostState.New,
+              media,
+              config: {
+                imageDimensionType: ImageDimensionType.ThreeSixtyTile,
+              },
+            },
+            {
+              type: ActivityType.DimensionImage,
+              postState: PostState.New,
+              media,
+              config: {
+                imageDimensionType: ImageDimensionType.ThreeSixtySmall,
+              },
+            },
+          ],
+        },
+      ],
     };
   }
 
@@ -60,8 +103,35 @@ export class UploadThreeSixtyImageProvider {
 
   logOrchestrationStart(instanceId: string): void {
     Logger.log(
-      `${ActivityOrchestratorType.UploadThreeSixtyImage} started orchestration with ID = '${instanceId}'.`,
+      `${ActivityOrchestratorType.UploadImage} started orchestration with ID = '${instanceId}'.`,
       UploadThreeSixtyImageProvider.name
     );
   }
+
+  addImage$ = (
+    env: Env,
+    httpService: HttpService,
+    activityUpload: ActivityUpload,
+    blobPath: string
+  ): Observable<Image> => {
+    return this.azureStorageProvider
+      .downloadBlobToFile$(
+        env.azureStorageConnectionString,
+        AzureStorageContainerType.Private,
+        blobPath,
+        activityUpload.media.fileName
+      )
+      .pipe(
+        switchMap((filePath) => readCreateDateExif$(filePath)),
+        switchMap((createDate) =>
+          addImage$(env, httpService, activityUpload.media, createDate)
+        ),
+        tap((image) => {
+          activityUpload.media = {
+            ...activityUpload.media,
+            id: image.id,
+          };
+        })
+      );
+  };
 }

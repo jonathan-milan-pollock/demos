@@ -13,11 +13,11 @@ export class SocialMediaPostImageController {
   @Get()
   async socialMediaPostImage(
     @Req() request: AzureRequest,
-    @Body() imageActivity: Activity
+    @Body() activity: Activity
   ): Promise<void> {
     request.context.done(
       null,
-      await this.socialMediaPostImageService.socialMediaPostImage(imageActivity)
+      await this.socialMediaPostImageService.socialMediaPostImage(activity)
     );
   }
 }

@@ -1,5 +1,5 @@
-export interface ImageExif {
-  readonly Title: string; //'iptc:ObjectName'
+export interface ExifImage {
+  readonly Title: string; //TODO 'iptc:ObjectName'
   readonly 'dc:description': string;
   readonly 'Keywords+': string[];
   readonly CreateDate: string;

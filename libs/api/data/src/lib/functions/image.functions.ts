@@ -15,6 +15,8 @@ export const toImage = (image: Image): Image => {
     keywords: image.keywords,
     dateCreated: image.dateCreated,
     datePublished: image.datePublished,
+    isProcessed: image.isProcessed,
+    isLocked: image.isLocked,
   };
 };
 

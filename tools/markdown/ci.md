@@ -170,23 +170,10 @@ Yes, disable perMessageDeflate in your server-side Node.js code. For example, if
 
 Node.js
 
-Copy
-const io = require('socket.io')(server,{
-perMessageDeflate :false
-});
-
 - Deploy images to the ACR registry server
 
-/\*
-
-- This function is not intended to be invoked directly. Instead it will be
-- triggered by an orchestrator function.
--
-- Before running this sample, please:
-- - create a Durable orchestration function
-- - create a Durable HTTP starter function
-- - run 'npm install durable-functions' from the wwwroot folder of your
-- function app in Kudu
-  \*/
+- TODO: run 'npm install durable-functions' from the wwwroot folder of your function app in Kudu
 
 https://dev.to/_ceder/deploying-azure-functions-using-pulumi-net-3dcb
+
+TODO: <https://www.web-technology-experts-notes.in/2019/09/install-ffmpeg-in-azure-serverless.html>

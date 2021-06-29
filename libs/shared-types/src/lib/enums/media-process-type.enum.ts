@@ -1,7 +1,7 @@
 export enum MediaProcessType {
-  AppleIcon = 'AppleIcon',
   AppleResource = 'AppleResource',
+  Icon = 'Icon',
   ImageVideo = 'ImageVideo',
-  PostMobileImage = 'PostMobileImage',
+  MobileImage = 'MobileImage',
   Png = 'Png',
 }

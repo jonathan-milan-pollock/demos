@@ -7,13 +7,12 @@ import {
 import { Reflector } from '@nestjs/core';
 
 import { ADMIN, ENV } from '@dark-rush-photography/shared-types';
-import { AUTH0_ROLES } from '@dark-rush-photography/shared-server/types';
 import {
   DRP_API_ADMIN_KEY,
   ROLES,
   Env,
+  AUTH0_ROLES,
 } from '@dark-rush-photography/api/types';
-
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(

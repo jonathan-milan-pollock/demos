@@ -11,11 +11,8 @@ export class ExifImageController {
   @Get()
   async exifImage(
     @Req() request: AzureRequest,
-    @Body() imageActivity: Activity
+    @Body() activity: Activity
   ): Promise<void> {
-    request.context.done(
-      null,
-      await this.exifImageService.exifImage(imageActivity)
-    );
+    request.context.done(null, await this.exifImageService.exifImage(activity));
   }
 }

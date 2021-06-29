@@ -22,4 +22,6 @@ export const mockImage = (): Image => ({
     .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
   dateCreated: faker.date.recent().toISOString(),
   datePublished: faker.date.recent().toISOString(),
+  isProcessed: faker.datatype.boolean(),
+  isLocked: faker.datatype.boolean(),
 });
