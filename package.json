@@ -96,6 +96,7 @@
     "dist-exiftool": "^10.53.0",
     "document-register-element": "1.13.1",
     "durable-functions": "^1.4.6",
+    "exif-date-to-iso": "^1.0.1",
     "express": "^4.15.2",
     "fs-extra": "^10.0.0",
     "jwks-rsa": "^2.0.3",

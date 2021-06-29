@@ -18,7 +18,7 @@ export class UploadImageController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  async upload(
+  async uploadImage(
     @Headers('x-entity-id') entityId: string,
     @Headers('x-entity-type') entityType: EntityType,
     @Headers('x-entity-group') entityGroup: string,
@@ -28,7 +28,7 @@ export class UploadImageController {
   ): Promise<void> {
     request.context.done(
       null,
-      await this.uploadImageService.upload(
+      await this.uploadImageService.uploadImage(
         entityId,
         entityType,
         entityGroup,

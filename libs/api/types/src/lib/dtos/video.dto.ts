@@ -6,6 +6,7 @@ import {
   IsMongoId,
   IsOptional,
   IsString,
+  IsUrl,
   IsUUID,
   Min,
 } from 'class-validator';
@@ -52,11 +53,18 @@ export class VideoDto implements Video {
   datePublished?: string;
 
   @IsUUID()
-  imageId!: string;
+  coverImageId!: string;
 
-  @IsBoolean()
-  hasTrack!: boolean;
+  @IsUrl()
+  @IsOptional()
+  hlsStreamingUrl?: string;
 
   @IsBoolean()
   isFlyOver!: boolean;
+
+  @IsBoolean()
+  isProcessed!: boolean;
+
+  @IsBoolean()
+  isLocked!: boolean;
 }

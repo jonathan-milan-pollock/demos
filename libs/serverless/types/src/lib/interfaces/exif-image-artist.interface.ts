@@ -1,4 +1,4 @@
-export interface ImageArtistExif {
+export interface ExifImageArtist {
   readonly Rating: number;
   readonly Artist: string;
   readonly 'dc:creator': string;
@@ -16,7 +16,9 @@ export interface ImageArtistExif {
     LicensorURL: string;
   };
   readonly 'Keywords+': string[];
-  readonly AllDates: string;
+  readonly CreateDate: string;
+  readonly 'xmp:MetadataDate': string;
+  readonly FileModifyDate: string;
   readonly Copyrighted: boolean;
   readonly 'xmpRights:Marked': boolean;
   readonly Copyright: string;

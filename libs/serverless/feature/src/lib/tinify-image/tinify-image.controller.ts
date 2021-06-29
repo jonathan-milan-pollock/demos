@@ -11,11 +11,11 @@ export class TinifyImageController {
   @Get()
   async tinifyImage(
     @Req() request: AzureRequest,
-    @Body() imageActivity: Activity
+    @Body() activity: Activity
   ): Promise<void> {
     request.context.done(
       null,
-      await this.tinifyImageService.tinifyImage(imageActivity)
+      await this.tinifyImageService.tinifyImage(activity)
     );
   }
 }

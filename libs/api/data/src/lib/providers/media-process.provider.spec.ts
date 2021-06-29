@@ -1,8 +1,8 @@
 describe('media-process-type.functions', () => {
   describe('findEntityTypeFromMediaProcessType', () => {
     /* it('should return media apple icon document type for apple icon media type', () => {
-      const mediaProcessType = MediaProcessType.AppleIcon;
-      const entityType = EntityType.MediaProcessAppleIcon;
+      const mediaProcessType = MediaProcessType.Icon;
+      const entityType = EntityType.MediaProcessIcon;
 
       const result = findEntityTypeFromMediaProcessType(mediaProcessType);
       expect(result).toBe(entityType);
@@ -17,7 +17,7 @@ describe('media-process-type.functions', () => {
     });
 
     it('should return media image video document type for image video media type', () => {
-      const mediaProcessType = MediaProcessType.ImageVideo;
+      const mediaProcessType = MediaProcessType.CreateImageVideo;
       const entityType = EntityType.MediaProcessImageVideo;
 
       const result = findEntityTypeFromMediaProcessType(mediaProcessType);

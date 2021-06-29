@@ -90,7 +90,7 @@ export class AdminMediaProcessService {
           this.httpService,
           'media-process',
           id,
-          EntityType.MediaProcessAppleIcon //TODO: Find the entity type from the media process type
+          EntityType.MediaProcessIcon //TODO: Find the entity type from the media process type
         )
       ),
       map((response) => response as MediaProcess)

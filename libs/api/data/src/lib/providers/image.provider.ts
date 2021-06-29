@@ -34,6 +34,8 @@ export class ImageProvider {
         isStared: false,
         isLoved: false,
         isLiked: false,
+        isProcessed: false,
+        isLocked: false,
       },
     ],
   });

@@ -13,9 +13,6 @@ export class PostImageController {
     @Req() request: AzureRequest,
     @Body() activity: Activity
   ): Promise<void> {
-    request.context.done(
-      null,
-      await this.postImageService.postImage(request, activity)
-    );
+    request.context.done(null, await this.postImageService.postImage(activity));
   }
 }

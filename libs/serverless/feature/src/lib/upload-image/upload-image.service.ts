@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpService, Inject, Injectable, Logger } from '@nestjs/common';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
 import { getClient } from 'durable-functions';
@@ -6,7 +6,11 @@ import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 import { from } from 'rxjs';
 import { map, switchMapTo, tap } from 'rxjs/operators';
 
-import { EntityType, ENV } from '@dark-rush-photography/shared-types';
+import {
+  EntityType,
+  ENV,
+  PostState,
+} from '@dark-rush-photography/shared-types';
 import {
   ActivityOrchestratorType,
   AzureStorageContainerType,
@@ -21,11 +25,12 @@ import {
 export class UploadImageService {
   constructor(
     @Inject(ENV) private readonly env: Env,
+    private readonly httpService: HttpService,
     private readonly uploadImageProvider: UploadImageProvider,
     private readonly azureStorageProvider: AzureStorageProvider
   ) {}
 
-  async upload(
+  async uploadImage(
     entityId: string,
     entityType: EntityType,
     entityGroup: string,
@@ -33,6 +38,8 @@ export class UploadImageService {
     request: AzureRequest,
     image: Express.Multer.File
   ): Promise<IHttpResponse> {
+    Logger.log('Upload Image', UploadImageService.name);
+
     const client = getClient(request.context);
     const activityUpload = this.uploadImageProvider.validateUpload(
       request.body['fileName'],
@@ -43,15 +50,27 @@ export class UploadImageService {
       image
     );
 
+    const blobPath = this.azureStorageProvider.getBlobPath(
+      PostState.New,
+      activityUpload.media
+    );
     return this.azureStorageProvider
       .uploadBufferToBlob$(
         this.env.azureStorageConnectionString,
         AzureStorageContainerType.Private,
         activityUpload.file.buffer,
-        this.uploadImageProvider.getBlobPath(activityUpload.media)
+        blobPath
       )
       .pipe(
         tap(this.uploadImageProvider.logStart),
+        switchMapTo(
+          this.uploadImageProvider.addImage$(
+            this.env,
+            this.httpService,
+            activityUpload,
+            blobPath
+          )
+        ),
         switchMapTo(
           from(
             client.startNew(

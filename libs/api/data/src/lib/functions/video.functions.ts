@@ -13,9 +13,11 @@ export const toVideo = (video: Video): Video => {
     keywords: video.keywords,
     dateCreated: video.dateCreated,
     datePublished: video.datePublished,
-    imageId: video.imageId,
-    hasTrack: video.hasTrack,
+    coverImageId: video.coverImageId,
+    hlsStreamingUrl: video.hlsStreamingUrl,
     isFlyOver: video.isFlyOver,
+    isProcessed: video.isProcessed,
+    isLocked: video.isLocked,
   };
 };
 

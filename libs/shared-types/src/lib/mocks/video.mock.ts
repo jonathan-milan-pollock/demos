@@ -20,7 +20,9 @@ export const mockVideo = (): Video => ({
     .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
   dateCreated: faker.date.recent().toISOString(),
   datePublished: faker.date.recent().toISOString(),
-  imageId: faker.datatype.uuid(),
-  hasTrack: faker.datatype.boolean(),
+  coverImageId: faker.datatype.uuid(),
+  hlsStreamingUrl: faker.internet.url(),
   isFlyOver: faker.datatype.boolean(),
+  isProcessed: faker.datatype.boolean(),
+  isLocked: faker.datatype.boolean(),
 });

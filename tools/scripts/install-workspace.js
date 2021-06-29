@@ -475,7 +475,8 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i datauri'))
-    .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'));
+    .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
+    .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'));
 
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))

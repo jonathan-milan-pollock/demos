@@ -13,7 +13,7 @@ import {
   WebSocketClient,
 } from '@dark-rush-photography/web-socket/types';
 import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
-import { createOrUpdateComment$ } from '../api/comment-api';
+import { createComment$ } from '../api/comment-api';
 import { createOrUpdateEmotion$ } from '../api/emotion-api';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class HandleMessageProvider {
       switchMap((authToken) => {
         switch (message.messageType) {
           case MessageType.Comment:
-            return createOrUpdateComment$(
+            return createComment$(
               env.api,
               httpService,
               authToken,

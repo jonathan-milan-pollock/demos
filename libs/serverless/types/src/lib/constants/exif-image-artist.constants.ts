@@ -1,6 +1,6 @@
-import { ImageArtistExif } from '../interfaces/exif-image-artist.interface';
-
-export const IMAGE_ARTIST_EXIF_FN = (year: number): ImageArtistExif => ({
+import { ExifImageArtist } from '../interfaces/exif-image-artist.interface';
+//TODO: Use Exif Date
+export const EXIF_IMAGE_ARTIST_FN = (year: number): ExifImageArtist => ({
   Rating: 5,
   Artist: 'Dark Rush',
   'dc:creator': 'Dark Rush',
@@ -18,7 +18,9 @@ export const IMAGE_ARTIST_EXIF_FN = (year: number): ImageArtistExif => ({
     LicensorURL: 'https://www.darkrushphotography.com',
   },
   'Keywords+': ['Dark Rush Photography', 'Photography'],
-  AllDates: new Date().toISOString().slice(0, 10).replace('-', ':'),
+  CreateDate: new Date().toISOString().slice(0, 10).replace('-', ':'),
+  'xmp:MetadataDate': new Date().toISOString().slice(0, 10).replace('-', ':'),
+  FileModifyDate: new Date().toISOString().slice(0, 10).replace('-', ':'),
   Copyrighted: true,
   'xmpRights:Marked': true,
   Copyright: `© ${year} Dark Rush Photography`,

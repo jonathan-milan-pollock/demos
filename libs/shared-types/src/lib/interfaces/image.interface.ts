@@ -14,4 +14,6 @@ export interface Image {
   readonly keywords?: string;
   readonly dateCreated: string;
   readonly datePublished?: string;
+  readonly isProcessed: boolean;
+  readonly isLocked: boolean;
 }

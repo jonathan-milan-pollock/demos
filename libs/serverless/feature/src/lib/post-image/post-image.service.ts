@@ -3,20 +3,21 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 
-import { PostImageProvider } from '@dark-rush-photography/serverless/data';
+import {
+  AzureStorageProvider,
+  PostImageProvider,
+} from '@dark-rush-photography/serverless/data';
 import { Activity } from '@dark-rush-photography/serverless/types';
 
 @Injectable()
 export class PostImageService {
-  constructor(private readonly postImageProvider: PostImageProvider) {}
+  constructor(
+    private readonly postImageProvider: PostImageProvider,
+    private readonly azureStorageProvider: AzureStorageProvider
+  ) {}
 
-  async postImage(
-    request: AzureRequest,
-    activity: Activity
-  ): Promise<IHttpResponse> {
-    Logger.log('Post image', PostImageService.name);
-    return this.postImageProvider
-      .postImage$(request.context, activity.media)
-      .toPromise();
+  async postImage(activity: Activity): Promise<Activity> {
+    Logger.log('Post Image', PostImageService.name);
+    return {} as Activity;
   }
 }

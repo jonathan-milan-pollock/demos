@@ -56,4 +56,10 @@ export class ImageDto implements Image {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
+
+  @IsBoolean()
+  isProcessed!: boolean;
+
+  @IsBoolean()
+  isLocked!: boolean;
 }

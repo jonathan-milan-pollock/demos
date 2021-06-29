@@ -10,5 +10,5 @@ export class VideoAddDto implements Partial<Video> {
   dateCreated!: string;
 
   @IsUUID()
-  imageId!: string;
+  coverImageId!: string;
 }

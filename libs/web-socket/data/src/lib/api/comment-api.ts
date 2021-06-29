@@ -6,17 +6,17 @@ import { map } from 'rxjs/operators';
 import { Comment } from '@dark-rush-photography/shared-types';
 import { CommentMessage } from '@dark-rush-photography/web-socket/types';
 
-export const createOrUpdateComment$ = (
+export const createComment$ = (
   drpApi: string,
   httpService: HttpService,
   authToken: string,
   commentMessage: CommentMessage
 ): Observable<CommentMessage> => {
-  const apiEndpoint = `${drpApi}/admin/v1/comment`;
-  Logger.log(`Calling API ${apiEndpoint}`, createOrUpdateComment$.name);
+  const url = `${drpApi}/admin/v1/comment`;
+  Logger.log(url, createComment$.name);
   return httpService
     .post<Comment>(
-      apiEndpoint,
+      url,
       {
         ...commentMessage,
       },

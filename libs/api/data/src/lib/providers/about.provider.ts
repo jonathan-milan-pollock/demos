@@ -7,12 +7,9 @@ import { toImageDimension } from '../functions/image-dimension.functions';
 import { toVideo } from '../functions/video.functions';
 import { toVideoDimension } from '../functions/video-dimension.functions';
 import { findPublicContent } from '../functions/public.functions';
-import { DocumentModelProvider } from './document-model.provider';
 
 @Injectable()
 export class AboutProvider {
-  constructor(private readonly documentModelProvider: DocumentModelProvider) {}
-
   newAbout(slug: string): About {
     return {
       type: EntityType.About,

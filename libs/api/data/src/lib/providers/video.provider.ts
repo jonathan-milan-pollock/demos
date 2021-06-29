@@ -32,8 +32,9 @@ export class VideoProvider {
         postState: PostState.New,
         order: 0,
         isStared: false,
-        hasTrack: false,
         isFlyOver: false,
+        isProcessed: false,
+        isLocked: false,
       },
     ],
   });

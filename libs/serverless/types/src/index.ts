@@ -12,9 +12,12 @@ export * from './lib/enums/azure-storage-container-type.enum';
 
 // interfaces
 export * from './lib/interfaces/activity-config.interface';
+export * from './lib/interfaces/activity-group.interface';
 export * from './lib/interfaces/activity-media.interface';
+export * from './lib/interfaces/activity-process.interface';
 export * from './lib/interfaces/activity-upload.interface';
 export * from './lib/interfaces/activity.interface';
+export * from './lib/interfaces/env-api-auth.interface';
 export * from './lib/interfaces/env-api.interface';
 export * from './lib/interfaces/env.interface';
 export * from './lib/interfaces/exif-create-date.interface';
