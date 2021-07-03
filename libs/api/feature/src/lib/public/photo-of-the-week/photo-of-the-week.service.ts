@@ -2,18 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import {
   PhotoOfTheWeek,
   EntityType,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import {
   DocumentModel,
   Document,
-  PhotoOfTheWeekProvider,
-  DocumentModelProvider,
+  EntityProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,24 +19,21 @@ export class PhotoOfTheWeekService {
   constructor(
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   findAll$(): Observable<PhotoOfTheWeek[]> {
-    return from(
-      this.photoOfTheWeekModel.find({ type: EntityType.PhotoOfTheWeek })
-    ).pipe(
-      switchMap((documentModels) => from(documentModels)),
-      map(this.photoOfTheWeekProvider.fromDocumentModelPublic),
-      toArray<PhotoOfTheWeek>()
-    );
+    return this.entityProvider.findAllPublic$(
+      EntityType.PhotoOfTheWeek,
+      this.photoOfTheWeekModel
+    ) as Observable<PhotoOfTheWeek[]>;
   }
 
   findOne$(id: string): Observable<PhotoOfTheWeek> {
-    return from(this.photoOfTheWeekModel.findById(id)).pipe(
-      map(this.documentModelProvider.validateFind),
-      map(this.photoOfTheWeekProvider.fromDocumentModelPublic)
-    );
+    return this.entityProvider.findOnePublic$(
+      EntityType.PhotoOfTheWeek,
+      id,
+      this.photoOfTheWeekModel
+    ) as Observable<PhotoOfTheWeek>;
   }
 }

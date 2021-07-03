@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 
-import { ENV } from '@dark-rush-photography/shared-types';
+import { ENV } from '@dark-rush-photography/shared/types';
 import {
   Env,
   Activity,
@@ -18,7 +18,7 @@ export class SocialMediaPostImageProvider {
 
   socialMediaPostImage$(activity: Activity): Observable<void> {
     /**
-     * if (activity.data?.resizeImageDimensionType === undefined) {
+     * if (activity.data?.resizeImageDimensionType == undefined) {
       throw new BadRequestException(
         'resize image dimension type must be set for resizing image'
       );
@@ -27,7 +27,7 @@ export class SocialMediaPostImageProvider {
     const { media, config } = activity;
 
     const imageDimension = IMAGE_DIMENSION_CONFIG.find(
-      (imageDimension) => imageDimension.type === config?.imageDimensionType
+      (imageDimension) => imageDimension.type == config?.imageDimensionType
     );
     if (!imageDimension)
       throw new NotFoundException('Could not find image dimension');

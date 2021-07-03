@@ -1,22 +1,23 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  FavoritesProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { FavoritesController } from './favorites.controller';
 import { FavoritesService } from './favorites.service';
+import { FavoritesController } from './favorites.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [FavoritesController],
-  providers: [DocumentModelProvider, FavoritesProvider, FavoritesService],
+  providers: [FavoritesService, EntityProvider, ServerlessEntityProvider],
 })
 export class FavoritesModule {}

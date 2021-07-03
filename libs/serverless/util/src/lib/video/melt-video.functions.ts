@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import {
   Image,
   MediaDimensionPixels,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 
 export const meltVideo = (
   images: Image[],

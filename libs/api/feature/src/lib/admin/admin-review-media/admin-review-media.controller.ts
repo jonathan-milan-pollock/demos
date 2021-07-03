@@ -2,7 +2,6 @@ import {
   Controller,
   Param,
   Post,
-  Delete,
   HttpCode,
   UseGuards,
   Get,
@@ -16,7 +15,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, ReviewMedia } from '@dark-rush-photography/shared-types';
+import { ADMIN, ReviewMedia } from '@dark-rush-photography/shared/types';
 import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminReviewMediaService } from './admin-review-media.service';
@@ -38,16 +37,16 @@ export class AdminReviewMediaController {
   }
 
   @Roles(ADMIN)
-  @Get(':id')
+  @Get()
   @ApiOkResponse({ type: ReviewMediaDto })
   findOne$(): Observable<ReviewMedia> {
     return this.adminReviewMediaService.findOne$();
   }
 
   @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminReviewMediaService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminReviewMediaService.deleteProcess$(id);
   }
 }

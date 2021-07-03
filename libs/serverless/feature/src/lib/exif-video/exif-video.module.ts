@@ -2,14 +2,14 @@ import { HttpModule, Module } from '@nestjs/common';
 
 import {
   AzureStorageProvider,
-  ExifImageProvider,
+  ExifVideoProvider,
 } from '@dark-rush-photography/serverless/data';
-import { ExifImageController } from './exif-image.controller';
-import { ExifImageService } from './exif-image.service';
+import { ExifVideoService } from './exif-video.service';
+import { ExifVideoController } from './exif-video.controller';
 
 @Module({
   imports: [HttpModule],
-  controllers: [ExifImageController],
-  providers: [ExifImageService, ExifImageProvider, AzureStorageProvider],
+  controllers: [ExifVideoController],
+  providers: [ExifVideoService, ExifVideoProvider, AzureStorageProvider],
 })
-export class ExifImageModule {}
+export class ExifVideoModule {}

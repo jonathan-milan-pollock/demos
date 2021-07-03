@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 import {
   ImageDimension,
   ImageDimensionType,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import { MediaDimensionPixelsDto } from './media-dimension-pixels.dto';
 import { ThreeSixtyImageSettingsDto } from './three-sixty-image-settings.dto';
 

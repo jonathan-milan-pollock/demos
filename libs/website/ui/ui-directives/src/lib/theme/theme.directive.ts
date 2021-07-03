@@ -11,6 +11,6 @@ export class ThemeDirective implements OnInit {
   @Input() drpTheme = 'Dark';
 
   ngOnInit(): void {
-    this.lightTheme = this.drpTheme === 'Light';
+    this.lightTheme = this.drpTheme == 'Light';
   }
 }

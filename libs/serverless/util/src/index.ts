@@ -1,19 +1,7 @@
 // api
-export * from './lib/api/api-about.functions';
 export * from './lib/api/api-auth.functions';
-export * from './lib/api/api-best-of.functions';
-export * from './lib/api/api-destinations.functions';
-export * from './lib/api/api-entity-create.functions';
-export * from './lib/api/api-entity-find-one.functions';
-export * from './lib/api/api-events.functions';
-export * from './lib/api/api-favorites.functions';
 export * from './lib/api/api-image-dimensions.functions';
 export * from './lib/api/api-images.functions';
-export * from './lib/api/api-media-process.functions';
-export * from './lib/api/api-photo-of-the-week.functions';
-export * from './lib/api/api-review-media.functions';
-export * from './lib/api/api-reviews.functions';
-export * from './lib/api/api-social-media.functions';
 export * from './lib/api/api-video-dimensions.functions';
 export * from './lib/api/api-videos.functions';
 
@@ -21,7 +9,7 @@ export * from './lib/api/api-videos.functions';
 export * from './lib/azure-storage/azure-storage-blob-path.functions';
 export * from './lib/azure-storage/azure-storage-block-blob-client.functions';
 export * from './lib/azure-storage/azure-storage-container-client.functions';
-export * from './lib/azure-storage/azure-storage-container-type.functions';
+export * from './lib/azure-storage/media-state-to-azure-storage-type.functions';
 
 // env
 export * from './lib/env/env-dev.functions';

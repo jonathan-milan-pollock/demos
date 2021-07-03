@@ -1,4 +1,4 @@
-import { ImageDimensionType } from '@dark-rush-photography/shared-types';
+import { ImageDimensionType } from '@dark-rush-photography/shared/types';
 import { ImageDimensionStandardConfig } from '../interfaces/image-dimension-standard-config.interface';
 import { ImageDimensionLongestEdgeConfig } from '../interfaces/image-dimension-longest-edge-config.interface';
 import { ImageDimensionTileConfig } from '../interfaces/image-dimension-tile-config.interface';

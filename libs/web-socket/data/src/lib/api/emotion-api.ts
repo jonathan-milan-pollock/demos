@@ -3,13 +3,13 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Emotion } from '@dark-rush-photography/shared-types';
+import { Emotion } from '@dark-rush-photography/shared/types';
 import { EmotionMessage } from '@dark-rush-photography/web-socket/types';
 
 export const createOrUpdateEmotion$ = (
   drpApi: string,
   httpService: HttpService,
-  authToken: string,
+  accessToken: string,
   emotionMessage: EmotionMessage
 ): Observable<EmotionMessage> => {
   const url = `${drpApi}/admin/v1/emotion`;
@@ -22,7 +22,7 @@ export const createOrUpdateEmotion$ = (
       },
       {
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     )

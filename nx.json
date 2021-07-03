@@ -4,15 +4,10 @@
     "angular.json": "*",
     "jest.config.js": "*",
     "nx.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "npmScope": "dark-rush-photography",
   "tasksRunnerOptions": {
     "default": {
@@ -31,19 +26,12 @@
       "implicitDependencies": ["best-of", "serverless", "website"]
     },
     "api-e2e": {
-      "tags": [],
+      "tags": ["scope:api", "type:app"],
       "implicitDependencies": ["api"]
     },
-    "best-of": {
-      "tags": ["scope:best-of", "type:app"]
-    },
-    "best-of-e2e": {
-      "tags": [],
-      "implicitDependencies": ["best-of"]
-    },
-    "serverless": {
-      "tags": ["scope:serverless", "type:app"]
-    },
+    "best-of": { "tags": ["scope:best-of", "type:app"] },
+    "best-of-e2e": { "tags": [], "implicitDependencies": ["best-of"] },
+    "serverless": { "tags": ["scope:serverless", "type:app"] },
     "ui-storybook-e2e": {
       "tags": [],
       "implicitDependencies": ["ui-storybook"]
@@ -52,115 +40,41 @@
       "tags": ["scope:web-socket", "type:app"],
       "implicitDependencies": ["best-of", "website"]
     },
-    "website": {
-      "tags": ["scope:website", "type:app"]
-    },
-    "website-e2e": {
-      "tags": [],
-      "implicitDependencies": ["website"]
-    },
-    "website-host": {
-      "tags": [],
-      "implicitDependencies": ["website"]
-    },
-    "api-data": {
-      "tags": ["scope:api", "type:data"]
-    },
-    "api-feature": {
-      "tags": ["scope:api", "type:feature"]
-    },
-    "api-types": {
-      "tags": ["scope:api", "type:types"]
-    },
-    "api-util": {
-      "tags": ["scope:api", "type:util"]
-    },
-    "best-of-data": {
-      "tags": ["scope:best-of", "type:data"]
-    },
-    "best-of-feature": {
-      "tags": ["scope:best-of", "type:feature"]
-    },
-    "best-of-types": {
-      "tags": ["scope:best-of", "type:types"]
-    },
-    "best-of-ui": {
-      "tags": ["scope:best-of", "type:ui"]
-    },
-    "best-of-util": {
-      "tags": ["scope:best-of", "type:util"]
-    },
-    "image-elements": {
-      "tags": ["scope:image-elements", "type:ui"]
-    },
-    "serverless-data": {
-      "tags": ["scope:serverless", "type:data"]
-    },
-    "serverless-feature": {
-      "tags": ["scope:serverless", "type:feature"]
-    },
-    "serverless-types": {
-      "tags": ["scope:serverless", "type:types"]
-    },
-    "serverless-util": {
-      "tags": ["scope:serverless", "type:util"]
-    },
-    "shared-server-data": {
-      "tags": ["scope:shared-server", "type:data"]
-    },
-    "shared-server-types": {
-      "tags": ["scope:shared-server", "type:types"]
-    },
-    "shared-server-util": {
-      "tags": ["scope:shared-server", "type:util"]
-    },
-    "shared-types": {
-      "tags": ["scope:shared", "type:types"]
-    },
-    "ui-storybook": {
-      "tags": ["scope:ui-storybook", "type:ui"]
-    },
-    "web-socket-data": {
-      "tags": ["scope:web-socket", "type:data"]
-    },
-    "web-socket-feature": {
-      "tags": ["scope:web-socket", "type:feature"]
-    },
-    "web-socket-types": {
-      "tags": ["scope:web-socket", "type:types"]
-    },
-    "web-socket-util": {
-      "tags": ["scope:web-socket", "type:util"]
-    },
-    "website-data": {
-      "tags": ["scope:website", "type:data"]
-    },
-    "website-features-admin": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-home": {
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-types": {
-      "tags": ["scope:website", "type:types"]
-    },
-    "website-ui-ui-admin": {
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-common": {
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-directives": {
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-home": {
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-shell": {
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-util": {
-      "tags": ["scope:website", "type:util"]
-    }
+    "website": { "tags": ["scope:website", "type:app"] },
+    "website-e2e": { "tags": [], "implicitDependencies": ["website"] },
+    "website-host": { "tags": [], "implicitDependencies": ["website"] },
+    "api-data": { "tags": ["scope:api", "type:data"] },
+    "api-feature": { "tags": ["scope:api", "type:feature"] },
+    "api-types": { "tags": ["scope:api", "type:types"] },
+    "api-util": { "tags": ["scope:api", "type:util"] },
+    "best-of-data": { "tags": ["scope:best-of", "type:data"] },
+    "best-of-feature": { "tags": ["scope:best-of", "type:feature"] },
+    "best-of-types": { "tags": ["scope:best-of", "type:types"] },
+    "best-of-ui": { "tags": ["scope:best-of", "type:ui"] },
+    "best-of-util": { "tags": ["scope:best-of", "type:util"] },
+    "image-elements": { "tags": ["scope:image-elements", "type:ui"] },
+    "serverless-data": { "tags": ["scope:serverless", "type:data"] },
+    "serverless-feature": { "tags": ["scope:serverless", "type:feature"] },
+    "serverless-types": { "tags": ["scope:serverless", "type:types"] },
+    "serverless-util": { "tags": ["scope:serverless", "type:util"] },
+    "shared-types": { "tags": ["scope:shared", "type:types"] },
+    "shared-util": { "tags": ["scope:shared", "type:util"] },
+    "shared-server-types": { "tags": ["scope:shared-server", "type:types"] },
+    "shared-server-util": { "tags": ["scope:shared-server", "type:util"] },
+    "ui-storybook": { "tags": ["scope:ui-storybook", "type:ui"] },
+    "web-socket-data": { "tags": ["scope:web-socket", "type:data"] },
+    "web-socket-feature": { "tags": ["scope:web-socket", "type:feature"] },
+    "web-socket-types": { "tags": ["scope:web-socket", "type:types"] },
+    "web-socket-util": { "tags": ["scope:web-socket", "type:util"] },
+    "website-data": { "tags": ["scope:website", "type:data"] },
+    "website-features-admin": { "tags": ["scope:website", "type:feature"] },
+    "website-features-home": { "tags": ["scope:website", "type:feature"] },
+    "website-types": { "tags": ["scope:website", "type:types"] },
+    "website-ui-ui-admin": { "tags": ["scope:website", "type:ui"] },
+    "website-ui-ui-common": { "tags": ["scope:website", "type:ui"] },
+    "website-ui-ui-directives": { "tags": ["scope:website", "type:ui"] },
+    "website-ui-ui-home": { "tags": ["scope:website", "type:ui"] },
+    "website-ui-ui-shell": { "tags": ["scope:website", "type:ui"] },
+    "website-util": { "tags": ["scope:website", "type:util"] }
   }
 }

@@ -1,15 +1,11 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
-import {
-  AzureStorageProvider,
-  TinifyImageProvider,
-} from '@dark-rush-photography/serverless/data';
-import { TinifyImageController } from './tinify-image.controller';
+import { AzureStorageProvider } from '@dark-rush-photography/serverless/data';
 import { TinifyImageService } from './tinify-image.service';
+import { TinifyImageController } from './tinify-image.controller';
 
 @Module({
-  imports: [HttpModule],
   controllers: [TinifyImageController],
-  providers: [TinifyImageService, TinifyImageProvider, AzureStorageProvider],
+  providers: [TinifyImageService, AzureStorageProvider],
 })
 export class TinifyImageModule {}

@@ -9,7 +9,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
-import { EntityType } from '@dark-rush-photography/shared-types';
+import { EntityType } from '@dark-rush-photography/shared/types';
 import { UploadImageService } from './upload-image.service';
 
 @Controller('upload-image')

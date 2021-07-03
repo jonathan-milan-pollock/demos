@@ -13,7 +13,6 @@
 - use ems instead of px for measurement
 - use a for links to other pages and button for actions
 - don't put href on anchor tags causes the page to reload
-- only export what is needed from utils index.ts files
 - names of variables and functions for Observables should end with $
 
 ---

@@ -1,133 +1,142 @@
-import { HttpService, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, switchMap, switchMapTo } from 'rxjs/operators';
 
 import {
-  ENV,
+  ContentType,
   ImageDimension,
+  ImageDimensionAdd,
   ImageDimensionData,
-} from '@dark-rush-photography/shared-types';
+  ThreeSixtyImageSettings,
+} from '@dark-rush-photography/shared/types';
 import {
-  Env,
-  ImageDimensionAddDto,
-  ImageDimensionUpdateDto,
-} from '@dark-rush-photography/api/types';
-import {
+  ContentProvider,
   Document,
   DocumentModel,
-  DocumentModelProvider,
-  ImageDimensionProvider,
-  ServerlessProvider,
+  ServerlessMediaProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class AdminImageDimensionsService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly imageDimensionProvider: ImageDimensionProvider,
-    private readonly documentModelProvider: DocumentModelProvider,
-    private readonly serverlessProvider: ServerlessProvider
+    private readonly contentProvider: ContentProvider,
+    private readonly serverlessMediaProvider: ServerlessMediaProvider
   ) {}
 
   add$(
     entityId: string,
     imageId: string,
-    imageDimensionAdd: ImageDimensionAddDto
+    imageDimensionAdd: ImageDimensionAdd
   ): Observable<ImageDimension> {
     const id = uuidv4();
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      switchMap((documentModel) => {
-        const foundImageDimension = this.imageDimensionProvider.findImageDimension(
-          imageId,
-          imageDimensionAdd.type,
-          documentModel.imageDimensions
-        );
-        if (foundImageDimension) return of(documentModel);
-
-        return from(
-          this.entityModel.findByIdAndUpdate(
-            entityId,
-            this.imageDimensionProvider.addImageDimension(
-              id,
-              entityId,
-              imageId,
-              imageDimensionAdd,
-              documentModel.imageDimensions
-            )
-          )
-        );
-      }),
-      switchMapTo(this.findOne$(id, entityId))
-    );
+    return this.contentProvider
+      .add$(
+        ContentType.ImageDimension,
+        entityId,
+        this.entityModel,
+        (documentModel) =>
+          !!documentModel.imageDimensions.find(
+            (imageDimension) =>
+              imageDimension.imageId === imageId &&
+              imageDimension.type === imageDimensionAdd.type
+          ),
+        (documentModel) => ({
+          imageDimensions: [
+            ...documentModel.imageDimensions,
+            { ...imageDimensionAdd, id, entityId, imageId },
+          ],
+        })
+      )
+      .pipe(switchMapTo(this.findOne$(id, entityId)));
   }
 
-  update$(
+  updateThreeSixtyImageSettings$(
     id: string,
     entityId: string,
-    imageDimension: ImageDimensionUpdateDto
+    threeSixtyImageSettings: ThreeSixtyImageSettings
   ): Observable<ImageDimension> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      switchMap((documentModel) => {
-        const foundImageDimension = this.imageDimensionProvider.validateFindImageDimension(
-          id,
-          documentModel.imageDimensions
-        );
-        const updateImageDimension = this.imageDimensionProvider.updateImageDimension(
-          id,
-          foundImageDimension,
-          imageDimension,
-          documentModel.imageDimensions
-        );
-        return from(
-          this.entityModel.findByIdAndUpdate(entityId, updateImageDimension)
-        );
-      }),
-      switchMapTo(this.findOne$(id, entityId))
-    );
+    return this.contentProvider
+      .update$(
+        ContentType.ImageDimension,
+        id,
+        entityId,
+        this.entityModel,
+        (documentModel) => {
+          const foundImageDimension = documentModel.imageDimensions.find(
+            (imageDimension) => imageDimension.id == id
+          );
+          return {
+            imageDimensions: [
+              ...documentModel.imageDimensions.filter(
+                (imageDimension) => imageDimension.id !== id
+              ),
+              {
+                ...foundImageDimension,
+                threeSixtyImageSettings: { ...threeSixtyImageSettings },
+              },
+            ],
+          } as Partial<DocumentModel>;
+        }
+      )
+      .pipe(switchMapTo(this.findOne$(id, entityId)));
   }
 
   findOne$(id: string, entityId: string): Observable<ImageDimension> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      map((documentModel) => {
-        const imageDimension = this.imageDimensionProvider.validateFindImageDimension(
-          id,
-          documentModel.imageDimensions
-        );
-        return this.imageDimensionProvider.toImageDimension(imageDimension);
-      })
+    return this.contentProvider
+      .findOne$(ContentType.ImageDimension, id, entityId, this.entityModel)
+      .pipe(
+        map((documentModel) =>
+          this.contentProvider.toImageDimension(
+            documentModel.imageDimensions.find(
+              (imageDimension) => imageDimension.id == id
+            )
+          )
+        )
+      );
+  }
+
+  findDataUri$(id: string, entityId: string): Observable<ImageDimensionData> {
+    return combineLatest([
+      this.contentProvider.findOne$(
+        ContentType.ImageDimension,
+        id,
+        entityId,
+        this.entityModel
+      ),
+      this.findOne$(id, entityId),
+    ]).pipe(
+      switchMap(([documentModel, imageDimension]) =>
+        this.serverlessMediaProvider.findDataUriImage$(
+          imageDimension.id,
+          imageDimension.imageId,
+          documentModel.type,
+          entityId
+        )
+      )
     );
   }
 
-  data$(id: string, entityId: string): Observable<ImageDimensionData> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.documentModelProvider.validateFind),
-      tap((documentModel) => {
-        this.imageDimensionProvider.validateFindImageDimension(
-          id,
-          documentModel.imageDimensions
-        );
-      }),
-      switchMap((documentModel) => {
-        return this.serverlessProvider.mediaData$(
-          this.env.serverless,
-          this.httpService,
-          'image-dimension-data',
-          id,
-          entityId,
-          documentModel.type
-        );
-      }),
-      map((response) => response as ImageDimensionData)
+  remove$(id: string, entityId: string): Observable<void> {
+    return this.contentProvider.remove$(
+      ContentType.ImageDimension,
+      id,
+      entityId,
+      this.entityModel,
+      (documentModel) => {
+        return {
+          imageDimensions: [
+            ...documentModel.imageDimensions.filter(
+              (imageDimension) => imageDimension.id !== id
+            ),
+          ],
+        } as Partial<DocumentModel>;
+      }
     );
   }
 }

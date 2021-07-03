@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { Destination } from '@dark-rush-photography/shared-types';
+import { Destination } from '@dark-rush-photography/shared/types';
 
 export const selectDestination = createAction(
   '[Destination] Select Destination',

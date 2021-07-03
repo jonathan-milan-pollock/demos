@@ -1,26 +1,27 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  ReviewMediaProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { AdminReviewMediaController } from './admin-review-media.controller';
 import { AdminReviewMediaService } from './admin-review-media.service';
+import { AdminReviewMediaController } from './admin-review-media.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [AdminReviewMediaController],
   providers: [
-    DocumentModelProvider,
-    ReviewMediaProvider,
     AdminReviewMediaService,
+    EntityProvider,
+    ServerlessEntityProvider,
   ],
 })
 export class AdminReviewMediaModule {}

@@ -758,22 +758,35 @@
         }
       }
     },
-    "shared-server-data": {
-      "root": "libs/shared-server/data",
-      "sourceRoot": "libs/shared-server/data/src",
+    "shared-types": {
+      "root": "libs/shared/types",
+      "sourceRoot": "libs/shared/types/src",
       "projectType": "library",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/shared-server/data/**/*.ts"]
+            "lintFilePatterns": ["libs/shared/types/**/*.ts"]
+          }
+        }
+      }
+    },
+    "shared-util": {
+      "root": "libs/shared/util",
+      "sourceRoot": "libs/shared/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util/**/*.ts"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared-server/data"],
+          "outputs": ["coverage/libs/shared/util"],
           "options": {
-            "jestConfig": "libs/shared-server/data/jest.config.js",
+            "jestConfig": "libs/shared/util/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -809,19 +822,6 @@
           "options": {
             "jestConfig": "libs/shared-server/util/jest.config.js",
             "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "shared-types": {
-      "root": "libs/shared-types",
-      "sourceRoot": "libs/shared-types/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/shared-types/**/*.ts"]
           }
         }
       }

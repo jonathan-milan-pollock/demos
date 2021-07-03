@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Emotion, EmotionType } from '@dark-rush-photography/shared-types';
+import { Emotion, EmotionType } from '@dark-rush-photography/shared/types';
 import { UserDto } from './user.dto';
 
 export class EmotionDto implements Emotion {

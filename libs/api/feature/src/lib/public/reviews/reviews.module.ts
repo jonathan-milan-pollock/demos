@@ -1,22 +1,23 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  ReviewProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { ReviewsController } from './reviews.controller';
 import { ReviewsService } from './reviews.service';
+import { ReviewsController } from './reviews.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [ReviewsController],
-  providers: [DocumentModelProvider, ReviewProvider, ReviewsService],
+  providers: [ReviewsService, EntityProvider, ServerlessEntityProvider],
 })
 export class ReviewsModule {}

@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 import {
   VideoDimension,
   VideoDimensionType,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import { MediaDimensionPixelsDto } from './media-dimension-pixels.dto';
 
 export class VideoDimensionDto implements VideoDimension {

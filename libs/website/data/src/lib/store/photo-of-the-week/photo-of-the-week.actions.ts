@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 
 export const selectPhotoOfTheWeek = createAction(
   '[Photo of the Week] Select Photo of the Week0',

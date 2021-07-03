@@ -2,6 +2,8 @@
   "window.zoomLevel": 0,
   "cSpell.words": [
     "APPINSIGHTS",
+    "Buildable",
+    "Chainable",
     "Exifed",
     "Haha",
     "INSTRUMENTATIONKEY",
@@ -32,6 +34,7 @@
     "tinify",
     "uuidv",
     "vcodec",
+    "websockets",
     "youtube"
   ],
   "azureFunctions.deploySubpath": ".",

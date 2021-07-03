@@ -1,14 +1,11 @@
-import { IsISO8601, IsString, IsUUID } from 'class-validator';
+import { IsISO8601, IsString } from 'class-validator';
 
-import { Video } from '@dark-rush-photography/shared-types';
+import { VideoAdd } from '@dark-rush-photography/shared/types';
 
-export class VideoAddDto implements Partial<Video> {
+export class VideoAddDto implements VideoAdd {
   @IsString()
   fileName!: string;
 
   @IsISO8601()
   dateCreated!: string;
-
-  @IsUUID()
-  coverImageId!: string;
 }

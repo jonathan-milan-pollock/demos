@@ -8,11 +8,11 @@ import {
   ENV,
   ImageDimensionData,
   ImageDimensionType,
-  PostState,
-} from '@dark-rush-photography/shared-types';
+  MediaState,
+} from '@dark-rush-photography/shared/types';
 import { Env } from '@dark-rush-photography/serverless/types';
 import { AzureStorageProvider } from './azure-storage.provider';
-import { findAzureStorageContainerType } from '@dark-rush-photography/serverless/util';
+import { getAzureStorageTypeFromMediaState } from '@dark-rush-photography/serverless/util';
 
 @Injectable()
 export class DataUriImageProvider {
@@ -27,12 +27,12 @@ export class DataUriImageProvider {
     entityType: EntityType,
     imageId: string,
     imageSlug: string,
-    state: PostState
+    state: MediaState
   ): Observable<ImageDimensionData> {
     return from(
       this.azureStorageProvider.dataUriForBlob$(
         this.env.azureStorageConnectionString,
-        findAzureStorageContainerType(state),
+        getAzureStorageTypeFromMediaState(state),
         `best-of/${entityType.toLowerCase()}/${imageDimensionType.toLowerCase()}/${imageSlug.toLowerCase()}.jpg`
       )
     ).pipe(

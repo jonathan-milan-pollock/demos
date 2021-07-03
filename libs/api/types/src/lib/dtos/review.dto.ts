@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review } from '@dark-rush-photography/shared/types';
 import { ImageDto } from './image.dto';
 import { ImageDimensionDto } from './image-dimension.dto';
 

@@ -3,8 +3,6 @@ import {
   Body,
   Param,
   Post,
-  Put,
-  Delete,
   HttpCode,
   UseGuards,
   Get,
@@ -18,7 +16,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { ADMIN, PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 import {
   PhotoOfTheWeekCreateDto,
   PhotoOfTheWeekDto,
@@ -40,18 +38,29 @@ export class AdminPhotoOfTheWeekController {
   @Post()
   @ApiCreatedResponse({ type: PhotoOfTheWeekDto })
   create$(
-    @Body() photoOfTheWeek: PhotoOfTheWeekCreateDto
+    @Body() photoOfTheWeekCreate: PhotoOfTheWeekCreateDto
   ): Observable<PhotoOfTheWeek> {
-    return this.adminPhotoOfTheWeekService.create$(photoOfTheWeek);
+    return this.adminPhotoOfTheWeekService.create$(photoOfTheWeekCreate);
   }
 
   @Roles(ADMIN)
-  @Put(':id')
-  update$(
+  @Post(':id/update')
+  @HttpCode(204)
+  updateProcess$(
     @Param('id') id: string,
-    @Body() photoOfTheWeek: PhotoOfTheWeekUpdateDto
-  ): Observable<PhotoOfTheWeek> {
-    return this.adminPhotoOfTheWeekService.update$(id, photoOfTheWeek);
+    @Body() photoOfTheWeekUpdate: PhotoOfTheWeekUpdateDto
+  ): Observable<void> {
+    return this.adminPhotoOfTheWeekService.updateProcess$(
+      id,
+      photoOfTheWeekUpdate
+    );
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  @HttpCode(204)
+  postProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminPhotoOfTheWeekService.postProcess$(id);
   }
 
   @Roles(ADMIN)
@@ -69,15 +78,9 @@ export class AdminPhotoOfTheWeekController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/post')
-  post$(@Param('id') id: string): Observable<PhotoOfTheWeek> {
-    return this.adminPhotoOfTheWeekService.post$(id);
-  }
-
-  @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminPhotoOfTheWeekService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminPhotoOfTheWeekService.deleteProcess$(id);
   }
 }

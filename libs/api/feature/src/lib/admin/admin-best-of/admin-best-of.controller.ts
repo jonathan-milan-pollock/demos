@@ -1,5 +1,4 @@
 import {
-  Delete,
   Controller,
   Param,
   Post,
@@ -17,7 +16,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, BestOf, BestOfType } from '@dark-rush-photography/shared-types';
+import { ADMIN, BestOf, BestOfType } from '@dark-rush-photography/shared/types';
 import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
   BestOfTypeValidationPipe,
@@ -61,16 +60,17 @@ export class AdminBestOfController {
   }
 
   @Roles(ADMIN)
-  @Delete(':bestOfType')
+  @Post(':bestOfType/:id/delete')
   @ApiParam({
     name: 'bestOfType',
     enum: BestOfType,
   })
   @HttpCode(204)
-  delete$(
+  deleteProcess$(
     @Param('bestOfType', new BestOfTypeValidationPipe())
-    bestOfType: BestOfType
+    bestOfType: BestOfType,
+    @Param('id') id: string
   ): Observable<void> {
-    return this.adminBestOfService.delete$(bestOfType);
+    return this.adminBestOfService.deleteProcess$(bestOfType, id);
   }
 }

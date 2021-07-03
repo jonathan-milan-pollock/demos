@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Event } from '@dark-rush-photography/shared-types';
+import { Event } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 import { ImageDto } from './image.dto';
 import { ImageDimensionDto } from './image-dimension.dto';

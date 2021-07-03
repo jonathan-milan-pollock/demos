@@ -1,6 +1,5 @@
 import {
   IsBoolean,
-  IsEnum,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -10,14 +9,11 @@ import {
   Min,
 } from 'class-validator';
 
-import { PostState, Video } from '@dark-rush-photography/shared-types';
+import { VideoUpdate } from '@dark-rush-photography/shared/types';
 
-export class VideoUpdateDto implements Partial<Video> {
+export class VideoUpdateDto implements VideoUpdate {
   @IsString()
   fileName!: string;
-
-  @IsEnum(PostState)
-  postState!: PostState;
 
   @IsInt()
   @Min(0)
@@ -46,7 +42,7 @@ export class VideoUpdateDto implements Partial<Video> {
   datePublished?: string;
 
   @IsUUID()
-  coverImageId!: string;
+  coverImageId?: string;
 
   @IsUrl()
   @IsOptional()
@@ -54,10 +50,4 @@ export class VideoUpdateDto implements Partial<Video> {
 
   @IsBoolean()
   isFlyOver!: boolean;
-
-  @IsBoolean()
-  isProcessed!: boolean;
-
-  @IsBoolean()
-  isLocked!: boolean;
 }

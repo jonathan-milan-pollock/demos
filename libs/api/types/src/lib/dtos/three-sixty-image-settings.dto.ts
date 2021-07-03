@@ -1,6 +1,6 @@
 import { IsNumber } from 'class-validator';
 
-import { ThreeSixtyImageSettings } from '@dark-rush-photography/shared-types';
+import { ThreeSixtyImageSettings } from '@dark-rush-photography/shared/types';
 
 export class ThreeSixtyImageSettingsDto implements ThreeSixtyImageSettings {
   @IsNumber()

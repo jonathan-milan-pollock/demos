@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Param,
-  Post,
-  Delete,
-  HttpCode,
-  UseGuards,
-  Get,
-} from '@nestjs/common';
+import { Controller, Post, HttpCode, UseGuards, Get } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -16,7 +8,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Favorites } from '@dark-rush-photography/shared-types';
+import { ADMIN, Favorites } from '@dark-rush-photography/shared/types';
 import { FavoritesDto } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminFavoritesService } from './admin-favorites.service';
@@ -43,9 +35,9 @@ export class AdminFavoritesController {
   }
 
   @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminFavoritesService.delete$(id);
+  deleteProcess$(id: string): Observable<void> {
+    return this.adminFavoritesService.deleteProcess$(id);
   }
 }

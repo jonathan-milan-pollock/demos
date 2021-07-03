@@ -7,13 +7,13 @@ import {
   VideoDimension,
   MediaDimensionPixels,
   VideoDimensionType,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import { EnvApi } from '@dark-rush-photography/serverless/types';
 
 export const addVideoDimension$ = (
   envApi: EnvApi,
   httpService: HttpService,
-  authToken: string,
+  accessToken: string,
   entityId: string,
   videoId: string,
   type: VideoDimensionType,
@@ -30,7 +30,7 @@ export const addVideoDimension$ = (
       },
       {
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'X-DRP-API-ADMIN-KEY': envApi.drpApiAdminKey,
         },
       }

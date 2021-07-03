@@ -3,13 +3,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  ReviewProvider,
-  ServerlessProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { AdminReviewsController } from './admin-reviews.controller';
 import { AdminReviewsService } from './admin-reviews.service';
+import { AdminReviewsController } from './admin-reviews.controller';
 
 @Module({
   imports: [
@@ -19,11 +18,6 @@ import { AdminReviewsService } from './admin-reviews.service';
     HttpModule,
   ],
   controllers: [AdminReviewsController],
-  providers: [
-    ServerlessProvider,
-    DocumentModelProvider,
-    ReviewProvider,
-    AdminReviewsService,
-  ],
+  providers: [AdminReviewsService, EntityProvider, ServerlessEntityProvider],
 })
 export class AdminReviewsModule {}

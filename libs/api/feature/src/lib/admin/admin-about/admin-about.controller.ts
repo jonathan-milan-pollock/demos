@@ -1,5 +1,4 @@
 import {
-  Delete,
   Controller,
   HttpCode,
   Param,
@@ -16,7 +15,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { About, ADMIN } from '@dark-rush-photography/shared-types';
+import { About, ADMIN } from '@dark-rush-photography/shared/types';
 import { AboutDto } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminAboutService } from './admin-about.service';
@@ -50,9 +49,9 @@ export class AdminAboutController {
   }
 
   @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminAboutService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminAboutService.deleteProcess$(id);
   }
 }

@@ -4,9 +4,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { from, Observable } from 'rxjs';
 import { mapTo, switchMap, tap } from 'rxjs/operators';
 
-import { ENV, PostState } from '@dark-rush-photography/shared-types';
+import { ENV, MediaState } from '@dark-rush-photography/shared/types';
 import {
-  AzureStorageContainerType,
+  AzureStorageType,
   Env,
   Activity,
   EXIF_IMAGE_ARTIST_FN,
@@ -27,9 +27,9 @@ export class ExifVideoProvider {
     return this.azureStorageProvider
       .downloadBlobToFile$(
         this.env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         this.azureStorageProvider.getBlobPath(
-          activity.postState,
+          activity.mediaState,
           activity.media
         ),
         activity.media.fileName
@@ -45,9 +45,12 @@ export class ExifVideoProvider {
         switchMap((resizedImageFilePath) =>
           this.azureStorageProvider.uploadStreamToBlob$(
             this.env.azureStorageConnectionString,
-            AzureStorageContainerType.Private,
+            AzureStorageType.Private,
             fs.createReadStream(resizedImageFilePath),
-            this.azureStorageProvider.getBlobPath(PostState.New, activity.media)
+            this.azureStorageProvider.getBlobPath(
+              MediaState.New,
+              activity.media
+            )
           )
         ),
         mapTo(Logger.log('Exif Video complete', ExifVideoProvider.name))

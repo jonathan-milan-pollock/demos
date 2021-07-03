@@ -1,6 +1,5 @@
 import {
   IsBoolean,
-  IsEnum,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -8,14 +7,11 @@ import {
   Min,
 } from 'class-validator';
 
-import { Image, PostState } from '@dark-rush-photography/shared-types';
+import { ImageUpdate } from '@dark-rush-photography/shared/types';
 
-export class ImageUpdateDto implements Partial<Image> {
+export class ImageUpdateDto implements ImageUpdate {
   @IsString()
   fileName!: string;
-
-  @IsEnum(PostState)
-  postState!: PostState;
 
   @IsInt()
   @Min(0)
@@ -48,10 +44,4 @@ export class ImageUpdateDto implements Partial<Image> {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
-
-  @IsBoolean()
-  isProcessed!: boolean;
-
-  @IsBoolean()
-  isLocked!: boolean;
 }

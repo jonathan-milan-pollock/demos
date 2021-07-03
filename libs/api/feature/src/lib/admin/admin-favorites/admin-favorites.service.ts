@@ -2,52 +2,46 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-import { EntityType, Favorites } from '@dark-rush-photography/shared-types';
+import { EntityType, Favorites } from '@dark-rush-photography/shared/types';
+import { FAVORITES_SLUG } from '@dark-rush-photography/shared-server/types';
 import {
   DocumentModel,
   Document,
-  FavoritesProvider,
-  DocumentModelProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AdminFavoritesService {
   constructor(
     @InjectModel(Document.name)
     private readonly favoritesModel: Model<DocumentModel>,
-    private readonly favoritesProvider: FavoritesProvider,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly serverlessEntityProvider: ServerlessEntityProvider
   ) {}
 
   create$(): Observable<Favorites> {
-    return from(
-      this.favoritesModel.findOne({ type: EntityType.Favorites })
-    ).pipe(
-      switchMap((documentModel) => {
-        if (documentModel) return of(documentModel);
-
-        return from(
-          new this.favoritesModel(this.favoritesProvider.newFavorites()).save()
-        );
-      }),
-      map(this.documentModelProvider.validateCreate),
-      map(this.favoritesProvider.fromDocumentModel)
-    );
+    return this.entityProvider.create$(
+      EntityType.Favorites,
+      FAVORITES_SLUG,
+      this.favoritesModel
+    ) as Observable<Favorites>;
   }
 
   findOne$(): Observable<Favorites> {
-    return from(this.favoritesModel.find({ type: EntityType.Favorites })).pipe(
-      map(this.documentModelProvider.validateOne),
-      map(this.favoritesProvider.fromDocumentModel)
-    );
+    return this.entityProvider
+      .findAll$(EntityType.Favorites, this.favoritesModel)
+      .pipe(map(this.entityProvider.validateOne)) as Observable<Favorites>;
   }
 
-  delete$(id: string): Observable<void> {
-    return from(this.favoritesModel.findByIdAndDelete(id)).pipe(
-      mapTo(undefined)
+  deleteProcess$(id: string): Observable<void> {
+    return this.serverlessEntityProvider.deleteProcess$(
+      EntityType.Favorites,
+      id,
+      this.favoritesModel
     );
   }
 }

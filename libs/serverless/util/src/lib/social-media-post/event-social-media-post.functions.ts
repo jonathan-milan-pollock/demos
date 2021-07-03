@@ -1,4 +1,4 @@
-import { Event } from '@dark-rush-photography/shared-types';
+import { Event } from '@dark-rush-photography/shared/types';
 
 export const getEventFacebookPost = (event: Event): string =>
   `

@@ -3,8 +3,6 @@ import {
   Body,
   Param,
   Post,
-  Put,
-  Delete,
   HttpCode,
   UseGuards,
   Get,
@@ -18,7 +16,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Event } from '@dark-rush-photography/shared-types';
+import { ADMIN, Event } from '@dark-rush-photography/shared/types';
 import {
   EventCreateDto,
   EventDto,
@@ -37,18 +35,25 @@ export class AdminEventsController {
   @Roles(ADMIN)
   @Post()
   @ApiCreatedResponse({ type: EventDto })
-  create$(@Body() event: EventCreateDto): Observable<Event> {
-    return this.adminEventsService.create$(event);
+  create$(@Body() eventCreate: EventCreateDto): Observable<Event> {
+    return this.adminEventsService.create$(eventCreate);
   }
 
   @Roles(ADMIN)
-  @Put(':id')
-  @ApiOkResponse({ type: EventDto })
-  update$(
+  @Post(':id/update')
+  @HttpCode(204)
+  updateProcess$(
     @Param('id') id: string,
-    @Body() event: EventUpdateDto
-  ): Observable<Event> {
-    return this.adminEventsService.update$(id, event);
+    @Body() eventUpdate: EventUpdateDto
+  ): Observable<void> {
+    return this.adminEventsService.updateProcess$(id, eventUpdate);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  @HttpCode(204)
+  postProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminEventsService.postProcess$(id);
   }
 
   @Roles(ADMIN)
@@ -66,15 +71,9 @@ export class AdminEventsController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/post')
-  post$(@Param('id') id: string): Observable<Event> {
-    return this.adminEventsService.post$(id);
-  }
-
-  @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminEventsService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminEventsService.deleteProcess$(id);
   }
 }

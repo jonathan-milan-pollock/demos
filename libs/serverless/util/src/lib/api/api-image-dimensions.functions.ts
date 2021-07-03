@@ -7,7 +7,7 @@ import {
   ImageDimension,
   MediaDimensionPixels,
   ImageDimensionType,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import { ActivityMedia, Env } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from './api-auth.functions';
 
@@ -35,7 +35,7 @@ export const addImageDimension$ = (
   const url = `${env.api.drpApi}/admin/v1/image-dimensions?entityId=${activityMedia.entityId}&imageId=${activityMedia.id}`;
   Logger.log(url, addImageDimension$.name);
   return apiAuth$(env.apiAuth, httpService).pipe(
-    switchMap((authToken) =>
+    switchMap((accessToken) =>
       httpService.put<ImageDimension>(
         url,
         {
@@ -44,7 +44,7 @@ export const addImageDimension$ = (
         },
         {
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${accessToken}`,
             'X-DRP-API-ADMIN-KEY': env.api.drpApiAdminKey,
           },
         }

@@ -13,7 +13,7 @@ import {
   Video,
   VideoDimension,
   Entity,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
@@ -111,6 +111,9 @@ export class Document implements Entity {
 
   @Prop({ type: [emotionSchema], required: true })
   emotions!: Emotion[];
+
+  @Prop({ type: Boolean, required: true, default: false })
+  isProcessing!: boolean;
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);

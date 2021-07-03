@@ -1,10 +1,27 @@
-import { IsEnum, ValidateNested } from 'class-validator';
+import {
+  IsEnum,
+  IsMongoId,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Emotion, EmotionType } from '@dark-rush-photography/shared-types';
+import { EmotionAdd, EmotionType } from '@dark-rush-photography/shared/types';
 import { UserDto } from './user.dto';
 
-export class EmotionAddDto implements Partial<Emotion> {
+export class EmotionAddDto implements EmotionAdd {
+  @IsMongoId()
+  entityId!: string;
+
+  @IsUUID()
+  @IsOptional()
+  mediaId?: string;
+
+  @IsUUID()
+  @IsOptional()
+  commentId?: string;
+
   @IsEnum(EmotionType)
   type!: EmotionType;
 

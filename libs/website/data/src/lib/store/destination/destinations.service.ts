@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { Destination } from '@dark-rush-photography/shared-types';
+import { Destination } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class DestinationsService {

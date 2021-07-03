@@ -1,4 +1,4 @@
-import { ImageDimensionType } from '@dark-rush-photography/shared-types';
+import { ImageDimensionType } from '@dark-rush-photography/shared/types';
 import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
 import { imageDimensionSettingsSchema } from './image-dimension-settings.schema';
 

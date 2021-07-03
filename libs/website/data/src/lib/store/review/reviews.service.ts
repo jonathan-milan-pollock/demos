@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review } from '@dark-rush-photography/shared/types';
 import { Observable } from 'rxjs';
 
 @Injectable()

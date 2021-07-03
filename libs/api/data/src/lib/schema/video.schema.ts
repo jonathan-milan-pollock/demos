@@ -1,12 +1,12 @@
-import { PostState } from '@dark-rush-photography/shared-types';
+import { MediaState } from '@dark-rush-photography/shared/types';
 
 export const videoSchema = {
   id: { type: String, required: false },
   entityId: { type: String, required: true },
   fileName: { type: String, required: true },
-  postState: {
+  state: {
     type: String,
-    enum: Object.keys(PostState),
+    enum: Object.keys(MediaState),
     required: true,
   },
   order: { type: Number, required: true },

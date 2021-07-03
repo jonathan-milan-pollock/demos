@@ -1,4 +1,4 @@
 export interface EnvServerless {
-  readonly drpServerlessUrl: string;
-  readonly drpServerlessFunctionsKey: string;
+  readonly url: string;
+  readonly functionsKey: string;
 }

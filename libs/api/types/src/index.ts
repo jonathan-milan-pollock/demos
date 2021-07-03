@@ -11,6 +11,9 @@ export * from './lib/dtos/destination-update.dto';
 export * from './lib/dtos/destination.dto';
 export * from './lib/dtos/emotion-add.dto';
 export * from './lib/dtos/emotion.dto';
+export * from './lib/dtos/entity-create.dto';
+export * from './lib/dtos/entity-update.dto';
+export * from './lib/dtos/entity.dto';
 export * from './lib/dtos/event-create.dto';
 export * from './lib/dtos/event-update.dto';
 export * from './lib/dtos/event.dto';
@@ -20,7 +23,6 @@ export * from './lib/dtos/geo-coordinates.dto';
 export * from './lib/dtos/image-add.dto';
 export * from './lib/dtos/image-dimension-add.dto';
 export * from './lib/dtos/image-dimension-data.dto';
-export * from './lib/dtos/image-dimension-update.dto';
 export * from './lib/dtos/image-dimension.dto';
 export * from './lib/dtos/image-update.dto';
 export * from './lib/dtos/image.dto';
@@ -46,5 +48,6 @@ export * from './lib/dtos/video-update.dto';
 export * from './lib/dtos/video.dto';
 
 // interfaces
+export * from './lib/interfaces/content.interface';
 export * from './lib/interfaces/env-serverless.interface';
 export * from './lib/interfaces/env.interface';

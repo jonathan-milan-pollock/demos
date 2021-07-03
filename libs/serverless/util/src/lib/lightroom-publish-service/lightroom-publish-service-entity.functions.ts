@@ -1,9 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 
+import { EntityType } from '@dark-rush-photography/shared/types';
 import {
-  EntityType,
   FAVORITES_SLUG,
-} from '@dark-rush-photography/shared-types';
+  REVIEW_MEDIA_SLUG,
+} from '@dark-rush-photography/shared-server/types';
 import { ActivityMedia } from '@dark-rush-photography/serverless/types';
 
 export const getAboutActivityMedia = (
@@ -106,7 +107,7 @@ export const getReviewMediaActivityMedia = (
 ): ActivityMedia => {
   return {
     entityType: EntityType.ReviewMedia,
-    entitySlug: fileNameSections[1].toLowerCase(),
+    entitySlug: REVIEW_MEDIA_SLUG,
     fileName: fileNameSections[2].toLowerCase(),
   };
 };

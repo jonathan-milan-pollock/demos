@@ -6,6 +6,8 @@ import {
   Param,
   Get,
   Query,
+  Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -15,7 +17,7 @@ import {
   ADMIN,
   VideoDimension,
   VideoDimensionData,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import {
   VideoDimensionAddDto,
   VideoDimensionDataDto,
@@ -33,6 +35,8 @@ export class AdminVideoDimensionsController {
     private readonly adminVideoDimensionsService: AdminVideoDimensionsService
   ) {}
 
+  //TODO: Update state
+  //TODO: Update is generated
   @Roles(ADMIN)
   @Post()
   @ApiOkResponse({ type: VideoDimensionDto })
@@ -61,10 +65,20 @@ export class AdminVideoDimensionsController {
   @Roles(ADMIN)
   @Get(':id/data')
   @ApiOkResponse({ type: VideoDimensionDataDto })
-  data$(
+  findDataUri$(
     @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<VideoDimensionData> {
-    return this.adminVideoDimensionsService.data$(id, entityId);
+    return this.adminVideoDimensionsService.findDataUri$(id, entityId);
+  }
+
+  @Roles(ADMIN)
+  @Delete(':id')
+  @HttpCode(204)
+  remove$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminVideoDimensionsService.remove$(id, entityId);
   }
 }

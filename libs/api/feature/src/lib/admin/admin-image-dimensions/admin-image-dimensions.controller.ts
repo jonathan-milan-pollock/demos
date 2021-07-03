@@ -7,6 +7,8 @@ import {
   Get,
   Post,
   Query,
+  Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -16,12 +18,12 @@ import {
   ADMIN,
   ImageDimension,
   ImageDimensionData,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import {
   ImageDimensionAddDto,
   ImageDimensionDataDto,
   ImageDimensionDto,
-  ImageDimensionUpdateDto,
+  ThreeSixtyImageSettingsDto,
 } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminImageDimensionsService } from './admin-image-dimensions.service';
@@ -41,27 +43,27 @@ export class AdminImageDimensionsController {
   add$(
     @Query('entityId') entityId: string,
     @Query('imageId') imageId: string,
-    @Body() imageDimension: ImageDimensionAddDto
+    @Body() imageDimensionAdd: ImageDimensionAddDto
   ): Observable<ImageDimension> {
     return this.adminImageDimensionsService.add$(
       entityId,
       imageId,
-      imageDimension
+      imageDimensionAdd
     );
   }
 
   @Roles(ADMIN)
-  @Put(':id')
+  @Put(':id/three-sixty-image-settings')
   @ApiOkResponse({ type: ImageDimensionDto })
-  update$(
+  updateThreeSixtyImageSettings$(
     @Param('id') id: string,
     @Query('entityId') entityId: string,
-    @Body() imageDimension: ImageDimensionUpdateDto
+    @Body() threeSixtyImageSettings: ThreeSixtyImageSettingsDto
   ): Observable<ImageDimension> {
-    return this.adminImageDimensionsService.update$(
+    return this.adminImageDimensionsService.updateThreeSixtyImageSettings$(
       id,
       entityId,
-      imageDimension
+      threeSixtyImageSettings
     );
   }
 
@@ -78,10 +80,20 @@ export class AdminImageDimensionsController {
   @Roles(ADMIN)
   @Get(':id/data')
   @ApiOkResponse({ type: ImageDimensionDataDto })
-  data$(
+  findDataUri$(
     @Param('id') id: string,
     @Query('entityId') entityId: string
   ): Observable<ImageDimensionData> {
-    return this.adminImageDimensionsService.data$(id, entityId);
+    return this.adminImageDimensionsService.findDataUri$(id, entityId);
+  }
+
+  @Roles(ADMIN)
+  @Delete(':id')
+  @HttpCode(204)
+  remove$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminImageDimensionsService.remove$(id, entityId);
   }
 }

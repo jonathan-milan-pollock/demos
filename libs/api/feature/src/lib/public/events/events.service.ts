@@ -2,15 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { map, switchMap, toArray } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-import { Event, EntityType } from '@dark-rush-photography/shared-types';
+import { Event, EntityType } from '@dark-rush-photography/shared/types';
 import {
   DocumentModel,
   Document,
-  EventProvider,
-  DocumentModelProvider,
+  EntityProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,22 +16,21 @@ export class EventsService {
   constructor(
     @InjectModel(Document.name)
     private readonly eventModel: Model<DocumentModel>,
-    private readonly eventProvider: EventProvider,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   findAll$(): Observable<Event[]> {
-    return from(this.eventModel.find({ type: EntityType.Event })).pipe(
-      switchMap((documentModels) => from(documentModels)),
-      map(this.eventProvider.fromDocumentModelPublic),
-      toArray<Event>()
-    );
+    return this.entityProvider.findAllPublic$(
+      EntityType.Event,
+      this.eventModel
+    ) as Observable<Event[]>;
   }
 
   findOne$(id: string): Observable<Event> {
-    return from(this.eventModel.findById(id)).pipe(
-      map(this.documentModelProvider.validateFind),
-      map(this.eventProvider.fromDocumentModelPublic)
-    );
+    return this.entityProvider.findOnePublic$(
+      EntityType.Event,
+      id,
+      this.eventModel
+    ) as Observable<Event>;
   }
 }

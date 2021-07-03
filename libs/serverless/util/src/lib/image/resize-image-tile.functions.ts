@@ -1,25 +1,21 @@
-﻿import { Logger } from '@nestjs/common';
+﻿import { EMPTY, Observable } from 'rxjs';
+import { expand, mergeMap, map, filter } from 'rxjs/operators';
 
-import { EMPTY, Observable } from 'rxjs';
-import { tap, expand, mergeMap, map, filter } from 'rxjs/operators';
-
-import { MediaDimensionPixels } from '@dark-rush-photography/shared-types';
+import { MediaDimensionPixels } from '@dark-rush-photography/shared/types';
 import { ImageDimensionTileConfig } from '@dark-rush-photography/serverless/types';
 import { findImageDimensionPixelsWithFileName$ } from './image-dimension-pixels.functions';
 import { resizeLongestEdge$ } from './resize-longest-edge.functions';
 
 export const resizeAndFindDimensions$ = (
-  imageFilePath: string,
-  imageName: string,
+  fileName: string,
+  filePath: string,
   updatedLongestEdge: number
 ): Observable<{
   pixels: MediaDimensionPixels;
-  imageFilePath: string;
+  filePath: string;
 }> =>
-  resizeLongestEdge$(imageFilePath, imageName, updatedLongestEdge).pipe(
-    mergeMap((imageFilePath) =>
-      findImageDimensionPixelsWithFileName$(imageFilePath)
-    )
+  resizeLongestEdge$(fileName, filePath, updatedLongestEdge).pipe(
+    mergeMap(findImageDimensionPixelsWithFileName$)
   );
 
 const isValidDimensionPixels = (
@@ -29,30 +25,21 @@ const isValidDimensionPixels = (
 ) => pixels.width >= minWidth && pixels.height >= minHeight;
 
 export const resizeImageTile$ = (
-  imageFilePath: string,
-  imageName: string,
+  fileName: string,
+  filePath: string,
   imageDimensionTileConfig: ImageDimensionTileConfig
 ): Observable<string> => {
   const { minWidth, minHeight, longestEdge } = imageDimensionTileConfig;
 
   let updatedLongestEdge = longestEdge;
-  return resizeAndFindDimensions$(
-    imageFilePath,
-    imageName,
-    updatedLongestEdge
-  ).pipe(
-    expand(({ pixels, imageFilePath }) => {
+  return resizeAndFindDimensions$(fileName, filePath, updatedLongestEdge).pipe(
+    expand(({ pixels, filePath }) => {
       updatedLongestEdge += 10;
       return isValidDimensionPixels(pixels, minWidth, minHeight)
         ? EMPTY
-        : resizeAndFindDimensions$(
-            imageFilePath,
-            imageName,
-            updatedLongestEdge
-          );
+        : resizeAndFindDimensions$(fileName, filePath, updatedLongestEdge);
     }),
     filter(({ pixels }) => isValidDimensionPixels(pixels, minWidth, minHeight)),
-    map(({ imageFilePath }) => imageFilePath),
-    tap(() => Logger.log(`Returning resized image tile`, resizeImageTile$.name))
+    map(({ filePath }) => filePath)
   );
 };

@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { About } from '@dark-rush-photography/shared-types';
+import { About } from '@dark-rush-photography/shared/types';
 import { AboutDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { AboutService } from './about.service';

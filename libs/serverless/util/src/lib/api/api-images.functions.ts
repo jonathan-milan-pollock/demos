@@ -3,7 +3,7 @@ import { BadRequestException, HttpService, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { Image } from '@dark-rush-photography/shared-types';
+import { Image } from '@dark-rush-photography/shared/types';
 import { ActivityMedia, Env } from '@dark-rush-photography/serverless/types';
 import { apiAuth$ } from './api-auth.functions';
 
@@ -13,7 +13,7 @@ export const addImage$ = (
   activityMedia: ActivityMedia,
   dateCreated: string
 ): Observable<Image> => {
-  const url = `${env.api.drpApi}/admin/v1/images?entityId=${activityMedia.entityId}`;
+  const url = `${env.api.drpApi}/admin/v1/media?entityId=${activityMedia.entityId}`;
   Logger.log(url, addImage$.name);
   Logger.log('fileName' + activityMedia.fileName, addImage$.name);
   Logger.log('dateCreated' + dateCreated, addImage$.name);
@@ -31,7 +31,7 @@ export const addImage$ = (
   }
 
   return apiAuth$(env.apiAuth, httpService).pipe(
-    switchMap((authToken) =>
+    switchMap((accessToken) =>
       httpService.post<Image>(
         url,
         {
@@ -40,7 +40,7 @@ export const addImage$ = (
         },
         {
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${accessToken}`,
             'X-DRP-API-ADMIN-KEY': env.api.drpApiAdminKey,
           },
         }

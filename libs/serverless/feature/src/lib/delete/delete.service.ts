@@ -9,11 +9,11 @@ import { map, switchMapTo, tap } from 'rxjs/operators';
 import {
   EntityType,
   ENV,
-  PostState,
-} from '@dark-rush-photography/shared-types';
+  MediaState,
+} from '@dark-rush-photography/shared/types';
 import {
   ActivityOrchestratorType,
-  AzureStorageContainerType,
+  AzureStorageType,
   Env,
 } from '@dark-rush-photography/serverless/types';
 import {
@@ -35,7 +35,7 @@ export class DeleteService {
     entityType: EntityType,
     entityGroup: string,
     entitySlug: string,
-    postState: PostState,
+    mediaState: MediaState,
     request: AzureRequest
   ): Promise<IHttpResponse> {
     Logger.log('Delete', DeleteService.name);
@@ -50,13 +50,13 @@ export class DeleteService {
     );
 
     const blobPath = this.azureStorageProvider.getBlobPath(
-      postState,
+      mediaState,
       activityUpload.media
     );
     return this.azureStorageProvider
       .uploadBufferToBlob$(
         this.env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         activityUpload.file.buffer,
         blobPath
       )
@@ -76,7 +76,7 @@ export class DeleteService {
               ActivityOrchestratorType.Delete,
               undefined,
               this.deleteProvider.getOrchestratorInput(
-                postState,
+                mediaState,
                 activityUpload.media
               )
             )

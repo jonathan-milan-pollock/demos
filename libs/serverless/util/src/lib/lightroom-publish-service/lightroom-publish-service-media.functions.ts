@@ -1,6 +1,6 @@
 import { BadRequestException, Logger } from '@nestjs/common';
 
-import { EntityType } from '@dark-rush-photography/shared-types';
+import { EntityType } from '@dark-rush-photography/shared/types';
 import {
   getAboutActivityMedia,
   getBestOfActivityMedia,
@@ -41,7 +41,7 @@ const activityMediaMap = new Map<
 
 const getFileNameSections = (fileName: string) => {
   const fileNameSections = fileName.split('---');
-  if (fileNameSections.length === 0) {
+  if (fileNameSections.length == 0) {
     const message = '--- is required to separate publish service segments';
     Logger.log(message, getFileNameSections.name);
     throw new BadRequestException(message);
@@ -88,7 +88,7 @@ export const getPublishServiceActivityMedia = (
   const fileNameSections = getFileNameSections(fileName);
   const entityName = getEntityName(fileNameSections[0]);
 
-  if (entityName === 'bestof') {
+  if (entityName == 'bestof') {
     return getBestOfActivityMedia(fileNameSections);
   }
 

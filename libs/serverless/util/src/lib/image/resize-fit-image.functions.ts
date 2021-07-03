@@ -2,7 +2,7 @@
 import { from, Observable } from 'rxjs';
 import { mapTo, switchMap } from 'rxjs/operators';
 
-import { MediaDimensionPixels } from '@dark-rush-photography/shared-types';
+import { MediaDimensionPixels } from '@dark-rush-photography/shared/types';
 import { ImageDimensionStandardConfig } from '@dark-rush-photography/serverless/types';
 import { createTempFile$ } from '../file/file.functions';
 

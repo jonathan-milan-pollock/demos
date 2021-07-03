@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 
-import { ENV } from '@dark-rush-photography/shared-types';
+import { ENV } from '@dark-rush-photography/shared/types';
 import { environment } from '../environments/environment';
 
 @Global()

@@ -9,11 +9,11 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Destination } from '@dark-rush-photography/shared-types';
+import { DestinationUpdate } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 import { SocialMediaUrlDto } from './social-media-url.dto';
 
-export class DestinationUpdateDto implements Partial<Destination> {
+export class DestinationUpdateDto implements DestinationUpdate {
   @IsString()
   slug!: string;
 

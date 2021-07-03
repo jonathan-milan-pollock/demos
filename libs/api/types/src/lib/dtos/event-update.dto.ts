@@ -9,10 +9,10 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Event } from '@dark-rush-photography/shared-types';
+import { EventUpdate } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 
-export class EventUpdateDto implements Partial<Event> {
+export class EventUpdateDto implements EventUpdate {
   @IsNumberString()
   group!: string;
 

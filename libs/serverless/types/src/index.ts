@@ -1,3 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Express } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer';
+
 // constants
 export * from './lib/constants/constants';
 export * from './lib/constants/exif-image-artist.constants';
@@ -8,7 +13,7 @@ export * from './lib/constants/video-dimension-config.constants';
 // enums
 export * from './lib/enums/activity-orchestrator-type.enum';
 export * from './lib/enums/activity-type.enum';
-export * from './lib/enums/azure-storage-container-type.enum';
+export * from './lib/enums/azure-storage-type.enum';
 
 // interfaces
 export * from './lib/interfaces/activity-config.interface';

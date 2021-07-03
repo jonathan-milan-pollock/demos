@@ -23,7 +23,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Image } from '@dark-rush-photography/shared-types';
+import { ADMIN, Image } from '@dark-rush-photography/shared/types';
 import {
   FileUploadDto,
   ImageAddDto,
@@ -45,9 +45,53 @@ export class AdminImagesController {
   @ApiOkResponse({ type: ImageDto })
   add$(
     @Query('entityId') entityId: string,
-    @Body() image: ImageAddDto
+    @Body() imageAdd: ImageAddDto
   ): Observable<Image> {
-    return this.adminImagesService.add$(entityId, image);
+    return this.adminImagesService.add$(entityId, imageAdd);
+  }
+
+  @Roles(ADMIN)
+  @Post('upload-image')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  @HttpCode(204)
+  upload$(
+    @Query('entityId') entityId: string,
+    @UploadedFile() image: Express.Multer.File
+  ): Observable<void> {
+    return this.adminImagesService.uploadImage$(entityId, image);
+  }
+
+  @Roles(ADMIN)
+  @Post('upload-three-sixty-image')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  @HttpCode(204)
+  uploadThreeSixtyImage$(
+    @Query('entityId') entityId: string,
+    @UploadedFile() threeSixtyImage: Express.Multer.File
+  ): Observable<void> {
+    return this.adminImagesService.uploadThreeSixtyImage$(
+      entityId,
+      threeSixtyImage
+    );
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/update')
+  @HttpCode(204)
+  updateProcess$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string,
+    @Body() imageUpdate: ImageUpdateDto
+  ): Observable<void> {
+    return this.adminImagesService.updateProcess$(id, entityId, imageUpdate);
   }
 
   @Roles(ADMIN)
@@ -56,9 +100,19 @@ export class AdminImagesController {
   update$(
     @Param('id') id: string,
     @Query('entityId') entityId: string,
-    @Body() image: ImageUpdateDto
+    @Body() imageUpdate: ImageUpdateDto
   ): Observable<Image> {
-    return this.adminImagesService.update$(id, entityId, image);
+    return this.adminImagesService.update$(id, entityId, imageUpdate);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  @HttpCode(204)
+  postProcess$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminImagesService.postProcess$(id, entityId);
   }
 
   @Roles(ADMIN)
@@ -72,17 +126,13 @@ export class AdminImagesController {
   }
 
   @Roles(ADMIN)
-  @Post('upload-three-sixty')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: FileUploadDto,
-  })
-  uploadThreeSixtyImage$(
-    @Query('entityId') entityId: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminImagesService.uploadThreeSixtyImage$(entityId, file);
+  @Post(':id/remove')
+  @HttpCode(204)
+  removeProcess$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminImagesService.removeProcess$(id, entityId);
   }
 
   @Roles(ADMIN)
