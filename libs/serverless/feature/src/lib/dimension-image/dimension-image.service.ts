@@ -1,13 +1,11 @@
-import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
+import * as fs from 'fs-extra';
+import { Injectable, Inject, Logger, HttpService } from '@nestjs/common';
 
-import { switchMap, take } from 'rxjs/operators';
+import { combineLatest, of } from 'rxjs';
+import { mapTo, mergeMap, switchMap, take } from 'rxjs/operators';
 
-import { ENV } from '@dark-rush-photography/shared-types';
-import {
-  Env,
-  Activity,
-  AzureStorageContainerType,
-} from '@dark-rush-photography/serverless/types';
+import { ENV } from '@dark-rush-photography/shared/types';
+import { Env, Activity } from '@dark-rush-photography/serverless/types';
 import {
   AzureStorageProvider,
   DimensionImageProvider,
@@ -23,23 +21,28 @@ export class DimensionImageService {
   ) {}
 
   dimensionImage(activity: Activity): Promise<Activity> {
-    Logger.log('Dimension Image', DimensionImageService.name);
-
-    const activityConfig = this.dimensionImageProvider.validateActivityConfig(
+    const imageDimensionConfig = this.dimensionImageProvider.getImageDimensionConfig(
       activity.config
     );
-    const imageDimensionConfig = this.dimensionImageProvider.findImageDimensionConfig(
-      activityConfig
+    Logger.log(
+      `Dimension Image started for ${imageDimensionConfig.type}`,
+      DimensionImageService.name
+    );
+
+    const azureStorageType = this.azureStorageProvider.getAzureStorageType(
+      activity.media.state
+    );
+    const blobPath = this.azureStorageProvider.getBlobPath(activity.media);
+    const blobPathWithImageDimension = this.azureStorageProvider.getBlobPathWithImageDimension(
+      activity.media,
+      imageDimensionConfig.type
     );
 
     return this.azureStorageProvider
       .downloadBlobToFile$(
         this.env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
-        this.azureStorageProvider.getBlobPath(
-          activity.postState,
-          activity.media
-        ),
+        azureStorageType,
+        blobPath,
         activity.media.fileName
       )
       .pipe(
@@ -50,12 +53,31 @@ export class DimensionImageService {
             imageDimensionConfig
           )
         ),
-        switchMap((newImageFilePath) =>
-          this.dimensionImageProvider.addImageDimension$(
-            activity,
+        mergeMap((newFilePath) =>
+          combineLatest([
+            of(newFilePath),
+            this.azureStorageProvider.uploadStreamToBlob$(
+              this.env.azureStorageConnectionString,
+              azureStorageType,
+              fs.createReadStream(newFilePath),
+              blobPathWithImageDimension
+            ),
+          ])
+        ),
+        switchMap(([newFilePath]) =>
+          this.dimensionImageProvider.findImageDimensionPixels$(newFilePath)
+        ),
+        switchMap((pixels) =>
+          addImageDimension$(
+            this.env,
+            this.httpService,
+            activity.media,
             imageDimensionConfig.type,
-            newImageFilePath
+            pixels
           )
+        ),
+        mapTo(
+          Logger.log('Dimension Image complete', DimensionImageService.name)
         ),
         take(1)
       )

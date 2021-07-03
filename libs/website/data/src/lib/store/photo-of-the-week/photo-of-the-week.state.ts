@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 
 export const photoOfTheWeekAdapter: EntityAdapter<PhotoOfTheWeek> = createEntityAdapter<PhotoOfTheWeek>(
   {

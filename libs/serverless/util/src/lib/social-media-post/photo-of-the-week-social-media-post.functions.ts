@@ -1,4 +1,4 @@
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 
 export const getPhotoOfTheWeekFacebookPost = (
   photoOfTheWeek: PhotoOfTheWeek

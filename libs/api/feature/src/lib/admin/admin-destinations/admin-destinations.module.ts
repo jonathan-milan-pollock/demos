@@ -2,14 +2,13 @@ import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  DestinationProvider,
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  ServerlessProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { AdminDestinationsController } from './admin-destinations.controller';
 import { AdminDestinationsService } from './admin-destinations.service';
+import { AdminDestinationsController } from './admin-destinations.controller';
 
 @Module({
   imports: [
@@ -20,10 +19,9 @@ import { AdminDestinationsService } from './admin-destinations.service';
   ],
   controllers: [AdminDestinationsController],
   providers: [
-    ServerlessProvider,
-    DocumentModelProvider,
-    DestinationProvider,
     AdminDestinationsService,
+    EntityProvider,
+    ServerlessEntityProvider,
   ],
 })
 export class AdminDestinationsModule {}

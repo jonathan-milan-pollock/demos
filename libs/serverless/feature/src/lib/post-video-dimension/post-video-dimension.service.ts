@@ -1,5 +1,5 @@
 import { AzureRequest } from '@nestjs/azure-func-http';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { IHttpResponse } from 'durable-functions/lib/src/ihttpresponse';
 
@@ -21,8 +21,6 @@ export class PostVideoDimensionService {
     activity: Activity
   ): Promise<IHttpResponse> {
     Logger.log('Post Video Dimension', PostVideoDimensionService.name);
-    return this.postVideoDimensionProvider
-      .postImage$(request.context, activity.media)
-      .toPromise();
+    throw new NotFoundException();
   }
 }

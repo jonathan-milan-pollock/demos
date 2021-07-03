@@ -1,7 +1,7 @@
 import { IsArray, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { SocialMedia } from '@dark-rush-photography/shared-types';
+import { SocialMedia } from '@dark-rush-photography/shared/types';
 import { ImageDto } from './image.dto';
 import { ImageDimensionDto } from './image-dimension.dto';
 import { VideoDto } from './video.dto';

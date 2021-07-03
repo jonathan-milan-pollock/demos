@@ -5,17 +5,17 @@ import { map, tap } from 'rxjs/operators';
 
 import { Logger } from '@nestjs/common';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/serverless/types';
 import { getAzureStorageContainerClient$ } from './azure-storage-container-client.functions';
 
 export const getAzureStorageBlockBlobClient$ = (
   azureStorageConnectionString: string,
-  azureStorageContainerType: AzureStorageContainerType,
+  azureStorageType: AzureStorageType,
   blobPath: string
 ): Observable<BlockBlobClient> =>
   getAzureStorageContainerClient$(
     azureStorageConnectionString,
-    azureStorageContainerType
+    azureStorageType
   ).pipe(
     tap(() =>
       Logger.log(

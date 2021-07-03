@@ -5,3 +5,4 @@ export const DRP_SERVERLESS_URL_DEV = 'http://localhost:2222/api';
 export const IS_PUBLIC = 'isPublic';
 export const JWT = 'jwt';
 export const ROLES = 'roles';
+export const DEFAULT_GROUP = ' ';

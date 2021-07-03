@@ -1,28 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Express } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Multer } from 'multer';
-
 // providers
-export * from './lib/providers/about.provider';
-export * from './lib/providers/best-of.provider';
-export * from './lib/providers/comment.provider';
-export * from './lib/providers/destination.provider';
-export * from './lib/providers/document-model.provider';
-export * from './lib/providers/emotion.provider';
+export * from './lib/providers/content.provider';
 export * from './lib/providers/entity.provider';
-export * from './lib/providers/event.provider';
-export * from './lib/providers/favorites.provider';
-export * from './lib/providers/image-dimension.provider';
-export * from './lib/providers/image.provider';
-export * from './lib/providers/media-process.provider';
-export * from './lib/providers/photo-of-the-week.provider';
-export * from './lib/providers/review-media.provider';
-export * from './lib/providers/review.provider';
-export * from './lib/providers/serverless.provider';
-export * from './lib/providers/social-media.provider';
-export * from './lib/providers/video-dimension.provider';
-export * from './lib/providers/video.provider';
+export * from './lib/providers/serverless-entity.provider';
+export * from './lib/providers/serverless-media.provider';
 
 // schema
 export * from './lib/schema/document.schema';

@@ -1,49 +1,116 @@
 import { Injectable } from '@nestjs/common';
 
-import { About, EntityType } from '@dark-rush-photography/shared-types';
+import { Model } from 'mongoose';
+import { from, Observable } from 'rxjs';
+import { filter, map, switchMap, switchMapTo, toArray } from 'rxjs/operators';
+
+import {
+  BestOfType,
+  Entity,
+  EntityType,
+  MediaProcessType,
+} from '@dark-rush-photography/shared/types';
+import { DEFAULT_GROUP } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { toImage } from '../functions/image.functions';
-import { toImageDimension } from '../functions/image-dimension.functions';
-import { toVideo } from '../functions/video.functions';
-import { toVideoDimension } from '../functions/video-dimension.functions';
-import { findPublicContent } from '../functions/public.functions';
+import {
+  fromDocumentModel,
+  fromDocumentModelPublic,
+  newEntity,
+} from '../entities/entity.functions';
+import {
+  validateEntityCreate,
+  validateEntityType,
+  validateEntityFound,
+  validateEntityIsPublic,
+  validateEntityNotFound,
+} from '../entities/entity-validation.functions';
 
 @Injectable()
 export class EntityProvider {
-  newEntity(slug: string): About {
-    return {
-      type: EntityType.About,
-      slug,
-      isPublic: true,
-      images: [],
-      imageDimensions: [],
-      videos: [],
-      videoDimensions: [],
-    } as About;
+  getEntityTypeFromBestOfType(bestOfType: BestOfType): EntityType {
+    return this.getEntityTypeFromBestOfType(bestOfType);
   }
 
-  fromDocumentModel = (documentModel: DocumentModel): About => ({
-    id: documentModel._id,
-    slug: documentModel.slug,
-    images: documentModel.images.map((image) => toImage(image)),
-    imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
-      toImageDimension(imageDimension)
-    ),
-    videos: documentModel.videos.map((video) => toVideo(video)),
-    videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
-      toVideoDimension(videoDimension)
-    ),
-  });
+  getEntityTypeFromMediaProcessType(
+    mediaProcessType: MediaProcessType
+  ): EntityType {
+    return this.getEntityTypeFromMediaProcessType(mediaProcessType);
+  }
 
-  fromDocumentModelPublic = (documentModel: DocumentModel): About => {
-    const publicContent = findPublicContent(documentModel);
-    return {
-      id: documentModel._id,
-      slug: documentModel.slug,
-      images: publicContent.images,
-      imageDimensions: publicContent.imageDimensions,
-      videos: publicContent.videos,
-      videoDimensions: publicContent.videoDimensions,
-    };
-  };
+  validateFound(documentModel: DocumentModel | null): DocumentModel {
+    return validateEntityFound(documentModel);
+  }
+
+  validateEntityType(
+    entityType: EntityType,
+    documentModel: DocumentModel
+  ): DocumentModel {
+    return validateEntityType(entityType, documentModel);
+  }
+
+  validateOne(documentModels: Partial<Entity>[]): Partial<Entity> {
+    return this.validateOne(documentModels);
+  }
+
+  create$(
+    entityType: EntityType,
+    slug: string,
+    entityModel: Model<DocumentModel>,
+    group = DEFAULT_GROUP
+  ): Observable<Partial<Entity>> {
+    return from(entityModel.findOne({ type: entityType, group, slug })).pipe(
+      map(validateEntityNotFound),
+      switchMapTo(from(new entityModel(newEntity(entityType, slug)).save())),
+      map(validateEntityCreate),
+      map((documentModel) => fromDocumentModel(entityType, documentModel))
+    );
+  }
+
+  findAll$(
+    entityType: EntityType,
+    entityModel: Model<DocumentModel>
+  ): Observable<Partial<Entity>[]> {
+    return from(entityModel.find({ type: entityType })).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      map((documentModel) => fromDocumentModel(entityType, documentModel)),
+      toArray<Partial<Entity>>()
+    );
+  }
+
+  findOne$(
+    entityType: EntityType,
+    id: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<Partial<Entity>> {
+    return from(entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      map((documentModel) => fromDocumentModel(entityType, documentModel))
+    );
+  }
+
+  findAllPublic$(
+    entityType: EntityType,
+    entityModel: Model<DocumentModel>
+  ): Observable<Partial<Entity>[]> {
+    return from(entityModel.find({ type: entityType })).pipe(
+      switchMap((documentModels) => from(documentModels)),
+      filter((documentModel) => !documentModel.isPublic),
+      map((documentModel) => fromDocumentModel(entityType, documentModel)),
+      toArray<Partial<Entity>>()
+    );
+  }
+
+  findOnePublic$(
+    entityType: EntityType,
+    id: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<Partial<Entity>> {
+    return from(entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map(validateEntityIsPublic),
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      map((documentModel) => fromDocumentModelPublic(entityType, documentModel))
+    );
+  }
 }

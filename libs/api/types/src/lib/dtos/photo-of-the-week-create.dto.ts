@@ -1,8 +1,8 @@
 import { IsNumberString, IsString } from 'class-validator';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekCreate } from '@dark-rush-photography/shared/types';
 
-export class PhotoOfTheWeekCreateDto implements Partial<PhotoOfTheWeek> {
+export class PhotoOfTheWeekCreateDto implements PhotoOfTheWeekCreate {
   @IsNumberString()
   group!: string;
 

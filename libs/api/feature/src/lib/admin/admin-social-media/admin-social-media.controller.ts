@@ -1,6 +1,5 @@
 import {
   Body,
-  Delete,
   Controller,
   HttpCode,
   Param,
@@ -17,7 +16,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, SocialMedia } from '@dark-rush-photography/shared-types';
+import { ADMIN, SocialMedia } from '@dark-rush-photography/shared/types';
 import {
   SocialMediaCreateDto,
   SocialMediaDto,
@@ -37,8 +36,10 @@ export class AdminSocialMediaController {
   @Roles(ADMIN)
   @Post()
   @ApiCreatedResponse({ type: SocialMediaDto })
-  create$(@Body() socialMedia: SocialMediaCreateDto): Observable<SocialMedia> {
-    return this.adminSocialMediaService.create$(socialMedia);
+  create$(
+    @Body() socialMediaCreate: SocialMediaCreateDto
+  ): Observable<SocialMedia> {
+    return this.adminSocialMediaService.create$(socialMediaCreate);
   }
 
   @Roles(ADMIN)
@@ -56,9 +57,9 @@ export class AdminSocialMediaController {
   }
 
   @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminSocialMediaService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminSocialMediaService.deleteProcess$(id);
   }
 }

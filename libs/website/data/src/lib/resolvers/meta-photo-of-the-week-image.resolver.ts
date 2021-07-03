@@ -7,7 +7,7 @@ import { take, map } from 'rxjs/operators';
 import { Metadata } from '@dark-rush-photography/website/types';
 import { Store } from '@ngrx/store';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 
 @Injectable({
   providedIn: 'root',

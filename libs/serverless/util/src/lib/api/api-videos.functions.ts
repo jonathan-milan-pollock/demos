@@ -3,13 +3,13 @@ import { HttpService, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Video } from '@dark-rush-photography/shared-types';
+import { Video } from '@dark-rush-photography/shared/types';
 import { EnvApi } from '@dark-rush-photography/serverless/types';
 
 export const addVideo$ = (
   envApi: EnvApi,
   httpService: HttpService,
-  authToken: string,
+  accessToken: string,
   entityId: string,
   fileName: string,
   createDate: string
@@ -25,7 +25,7 @@ export const addVideo$ = (
       },
       {
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'X-DRP-API-ADMIN-KEY': envApi.drpApiAdminKey,
         },
       }

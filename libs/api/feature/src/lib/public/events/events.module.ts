@@ -1,22 +1,23 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  EventProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
+import { EventsController } from './events.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [EventsController],
-  providers: [DocumentModelProvider, EventProvider, EventsService],
+  providers: [EventsService, EntityProvider, ServerlessEntityProvider],
 })
 export class EventsModule {}

@@ -1,4 +1,4 @@
-import { EmotionType } from '@dark-rush-photography/shared-types';
+import { EmotionType } from '@dark-rush-photography/shared/types';
 import { userSchema } from './user.schema';
 
 export const emotionSchema = {

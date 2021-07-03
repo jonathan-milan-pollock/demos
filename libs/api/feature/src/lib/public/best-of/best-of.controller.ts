@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
+import { BestOf, BestOfType } from '@dark-rush-photography/shared/types';
 import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
   BestOfTypeValidationPipe,

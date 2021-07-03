@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { Image, PostState } from '@dark-rush-photography/shared-types';
+import { Image, MediaState } from '@dark-rush-photography/shared/types';
 
 export class ImageDto implements Image {
   @IsUUID()
@@ -22,8 +22,8 @@ export class ImageDto implements Image {
   @IsString()
   fileName!: string;
 
-  @IsEnum(PostState)
-  postState!: PostState;
+  @IsEnum(MediaState)
+  state!: MediaState;
 
   @IsInt()
   @Min(0)
@@ -58,8 +58,5 @@ export class ImageDto implements Image {
   datePublished?: string;
 
   @IsBoolean()
-  isProcessed!: boolean;
-
-  @IsBoolean()
-  isLocked!: boolean;
+  isGenerated!: boolean;
 }

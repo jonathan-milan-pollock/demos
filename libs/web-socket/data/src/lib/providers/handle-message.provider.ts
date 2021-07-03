@@ -24,20 +24,20 @@ export class HandleMessageProvider {
     message: CommentMessage | EmotionMessage
   ): Observable<Message> {
     return apiAuth$(env.apiAuth, httpService).pipe(
-      switchMap((authToken) => {
+      switchMap((accessToken) => {
         switch (message.messageType) {
           case MessageType.Comment:
             return createComment$(
               env.api,
               httpService,
-              authToken,
+              accessToken,
               message as CommentMessage
             );
           case MessageType.Emotion:
             return createOrUpdateEmotion$(
               env.api,
               httpService,
-              authToken,
+              accessToken,
               message as EmotionMessage
             );
           case MessageType.StartingComment:

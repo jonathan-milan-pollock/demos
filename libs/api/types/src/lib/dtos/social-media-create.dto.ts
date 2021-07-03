@@ -1,8 +1,8 @@
 import { IsString } from 'class-validator';
 
-import { SocialMedia } from '@dark-rush-photography/shared-types';
+import { SocialMediaCreate } from '@dark-rush-photography/shared/types';
 
-export class SocialMediaCreateDto implements Partial<SocialMedia> {
+export class SocialMediaCreateDto implements SocialMediaCreate {
   @IsString()
   group!: string;
 

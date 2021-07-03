@@ -186,15 +186,9 @@ const execGenerateServerlessLibs = (isReady) =>
       )
     );
 
-const execGenerateSharedServerTypesLib = (isReady) =>
-  Promise.resolve(console.log('#### shared-server-types library'))
+const execGenerateSharedServerLibs = (isReady) =>
+  Promise.resolve(console.log('#### shared-server libraries'))
     .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data'
-      )
-    )
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -207,13 +201,20 @@ const execGenerateSharedServerTypesLib = (isReady) =>
         'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
       )
     );
-const execGenerateSharedTypesLib = (isReady) =>
-  Promise.resolve(console.log('#### shared-types library'))
+
+const execGenerateSharedLibs = (isReady) =>
+  Promise.resolve(console.log('#### shared libraries'))
     .then(() => console.log())
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/workspace:lib shared-types --unitTestRunner=none --tags=scope:shared,type:types'
+        'npx nx g @nrwl/workspace:lib shared/types --unitTestRunner=none --tags=scope:shared,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/workspace:lib shared/util --unitTestRunner=jest --tags=scope:shared,type:util'
       )
     );
 
@@ -522,9 +523,9 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateServerlessLibs(isReady))
     .then(() => console.log())
-    .then(() => execGenerateSharedServerTypesLib(isReady))
+    .then(() => execGenerateSharedServerLibs(isReady))
     .then(() => console.log())
-    .then(() => execGenerateSharedTypesLib(isReady))
+    .then(() => execGenerateSharedLibs(isReady))
     .then(() => console.log())
     .then(() => execGenerateUiStorybook(isReady))
     .then(() => console.log())

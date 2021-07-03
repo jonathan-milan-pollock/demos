@@ -17,7 +17,7 @@ function TabBar(props: TabBarProps): JSX.Element {
     <AppBar position="static" className={styles.appBar}>
       <Paper>
         <Tabs
-          value={props.activeLink === '/' ? '/events' : props.activeLink}
+          value={props.activeLink == '/' ? '/events' : props.activeLink}
           onChange={(_event: React.ChangeEvent<unknown>, value: string) =>
             props.onTabChange(value)
           }
@@ -26,7 +26,7 @@ function TabBar(props: TabBarProps): JSX.Element {
         >
           <Tab
             className={
-              props.activeLink === '/events' ? styles.tabSelected : styles.tab
+              props.activeLink == '/events' ? styles.tabSelected : styles.tab
             }
             label="Events"
             value="/events"
@@ -34,7 +34,7 @@ function TabBar(props: TabBarProps): JSX.Element {
           />
           <Tab
             className={
-              props.activeLink === '/real-estate'
+              props.activeLink == '/real-estate'
                 ? styles.tabSelected
                 : styles.tab
             }
@@ -44,7 +44,7 @@ function TabBar(props: TabBarProps): JSX.Element {
           />
           <Tab
             className={
-              props.activeLink === '/nature' ? styles.tabSelected : styles.tab
+              props.activeLink == '/nature' ? styles.tabSelected : styles.tab
             }
             label="Nature"
             value="/nature"
@@ -52,7 +52,7 @@ function TabBar(props: TabBarProps): JSX.Element {
           />
           <Tab
             className={
-              props.activeLink === '/landscapes'
+              props.activeLink == '/landscapes'
                 ? styles.tabSelected
                 : styles.tab
             }
@@ -62,7 +62,7 @@ function TabBar(props: TabBarProps): JSX.Element {
           />
           <Tab
             className={
-              props.activeLink === '/children' ? styles.tabSelected : styles.tab
+              props.activeLink == '/children' ? styles.tabSelected : styles.tab
             }
             label="Children"
             value="/children"

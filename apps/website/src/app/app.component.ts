@@ -21,7 +21,7 @@ import {
   ADMIN,
   Destination,
   Review,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 
 @Component({
   selector: 'drp-root',

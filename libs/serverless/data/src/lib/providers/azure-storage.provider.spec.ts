@@ -8,7 +8,7 @@ import {
   ContainerClient,
 } from '@azure/storage-blob';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/serverless/types';
 
 describe('Azure Storage Upload Functions', () => {
   /* beforeEach(() => {
@@ -49,7 +49,7 @@ describe('Azure Storage Upload Functions', () => {
       uploadBufferSubscription = uploadBufferToAzureStorageBlob$(
         Buffer.concat([]),
         '',
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         'uploaded-image'
       ).subscribe((requestId) => {
         expect(requestId).toBe('requestId');
@@ -70,7 +70,7 @@ describe('Azure Storage Upload Functions', () => {
       uploadStreamSubscription = uploadStreamToAzureStorageBlob$(
         Readable.from(['']),
         AZURE_STORAGE_CONNECTION_STRING_DEV,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         'uploaded-image'
       ).subscribe((requestId) => {
         expect(requestId).toBe('requestId');

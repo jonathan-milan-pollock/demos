@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
-import { Destination } from '@dark-rush-photography/shared-types';
+import { Destination } from '@dark-rush-photography/shared/types';
 
 export const destinationAdapter: EntityAdapter<Destination> = createEntityAdapter<Destination>(
   {

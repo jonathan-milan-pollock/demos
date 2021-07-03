@@ -30,8 +30,8 @@ export const loadDevEnvironment = (): Env => {
     production: false,
     drpApiAdminKey: process.env.NX_DRP_API_ADMIN_KEY,
     serverless: {
-      drpServerlessUrl: DRP_SERVERLESS_URL_DEV,
-      drpServerlessFunctionsKey: process.env.NX_DRP_SERVERLESS_FUNCTIONS_KEY,
+      url: DRP_SERVERLESS_URL_DEV,
+      functionsKey: process.env.NX_DRP_SERVERLESS_FUNCTIONS_KEY,
     },
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
   };

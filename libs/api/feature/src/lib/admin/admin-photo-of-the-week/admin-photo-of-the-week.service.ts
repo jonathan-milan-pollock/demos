@@ -1,113 +1,86 @@
-import { HttpService, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, switchMapTo, toArray } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import {
   PhotoOfTheWeek,
   EntityType,
-  ENV,
-} from '@dark-rush-photography/shared-types';
-import {
-  Env,
-  PhotoOfTheWeekCreateDto,
-  PhotoOfTheWeekUpdateDto,
-} from '@dark-rush-photography/api/types';
+  PhotoOfTheWeekCreate,
+  PhotoOfTheWeekUpdate,
+} from '@dark-rush-photography/shared/types';
 import {
   DocumentModel,
   Document,
-  PhotoOfTheWeekProvider,
-  DocumentModelProvider,
-  ServerlessProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class AdminPhotoOfTheWeekService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly httpService: HttpService,
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
-    private readonly documentModelProvider: DocumentModelProvider,
-    private readonly serverlessProvider: ServerlessProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly serverlessEntityProvider: ServerlessEntityProvider
   ) {}
 
   create$(
-    photoOfTheWeekCreate: PhotoOfTheWeekCreateDto
+    photoOfTheWeekCreate: PhotoOfTheWeekCreate
   ): Observable<PhotoOfTheWeek> {
-    return from(
-      this.photoOfTheWeekModel.findOne({
-        type: EntityType.PhotoOfTheWeek,
-        group: photoOfTheWeekCreate.group,
-        slug: photoOfTheWeekCreate.slug,
-      })
-    ).pipe(
-      switchMap((documentModel) => {
-        if (documentModel) return of(documentModel);
+    return this.entityProvider.create$(
+      EntityType.PhotoOfTheWeek,
+      photoOfTheWeekCreate.slug,
+      this.photoOfTheWeekModel,
+      photoOfTheWeekCreate.group
+    ) as Observable<PhotoOfTheWeek>;
+  }
 
-        return from(
-          new this.photoOfTheWeekModel(
-            this.photoOfTheWeekProvider.newPhotoOfTheWeek(photoOfTheWeekCreate)
-          ).save()
-        );
-      }),
-      map(this.documentModelProvider.validateCreate),
-      map(this.photoOfTheWeekProvider.fromDocumentModel)
+  updateProcess$(
+    id: string,
+    photoOfTheWeekUpdate: PhotoOfTheWeekUpdate
+  ): Observable<void> {
+    return this.serverlessEntityProvider.updateProcess$(
+      EntityType.PhotoOfTheWeek,
+      id,
+      this.photoOfTheWeekModel,
+      {
+        ...photoOfTheWeekUpdate,
+        hasExtendedReality: false,
+        socialMediaUrls: [],
+      }
     );
   }
 
-  update$(
-    id: string,
-    photoOfTheWeekUpdate: PhotoOfTheWeekUpdateDto
-  ): Observable<PhotoOfTheWeek> {
-    return from(
-      this.photoOfTheWeekModel.findByIdAndUpdate(id, {
-        ...photoOfTheWeekUpdate,
-      })
-    ).pipe(
-      map(this.documentModelProvider.validateFind),
-      switchMapTo(this.findOne$(id))
+  postProcess$(id: string): Observable<void> {
+    return this.serverlessEntityProvider.postProcess$(
+      EntityType.PhotoOfTheWeek,
+      id,
+      this.photoOfTheWeekModel
     );
   }
 
   findAll$(): Observable<PhotoOfTheWeek[]> {
-    return from(
-      this.photoOfTheWeekModel.find({ type: EntityType.PhotoOfTheWeek })
-    ).pipe(
-      switchMap((documentModels) => from(documentModels)),
-      map(this.photoOfTheWeekProvider.fromDocumentModel),
-      toArray<PhotoOfTheWeek>()
-    );
+    return this.entityProvider.findAll$(
+      EntityType.PhotoOfTheWeek,
+      this.photoOfTheWeekModel
+    ) as Observable<PhotoOfTheWeek[]>;
   }
 
   findOne$(id: string): Observable<PhotoOfTheWeek> {
-    return from(this.photoOfTheWeekModel.findById(id)).pipe(
-      map(this.documentModelProvider.validateFind),
-      map(this.photoOfTheWeekProvider.fromDocumentModel)
-    );
+    return this.entityProvider.findOne$(
+      EntityType.PhotoOfTheWeek,
+      id,
+      this.photoOfTheWeekModel
+    ) as Observable<PhotoOfTheWeek>;
   }
 
-  post$(id: string): Observable<PhotoOfTheWeek> {
-    return this.findOne$(id).pipe(
-      switchMapTo(
-        this.serverlessProvider.post$(
-          this.env.serverless,
-          this.httpService,
-          'post-photo-of-the-week',
-          id,
-          EntityType.PhotoOfTheWeek
-        )
-      ),
-      map((response) => response as PhotoOfTheWeek)
-    );
-  }
-
-  delete$(id: string): Observable<void> {
-    return from(this.photoOfTheWeekModel.findByIdAndDelete(id)).pipe(
-      mapTo(undefined)
+  deleteProcess$(id: string): Observable<void> {
+    return this.serverlessEntityProvider.deleteProcess$(
+      EntityType.PhotoOfTheWeek,
+      id,
+      this.photoOfTheWeekModel
     );
   }
 }

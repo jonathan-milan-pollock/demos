@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
-import { Review } from '@dark-rush-photography/shared-types';
+import { Review } from '@dark-rush-photography/shared/types';
 import { Page } from '@dark-rush-photography/website/types';
 import { addReview, MetaService } from '@dark-rush-photography/website/data';
 

@@ -1,8 +1,8 @@
 import { IsISO8601, IsString } from 'class-validator';
 
-import { Image } from '@dark-rush-photography/shared-types';
+import { ImageAdd } from '@dark-rush-photography/shared/types';
 
-export class ImageAddDto implements Partial<Image> {
+export class ImageAddDto implements ImageAdd {
   @IsString()
   fileName!: string;
 

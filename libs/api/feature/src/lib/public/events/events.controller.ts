@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Event } from '@dark-rush-photography/shared-types';
+import { Event } from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { EventsService } from './events.service';
 import { EventDto } from '@dark-rush-photography/api/types';

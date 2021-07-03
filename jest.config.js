@@ -7,7 +7,7 @@ module.exports = {
     '<rootDir>/libs/image-elements',
     '<rootDir>/libs/serverless/data',
     '<rootDir>/libs/serverless/util',
-    '<rootDir>/libs/shared-server/data',
+    '<rootDir>/libs/shared/util',
     '<rootDir>/libs/shared-server/util',
     '<rootDir>/libs/web-socket/data',
     '<rootDir>/libs/web-socket/util',

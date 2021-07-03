@@ -9,9 +9,9 @@ import {
 import { Observable } from 'rxjs';
 import { mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 
-import { ENV, ImageDimensionType } from '@dark-rush-photography/shared-types';
+import { ENV, ImageDimensionType } from '@dark-rush-photography/shared/types';
 import {
-  AzureStorageContainerType,
+  AzureStorageType,
   Env,
   Activity,
   IMAGE_DIMENSION_CONFIG,
@@ -41,7 +41,7 @@ export class DeleteVideoDimensionProvider {
 
   findImageDimensionConfig(config: ActivityConfig): ImageDimensionConfig {
     const imageDimensionConfig = IMAGE_DIMENSION_CONFIG.find(
-      (imageDimension) => imageDimension.type === config.imageDimensionType
+      (imageDimension) => imageDimension.type == config.imageDimensionType
     );
     if (!imageDimensionConfig)
       throw new BadRequestException('Could not find image dimension config');
@@ -67,10 +67,9 @@ export class DeleteVideoDimensionProvider {
     return this.azureStorageProvider
       .uploadStreamToBlob$(
         env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         fs.createReadStream(imageFilePath),
         this.azureStorageProvider.getBlobPathWithImageDimension(
-          activity.postState,
           activity.media,
           imageDimensionType
         )

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { ADMIN, ENV } from '@dark-rush-photography/shared-types';
+import { ADMIN, ENV } from '@dark-rush-photography/shared/types';
 import {
   DRP_API_ADMIN_KEY,
   ROLES,

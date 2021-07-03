@@ -4,20 +4,20 @@ import { ContainerClient, BlobServiceClient } from '@azure/storage-blob';
 import { Observable, of } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
-import { AzureStorageContainerType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/serverless/types';
 
 export const getAzureStorageContainerClient$ = (
   azureStorageConnectionString: string,
-  azureStorageContainerType: AzureStorageContainerType
+  azureStorageType: AzureStorageType
 ): Observable<ContainerClient> =>
   of(BlobServiceClient.fromConnectionString(azureStorageConnectionString)).pipe(
     tap(() =>
       Logger.log(
-        `Getting container client for container type ${azureStorageContainerType}`,
+        `Getting container client for container type ${azureStorageType}`,
         getAzureStorageContainerClient$.name
       )
     ),
     map((blobServiceClient) =>
-      blobServiceClient.getContainerClient(azureStorageContainerType)
+      blobServiceClient.getContainerClient(azureStorageType)
     )
   );

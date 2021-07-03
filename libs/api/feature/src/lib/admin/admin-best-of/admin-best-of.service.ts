@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { BestOf, BestOfType } from '@dark-rush-photography/shared-types';
+import { BestOf, BestOfType } from '@dark-rush-photography/shared/types';
 import {
-  BestOfProvider,
   Document,
   DocumentModel,
-  DocumentModelProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,44 +18,32 @@ export class AdminBestOfService {
   constructor(
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly bestOfProvider: BestOfProvider,
-    private readonly documentModelProvider: DocumentModelProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly serverlessEntityProvider: ServerlessEntityProvider
   ) {}
 
   create$(bestOfType: BestOfType): Observable<BestOf> {
-    return from(
-      this.bestOfModel.findOne({
-        type: this.bestOfProvider.findEntityType(bestOfType),
-      })
-    ).pipe(
-      switchMap((documentModel) => {
-        if (documentModel) return of(documentModel);
-
-        return from(
-          new this.bestOfModel(this.bestOfProvider.newBestOf(bestOfType)).save()
-        );
-      }),
-      map(this.documentModelProvider.validateCreate),
-      map(this.bestOfProvider.fromDocumentModel)
-    );
+    return this.entityProvider.create$(
+      this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
+      bestOfType,
+      this.bestOfModel
+    ) as Observable<BestOf>;
   }
 
   findOne$(bestOfType: BestOfType): Observable<BestOf> {
-    return from(
-      this.bestOfModel.findOne({
-        type: this.bestOfProvider.findEntityType(bestOfType),
-      })
-    ).pipe(
-      map(this.documentModelProvider.validateFind),
-      map(this.bestOfProvider.fromDocumentModel)
-    );
+    return this.entityProvider
+      .findAll$(
+        this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
+        this.bestOfModel
+      )
+      .pipe(map(this.entityProvider.validateOne)) as Observable<BestOf>;
   }
 
-  delete$(bestOfType: BestOfType): Observable<void> {
-    return from(
-      this.bestOfModel.findOneAndDelete({
-        type: this.bestOfProvider.findEntityType(bestOfType),
-      })
-    ).pipe(mapTo(undefined));
+  deleteProcess$(bestOfType: BestOfType, id: string): Observable<void> {
+    return this.serverlessEntityProvider.deleteProcess$(
+      this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
+      id,
+      this.bestOfModel
+    );
   }
 }

@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-import { GeoCoordinates } from '@dark-rush-photography/shared-types';
+import { GeoCoordinates } from '@dark-rush-photography/shared/types';
 
 export class GeoCoordinatesDto implements GeoCoordinates {
   @IsString()

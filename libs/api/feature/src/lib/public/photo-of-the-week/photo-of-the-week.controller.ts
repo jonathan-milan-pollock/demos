@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';

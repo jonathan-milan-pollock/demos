@@ -3,8 +3,6 @@ import {
   Body,
   Param,
   Post,
-  Put,
-  Delete,
   HttpCode,
   UseGuards,
   Get,
@@ -18,7 +16,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Destination } from '@dark-rush-photography/shared-types';
+import { ADMIN, Destination } from '@dark-rush-photography/shared/types';
 import {
   DestinationDto,
   DestinationUpdateDto,
@@ -43,13 +41,20 @@ export class AdminDestinationsController {
   }
 
   @Roles(ADMIN)
-  @Put(':id')
-  @ApiOkResponse({ type: DestinationDto })
-  update$(
+  @Post(':id/update')
+  @HttpCode(204)
+  updateProcess$(
     @Param('id') id: string,
-    @Body() destination: DestinationUpdateDto
-  ): Observable<Destination> {
-    return this.adminDestinationsService.update$(id, destination);
+    @Body() destinationUpdate: DestinationUpdateDto
+  ): Observable<void> {
+    return this.adminDestinationsService.updateProcess$(id, destinationUpdate);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  @HttpCode(204)
+  postProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminDestinationsService.postProcess$(id);
   }
 
   @Roles(ADMIN)
@@ -67,15 +72,9 @@ export class AdminDestinationsController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/post')
-  post$(@Param('id') id: string): Observable<Destination> {
-    return this.adminDestinationsService.post$(id);
-  }
-
-  @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminDestinationsService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminDestinationsService.deleteProcess$(id);
   }
 }

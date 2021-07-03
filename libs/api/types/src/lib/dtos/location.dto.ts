@@ -1,7 +1,7 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Location } from '@dark-rush-photography/shared-types';
+import { Location } from '@dark-rush-photography/shared/types';
 import { GeoCoordinatesDto } from './geo-coordinates.dto';
 
 export class LocationDto implements Location {

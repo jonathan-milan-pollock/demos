@@ -2,7 +2,7 @@ import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
 
 import { take } from 'rxjs/operators';
 
-import { ENV } from '@dark-rush-photography/shared-types';
+import { ENV } from '@dark-rush-photography/shared/types';
 import { Env, Activity } from '@dark-rush-photography/serverless/types';
 import {
   AzureStorageProvider,

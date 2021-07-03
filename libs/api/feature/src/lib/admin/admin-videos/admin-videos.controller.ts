@@ -23,7 +23,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Video } from '@dark-rush-photography/shared-types';
+import { ADMIN, Video } from '@dark-rush-photography/shared/types';
 import {
   FileUploadDto,
   VideoAddDto,
@@ -45,9 +45,35 @@ export class AdminVideosController {
   @ApiOkResponse({ type: VideoDto })
   add$(
     @Query('entityId') entityId: string,
-    @Body() video: VideoAddDto
+    @Body() videoAdd: VideoAddDto
   ): Observable<Video> {
-    return this.adminVideosService.add$(entityId, video);
+    return this.adminVideosService.add$(entityId, videoAdd);
+  }
+
+  @Roles(ADMIN)
+  @Post('upload-video')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  @HttpCode(204)
+  uploadVideo$(
+    @Query('entityId') entityId: string,
+    @UploadedFile() video: Express.Multer.File
+  ): Observable<void> {
+    return this.adminVideosService.uploadVideo$(entityId, video);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/update')
+  @HttpCode(204)
+  updateProcess$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string,
+    @Body() videoUpdate: VideoUpdateDto
+  ): Observable<void> {
+    return this.adminVideosService.updateProcess$(id, entityId, videoUpdate);
   }
 
   @Roles(ADMIN)
@@ -56,9 +82,19 @@ export class AdminVideosController {
   update$(
     @Param('id') id: string,
     @Query('entityId') entityId: string,
-    @Body() video: VideoUpdateDto
+    @Body() videoUpdate: VideoUpdateDto
   ): Observable<Video> {
-    return this.adminVideosService.update$(id, entityId, video);
+    return this.adminVideosService.update$(id, entityId, videoUpdate);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  @HttpCode(204)
+  postProcess$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminVideosService.postProcess$(id, entityId);
   }
 
   @Roles(ADMIN)
@@ -72,17 +108,13 @@ export class AdminVideosController {
   }
 
   @Roles(ADMIN)
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: FileUploadDto,
-  })
-  upload$(
-    @Query('entityId') entityId: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Observable<Video> {
-    return this.adminVideosService.upload$(entityId, file);
+  @Post(':id/remove')
+  @HttpCode(204)
+  removeProcess$(
+    @Param('id') id: string,
+    @Query('entityId') entityId: string
+  ): Observable<void> {
+    return this.adminVideosService.removeProcess$(id, entityId);
   }
 
   @Roles(ADMIN)

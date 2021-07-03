@@ -1,26 +1,27 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  SocialMediaProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { AdminSocialMediaController } from './admin-social-media.controller';
 import { AdminSocialMediaService } from './admin-social-media.service';
+import { AdminSocialMediaController } from './admin-social-media.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [AdminSocialMediaController],
   providers: [
-    DocumentModelProvider,
-    SocialMediaProvider,
     AdminSocialMediaService,
+    EntityProvider,
+    ServerlessEntityProvider,
   ],
 })
 export class AdminSocialMediaModule {}

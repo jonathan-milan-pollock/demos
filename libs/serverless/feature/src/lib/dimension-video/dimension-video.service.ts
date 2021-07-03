@@ -2,11 +2,11 @@ import { Injectable, Inject, HttpService, Logger } from '@nestjs/common';
 
 import { switchMap, take } from 'rxjs/operators';
 
-import { ENV } from '@dark-rush-photography/shared-types';
+import { ENV } from '@dark-rush-photography/shared/types';
 import {
   Env,
   Activity,
-  AzureStorageContainerType,
+  AzureStorageType,
 } from '@dark-rush-photography/serverless/types';
 import {
   AzureStorageProvider,
@@ -35,9 +35,9 @@ export class DimensionVideoService {
     return this.azureStorageProvider
       .downloadBlobToFile$(
         this.env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         this.azureStorageProvider.getBlobPath(
-          activity.postState,
+          activity.mediaState,
           activity.media
         ),
         activity.media.fileName

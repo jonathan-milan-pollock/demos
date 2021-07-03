@@ -3,19 +3,12 @@ import {
   Body,
   Param,
   Post,
-  Put,
-  Delete,
   HttpCode,
   UseGuards,
   Get,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
@@ -23,12 +16,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Image, Review } from '@dark-rush-photography/shared-types';
-import {
-  FileUploadDto,
-  ReviewDto,
-  ReviewUpdateDto,
-} from '@dark-rush-photography/api/types';
+import { ADMIN, Review } from '@dark-rush-photography/shared/types';
+import { ReviewDto, ReviewUpdateDto } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminReviewsService } from './admin-reviews.service';
 
@@ -47,13 +36,20 @@ export class AdminReviewsController {
   }
 
   @Roles(ADMIN)
-  @Put(':id')
-  @ApiOkResponse({ type: ReviewDto })
-  update$(
+  @Post(':id/update')
+  @HttpCode(204)
+  updateProcess$(
     @Param('id') id: string,
-    @Body() review: ReviewUpdateDto
-  ): Observable<Review> {
-    return this.adminReviewsService.update$(id, review);
+    @Body() reviewUpdate: ReviewUpdateDto
+  ): Observable<void> {
+    return this.adminReviewsService.updateProcess$(id, reviewUpdate);
+  }
+
+  @Roles(ADMIN)
+  @Post(':id/post')
+  @HttpCode(204)
+  postProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminReviewsService.postProcess$(id);
   }
 
   @Roles(ADMIN)
@@ -71,29 +67,9 @@ export class AdminReviewsController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/images')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: FileUploadDto,
-  })
-  upload$(
-    @Param('id') id: string,
-    @UploadedFile() file: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminReviewsService.uploadImage$(id, file);
-  }
-
-  @Roles(ADMIN)
-  @Post(':id/post')
-  post$(@Param('id') id: string): Observable<Review> {
-    return this.adminReviewsService.post$(id);
-  }
-
-  @Roles(ADMIN)
-  @Delete(':id')
+  @Post(':id/delete')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
-    return this.adminReviewsService.delete$(id);
+  deleteProcess$(@Param('id') id: string): Observable<void> {
+    return this.adminReviewsService.deleteProcess$(id);
   }
 }

@@ -9,10 +9,10 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared-types';
+import { PhotoOfTheWeekUpdate } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 
-export class PhotoOfTheWeekUpdateDto implements Partial<PhotoOfTheWeek> {
+export class PhotoOfTheWeekUpdateDto implements PhotoOfTheWeekUpdate {
   @IsNumberString()
   group!: string;
 

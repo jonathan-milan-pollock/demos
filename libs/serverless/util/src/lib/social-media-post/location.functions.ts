@@ -1,4 +1,4 @@
-import { Location } from '@dark-rush-photography/shared-types';
+import { Location } from '@dark-rush-photography/shared/types';
 
 export const formatLocation = (location: Location): string => {
   let locationFormatted = '';

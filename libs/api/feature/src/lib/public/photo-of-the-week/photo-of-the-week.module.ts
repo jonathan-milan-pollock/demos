@@ -1,26 +1,23 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
   Document,
-  DocumentModelProvider,
   DocumentSchema,
-  PhotoOfTheWeekProvider,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
+import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [PhotoOfTheWeekController],
-  providers: [
-    DocumentModelProvider,
-    PhotoOfTheWeekProvider,
-    PhotoOfTheWeekService,
-  ],
+  providers: [PhotoOfTheWeekService, EntityProvider, ServerlessEntityProvider],
 })
 export class PhotoOfTheWeekModule {}

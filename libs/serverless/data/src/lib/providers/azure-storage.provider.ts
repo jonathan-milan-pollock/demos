@@ -6,11 +6,12 @@ import { buffer, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
 
 import {
   ActivityMedia,
-  AzureStorageContainerType,
+  AzureStorageType,
 } from '@dark-rush-photography/serverless/types';
 import {
   createTempFile$,
   getAzureStorageBlockBlobClient$,
+  getAzureStorageTypeFromMediaState,
   getBlobPrefix,
   writeStreamToFile,
 } from '@dark-rush-photography/serverless/util';
@@ -20,33 +21,33 @@ import {
 } from '@azure/storage-blob';
 import {
   ImageDimensionType,
-  PostState,
-} from '@dark-rush-photography/shared-types';
+  MediaState,
+} from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class AzureStorageProvider {
-  getBlobPath = (
-    postState: PostState,
-    activityMedia: ActivityMedia
-  ): string => {
-    const blobPrefix = getBlobPrefix(postState, activityMedia);
+  getBlobPath = (activityMedia: ActivityMedia): string => {
+    const blobPrefix = getBlobPrefix(activityMedia);
     return `${blobPrefix}/${activityMedia.fileName}`;
   };
 
   getBlobPathWithImageDimension = (
-    postState: PostState,
     activityMedia: ActivityMedia,
     imageDimensionType: ImageDimensionType
   ): string => {
-    const blobPrefix = getBlobPrefix(postState, activityMedia);
+    const blobPrefix = getBlobPrefix(activityMedia);
     return `${blobPrefix}/${imageDimensionType.toLowerCase()}/${
       activityMedia.fileName
     }`;
   };
 
+  getAzureStorageType(mediaState: MediaState): AzureStorageType {
+    return getAzureStorageTypeFromMediaState(mediaState);
+  }
+
   uploadBufferToBlob$ = (
     connectionString: string,
-    containerType: AzureStorageContainerType,
+    containerType: AzureStorageType,
     buffer: Buffer,
     blobPath: string
   ): Observable<void> => {
@@ -68,7 +69,7 @@ export class AzureStorageProvider {
 
   uploadStreamToBlob$ = (
     connectionString: string,
-    containerType: AzureStorageContainerType,
+    containerType: AzureStorageType,
     stream: Readable,
     blobPath: string
   ): Observable<void> => {
@@ -90,14 +91,14 @@ export class AzureStorageProvider {
 
   downloadBlobAsStream$ = (
     azureStorageConnectionString: string,
-    azureStorageContainerType: AzureStorageContainerType,
+    azureStorageType: AzureStorageType,
     blobPath: string
   ): Observable<NodeJS.ReadableStream> => {
     Logger.log(`Downloading image blob ${blobPath}`, AzureStorageProvider.name);
 
     return getAzureStorageBlockBlobClient$(
       azureStorageConnectionString,
-      azureStorageContainerType,
+      azureStorageType,
       blobPath
     ).pipe(
       switchMap((blockBlobClient) => blockBlobClient.download()),
@@ -112,7 +113,7 @@ export class AzureStorageProvider {
 
   downloadBlobToFile$ = (
     connectionString: string,
-    containerType: AzureStorageContainerType,
+    containerType: AzureStorageType,
     blobPath: string,
     fileName: string
   ): Observable<string> =>
@@ -125,14 +126,14 @@ export class AzureStorageProvider {
 
   dataUriForBlob$ = (
     azureStorageConnectionString: string,
-    azureStorageContainerType: AzureStorageContainerType,
+    azureStorageType: AzureStorageType,
     blobPath: string
   ): Observable<string> => {
     return of(
       BlobServiceClient.fromConnectionString(azureStorageConnectionString)
     ).pipe(
       map((blobServiceClient) =>
-        blobServiceClient.getContainerClient(azureStorageContainerType)
+        blobServiceClient.getContainerClient(azureStorageType)
       ),
       map((containerClient) => containerClient.getBlockBlobClient(blobPath)),
       switchMap((blockBlobClient) => blockBlobClient.download()),
@@ -159,12 +160,12 @@ export class AzureStorageProvider {
 
   deleteBlob$ = (
     azureStorageConnectionString: string,
-    azureStorageContainerType: AzureStorageContainerType,
+    azureStorageType: AzureStorageType,
     blobPath: string
   ): Observable<boolean> =>
     getAzureStorageBlockBlobClient$(
       azureStorageConnectionString,
-      azureStorageContainerType,
+      azureStorageType,
       blobPath
     ).pipe(
       switchMap((blockBlobClient) => blockBlobClient.deleteIfExists()),

@@ -7,29 +7,21 @@ import { resizeLongestEdgeWidth$ } from './resize-longest-edge-width.functions';
 import { resizeLongestEdgeHeight$ } from './resize-longest-edge-height.functions';
 
 export const resizeLongestEdge$ = (
-  imageFilePath: string,
-  imageName: string,
+  fileName: string,
+  filePath: string,
   longestEdge: number
 ): Observable<string> =>
-  findImageDimensionPixels$(imageFilePath).pipe(
+  findImageDimensionPixels$(filePath).pipe(
     switchMap((pixels) => {
       return pixels.width > pixels.height
-        ? createTempFile$(imageName).pipe(
-            switchMap((newImageFilePath) =>
-              resizeLongestEdgeWidth$(
-                imageFilePath,
-                newImageFilePath,
-                longestEdge
-              )
+        ? createTempFile$(fileName).pipe(
+            switchMap((newFilePath) =>
+              resizeLongestEdgeWidth$(filePath, newFilePath, longestEdge)
             )
           )
-        : createTempFile$(imageName).pipe(
-            switchMap((newImageFilePath) =>
-              resizeLongestEdgeHeight$(
-                imageFilePath,
-                newImageFilePath,
-                longestEdge
-              )
+        : createTempFile$(fileName).pipe(
+            switchMap((newFilePath) =>
+              resizeLongestEdgeHeight$(filePath, newFilePath, longestEdge)
             )
           );
     })

@@ -7,16 +7,14 @@ import {
   EntityType,
   ImageDimensionType,
   Image,
-  PostState,
-} from '@dark-rush-photography/shared-types';
+} from '@dark-rush-photography/shared/types';
 import {
-  Activity,
   ActivityMedia,
   ActivityOrchestratorType,
   ActivityProcess,
   ActivityType,
   ActivityUpload,
-  AzureStorageContainerType,
+  AzureStorageType,
   Env,
 } from '@dark-rush-photography/serverless/types';
 import {
@@ -47,10 +45,7 @@ export class DeleteProvider {
     } as ActivityUpload;
   }
 
-  getOrchestratorInput(
-    postState: PostState,
-    activityMedia: ActivityMedia
-  ): ActivityProcess {
+  getOrchestratorInput(activityMedia: ActivityMedia): ActivityProcess {
     return {
       orchestratorType: ActivityOrchestratorType.UploadImage,
       activityGroups: [
@@ -58,14 +53,12 @@ export class DeleteProvider {
           sequential: [
             {
               type: ActivityType.TinifyImage,
-              postState,
               media: activityMedia,
             },
           ],
           parallel: [
             {
               type: ActivityType.DimensionImage,
-              postState,
               media: activityMedia,
               config: {
                 imageDimensionType: ImageDimensionType.Tile,
@@ -73,7 +66,6 @@ export class DeleteProvider {
             },
             {
               type: ActivityType.DimensionImage,
-              postState,
               media: activityMedia,
               config: {
                 imageDimensionType: ImageDimensionType.Small,
@@ -105,7 +97,7 @@ export class DeleteProvider {
     return this.azureStorageProvider
       .downloadBlobToFile$(
         env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         blobPath,
         activityUpload.media.fileName
       )

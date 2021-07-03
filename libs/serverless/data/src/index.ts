@@ -25,7 +25,6 @@ export * from './lib/providers/post.provider';
 export * from './lib/providers/sitemap.provider';
 export * from './lib/providers/social-media-post-image.provider';
 export * from './lib/providers/social-media-post-video.provider';
-export * from './lib/providers/tinify-image.provider';
 export * from './lib/providers/update-entity.provider';
 export * from './lib/providers/update-image-dimension.provider';
 export * from './lib/providers/update-image.provider';

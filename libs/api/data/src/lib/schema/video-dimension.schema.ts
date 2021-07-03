@@ -1,4 +1,4 @@
-import { VideoDimensionType } from '@dark-rush-photography/shared-types';
+import { VideoDimensionType } from '@dark-rush-photography/shared/types';
 import { mediaDimensionPixelsSchema } from './media-dimension-pixels.schema';
 
 export const videoDimensionSchema = {

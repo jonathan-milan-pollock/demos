@@ -1,4 +1,3 @@
-import * as fs from 'fs-extra';
 import {
   BadRequestException,
   HttpService,
@@ -9,14 +8,19 @@ import {
 import { Observable } from 'rxjs';
 import { mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 
-import { ENV, ImageDimensionType } from '@dark-rush-photography/shared-types';
 import {
-  AzureStorageContainerType,
+  ENV,
+  ImageDimensionType,
+  MediaDimensionPixels,
+} from '@dark-rush-photography/shared/types';
+import {
+  AzureStorageType,
   Env,
   Activity,
   IMAGE_DIMENSION_CONFIG,
   ActivityConfig,
   ImageDimensionConfig,
+  ActivityMedia,
 } from '@dark-rush-photography/serverless/types';
 import {
   addImageDimension$,
@@ -27,22 +31,14 @@ import { AzureStorageProvider } from './azure-storage.provider';
 
 @Injectable()
 export class DimensionImageProvider {
-  constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly httpService: HttpService,
-    private readonly azureStorageProvider: AzureStorageProvider
-  ) {}
+  constructor(private readonly azureStorageProvider: AzureStorageProvider) {}
 
-  validateActivityConfig(config?: ActivityConfig): ActivityConfig {
+  getImageDimensionConfig(config: ActivityConfig): ImageDimensionConfig {
     if (!config?.imageDimensionType) {
       throw new BadRequestException('Image dimension type must be provided');
     }
-    return config;
-  }
-
-  findImageDimensionConfig(config: ActivityConfig): ImageDimensionConfig {
     const imageDimensionConfig = IMAGE_DIMENSION_CONFIG.find(
-      (imageDimension) => imageDimension.type === config.imageDimensionType
+      (imageDimension) => imageDimension.type == config.imageDimensionType
     );
     if (!imageDimensionConfig)
       throw new BadRequestException('Could not find image dimension config');
@@ -55,37 +51,12 @@ export class DimensionImageProvider {
     filePath: string,
     imageDimensionConfig: ImageDimensionConfig
   ): Observable<string> {
-    return resizeImage$(filePath, fileName, imageDimensionConfig);
+    return resizeImage$(fileName, filePath, imageDimensionConfig);
   }
 
-  addImageDimension$(
-    activity: Activity,
-    imageDimensionType: ImageDimensionType,
-    imageFilePath: string
-  ): Observable<void> {
-    return this.azureStorageProvider
-      .uploadStreamToBlob$(
-        this.env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
-        fs.createReadStream(imageFilePath),
-        this.azureStorageProvider.getBlobPathWithImageDimension(
-          activity.postState,
-          activity.media,
-          imageDimensionType
-        )
-      )
-      .pipe(
-        switchMapTo(findImageDimensionPixels$(imageFilePath)),
-        switchMap((pixels) =>
-          addImageDimension$(
-            this.env,
-            this.httpService,
-            activity.media,
-            imageDimensionType,
-            pixels
-          )
-        ),
-        mapTo(undefined)
-      );
+  findImageDimensionPixels$(
+    filePath: string
+  ): Observable<MediaDimensionPixels> {
+    return findImageDimensionPixels$(filePath);
   }
 }

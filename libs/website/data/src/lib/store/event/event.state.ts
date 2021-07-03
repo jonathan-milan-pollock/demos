@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 
-import { Event } from '@dark-rush-photography/shared-types';
+import { Event } from '@dark-rush-photography/shared/types';
 
 export const eventAdapter: EntityAdapter<Event> = createEntityAdapter<Event>({
   selectId: (event: Event): string => event.id ?? '',

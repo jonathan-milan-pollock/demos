@@ -11,7 +11,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { Video, PostState } from '@dark-rush-photography/shared-types';
+import { Video, MediaState } from '@dark-rush-photography/shared/types';
 
 export class VideoDto implements Video {
   @IsUUID()
@@ -23,8 +23,8 @@ export class VideoDto implements Video {
   @IsString()
   fileName!: string;
 
-  @IsEnum(PostState)
-  postState!: PostState;
+  @IsEnum(MediaState)
+  state!: MediaState;
 
   @IsInt()
   @Min(0)
@@ -53,7 +53,7 @@ export class VideoDto implements Video {
   datePublished?: string;
 
   @IsUUID()
-  coverImageId!: string;
+  coverImageId?: string;
 
   @IsUrl()
   @IsOptional()
@@ -63,8 +63,5 @@ export class VideoDto implements Video {
   isFlyOver!: boolean;
 
   @IsBoolean()
-  isProcessed!: boolean;
-
-  @IsBoolean()
-  isLocked!: boolean;
+  isGenerated!: boolean;
 }

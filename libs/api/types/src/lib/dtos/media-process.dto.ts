@@ -1,7 +1,7 @@
 import { IsArray, IsMongoId, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { MediaProcess } from '@dark-rush-photography/shared-types';
+import { MediaProcess } from '@dark-rush-photography/shared/types';
 import { ImageDto } from './image.dto';
 import { ImageDimensionDto } from './image-dimension.dto';
 import { VideoDto } from './video.dto';

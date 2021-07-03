@@ -7,9 +7,9 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Review } from '@dark-rush-photography/shared-types';
+import { ReviewUpdate } from '@dark-rush-photography/shared/types';
 
-export class ReviewUpdateDto implements Partial<Review> {
+export class ReviewUpdateDto implements ReviewUpdate {
   @IsString()
   slug!: string;
 

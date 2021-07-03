@@ -1,22 +1,23 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  BestOfProvider,
   Document,
-  DocumentModelProvider,
   DocumentSchema,
+  EntityProvider,
+  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
-import { BestOfController } from './best-of.controller';
 import { BestOfService } from './best-of.service';
+import { BestOfController } from './best-of.controller';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    HttpModule,
   ],
   controllers: [BestOfController],
-  providers: [DocumentModelProvider, BestOfProvider, BestOfService],
+  providers: [BestOfService, EntityProvider, ServerlessEntityProvider],
 })
 export class BestOfModule {}

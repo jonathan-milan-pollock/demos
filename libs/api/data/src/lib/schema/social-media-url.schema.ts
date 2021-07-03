@@ -1,4 +1,4 @@
-import { SocialMediaType } from '@dark-rush-photography/shared-types';
+import { SocialMediaType } from '@dark-rush-photography/shared/types';
 
 export const socialMediaUrlSchema = {
   type: {

@@ -12,8 +12,8 @@ import {
   EntityType,
   ImageDimensionType,
   Image,
-  PostState,
-} from '@dark-rush-photography/shared-types';
+  MediaState,
+} from '@dark-rush-photography/shared/types';
 import {
   Activity,
   ActivityMedia,
@@ -21,7 +21,7 @@ import {
   ActivityProcess,
   ActivityType,
   ActivityUpload,
-  AzureStorageContainerType,
+  AzureStorageType,
   Env,
 } from '@dark-rush-photography/serverless/types';
 import {
@@ -65,14 +65,14 @@ export class UploadImageProvider {
           sequential: [
             {
               type: ActivityType.TinifyImage,
-              postState: PostState.New,
+              mediaState: MediaState.New,
               media: activityMedia,
             },
           ],
           parallel: [
             {
               type: ActivityType.DimensionImage,
-              postState: PostState.New,
+              mediaState: MediaState.New,
               media: activityMedia,
               config: {
                 imageDimensionType: ImageDimensionType.Tile,
@@ -80,7 +80,7 @@ export class UploadImageProvider {
             },
             {
               type: ActivityType.DimensionImage,
-              postState: PostState.New,
+              mediaState: MediaState.New,
               media: activityMedia,
               config: {
                 imageDimensionType: ImageDimensionType.Small,
@@ -112,7 +112,7 @@ export class UploadImageProvider {
     return this.azureStorageProvider
       .downloadBlobToFile$(
         env.azureStorageConnectionString,
-        AzureStorageContainerType.Private,
+        AzureStorageType.Private,
         blobPath,
         activityUpload.media.fileName
       )

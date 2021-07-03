@@ -1,7 +1,7 @@
 import { IsArray, IsMongoId, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { BestOf } from '@dark-rush-photography/shared-types';
+import { BestOf } from '@dark-rush-photography/shared/types';
 import { ImageDto } from './image.dto';
 import { ImageDimensionDto } from './image-dimension.dto';
 import { CommentDto } from './comment.dto';

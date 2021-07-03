@@ -7,7 +7,7 @@ import {
 } from '@azure/storage-blob';
 
 import { getAzureStorageContainerClient$ } from './azure-storage-container-client.functions';
-import { AzureStorageContainerType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/serverless/types';
 
 describe('containerClient$', () => {
   let containerClientSubscription: Subscription | undefined;
@@ -31,7 +31,7 @@ describe('containerClient$', () => {
   it('should provide a container client for the private container', () => {
     containerClientSubscription = getAzureStorageContainerClient$(
       '',
-      AzureStorageContainerType.Private
+      AzureStorageType.Private
     ).subscribe((containerClient) => {
       expect(containerClient).toBeDefined();
     });
@@ -40,7 +40,7 @@ describe('containerClient$', () => {
   it('should provide a container client for the public container', () => {
     containerClientSubscription = getAzureStorageContainerClient$(
       '',
-      AzureStorageContainerType.Public
+      AzureStorageType.Public
     ).subscribe((containerClient) => {
       expect(containerClient).toBeDefined();
     });

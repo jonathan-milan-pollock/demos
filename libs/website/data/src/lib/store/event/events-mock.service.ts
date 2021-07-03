@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { EMPTY, Observable, of } from 'rxjs';
 
-import { Event } from '@dark-rush-photography/shared-types';
+import { Event } from '@dark-rush-photography/shared/types';
 import { EventsService } from './events.service';
 
 @Injectable()

@@ -11,22 +11,22 @@ import { resizeImageTile$ } from './resize-image-tile.functions';
 import { resizeLongestEdge$ } from './resize-longest-edge.functions';
 
 export const resizeImage$ = (
-  imageFilePath: string,
-  imageName: string,
+  fileName: string,
+  filePath: string,
   imageDimensionConfig: ImageDimensionConfig
 ): Observable<string> => {
   switch (imageDimensionConfig.type) {
     case 'Tile':
       return resizeImageTile$(
-        imageFilePath,
-        imageName,
+        fileName,
+        filePath,
         imageDimensionConfig as ImageDimensionTileConfig
       );
     case 'Thumbnail':
     case 'Small':
       return resizeLongestEdge$(
-        imageFilePath,
-        imageName,
+        fileName,
+        filePath,
         (imageDimensionConfig as ImageDimensionLongestEdgeConfig).longestEdge
       );
     default:
