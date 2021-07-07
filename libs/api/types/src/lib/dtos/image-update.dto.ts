@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsEnum,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -7,11 +8,14 @@ import {
   Min,
 } from 'class-validator';
 
-import { ImageUpdate } from '@dark-rush-photography/shared/types';
+import { ImageUpdate, MediaState } from '@dark-rush-photography/shared/types';
 
 export class ImageUpdateDto implements ImageUpdate {
   @IsString()
   fileName!: string;
+
+  @IsEnum(MediaState)
+  state!: MediaState;
 
   @IsInt()
   @Min(0)
@@ -22,9 +26,6 @@ export class ImageUpdateDto implements ImageUpdate {
 
   @IsBoolean()
   isLoved!: boolean;
-
-  @IsBoolean()
-  isLiked!: boolean;
 
   @IsString()
   @IsOptional()
@@ -37,9 +38,6 @@ export class ImageUpdateDto implements ImageUpdate {
   @IsString()
   @IsOptional()
   keywords?: string;
-
-  @IsISO8601()
-  dateCreated!: string;
 
   @IsISO8601()
   @IsOptional()

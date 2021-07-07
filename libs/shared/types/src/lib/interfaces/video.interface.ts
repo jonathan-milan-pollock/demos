@@ -7,13 +7,14 @@ export interface Video {
   readonly state: MediaState;
   readonly order: number;
   readonly isStared: boolean; //TODO: Can star 1
-  readonly title?: string;
-  readonly description?: string;
-  readonly keywords?: string;
+  readonly title: string;
+  readonly description: string;
+  readonly keywords: string;
   readonly dateCreated: string;
-  readonly datePublished?: string;
-  readonly coverImageId?: string;
-  readonly hlsStreamingUrl?: string;
+  readonly datePublished: string;
+  readonly coverImageId: string;
+  readonly hlsUrl: string;
   readonly isFlyOver: boolean;
   readonly isGenerated: boolean;
+  readonly isProcessing: boolean;
 }

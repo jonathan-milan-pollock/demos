@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminFavoritesService } from './admin-favorites.service';
 import { AdminFavoritesController } from './admin-favorites.controller';
@@ -18,6 +17,6 @@ import { AdminFavoritesController } from './admin-favorites.controller';
     HttpModule,
   ],
   controllers: [AdminFavoritesController],
-  providers: [AdminFavoritesService, EntityProvider, ServerlessEntityProvider],
+  providers: [AdminFavoritesService, EntityProvider],
 })
 export class AdminFavoritesModule {}

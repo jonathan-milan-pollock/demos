@@ -1,9 +1,17 @@
 {
   "bindings": [
     {
-      "name": "name",
-      "type": "activityTrigger",
-      "direction": "in"
+      "authLevel": "function",
+      "name": "req",
+      "type": "httpTrigger",
+      "direction": "in",
+      "route": "exif-video",
+      "methods": ["post"]
+    },
+    {
+      "name": "res",
+      "type": "http",
+      "direction": "out"
     }
   ],
   "scriptFile": "../dist/exif-video/index.js"

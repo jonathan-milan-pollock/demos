@@ -6,6 +6,7 @@ import {
   Post,
   UseGuards,
   Get,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -57,9 +58,9 @@ export class AdminSocialMediaController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/delete')
+  @Delete(':id')
   @HttpCode(204)
   deleteProcess$(@Param('id') id: string): Observable<void> {
-    return this.adminSocialMediaService.deleteProcess$(id);
+    return this.adminSocialMediaService.delete$(id);
   }
 }

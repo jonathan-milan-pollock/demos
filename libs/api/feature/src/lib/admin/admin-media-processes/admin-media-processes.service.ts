@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
@@ -8,11 +8,11 @@ import {
   MediaProcess,
   MediaProcessType,
 } from '@dark-rush-photography/shared/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import {
   Document,
   DocumentModel,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -20,8 +20,7 @@ export class AdminMediaProcessesService {
   constructor(
     @InjectModel(Document.name)
     private readonly mediaProcessModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(
@@ -30,17 +29,14 @@ export class AdminMediaProcessesService {
   ): Observable<MediaProcess> {
     return this.entityProvider.create$(
       this.entityProvider.getEntityTypeFromMediaProcessType(mediaProcessType),
+      DEFAULT_ENTITY_GROUP,
       slug,
       this.mediaProcessModel
     ) as Observable<MediaProcess>;
   }
 
   process$(mediaProcessType: MediaProcessType, id: string): Observable<void> {
-    return this.serverlessEntityProvider.mediaProcess$(
-      this.entityProvider.getEntityTypeFromMediaProcessType(mediaProcessType),
-      id,
-      this.mediaProcessModel
-    );
+    throw new NotImplementedException();
   }
 
   findAll$(mediaProcessType: MediaProcessType): Observable<MediaProcess[]> {
@@ -61,11 +57,8 @@ export class AdminMediaProcessesService {
     ) as Observable<MediaProcess>;
   }
 
-  deleteProcess$(
-    mediaProcessType: MediaProcessType,
-    id: string
-  ): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
+  delete$(mediaProcessType: MediaProcessType, id: string): Observable<void> {
+    return this.entityProvider.delete$(
       this.entityProvider.getEntityTypeFromMediaProcessType(mediaProcessType),
       id,
       this.mediaProcessModel

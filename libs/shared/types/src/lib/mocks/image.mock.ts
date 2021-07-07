@@ -12,7 +12,6 @@ export const mockImage = (): Image => ({
   order: faker.datatype.number(),
   isStared: faker.datatype.boolean(),
   isLoved: faker.datatype.boolean(),
-  isLiked: faker.datatype.boolean(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
   keywords: `${faker.lorem
@@ -23,4 +22,5 @@ export const mockImage = (): Image => ({
   dateCreated: faker.date.recent().toISOString(),
   datePublished: faker.date.recent().toISOString(),
   isGenerated: faker.datatype.boolean(),
+  isProcessing: faker.datatype.boolean(),
 });

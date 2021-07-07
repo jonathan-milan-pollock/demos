@@ -1,57 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 import {
   Destination,
   DestinationUpdate,
   EntityType,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import {
   DocumentModel,
   Document,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
+import { map, switchMapTo } from 'rxjs/operators';
 
 @Injectable()
 export class AdminDestinationsService {
   constructor(
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(slug: string): Observable<Destination> {
     return this.entityProvider.create$(
       EntityType.Destination,
+      DEFAULT_ENTITY_GROUP,
       slug,
       this.destinationModel
     ) as Observable<Destination>;
   }
 
-  updateProcess$(
+  update$(
     id: string,
     destinationUpdate: DestinationUpdate
-  ): Observable<void> {
-    return this.serverlessEntityProvider.updateProcess$(
-      EntityType.Destination,
-      id,
-      this.destinationModel,
-      { ...destinationUpdate, group: DEFAULT_GROUP }
+  ): Observable<Destination> {
+    return from(this.destinationModel.findById(id)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      switchMapTo(
+        this.destinationModel.findByIdAndUpdate(id, { ...destinationUpdate })
+      ),
+      switchMapTo(
+        this.entityProvider.findOne$(
+          EntityType.Destination,
+          id,
+          this.destinationModel
+        ) as Observable<Destination>
+      )
     );
   }
 
-  postProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.postProcess$(
-      EntityType.Destination,
-      id,
-      this.destinationModel
-    );
+  post$(id: string): Observable<void> {
+    throw new NotImplementedException();
   }
 
   findAll$(): Observable<Destination[]> {
@@ -69,8 +72,8 @@ export class AdminDestinationsService {
     ) as Observable<Destination>;
   }
 
-  deleteProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
+  delete$(id: string): Observable<void> {
+    return this.entityProvider.delete$(
       EntityType.Destination,
       id,
       this.destinationModel

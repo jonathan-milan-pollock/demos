@@ -14,9 +14,10 @@ export const toVideo = (video: Video): Video => {
     dateCreated: video.dateCreated,
     datePublished: video.datePublished,
     coverImageId: video.coverImageId,
-    hlsStreamingUrl: video.hlsStreamingUrl,
+    hlsUrl: video.hlsUrl,
     isFlyOver: video.isFlyOver,
     isGenerated: video.isGenerated,
+    isProcessing: video.isProcessing,
   };
 };
 

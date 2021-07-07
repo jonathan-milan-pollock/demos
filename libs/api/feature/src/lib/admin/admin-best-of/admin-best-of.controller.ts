@@ -5,6 +5,7 @@ import {
   UseGuards,
   HttpCode,
   Get,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -60,17 +61,17 @@ export class AdminBestOfController {
   }
 
   @Roles(ADMIN)
-  @Post(':bestOfType/:id/delete')
+  @Delete(':bestOfType/:id')
   @ApiParam({
     name: 'bestOfType',
     enum: BestOfType,
   })
   @HttpCode(204)
-  deleteProcess$(
+  delete$(
     @Param('bestOfType', new BestOfTypeValidationPipe())
     bestOfType: BestOfType,
     @Param('id') id: string
   ): Observable<void> {
-    return this.adminBestOfService.deleteProcess$(bestOfType, id);
+    return this.adminBestOfService.delete$(bestOfType, id);
   }
 }

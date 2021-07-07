@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminMediaProcessesService } from './admin-media-processes.service';
 import { AdminMediaProcessesController } from './admin-media-processes.controller';
@@ -18,10 +17,6 @@ import { AdminMediaProcessesController } from './admin-media-processes.controlle
     HttpModule,
   ],
   controllers: [AdminMediaProcessesController],
-  providers: [
-    AdminMediaProcessesService,
-    EntityProvider,
-    ServerlessEntityProvider,
-  ],
+  providers: [AdminMediaProcessesService, EntityProvider],
 })
 export class AdminMediaProcessesModule {}

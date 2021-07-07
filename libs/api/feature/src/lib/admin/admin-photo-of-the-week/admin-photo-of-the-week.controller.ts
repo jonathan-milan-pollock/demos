@@ -6,6 +6,8 @@ import {
   HttpCode,
   UseGuards,
   Get,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -44,23 +46,20 @@ export class AdminPhotoOfTheWeekController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/update')
-  @HttpCode(204)
-  updateProcess$(
+  @Put(':id')
+  @ApiOkResponse({ type: PhotoOfTheWeekDto })
+  update$(
     @Param('id') id: string,
     @Body() photoOfTheWeekUpdate: PhotoOfTheWeekUpdateDto
-  ): Observable<void> {
-    return this.adminPhotoOfTheWeekService.updateProcess$(
-      id,
-      photoOfTheWeekUpdate
-    );
+  ): Observable<PhotoOfTheWeek> {
+    return this.adminPhotoOfTheWeekService.update$(id, photoOfTheWeekUpdate);
   }
 
   @Roles(ADMIN)
   @Post(':id/post')
   @HttpCode(204)
   postProcess$(@Param('id') id: string): Observable<void> {
-    return this.adminPhotoOfTheWeekService.postProcess$(id);
+    return this.adminPhotoOfTheWeekService.post$(id);
   }
 
   @Roles(ADMIN)
@@ -78,9 +77,9 @@ export class AdminPhotoOfTheWeekController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/delete')
+  @Delete(':id')
   @HttpCode(204)
   deleteProcess$(@Param('id') id: string): Observable<void> {
-    return this.adminPhotoOfTheWeekService.deleteProcess$(id);
+    return this.adminPhotoOfTheWeekService.delete$(id);
   }
 }

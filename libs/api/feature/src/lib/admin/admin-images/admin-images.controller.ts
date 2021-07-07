@@ -6,6 +6,7 @@ import {
   UseGuards,
   Post,
   HttpCode,
+  Headers,
   Delete,
   Query,
   UseInterceptors,
@@ -26,9 +27,9 @@ import { Observable } from 'rxjs';
 import { ADMIN, Image } from '@dark-rush-photography/shared/types';
 import {
   FileUploadDto,
-  ImageAddDto,
   ImageDto,
   ImageUpdateDto,
+  ThreeSixtyImageSettingsDto,
 } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
 import { AdminImagesService } from './admin-images.service';
@@ -41,28 +42,25 @@ export class AdminImagesController {
   constructor(private readonly adminImagesService: AdminImagesService) {}
 
   @Roles(ADMIN)
-  @Post()
-  @ApiOkResponse({ type: ImageDto })
-  add$(
-    @Query('entityId') entityId: string,
-    @Body() imageAdd: ImageAddDto
-  ): Observable<Image> {
-    return this.adminImagesService.add$(entityId, imageAdd);
-  }
-
-  @Roles(ADMIN)
-  @Post('upload-image')
+  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     type: FileUploadDto,
   })
-  @HttpCode(204)
+  @ApiOkResponse({ type: ImageDto })
   upload$(
+    @Headers('X-FILE-NAME') fileName: string,
     @Query('entityId') entityId: string,
     @UploadedFile() image: Express.Multer.File
-  ): Observable<void> {
-    return this.adminImagesService.uploadImage$(entityId, image);
+  ): Observable<Image> {
+    const isThreeSixtyImage = false;
+    return this.adminImagesService.upload$(
+      entityId,
+      fileName,
+      isThreeSixtyImage,
+      image
+    );
   }
 
   @Roles(ADMIN)
@@ -72,26 +70,37 @@ export class AdminImagesController {
   @ApiBody({
     type: FileUploadDto,
   })
-  @HttpCode(204)
+  @ApiOkResponse({ type: ImageDto })
   uploadThreeSixtyImage$(
+    @Headers('X-FILE-NAME') fileName: string,
     @Query('entityId') entityId: string,
     @UploadedFile() threeSixtyImage: Express.Multer.File
-  ): Observable<void> {
-    return this.adminImagesService.uploadThreeSixtyImage$(
+  ): Observable<Image> {
+    const isThreeSixtyImage = true;
+    return this.adminImagesService.upload$(
       entityId,
+      fileName,
+      isThreeSixtyImage,
       threeSixtyImage
     );
   }
 
   @Roles(ADMIN)
-  @Post(':id/update')
-  @HttpCode(204)
-  updateProcess$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string,
-    @Body() imageUpdate: ImageUpdateDto
-  ): Observable<void> {
-    return this.adminImagesService.updateProcess$(id, entityId, imageUpdate);
+  @Post('upload-lightroom-image')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: FileUploadDto,
+  })
+  @ApiOkResponse({ type: ImageDto })
+  uploadLightroomImage$(
+    @Headers('X-LIGHTROOM-PATH') lightroomPath: string,
+    @UploadedFile() lightroomImage: Express.Multer.File
+  ): Observable<Image> {
+    return this.adminImagesService.uploadLightroomImage$(
+      lightroomPath,
+      lightroomImage
+    );
   }
 
   @Roles(ADMIN)
@@ -106,13 +115,29 @@ export class AdminImagesController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/post')
+  @Put(':id/:imageDimensionType/three-sixty-image-settings')
   @HttpCode(204)
-  postProcess$(
+  updateThreeSixtyImageSettings$(
     @Param('id') id: string,
-    @Query('entityId') entityId: string
+    @Query('entityId') entityId: string,
+    @Body() threeSixtyImageSettings: ThreeSixtyImageSettingsDto
   ): Observable<void> {
-    return this.adminImagesService.postProcess$(id, entityId);
+    return this.adminImagesService.updateThreeSixtyImageSettings$(
+      id,
+      entityId,
+      threeSixtyImageSettings
+    );
+  }
+
+  @Roles(ADMIN)
+  @Put(':id/processing/:isProcessing')
+  @ApiOkResponse({ type: ImageDto })
+  setIsProcessing$(
+    @Param('id') id: string,
+    @Param('isProcessing') isProcessing: boolean,
+    @Query('entityId') entityId: string
+  ): Observable<Image> {
+    return this.adminImagesService.setIsProcessing$(id, entityId, isProcessing);
   }
 
   @Roles(ADMIN)
@@ -123,16 +148,6 @@ export class AdminImagesController {
     @Query('entityId') entityId: string
   ): Observable<Image> {
     return this.adminImagesService.findOne$(id, entityId);
-  }
-
-  @Roles(ADMIN)
-  @Post(':id/remove')
-  @HttpCode(204)
-  removeProcess$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
-  ): Observable<void> {
-    return this.adminImagesService.removeProcess$(id, entityId);
   }
 
   @Roles(ADMIN)

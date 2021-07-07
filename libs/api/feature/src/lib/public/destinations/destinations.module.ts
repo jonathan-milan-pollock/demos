@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { DestinationsService } from './destinations.service';
 import { DestinationsController } from './destinations.controller';
@@ -18,6 +17,6 @@ import { DestinationsController } from './destinations.controller';
     HttpModule,
   ],
   controllers: [DestinationsController],
-  providers: [DestinationsService, EntityProvider, ServerlessEntityProvider],
+  providers: [DestinationsService, EntityProvider],
 })
 export class DestinationsModule {}

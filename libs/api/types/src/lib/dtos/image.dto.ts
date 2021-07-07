@@ -4,7 +4,6 @@ import {
   IsInt,
   IsISO8601,
   IsMongoId,
-  IsOptional,
   IsString,
   IsUUID,
   Min,
@@ -35,28 +34,24 @@ export class ImageDto implements Image {
   @IsBoolean()
   isLoved!: boolean;
 
-  @IsBoolean()
-  isLiked!: boolean;
+  @IsString()
+  title!: string;
 
   @IsString()
-  @IsOptional()
-  title?: string;
+  description!: string;
 
   @IsString()
-  @IsOptional()
-  description?: string;
-
-  @IsString()
-  @IsOptional()
-  keywords?: string;
+  keywords!: string;
 
   @IsISO8601()
   dateCreated!: string;
 
   @IsISO8601()
-  @IsOptional()
-  datePublished?: string;
+  datePublished!: string;
 
   @IsBoolean()
   isGenerated!: boolean;
+
+  @IsBoolean()
+  isProcessing!: boolean;
 }

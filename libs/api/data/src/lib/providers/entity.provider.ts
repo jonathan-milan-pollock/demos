@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { filter, map, switchMap, switchMapTo, toArray } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import {
+  filter,
+  map,
+  mapTo,
+  switchMap,
+  switchMapTo,
+  toArray,
+} from 'rxjs/operators';
 
 import {
   BestOfType,
@@ -10,7 +17,6 @@ import {
   EntityType,
   MediaProcessType,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_GROUP } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   fromDocumentModel,
@@ -23,6 +29,8 @@ import {
   validateEntityFound,
   validateEntityIsPublic,
   validateEntityNotFound,
+  validateOneEntity,
+  validateProcessingEntity,
 } from '../entities/entity-validation.functions';
 
 @Injectable()
@@ -37,7 +45,7 @@ export class EntityProvider {
     return this.getEntityTypeFromMediaProcessType(mediaProcessType);
   }
 
-  validateFound(documentModel: DocumentModel | null): DocumentModel {
+  validateEntityFound(documentModel: DocumentModel | null): DocumentModel {
     return validateEntityFound(documentModel);
   }
 
@@ -48,21 +56,43 @@ export class EntityProvider {
     return validateEntityType(entityType, documentModel);
   }
 
-  validateOne(documentModels: Partial<Entity>[]): Partial<Entity> {
-    return this.validateOne(documentModels);
+  validateOneEntity(documentModels: Partial<Entity>[]): Partial<Entity> {
+    return validateOneEntity(documentModels);
+  }
+
+  validateProcessingEntity(documentModel: DocumentModel): DocumentModel {
+    return validateProcessingEntity(documentModel);
   }
 
   create$(
     entityType: EntityType,
+    group: string,
     slug: string,
-    entityModel: Model<DocumentModel>,
-    group = DEFAULT_GROUP
+    entityModel: Model<DocumentModel>
   ): Observable<Partial<Entity>> {
     return from(entityModel.findOne({ type: entityType, group, slug })).pipe(
       map(validateEntityNotFound),
       switchMapTo(from(new entityModel(newEntity(entityType, slug)).save())),
       map(validateEntityCreate),
       map((documentModel) => fromDocumentModel(entityType, documentModel))
+    );
+  }
+
+  findOrCreate$(
+    entityType: EntityType,
+    group: string,
+    slug: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<DocumentModel> {
+    return from(
+      from(entityModel.findOne({ type: entityType, group, slug }))
+    ).pipe(
+      switchMap((documentModel) =>
+        documentModel
+          ? of(documentModel)
+          : from(new entityModel(newEntity(entityType, slug)).save())
+      ),
+      map(validateEntityFound)
     );
   }
 
@@ -111,6 +141,24 @@ export class EntityProvider {
       map(validateEntityIsPublic),
       map((documentModel) => validateEntityType(entityType, documentModel)),
       map((documentModel) => fromDocumentModelPublic(entityType, documentModel))
+    );
+  }
+
+  delete$(
+    entityType: EntityType,
+    id: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<void> {
+    return from(entityModel.findById(id)).pipe(
+      map((documentModel) =>
+        documentModel
+          ? validateEntityType(entityType, documentModel)
+          : of(documentModel)
+      ),
+      switchMap((documentModel) =>
+        documentModel ? from(entityModel.findByIdAndDelete(id)) : of()
+      ),
+      mapTo(undefined)
     );
   }
 }

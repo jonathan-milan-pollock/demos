@@ -47,16 +47,28 @@ export const validateEntityIsPublic = (
   return documentModel;
 };
 
-export const validateEntityNotProcessing = (
-  entityModel: DocumentModel
+export const validateProcessingEntity = (
+  documentModel: DocumentModel
 ): DocumentModel => {
-  if (entityModel.isProcessing) {
+  if (!documentModel.isProcessing) {
+    throw new ConflictException(
+      'Entity cannot be modified unless it is being processed',
+      HttpStatus.CONFLICT
+    );
+  }
+  return documentModel;
+};
+
+export const validateNotProcessingEntity = (
+  documentModel: DocumentModel
+): DocumentModel => {
+  if (documentModel.isProcessing) {
     throw new ConflictException(
       'Entity is currently being processed',
       HttpStatus.CONFLICT
     );
   }
-  return entityModel;
+  return documentModel;
 };
 
 export const validateOneEntity = (

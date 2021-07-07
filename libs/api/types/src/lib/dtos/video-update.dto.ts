@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsEnum,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -9,11 +10,14 @@ import {
   Min,
 } from 'class-validator';
 
-import { VideoUpdate } from '@dark-rush-photography/shared/types';
+import { MediaState, VideoUpdate } from '@dark-rush-photography/shared/types';
 
 export class VideoUpdateDto implements VideoUpdate {
   @IsString()
-  fileName!: string;
+  fileName?: string;
+
+  @IsEnum(MediaState)
+  state!: MediaState;
 
   @IsInt()
   @Min(0)
@@ -35,9 +39,6 @@ export class VideoUpdateDto implements VideoUpdate {
   keywords?: string;
 
   @IsISO8601()
-  dateCreated!: string;
-
-  @IsISO8601()
   @IsOptional()
   datePublished?: string;
 
@@ -46,7 +47,7 @@ export class VideoUpdateDto implements VideoUpdate {
 
   @IsUrl()
   @IsOptional()
-  hlsStreamingUrl?: string;
+  hlsUrl?: string;
 
   @IsBoolean()
   isFlyOver!: boolean;

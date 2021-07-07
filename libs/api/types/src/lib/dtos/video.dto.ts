@@ -4,7 +4,6 @@ import {
   IsInt,
   IsISO8601,
   IsMongoId,
-  IsOptional,
   IsString,
   IsUrl,
   IsUUID,
@@ -34,34 +33,32 @@ export class VideoDto implements Video {
   isStared!: boolean;
 
   @IsString()
-  @IsOptional()
-  title?: string;
+  title!: string;
 
   @IsString()
-  @IsOptional()
-  description?: string;
+  description!: string;
 
   @IsString()
-  @IsOptional()
-  keywords?: string;
+  keywords!: string;
 
   @IsISO8601()
   dateCreated!: string;
 
   @IsISO8601()
-  @IsOptional()
-  datePublished?: string;
+  datePublished!: string;
 
   @IsUUID()
-  coverImageId?: string;
+  coverImageId!: string;
 
   @IsUrl()
-  @IsOptional()
-  hlsStreamingUrl?: string;
+  hlsUrl!: string;
 
   @IsBoolean()
   isFlyOver!: boolean;
 
   @IsBoolean()
   isGenerated!: boolean;
+
+  @IsBoolean()
+  isProcessing!: boolean;
 }

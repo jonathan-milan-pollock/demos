@@ -23,6 +23,8 @@ export class FavoritesService {
   findOne$(): Observable<Favorites> {
     return this.entityProvider
       .findAllPublic$(EntityType.Favorites, this.favoritesModel)
-      .pipe(map(this.entityProvider.validateOne)) as Observable<Favorites>;
+      .pipe(
+        map(this.entityProvider.validateOneEntity)
+      ) as Observable<Favorites>;
   }
 }

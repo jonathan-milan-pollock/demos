@@ -8,4 +8,7 @@ export const environment: Env = {
     functionsKey: '%%DRP_SERVERLESS_FUNCTIONS_KEY%%',
   },
   mongoDbConnectionString: '%%MONGO_DB_CONNECTION_STRING%%',
+  azureStorageConnectionString: '%%AZURE_STORAGE_CONNECTION_STRING%%',
+  tinyPngApiKey: '%%TINY_PNG_API_KEY%%',
+  ayrshareApiKey: '%%AYRSHARE_API_KEY%%',
 };

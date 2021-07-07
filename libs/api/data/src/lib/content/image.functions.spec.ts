@@ -10,7 +10,6 @@ describe('image.functions', () => {
     order: 10,
     isStared: true,
     isLoved: true,
-    isLiked: true,
     title: 'title',
     description: 'description',
     keywords: 'keywords',

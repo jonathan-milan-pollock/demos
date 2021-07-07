@@ -1,96 +1,111 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
-import { map, switchMapTo } from 'rxjs/operators';
+import { combineLatest, from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 
 import {
-  ContentType,
+  ENV,
   Image,
-  ImageAdd,
   ImageUpdate,
-  MediaState,
-  MediaType,
+  ThreeSixtyImageSettings,
 } from '@dark-rush-photography/shared/types';
 import {
-  ContentProvider,
   Document,
   DocumentModel,
-  ServerlessMediaProvider,
+  EntityProvider,
+  ImageDimensionProvider,
+  ImageProvider,
+  ImageRemoveProvider,
+  ImageUpdateProvider,
+  ImageUploadProvider,
 } from '@dark-rush-photography/api/data';
+import { Env } from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class AdminImagesService {
   constructor(
+    @Inject(ENV) private readonly env: Env,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly contentProvider: ContentProvider,
-    private readonly serverlessMediaProvider: ServerlessMediaProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly imageProvider: ImageProvider,
+    private readonly imageDimensionProvider: ImageDimensionProvider,
+    private readonly imageUploadProvider: ImageUploadProvider,
+    private readonly imageUpdateProvider: ImageUpdateProvider,
+    private readonly imageRemoveProvider: ImageRemoveProvider
   ) {}
 
-  add$(entityId: string, imageAdd: ImageAdd): Observable<Image> {
+  upload$(
+    entityId: string,
+    fileName: string,
+    isThreeSixtyImage: boolean,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    const isProcessing = true;
     const id = uuidv4();
-    return this.contentProvider
-      .add$(
-        ContentType.Image,
-        entityId,
-        this.entityModel,
-        (documentModel) =>
-          !!documentModel.images.find(
-            (image) => image.fileName == imageAdd.fileName
-          ),
-        (documentModel) => ({
-          images: [
-            ...documentModel.images,
-            {
-              ...imageAdd,
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      map(this.entityProvider.validateProcessingEntity),
+      map((documentModel) =>
+        this.imageProvider.validateImageNotFound(fileName, documentModel)
+      ),
+      map(this.imageProvider.validateCanAddImageToEntity),
+      switchMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          from(
+            this.imageProvider.add$(
               id,
               entityId,
-              state: MediaState.New,
-              order: 0,
-              isStared: false,
-              isLoved: false,
-              isLiked: false,
-              isGenerated: false,
-            },
-          ],
-        })
+              fileName,
+              isProcessing,
+              this.entityModel
+            )
+          ),
+        ])
+      ),
+      map(([documentModel, image]) => {
+        return this.imageProvider.getMedia(
+          image.id,
+          image.fileName,
+          image.state,
+          documentModel
+        );
+      }),
+      switchMap((media) =>
+        from(
+          this.imageUploadProvider.upload$(
+            media,
+            isThreeSixtyImage,
+            file,
+            this.entityModel
+          )
+        )
+      ),
+      switchMapTo(from(this.findOne$(id, entityId)))
+    );
+  }
+
+  uploadLightroomImage$(
+    lightroomPath: string,
+    file: Express.Multer.File
+  ): Observable<Image> {
+    const lightroomMedia = this.imageProvider.getLightroomMedia(lightroomPath);
+    return this.entityProvider
+      .findOrCreate$(
+        lightroomMedia.entityType,
+        lightroomMedia.entityGroup,
+        lightroomMedia.entitySlug,
+        this.entityModel
       )
-      .pipe(switchMapTo(this.findOne$(id, entityId)));
-  }
-
-  uploadImage$(entityId: string, image: Express.Multer.File): Observable<void> {
-    return this.serverlessMediaProvider.uploadImage$(
-      entityId,
-      image,
-      this.entityModel
-    );
-  }
-
-  uploadThreeSixtyImage$(
-    entityId: string,
-    threeSixtyImage: Express.Multer.File
-  ): Observable<void> {
-    return this.serverlessMediaProvider.uploadThreeSixtyImage$(
-      entityId,
-      threeSixtyImage,
-      this.entityModel
-    );
-  }
-
-  updateProcess$(
-    id: string,
-    entityId: string,
-    imageUpdate: ImageUpdate
-  ): Observable<void> {
-    return this.serverlessMediaProvider.updateImageProcess$(
-      id,
-      entityId,
-      imageUpdate,
-      this.entityModel
-    );
+      .pipe(
+        switchMap((documentModel) =>
+          this.upload$(documentModel._id, lightroomMedia.fileName, false, file)
+        )
+      );
   }
 
   update$(
@@ -98,68 +113,94 @@ export class AdminImagesService {
     entityId: string,
     imageUpdate: ImageUpdate
   ): Observable<Image> {
-    return this.contentProvider
-      .update$(
-        ContentType.Image,
-        id,
-        entityId,
-        this.entityModel,
-        (documentModel) => {
-          const foundImage = documentModel.images.find(
-            (image) => image.id == id
-          );
-          return {
-            images: [
-              ...documentModel.images.filter((image) => image.id !== id),
-              { ...foundImage, ...imageUpdate },
-            ],
-          } as Partial<DocumentModel>;
-        }
-      )
-      .pipe(switchMapTo(this.findOne$(id, entityId)));
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      map(this.entityProvider.validateProcessingEntity),
+      switchMap((documentModel) =>
+        combineLatest([of(documentModel), from(this.findOne$(id, entityId))])
+      ),
+      map(([documentModel, image]) => ({
+        image: this.imageProvider.validateImageNotProcessing(image),
+        documentModel,
+      })),
+      switchMap(({ image, documentModel }) =>
+        from(
+          this.imageUpdateProvider.update$(
+            image,
+            imageUpdate,
+            documentModel,
+            this.entityModel
+          )
+        )
+      ),
+      switchMapTo(from(this.findOne$(id, entityId)))
+    );
   }
 
-  postProcess$(id: string, entityId: string): Observable<void> {
-    return this.serverlessMediaProvider.postProcess$(
-      MediaType.Image,
-      id,
-      entityId,
-      this.entityModel
+  updateThreeSixtyImageSettings$(
+    id: string,
+    entityId: string,
+    threeSixtyImageSettings: ThreeSixtyImageSettings
+  ): Observable<void> {
+    return this.imageDimensionProvider
+      .updateThreeSixtyImageSettings$(
+        id,
+        entityId,
+        threeSixtyImageSettings,
+        this.entityModel
+      )
+      .pipe(mapTo(undefined));
+  }
+
+  setIsProcessing$(
+    id: string,
+    entityId: string,
+    isProcessing: boolean
+  ): Observable<Image> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      switchMap((documentModel) =>
+        combineLatest([of(documentModel), from(this.findOne$(id, entityId))])
+      ),
+      switchMapTo(
+        from(
+          this.imageUpdateProvider.setIsProcessing$(
+            id,
+            entityId,
+            isProcessing,
+            this.entityModel
+          )
+        )
+      ),
+      switchMapTo(from(this.findOne$(id, entityId)))
     );
   }
 
   findOne$(id: string, entityId: string): Observable<Image> {
-    return this.contentProvider
-      .findOne$(ContentType.Image, id, entityId, this.entityModel)
-      .pipe(
-        map((documentModel) =>
-          this.contentProvider.toImage(
-            documentModel.images.find((image) => image.id == id)
-          )
-        )
-      );
-  }
-
-  removeProcess$(id: string, entityId: string): Observable<void> {
-    return this.serverlessMediaProvider.removeProcess$(
-      MediaType.Image,
-      id,
-      entityId,
-      this.entityModel
-    );
+    return this.imageProvider.findOne$(id, entityId, this.entityModel);
   }
 
   remove$(id: string, entityId: string): Observable<void> {
-    return this.contentProvider.remove$(
-      ContentType.Image,
-      id,
-      entityId,
-      this.entityModel,
-      (documentModel) => {
-        return {
-          images: [...documentModel.images.filter((image) => image.id !== id)],
-        } as Partial<DocumentModel>;
-      }
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      map(this.entityProvider.validateProcessingEntity),
+      map((documentModel) => ({
+        image: documentModel.images.find((image) => image.id == id),
+        documentModel,
+      })),
+      switchMap(({ image, documentModel }) => {
+        if (image && this.imageProvider.validateImageNotProcessing(image)) {
+          return from(
+            this.imageRemoveProvider.remove$(
+              image,
+              documentModel,
+              this.entityModel
+            )
+          );
+        }
+        return of(image);
+      }),
+      mapTo(undefined)
     );
   }
 }

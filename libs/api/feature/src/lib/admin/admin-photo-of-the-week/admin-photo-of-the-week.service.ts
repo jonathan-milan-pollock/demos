@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 import {
   PhotoOfTheWeek,
@@ -14,16 +14,15 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
+import { map, switchMapTo } from 'rxjs/operators';
 
 @Injectable()
 export class AdminPhotoOfTheWeekService {
   constructor(
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(
@@ -31,34 +30,35 @@ export class AdminPhotoOfTheWeekService {
   ): Observable<PhotoOfTheWeek> {
     return this.entityProvider.create$(
       EntityType.PhotoOfTheWeek,
+      photoOfTheWeekCreate.group,
       photoOfTheWeekCreate.slug,
-      this.photoOfTheWeekModel,
-      photoOfTheWeekCreate.group
+      this.photoOfTheWeekModel
     ) as Observable<PhotoOfTheWeek>;
   }
 
-  updateProcess$(
+  update$(
     id: string,
     photoOfTheWeekUpdate: PhotoOfTheWeekUpdate
-  ): Observable<void> {
-    return this.serverlessEntityProvider.updateProcess$(
-      EntityType.PhotoOfTheWeek,
-      id,
-      this.photoOfTheWeekModel,
-      {
-        ...photoOfTheWeekUpdate,
-        hasExtendedReality: false,
-        socialMediaUrls: [],
-      }
+  ): Observable<PhotoOfTheWeek> {
+    return from(this.photoOfTheWeekModel.findById(id)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      switchMapTo(
+        this.photoOfTheWeekModel.findByIdAndUpdate(id, {
+          ...photoOfTheWeekUpdate,
+        })
+      ),
+      switchMapTo(
+        this.entityProvider.findOne$(
+          EntityType.PhotoOfTheWeek,
+          id,
+          this.photoOfTheWeekModel
+        ) as Observable<PhotoOfTheWeek>
+      )
     );
   }
 
-  postProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.postProcess$(
-      EntityType.PhotoOfTheWeek,
-      id,
-      this.photoOfTheWeekModel
-    );
+  post$(id: string): Observable<void> {
+    throw new NotImplementedException();
   }
 
   findAll$(): Observable<PhotoOfTheWeek[]> {
@@ -76,8 +76,8 @@ export class AdminPhotoOfTheWeekService {
     ) as Observable<PhotoOfTheWeek>;
   }
 
-  deleteProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
+  delete$(id: string): Observable<void> {
+    return this.entityProvider.delete$(
       EntityType.PhotoOfTheWeek,
       id,
       this.photoOfTheWeekModel

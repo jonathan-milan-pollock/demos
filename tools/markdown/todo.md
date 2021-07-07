@@ -84,3 +84,16 @@ TODO: Make note about Auth0 roles and how added to the user
     }
   }
 ```
+
+// TODO: Dimension pixels needs to be specified when finding entities
+// TODO: Loading all will only return what is needed then more detail can be received with find one
+// TODO: query params width and height (when not specified will load all)
+// Need a media state so that images do not go public until the document is posted
+// Will display images in creation order until images are reordered at that point they will take on order values
+// With the messages and web socket if not on a corresponding page or not logged in will add the update to a table to display them in the dropdown
+// Delete Entity
+// If images or videos then delete first
+// Otherwise can just delete from mongo db - there is no process
+// 1. Did slug change??
+// Need status back on the image
+// 2. Did the title, description, keywords, date published change

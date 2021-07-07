@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminDestinationsService } from './admin-destinations.service';
 import { AdminDestinationsController } from './admin-destinations.controller';
@@ -18,10 +17,6 @@ import { AdminDestinationsController } from './admin-destinations.controller';
     HttpModule,
   ],
   controllers: [AdminDestinationsController],
-  providers: [
-    AdminDestinationsService,
-    EntityProvider,
-    ServerlessEntityProvider,
-  ],
+  providers: [AdminDestinationsService, EntityProvider],
 })
 export class AdminDestinationsModule {}

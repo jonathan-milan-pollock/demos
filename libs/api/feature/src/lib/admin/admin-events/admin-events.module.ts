@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminEventsService } from './admin-events.service';
 import { AdminEventsController } from './admin-events.controller';
@@ -18,6 +17,6 @@ import { AdminEventsController } from './admin-events.controller';
     HttpModule,
   ],
   controllers: [AdminEventsController],
-  providers: [AdminEventsService, EntityProvider, ServerlessEntityProvider],
+  providers: [AdminEventsService, EntityProvider],
 })
 export class AdminEventsModule {}

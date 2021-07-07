@@ -9,21 +9,21 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 
 @Injectable()
 export class AdminAboutService {
   constructor(
     @InjectModel(Document.name)
     private readonly aboutModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(slug: string): Observable<About> {
     return this.entityProvider.create$(
       EntityType.About,
+      DEFAULT_ENTITY_GROUP,
       slug,
       this.aboutModel
     ) as Observable<About>;
@@ -44,11 +44,7 @@ export class AdminAboutService {
     ) as Observable<About>;
   }
 
-  deleteProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
-      EntityType.About,
-      id,
-      this.aboutModel
-    );
+  delete$(id: string): Observable<void> {
+    return this.entityProvider.delete$(EntityType.About, id, this.aboutModel);
   }
 }

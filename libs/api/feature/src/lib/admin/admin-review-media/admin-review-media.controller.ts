@@ -5,6 +5,7 @@ import {
   HttpCode,
   UseGuards,
   Get,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -44,9 +45,9 @@ export class AdminReviewMediaController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/delete')
+  @Delete(':id')
   @HttpCode(204)
-  deleteProcess$(@Param('id') id: string): Observable<void> {
-    return this.adminReviewMediaService.deleteProcess$(id);
+  delete$(@Param('id') id: string): Observable<void> {
+    return this.adminReviewMediaService.delete$(id);
   }
 }

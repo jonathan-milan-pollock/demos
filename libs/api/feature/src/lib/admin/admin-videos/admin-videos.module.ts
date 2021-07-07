@@ -2,10 +2,16 @@ import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  ContentProvider,
+  AzureStorageProvider,
   Document,
   DocumentSchema,
-  ServerlessMediaProvider,
+  EntityProvider,
+  ServerlessVideoProvider,
+  VideoProvider,
+  VideoDimensionProvider,
+  VideoRemoveProvider,
+  VideoUpdateProvider,
+  VideoUploadProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminVideosService } from './admin-videos.service';
 import { AdminVideosController } from './admin-videos.controller';
@@ -18,6 +24,16 @@ import { AdminVideosController } from './admin-videos.controller';
     HttpModule,
   ],
   controllers: [AdminVideosController],
-  providers: [AdminVideosService, ContentProvider, ServerlessMediaProvider],
+  providers: [
+    AdminVideosService,
+    EntityProvider,
+    VideoProvider,
+    VideoDimensionProvider,
+    VideoUploadProvider,
+    VideoUpdateProvider,
+    VideoRemoveProvider,
+    AzureStorageProvider,
+    ServerlessVideoProvider,
+  ],
 })
 export class AdminVideosModule {}

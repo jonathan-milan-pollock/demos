@@ -3,22 +3,22 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
-import { map, switchMapTo } from 'rxjs/operators';
+import { combineLatest, from, Observable, of } from 'rxjs';
+import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
 
 import {
-  ContentType,
-  MediaState,
-  MediaType,
+  HlsVideoAdd,
   Video,
-  VideoAdd,
   VideoUpdate,
 } from '@dark-rush-photography/shared/types';
 import {
-  ContentProvider,
   Document,
   DocumentModel,
-  ServerlessMediaProvider,
+  EntityProvider,
+  VideoProvider,
+  VideoRemoveProvider,
+  VideoUpdateProvider,
+  VideoUploadProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -26,58 +26,75 @@ export class AdminVideosService {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly contentProvider: ContentProvider,
-    private readonly serverlessMediaProvider: ServerlessMediaProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly videoProvider: VideoProvider,
+    private readonly videoUploadProvider: VideoUploadProvider,
+    private readonly videoUpdateProvider: VideoUpdateProvider,
+    private readonly videoRemoveProvider: VideoRemoveProvider
   ) {}
 
-  add$(entityId: string, videoAdd: VideoAdd): Observable<Video> {
+  addHlsVideo$(entityId: string, hlsVideoAdd: HlsVideoAdd): Observable<Video> {
+    const fileName = '';
+    const isProcessing = false;
     const id = uuidv4();
-    return this.contentProvider
-      .add$(
-        ContentType.Video,
-        entityId,
-        this.entityModel,
-        (documentModel) =>
-          !!documentModel.videos.find(
-            (video) => video.fileName == videoAdd.fileName
-          ),
-        (documentModel) => ({
-          videos: [
-            ...documentModel.videos,
-            {
-              ...videoAdd,
-              id,
-              entityId,
-              state: MediaState.New,
-              order: 0,
-              isStared: false,
-              isFlyOver: false,
-              isGenerated: false,
-            },
-          ],
-        })
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      map(this.videoProvider.validateCanAddVideoToEntity),
+      switchMapTo(
+        this.videoProvider.add$(
+          id,
+          entityId,
+          fileName,
+          hlsVideoAdd.hlsUrl,
+          isProcessing,
+          this.entityModel
+        )
       )
-      .pipe(switchMapTo(this.findOne$(id, entityId)));
-  }
-
-  uploadVideo$(entityId: string, video: Express.Multer.File): Observable<void> {
-    return this.serverlessMediaProvider.uploadVideo$(
-      entityId,
-      video,
-      this.entityModel
     );
   }
 
-  updateProcess$(
-    id: string,
+  upload$(
+    fileName: string,
     entityId: string,
-    videoUpdate: VideoUpdate
-  ): Observable<void> {
-    return this.serverlessMediaProvider.updateVideoProcess$(
-      id,
-      entityId,
-      videoUpdate,
-      this.entityModel
+    file: Express.Multer.File
+  ): Observable<Video> {
+    const hlsUrl = '';
+    const isProcessing = true;
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      map(this.entityProvider.validateProcessingEntity),
+      map((documentModel) =>
+        this.videoProvider.validateVideoNotFound(fileName, documentModel)
+      ),
+      map(this.videoProvider.validateCanAddVideoToEntity),
+      switchMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          from(
+            this.videoProvider.add$(
+              id,
+              entityId,
+              fileName,
+              hlsUrl,
+              isProcessing,
+              this.entityModel
+            )
+          ),
+        ])
+      ),
+      map(([documentModel, image]) => {
+        return this.videoProvider.getMedia(
+          image.id,
+          image.fileName,
+          image.state,
+          documentModel
+        );
+      }),
+      switchMap((media) =>
+        from(this.videoUploadProvider.upload$(media, file, this.entityModel))
+      ),
+      switchMapTo(from(this.findOne$(id, entityId)))
     );
   }
 
@@ -86,68 +103,39 @@ export class AdminVideosService {
     entityId: string,
     videoUpdate: VideoUpdate
   ): Observable<Video> {
-    return this.contentProvider
-      .update$(
-        ContentType.Video,
-        id,
-        entityId,
-        this.entityModel,
-        (documentModel) => {
-          const foundVideo = documentModel.videos.find(
-            (video) => video.id == id
-          );
-          return {
-            videos: [
-              ...documentModel.videos.filter((video) => video.id !== id),
-              { ...foundVideo, ...videoUpdate },
-            ],
-          } as Partial<DocumentModel>;
-        }
-      )
-      .pipe(switchMapTo(this.findOne$(id, entityId)));
-  }
-
-  postProcess$(id: string, entityId: string): Observable<void> {
-    return this.serverlessMediaProvider.postProcess$(
-      MediaType.Video,
+    return this.videoProvider.update$(
       id,
       entityId,
+      videoUpdate,
       this.entityModel
     );
   }
 
   findOne$(id: string, entityId: string): Observable<Video> {
-    return this.contentProvider
-      .findOne$(ContentType.Video, id, entityId, this.entityModel)
-      .pipe(
-        map((documentModel) =>
-          this.contentProvider.toVideo(
-            documentModel.videos.find((video) => video.id == id)
-          )
-        )
-      );
-  }
-
-  removeProcess$(id: string, entityId: string): Observable<void> {
-    return this.serverlessMediaProvider.removeProcess$(
-      MediaType.Video,
-      id,
-      entityId,
-      this.entityModel
-    );
+    return this.videoProvider.findOne$(id, entityId, this.entityModel);
   }
 
   remove$(id: string, entityId: string): Observable<void> {
-    return this.contentProvider.remove$(
-      ContentType.Video,
-      id,
-      entityId,
-      this.entityModel,
-      (documentModel) => {
-        return {
-          videos: [...documentModel.videos.filter((video) => video.id !== id)],
-        } as Partial<DocumentModel>;
-      }
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      map(this.entityProvider.validateProcessingEntity),
+      map((documentModel) => ({
+        video: documentModel.videos.find((video) => video.id == id),
+        documentModel,
+      })),
+      switchMap(({ video, documentModel }) => {
+        if (video && this.videoProvider.validateVideoNotProcessing(video)) {
+          return from(
+            this.videoRemoveProvider.remove$(
+              video,
+              documentModel,
+              this.entityModel
+            )
+          );
+        }
+        return of(video);
+      }),
+      mapTo(undefined)
     );
   }
 }
