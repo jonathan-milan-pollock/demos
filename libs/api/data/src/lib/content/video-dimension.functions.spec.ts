@@ -12,7 +12,7 @@ describe('video-dimension.functions', () => {
     id: 'id',
     entityId: 'entityId',
     videoId: 'videoId',
-    type: VideoDimensionType.Tile,
+    type: VideoDimensionType.YouTube,
     pixels: {
       width: 10,
       height: 20,

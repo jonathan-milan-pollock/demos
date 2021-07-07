@@ -26,6 +26,6 @@ export class BestOfService {
         this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
         this.bestOfModel
       )
-      .pipe(map(this.entityProvider.validateOne)) as Observable<BestOf>;
+      .pipe(map(this.entityProvider.validateOneEntity)) as Observable<BestOf>;
   }
 }

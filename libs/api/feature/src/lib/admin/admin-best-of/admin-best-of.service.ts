@@ -10,21 +10,21 @@ import {
   Document,
   DocumentModel,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 
 @Injectable()
 export class AdminBestOfService {
   constructor(
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(bestOfType: BestOfType): Observable<BestOf> {
     return this.entityProvider.create$(
       this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
+      DEFAULT_ENTITY_GROUP,
       bestOfType,
       this.bestOfModel
     ) as Observable<BestOf>;
@@ -36,11 +36,11 @@ export class AdminBestOfService {
         this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
         this.bestOfModel
       )
-      .pipe(map(this.entityProvider.validateOne)) as Observable<BestOf>;
+      .pipe(map(this.entityProvider.validateOneEntity)) as Observable<BestOf>;
   }
 
-  deleteProcess$(bestOfType: BestOfType, id: string): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
+  delete$(bestOfType: BestOfType, id: string): Observable<void> {
+    return this.entityProvider.delete$(
       this.entityProvider.getEntityTypeFromBestOfType(bestOfType),
       id,
       this.bestOfModel

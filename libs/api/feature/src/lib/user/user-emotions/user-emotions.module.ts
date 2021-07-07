@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  ContentProvider,
   Document,
   DocumentSchema,
+  EmotionProvider,
 } from '@dark-rush-photography/api/data';
 import { UserEmotionsService } from './user-emotions.service';
 import { UserEmotionsController } from './user-emotions.controller';
@@ -16,6 +16,6 @@ import { UserEmotionsController } from './user-emotions.controller';
     ]),
   ],
   controllers: [UserEmotionsController],
-  providers: [UserEmotionsService, ContentProvider],
+  providers: [UserEmotionsService, EmotionProvider],
 })
 export class UserEmotionsModule {}

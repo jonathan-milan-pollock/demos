@@ -1,5 +1,5 @@
 import { EntityType, Favorites } from '@dark-rush-photography/shared/types';
-import { FAVORITES_SLUG } from '@dark-rush-photography/shared-server/types';
+import { FAVORITES_SLUG } from '@dark-rush-photography/api/types';
 import { Content } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { toImage } from '../content/image.functions';

@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminSocialMediaService } from './admin-social-media.service';
 import { AdminSocialMediaController } from './admin-social-media.controller';
@@ -18,10 +17,6 @@ import { AdminSocialMediaController } from './admin-social-media.controller';
     HttpModule,
   ],
   controllers: [AdminSocialMediaController],
-  providers: [
-    AdminSocialMediaService,
-    EntityProvider,
-    ServerlessEntityProvider,
-  ],
+  providers: [AdminSocialMediaService, EntityProvider],
 })
 export class AdminSocialMediaModule {}

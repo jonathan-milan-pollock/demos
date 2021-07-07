@@ -1,4 +1,12 @@
-import { Controller, Post, HttpCode, UseGuards, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  HttpCode,
+  UseGuards,
+  Get,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -35,9 +43,9 @@ export class AdminFavoritesController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/delete')
+  @Delete(':id')
   @HttpCode(204)
-  deleteProcess$(id: string): Observable<void> {
-    return this.adminFavoritesService.deleteProcess$(id);
+  delete$(@Param('id') id: string): Observable<void> {
+    return this.adminFavoritesService.delete$(id);
   }
 }

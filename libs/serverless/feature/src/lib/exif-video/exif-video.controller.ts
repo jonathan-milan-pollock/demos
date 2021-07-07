@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Req } from '@nestjs/common';
 import { AzureRequest } from '@nestjs/azure-func-http';
 
-import { Activity } from '@dark-rush-photography/serverless/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { ExifVideoService } from './exif-video.service';
 
 @Controller('exif-video')
@@ -11,8 +11,8 @@ export class ExifVideoController {
   @Get()
   async exifVideo(
     @Req() request: AzureRequest,
-    @Body() activity: Activity
+    @Body() media: Media
   ): Promise<void> {
-    request.context.done(null, await this.exifVideoService.exifVideo(activity));
+    request.context.done(null, await this.exifVideoService.exifVideo(media));
   }
 }

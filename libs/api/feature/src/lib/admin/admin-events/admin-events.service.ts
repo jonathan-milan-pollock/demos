@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 import {
   Event,
@@ -14,42 +14,42 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
+import { map, switchMapTo } from 'rxjs/operators';
 
 @Injectable()
 export class AdminEventsService {
   constructor(
     @InjectModel(Document.name)
     private readonly eventModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(eventCreate: EventCreate): Observable<Event> {
     return this.entityProvider.create$(
       EntityType.Event,
+      eventCreate.group,
       eventCreate.slug,
-      this.eventModel,
-      eventCreate.group
+      this.eventModel
     ) as Observable<Event>;
   }
 
-  updateProcess$(id: string, eventUpdate: EventUpdate): Observable<void> {
-    return this.serverlessEntityProvider.updateProcess$(
-      EntityType.Event,
-      id,
-      this.eventModel,
-      { ...eventUpdate, hasExtendedReality: false, socialMediaUrls: [] }
+  update$(id: string, eventUpdate: EventUpdate): Observable<Event> {
+    return from(this.eventModel.findById(id)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      switchMapTo(this.eventModel.findByIdAndUpdate(id, { ...eventUpdate })),
+      switchMapTo(
+        this.entityProvider.findOne$(
+          EntityType.Event,
+          id,
+          this.eventModel
+        ) as Observable<Event>
+      )
     );
   }
 
-  postProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.postProcess$(
-      EntityType.Event,
-      id,
-      this.eventModel
-    );
+  post$(id: string): Observable<void> {
+    throw new NotImplementedException();
   }
 
   findAll$(): Observable<Event[]> {
@@ -67,11 +67,7 @@ export class AdminEventsService {
     ) as Observable<Event>;
   }
 
-  deleteProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
-      EntityType.Event,
-      id,
-      this.eventModel
-    );
+  delete$(id: string): Observable<void> {
+    return this.entityProvider.delete$(EntityType.Event, id, this.eventModel);
   }
 }

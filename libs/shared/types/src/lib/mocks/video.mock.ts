@@ -21,7 +21,8 @@ export const mockVideo = (): Video => ({
   dateCreated: faker.date.recent().toISOString(),
   datePublished: faker.date.recent().toISOString(),
   coverImageId: faker.datatype.uuid(),
-  hlsStreamingUrl: faker.internet.url(),
+  hlsUrl: faker.internet.url(),
   isFlyOver: faker.datatype.boolean(),
   isGenerated: faker.datatype.boolean(),
+  isProcessing: faker.datatype.boolean(),
 });

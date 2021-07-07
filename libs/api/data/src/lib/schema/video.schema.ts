@@ -1,7 +1,7 @@
 import { MediaState } from '@dark-rush-photography/shared/types';
 
 export const videoSchema = {
-  id: { type: String, required: false },
+  id: { type: String, required: true },
   entityId: { type: String, required: true },
   fileName: { type: String, required: true },
   state: {
@@ -11,9 +11,9 @@ export const videoSchema = {
   },
   order: { type: Number, required: true },
   isStared: { type: Boolean, required: true },
-  title: { type: String, required: false },
-  description: { type: String, required: false },
-  keywords: { type: String, required: false },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  keywords: { type: String, required: true },
   dateCreated: { type: String, required: true },
-  datePublished: { type: String, required: false },
+  datePublished: { type: String, required: true },
 };

@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { BestOfService } from './best-of.service';
 import { BestOfController } from './best-of.controller';
@@ -18,6 +17,6 @@ import { BestOfController } from './best-of.controller';
     HttpModule,
   ],
   controllers: [BestOfController],
-  providers: [BestOfService, EntityProvider, ServerlessEntityProvider],
+  providers: [BestOfService, EntityProvider],
 })
 export class BestOfModule {}

@@ -47,14 +47,6 @@ import './commands/api/public/reviews.commands';
 import './commands/api/user/user-comments.commands';
 import './commands/api/user/user-emotions.commands';
 
-// serverless
-import './commands/serverless/data-uri.commands';
-import './commands/serverless/delete.commands';
-import './commands/serverless/post.commands';
-import './commands/serverless/sitemap.commands';
-import './commands/serverless/update.commands';
-import './commands/serverless/upload.commands';
-
 // web-socket
 import './commands/web-socket/auth-web-socket.commands';
 import './commands/web-socket/messages.commands';

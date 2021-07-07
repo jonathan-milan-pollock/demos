@@ -1,4 +1,14 @@
-import { ImageDimension } from '@dark-rush-photography/shared/types';
+import {
+  ConflictException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
+
+import {
+  ImageDimension,
+  ImageDimensionAdd,
+} from '@dark-rush-photography/shared/types';
+import { DocumentModel } from '../schema/document.schema';
 
 export const toImageDimension = (
   imageDimension: ImageDimension
@@ -20,4 +30,25 @@ export const findPublicImageDimensions = (
   return imageDimensions
     .filter((id) => publicImageIds.includes(id.imageId))
     .map((id) => toImageDimension(id));
+};
+
+export const validateAddImageDimension = (
+  imageId: string,
+  imageDimensionAdd: ImageDimensionAdd,
+  documentModel: DocumentModel
+): DocumentModel => {
+  const imageIds = documentModel.images.map((image) => image.id);
+  if (!imageIds.includes(imageId)) {
+    throw new NotFoundException('Could not find image for dimension');
+  }
+  const imageDimensionType = documentModel.imageDimensions.find(
+    (imageDimension) => imageDimension.type === imageDimensionAdd.type
+  );
+  if (imageDimensionType) {
+    throw new ConflictException(
+      `Image dimension type ${imageDimensionType.type} already exists`,
+      HttpStatus.FOUND
+    );
+  }
+  return documentModel;
 };

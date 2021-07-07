@@ -23,6 +23,8 @@ export class ReviewMediaService {
   findOne$(): Observable<ReviewMedia> {
     return this.entityProvider
       .findAllPublic$(EntityType.ReviewMedia, this.reviewMediaModel)
-      .pipe(map(this.entityProvider.validateOne)) as Observable<ReviewMedia>;
+      .pipe(
+        map(this.entityProvider.validateOneEntity)
+      ) as Observable<ReviewMedia>;
   }
 }

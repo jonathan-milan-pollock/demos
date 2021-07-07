@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewMediaService } from './review-media.service';
 import { ReviewMediaController } from './review-media.controller';
@@ -18,6 +17,6 @@ import { ReviewMediaController } from './review-media.controller';
     HttpModule,
   ],
   controllers: [ReviewMediaController],
-  providers: [ReviewMediaService, EntityProvider, ServerlessEntityProvider],
+  providers: [ReviewMediaService, EntityProvider],
 })
 export class ReviewMediaModule {}

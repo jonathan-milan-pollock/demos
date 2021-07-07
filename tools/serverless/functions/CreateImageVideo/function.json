@@ -1,9 +1,17 @@
 {
   "bindings": [
     {
-      "name": "name",
-      "type": "activityTrigger",
-      "direction": "in"
+      "authLevel": "function",
+      "name": "req",
+      "type": "httpTrigger",
+      "direction": "in",
+      "route": "create-image-video",
+      "methods": ["post"]
+    },
+    {
+      "name": "res",
+      "type": "http",
+      "direction": "out"
     }
   ],
   "scriptFile": "../dist/create-image-video/index.js"

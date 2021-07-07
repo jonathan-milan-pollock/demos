@@ -13,7 +13,6 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,16 +20,15 @@ export class AdminSocialMediaService {
   constructor(
     @InjectModel(Document.name)
     private readonly socialMediaModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly serverlessEntityProvider: ServerlessEntityProvider
+    private readonly entityProvider: EntityProvider
   ) {}
 
   create$(socialMediaCreate: SocialMediaCreate): Observable<SocialMedia> {
     return this.entityProvider.create$(
       EntityType.SocialMedia,
+      socialMediaCreate.group,
       socialMediaCreate.slug,
-      this.socialMediaModel,
-      socialMediaCreate.group
+      this.socialMediaModel
     ) as Observable<SocialMedia>;
   }
 
@@ -49,8 +47,8 @@ export class AdminSocialMediaService {
     ) as Observable<SocialMedia>;
   }
 
-  deleteProcess$(id: string): Observable<void> {
-    return this.serverlessEntityProvider.deleteProcess$(
+  delete$(id: string): Observable<void> {
+    return this.entityProvider.delete$(
       EntityType.SocialMedia,
       id,
       this.socialMediaModel

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  ContentProvider,
+  CommentProvider,
   Document,
   DocumentSchema,
 } from '@dark-rush-photography/api/data';
@@ -16,6 +16,6 @@ import { UserCommentsController } from './user-comments.controller';
     ]),
   ],
   controllers: [UserCommentsController],
-  providers: [UserCommentsService, ContentProvider],
+  providers: [UserCommentsService, CommentProvider],
 })
 export class UserCommentsModule {}

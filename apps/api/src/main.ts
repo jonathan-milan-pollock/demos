@@ -1,7 +1,3 @@
-//import * as appInsights from 'applicationinsights';
-//appInsights.setup().start();
-//TODO: app insights
-
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';

@@ -1,4 +1,4 @@
-import { EnvApiAuth } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from './env-api-auth.interface';
 
 export interface Env {
   readonly production: boolean;

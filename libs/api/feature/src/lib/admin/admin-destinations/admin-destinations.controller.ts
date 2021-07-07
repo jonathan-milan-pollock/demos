@@ -6,6 +6,8 @@ import {
   HttpCode,
   UseGuards,
   Get,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -41,20 +43,20 @@ export class AdminDestinationsController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/update')
-  @HttpCode(204)
-  updateProcess$(
+  @Put(':id')
+  @ApiOkResponse({ type: DestinationDto })
+  update$(
     @Param('id') id: string,
     @Body() destinationUpdate: DestinationUpdateDto
-  ): Observable<void> {
-    return this.adminDestinationsService.updateProcess$(id, destinationUpdate);
+  ): Observable<Destination> {
+    return this.adminDestinationsService.update$(id, destinationUpdate);
   }
 
   @Roles(ADMIN)
   @Post(':id/post')
   @HttpCode(204)
-  postProcess$(@Param('id') id: string): Observable<void> {
-    return this.adminDestinationsService.postProcess$(id);
+  post$(@Param('id') id: string): Observable<void> {
+    return this.adminDestinationsService.post$(id);
   }
 
   @Roles(ADMIN)
@@ -72,9 +74,9 @@ export class AdminDestinationsController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/delete')
+  @Delete(':id')
   @HttpCode(204)
-  deleteProcess$(@Param('id') id: string): Observable<void> {
-    return this.adminDestinationsService.deleteProcess$(id);
+  delete$(@Param('id') id: string): Observable<void> {
+    return this.adminDestinationsService.delete$(id);
   }
 }

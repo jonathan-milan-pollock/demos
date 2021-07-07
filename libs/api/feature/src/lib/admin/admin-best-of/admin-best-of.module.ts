@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminBestOfService } from './admin-best-of.service';
 import { AdminBestOfController } from './admin-best-of.controller';
@@ -18,6 +17,6 @@ import { AdminBestOfController } from './admin-best-of.controller';
     HttpModule,
   ],
   controllers: [AdminBestOfController],
-  providers: [AdminBestOfService, EntityProvider, ServerlessEntityProvider],
+  providers: [AdminBestOfService, EntityProvider],
 })
 export class AdminBestOfModule {}

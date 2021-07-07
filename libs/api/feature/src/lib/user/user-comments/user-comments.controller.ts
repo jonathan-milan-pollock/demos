@@ -32,7 +32,7 @@ export class UserCommentsController {
 
   @Post()
   @ApiOkResponse({ type: CommentDto })
-  addEntityComment$(@Body() commentAdd: CommentAddDto): Observable<Comment> {
+  add$(@Body() commentAdd: CommentAddDto): Observable<Comment> {
     return this.userCommentsService.add$(commentAdd);
   }
 

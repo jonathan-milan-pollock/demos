@@ -6,6 +6,7 @@ import {
   Post,
   Delete,
   HttpCode,
+  Headers,
   Put,
   Query,
   UseInterceptors,
@@ -26,8 +27,8 @@ import { Observable } from 'rxjs';
 import { ADMIN, Video } from '@dark-rush-photography/shared/types';
 import {
   FileUploadDto,
-  VideoAddDto,
   VideoDto,
+  HlsVideoAddDto,
   VideoUpdateDto,
 } from '@dark-rush-photography/api/types';
 import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
@@ -41,39 +42,29 @@ export class AdminVideosController {
   constructor(private readonly adminVideosService: AdminVideosService) {}
 
   @Roles(ADMIN)
-  @Post()
+  @Post('hls')
   @ApiOkResponse({ type: VideoDto })
-  add$(
+  addHlsVideo$(
     @Query('entityId') entityId: string,
-    @Body() videoAdd: VideoAddDto
+    @Body() hlsVideoAdd: HlsVideoAddDto
   ): Observable<Video> {
-    return this.adminVideosService.add$(entityId, videoAdd);
+    return this.adminVideosService.addHlsVideo$(entityId, hlsVideoAdd);
   }
 
   @Roles(ADMIN)
-  @Post('upload-video')
+  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     type: FileUploadDto,
   })
   @HttpCode(204)
-  uploadVideo$(
+  upload$(
+    @Headers('X-FILE-NAME') fileName: string,
     @Query('entityId') entityId: string,
     @UploadedFile() video: Express.Multer.File
-  ): Observable<void> {
-    return this.adminVideosService.uploadVideo$(entityId, video);
-  }
-
-  @Roles(ADMIN)
-  @Post(':id/update')
-  @HttpCode(204)
-  updateProcess$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string,
-    @Body() videoUpdate: VideoUpdateDto
-  ): Observable<void> {
-    return this.adminVideosService.updateProcess$(id, entityId, videoUpdate);
+  ): Observable<Video> {
+    return this.adminVideosService.upload$(fileName, entityId, video);
   }
 
   @Roles(ADMIN)
@@ -88,16 +79,6 @@ export class AdminVideosController {
   }
 
   @Roles(ADMIN)
-  @Post(':id/post')
-  @HttpCode(204)
-  postProcess$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
-  ): Observable<void> {
-    return this.adminVideosService.postProcess$(id, entityId);
-  }
-
-  @Roles(ADMIN)
   @Get(':id')
   @ApiOkResponse({ type: VideoDto })
   findOne$(
@@ -105,16 +86,6 @@ export class AdminVideosController {
     @Query('entityId') entityId: string
   ): Observable<Video> {
     return this.adminVideosService.findOne$(id, entityId);
-  }
-
-  @Roles(ADMIN)
-  @Post(':id/remove')
-  @HttpCode(204)
-  removeProcess$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
-  ): Observable<void> {
-    return this.adminVideosService.removeProcess$(id, entityId);
   }
 
   @Roles(ADMIN)

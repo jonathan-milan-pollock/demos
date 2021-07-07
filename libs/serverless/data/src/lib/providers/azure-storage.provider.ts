@@ -1,43 +1,34 @@
 import { Readable } from 'node:stream';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
-import { forkJoin, from, fromEvent, Observable, of } from 'rxjs';
+import { BlobDownloadResponseParsed } from '@azure/storage-blob';
+import { forkJoin, from, fromEvent, Observable } from 'rxjs';
 import { buffer, map, mapTo, mergeMap, switchMap } from 'rxjs/operators';
 
-import {
-  ActivityMedia,
-  AzureStorageType,
-} from '@dark-rush-photography/serverless/types';
+import { Media, MediaState } from '@dark-rush-photography/shared/types';
+import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import {
   createTempFile$,
+  getAzureStorageBlobPrefix,
   getAzureStorageBlockBlobClient$,
   getAzureStorageTypeFromMediaState,
-  getBlobPrefix,
-  writeStreamToFile,
-} from '@dark-rush-photography/serverless/util';
-import {
-  BlobDownloadResponseParsed,
-  BlobServiceClient,
-} from '@azure/storage-blob';
-import {
-  ImageDimensionType,
-  MediaState,
-} from '@dark-rush-photography/shared/types';
+  writeStreamToFile$,
+} from '@dark-rush-photography/shared-server/util';
 
 @Injectable()
 export class AzureStorageProvider {
-  getBlobPath = (activityMedia: ActivityMedia): string => {
-    const blobPrefix = getBlobPrefix(activityMedia);
-    return `${blobPrefix}/${activityMedia.fileName}`;
+  getBlobPath = (media: Media): string => {
+    const blobPrefix = getAzureStorageBlobPrefix(media);
+    return `${blobPrefix}/${media.fileName}`;
   };
 
-  getBlobPathWithImageDimension = (
-    activityMedia: ActivityMedia,
-    imageDimensionType: ImageDimensionType
+  getBlobPathWithDimension = (
+    media: Media,
+    mediaDimensionType: string
   ): string => {
-    const blobPrefix = getBlobPrefix(activityMedia);
-    return `${blobPrefix}/${imageDimensionType.toLowerCase()}/${
-      activityMedia.fileName
+    const blobPrefix = getAzureStorageBlobPrefix(media);
+    return `${blobPrefix}/${mediaDimensionType.toLowerCase()}/${
+      media.fileName
     }`;
   };
 
@@ -111,6 +102,27 @@ export class AzureStorageProvider {
     );
   };
 
+  downloadBlobAsBuffer$ = (
+    azureStorageConnectionString: string,
+    azureStorageType: AzureStorageType,
+    blobPath: string
+  ): Observable<Buffer> => {
+    Logger.log(`Downloading image blob ${blobPath}`, AzureStorageProvider.name);
+
+    return this.downloadBlobAsStream$(
+      azureStorageConnectionString,
+      azureStorageType,
+      blobPath
+    ).pipe(
+      mergeMap((readableStreamBody: NodeJS.ReadableStream) =>
+        fromEvent<Buffer>(readableStreamBody, 'data').pipe(
+          buffer<Buffer>(fromEvent(readableStreamBody, 'end')),
+          map((chunks: Buffer[]) => Buffer.concat(chunks))
+        )
+      )
+    );
+  };
+
   downloadBlobToFile$ = (
     connectionString: string,
     containerType: AzureStorageType,
@@ -121,42 +133,8 @@ export class AzureStorageProvider {
       this.downloadBlobAsStream$(connectionString, containerType, blobPath),
       createTempFile$(fileName),
     ]).pipe(
-      mergeMap(([stream, filePath]) => writeStreamToFile(stream, filePath))
+      mergeMap(([stream, filePath]) => writeStreamToFile$(stream, filePath))
     );
-
-  dataUriForBlob$ = (
-    azureStorageConnectionString: string,
-    azureStorageType: AzureStorageType,
-    blobPath: string
-  ): Observable<string> => {
-    return of(
-      BlobServiceClient.fromConnectionString(azureStorageConnectionString)
-    ).pipe(
-      map((blobServiceClient) =>
-        blobServiceClient.getContainerClient(azureStorageType)
-      ),
-      map((containerClient) => containerClient.getBlockBlobClient(blobPath)),
-      switchMap((blockBlobClient) => blockBlobClient.download()),
-      map((blobDownloadResponseParsed: BlobDownloadResponseParsed) => {
-        if (!blobDownloadResponseParsed.readableStreamBody) {
-          throw new BadRequestException('Readable stream body was undefined');
-        }
-        return blobDownloadResponseParsed.readableStreamBody;
-      }),
-      mergeMap((readableStreamBody: NodeJS.ReadableStream) =>
-        fromEvent<Buffer>(readableStreamBody, 'data').pipe(
-          buffer<Buffer>(fromEvent(readableStreamBody, 'end')),
-          map((chunks: Buffer[]) => Buffer.concat(chunks))
-        )
-      ),
-      map((buffer) => {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const datauri = require('datauri/parser');
-        const parser = new datauri();
-        return parser.format('.jpg', buffer).content;
-      })
-    );
-  };
 
   deleteBlob$ = (
     azureStorageConnectionString: string,

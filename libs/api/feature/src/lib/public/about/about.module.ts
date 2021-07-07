@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessEntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AboutService } from './about.service';
 import { AboutController } from './about.controller';
@@ -18,6 +17,6 @@ import { AboutController } from './about.controller';
     HttpModule,
   ],
   controllers: [AboutController],
-  providers: [AboutService, EntityProvider, ServerlessEntityProvider],
+  providers: [AboutService, EntityProvider],
 })
 export class AboutModule {}

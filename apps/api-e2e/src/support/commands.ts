@@ -295,43 +295,4 @@ declare namespace Cypress {
     emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
     emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
   }
-
-  interface ServerlessDataUri<Subject> {
-    dataUriImage(slug: string): Cypress.Chainable<Cypress.Response>;
-    dataUriVideo(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessDelete<Subject> {
-    emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessPost<Subject> {
-    postServerless(slug: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessUpload<Subject> {
-    emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessSitemap<Subject> {
-    dataUriImage(slug: string): Cypress.Chainable<Cypress.Response>;
-    dataUriVideo(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessUpdate<Subject> {
-    emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessPost<Subject> {
-    emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ServerlessMediaProcess<Subject> {
-    emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
-  }
 }

@@ -7,12 +7,12 @@ export interface Image {
   readonly state: MediaState;
   readonly order: number;
   readonly isStared: boolean; //TODO: Can star 1
-  readonly isLoved: boolean; //TODO: Can love 5
-  readonly isLiked: boolean; //TODO: Can like 5
-  readonly title?: string;
-  readonly description?: string;
-  readonly keywords?: string;
+  readonly isLoved: boolean; //TODO: Can love 10?
+  readonly title: string;
+  readonly description: string;
+  readonly keywords: string;
   readonly dateCreated: string;
-  readonly datePublished?: string;
+  readonly datePublished: string;
   readonly isGenerated: boolean;
+  readonly isProcessing: boolean;
 }

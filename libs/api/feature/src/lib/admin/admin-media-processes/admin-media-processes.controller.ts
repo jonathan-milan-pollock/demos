@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -90,13 +91,13 @@ export class AdminMediaProcessesController {
   }
 
   @Roles(ADMIN)
-  @Post(':mediaProcessType/:id/delete')
+  @Delete(':mediaProcessType/:id')
   @HttpCode(204)
-  deleteProcess$(
+  delete$(
     @Param('mediaProcessType', new MediaProcessTypeValidationPipe())
     mediaProcessType: MediaProcessType,
     @Param('id') id: string
   ): Observable<void> {
-    return this.adminMediaProcessesService.deleteProcess$(mediaProcessType, id);
+    return this.adminMediaProcessesService.delete$(mediaProcessType, id);
   }
 }

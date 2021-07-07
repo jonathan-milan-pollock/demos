@@ -17,6 +17,8 @@ describe('video.functions', () => {
     imageId: 'imageId',
     hasTrack: false,
     isFlyOver: false,
+    isGenerated: false,
+    isProcessing: false,
   } as Video;
 
   describe('toVideo', () => {

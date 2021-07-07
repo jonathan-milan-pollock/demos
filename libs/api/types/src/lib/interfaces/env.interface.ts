@@ -5,4 +5,7 @@ export interface Env {
   readonly drpApiAdminKey: string;
   readonly serverless: EnvServerless;
   readonly mongoDbConnectionString: string;
+  readonly azureStorageConnectionString: string;
+  readonly tinyPngApiKey: string;
+  readonly ayrshareApiKey: string;
 }
