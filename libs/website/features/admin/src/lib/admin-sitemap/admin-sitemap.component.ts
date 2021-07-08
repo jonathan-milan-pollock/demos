@@ -12,6 +12,6 @@ export class AdminSitemapComponent implements OnInit {
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.AdminSitemap, this.router.url);
+    this.metaService.addMetadataForPage$(Page.AdminSitemap, this.router.url);
   }
 }

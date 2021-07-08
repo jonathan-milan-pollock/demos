@@ -7,12 +7,12 @@ import { Comment } from '@dark-rush-photography/shared/types';
 import { CommentMessage } from '@dark-rush-photography/web-socket/types';
 
 export const createComment$ = (
-  drpApi: string,
+  drpApiUrl: string,
   httpService: HttpService,
   accessToken: string,
   commentMessage: CommentMessage
 ): Observable<CommentMessage> => {
-  const url = `${drpApi}/admin/v1/comment`;
+  const url = `${drpApiUrl}/admin/v1/comment`;
   Logger.log(url, createComment$.name);
   return httpService
     .post<Comment>(

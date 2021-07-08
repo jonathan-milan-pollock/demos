@@ -7,12 +7,12 @@ import { Emotion } from '@dark-rush-photography/shared/types';
 import { EmotionMessage } from '@dark-rush-photography/web-socket/types';
 
 export const createOrUpdateEmotion$ = (
-  drpApi: string,
+  drpApiUrl: string,
   httpService: HttpService,
   accessToken: string,
   emotionMessage: EmotionMessage
 ): Observable<EmotionMessage> => {
-  const url = `${drpApi}/admin/v1/emotion`;
+  const url = `${drpApiUrl}/admin/v1/emotion`;
   Logger.log(url, createOrUpdateEmotion$.name);
   return httpService
     .post<Emotion>(

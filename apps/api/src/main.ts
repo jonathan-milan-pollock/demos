@@ -29,7 +29,7 @@ async function bootstrap() {
     operationIdFactory: (_controllerKey: string, methodKey: string) =>
       methodKey,
   });
-  SwaggerModule.setup('/', app, document, {
+  SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },

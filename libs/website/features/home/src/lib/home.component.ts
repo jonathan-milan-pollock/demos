@@ -12,6 +12,6 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.Home, this.router.url);
+    this.metaService.addMetadataForPage$(Page.Home, this.router.url);
   }
 }

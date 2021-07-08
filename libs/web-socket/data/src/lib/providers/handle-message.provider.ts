@@ -12,9 +12,10 @@ import {
   MessageType,
   WebSocketClient,
 } from '@dark-rush-photography/web-socket/types';
-import { apiAuth$ } from '@dark-rush-photography/shared-server/data';
 import { createComment$ } from '../api/comment-api';
 import { createOrUpdateEmotion$ } from '../api/emotion-api';
+
+import { apiAuth$ } from '@dark-rush-photography/web-socket/util';
 
 @Injectable()
 export class HandleMessageProvider {
@@ -28,14 +29,14 @@ export class HandleMessageProvider {
         switch (message.messageType) {
           case MessageType.Comment:
             return createComment$(
-              env.api,
+              env.drpApiUrl,
               httpService,
               accessToken,
               message as CommentMessage
             );
           case MessageType.Emotion:
             return createOrUpdateEmotion$(
-              env.api,
+              env.drpApiUrl,
               httpService,
               accessToken,
               message as EmotionMessage

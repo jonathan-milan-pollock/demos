@@ -6,7 +6,7 @@ export * from './lib/auth/roles.decorator';
 export * from './lib/auth/roles.guard';
 
 // env
-export * from './lib/env/env-dev.functions';
+export * from './lib/env/env.functions';
 
 // exif
 export * from './lib/exif/date-created-exif.functions';
