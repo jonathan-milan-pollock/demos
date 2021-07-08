@@ -16,7 +16,7 @@ export class EventsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.Events, this.router.url);
+    this.metaService.addMetadataForPage$(Page.Events, this.router.url);
   }
 
   onEventClicked(): void {

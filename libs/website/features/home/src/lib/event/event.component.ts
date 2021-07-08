@@ -20,7 +20,7 @@ export class EventComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       const { title, description, url } = data['metadata'];
-      this.metaService.addMetadata({ title, description }, url);
+      this.metaService.addMetadata$({ title, description }, url);
     });
   }
 

@@ -33,6 +33,6 @@ export class AboutComponent implements OnInit {
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.About, this.router.url);
+    this.metaService.addMetadataForPage$(Page.About, this.router.url);
   }
 }

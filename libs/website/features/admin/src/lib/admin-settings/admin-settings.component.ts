@@ -12,6 +12,6 @@ export class AdminSettingsComponent implements OnInit {
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.AdminSettings, this.router.url);
+    this.metaService.addMetadataForPage$(Page.AdminSettings, this.router.url);
   }
 }

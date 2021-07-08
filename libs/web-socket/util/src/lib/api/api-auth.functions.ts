@@ -7,6 +7,7 @@ import {
   AUTH0_AUDIENCE,
   AUTH0_ISSUER,
 } from '@dark-rush-photography/shared-server/types';
+import { EnvApiAuth } from '@dark-rush-photography/web-socket/types';
 
 export const apiAuth$ = (
   envApiAuth: EnvApiAuth,

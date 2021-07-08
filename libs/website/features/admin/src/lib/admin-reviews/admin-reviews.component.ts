@@ -24,7 +24,7 @@ export class AdminReviewsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.AdminReviews, this.router.url);
+    this.metaService.addMetadataForPage$(Page.AdminReviews, this.router.url);
 
     this.reviewsSub = this.reviewStore
       .select('review')

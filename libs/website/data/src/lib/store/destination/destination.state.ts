@@ -8,7 +8,10 @@ export const destinationAdapter: EntityAdapter<Destination> = createEntityAdapte
     sortComparer: (
       destination1: Destination,
       destination2: Destination
-    ): number => destination1.title.localeCompare(destination2.title),
+    ): number =>
+      destination1.title && destination2.title
+        ? destination1.title.localeCompare(destination2.title)
+        : 0,
   }
 );
 

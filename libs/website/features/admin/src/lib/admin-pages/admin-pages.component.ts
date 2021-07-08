@@ -51,7 +51,7 @@ export class AdminPagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.Admin, this.router.url);
+    this.metaService.addMetadataForPage$(Page.Admin, this.router.url);
   }
 
   onClicked(link: string): void {

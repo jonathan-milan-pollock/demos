@@ -12,6 +12,6 @@ export class AdminEventsComponent implements OnInit {
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.AdminEvents, this.router.url);
+    this.metaService.addMetadataForPage$(Page.AdminEvents, this.router.url);
   }
 }

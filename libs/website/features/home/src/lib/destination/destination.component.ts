@@ -20,7 +20,7 @@ export class DestinationComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
-      this.metaService.addMetadata({} as Metadata, '');
+      this.metaService.addMetadata$({} as Metadata, '');
     });
 
     this.route.params.subscribe((params) => {

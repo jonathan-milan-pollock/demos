@@ -30,7 +30,7 @@ export class AdminDestinationsComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(
+    this.metaService.addMetadataForPage$(
       Page.AdminDestinations,
       this.router.url
     );

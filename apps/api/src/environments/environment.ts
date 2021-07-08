@@ -1,3 +1,3 @@
-import { loadDevEnvironment } from '@dark-rush-photography/api/util';
+import { loadEnvironment } from '@dark-rush-photography/api/util';
 
-export const environment = loadDevEnvironment();
+export const environment = loadEnvironment();

@@ -6,5 +6,5 @@ export const environment: Env = {
     auth0ClientId: '%%AUTH0_CLIENT_ID%%',
     auth0ClientSecret: '%%AUTH0_CLIENT_SECRET%%',
   },
-  drpApi: '%%DARK_RUSH_PHOTOGRAPHY_API%%',
+  drpApiUrl: '%%DRP_API_URL%%',
 };

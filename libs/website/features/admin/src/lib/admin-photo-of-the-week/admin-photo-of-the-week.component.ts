@@ -32,7 +32,7 @@ export class AdminPhotoOfTheWeekComponent
   constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(
+    this.metaService.addMetadataForPage$(
       Page.AdminPhotoOfTheWeek,
       this.router.url
     );

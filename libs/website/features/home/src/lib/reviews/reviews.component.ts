@@ -41,6 +41,6 @@ export class ReviewsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.metaService.addMetadataForPage(Page.Reviews, '');
+    this.metaService.addMetadataForPage$(Page.Reviews, '');
   }
 }
