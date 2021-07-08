@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 
 import {
+  Image,
   ImageDimension,
   ImageDimensionAdd,
 } from '@dark-rush-photography/shared/types';
@@ -32,17 +33,26 @@ export const findPublicImageDimensions = (
     .map((id) => toImageDimension(id));
 };
 
+export const validateFoundImage = (
+  imageId: string,
+  documentModel: DocumentModel
+): DocumentModel => {
+  const foundImage = documentModel.images.find((image) => image.id === imageId);
+  if (!foundImage) {
+    throw new NotFoundException('Could not find image for dimension');
+  }
+  return documentModel;
+};
+
 export const validateAddImageDimension = (
   imageId: string,
   imageDimensionAdd: ImageDimensionAdd,
   documentModel: DocumentModel
 ): DocumentModel => {
-  const imageIds = documentModel.images.map((image) => image.id);
-  if (!imageIds.includes(imageId)) {
-    throw new NotFoundException('Could not find image for dimension');
-  }
   const imageDimensionType = documentModel.imageDimensions.find(
-    (imageDimension) => imageDimension.type === imageDimensionAdd.type
+    (imageDimension) =>
+      imageDimension.imageId === imageId &&
+      imageDimension.type === imageDimensionAdd.type
   );
   if (imageDimensionType) {
     throw new ConflictException(

@@ -15,7 +15,7 @@ import {
   Document,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
-import { map, switchMapTo } from 'rxjs/operators';
+import { map, concatMapTo } from 'rxjs/operators';
 
 @Injectable()
 export class AdminPhotoOfTheWeekService {
@@ -42,12 +42,12 @@ export class AdminPhotoOfTheWeekService {
   ): Observable<PhotoOfTheWeek> {
     return from(this.photoOfTheWeekModel.findById(id)).pipe(
       map(this.entityProvider.validateEntityFound),
-      switchMapTo(
+      concatMapTo(
         this.photoOfTheWeekModel.findByIdAndUpdate(id, {
           ...photoOfTheWeekUpdate,
         })
       ),
-      switchMapTo(
+      concatMapTo(
         this.entityProvider.findOne$(
           EntityType.PhotoOfTheWeek,
           id,

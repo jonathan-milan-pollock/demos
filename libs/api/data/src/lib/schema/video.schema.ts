@@ -16,4 +16,9 @@ export const videoSchema = {
   keywords: { type: String, required: true },
   dateCreated: { type: String, required: true },
   datePublished: { type: String, required: true },
+  coverImageId: { type: String, required: true },
+  hlsUrl: { type: String, required: true },
+  isFlyOver: { type: Boolean, required: true },
+  isGenerated: { type: Boolean, required: true },
+  isProcessing: { type: Boolean, required: true },
 };

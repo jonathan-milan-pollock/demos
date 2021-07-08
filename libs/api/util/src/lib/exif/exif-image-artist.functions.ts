@@ -1,31 +1,60 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { from, Observable } from 'rxjs';
-import { mapTo, switchMapTo, tap } from 'rxjs/operators';
+import { concatMap, mapTo } from 'rxjs/operators';
 
-import { IMAGE_ARTIST_EXIF_FN } from '@dark-rush-photography/api/types';
-
-export const exifImageArtist = (
-  imageFilePath: string,
-  year: number
+export const exifImageArtist$ = (
+  filePath: string,
+  year: number,
+  exifDateCreated: string
 ): Observable<string> => {
   const exiftool = require('node-exiftool');
   const exiftoolBin = require('dist-exiftool');
-  const exifTool = new exiftool.ExiftoolProcess(exiftoolBin);
-  const exifImageArtist = IMAGE_ARTIST_EXIF_FN(year);
+  const ep = new exiftool.ExiftoolProcess(exiftoolBin);
 
-  return from(exifTool.open()).pipe(
-    switchMapTo(
+  return from(ep.open()).pipe(
+    concatMap(() =>
       from(
-        exifTool.writeMetadata(
-          imageFilePath,
+        ep.writeMetadata(
+          filePath,
           {
-            ...exifImageArtist,
+            Rating: 5,
+            Artist: 'Dark Rush',
+            'dc:creator': 'Dark Rush',
+            Creator: 'Dark Rush',
+            'photoshop:credit': 'Dark Rush Photography',
+            Credit: 'Dark Rush Photography',
+            'xmp-plus:licensor': {
+              LicensorName: 'Dark Rush Photography',
+              LicensorCity: 'Atlanta',
+              LicensorRegion: 'Georgia',
+              LicensorCountry: 'United States',
+              LicensorEmail: 'dark@darkrush.photo',
+              LicensorTelephone1: '404-992-3275',
+              LicensorTelephoneType1: 'Cell',
+              LicensorURL: 'https://www.darkrushphotography.com',
+            },
+            'Keywords+': ['Dark Rush Photography', 'Photography'],
+            CreateDate: exifDateCreated,
+            'xmp:MetadataDate': exifDateCreated,
+            FileModifyDate: exifDateCreated,
+            Copyrighted: true,
+            'xmpRights:Marked': true,
+            Copyright: `© ${year} Dark Rush Photography`,
+            'dc:rights': `© ${year} Dark Rush Photography, All Rights Reserved`,
+            CopyrightNotice: `© ${year} Dark Rush Photography, All Rights Reserved`,
+            Licence:
+              'Creative Commons Attribution-NoDerivatives 4.0 International License (https://creativecommons.org/licenses/by-nd/4.0/)',
+            'xmpRights:WebStatement':
+              'https://creativecommons.org/licenses/by-nd/4.0/',
+            Rights: `For Placement with Credit © ${year} Dark Rush: www.darkrushphotography.com, all rights reserved.`,
+            'xmpRights:UsageTerms': `For Placement with Credit © ${year} Dark Rush: www.darkrushphotography.com, all rights reserved.`,
+            XPComment: `For Placement with Credit © ${year} Dark Rush: www.darkrushphotography.com, all rights reserved.`,
           },
           ['overwrite_original', 'codedcharacterset=utf8']
         )
       )
     ),
-    tap(() => exifTool.close()),
-    mapTo(imageFilePath)
+    concatMap(() => from(ep.close())),
+    mapTo(filePath)
   );
 };

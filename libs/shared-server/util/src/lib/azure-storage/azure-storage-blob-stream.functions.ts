@@ -8,12 +8,12 @@ import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
 
 export const downloadBlobAsStream$ = (
-  azureStorageConnectionString: string,
+  connectionString: string,
   azureStorageType: AzureStorageType,
   blobPath: string
 ): Observable<NodeJS.ReadableStream> => {
   return getAzureStorageBlockBlobClient$(
-    azureStorageConnectionString,
+    connectionString,
     azureStorageType,
     blobPath
   ).pipe(

@@ -1,14 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map, mapTo, tap } from 'rxjs/operators';
 
 import {
-  ENV,
   Image,
+  ImageDimensionType,
   ImageUpdate,
   ThreeSixtyImageSettings,
 } from '@dark-rush-photography/shared/types';
@@ -22,12 +22,10 @@ import {
   ImageUpdateProvider,
   ImageUploadProvider,
 } from '@dark-rush-photography/api/data';
-import { Env } from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class AdminImagesService {
   constructor(
-    @Inject(ENV) private readonly env: Env,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
@@ -52,18 +50,15 @@ export class AdminImagesService {
       map((documentModel) =>
         this.imageProvider.validateImageNotFound(fileName, documentModel)
       ),
-      map(this.imageProvider.validateCanAddImageToEntity),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         combineLatest([
           of(documentModel),
-          from(
-            this.imageProvider.add$(
-              id,
-              entityId,
-              fileName,
-              isProcessing,
-              this.entityModel
-            )
+          this.imageProvider.add$(
+            id,
+            entityId,
+            fileName,
+            isProcessing,
+            this.entityModel
           ),
         ])
       ),
@@ -75,17 +70,16 @@ export class AdminImagesService {
           documentModel
         );
       }),
-      switchMap((media) =>
-        from(
-          this.imageUploadProvider.upload$(
-            media,
-            isThreeSixtyImage,
-            file,
-            this.entityModel
-          )
+      concatMap((media) =>
+        this.imageUploadProvider.upload$(
+          media,
+          isThreeSixtyImage,
+          file,
+          this.entityModel
         )
       ),
-      switchMapTo(from(this.findOne$(id, entityId)))
+      tap(() => Logger.log('Upload complete', AdminImagesService.name)),
+      concatMapTo(this.findOne$(id, entityId))
     );
   }
 
@@ -102,7 +96,7 @@ export class AdminImagesService {
         this.entityModel
       )
       .pipe(
-        switchMap((documentModel) =>
+        concatMap((documentModel) =>
           this.upload$(documentModel._id, lightroomMedia.fileName, false, file)
         )
       );
@@ -116,14 +110,14 @@ export class AdminImagesService {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.entityProvider.validateEntityFound),
       map(this.entityProvider.validateProcessingEntity),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         combineLatest([of(documentModel), from(this.findOne$(id, entityId))])
       ),
       map(([documentModel, image]) => ({
         image: this.imageProvider.validateImageNotProcessing(image),
         documentModel,
       })),
-      switchMap(({ image, documentModel }) =>
+      concatMap(({ image, documentModel }) =>
         from(
           this.imageUpdateProvider.update$(
             image,
@@ -133,19 +127,21 @@ export class AdminImagesService {
           )
         )
       ),
-      switchMapTo(from(this.findOne$(id, entityId)))
+      concatMapTo(from(this.findOne$(id, entityId)))
     );
   }
 
   updateThreeSixtyImageSettings$(
     id: string,
     entityId: string,
+    imageDimensionType: ImageDimensionType,
     threeSixtyImageSettings: ThreeSixtyImageSettings
   ): Observable<void> {
     return this.imageDimensionProvider
       .updateThreeSixtyImageSettings$(
         id,
         entityId,
+        imageDimensionType,
         threeSixtyImageSettings,
         this.entityModel
       )
@@ -159,10 +155,10 @@ export class AdminImagesService {
   ): Observable<Image> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.entityProvider.validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         combineLatest([of(documentModel), from(this.findOne$(id, entityId))])
       ),
-      switchMapTo(
+      concatMapTo(
         from(
           this.imageUpdateProvider.setIsProcessing$(
             id,
@@ -172,7 +168,7 @@ export class AdminImagesService {
           )
         )
       ),
-      switchMapTo(from(this.findOne$(id, entityId)))
+      concatMapTo(from(this.findOne$(id, entityId)))
     );
   }
 
@@ -188,7 +184,7 @@ export class AdminImagesService {
         image: documentModel.images.find((image) => image.id == id),
         documentModel,
       })),
-      switchMap(({ image, documentModel }) => {
+      concatMap(({ image, documentModel }) => {
         if (image && this.imageProvider.validateImageNotProcessing(image)) {
           return from(
             this.imageRemoveProvider.remove$(

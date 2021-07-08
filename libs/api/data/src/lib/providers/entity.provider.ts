@@ -3,11 +3,11 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { from, Observable, of } from 'rxjs';
 import {
+  concatMap,
+  concatMapTo,
   filter,
   map,
   mapTo,
-  switchMap,
-  switchMapTo,
   toArray,
 } from 'rxjs/operators';
 
@@ -72,7 +72,7 @@ export class EntityProvider {
   ): Observable<Partial<Entity>> {
     return from(entityModel.findOne({ type: entityType, group, slug })).pipe(
       map(validateEntityNotFound),
-      switchMapTo(from(new entityModel(newEntity(entityType, slug)).save())),
+      concatMapTo(from(new entityModel(newEntity(entityType, slug)).save())),
       map(validateEntityCreate),
       map((documentModel) => fromDocumentModel(entityType, documentModel))
     );
@@ -87,7 +87,7 @@ export class EntityProvider {
     return from(
       from(entityModel.findOne({ type: entityType, group, slug }))
     ).pipe(
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         documentModel
           ? of(documentModel)
           : from(new entityModel(newEntity(entityType, slug)).save())
@@ -101,7 +101,7 @@ export class EntityProvider {
     entityModel: Model<DocumentModel>
   ): Observable<Partial<Entity>[]> {
     return from(entityModel.find({ type: entityType })).pipe(
-      switchMap((documentModels) => from(documentModels)),
+      concatMap((documentModels) => from(documentModels)),
       map((documentModel) => fromDocumentModel(entityType, documentModel)),
       toArray<Partial<Entity>>()
     );
@@ -124,7 +124,7 @@ export class EntityProvider {
     entityModel: Model<DocumentModel>
   ): Observable<Partial<Entity>[]> {
     return from(entityModel.find({ type: entityType })).pipe(
-      switchMap((documentModels) => from(documentModels)),
+      concatMap((documentModels) => from(documentModels)),
       filter((documentModel) => !documentModel.isPublic),
       map((documentModel) => fromDocumentModel(entityType, documentModel)),
       toArray<Partial<Entity>>()
@@ -155,7 +155,7 @@ export class EntityProvider {
           ? validateEntityType(entityType, documentModel)
           : of(documentModel)
       ),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         documentModel ? from(entityModel.findByIdAndDelete(id)) : of()
       ),
       mapTo(undefined)

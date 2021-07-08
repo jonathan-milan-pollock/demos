@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { MediaDimensionPixels } from '@dark-rush-photography/shared/types';
 
-export const findImageDimensionPixels$ = (
+export const findImageResolution$ = (
   filePath: string
 ): Observable<MediaDimensionPixels> =>
   from(sharp(filePath).metadata()).pipe(
@@ -19,7 +19,7 @@ export const findImageDimensionPixels$ = (
     })
   );
 
-export const findImageDimensionPixelsWithFileName$ = (
+export const findImageResolutionWithFileName$ = (
   filePath: string
 ): Observable<{
   pixels: MediaDimensionPixels;

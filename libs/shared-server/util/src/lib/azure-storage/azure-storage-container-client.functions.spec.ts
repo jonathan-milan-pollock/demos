@@ -7,7 +7,7 @@ import {
 } from '@azure/storage-blob';
 
 import { getAzureStorageContainerClient$ } from './azure-storage-container-client.functions';
-import { AzureStorageType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/api/types';
 
 describe('containerClient$', () => {
   let containerClientSubscription: Subscription | undefined;

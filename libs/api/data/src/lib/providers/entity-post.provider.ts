@@ -19,17 +19,10 @@ export class EntityPostProvider {
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
       map(validateNotProcessingEntity),
-      switchMapTo(
+      concatMapTo(
         entityModel.findByIdAndUpdate(entityId, { isProcessing: true })
       ),
-      switchMapTo(
-        serverlessPostEntityProcess$(
-          this.env.serverless,
-          this.httpService,
-          entityType,
-          entityId
-        )
-      ),
+      
       mapTo(undefined)
     );
     */

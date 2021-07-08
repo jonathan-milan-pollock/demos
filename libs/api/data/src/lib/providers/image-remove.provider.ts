@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { concatMap, concatMapTo, tap } from 'rxjs/operators';
 
 import {
   ENV,
@@ -13,14 +13,18 @@ import {
 import { Env } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { ImageProvider } from './image.provider';
-import { AzureStorageProvider } from './azure-storage.provider';
+import {
+  deleteBlob$,
+  getAzureStorageTypeFromMediaState,
+  getBlobPath,
+  getBlobPathWithDimension,
+} from '@dark-rush-photography/shared-server/util';
 
 @Injectable()
 export class ImageRemoveProvider {
   constructor(
     @Inject(ENV) private readonly env: Env,
-    private readonly imageProvider: ImageProvider,
-    private readonly azureStorageProvider: AzureStorageProvider
+    private readonly imageProvider: ImageProvider
   ) {}
 
   remove$(
@@ -33,7 +37,7 @@ export class ImageRemoveProvider {
       .setIsProcessing$(image.id, image.entityId, true, entityModel)
       .pipe(
         tap(() => Logger.log('Removing blobs', ImageRemoveProvider.name)),
-        switchMapTo(
+        concatMapTo(
           from(
             this.removeImageBlobs$(
               this.imageProvider.getMedia(
@@ -47,7 +51,7 @@ export class ImageRemoveProvider {
           )
         ),
         tap(() => Logger.log('Removing data', ImageRemoveProvider.name)),
-        switchMapTo(
+        concatMapTo(
           from(
             this.imageProvider.remove$(image.id, image.entityId, entityModel)
           )
@@ -59,10 +63,10 @@ export class ImageRemoveProvider {
   }
 
   removeImageBlob$(media: Media): Observable<boolean> {
-    return this.azureStorageProvider.deleteBlob$(
+    return deleteBlob$(
       this.env.azureStorageConnectionString,
-      this.azureStorageProvider.getAzureStorageType(media.state),
-      this.azureStorageProvider.getBlobPath(media)
+      getAzureStorageTypeFromMediaState(media.state),
+      getBlobPath(media)
     );
   }
 
@@ -73,17 +77,14 @@ export class ImageRemoveProvider {
     if (imageDimensions.length === 0) return this.removeImageBlob$(media);
 
     return from(imageDimensions).pipe(
-      switchMap((imageDimension) =>
-        this.azureStorageProvider.deleteBlob$(
+      concatMap((imageDimension) =>
+        deleteBlob$(
           this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(media.state),
-          this.azureStorageProvider.getBlobPathWithDimension(
-            media,
-            imageDimension.type
-          )
+          getAzureStorageTypeFromMediaState(media.state),
+          getBlobPathWithDimension(media, imageDimension.type)
         )
       ),
-      switchMapTo(this.removeImageBlob$(media))
+      concatMapTo(this.removeImageBlob$(media))
     );
   }
 }

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   HttpStatus,
   Injectable,
@@ -8,7 +7,7 @@ import {
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map } from 'rxjs/operators';
 
 import {
   Image,
@@ -21,7 +20,6 @@ import { LightroomMedia } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { getLightroomMedia } from '@dark-rush-photography/api/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { getEntityTypeAllowsImageAdd } from '../content/entity-type-allows-image-add.functions';
 import { toImage } from '../content/image.functions';
 
 @Injectable()
@@ -50,15 +48,6 @@ export class ImageProvider {
     return image;
   }
 
-  validateCanAddImageToEntity(documentModel: DocumentModel): DocumentModel {
-    if (!getEntityTypeAllowsImageAdd(documentModel.type)) {
-      throw new BadRequestException(
-        `Images cannot be added to entity type ${documentModel.type}`
-      );
-    }
-    return documentModel;
-  }
-
   add$(
     id: string,
     entityId: string,
@@ -68,7 +57,7 @@ export class ImageProvider {
   ): Observable<Image> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         from(
           entityModel.findByIdAndUpdate(entityId, {
             images: [
@@ -93,7 +82,7 @@ export class ImageProvider {
           })
         )
       ),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId, entityModel))
     );
   }
 
@@ -105,7 +94,7 @@ export class ImageProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundImage = documentModel.images.find(
           (image) => image.id === id
         );
@@ -185,7 +174,7 @@ export class ImageProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundImage = documentModel.images.find(
           (image) => image.id === id
         );
@@ -227,7 +216,7 @@ export class ImageProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundImage = documentModel.images.find(
           (image) => image.id === id
         );
@@ -269,7 +258,7 @@ export class ImageProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundImage = documentModel.images.find(
           (image) => image.id === id
         );
@@ -310,7 +299,7 @@ export class ImageProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         from(
           entityModel.findByIdAndUpdate(entityId, {
             images: [

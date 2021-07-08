@@ -3,7 +3,10 @@ import { DateCreatedExif } from '@dark-rush-photography/api/types';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export const findExifDateCreated$ = (filePath: string): Observable<string> => {
+export const findExifDateCreated$ = (
+  filePath: string,
+  date: Date
+): Observable<string> => {
   const exiftool = require('node-exiftool');
   const exiftoolBin = require('dist-exiftool');
   const ep = new exiftool.ExiftoolProcess(exiftoolBin);
@@ -15,14 +18,16 @@ export const findExifDateCreated$ = (filePath: string): Observable<string> => {
         'CreateDate' in dateCreated.data[0] &&
         dateCreated.data[0].CreateDate
         ? dateCreated.data[0].CreateDate
-        : getExifDateNow();
+        : getExifDate(date);
     })
   );
 };
 
-//TODO: Add the time to this!!!
-export const getExifDateNow = (): string =>
-  new Date().toISOString().slice(0, 10).replace('-', ':');
+export const getExifDate = (date: Date): string =>
+  `${date
+    .toISOString()
+    .slice(0, 10)
+    .replace(/-/g, ':')} ${date.toISOString().slice(11, 8)}`;
 
 export const getIsoDateFromExifDate = (
   exifDate: string | null

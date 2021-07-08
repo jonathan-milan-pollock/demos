@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 
 import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
-import { AzureStorageType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/api/types';
 
 describe('blockBlobClient$', () => {
   let blockBlobClientSubscription: Subscription | undefined;

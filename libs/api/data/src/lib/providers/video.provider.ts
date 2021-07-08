@@ -8,7 +8,7 @@ import {
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map } from 'rxjs/operators';
 
 import {
   Media,
@@ -67,7 +67,7 @@ export class VideoProvider {
   ): Observable<Video> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         from(
           entityModel.findByIdAndUpdate(entityId, {
             videos: [
@@ -94,7 +94,7 @@ export class VideoProvider {
           })
         )
       ),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId, entityModel))
     );
   }
 
@@ -106,7 +106,7 @@ export class VideoProvider {
   ): Observable<Video> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundVideo = documentModel.videos.find(
           (video) => video.id === id
         );
@@ -138,7 +138,7 @@ export class VideoProvider {
           })
         );
       }),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId, entityModel))
     );
   }
 
@@ -184,7 +184,7 @@ export class VideoProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundVideo = documentModel.videos.find(
           (video) => video.id === id
         );
@@ -211,7 +211,7 @@ export class VideoProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundVideo = documentModel.videos.find(
           (video) => video.id === id
         );
@@ -238,7 +238,7 @@ export class VideoProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundVideo = documentModel.videos.find(
           (video) => video.id === id
         );
@@ -264,7 +264,7 @@ export class VideoProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         from(
           entityModel.findByIdAndUpdate(entityId, {
             videos: [

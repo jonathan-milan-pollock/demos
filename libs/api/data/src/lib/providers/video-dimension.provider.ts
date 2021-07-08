@@ -3,8 +3,8 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { concatMap, concatMapTo, map } from 'rxjs/operators';
 
 import {
   ENV,
@@ -15,21 +15,20 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { Env } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
+import {
+  downloadBlobAsBuffer$,
+  getAzureStorageTypeFromMediaState,
+  getBlobPathWithDimension,
+} from '@dark-rush-photography/shared-server/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   toVideoDimension,
   validateAddVideoDimension,
 } from '../content/video-dimension.functions';
-import { AzureStorageProvider } from './azure-storage.provider';
-import { ServerlessVideoProvider } from './serverless-video.provider';
 
 @Injectable()
 export class VideoDimensionProvider {
-  constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly azureStorageProvider: AzureStorageProvider,
-    private readonly serverlessVideoProvider: ServerlessVideoProvider
-  ) {}
+  constructor(@Inject(ENV) private readonly env: Env) {}
 
   add$(
     entityId: string,
@@ -40,7 +39,7 @@ export class VideoDimensionProvider {
     const id = uuidv4();
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const validatedDocumentModel = validateAddVideoDimension(
           videoId,
           videoDimensionAdd,
@@ -55,7 +54,7 @@ export class VideoDimensionProvider {
           })
         );
       }),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId, entityModel))
     );
   }
 
@@ -63,14 +62,7 @@ export class VideoDimensionProvider {
     media: Media,
     entityModel: Model<DocumentModel>
   ): Observable<Media> {
-    return this.serverlessVideoProvider
-      .serverlessResizeVideo$({
-        video: media,
-        videoDimensionType: VideoDimensionType.YouTube,
-      })
-      .pipe
-      // TODO: Update the video dimension pixels
-      ();
+    return of();
   }
 
   findOne$(
@@ -96,21 +88,16 @@ export class VideoDimensionProvider {
     media: Media,
     videoDimensionType: VideoDimensionType
   ): Observable<string> => {
-    return this.azureStorageProvider
-      .downloadBlobAsBuffer$(
-        this.env.azureStorageConnectionString,
-        this.azureStorageProvider.getAzureStorageType(media.state),
-        this.azureStorageProvider.getBlobPathWithDimension(
-          media,
-          videoDimensionType
-        )
-      )
-      .pipe(
-        map((buffer) => {
-          const datauri = require('datauri/parser');
-          const parser = new datauri();
-          return parser.format('.mp4', buffer).content;
-        })
-      );
+    return downloadBlobAsBuffer$(
+      this.env.azureStorageConnectionString,
+      getAzureStorageTypeFromMediaState(media.state),
+      getBlobPathWithDimension(media, videoDimensionType)
+    ).pipe(
+      map((buffer) => {
+        const datauri = require('datauri/parser');
+        const parser = new datauri();
+        return parser.format('.mp4', buffer).content;
+      })
+    );
   };
 }

@@ -95,12 +95,12 @@
     },
 ```
 
-- add to api implicit dependencies of best-of, serverless, and website as they are dependent on the api
+- add to api implicit dependencies of best-of and website as they are dependent on the api
 
 ```json
     "api": {
       "tags": ["scope:api", "type:app"],
-      "implicitDependencies": ["best-of", "serverless", "website"]
+      "implicitDependencies": ["best-of", "website"]
     },
 ```
 
@@ -289,14 +289,6 @@ import { Multer } from 'multer';
 ```
 
 - in package.json add api:e2e to serve:api npm script
-
----
-
-## setup serverless
-
-- in angular.json for app
-  - remove assets from angular.json
-  - add /dist/src at end of output path
 
 ---
 

@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {
-  ImageExif,
-  IMAGE_ARTIST_EXIF_FN,
-} from '@dark-rush-photography/api/types';
+import { ImageExif } from '@dark-rush-photography/api/types';
 
 export const exifImage = (
   filePath: string,
-  imageExif: ImageExif
+  imageExif: ImageExif,
+  dateCreated: string
 ): Promise<void> => {
   const exiftool = require('node-exiftool');
   const exiftoolBin = require('dist-exiftool');
-  const imageArtistExif = IMAGE_ARTIST_EXIF_FN(new Date().getFullYear());
+  //const imageArtistExif = IMAGE_ARTIST_EXIF_FN(
+  //  new Date().getFullYear(),
+  //  dateCreated
+  //);
   const keywordsSet = new Set<string>([
-    ...imageArtistExif['Keywords+'],
+    //  ...imageArtistExif['Keywords+'],
     ...imageExif['Keywords+'],
   ]);
 
@@ -24,7 +25,7 @@ export const exifImage = (
       exifTool.writeMetadata(
         filePath,
         {
-          ...imageArtistExif,
+          //          ...imageArtistExif,
           'Keywords+': [...keywordsSet],
         },
         ['overwrite_original', 'codedcharacterset=utf8']

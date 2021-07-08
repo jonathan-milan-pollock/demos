@@ -2,11 +2,9 @@ import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  AzureStorageProvider,
   Document,
   DocumentSchema,
   EntityProvider,
-  ServerlessVideoProvider,
   VideoProvider,
   VideoDimensionProvider,
   VideoRemoveProvider,
@@ -32,8 +30,6 @@ import { AdminVideosController } from './admin-videos.controller';
     VideoUploadProvider,
     VideoUpdateProvider,
     VideoRemoveProvider,
-    AzureStorageProvider,
-    ServerlessVideoProvider,
   ],
 })
 export class AdminVideosModule {}

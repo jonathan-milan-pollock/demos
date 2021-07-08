@@ -1,37 +1,45 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { Observable } from 'rxjs';
 
 import {
-  ImageDimensionConfig,
-  ImageDimensionLongestEdgeConfig,
-  ImageDimensionTileConfig,
+  ImageResolution,
+  LongestEdgeImageResolution,
+  StandardImageResolution,
+  TileImageResolution,
 } from '@dark-rush-photography/api/types';
-import { resizeImageTile$ } from './resize-image-tile.functions';
-import { resizeLongestEdge$ } from './resize-longest-edge.functions';
+import { resizeTileImage$ } from './resize-tile-image.functions';
+import { resizeLongestEdgeImage$ } from './resize-longest-edge.functions';
+import { resizeExactFitImageDimensions$ as resizeExactFitImage$ } from './resize-exact-fit-image.functions';
+import { resizeStandardImageDimensions$ as resizeStandardImage$ } from './resize-standard-image.functions';
 
 export const resizeImage$ = (
   fileName: string,
   filePath: string,
-  imageDimensionConfig: ImageDimensionConfig
+  imageResolution: ImageResolution
 ): Observable<string> => {
-  switch (imageDimensionConfig.type) {
-    case 'Tile':
-      return resizeImageTile$(
-        fileName,
-        filePath,
-        imageDimensionConfig as ImageDimensionTileConfig
-      );
-    case 'Thumbnail':
-    case 'Small':
-      return resizeLongestEdge$(
-        fileName,
-        filePath,
-        (imageDimensionConfig as ImageDimensionLongestEdgeConfig).longestEdge
-      );
-    default:
-      throw new NotFoundException(
-        `Could not find image dimension for the type ${imageDimensionConfig.type}`
-      );
+  if ('minPixels' in imageResolution) {
+    return resizeTileImage$(
+      fileName,
+      filePath,
+      imageResolution as TileImageResolution
+    );
   }
+
+  if ('longestEdge' in imageResolution) {
+    return resizeLongestEdgeImage$(
+      fileName,
+      filePath,
+      (imageResolution as LongestEdgeImageResolution).longestEdge
+    );
+  }
+
+  const standardImageResolution = imageResolution as StandardImageResolution;
+  if (standardImageResolution.exactFit) {
+    return resizeExactFitImage$(
+      fileName,
+      filePath,
+      imageResolution as StandardImageResolution
+    );
+  }
+
+  return resizeStandardImage$(fileName, filePath, standardImageResolution);
 };

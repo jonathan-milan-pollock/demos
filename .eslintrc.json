@@ -29,14 +29,6 @@
                 ]
               },
               {
-                "sourceTag": "scope:serverless",
-                "onlyDependOnLibsWithTags": [
-                  "scope:serverless",
-                  "scope:shared-server",
-                  "scope:shared"
-                ]
-              },
-              {
                 "sourceTag": "scope:web-socket",
                 "onlyDependOnLibsWithTags": [
                   "scope:web-socket",

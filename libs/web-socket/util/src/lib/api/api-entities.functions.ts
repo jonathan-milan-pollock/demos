@@ -4,11 +4,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Entity } from '@dark-rush-photography/shared/types';
-import {
-  ActivityMedia,
-  Env,
-  EnvApi,
-} from '@dark-rush-photography/serverless/types';
+import { ActivityMedia, Env, EnvApi } from '@dark-rush-photography/api/types';
 import { apiAuth$ } from './api-auth.functions';
 
 export const createEntity$ = (

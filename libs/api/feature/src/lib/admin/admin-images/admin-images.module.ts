@@ -2,7 +2,6 @@ import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  AzureStorageProvider,
   Document,
   DocumentSchema,
   EntityProvider,
@@ -31,7 +30,6 @@ import { AdminImagesController } from './admin-images.controller';
     ImageUploadProvider,
     ImageUpdateProvider,
     ImageRemoveProvider,
-    AzureStorageProvider,
   ],
 })
 export class AdminImagesModule {}

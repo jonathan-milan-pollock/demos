@@ -8,5 +8,5 @@ export interface ImageDimension {
   readonly imageId: string;
   readonly type: ImageDimensionType;
   readonly pixels: MediaDimensionPixels;
-  readonly threeSixtyImageSettings?: ThreeSixtyImageSettings;
+  readonly threeSixtyImageSettings: ThreeSixtyImageSettings;
 }

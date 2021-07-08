@@ -1,16 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from 'fs-extra';
-import {
-  Injectable,
-  Inject,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, Logger } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map, tap } from 'rxjs/operators';
 
 import {
   ENV,
@@ -20,130 +15,162 @@ import {
   Media,
   ThreeSixtyImageSettings,
 } from '@dark-rush-photography/shared/types';
-import {
-  Env,
-  ImageDimensionConfig,
-  IMAGE_DIMENSION_CONFIG,
-} from '@dark-rush-photography/api/types';
+import { Env, ImageResolution } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
+
+import {
+  findImageResolution$,
+  resizeImage$,
+} from '@dark-rush-photography/api/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   toImageDimension,
   validateAddImageDimension,
+  validateFoundImage,
 } from '../content/image-dimension.functions';
-import { AzureStorageProvider } from './azure-storage.provider';
-import { BlobUploadCommonResponse } from '@azure/storage-blob';
-import { resizeImage$ } from '@dark-rush-photography/api/util';
+import {
+  downloadBlobAsBuffer$,
+  downloadBlobToFile$,
+  getAzureStorageTypeFromMediaState,
+  getBlobPath,
+  getBlobPathWithDimension,
+  uploadStreamToBlob$,
+} from '@dark-rush-photography/shared-server/util';
 
 @Injectable()
 export class ImageDimensionProvider {
-  constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly azureStorageProvider: AzureStorageProvider
-  ) {}
-
-  validateType(imageDimensionType: ImageDimensionType): ImageDimensionConfig {
-    const imageDimensionConfig = IMAGE_DIMENSION_CONFIG.find(
-      (imageDimension) => imageDimension.type == imageDimensionType
-    );
-    if (!imageDimensionConfig)
-      throw new BadRequestException(
-        `Could not find image dimension config for image dimension type ${imageDimensionType}`
-      );
-    return imageDimensionConfig;
-  }
+  constructor(@Inject(ENV) private readonly env: Env) {}
 
   add$(
+    id: string,
     entityId: string,
     imageId: string,
     imageDimensionAdd: ImageDimensionAdd,
     entityModel: Model<DocumentModel>
   ): Observable<ImageDimension> {
-    const id = uuidv4();
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
-        const validatedDocumentModel = validateAddImageDimension(
-          imageId,
-          imageDimensionAdd,
-          documentModel
-        );
+      map((documentModel) => validateFoundImage(imageId, documentModel)),
+      map((documentModel) =>
+        validateAddImageDimension(imageId, imageDimensionAdd, documentModel)
+      ),
+      concatMap((documentModel) => {
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             imageDimensions: [
-              ...validatedDocumentModel.imageDimensions,
-              { ...imageDimensionAdd, id, entityId, imageId },
+              ...documentModel.imageDimensions,
+              {
+                id,
+                entityId,
+                imageId,
+                type: imageDimensionAdd.type,
+                pixels: imageDimensionAdd.pixels,
+                threeSixtyImageSettings: { pitch: 0, yaw: 0, hfov: 0 },
+              },
             ],
           })
         );
       }),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId, entityModel))
     );
   }
 
   updateThreeSixtyImageSettings$(
-    id: string,
+    imageId: string,
     entityId: string,
+    imageDimensionType: ImageDimensionType,
     threeSixtyImageSettings: ThreeSixtyImageSettings,
     entityModel: Model<DocumentModel>
   ): Observable<ImageDimension> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundImageDimension = documentModel.imageDimensions.find(
-          (imageDimension) => imageDimension.id === id
+          (imageDimension) =>
+            imageDimension.imageId === imageId &&
+            imageDimension.type === imageDimensionType
         );
         if (!foundImageDimension) throw new NotFoundException();
 
-        return from(
-          entityModel.findByIdAndUpdate(entityId, {
-            imageDimensions: [
-              ...documentModel.imageDimensions.filter(
-                (imageDimension) => imageDimension.id !== id
-              ),
-              { ...foundImageDimension, threeSixtyImageSettings },
-            ],
-          })
-        );
+        return combineLatest([
+          of(foundImageDimension),
+          from(
+            entityModel.findByIdAndUpdate(entityId, {
+              imageDimensions: [
+                ...documentModel.imageDimensions.filter(
+                  (imageDimension) => imageDimension.type !== imageDimensionType
+                ),
+                {
+                  id: foundImageDimension.id,
+                  entityId: foundImageDimension.entityId,
+                  imageId: foundImageDimension.imageId,
+                  type: foundImageDimension.type,
+                  pixels: foundImageDimension.pixels,
+                  threeSixtyImageSettings: threeSixtyImageSettings,
+                },
+              ],
+            })
+          ),
+        ]);
       }),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMap(([foundImageDimension]) =>
+        this.findOne$(foundImageDimension.id, entityId, entityModel)
+      )
     );
   }
 
-  //TODO: findImageDimensionPixels$(filePath)
-  resizeImage$(
+  resize$(
     media: Media,
-    isThreeSixtyImage: boolean
-  ): Observable<BlobUploadCommonResponse> {
-    return this.azureStorageProvider
-      .downloadBlobToFile$(
-        this.env.azureStorageConnectionString,
-        this.azureStorageProvider.getAzureStorageType(media.state),
-        this.azureStorageProvider.getBlobPath(media),
-        media.fileName
-      )
-      .pipe(
-        switchMap((filePath) => {
-          const config = this.validateType(ImageDimensionType.Tile);
-          return combineLatest([
-            of(config),
-            from(resizeImage$(media.fileName, filePath, config)),
-          ]);
-        }),
-        switchMap(([config, filePath]) =>
-          from(
-            this.azureStorageProvider.uploadStreamToBlob$(
-              this.env.azureStorageConnectionString,
-              this.azureStorageProvider.getAzureStorageType(media.state),
-              fs.createReadStream(filePath),
-              this.azureStorageProvider.getBlobPathWithDimension(
-                media,
-                config.type
-              )
-            )
-          )
+    imageResolution: ImageResolution,
+    entityModel: Model<DocumentModel>
+  ): Observable<ImageDimension> {
+    const id = uuidv4();
+    Logger.log(`Resizing image dimension ${imageResolution.type}`);
+    return downloadBlobToFile$(
+      this.env.azureStorageConnectionString,
+      getAzureStorageTypeFromMediaState(media.state),
+      getBlobPath(media),
+      media.fileName
+    ).pipe(
+      concatMap((filePath) =>
+        combineLatest([
+          of(imageResolution),
+          resizeImage$(media.fileName, filePath, imageResolution),
+        ])
+      ),
+      concatMap(([imageResolution, filePath]) =>
+        combineLatest([
+          of(imageResolution),
+          of(filePath),
+          uploadStreamToBlob$(
+            this.env.azureStorageConnectionString,
+            getAzureStorageTypeFromMediaState(media.state),
+            fs.createReadStream(filePath),
+            getBlobPathWithDimension(media, imageResolution.type)
+          ),
+        ])
+      ),
+      tap(() => Logger.log(`Finding image resolution ${imageResolution.type}`)),
+      concatMap(([imageResolution, filePath]) =>
+        combineLatest([of(imageResolution), findImageResolution$(filePath)])
+      ),
+      tap(() => Logger.log(`Adding image dimension ${imageResolution.type}`)),
+      concatMap(([imageResolution, pixels]) =>
+        this.add$(
+          id,
+          media.entityId,
+          media.id,
+          {
+            type: imageResolution.type,
+            pixels,
+          },
+          entityModel
         )
-      );
+      ),
+      tap(() =>
+        Logger.log(`Resizing image dimension ${imageResolution.type} complete`)
+      )
+    );
   }
 
   findOne$(
@@ -169,21 +196,16 @@ export class ImageDimensionProvider {
     media: Media,
     imageDimensionType: ImageDimensionType
   ): Observable<string> => {
-    return this.azureStorageProvider
-      .downloadBlobAsBuffer$(
-        this.env.azureStorageConnectionString,
-        this.azureStorageProvider.getAzureStorageType(media.state),
-        this.azureStorageProvider.getBlobPathWithDimension(
-          media,
-          imageDimensionType
-        )
-      )
-      .pipe(
-        map((buffer) => {
-          const datauri = require('datauri/parser');
-          const parser = new datauri();
-          return parser.format('.jpg', buffer).content;
-        })
-      );
+    return downloadBlobAsBuffer$(
+      this.env.azureStorageConnectionString,
+      getAzureStorageTypeFromMediaState(media.state),
+      getBlobPathWithDimension(media, imageDimensionType)
+    ).pipe(
+      map((buffer) => {
+        const datauri = require('datauri/parser');
+        const parser = new datauri();
+        return parser.format('.jpg', buffer).content;
+      })
+    );
   };
 }

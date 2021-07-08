@@ -7,32 +7,33 @@ import {
   ImageDimension,
   MediaDimensionPixels,
   ImageDimensionType,
+  Media,
 } from '@dark-rush-photography/shared/types';
-import { ActivityMedia, Env } from '@dark-rush-photography/serverless/types';
+import { Env } from '@dark-rush-photography/web-socket/types';
 import { apiAuth$ } from './api-auth.functions';
 
 export const addImageDimension$ = (
   env: Env,
   httpService: HttpService,
-  activityMedia: ActivityMedia,
+  media: Media,
   type: ImageDimensionType,
   pixels: MediaDimensionPixels
 ): Observable<ImageDimension> => {
-  const entityId = activityMedia.entityId;
+  const entityId = media.entityId;
   if (!entityId) {
     const message = 'Entity id is required for adding an image dimension';
     Logger.log(message, addImageDimension$.name);
     throw new BadRequestException(message);
   }
 
-  const imageId = activityMedia.id;
+  const imageId = media.id;
   if (!imageId) {
     const message = 'Image id is required for adding an image dimension';
     Logger.log(message, addImageDimension$.name);
     throw new BadRequestException(message);
   }
 
-  const url = `${env.api.drpApi}/admin/v1/image-dimensions?entityId=${activityMedia.entityId}&imageId=${activityMedia.id}`;
+  const url = `${env.api.drpApi}/admin/v1/image-dimensions?entityId=${media.entityId}&imageId=${activityMedia.id}`;
   Logger.log(url, addImageDimension$.name);
   return apiAuth$(env.apiAuth, httpService).pipe(
     switchMap((accessToken) =>
@@ -45,7 +46,6 @@ export const addImageDimension$ = (
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'X-DRP-API-ADMIN-KEY': env.api.drpApiAdminKey,
           },
         }
       )

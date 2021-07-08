@@ -86,7 +86,7 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
     //if (imageElement.loading) {
     //  console.log('after view init if');
     //  this.imageLoaded$ = merge(fromEvent(imageElement, 'load')).pipe(
-    //    switchMapTo(timer(this.transitionMilliseconds)),
+    //    concatMapTo(timer(this.transitionMilliseconds)),
     //    mapTo(true)
     //  );
     //} else {

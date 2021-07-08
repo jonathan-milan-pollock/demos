@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
 import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, mapTo } from 'rxjs/operators';
 
 import {
   ImageUpdate,
@@ -15,14 +15,20 @@ import {
 import { Env } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { ImageProvider } from './image.provider';
-import { AzureStorageProvider } from './azure-storage.provider';
+import {
+  deleteBlob$,
+  downloadBlobToFile$,
+  getAzureStorageTypeFromMediaState,
+  getBlobPath,
+  getBlobPathWithDimension,
+  uploadStreamToBlob$,
+} from '@dark-rush-photography/shared-server/util';
 
 @Injectable()
 export class ImageUpdateProvider {
   constructor(
     @Inject(ENV) private readonly env: Env,
-    private readonly imageProvider: ImageProvider,
-    private readonly azureStorageProvider: AzureStorageProvider
+    private readonly imageProvider: ImageProvider
   ) {}
 
   update$(
@@ -34,7 +40,7 @@ export class ImageUpdateProvider {
     return this.imageProvider
       .setIsProcessing$(image.id, image.entityId, true, entityModel)
       .pipe(
-        switchMapTo(
+        concatMapTo(
           this.updateBlobPath$(
             image,
             imageUpdate,
@@ -53,7 +59,7 @@ export class ImageUpdateProvider {
             documentModel.imageDimensions
           )
         ),
-        switchMapTo(
+        concatMapTo(
           this.imageProvider.update$(
             image.id,
             image.entityId,
@@ -61,7 +67,7 @@ export class ImageUpdateProvider {
             entityModel
           )
         ),
-        switchMapTo(
+        concatMapTo(
           this.imageProvider.setIsProcessing$(
             image.id,
             image.entityId,
@@ -108,61 +114,56 @@ export class ImageUpdateProvider {
       return of(image);
 
     return from(imageDimensions).pipe(
-      switchMap((imageDimension) => {
-        const downloadBlobToFile$ = this.azureStorageProvider.downloadBlobToFile$(
-          this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(imageMedia.state),
-          this.azureStorageProvider.getBlobPathWithDimension(
-            imageMedia,
-            imageDimension.type
+      concatMap((imageDimension) =>
+        combineLatest([
+          of(imageDimension),
+          downloadBlobToFile$(
+            this.env.azureStorageConnectionString,
+            getAzureStorageTypeFromMediaState(imageMedia.state),
+            getBlobPathWithDimension(imageMedia, imageDimension.type),
+            imageMedia.fileName
           ),
-          imageMedia.fileName
-        );
-        return combineLatest([of(imageDimension), from(downloadBlobToFile$)]);
+        ])
+      ),
+      concatMap(([imageDimension, filePath]) => {
+        return combineLatest([
+          of(imageDimension),
+          uploadStreamToBlob$(
+            this.env.azureStorageConnectionString,
+            getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
+            fs.createReadStream(filePath),
+            getBlobPathWithDimension(imageUpdateMedia, imageDimension.type)
+          ),
+        ]);
       }),
-      switchMap(([imageDimension, filePath]) => {
-        const uploadStreamToBlob$ = this.azureStorageProvider.uploadStreamToBlob$(
+      concatMap(([imageDimension]) =>
+        deleteBlob$(
           this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(imageUpdateMedia.state),
-          fs.createReadStream(filePath),
-          this.azureStorageProvider.getBlobPathWithDimension(
-            imageUpdateMedia,
-            imageDimension.type
-          )
-        );
-        return combineLatest([of(imageDimension), from(uploadStreamToBlob$)]);
-      }),
-      switchMap(([imageDimension]) =>
-        this.azureStorageProvider.deleteBlob$(
-          this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(imageMedia.state),
-          this.azureStorageProvider.getBlobPathWithDimension(
-            imageMedia,
-            imageDimension.type
-          )
+          getAzureStorageTypeFromMediaState(imageMedia.state),
+          getBlobPathWithDimension(imageMedia, imageDimension.type)
         )
       ),
-      switchMapTo(
-        this.azureStorageProvider.downloadBlobToFile$(
+      concatMapTo(
+        downloadBlobToFile$(
           this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(imageMedia.state),
-          this.azureStorageProvider.getBlobPath(imageMedia),
+          getAzureStorageTypeFromMediaState(imageMedia.state),
+          getBlobPath(imageMedia),
           imageMedia.fileName
         )
       ),
-      switchMap((filePath) =>
-        this.azureStorageProvider.uploadStreamToBlob$(
+      concatMap((filePath) =>
+        uploadStreamToBlob$(
           this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(imageUpdateMedia.state),
+          getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
           fs.createReadStream(filePath),
-          this.azureStorageProvider.getBlobPath(imageUpdateMedia)
+          getBlobPath(imageUpdateMedia)
         )
       ),
-      switchMapTo(
-        this.azureStorageProvider.deleteBlob$(
+      concatMapTo(
+        deleteBlob$(
           this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(imageMedia.state),
-          this.azureStorageProvider.getBlobPath(imageMedia)
+          getAzureStorageTypeFromMediaState(imageMedia.state),
+          getBlobPath(imageMedia)
         )
       ),
       mapTo(image)

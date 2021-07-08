@@ -1,4 +1,4 @@
-import { AzureStorageType } from '@dark-rush-photography/serverless/types';
+import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import { MediaState } from '@dark-rush-photography/shared/types';
 import { BadRequestException } from '@nestjs/common';
 import { getAzureStorageTypeFromMediaState } from './media-state-to-azure-storage-type.functions';

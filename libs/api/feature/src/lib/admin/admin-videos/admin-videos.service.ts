@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map, mapTo } from 'rxjs/operators';
 
 import {
   HlsVideoAdd,
@@ -40,7 +40,7 @@ export class AdminVideosService {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.entityProvider.validateEntityFound),
       map(this.videoProvider.validateCanAddVideoToEntity),
-      switchMapTo(
+      concatMapTo(
         this.videoProvider.add$(
           id,
           entityId,
@@ -54,8 +54,8 @@ export class AdminVideosService {
   }
 
   upload$(
-    fileName: string,
     entityId: string,
+    fileName: string,
     file: Express.Multer.File
   ): Observable<Video> {
     const hlsUrl = '';
@@ -68,7 +68,7 @@ export class AdminVideosService {
         this.videoProvider.validateVideoNotFound(fileName, documentModel)
       ),
       map(this.videoProvider.validateCanAddVideoToEntity),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         combineLatest([
           of(documentModel),
           from(
@@ -91,10 +91,10 @@ export class AdminVideosService {
           documentModel
         );
       }),
-      switchMap((media) =>
+      concatMap((media) =>
         from(this.videoUploadProvider.upload$(media, file, this.entityModel))
       ),
-      switchMapTo(from(this.findOne$(id, entityId)))
+      concatMapTo(from(this.findOne$(id, entityId)))
     );
   }
 
@@ -123,7 +123,7 @@ export class AdminVideosService {
         video: documentModel.videos.find((video) => video.id == id),
         documentModel,
       })),
-      switchMap(({ video, documentModel }) => {
+      concatMap(({ video, documentModel }) => {
         if (video && this.videoProvider.validateVideoNotProcessing(video)) {
           return from(
             this.videoRemoveProvider.remove$(

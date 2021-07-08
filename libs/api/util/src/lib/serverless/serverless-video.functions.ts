@@ -1,4 +1,4 @@
-import { HttpService, Logger } from '@nestjs/common';
+/*import { HttpService, Logger } from '@nestjs/common';
 
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
@@ -107,3 +107,4 @@ export const serverlessCreateImageVideo$ = (
       .pipe(map((axiosResponse) => axiosResponse.data))
   );
 };
+*/

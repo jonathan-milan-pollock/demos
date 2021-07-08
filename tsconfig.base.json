@@ -34,18 +34,6 @@
       "@dark-rush-photography/image-elements/loader": [
         "dist/libs/image-elements/loader"
       ],
-      "@dark-rush-photography/serverless/data": [
-        "libs/serverless/data/src/index.ts"
-      ],
-      "@dark-rush-photography/serverless/feature": [
-        "libs/serverless/feature/src/index.ts"
-      ],
-      "@dark-rush-photography/serverless/types": [
-        "libs/serverless/types/src/index.ts"
-      ],
-      "@dark-rush-photography/serverless/util": [
-        "libs/serverless/util/src/index.ts"
-      ],
       "@dark-rush-photography/shared/types": ["libs/shared/types/src/index.ts"],
       "@dark-rush-photography/shared/util": ["libs/shared/util/src/index.ts"],
       "@dark-rush-photography/shared-server/types": [

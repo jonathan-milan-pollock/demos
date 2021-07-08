@@ -17,17 +17,10 @@ export class MediaProcessProvider {
     /* return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
-      switchMapTo(
+      concatMapTo(
         entityModel.findByIdAndUpdate(entityId, { isProcessing: true })
       ),
-      switchMapTo(
-        serverlessMediaProcess$(
-          this.env.serverless,
-          this.httpService,
-          entityType,
-          entityId
-        )
-      ),
+      
       mapTo(undefined)
     );
   }*/
