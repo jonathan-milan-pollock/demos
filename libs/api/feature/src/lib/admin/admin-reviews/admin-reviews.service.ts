@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMapTo } from 'rxjs/operators';
+import { map, concatMapTo } from 'rxjs/operators';
 
 import {
   Review,
@@ -37,8 +37,8 @@ export class AdminReviewsService {
   update$(id: string, reviewUpdate: ReviewUpdate): Observable<Review> {
     return from(this.reviewModel.findById(id)).pipe(
       map(this.entityProvider.validateEntityFound),
-      switchMapTo(this.reviewModel.findByIdAndUpdate(id, { ...reviewUpdate })),
-      switchMapTo(
+      concatMapTo(this.reviewModel.findByIdAndUpdate(id, { ...reviewUpdate })),
+      concatMapTo(
         this.entityProvider.findOne$(
           EntityType.Review,
           id,

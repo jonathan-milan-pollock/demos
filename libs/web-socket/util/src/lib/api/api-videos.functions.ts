@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Video } from '@dark-rush-photography/shared/types';
-import { EnvApi } from '@dark-rush-photography/serverless/types';
+import { EnvApi } from '@dark-rush-photography/api/types';
 
 export const addVideo$ = (
   envApi: EnvApi,

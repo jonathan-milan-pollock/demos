@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
+import {
+  Document,
+  DocumentSchema,
+} from '@dark-rush-photography/api/data';
 import { AdminAboutModule } from './admin-about/admin-about.module';
 import { AdminBestOfModule } from './admin-best-of/admin-best-of.module';
 import { AdminDestinationsModule } from './admin-destinations/admin-destinations.module';

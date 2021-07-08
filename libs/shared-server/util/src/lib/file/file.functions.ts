@@ -1,20 +1,15 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
-import { v4 as uuidv4 } from 'uuid';
 
+import { v4 as uuidv4 } from 'uuid';
 import { from, fromEvent, Observable, of } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
+import { map, mapTo, switchMap, take } from 'rxjs/operators';
 
 export const createTempFile$ = (fileName: string): Observable<string> => {
   const filePath = path.join(os.tmpdir(), uuidv4(), fileName);
   return from(fs.ensureFile(filePath)).pipe(mapTo(filePath));
 };
-
-const onWriteStreamClose = (writeStream: fs.WriteStream, fileName: string) =>
-  fromEvent(writeStream, 'close').pipe(mapTo(fileName));
-const onWriteStreamError = (writeStream: fs.WriteStream) =>
-  fromEvent(writeStream, 'error');
 
 export const writeStreamToFile$ = (
   readableStream: NodeJS.ReadableStream,
@@ -22,6 +17,8 @@ export const writeStreamToFile$ = (
 ): Observable<string> => {
   return of(fs.createWriteStream(fileName, { flags: 'w' })).pipe(
     map((writeStream) => readableStream.pipe(writeStream)),
-    switchMap((writeStream) => onWriteStreamClose(writeStream, fileName))
+    switchMap((writeStream) => fromEvent(writeStream, 'close')),
+    mapTo(fileName),
+    take(1)
   );
 };

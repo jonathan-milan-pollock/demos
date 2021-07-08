@@ -1,5 +1,4 @@
 // providers
-export * from './lib/providers/azure-storage.provider';
 export * from './lib/providers/comment.provider';
 export * from './lib/providers/emotion.provider';
 export * from './lib/providers/entity-delete.provider';
@@ -12,7 +11,6 @@ export * from './lib/providers/image-update.provider';
 export * from './lib/providers/image-upload.provider';
 export * from './lib/providers/image.provider';
 export * from './lib/providers/media-process.provider';
-export * from './lib/providers/serverless-video.provider';
 export * from './lib/providers/video-dimension.provider';
 export * from './lib/providers/video-remove.provider';
 export * from './lib/providers/video-update.provider';

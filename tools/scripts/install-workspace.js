@@ -76,12 +76,6 @@ const execGenerateApps = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:app serverless --unitTestRunner=none --tags=scope:serverless,type:app'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
         'npx nx g @nrwl/nest:app web-socket --unitTestRunner=none --tags=scope:web-socket,type:app'
       )
     );
@@ -155,34 +149,6 @@ const execGenerateImageElementsLibs = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nxext/stencil:lib image-elements --style=scss --tags=scope:image-elements,type:ui --publishable --importPath=@dark-rush-photography/image-elements'
-      )
-    );
-
-const execGenerateServerlessLibs = (isReady) =>
-  Promise.resolve(console.log('#### serverless libraries'))
-    .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/data --unitTestRunner=jest --tags=scope:serverless,type:data'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/feature --unitTestRunner=none --tags=scope:serverless,type:feature'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/types --unitTestRunner=none --tags=scope:serverless,type:types'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/util --unitTestRunner=jest --tags=scope:serverless,type:util'
       )
     );
 

@@ -5,10 +5,10 @@ import { map } from 'rxjs/operators';
 import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 
 export const getAzureStorageContainerClient$ = (
-  azureStorageConnectionString: string,
+  connectionString: string,
   azureStorageType: AzureStorageType
 ): Observable<ContainerClient> =>
-  of(BlobServiceClient.fromConnectionString(azureStorageConnectionString)).pipe(
+  of(BlobServiceClient.fromConnectionString(connectionString)).pipe(
     map((blobServiceClient) =>
       blobServiceClient.getContainerClient(azureStorageType.toLowerCase())
     )

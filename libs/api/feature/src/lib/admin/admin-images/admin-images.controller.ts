@@ -24,7 +24,11 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, Image } from '@dark-rush-photography/shared/types';
+import {
+  ADMIN,
+  Image,
+  ImageDimensionType,
+} from '@dark-rush-photography/shared/types';
 import {
   FileUploadDto,
   ImageDto,
@@ -125,6 +129,7 @@ export class AdminImagesController {
     return this.adminImagesService.updateThreeSixtyImageSettings$(
       id,
       entityId,
+      ImageDimensionType.Facebook, //TODO: add parameter
       threeSixtyImageSettings
     );
   }

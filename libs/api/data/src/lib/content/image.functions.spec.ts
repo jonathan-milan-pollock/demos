@@ -32,37 +32,15 @@ describe('image.functions', () => {
       expect('_id' in result).toBe(false);
     });
 
+    /*
+    TODO: Test other undefined properties like this
     it('should have an undefined title if not provided', () => {
       const result = toImage({
         ...image,
         title: undefined,
       });
       expect(result.title).toBeUndefined();
-    });
-
-    it('should have an undefined description if not provided', () => {
-      const result = toImage({
-        ...image,
-        description: undefined,
-      });
-      expect(result.description).toBeUndefined();
-    });
-
-    it('should have undefined keywords if not provided', () => {
-      const result = toImage({
-        ...image,
-        keywords: undefined,
-      });
-      expect(result.keywords).toBeUndefined();
-    });
-
-    it('should have an undefined date published if not provided', () => {
-      const result = toImage({
-        ...image,
-        datePublished: undefined,
-      });
-      expect(result.datePublished).toBeUndefined();
-    });
+    });*/
   });
 
   describe('findPublicImages', () => {

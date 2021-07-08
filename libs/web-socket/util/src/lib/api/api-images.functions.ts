@@ -1,10 +1,10 @@
 import { BadRequestException, HttpService, Logger } from '@nestjs/common';
 
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { concatMap, map, switchMap } from 'rxjs/operators';
 
 import { Image } from '@dark-rush-photography/shared/types';
-import { ActivityMedia, Env } from '@dark-rush-photography/serverless/types';
+import { ActivityMedia, Env } from '@dark-rush-photography/api/types';
 import { apiAuth$ } from './api-auth.functions';
 
 export const addImage$ = (
@@ -31,7 +31,7 @@ export const addImage$ = (
   }
 
   return apiAuth$(env.apiAuth, httpService).pipe(
-    switchMap((accessToken) =>
+    concatMap((accessToken) =>
       httpService.post<Image>(
         url,
         {

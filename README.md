@@ -13,7 +13,6 @@
 - **_StencilJS_**
 - **_NestJS Api_**
 - **_NestJS Mongoose_**
-- **_NestJS Serverless_**
 - **_Storybook_**
 - **_Pulumi_**
 - **_Cypress_**

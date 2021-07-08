@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { combineLatest, from, Observable, of } from 'rxjs';
-import { map, max, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map, max } from 'rxjs/operators';
 
 import {
   Comment,
@@ -23,13 +23,13 @@ export class CommentProvider {
     const id = uuidv4();
     return from(entityModel.findById(commentAdd.entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         combineLatest([
           of(documentModel),
           from(documentModel.comments).pipe(max((comment) => comment.order)),
         ])
       ),
-      switchMap(([documentModel, maxComment]) => {
+      concatMap(([documentModel, maxComment]) => {
         const validateDocumentModel = validateAddComment(
           commentAdd,
           documentModel
@@ -47,7 +47,7 @@ export class CommentProvider {
           })
         );
       }),
-      switchMapTo(this.findOne$(id, commentAdd.entityId, entityModel))
+      concatMapTo(this.findOne$(id, commentAdd.entityId, entityModel))
     );
   }
 
@@ -59,7 +59,7 @@ export class CommentProvider {
   ): Observable<Comment> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const foundComment = documentModel.comments.find(
           (comment) => comment.id == id
         );
@@ -74,7 +74,7 @@ export class CommentProvider {
           })
         );
       }),
-      switchMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId, entityModel))
     );
   }
 
@@ -104,7 +104,7 @@ export class CommentProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         from(
           entityModel.findByIdAndUpdate(entityId, {
             comments: [

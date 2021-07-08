@@ -5,15 +5,11 @@ import { EntityType, ENV } from '@dark-rush-photography/shared/types';
 import { Env } from '@dark-rush-photography/api/types';
 
 import { DocumentModel } from '../schema/document.schema';
-import { AzureStorageProvider } from './azure-storage.provider';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class EntityUpdateProvider {
-  constructor(
-    @Inject(ENV) private readonly env: Env,
-    private readonly azureStorageProvider: AzureStorageProvider
-  ) {}
+  constructor(@Inject(ENV) private readonly env: Env) {}
 
   update$(
     entityType: EntityType,
@@ -37,15 +33,8 @@ export class EntityUpdateProvider {
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
       map(validateNotProcessingEntity),
-      switchMapTo(
+      concatMapTo(
         entityModel.findByIdAndUpdate(entityId, { isProcessing: true })
-      ),
-      switchMapTo(
-        serverlessUpdateEntityProcess$(this.env.serverless, this.httpService, {
-          entityType,
-          entityId,
-          entityUpdate,
-        })
       ),
       mapTo(undefined)
     );*/

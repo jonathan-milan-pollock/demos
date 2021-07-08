@@ -1,26 +1,26 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { mapTo, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { concatMap, concatMapTo, mapTo, tap } from 'rxjs/operators';
 
 import { ENV, Media } from '@dark-rush-photography/shared/types';
 import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import { Env } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { AzureStorageProvider } from './azure-storage.provider';
-import { ServerlessVideoProvider } from './serverless-video.provider';
 import { VideoProvider } from './video.provider';
 import { VideoDimensionProvider } from './video-dimension.provider';
+import {
+  getBlobPath,
+  uploadBufferToBlob$,
+} from '@dark-rush-photography/shared-server/util';
 
 @Injectable()
 export class VideoUploadProvider {
   constructor(
     @Inject(ENV) private readonly env: Env,
     private readonly videoProvider: VideoProvider,
-    private readonly videoDimensionProvider: VideoDimensionProvider,
-    private readonly azureStorageProvider: AzureStorageProvider,
-    private readonly serverlessVideoProvider: ServerlessVideoProvider
+    private readonly videoDimensionProvider: VideoDimensionProvider
   ) {}
 
   upload$(
@@ -30,21 +30,21 @@ export class VideoUploadProvider {
   ): Observable<DocumentModel> {
     Logger.log('Uploading video', VideoUploadProvider.name);
     return from(
-      this.azureStorageProvider.uploadBufferToBlob$(
+      uploadBufferToBlob$(
         this.env.azureStorageConnectionString,
         AzureStorageType.Private,
         file.buffer,
-        this.azureStorageProvider.getBlobPath(media)
+        getBlobPath(media)
       )
     ).pipe(
       tap(() => Logger.log('Update date created', VideoUploadProvider.name)),
-      switchMapTo(from(this.updateDateCreated$(media, entityModel))),
+      concatMapTo(from(this.updateDateCreated$(media, entityModel))),
       tap(() => Logger.log('Exif video', VideoUploadProvider.name)),
       tap(() => Logger.log('Resize video', VideoUploadProvider.name)),
-      switchMapTo(
+      concatMapTo(
         from(this.videoDimensionProvider.resizeVideo$(media, entityModel))
       ),
-      switchMapTo(
+      concatMapTo(
         from(
           this.videoProvider.setIsProcessing$(
             media.id,
@@ -61,12 +61,13 @@ export class VideoUploadProvider {
     media: Media,
     entityModel: Model<DocumentModel>
   ): Observable<Media> {
-    return this.serverlessVideoProvider
-      .serverlessFindDateVideoCreated$({
+    return of();
+    /*  return this.VideoProvider
+      .FindDateVideoCreated$({
         video: media,
       })
       .pipe(
-        switchMap((dateCreated) =>
+        concatMap((dateCreated) =>
           this.videoProvider.setDateCreated$(
             media.id,
             media.entityId,
@@ -75,6 +76,6 @@ export class VideoUploadProvider {
           )
         ),
         mapTo(media)
-      );
+      );*/
   }
 }

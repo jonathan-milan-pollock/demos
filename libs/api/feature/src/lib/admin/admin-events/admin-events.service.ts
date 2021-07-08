@@ -15,7 +15,7 @@ import {
   Document,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
-import { map, switchMapTo } from 'rxjs/operators';
+import { concatMapTo, map } from 'rxjs/operators';
 
 @Injectable()
 export class AdminEventsService {
@@ -37,8 +37,8 @@ export class AdminEventsService {
   update$(id: string, eventUpdate: EventUpdate): Observable<Event> {
     return from(this.eventModel.findById(id)).pipe(
       map(this.entityProvider.validateEntityFound),
-      switchMapTo(this.eventModel.findByIdAndUpdate(id, { ...eventUpdate })),
-      switchMapTo(
+      concatMapTo(this.eventModel.findByIdAndUpdate(id, { ...eventUpdate })),
+      concatMapTo(
         this.entityProvider.findOne$(
           EntityType.Event,
           id,

@@ -34,13 +34,11 @@
 
 ### install serverless
 
-#### in next version azurite table storage will be supported in VSCode
+#### start azurite table and blob storage from bottom of VSCode
 
-- for now:
+- TODO: Do we still need this
 
 > npm install -g azurite@3.12.0
-> azurite start
-> azurite close
 
 #### install msi for Azure Functions Core Tools v3
 
@@ -50,8 +48,6 @@
 
 - View > Command Palette...
 - Azurite Start
-
-#### for new serverless functions add function and index in tools/serverless folder
 
 ---
 

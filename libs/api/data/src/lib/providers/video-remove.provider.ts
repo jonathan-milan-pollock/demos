@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { Model } from 'mongoose';
 import { from, Observable, of } from 'rxjs';
-import { switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { concatMap, concatMapTo, tap } from 'rxjs/operators';
 
 import {
   ENV,
@@ -11,16 +11,20 @@ import {
   VideoDimension,
 } from '@dark-rush-photography/shared/types';
 import { Env } from '@dark-rush-photography/api/types';
+import {
+  deleteBlob$,
+  getAzureStorageTypeFromMediaState,
+  getBlobPath,
+  getBlobPathWithDimension,
+} from '@dark-rush-photography/shared-server/util';
 import { DocumentModel } from '../schema/document.schema';
 import { VideoProvider } from './video.provider';
-import { AzureStorageProvider } from './azure-storage.provider';
 
 @Injectable()
 export class VideoRemoveProvider {
   constructor(
     @Inject(ENV) private readonly env: Env,
-    private readonly videoProvider: VideoProvider,
-    private readonly azureStorageProvider: AzureStorageProvider
+    private readonly videoProvider: VideoProvider
   ) {}
 
   remove$(
@@ -32,7 +36,7 @@ export class VideoRemoveProvider {
     return this.videoProvider
       .setIsProcessing$(video.id, video.entityId, true, entityModel)
       .pipe(
-        switchMapTo(
+        concatMapTo(
           from(
             this.removeVideoBlobs$(
               this.videoProvider.getMedia(
@@ -45,7 +49,7 @@ export class VideoRemoveProvider {
             )
           )
         ),
-        switchMapTo(
+        concatMapTo(
           from(
             this.videoProvider.remove$(video.id, video.entityId, entityModel)
           )
@@ -57,10 +61,10 @@ export class VideoRemoveProvider {
   }
 
   removeVideoBlob$(media: Media): Observable<boolean> {
-    return this.azureStorageProvider.deleteBlob$(
+    return deleteBlob$(
       this.env.azureStorageConnectionString,
-      this.azureStorageProvider.getAzureStorageType(media.state),
-      this.azureStorageProvider.getBlobPath(media)
+      getAzureStorageTypeFromMediaState(media.state),
+      getBlobPath(media)
     );
   }
 
@@ -73,17 +77,14 @@ export class VideoRemoveProvider {
     if (videoDimensions.length === 0) return this.removeVideoBlob$(media);
 
     return from(videoDimensions).pipe(
-      switchMap((videoDimension) =>
-        this.azureStorageProvider.deleteBlob$(
+      concatMap((videoDimension) =>
+        deleteBlob$(
           this.env.azureStorageConnectionString,
-          this.azureStorageProvider.getAzureStorageType(media.state),
-          this.azureStorageProvider.getBlobPathWithDimension(
-            media,
-            videoDimension.type
-          )
+          getAzureStorageTypeFromMediaState(media.state),
+          getBlobPathWithDimension(media, videoDimension.type)
         )
       ),
-      switchMapTo(this.removeVideoBlob$(media))
+      concatMapTo(this.removeVideoBlob$(media))
     );
   }
 }

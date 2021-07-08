@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { concatMap, concatMapTo, map } from 'rxjs/operators';
 
 import { DocumentModel } from '../schema/document.schema';
 import { Emotion, EmotionAdd } from '@dark-rush-photography/shared/types';
@@ -19,7 +19,7 @@ export class EmotionProvider {
     const id = uuidv4();
     return from(entityModel.findById(emotionAdd.entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) => {
+      concatMap((documentModel) => {
         const validatedDocumentModel = validateAddEmotion(
           emotionAdd,
           documentModel
@@ -36,7 +36,7 @@ export class EmotionProvider {
           })
         );
       }),
-      switchMapTo(this.findOne$(id, emotionAdd.entityId, entityModel))
+      concatMapTo(this.findOne$(id, emotionAdd.entityId, entityModel))
     );
   }
 
@@ -66,7 +66,7 @@ export class EmotionProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      switchMap((documentModel) =>
+      concatMap((documentModel) =>
         from(
           entityModel.findByIdAndUpdate(entityId, {
             emotions: [

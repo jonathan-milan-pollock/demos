@@ -12,6 +12,7 @@
 
 - [Chrome Lighthouse](https://developers.google.com/web/tools/lighthouse)
 - [Social Media Image Cheat Sheet](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
+- [Social Media Video Specs](https://sproutsocial.com/insights/social-media-video-specs-guide/)
 - [ScreamingFrog](https://www.screamingfrog.co.uk/seo-spider/)
 - [KWFinder](https://app.kwfinder.com/)
 - [ahrefs](https://ahrefs.com/)

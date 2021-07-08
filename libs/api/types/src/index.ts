@@ -6,7 +6,11 @@ import { Multer } from 'multer';
 // constants
 export * from './lib/constants/constants';
 export * from './lib/constants/image-artist-exif.constants';
-export * from './lib/constants/image-dimension-config.constants';
+export * from './lib/constants/image-resolutions.constants';
+export * from './lib/constants/image-video-resolutions.constants';
+export * from './lib/constants/three-sixty-image-resolutions.constants';
+export * from './lib/constants/three-sixty-video-resolutions.constants';
+export * from './lib/constants/video-resolutions.constants';
 
 // dtos
 export * from './lib/dtos/about.dto';
@@ -51,13 +55,13 @@ export * from './lib/dtos/video.dto';
 // interfaces
 export * from './lib/interfaces/content.interface';
 export * from './lib/interfaces/date-created-exif.interface';
-export * from './lib/interfaces/env-serverless.interface';
 export * from './lib/interfaces/env.interface';
 export * from './lib/interfaces/facebook-carousel-image.interface';
 export * from './lib/interfaces/image-artist-exif.interface';
-export * from './lib/interfaces/image-dimension-config.interface';
-export * from './lib/interfaces/image-dimension-longest-edge-config.interface';
-export * from './lib/interfaces/image-dimension-standard-config.interface';
-export * from './lib/interfaces/image-dimension-tile-config.interface';
 export * from './lib/interfaces/image-exif.interface';
+export * from './lib/interfaces/image-resolution.interface';
 export * from './lib/interfaces/lightroom-media.interface';
+export * from './lib/interfaces/longest-edge-image-resolution.interface';
+export * from './lib/interfaces/standard-image-resolution.interface';
+export * from './lib/interfaces/tile-image-resolution.interface';
+export * from './lib/interfaces/video-dimension-config.interface';

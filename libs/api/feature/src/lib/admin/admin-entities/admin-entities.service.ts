@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, mapTo, switchMapTo } from 'rxjs/operators';
+import { concatMapTo, map, mapTo } from 'rxjs/operators';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
 import {
@@ -34,7 +34,7 @@ export class AdminEntitiesService {
       map((documentModel) =>
         this.entityProvider.validateEntityType(entityType, documentModel)
       ),
-      switchMapTo(
+      concatMapTo(
         from(this.entityModel.findByIdAndUpdate(id, { isProcessing }))
       ),
       mapTo(undefined)

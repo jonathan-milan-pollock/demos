@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsMongoId,
-  IsOptional,
-  IsUUID,
-  ValidateNested,
-} from 'class-validator';
+import { IsEnum, IsMongoId, IsUUID, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import {
@@ -33,6 +27,5 @@ export class ImageDimensionDto implements ImageDimension {
 
   @ValidateNested()
   @Type(() => ThreeSixtyImageSettingsDto)
-  @IsOptional()
-  threeSixtyImageSettings?: ThreeSixtyImageSettingsDto;
+  threeSixtyImageSettings!: ThreeSixtyImageSettingsDto;
 }
