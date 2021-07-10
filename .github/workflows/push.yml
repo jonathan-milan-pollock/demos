@@ -20,8 +20,22 @@ jobs:
         run: |
           npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
           npm install
+      - name: Storybook Copy Docs
+        run: npm run docs:json
+      - name: Storybook Build
+        run: npx nx run ui-storybook:build-storybook
       - name: Storybook Copy Files
         run: npm run sb:copy
+      - name: Website Build
+        run: npm run build:ssr
+      - name: Best Of Build
+        run: npx nx run best-of:build:production
+      - name: Api Build
+        run: npx nx run api:build:production
+      - name: Web Socket Build
+        run: npx nx run web-socket:build:production
+      - name: Docker Copy Files
+        run: npm run dc:copy
       - name: Storybook Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
