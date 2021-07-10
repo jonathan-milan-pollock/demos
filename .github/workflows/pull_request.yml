@@ -9,12 +9,26 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v1
+      - name: Setup Node 14.x
+        uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - name: Install Dependecies
+        run: npm install
+      - name: Prebuild Website
+        run: npm run prebuild:ssr
+      - name: Build Website
+        run: npm run build:ssr
+      - name: Build Api
+        run: npx nx build api --prod
+      - name: Build Websocket
+        run: npx nx build web-socket --prod
+      - name: Copy files for Docker
+        run: npm run dc:copy
       - name: Install Pulumi CLI
         uses: pulumi/action-install-pulumi-cli@v1
-      - run: npm install
+      - name: Install Pulumi Dependencies
+        run: npm install
         working-directory: ./tools/ci/
       - name: Pulumi Preview
         uses: pulumi/actions@v3
