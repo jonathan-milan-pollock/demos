@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -33,8 +32,7 @@ export class VideoProvider {
     );
     if (foundVideo)
       throw new ConflictException(
-        `Video with file name ${fileName} already exists`,
-        HttpStatus.FOUND
+        `Video with file name ${fileName} already exists`
       );
     return documentModel;
   }
@@ -42,8 +40,7 @@ export class VideoProvider {
   validateVideoNotProcessing(video: Video): Video {
     if (video.isProcessing)
       throw new ConflictException(
-        'Video cannot be modified as it currently being processed',
-        HttpStatus.NOT_ACCEPTABLE
+        'Video cannot be modified as it currently being processed'
       );
     return video;
   }

@@ -1,6 +1,5 @@
 import {
   ConflictException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -33,8 +32,7 @@ export class ImageProvider {
     );
     if (foundImage)
       throw new ConflictException(
-        `Image with file name ${fileName} already exists`,
-        HttpStatus.FOUND
+        `Image with file name ${fileName} already exists`
       );
     return documentModel;
   }
@@ -42,8 +40,7 @@ export class ImageProvider {
   validateImageNotProcessing(image: Image): Image {
     if (image.isProcessing)
       throw new ConflictException(
-        'Image cannot be modified as it currently being processed',
-        HttpStatus.NOT_ACCEPTABLE
+        'Image cannot be modified as it currently being processed'
       );
     return image;
   }

@@ -9,9 +9,8 @@
   },
   "devDependencies": {
     "@pulumi/azure-native": "^1.16.0",
+    "@pulumi/docker": "^3.0.0",
     "@pulumi/pulumi": "^3.6.1"
   },
-  "dependencies": {
-    "@pulumi/docker": "^3.0.0"
-  }
+  "dependencies": {}
 }

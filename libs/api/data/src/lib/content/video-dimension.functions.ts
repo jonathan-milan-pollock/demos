@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  HttpStatus,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import {
   VideoDimension,
@@ -45,8 +41,7 @@ export const validateAddVideoDimension = (
   );
   if (videoDimensionType) {
     throw new ConflictException(
-      `Video dimension type ${videoDimensionAdd.type} already exists`,
-      HttpStatus.FOUND
+      `Video dimension type ${videoDimensionAdd.type} already exists`
     );
   }
   return documentModel;

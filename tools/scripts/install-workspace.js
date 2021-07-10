@@ -35,6 +35,8 @@ const execInstallDevDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D source-map-explorer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D concurrently'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D copyfiles'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D faker'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/faker'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/fs-extra'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/uuid'));
@@ -43,8 +45,7 @@ const execInstallDependencies = (isReady) =>
   Promise.resolve(console.log('### dependencies'))
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i fs-extra'))
-    .then(() => consoleLogOrExec(isReady, 'npm i uuid'))
-    .then(() => consoleLogOrExec(isReady, 'npm i faker'));
+    .then(() => consoleLogOrExec(isReady, 'npm i uuid'));
 
 const execGenerateApps = (isReady) =>
   Promise.resolve(console.log('### apps'))
@@ -331,17 +332,14 @@ const execAddReactMaterialUi = (isReady) =>
 const execAddApiDependencies = (isReady) =>
   Promise.resolve(console.log('### add nestjs dependencies'))
     .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i applicationinsights'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
-    .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'));
-
-const execAddServerlessDependencies = (isReady) =>
-  Promise.resolve(console.log('### add serverless'))
-    .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i -D copyfiles'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @azure/functions'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
-    .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
+    .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
+    .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
+    .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
+    .then(() => consoleLogOrExec(isReady, 'npm i saslprep'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
 
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
@@ -349,20 +347,6 @@ const execAddWebSocketDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/ws'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/websockets'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/platform-ws'));
-
-const execAddMongoose = (isReady) =>
-  Promise.resolve(console.log('### add mongoose'))
-    .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
-    .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
-    .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
-    .then(() => consoleLogOrExec(isReady, 'npm i saslprep'));
-
-const execAddAzureBlobStorage = (isReady) =>
-  Promise.resolve(console.log('### add azure blob storage'))
-    .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
 
 const execAddAuthentication = (isReady) =>
   Promise.resolve(console.log('### add authentication'))
@@ -511,13 +495,7 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execAddApiDependencies(isReady))
     .then(() => console.log())
-    .then(() => execAddServerlessDependencies(isReady))
-    .then(() => console.log())
     .then(() => execAddWebSocketDependencies(isReady))
-    .then(() => console.log())
-    .then(() => execAddMongoose(isReady))
-    .then(() => console.log())
-    .then(() => execAddAzureBlobStorage(isReady))
     .then(() => console.log())
     .then(() => execAddAuthentication(isReady))
     .then(() => console.log())
