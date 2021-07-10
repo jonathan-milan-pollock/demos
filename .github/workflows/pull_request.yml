@@ -6,6 +6,10 @@ jobs:
     name: Preview
     runs-on: ubuntu-latest
     steps:
+      - name: Set git to use LF for install-tools.sh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -17,17 +21,21 @@ jobs:
         run: |
           npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
           npm install
-      - name: Build Website
+      - name: Storybook Copy Files
+        run: npm run docs:json
+      - name: Storybook Build
+        run: npx nx run ui-storybook:build-storybook
+      - name: Website Build
         run: npm run build:ssr
-      - name: Build Api
+      - name: Api Build
         run: npx nx run api:build:production
-      - name: Build Websocket
+      - name: Websocket Build
         run: npx nx run web-socket:build:production
-      - name: Copy files for Docker
+      - name: Docker Copy Files
         run: npm run dc:copy
-      - name: Install Pulumi CLI
+      - name: Pulumi Install CLI
         uses: pulumi/action-install-pulumi-cli@v1
-      - name: Install Pulumi Dependencies
+      - name: Pulumi Install Dependencies
         run: npm install
         working-directory: ./tools/ci/
       - name: Pulumi Preview
