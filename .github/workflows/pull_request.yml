@@ -24,6 +24,8 @@ jobs:
         run: npx nx run ui-storybook:build-storybook
       - name: Website Build
         run: npm run build:ssr
+      - name: Best Of Build
+        run: npx nx run best-of:build:production
       - name: Api Build
         run: npx nx run api:build:production
       - name: Websocket Build

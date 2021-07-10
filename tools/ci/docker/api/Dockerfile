@@ -2,6 +2,7 @@ FROM node:14.16.1
 LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
 ADD /docker/api/install-tools.sh /root
+USER root
 RUN /root/install-tools.sh
 WORKDIR /usr/src/app
 COPY dist/node_modules/ ./node_modules/
