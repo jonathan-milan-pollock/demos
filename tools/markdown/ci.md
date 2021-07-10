@@ -113,17 +113,6 @@
     - use tenant for the ARM_TENANT_ID
     - for ARM_SUBSCRIPTION_ID use subscription id from the az account list command response above
 
-### Docker install-tools.sh had permission access in Dockerfile due to lf as git stores files with crlf
-
-- in pull_request.yml file added
-
-```yml
-  - name: Set git to use LF for install-tools.sh
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-```
-
 ---
 
 az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
