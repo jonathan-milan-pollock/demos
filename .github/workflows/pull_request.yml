@@ -31,7 +31,7 @@ jobs:
       - name: Docker Copy Files
         run: npm run dc:copy
       - name: Pulumi Install CLI
-        uses: pulumi/action-install-pulumi-cli@v1
+        uses: pulumi/setup-pulumi@v2
       - name: Pulumi Install Dependencies
         run: npm install
         working-directory: ./tools/ci/
