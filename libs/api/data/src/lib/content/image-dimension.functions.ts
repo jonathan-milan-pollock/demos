@@ -1,11 +1,6 @@
-import {
-  ConflictException,
-  HttpStatus,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import {
-  Image,
   ImageDimension,
   ImageDimensionAdd,
 } from '@dark-rush-photography/shared/types';
@@ -56,8 +51,7 @@ export const validateAddImageDimension = (
   );
   if (imageDimensionType) {
     throw new ConflictException(
-      `Image dimension type ${imageDimensionType.type} already exists`,
-      HttpStatus.FOUND
+      `Image dimension type ${imageDimensionType.type} already exists`
     );
   }
   return documentModel;

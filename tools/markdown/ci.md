@@ -8,6 +8,8 @@
   - runs lint
   - runs format:check
   - builds the site
+  - runs unit tests
+  - runs the storybook-e2e
   - runs UI tests headless
     "cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
   - runs website e2e - headless
@@ -15,15 +17,12 @@
   - runs best of e2e - headless
     "cy:bestof:headless": "nx run bestof-e2e:e2e --headless",
   - runs Pulumi Preview
-  - Serverless Deployment
+  - AZ Deployment
 - on Commit (once Pull Request GitHub Action complete)
   - runs UI tests headless
-  - runs lint
-  - runs format:check
   - runs website e2e headless
   - deploys the site
   - Cypress e2e Deployment BrowserStack
-- enable mime types a necessary
 
 ---
 
@@ -50,13 +49,45 @@
 - npm init to create a new package.json file
 - npm i -D @pulumi/pulumi
 - npm i -D @pulumi/azure-native
+- npm i -D @pulumi/docker
 - create .gitignore file in tools/ci directory
 
 ### run Pulumi locally
 
-1. az login
-2. pulumi login
-3. pulumi up
+1. npm run serve:web
+2. npm run dc:copy
+3. az login
+4. pulumi login
+5. pulumi up
+
+---
+
+## font awesome pro
+
+- create .npmrc file
+- add FONTAWESOME_NPM_AUTH_TOKEN secret in GitHub actions
+
+## post-deploy
+
+### auth
+
+- In Namecheap add DNS mapping for darkrushphotography.com
+  - CNAME Record, Host auth, Value darkrushphotography-cd-daulq4wds7ykzqff.edge.tenants.us.auth0.com. TTL Automatic
+
+### cdn
+
+- In Namecheap add DNS mapping for darkrushphotography.art
+
+  - CNAME Record, Host www, Value cdn-endpnt-prodpublicsa.azureedge.net. TTL Automatic
+
+- In Azure cdn-endpnt-prodpublicsa click Add Custom Hostname
+
+  - www.darkrushphotography.art
+
+- In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
+  - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
+
+---
 
 az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
 
@@ -104,15 +135,9 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 ## setup Docker
 
 - at root create docker-compose.yml and .dockerignore file
-- create docker directory under tools and add a Docker file for each service
+- create docker directory under ci and add a Docker file for each service
 
 ---
-
-- Azure Container Registry
-
-## Notes
-
-- TODO: run 'npm install durable-functions' from the wwwroot folder of your function app in Kudu
 
 ## source map explorer
 
@@ -123,16 +148,6 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 
 - <https://mariocardinal.wordpress.com/2019/03/05/configuring-cypress-in-ci-with-azure-devops-pipelines/>
 
-## Post-Deploy
-
-1. Verify CNAME record Type CNAME Record, Host www, Value dark-rush-photography.azureedge.net.
-2. Within endpoint dark-rush-photography add Custom Hostname www.darkrushphotography.host
-3. Enable Custom Domain HTTPS, CDN Managed, and TLS 1.2
-
-## recommended videos
-
-- [HTTP/2 (H2)](https://www.youtube.com/watch?v=r5oT_2ndjms)
-
 ## references
 
 ## Enable Features
@@ -140,24 +155,6 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 - Use Cache-Control
 - Add H2 Enabled CDN
 - Enable GZip (html, js, css)
-- Use H2 Push -allows pushing files that are known to be needed
-
-  ```js
-  for (const asset of ['/static/awesome.css', '/static/unicorn.png']) {
-    // stream is a ServerHttp2Stream.
-    stream.pushStream({ ':path': asset }, (err, pushStream) => {
-      if (err) throw err;
-      pushStream.respondWithFile(asset);
-    });
-  }
-  ```
-
-### H2
-
-- HTTP 2 used mulitplexing allowing multiple requests to fire at once fixing H1 Head-of-line blocking (HOL blocking)
-- Compresses headers with HPack, references previous headers that have been processed to save time
-- Works over TLS
-- Defaults to H1 if client can't handle H2
 
 ## cypress
 
@@ -169,29 +166,3 @@ browsers include edge (chrome, chromium, edge, firefox, electron)
 ## Cypress Cloud
 
 - cypress run --record --key 0f12e8f5-ca73-4d93-9173-cba92e770292
-
-- run Cypress headless for ui
-- run Pulumi
-
-- deploy docker images with Pulumi
-
-https://www.domysee.com/blogposts/reverse-proxy-nginx-docker-compose
-https://docs.microsoft.com/en-us/azure/container-instances/tutorial-docker-compose
-https://www.bogotobogo.com/DevOps/Docker/Docker-Compose-Nginx-Reverse-Proxy-Multiple-Containers.php
-
-- github actions
-
-  - pull request
-    - run the unit tests
-    - run the storybook-e2e
-
-https://github.com/pulumi/pulumi-azure/issues/228
-
-https://docs.microsoft.com/en-us/azure/app-service/faq-app-service-linux#custom-containers
-I want to use web sockets in my Node.js application, any special settings, or configurations to set?
-
-Yes, disable perMessageDeflate in your server-side Node.js code. For example, if you are using socket.io, use the following code:
-
-Node.js
-
-- Deploy images to the ACR registry server

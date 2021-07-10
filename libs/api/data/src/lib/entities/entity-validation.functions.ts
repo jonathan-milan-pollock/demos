@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
 
@@ -26,10 +25,7 @@ export const validateEntityNotFound = (
   documentModel: DocumentModel | null
 ): void => {
   if (documentModel)
-    throw new ConflictException(
-      'Entity has already been created',
-      HttpStatus.FOUND
-    );
+    throw new ConflictException('Entity has already been created');
 };
 
 export const validateEntityRemove = (
@@ -52,8 +48,7 @@ export const validateProcessingEntity = (
 ): DocumentModel => {
   if (!documentModel.isProcessing) {
     throw new ConflictException(
-      'Entity cannot be modified unless it is being processed',
-      HttpStatus.CONFLICT
+      'Entity cannot be modified unless it is being processed'
     );
   }
   return documentModel;
@@ -63,10 +58,7 @@ export const validateNotProcessingEntity = (
   documentModel: DocumentModel
 ): DocumentModel => {
   if (documentModel.isProcessing) {
-    throw new ConflictException(
-      'Entity is currently being processed',
-      HttpStatus.CONFLICT
-    );
+    throw new ConflictException('Entity is currently being processed');
   }
   return documentModel;
 };
@@ -77,10 +69,7 @@ export const validateOneEntity = (
   if (documentModels.length == 0) throw new NotFoundException();
 
   if (documentModels.length > 1)
-    throw new ConflictException(
-      'More than one entity found',
-      HttpStatus.EXPECTATION_FAILED
-    );
+    throw new ConflictException('More than one entity found');
 
   return documentModels[0];
 };
