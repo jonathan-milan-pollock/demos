@@ -89,7 +89,7 @@ export class VideoDimensionProvider {
     videoDimensionType: VideoDimensionType
   ): Observable<string> => {
     return downloadBlobAsBuffer$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPathWithDimension(media, videoDimensionType)
     ).pipe(

@@ -31,7 +31,7 @@ export class VideoUploadProvider {
     Logger.log('Uploading video', VideoUploadProvider.name);
     return from(
       uploadBufferToBlob$(
-        this.env.azureStorageConnectionString,
+        this.env.privateBlobConnectionString,
         AzureStorageType.Private,
         file.buffer,
         getBlobPath(media)

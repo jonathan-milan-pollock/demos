@@ -62,7 +62,7 @@ export class VideoRemoveProvider {
 
   removeVideoBlob$(media: Media): Observable<boolean> {
     return deleteBlob$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPath(media)
     );
@@ -79,7 +79,7 @@ export class VideoRemoveProvider {
     return from(videoDimensions).pipe(
       concatMap((videoDimension) =>
         deleteBlob$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           getAzureStorageTypeFromMediaState(media.state),
           getBlobPathWithDimension(media, videoDimension.type)
         )

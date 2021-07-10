@@ -118,7 +118,7 @@ export class ImageUpdateProvider {
         combineLatest([
           of(imageDimension),
           downloadBlobToFile$(
-            this.env.azureStorageConnectionString,
+            this.env.privateBlobConnectionString,
             getAzureStorageTypeFromMediaState(imageMedia.state),
             getBlobPathWithDimension(imageMedia, imageDimension.type),
             imageMedia.fileName
@@ -129,7 +129,7 @@ export class ImageUpdateProvider {
         return combineLatest([
           of(imageDimension),
           uploadStreamToBlob$(
-            this.env.azureStorageConnectionString,
+            this.env.privateBlobConnectionString,
             getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
             fs.createReadStream(filePath),
             getBlobPathWithDimension(imageUpdateMedia, imageDimension.type)
@@ -138,14 +138,14 @@ export class ImageUpdateProvider {
       }),
       concatMap(([imageDimension]) =>
         deleteBlob$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           getAzureStorageTypeFromMediaState(imageMedia.state),
           getBlobPathWithDimension(imageMedia, imageDimension.type)
         )
       ),
       concatMapTo(
         downloadBlobToFile$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           getAzureStorageTypeFromMediaState(imageMedia.state),
           getBlobPath(imageMedia),
           imageMedia.fileName
@@ -153,7 +153,7 @@ export class ImageUpdateProvider {
       ),
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
           fs.createReadStream(filePath),
           getBlobPath(imageUpdateMedia)
@@ -161,7 +161,7 @@ export class ImageUpdateProvider {
       ),
       concatMapTo(
         deleteBlob$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           getAzureStorageTypeFromMediaState(imageMedia.state),
           getBlobPath(imageMedia)
         )

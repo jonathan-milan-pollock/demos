@@ -30,6 +30,7 @@ export interface PulumiConfig {
   readonly socketImageName: string;
   readonly appServicePlanName: string;
   readonly webAppName: string;
+  readonly webAppApiUrl: string;
 }
 
 export const getPulumiConfig = (): PulumiConfig => ({
@@ -62,4 +63,5 @@ export const getPulumiConfig = (): PulumiConfig => ({
   socketImageName: config.require('socketImageName'),
   appServicePlanName: config.require('appServicePlanName'),
   webAppName: config.require('webAppName'),
+  webAppApiUrl: config.require('webAppApiUrl'),
 });

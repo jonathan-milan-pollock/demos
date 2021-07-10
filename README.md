@@ -84,5 +84,5 @@
 
 ## Deployments
 
-[37 Photos](https://37-photos.vercel.app/)
-[Dev](https://milanpollock.github.io/dark-rush-photography/ui-storybook)
+- [37 Photos](https://37-photos.vercel.app/)
+- [Dev](https://milanpollock.github.io/dark-rush-photography/ui-storybook)
