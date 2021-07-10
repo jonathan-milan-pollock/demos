@@ -21,6 +21,16 @@ jobs:
       - name: Pulumi Install Dependencies
         run: npm install
         working-directory: ./tools/ci/
+      - name: Storybook Copy Files
+        run: npm run dc:copy
+      - name: Storybook Deploy
+        uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: master
+          FOLDER: docs-build
+          CLEAN: true
+          TARGET_FOLDER: docs
       - name: Pulumi Up
         uses: pulumi/actions@v3
         with:
