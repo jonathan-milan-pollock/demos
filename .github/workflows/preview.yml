@@ -1,12 +1,11 @@
-name: Manual Dispatch Deployment Master
+name: Preview Deployment Master
 on:
-  workflow_dispatch:
+  push:
     branches:
       - master
-
 jobs:
-  deploy:
-    name: Deploy
+  preview:
+    name: Preview Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,8 +24,6 @@ jobs:
         run: npm run docs:json
       - name: Storybook Build
         run: npx nx run ui-storybook:build-storybook
-      - name: Storybook Copy Files
-        run: npm run sb:copy
       - name: Website Build
         run: npm run build:ssr
       - name: Best Of Build
@@ -37,24 +34,16 @@ jobs:
         run: npx nx run web-socket:build:production
       - name: Docker Copy Files
         run: npm run dc:copy
-      - name: Storybook Deploy
-        uses: JamesIves/github-pages-deploy-action@3.6.2
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BASE_BRANCH: master
-          BRANCH: gh-pages
-          FOLDER: docs-build
-          TARGET_FOLDER: docs
       - name: Pulumi Install CLI
         uses: pulumi/setup-pulumi@v2
       - name: Pulumi Install Dependencies
         run: npm install
         working-directory: ./tools/ci/
-      - name: Pulumi Up
+      - name: Pulumi Preview
         uses: pulumi/actions@v3
         with:
           work-dir: ./tools/ci/
-          command: up
+          command: preview
           stack-name: ci
         env:
           ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}

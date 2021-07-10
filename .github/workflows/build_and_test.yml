@@ -1,9 +1,9 @@
-name: Build and Test Master
+name: Build & Test Master
 on:
   - pull_request
 jobs:
   build:
-    name: Build and Test
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
