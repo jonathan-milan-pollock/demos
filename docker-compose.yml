@@ -2,49 +2,42 @@ version: '3.8'
 
 services:
   nginx:
-    image: nginx:1.21.0
+    image: darkrushphotography.azurecr.io/nginx:latest
     container_name: nginx
-    volumes:
-      - ./tools/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
       - 443:443
 
   website:
-    image: website:latest
+    image: darkrushphotography.azurecr.io/website:latest
     container_name: website
-    build:
-      context: .
-      dockerfile: ./tools/docker/website/Dockerfile
-    env_file:
-      - ./tools/docker/website/.env.dev
     environment:
       - PORT=8080
     ports:
       - 8080:8080
 
-  nestjs:
-    image: nestjs:latest
-    container_name: nestjs
-    build:
-      context: .
-      dockerfile: ./tools/docker/api/Dockerfile
-    env_file:
-      - ./tools/docker/api/.env.dev
+  api:
+    image: darkrushphotography.azurecr.io/api:latest
+    container_name: api
     environment:
       - PORT=8081
+      - NX_DRP_API_ADMIN_KEY=%%DRP_API_ADMIN_KEY%%
+      - NX_MONGO_DB_CONNECTION_STRING=%%MONGO_DB_CONNECTION_STRING%%
+      - NX_AZURE_STORAGE_CONNECTION_STRING=%%AZURE_STORAGE_CONNECTION_STRING%%
+      - NX_TINY_PNG_API_KEY=%%TINY_PNG_API_KEY%%
+      - NX_AYRSHARE_API_KEY=%%AYRSHARE_API_KEY%%
     ports:
       - 8081:8081
 
   socket:
-    image: socket:latest
+    image: darkrushphotography.azurecr.io/socket:latest
     container_name: socket
-    build:
-      context: .
-      dockerfile: ./tools/docker/web-socket/Dockerfile
     env_file:
-      - ./tools/docker/web-socket/.env.dev
+      - ./tools/ci/docker/socket/.env.dev
     environment:
       - PORT=8082
+      - NX_AUTH0_CLIENT_ID=%%AUTH0_CLIENT_ID%%
+      - NX_AUTH0_CLIENT_SECRET=%%AUTH0_CLIENT_SECRET%%
+      - NX_DRP_API_URL=%%NX_DRP_API_URL%%
     ports:
       - 8082:8082

@@ -2,40 +2,62 @@ import { Config } from '@pulumi/pulumi';
 
 const config = new Config();
 
-interface PulumiConfig {
+export interface PulumiConfig {
   readonly location: string;
   readonly resourceGroupName: string;
-  readonly mongoDbAccountName: string;
-  readonly mongoDbDatabaseName: string;
-  readonly mongoDbCollectionName: string;
-  readonly uploadsStorageAccountName: string;
-  readonly uploadsBlobContainerName: string;
-  readonly contentStorageAccountName: string;
-  readonly contentBlobContainerName: string;
-  readonly contentCdnProfileName: string;
-  readonly contentCdnEndpointName: string;
-  readonly serverlessStorageAccountName: string;
-  readonly serverlessBlobContainerName: string;
-  readonly serverlessBlobName: string;
-  readonly serverlessAppName: string;
+  readonly devMongoDbAccountName: string;
+  readonly devMongoDbDatabaseName: string;
+  readonly devMongoDbCollectionName: string;
+  readonly prodMongoDbAccountName: string;
+  readonly prodMongoDbDatabaseName: string;
+  readonly prodMongoDbCollectionName: string;
+  readonly devPrivateStorageAccountName: string;
+  readonly devPrivateBlobContainerName: string;
+  readonly devPrivateUsersTableName: string;
+  readonly prodPrivateStorageAccountName: string;
+  readonly prodPrivateBlobContainerName: string;
+  readonly prodPrivateUsersTableName: string;
+  readonly devPublicStorageAccountName: string;
+  readonly devPublicBlobContainerName: string;
+  readonly prodPublicStorageAccountName: string;
+  readonly prodPublicBlobContainerName: string;
+  readonly cdnProfileName: string;
+  readonly cdnEndpointName: string;
+  readonly containerRegistryName: string;
+  readonly nginxImageName: string;
+  readonly websiteImageName: string;
+  readonly apiImageName: string;
+  readonly socketImageName: string;
+  readonly appServicePlanName: string;
 }
 
-const getConfigValue = (configName: string) => config.require(configName);
-
-export const pulumiConfig: PulumiConfig = {
-  location: getConfigValue('location'),
-  resourceGroupName: getConfigValue('resourceGroupName'),
-  mongoDbAccountName: getConfigValue('mongoDbAccountName'),
-  mongoDbDatabaseName: getConfigValue('mongoDbDatabaseName'),
-  mongoDbCollectionName: getConfigValue('mongoDbCollectionName'),
-  uploadsStorageAccountName: getConfigValue('uploadsStorageAccountName'),
-  uploadsBlobContainerName: getConfigValue('uploadsBlobContainerName'),
-  contentStorageAccountName: getConfigValue('contentStorageAccountName'),
-  contentBlobContainerName: getConfigValue('contentBlobContainerName'),
-  contentCdnProfileName: getConfigValue('contentCdnProfileName'),
-  contentCdnEndpointName: getConfigValue('contentCdnEndpointName'),
-  serverlessStorageAccountName: getConfigValue('serverlessStorageAccountName'),
-  serverlessBlobContainerName: getConfigValue('serverlessBlobContainerName'),
-  serverlessBlobName: getConfigValue('serverlessBlobName'),
-  serverlessAppName: getConfigValue('serverlessAppName'),
-};
+export const getPulumiConfig = (): PulumiConfig => ({
+  location: config.require('location'),
+  resourceGroupName: config.require('resourceGroupName'),
+  devMongoDbAccountName: config.require('devMongoDbAccountName'),
+  devMongoDbDatabaseName: config.require('devMongoDbDatabaseName'),
+  devMongoDbCollectionName: config.require('devMongoDbCollectionName'),
+  prodMongoDbAccountName: config.require('prodMongoDbAccountName'),
+  prodMongoDbDatabaseName: config.require('prodMongoDbDatabaseName'),
+  prodMongoDbCollectionName: config.require('prodMongoDbCollectionName'),
+  devPrivateStorageAccountName: config.require('devPrivateStorageAccountName'),
+  devPrivateBlobContainerName: config.require('devPrivateBlobContainerName'),
+  devPrivateUsersTableName: config.require('devPrivateUsersTableName'),
+  prodPrivateStorageAccountName: config.require(
+    'prodPrivateStorageAccountName'
+  ),
+  prodPrivateBlobContainerName: config.require('prodPrivateBlobContainerName'),
+  prodPrivateUsersTableName: config.require('prodPrivateUsersTableName'),
+  devPublicStorageAccountName: config.require('devPublicStorageAccountName'),
+  devPublicBlobContainerName: config.require('devPublicBlobContainerName'),
+  prodPublicStorageAccountName: config.require('prodPublicStorageAccountName'),
+  prodPublicBlobContainerName: config.require('prodPublicBlobContainerName'),
+  cdnProfileName: config.require('cdnProfileName'),
+  cdnEndpointName: config.require('cdnEndpointName'),
+  containerRegistryName: config.require('containerRegistryName'),
+  nginxImageName: config.require('nginxImageName'),
+  websiteImageName: config.require('websiteImageName'),
+  apiImageName: config.require('apiImageName'),
+  socketImageName: config.require('socketImageName'),
+  appServicePlanName: config.require('appServicePlanName'),
+});

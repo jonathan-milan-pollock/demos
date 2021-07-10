@@ -1,167 +1,184 @@
-import { interpolate } from '@pulumi/pulumi';
+/* NOTES: With multiple pipelines could split this into Pulumi.dev and Pulumi.prod */
+import { ResourceGroup } from '@pulumi/azure-native/resources';
 
-import { pulumiConfig } from './pulumi-config';
-import { createResourceGroup } from './services/resource-group.service';
+import { createFreeMongoDbAccount } from './services/mongo-db-free.service';
+import { createServerlessMongoDbAccount } from './services/mongo-db-serverless.service';
 import {
-  createMongoDbAccount,
-  createMongoDbDatabase,
-  createMongoDbCollectionWithTypeShardKey,
-} from './services/mongodb.service';
-import { createStorageAccount } from './services/storage-account.service';
+  createMongoDb,
+  createMongoDbCollection,
+} from './services/mongo-db.service';
 import {
+  createPrivateStorageAccount,
   createPrivateBlobContainer,
+  createPrivateTable,
+} from './services/storage-account-private.service';
+import {
+  createPublicStorageAccount,
   createPublicBlobContainer,
-  createBlobWithAsset,
-} from './services/blob-storage.service';
+} from './services/storage-account-public.service';
+import { createCdnProfile, createCdnEndpoint } from './services/cdn.service';
+import { createAppServicePlan } from './services/app-service-plan.service';
+import {
+  createContainerRegistry,
+  getAdminAcrUser,
+  createImage,
+} from './services/acr.service';
+import { getPulumiConfig } from './pulumi-config';
 
-import //  getServerlessFunctionsAsset,
-//  createServerlessFunctionsPlan,
-//  createServerlessFunctionsWebApp,
-'./services/serverless.service';
+const pulumiConfig = getPulumiConfig();
 
-const resourceGroup = pipe(
-  pulumiConfig.resourceGroupName,
-  createResourceGroup(pulumiConfig.location)
+const resourceGroup = new ResourceGroup(pulumiConfig.resourceGroupName, {
+  resourceGroupName: pulumiConfig.resourceGroupName,
+  location: pulumiConfig.location,
+});
+
+const devMongoDbAccount = createFreeMongoDbAccount(
+  pulumiConfig.devMongoDbAccountName,
+  resourceGroup
+);
+const devMongoDb = createMongoDb(
+  pulumiConfig.devMongoDbDatabaseName,
+  resourceGroup,
+  devMongoDbAccount
+);
+const devMongoDbCollection = createMongoDbCollection(
+  pulumiConfig.devMongoDbCollectionName,
+  resourceGroup,
+  devMongoDbAccount,
+  devMongoDb
 );
 
-const mongoDbCollection = pipe(
+const prodMongoDbAccount = createServerlessMongoDbAccount(
+  pulumiConfig.prodMongoDbAccountName,
+  resourceGroup
+);
+const prodMongoDb = createMongoDb(
+  pulumiConfig.prodMongoDbDatabaseName,
   resourceGroup,
-  createMongoDbAccount(pulumiConfig.mongoDbAccountName),
-  createMongoDbDatabase(pulumiConfig.mongoDbDatabaseName),
-  createMongoDbCollectionWithTypeShardKey(pulumiConfig.mongoDbCollectionName)
+  prodMongoDbAccount
+);
+const prodMongoDbCollection = createMongoDbCollection(
+  pulumiConfig.prodMongoDbCollectionName,
+  resourceGroup,
+  prodMongoDbAccount,
+  prodMongoDb
 );
 
-const uploadsStorageAccount = pipe(
+const devPrivateStorageAccount = createPrivateStorageAccount(
+  pulumiConfig.devPrivateStorageAccountName,
+  resourceGroup
+);
+const devPrivateBlobContainer = createPrivateBlobContainer(
+  pulumiConfig.devPrivateBlobContainerName,
   resourceGroup,
-  createStorageAccount(pulumiConfig.uploadsStorageAccountName)(false),
-  createPrivateBlobContainer(pulumiConfig.uploadsBlobContainerName)
+  devPrivateStorageAccount
+);
+const devPrivateUsersTableName = createPrivateTable(
+  pulumiConfig.devPrivateUsersTableName,
+  resourceGroup,
+  devPrivateStorageAccount
+);
+const devPublicStorageAccount = createPublicStorageAccount(
+  pulumiConfig.devPublicStorageAccountName,
+  resourceGroup
+);
+const devPublicBlobContainer = createPublicBlobContainer(
+  pulumiConfig.devPublicBlobContainerName,
+  resourceGroup,
+  devPublicStorageAccount
 );
 
-const contentStorageAccount = pipe(
+const prodPrivateStorageAccount = createPrivateStorageAccount(
+  pulumiConfig.prodPrivateStorageAccountName,
+  resourceGroup
+);
+const prodPrivateBlobContainer = createPrivateBlobContainer(
+  pulumiConfig.prodPrivateBlobContainerName,
   resourceGroup,
-  createStorageAccount(pulumiConfig.contentStorageAccountName)(true),
-  createPublicBlobContainer(pulumiConfig.contentBlobContainerName)
+  prodPrivateStorageAccount
+);
+const prodPrivateUsersTableName = createPrivateTable(
+  pulumiConfig.prodPrivateUsersTableName,
+  resourceGroup,
+  prodPrivateStorageAccount
+);
+const prodPublicStorageAccount = createPublicStorageAccount(
+  pulumiConfig.prodPublicStorageAccountName,
+  resourceGroup
+);
+const prodPublicBlobContainer = createPublicBlobContainer(
+  pulumiConfig.prodPublicBlobContainerName,
+  resourceGroup,
+  prodPublicStorageAccount
+);
+const cdnProfile = createCdnProfile(pulumiConfig.cdnProfileName, resourceGroup);
+const cdnEndpoint = createCdnEndpoint(
+  pulumiConfig.cdnEndpointName,
+  resourceGroup,
+  prodPublicStorageAccount,
+  cdnProfile
 );
 
-const serverlessStorageAccount = pipe(
-  resourceGroup,
-  createStorageAccount(pulumiConfig.serverlessStorageAccountName)(false),
-  createPrivateBlobContainer(pulumiConfig.serverlessBlobContainerName)
-  //createBlobWithAsset(pulumiConfig.serverlessBlobName)(
-  //  getServerlessAsset()
-  //)
+const containerRegistry = createContainerRegistry(
+  pulumiConfig.containerRegistryName,
+  resourceGroup
+);
+const adminAcrUser = getAdminAcrUser(resourceGroup, containerRegistry);
+const nginxImage = createImage(
+  pulumiConfig.nginxImageName,
+  containerRegistry,
+  adminAcrUser
+);
+const websiteImage = createImage(
+  pulumiConfig.websiteImageName,
+  containerRegistry,
+  adminAcrUser
+);
+const apiImage = createImage(
+  pulumiConfig.apiImageName,
+  containerRegistry,
+  adminAcrUser
+);
+const socketImage = createImage(
+  pulumiConfig.socketImageName,
+  containerRegistry,
+  adminAcrUser
+);
+
+const appServicePlan = createAppServicePlan(
+  pulumiConfig.appServicePlanName,
+  resourceGroup
 );
 
 export const resourceGroupUrn = resourceGroup.urn;
-export const mongoDbAccountUrn = mongoDbCollection.databaseAccount.urn;
-export const mongoDbDatabaseUrn = mongoDbCollection.database.urn;
-export const mongoDbCollectionUrn = mongoDbCollection.collection.urn;
 
-export const uploadsStorageAccountUrn =
-  uploadsStorageAccount.storageAccount.urn;
-export const uploadsBlobContainerUrn = uploadsStorageAccount.blobContainer.urn;
+export const devMongoDbAccountUrn = devMongoDbAccount.urn;
+export const devMongoDbDatabaseUrn = devMongoDb.urn;
+export const devMongoDbCollectionUrn = devMongoDbCollection.urn;
 
-export const contentStorageAccountUrn =
-  contentStorageAccount.storageAccount.urn;
-export const contentBlobContainerUrn = contentStorageAccount.blobContainer.urn;
+export const prodMongoDbAccountUrn = prodMongoDbAccount.urn;
+export const prodMongoDbDatabaseUrn = prodMongoDb.urn;
+export const prodMongoDbCollectionUrn = prodMongoDbCollection.urn;
 
-//export const serverlessStorageAccountUrn = serverlessStorageAccount.urn;
-//export const serverlessBlobContainerUrn =
-//  serverlessBlobContainer.urn;
+export const devPrivateStorageAccountUrn = devPrivateStorageAccount.urn;
+export const devPrivateBlobContainerUrn = devPrivateBlobContainer.urn;
+export const devPrivateUsersTableNameUrn = devPrivateUsersTableName.urn;
+export const devPublicStorageAccountUrn = devPublicStorageAccount.urn;
+export const devPublicBlobContainerUrn = devPublicBlobContainer.urn;
 
-//export const serverlessBlobUrn = serverlessBlob.urn;
+export const prodPrivateStorageAccountUrn = prodPrivateStorageAccount.urn;
+export const prodPrivateBlobContainerUrn = prodPrivateBlobContainer.urn;
+export const prodPrivateUsersTableNameUrn = prodPrivateUsersTableName.urn;
+export const prodPublicStorageAccountUrn = prodPublicStorageAccount.urn;
+export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
 
-//export const endpoint = interpolate`https://${app.defaultHostName}/api/HelloNode?name=Pulumi`;
+export const cdnProfileUrn = cdnProfile.urn;
+export const cdnEndpointUrn = cdnEndpoint.urn;
 
-/*
-import { getSignedBlobUrl } from './blob-storage.service';
-{
-  name: 'WEBSITE_RUN_FROM_PACKAGE',
-  value: getSignedBlobUrl(blobStorage),
-},
-{
-  name: 'TINY_PNG_API_KEY',
-  value: '', //TODO: Get this value
-},
-{
-  name: 'UPLOADS_CONNECTION_STRING',
-  value: '',
-},
-{
-  name: 'CONTENT_CONNECTION_STRING',
-  value: '',
-},
+export const containerRegistryUrn = containerRegistry.urn;
+export const nginxImageUrn = nginxImage.urn;
+export const websiteImageUrn = websiteImage.urn;
+export const apiImageUrn = apiImage.urn;
+export const socketImageUrn = socketImage.urn;
 
-
-
-
-
-
-
-var cdnProfile = new Profile(settings.BlobStorageCdnProfileName, new ProfileArgs
-{
-    Name = settings.BlobStorageCdnProfileName,
-    ResourceGroupName = settings.ResourceGroupName,
-    Sku = "Standard_Microsoft"
-});
-
-var cdnEndpoint = new Endpoint(settings.BlobStorageCdnEndpointName, new EndpointArgs
-{
-    Name = settings.BlobStorageCdnEndpointName,
-    ResourceGroupName = settings.ResourceGroupName,
-    ProfileName = cdnProfile.Name,
-    OriginHostHeader = storageAccount.PrimaryWebHost,
-    Origins = new InputList<EndpointOriginArgs>
-    {
-        new EndpointOriginArgs
-        {
-            Name = "blobstorage", HostName = storageAccount.PrimaryWebHost
-        }
-    },
-    IsHttpAllowed = false,
-    IsHttpsAllowed = true,
-});
-
-
-const customImage = "node-app";
-
-const registry = new azure.containerservice.Registry("myregistry", {
-    resourceGroupName: resourceGroup.name,
-    sku: "Basic",
-    adminEnabled: true,
-});
-
-const myImage = new docker.Image(customImage, {
-    imageName: pulumi.interpolate`${registry.loginServer}/${customImage}:v1.0.0`,
-    build: {
-        context: `./${customImage}`,
-    },
-    registry: {
-        server: registry.loginServer,
-        username: registry.adminUsername,
-        password: registry.adminPassword,
-    },
-});
-
-const getStartedApp = new azure.appservice.AppService("get-started", {
-    resourceGroupName: resourceGroup.name,
-    appServicePlanId: plan.id,
-    appSettings: {
-      WEBSITES_ENABLE_APP_SERVICE_STORAGE: "false",
-      DOCKER_REGISTRY_SERVER_URL: pulumi.interpolate`https://${registry.loginServer}`,
-      DOCKER_REGISTRY_SERVER_USERNAME: registry.adminUsername,
-      DOCKER_REGISTRY_SERVER_PASSWORD: registry.adminPassword,
-      WEBSITES_PORT: "80", // Our custom image exposes port 80. Adjust for your app as needed.
-    },
-    siteConfig: {
-        alwaysOn: true,
-        linuxFxVersion: pulumi.interpolate`DOCKER|${myImage.imageName}`,
-    },
-    httpsOnly: true,
-});
-
-
-export const uploadAppPlanUrn = uploadAppPlan.urn;
-
-export const getStartedEndpoint = pulumi.interpolate`https://${getStartedApp.defaultSiteHostname}`;
-*/
+export const appServicePlanUrn = appServicePlan.urn;
