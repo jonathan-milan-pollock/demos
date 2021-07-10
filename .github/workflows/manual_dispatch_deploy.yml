@@ -1,11 +1,12 @@
-name: 'Push Master'
+name: Manual Dispatch Deployment Master
 on:
-  push:
+  workflow_dispatch:
     branches:
       - master
+
 jobs:
-  up:
-    name: Up
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

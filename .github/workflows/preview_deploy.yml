@@ -1,12 +1,14 @@
-name: 'Pull Request'
+name: Preview Deployment Master
 on:
-  - pull_request
+  push:
+    branches:
+      - master
 jobs:
   preview:
-    name: Preview
+    name: Preview Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
