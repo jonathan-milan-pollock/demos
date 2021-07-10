@@ -26,9 +26,9 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: master
+          BASE_BRANCH: master
+          BRANCH: gh-pages
           FOLDER: docs-build
-          CLEAN: true
           TARGET_FOLDER: docs
       - name: Pulumi Install CLI
         uses: pulumi/setup-pulumi@v2
