@@ -66,6 +66,14 @@
 
 - create .npmrc file
 - add FONTAWESOME_NPM_AUTH_TOKEN secret in GitHub actions
+- add to pull_request.yml
+
+```yml
+- name: Install Dependencies
+  run: |
+    npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
+    npm install
+```
 
 ## post-deploy
 
