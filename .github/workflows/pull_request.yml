@@ -15,6 +15,7 @@ jobs:
       - name: Install Pulumi CLI
         uses: pulumi/action-install-pulumi-cli@v1
       - run: npm install
+        working-directory: ./tools/ci/
       - name: Pulumi Preview
         uses: pulumi/actions@v3
         with:
