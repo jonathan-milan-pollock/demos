@@ -49,3 +49,11 @@ jobs:
           ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
           ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          NX_AUTH0_CLIENT_ID: ${{ secrets.NX_AUTH0_CLIENT_ID }}
+          NX_AUTH0_CLIENT_SECRET: ${{ secrets.NX_AUTH0_CLIENT_SECRET }}
+          NX_DRP_API_URL: ${{ secrets.NX_DRP_API_URL }}
+          NX_DRP_API_ADMIN_KEY: ${{ secrets.NX_DRP_API_ADMIN_KEY }}
+          NX_MONGO_DB_CONNECTION_STRING: ${{ secrets.NX_MONGO_DB_CONNECTION_STRING }}
+          NX_AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.NX_AZURE_STORAGE_CONNECTION_STRING }}
+          NX_TINY_PNG_API_KEY: ${{ secrets.NX_TINY_PNG_API_KEY }}
+          NX_AYRSHARE_API_KEY: ${{ secrets.NX_AYRSHARE_API_KEY }}

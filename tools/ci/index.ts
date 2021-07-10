@@ -17,12 +17,15 @@ import {
   createPublicBlobContainer,
 } from './services/storage-account-public.service';
 import { createCdnProfile, createCdnEndpoint } from './services/cdn.service';
-import { createAppServicePlan } from './services/app-service-plan.service';
 import {
   createContainerRegistry,
   getAdminAcrUser,
   createImage,
 } from './services/acr.service';
+import {
+  createAppServicePlan,
+  createWebApp,
+} from './services/app-service.service';
 import { getPulumiConfig } from './pulumi-config';
 
 const pulumiConfig = getPulumiConfig();
@@ -149,6 +152,13 @@ const appServicePlan = createAppServicePlan(
   pulumiConfig.appServicePlanName,
   resourceGroup
 );
+const webApp = createWebApp(
+  pulumiConfig.webAppName,
+  resourceGroup,
+  pulumiConfig.containerRegistryName,
+  adminAcrUser,
+  appServicePlan
+);
 
 export const resourceGroupUrn = resourceGroup.urn;
 
@@ -182,3 +192,4 @@ export const apiImageUrn = apiImage.urn;
 export const socketImageUrn = socketImage.urn;
 
 export const appServicePlanUrn = appServicePlan.urn;
+export const webAppUrn = webApp.urn;
