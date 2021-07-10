@@ -32,25 +32,6 @@
 
 ---
 
-### install serverless
-
-#### start azurite table and blob storage from bottom of VSCode
-
-- TODO: Do we still need this
-
-> npm install -g azurite@3.12.0
-
-#### install msi for Azure Functions Core Tools v3
-
-- <https://www.npmjs.com/package/azure-functions-core-tools>
-
-#### in next version will use Azurite VSCode extension and uninstall global npm installation
-
-- View > Command Palette...
-- Azurite Start
-
----
-
 ### optional VSCode extensions (other VSCode extensions have been added to .vscode extensions.json)
 
 - [optionally Install open in browser](https://marketplace.visualstudio.com/items?itemName=techer.open-in-browser&ssr=false#review-details)
@@ -76,14 +57,16 @@
   - on Windows use installer
     - <https://shotcut.org/download/>
     - Add C:\Program Files\Shotcut to System Variables Path to use melt.exe
+- setup Android emulator
 
 ---
 
 ## running dev
 
-- azurite start (for now)
-- npm run cy:ui
-- npm run cy:web
+- npm run serve:api
+- npm run serve:web
+- npm run serve:best
+- npm run serve:ui
 
 ---
 
@@ -92,19 +75,10 @@
 ### ui and ui feature components create with NxConsole
 
 - use these settings:
+
   - style: scss
   - select SkipTests
 
-### util, data, and api lib files create manually by feature
-
-- generate types manually
-  - add \*.spec.ts file for unit testing
-
-### types
-
-- generate types manually
-  - add \*.spec.ts file for unit testing
-
-**_generating files with @nrwl/nest schematics does not currently work for nx_**
+- other files should be created manually
 
 ---
