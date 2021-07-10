@@ -14,7 +14,9 @@ jobs:
         with:
           node-version: 14.x
       - name: Install Dependecies
-        run: npm install
+        run: |
+          npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
+          npm install
       - name: Prebuild Website
         run: npm run prebuild:ssr
       - name: Build Website
