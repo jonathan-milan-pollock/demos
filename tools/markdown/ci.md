@@ -115,6 +115,18 @@
 
 ---
 
+## Deploying Nx to Vercel
+
+- [Deploying to Vercel](https://nx.dev/latest/react/guides/nextjs#deploying-to-vercel)
+- In Project Settings add NPM_RC with FontAwesome PRO content
+
+```rc
+@fortawesome:registry=https://npm.fontawesome.com/
+//npm.fontawesome.com/:_authToken=YOUR_FONTAWESOME_TOKEN_HERE
+```
+
+---
+
 az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
 
 az webapp config container set --resource-group drp-rg --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
