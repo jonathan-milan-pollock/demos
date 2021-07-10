@@ -5,6 +5,9 @@ jobs:
   build:
     name: Build & Test
     runs-on: ubuntu-latest
+    env:
+      NX_BRANCH: ${{ github.event.number }}
+      NX_RUN_GROUP: ${{ github.run_id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -18,8 +21,6 @@ jobs:
         run: |
           npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
           npm install
-      - name: Storybook Copy Docs
-        run: npm run docs:json
       - name: Storybook Build
         run: npx nx run ui-storybook:build-storybook
       - name: Website Build

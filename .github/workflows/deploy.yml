@@ -8,6 +8,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    env:
+      NX_BRANCH: ${{ github.event.number }}
+      NX_RUN_GROUP: ${{ github.run_id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
