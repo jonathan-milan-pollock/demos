@@ -46,5 +46,6 @@ __queuestorage__
 # compodoc
 /libs/ui-storybook/.storybook/public/documentation.json
 
-# docker
+# ci
 .env.dev
+/ci/dist

@@ -8,7 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@pulumi/azure-native": "^1.4.0",
-    "@pulumi/pulumi": "^3.2.1"
+    "@pulumi/azure-native": "^1.16.0",
+    "@pulumi/pulumi": "^3.6.1"
+  },
+  "dependencies": {
+    "@pulumi/docker": "^3.0.0"
   }
 }

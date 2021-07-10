@@ -58,6 +58,31 @@
 2. pulumi login
 3. pulumi up
 
+az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+az webapp config container set --resource-group drp-rg --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+// Under configuration app service plan > apps > dark-rush-photography
+fter you uploaded your Docker Compose file and clicked create, you will have to make sure App Service can access Azure Container Registry by adding the following App settings in the App Service portal:
+
+DOCKER_REGISTRY_SERVER_USERNAME = [azure-container-registry-name]
+DOCKER_REGISTRY_SERVER_URL = [azure-container-registry-name].azurecr.io
+DOCKER_REGISTRY_SERVER_PASSWORD = [password]
+
+DOCKER_REGISTRY_SERVER_USERNAME = darkrushphotography
+DOCKER_REGISTRY_SERVER_URL = darkrushphotography.azurecr.io
+DOCKER_REGISTRY_SERVER_PASSWORD = [password]
+
+//Enabled App Service logs to filesystem with retention period 1 day quota 35MB
+
 ---
 
 ## setup GitHub Actions
@@ -159,7 +184,6 @@ https://www.bogotobogo.com/DevOps/Docker/Docker-Compose-Nginx-Reverse-Proxy-Mult
   - pull request
     - run the unit tests
     - run the storybook-e2e
-  - commit
 
 https://github.com/pulumi/pulumi-azure/issues/228
 
@@ -171,9 +195,3 @@ Yes, disable perMessageDeflate in your server-side Node.js code. For example, if
 Node.js
 
 - Deploy images to the ACR registry server
-
-- TODO: run 'npm install durable-functions' from the wwwroot folder of your function app in Kudu
-
-https://dev.to/_ceder/deploying-azure-functions-using-pulumi-net-3dcb
-
-TODO: <https://www.web-technology-experts-notes.in/2019/09/install-ffmpeg-in-azure-serverless.html>
