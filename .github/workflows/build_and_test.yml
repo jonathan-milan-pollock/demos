@@ -1,0 +1,32 @@
+name: Build and Test Master
+on:
+  - pull_request
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Setup Node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install Dependencies
+        run: |
+          npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
+          npm install
+      - name: Storybook Copy Docs
+        run: npm run docs:json
+      - name: Storybook Build
+        run: npx nx run ui-storybook:build-storybook
+      - name: Website Build
+        run: npm run build:ssr
+      - name: Best Of Build
+        run: npx nx run best-of:build:production
+      - name: Api Build
+        run: npx nx run api:build:production
+      - name: Web Socket Build
+        run: npx nx run web-socket:build:production
