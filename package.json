@@ -39,7 +39,7 @@
     "dc:copy:node-modules": "copyfiles \"./node_modules/**/*\" \"./tools/ci/dist\"",
     "dc:copy:dist": "copyfiles \"./dist/**/*\" \"./tools/ci\"",
     "dc:copy": "npm run dc:copy:node-modules && npm run dc:copy:dist",
-    "sb:copy": "copyfiles \"./dist/storybook/**/*\" \"./docs-build\" --up 3"
+    "sb:copy": "copyfiles \"./dist/storybook/ui-storybook/**/*\" \"./docs-build\" --up 2"
   },
   "private": true,
   "dependencies": {
