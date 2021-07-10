@@ -125,13 +125,12 @@
 ### add to .gitignore
 
 ```shell
-# azurite
-__azurite*
-__blobstorage__
-__queuestorage__
-
 # compodoc
 /libs/ui-storybook/.storybook/public/documentation.json
+
+# ci
+.env.dev
+/ci/dist
 ```
 
 ### in angular.json add codeCoverage to test tasks options

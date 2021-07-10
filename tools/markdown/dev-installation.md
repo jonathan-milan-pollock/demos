@@ -23,4 +23,3 @@
 ### Azure
 
 - [Install VSCode Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
-- [Install and Setup VSCode Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#install-and-run-the-azurite-visual-studio-code-extension)

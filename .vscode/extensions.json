@@ -4,7 +4,6 @@
     "nrwl.angular-console",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
-    "ms-azuretools.vscode-azurefunctions",
-    "azurite.azurite"
+    "ms-azuretools.vscode-azurefunctions"
   ]
 }
