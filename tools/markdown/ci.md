@@ -53,14 +53,6 @@
 - npm i -D @pulumi/docker
 - create .gitignore file in tools/ci directory
 
-### run Pulumi locally
-
-1. npm run serve:web
-2. npm run dc:copy
-3. az login
-4. pulumi login
-5. pulumi up
-
 ---
 
 ## post-deploy
@@ -82,6 +74,13 @@
 
 - In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
   - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
+
+---
+
+## docker
+
+- at root create docker-compose.yml and .dockerignore file
+- create docker directory under ci and add a Docker file for each service
 
 ---
 
@@ -114,6 +113,17 @@
     - use tenant for the ARM_TENANT_ID
     - for ARM_SUBSCRIPTION_ID use subscription id from the az account list command response above
 
+### Docker install-tools.sh had permission access in Dockerfile due to lf as git stores files with crlf
+
+- in pull_request.yml file added
+
+```yml
+  - name: Set git to use LF for install-tools.sh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+```
+
 ---
 
 az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
@@ -145,11 +155,6 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 
 ---
 
-## setup Docker
-
-- at root create docker-compose.yml and .dockerignore file
-- create docker directory under ci and add a Docker file for each service
-
 ---
 
 ## source map explorer
@@ -173,8 +178,6 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 
 browsers include edge (chrome, chromium, edge, firefox, electron)
 --config-file=/apps/website-e2e/cypress-prod.json
-
-## NxCloud verify setup
 
 ## Cypress Cloud
 

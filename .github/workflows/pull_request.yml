@@ -6,7 +6,7 @@ jobs:
     name: Preview
     runs-on: ubuntu-latest
     steps:
-      - name: Set git to use LF for install-tools.sh
+      - name: Git LF for install-tools.sh
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
