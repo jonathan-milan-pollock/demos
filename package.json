@@ -36,10 +36,9 @@
     "serve:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
     "serve:web": "concurrently \"npm run dev:ssr\" \"nx serve api\" \"nx serve web-socket\" \"nx run website-e2e:e2e --watch\"",
     "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx serve web-socket\" \"nx run best-of-e2e:e2e --watch\"",
+    "dc:copy:node-modules": "copyfiles \"./node_modules/**/*\" \"./tools/ci/dist\"",
     "dc:copy:dist": "copyfiles \"./dist/**/*\" \"./tools/ci\"",
-    "dc:copy:package": "copyfiles \"./package.json\" \"./tools/ci/dist\"",
-    "dc:copy:package-lock": "copyfiles \"./package-lock.json\" \"./tools/ci/dist\"",
-    "dc:copy": "npm run dc:copy:dist && npm run dc:copy:package && npm run dc:copy:package-lock"
+    "dc:copy": "npm run dc:copy:node-modules && npm run dc:copy:dist"
   },
   "private": true,
   "dependencies": {

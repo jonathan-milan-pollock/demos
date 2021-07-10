@@ -129,7 +129,6 @@
 /libs/ui-storybook/.storybook/public/documentation.json
 
 # ci
-.env.dev
 /ci/dist
 ```
 
