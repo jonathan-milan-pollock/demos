@@ -35,18 +35,11 @@
     "serve:api": "concurrently \"nx serve api\" \"nx serve web-socket\" \"nx run api-e2e:e2e --watch\"",
     "serve:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
     "serve:web": "concurrently \"npm run dev:ssr\" \"nx serve api\" \"nx serve web-socket\" \"nx run website-e2e:e2e --watch\"",
-    "serve:best": "concurrently \"nx run best-of:serve\" \"nx serve api\" \"nx serve web-socket\" \"nx run best-of-e2e:e2e --watch\"",
-    "dc:pre": "npm run build:ssr && npm run docs:json && nx run ui-storybook:build-storybook",
+    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx serve web-socket\" \"nx run best-of-e2e:e2e --watch\"",
     "dc:copy:dist": "copyfiles \"./dist/**/*\" \"./tools/ci\"",
     "dc:copy:package": "copyfiles \"./package.json\" \"./tools/ci/dist\"",
     "dc:copy:package-lock": "copyfiles \"./package-lock.json\" \"./tools/ci/dist\"",
-    "dc:copy": "npm run dc:copy:dist && npm run dc:copy:package && npm run dc:copy:package-lock",
-    "dc:build": "docker compose build",
-    "dc:up": "docker compose up",
-    "dc:down": "docker compose down",
-    "dc:build:prod": "docker compose -f docker-compose.prod.yml build",
-    "dc:up:prod": "docker compose -f docker-compose.prod.yml up -d",
-    "dc:down:prod": "docker compose -f docker-compose.prod.yml down"
+    "dc:copy": "npm run dc:copy:dist && npm run dc:copy:package && npm run dc:copy:package-lock"
   },
   "private": true,
   "dependencies": {
