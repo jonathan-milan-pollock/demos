@@ -8,18 +8,24 @@ jobs:
     name: Up
     runs-on: ubuntu-latest
     steps:
+      - name: Git LF for install-tools.sh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v1
+      - name: Setup Node 14.x
+        uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: Install Pulumi CLI
+      - name: Pulumi Install CLI
         uses: pulumi/action-install-pulumi-cli@v1
-      - name: Install Pulumi Dependencies
+      - name: Pulumi Install Dependencies
         run: npm install
         working-directory: ./tools/ci/
-      - uses: pulumi/actions@v3
+      - name: Pulumi Up
+        uses: pulumi/actions@v3
         with:
           work-dir: ./tools/ci/
           command: up

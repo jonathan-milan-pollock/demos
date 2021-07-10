@@ -4,4 +4,3 @@ apps
 libs
 node_modules
 tools
-!/tools/docker/**
