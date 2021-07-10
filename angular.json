@@ -43,7 +43,7 @@
   "projects": {
     "api": {
       "root": "apps/api",
-      "sourceRoot": "apps\\api\\src",
+      "sourceRoot": "apps/api/src",
       "projectType": "application",
       "architect": {
         "build": {
@@ -405,7 +405,7 @@
     },
     "website-host": {
       "root": "apps/website-host",
-      "sourceRoot": "apps\\website-host\\src",
+      "sourceRoot": "apps/website-host/src",
       "projectType": "application",
       "architect": {
         "build": {

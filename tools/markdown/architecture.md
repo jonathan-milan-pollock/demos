@@ -240,6 +240,24 @@ preloadingStrategy: PreloadAllModules;
 
 ## setup api
 
+### check the sourceRoot path
+
+- somehow the sourcePath was the following
+
+```json
+  "root": "apps/api",
+  "sourceRoot": "apps\\api\\src",
+```
+
+- corrected to the following
+
+```json
+  "root": "apps/api",
+  "sourceRoot": "apps/api/src",
+```
+
+- _This was also an issue of website-host_
+
 ### add type definition for multer
 
 - add the following to index.ts of shared-server/types and api/data for Express.Multer.File
