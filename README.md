@@ -82,10 +82,10 @@
 
 ---
 
-[![Build & Test Master](https://github.com/milanpollock/dark-rush-photography/actions/workflows/build_and_test.yml/badge.svg?branch=master)](https://github.com/milanpollock/dark-rush-photography/actions/workflows/build_and_test.yml)
+[![Build & Test Master](https://github.com/milanpollock/dark-rush-photography/actions/workflows/build_and_test.yml/badge.svg?branch=master&kill_cache=1)](https://github.com/milanpollock/dark-rush-photography/actions/workflows/build_and_test.yml)
 
-[![Preview Deployment Master](https://github.com/milanpollock/dark-rush-photography/actions/workflows/preview.yml/badge.svg?branch=master)](https://github.com/milanpollock/dark-rush-photography/actions/workflows/preview.yml)
+[![Preview Deployment Master](https://github.com/milanpollock/dark-rush-photography/actions/workflows/preview.yml/badge.svg?branch=master?branch=master&kill_cache=1)](https://github.com/milanpollock/dark-rush-photography/actions/workflows/preview.yml)
 
-[![Deploy Master](https://github.com/milanpollock/dark-rush-photography/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/milanpollock/dark-rush-photography/actions/workflows/deploy.yml)
+[![Deploy Master](https://github.com/milanpollock/dark-rush-photography/actions/workflows/deploy.yml/badge.svg?branch=master&kill_cache=1)](https://github.com/milanpollock/dark-rush-photography/actions/workflows/deploy.yml)
 
 ---
