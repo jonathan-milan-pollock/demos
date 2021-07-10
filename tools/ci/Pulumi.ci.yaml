@@ -26,3 +26,4 @@ config:
   deployment:socketImageName: socket
   deployment:appServicePlanName: drpappserviceplan,
   deployment:webAppName: dark-rush-photography
+  deployment:webAppApiUrl: https://dark-rush-photography.azurewebsites.net/api

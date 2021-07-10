@@ -3,14 +3,7 @@ import { Logger } from '@nestjs/common';
 import { BlobUploadCommonResponse } from '@azure/storage-blob';
 import { Readable } from 'node:stream';
 import { combineLatest, from, fromEvent, Observable, of } from 'rxjs';
-import {
-  buffer,
-  concatMap,
-  map,
-  mergeMap,
-  switchMap,
-  take,
-} from 'rxjs/operators';
+import { buffer, concatMap, map, mergeMap, switchMap } from 'rxjs/operators';
 
 import {
   ImageDimensionType,
@@ -123,13 +116,13 @@ export const downloadBlobToFile$ = (
 };
 
 export const deleteBlob$ = (
-  azureStorageConnectionString: string,
+  connectionString: string,
   azureStorageType: AzureStorageType,
   blobPath: string
 ): Observable<boolean> => {
   Logger.log(`Deleting blob ${blobPath}`, deleteBlob$.name);
   return getAzureStorageBlockBlobClient$(
-    azureStorageConnectionString,
+    connectionString,
     azureStorageType,
     blobPath
   ).pipe(

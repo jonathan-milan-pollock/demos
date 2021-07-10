@@ -7,7 +7,7 @@ import {
 export const createFreeMongoDbAccount = (
   freeMongoDbAccountName: string,
   resourceGroup: ResourceGroup
-) =>
+): DatabaseAccount =>
   new DatabaseAccount(freeMongoDbAccountName, {
     accountName: freeMongoDbAccountName,
     resourceGroupName: resourceGroup.name,

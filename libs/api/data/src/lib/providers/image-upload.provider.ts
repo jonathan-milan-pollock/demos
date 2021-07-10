@@ -54,7 +54,7 @@ export class ImageUploadProvider {
       : findImageResolution(ImageDimensionType.Small);
 
     return uploadBufferToBlob$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       AzureStorageType.Private,
       file.buffer,
       getBlobPath(media)
@@ -98,7 +98,7 @@ export class ImageUploadProvider {
     entityModel: Model<DocumentModel>
   ): Observable<string> {
     return downloadBlobToFile$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       AzureStorageType.Private,
       getBlobPath(media),
       media.fileName
@@ -121,7 +121,7 @@ export class ImageUploadProvider {
 
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       AzureStorageType.Private,
       getBlobPath(media),
       media.fileName
@@ -132,7 +132,7 @@ export class ImageUploadProvider {
       }),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           AzureStorageType.Private,
           Buffer.from(uint8Array),
           getBlobPath(media)
@@ -146,7 +146,7 @@ export class ImageUploadProvider {
     dateCreated: string
   ): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       AzureStorageType.Private,
       getBlobPath(media),
       media.fileName
@@ -157,7 +157,7 @@ export class ImageUploadProvider {
       }),
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.env.azureStorageConnectionString,
+          this.env.privateBlobConnectionString,
           AzureStorageType.Private,
           fs.createReadStream(filePath),
           getBlobPath(media)

@@ -6,7 +6,7 @@ import { StorageAccount } from '@pulumi/azure-native/storage';
 export const createCdnProfile = (
   cdnProfileName: string,
   resourceGroup: ResourceGroup
-) =>
+): Profile =>
   new Profile(cdnProfileName, {
     profileName: cdnProfileName,
     resourceGroupName: resourceGroup.name,

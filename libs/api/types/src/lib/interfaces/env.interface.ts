@@ -1,8 +1,10 @@
 export interface Env {
   readonly production: boolean;
-  readonly drpApiAdminKey: string;
   readonly mongoDbConnectionString: string;
-  readonly azureStorageConnectionString: string;
+  readonly privateBlobConnectionString: string;
+  readonly privateTableConnectionString: string;
+  readonly publicBlobConnectionString: string;
+  readonly drpApiAdminKey: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;
 }

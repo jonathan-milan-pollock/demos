@@ -154,8 +154,12 @@ const appServicePlan = createAppServicePlan(
 );
 const webApp = createWebApp(
   pulumiConfig.webAppName,
+  pulumiConfig.webAppApiUrl,
   resourceGroup,
-  pulumiConfig.containerRegistryName,
+  prodMongoDbAccount,
+  prodPrivateStorageAccount,
+  prodPublicStorageAccount,
+  containerRegistry,
   adminAcrUser,
   appServicePlan
 );

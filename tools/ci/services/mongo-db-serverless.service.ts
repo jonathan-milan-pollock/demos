@@ -7,7 +7,7 @@ import {
 export const createServerlessMongoDbAccount = (
   serverlessMongoDbAccountName: string,
   resourceGroup: ResourceGroup
-) =>
+): DatabaseAccount =>
   new DatabaseAccount(serverlessMongoDbAccountName, {
     accountName: serverlessMongoDbAccountName,
     resourceGroupName: resourceGroup.name,

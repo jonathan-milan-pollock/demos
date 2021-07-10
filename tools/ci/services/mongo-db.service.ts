@@ -9,7 +9,7 @@ export const createMongoDb = (
   mongoDbDatabaseName: string,
   resourceGroup: ResourceGroup,
   mongoDbAccount: DatabaseAccount
-) =>
+): MongoDBResourceMongoDBDatabase =>
   new MongoDBResourceMongoDBDatabase(mongoDbDatabaseName, {
     databaseName: mongoDbDatabaseName,
     accountName: mongoDbAccount.name,
@@ -25,7 +25,7 @@ export const createMongoDbCollection = (
   resourceGroup: ResourceGroup,
   mongoDbAccount: DatabaseAccount,
   mongoDbDatabase: MongoDBResourceMongoDBDatabase
-) =>
+): MongoDBResourceMongoDBCollection =>
   new MongoDBResourceMongoDBCollection(mongoDbCollectionName, {
     collectionName: mongoDbCollectionName,
     databaseName: mongoDbDatabase.name,

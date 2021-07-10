@@ -15,7 +15,7 @@ export interface AdminAcrUser {
 export const createContainerRegistry = (
   containerRegistryName: string,
   resourceGroup: ResourceGroup
-) =>
+): Registry =>
   new Registry(containerRegistryName, {
     registryName: containerRegistryName,
     resourceGroupName: resourceGroup.name,

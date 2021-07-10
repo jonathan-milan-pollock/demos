@@ -127,7 +127,7 @@ export class ImageDimensionProvider {
     const id = uuidv4();
     Logger.log(`Resizing image dimension ${imageResolution.type}`);
     return downloadBlobToFile$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPath(media),
       media.fileName
@@ -143,7 +143,7 @@ export class ImageDimensionProvider {
           of(imageResolution),
           of(filePath),
           uploadStreamToBlob$(
-            this.env.azureStorageConnectionString,
+            this.env.privateBlobConnectionString,
             getAzureStorageTypeFromMediaState(media.state),
             fs.createReadStream(filePath),
             getBlobPathWithDimension(media, imageResolution.type)
@@ -197,7 +197,7 @@ export class ImageDimensionProvider {
     imageDimensionType: ImageDimensionType
   ): Observable<string> => {
     return downloadBlobAsBuffer$(
-      this.env.azureStorageConnectionString,
+      this.env.privateBlobConnectionString,
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPathWithDimension(media, imageDimensionType)
     ).pipe(
