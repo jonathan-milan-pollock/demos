@@ -22,9 +22,9 @@ jobs:
       - name: Build Website
         run: npm run build:ssr
       - name: Build Api
-        run: npx nx build api --prod
+        run: npx nx run api:build:production
       - name: Build Websocket
-        run: npx nx build web-socket --prod
+        run: npx nx run web-socket:build:production
       - name: Copy files for Docker
         run: npm run dc:copy
       - name: Install Pulumi CLI

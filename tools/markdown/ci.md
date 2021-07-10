@@ -9,6 +9,7 @@
   - runs format:check
   - builds the site
   - runs unit tests
+  - displays code coverage report
   - runs the storybook-e2e
   - runs UI tests headless
     "cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
@@ -62,19 +63,6 @@
 
 ---
 
-## font awesome pro
-
-- create .npmrc file
-- add FONTAWESOME_NPM_AUTH_TOKEN secret in GitHub actions
-- add to pull_request.yml
-
-```yml
-- name: Install Dependencies
-  run: |
-    npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
-    npm install
-```
-
 ## post-deploy
 
 ### auth
@@ -94,6 +82,37 @@
 
 - In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
   - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
+
+---
+
+## setup GitHub Actions
+
+### font awesome pro
+
+- create .npmrc file
+- add FONTAWESOME_NPM_AUTH_TOKEN secret in GitHub actions
+- add to pull_request.yml
+
+```yml
+- name: Install Dependencies
+  run: |
+    npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
+    npm install
+```
+
+### pulumi
+
+- Install Pulumi GitHub App <https://github.com/apps/pulumi>
+- Create GitHub secret for PULUMI_ACCESS_TOKEN at <https://app.pulumi.com/milanpollock/settings/tokens>
+- Create GitHub secrets for Azure Credentials
+  - az login
+  - az account list
+  - az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID"
+  - create ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_TENANT_ID, and ARM_SUBSCRIPTION_ID secrets
+    - use appId for the ARM_CLIENT_ID
+    - use password for the ARM_CLIENT_SECRET
+    - use tenant for the ARM_TENANT_ID
+    - for ARM_SUBSCRIPTION_ID use subscription id from the az account list command response above
 
 ---
 
@@ -123,20 +142,6 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 //Enabled App Service logs to filesystem with retention period 1 day quota 35MB
 
 ---
-
-## setup GitHub Actions
-
-- Install Pulumi GitHub App <https://github.com/apps/pulumi>
-- Create GitHub secret for PULUMI_ACCESS_TOKEN at <https://app.pulumi.com/milanpollock/settings/tokens>
-- Create GitHub secrets for Azure Credentials
-  - az login
-  - az account list
-  - az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID"
-  - create ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_TENANT_ID, and ARM_SUBSCRIPTION_ID secrets
-    - use appId for the ARM_CLIENT_ID
-    - use password for the ARM_CLIENT_SECRET
-    - use tenant for the ARM_TENANT_ID
-    - for ARM_SUBSCRIPTION_ID use subscription id from the az account list command response above
 
 ---
 

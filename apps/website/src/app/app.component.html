@@ -5,7 +5,7 @@
   <nav class="top-nav">
     <div class="top-nav-bar-container">
       <drp-top-nav-bar
-        [isAuthenticated]="(isAuthenticated$ | async) == true"
+        [isAuthenticated]="(isAuthenticated$ | async) === true"
         (signIn)="onSignIn()"
         (signOut)="onSignOut()"
         (linkClicked)="onLinkClicked($event)"

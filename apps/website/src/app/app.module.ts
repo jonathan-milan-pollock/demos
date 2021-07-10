@@ -11,21 +11,21 @@ import {
   Auth0AuthService,
   DestinationsService,
   ReviewsService,
-  ReviewsServiceMock,
+  //ReviewsServiceMock,
 } from '@dark-rush-photography/website/data';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RootStoreModule } from './root-store.module';
+//import { RootStoreModule } from './root-store.module';
 import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import {
-  AuthStoreModule,
+  // AuthStoreModule,
   DestinationStoreModule,
-  EventStoreModule,
-  PhotoOfTheWeekStoreModule,
+  // EventStoreModule,
+  // PhotoOfTheWeekStoreModule,
   ReviewStoreModule,
 } from '@dark-rush-photography/website/data';
 
