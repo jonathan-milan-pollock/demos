@@ -1,9 +1,9 @@
 FROM node:14.16.1
 LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
-ADD /docker/api/install-tools.sh /root
-USER root
-RUN /root/install-tools.sh
+RUN apt-get update
+RUN apt-get install -y ffmpeg
+RUN apt-get install -y melt
 WORKDIR /usr/src/app
 COPY dist/node_modules/ ./node_modules/
 RUN ls -la ./node_modules/*
