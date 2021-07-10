@@ -28,7 +28,7 @@ jobs:
         run: npx nx run best-of:build:production
       - name: Api Build
         run: npx nx run api:build:production
-      - name: Websocket Build
+      - name: Web Socket Build
         run: npx nx run web-socket:build:production
       - name: Docker Copy Files
         run: npm run dc:copy

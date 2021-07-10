@@ -21,7 +21,7 @@ jobs:
           npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
           npm install
       - name: Storybook Copy Files
-        run: npm run dc:copy
+        run: npm run sb:copy
       - name: Storybook Deploy
         uses: JamesIves/github-pages-deploy-action@3.6.2
         with:
