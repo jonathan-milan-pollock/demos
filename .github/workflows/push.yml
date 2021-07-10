@@ -16,11 +16,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: Pulumi Install CLI
-        uses: pulumi/action-install-pulumi-cli@v1
-      - name: Pulumi Install Dependencies
-        run: npm install
-        working-directory: ./tools/ci/
       - name: Storybook Copy Files
         run: npm run dc:copy
       - name: Storybook Deploy
@@ -31,6 +26,11 @@ jobs:
           FOLDER: docs-build
           CLEAN: true
           TARGET_FOLDER: docs
+      - name: Pulumi Install CLI
+        uses: pulumi/setup-pulumi@v2
+      - name: Pulumi Install Dependencies
+        run: npm install
+        working-directory: ./tools/ci/
       - name: Pulumi Up
         uses: pulumi/actions@v3
         with:
