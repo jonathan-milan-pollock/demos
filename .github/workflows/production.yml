@@ -1,4 +1,4 @@
-name: Deploy Master
+name: Production
 on:
   workflow_dispatch:
     branches:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Production
     runs-on: ubuntu-latest
     env:
       NX_BRANCH: ${{ github.event.number }}
@@ -24,8 +24,8 @@ jobs:
         run: |
           npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
           npm install
-      - name: Storybook Copy Docs
-        run: npm run docs:json
+      - name: Storybook Docs
+        run: npm run sb:docs
       - name: Storybook Build
         run: npx nx run ui-storybook:build-storybook
       - name: Storybook Copy Files

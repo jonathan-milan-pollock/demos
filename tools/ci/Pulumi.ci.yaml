@@ -27,3 +27,5 @@ config:
   deployment:appServicePlanName: drp-app-service-plan
   deployment:webAppName: dark-rush-photography
   deployment:webAppApiUrl: https://dark-rush-photography.azurewebsites.net/api
+  deployment:mediaServiceStorageAccountName: mediasvcsa
+  deployment:mediaServiceName: mediasvc

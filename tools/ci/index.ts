@@ -26,6 +26,11 @@ import {
   createAppServicePlan,
   updateWebApp,
 } from './services/app-service.service';
+import {
+  createMediaServiceStorageAccount,
+  createMediaService,
+} from './services/media.service';
+
 import { getPulumiConfig } from './pulumi-config';
 
 const pulumiConfig = getPulumiConfig();
@@ -165,6 +170,16 @@ const webApp = updateWebApp(
   appServicePlan
 );
 
+const mediaServiceStorageAccount = createMediaServiceStorageAccount(
+  pulumiConfig.mediaServiceStorageAccountName,
+  resourceGroup
+);
+const mediaService = createMediaService(
+  pulumiConfig.mediaServiceName,
+  resourceGroup,
+  mediaServiceStorageAccount
+);
+
 export const resourceGroupUrn = resourceGroup.urn;
 
 export const devMongoDbAccountUrn = devMongoDbAccount.urn;
@@ -198,3 +213,6 @@ export const socketImageUrn = socketImage.urn;
 
 export const appServicePlanUrn = appServicePlan.urn;
 export const webAppUrn = webApp.urn;
+
+export const mediaServiceStorageAccountUrn = mediaServiceStorageAccount.urn;
+export const mediaServiceUrn = mediaService.urn;

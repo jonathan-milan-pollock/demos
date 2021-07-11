@@ -31,15 +31,15 @@
     "build:ssr": "nx build --prod && nx run website:server:production",
     "prerender": "nx run website:prerender",
     "prebuild:ssr": "ngcc",
-    "docs:json": "compodoc -p \"./tsconfig.base.json\" -e json -d \"./libs/ui-storybook/.storybook/public\"",
-    "serve:api": "concurrently \"nx serve api\" \"nx serve web-socket\" \"nx run api-e2e:e2e --watch\"",
-    "serve:ui": "npm run docs:json && nx run ui-storybook-e2e:e2e --watch",
-    "serve:web": "concurrently \"npm run dev:ssr\" \"nx serve api\" \"nx serve web-socket\" \"nx run website-e2e:e2e --watch\"",
-    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx serve web-socket\" \"nx run best-of-e2e:e2e --watch\"",
+    "sb:docs": "compodoc -p \"./tsconfig.base.json\" -e json -d \"./libs/ui-storybook/.storybook/public\"",
     "dc:copy:node-modules": "copyfiles \"./node_modules/**/*\" \"./tools/ci/dist\"",
     "dc:copy:dist": "copyfiles \"./dist/**/*\" \"./tools/ci\"",
     "dc:copy": "npm run dc:copy:node-modules && npm run dc:copy:dist",
-    "sb:copy": "copyfiles \"./dist/storybook/**/*\" \"./docs-build\" --up 2"
+    "sb:copy": "copyfiles \"./dist/storybook/**/*\" \"./docs-build\" --up 2",
+    "serve:api": "concurrently \"nx serve api\" \"nx serve web-socket\" \"nx run api-e2e:e2e --watch\"",
+    "serve:ui": "npm run sb:docs && nx run ui-storybook-e2e:e2e --watch",
+    "serve:web": "concurrently \"npm run dev:ssr\" \"nx serve api\" \"nx serve web-socket\" \"nx run website-e2e:e2e --watch\"",
+    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx serve web-socket\" \"nx run best-of-e2e:e2e --watch\""
   },
   "private": true,
   "dependencies": {
