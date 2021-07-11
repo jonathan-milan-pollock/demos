@@ -108,16 +108,29 @@
 ### pulumi
 
 - Install Pulumi GitHub App <https://github.com/apps/pulumi>
+
+### Github secrets
+
 - Create GitHub secret for PULUMI_ACCESS_TOKEN at <https://app.pulumi.com/milanpollock/settings/tokens>
 - Create GitHub secrets for Azure Credentials
   - az login
   - az account list
+    - id is the SUBSCRIPTION_ID
   - az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID"
   - create ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_TENANT_ID, and ARM_SUBSCRIPTION_ID secrets
     - use appId for the ARM_CLIENT_ID
     - use password for the ARM_CLIENT_SECRET
     - use tenant for the ARM_TENANT_ID
-    - for ARM_SUBSCRIPTION_ID use subscription id from the az account list command response above
+    - for ARM_SUBSCRIPTION_ID use id from the az account list command response above
+  - also create an AZURE_CREDENTIALS secret with the following exact format
+
+```json
+{"clientId": "<GUID>",
+ "clientSecret": "<GUID>",
+ "subscriptionId": "<GUID>",
+ "tenantId": "<GUID>",
+ (...)}
+```
 
 ---
 
@@ -140,6 +153,31 @@
   - Therefore run pulumi to create resources and run from ./tools/ci
 
 > az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+az webapp config container set --resource-group drp-rg --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+
+// Under configuration app service plan > apps > dark-rush-photography
+fter you uploaded your Docker Compose file and clicked create, you will have to make sure App Service can access Azure Container Registry by adding the following App settings in the App Service portal:
+
+DOCKER_REGISTRY_SERVER_USERNAME = [azure-container-registry-name]
+DOCKER_REGISTRY_SERVER_URL = [azure-container-registry-name].azurecr.io
+DOCKER_REGISTRY_SERVER_PASSWORD = [password]
+
+DOCKER_REGISTRY_SERVER_USERNAME = darkrushphotography
+DOCKER_REGISTRY_SERVER_URL = darkrushphotography.azurecr.io
+DOCKER_REGISTRY_SERVER_PASSWORD = [password]
+
+---
 
 ---
 
