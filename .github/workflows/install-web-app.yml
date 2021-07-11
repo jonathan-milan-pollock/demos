@@ -1,5 +1,4 @@
-name: Install Web App
-description: Installs the multi-container Web App, multi-container is in preview so separate from Pulumi
+name: Install Web App (multi-container in preview)
 on:
   workflow_dispatch:
     branches:
