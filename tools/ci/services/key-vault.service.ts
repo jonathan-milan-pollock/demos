@@ -24,6 +24,7 @@ export const createVault = (
           objectId: currentPrincipal,
           tenantId,
           permissions: {
+            keys: ['delete', 'get', 'list', 'set'],
             secrets: ['delete', 'get', 'list', 'set'],
           },
         },

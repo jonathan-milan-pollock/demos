@@ -8,28 +8,19 @@
 - Add H2 Enabled CDN
 - Enable GZip (html, js, css)
 
-## best practices
+## Need to Add
 
-- on Pull Request
-  - runs lint
-  - runs format:check
-  - builds the site
-  - runs unit tests
-  - displays code coverage report
-  - runs the storybook-e2e
-  - runs UI tests headless
-    "cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
-  - runs website e2e - headless
-    "cy:web:headless": "nx run website-e2e:e2e --headless",
-  - runs best of e2e - headless
-    "cy:bestof:headless": "nx run bestof-e2e:e2e --headless",
-  - runs Pulumi Preview
-  - AZ Deployment
-- on Commit (once Pull Request GitHub Action complete)
-  - runs UI tests headless
-  - runs website e2e headless
-  - deploys the site
-  - Cypress e2e Deployment BrowserStack
+- lint
+- format:check
+- unit tests
+- deploy code coverage report
+- Will need preview environment for website?
+- runs API, UI, Website and Best Of Cypress tests headless
+  "cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
+  "cy:web:headless": "nx run website-e2e:e2e --headless",
+  "cy:best-of:headless": "nx run best-of-e2e:e2e --headless",
+  "cy:api": "nx run api-e2e:e2e --headless",
+- Cypress e2e Deployment BrowserStack
 
 ---
 
@@ -132,9 +123,7 @@
  (...)}
 ```
 
----
-
-## deploying Nx to Vercel
+### deploying Nx to Vercel
 
 - [Deploying to Vercel](https://nx.dev/latest/react/guides/nextjs#deploying-to-vercel)
 - In Project Settings add NPM_RC with FontAwesome PRO content
@@ -150,7 +139,9 @@
 
 - As the multicontainer WebApp is in preview mode there does not appear to be a way to create the type from Pulumi
 
-  - Therefore run pulumi to create resources and run from ./tools/ci
+  - Therefore run Update Web App workflow manually after Production workflow
+
+---
 
 > az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
 
@@ -166,9 +157,6 @@ az webapp config container set --name dark-rush-photography --resource-group drp
 
 az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
 
-// Under configuration app service plan > apps > dark-rush-photography
-fter you uploaded your Docker Compose file and clicked create, you will have to make sure App Service can access Azure Container Registry by adding the following App settings in the App Service portal:
-
 DOCKER_REGISTRY_SERVER_USERNAME = [azure-container-registry-name]
 DOCKER_REGISTRY_SERVER_URL = [azure-container-registry-name].azurecr.io
 DOCKER_REGISTRY_SERVER_PASSWORD = [password]
@@ -176,8 +164,6 @@ DOCKER_REGISTRY_SERVER_PASSWORD = [password]
 DOCKER_REGISTRY_SERVER_USERNAME = darkrushphotography
 DOCKER_REGISTRY_SERVER_URL = darkrushphotography.azurecr.io
 DOCKER_REGISTRY_SERVER_PASSWORD = [password]
-
----
 
 ---
 
