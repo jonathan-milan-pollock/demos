@@ -173,85 +173,86 @@ const connectionStrings = all([
 );
 
 const websitesEnableAppServiceStorageSecret = createSecret(
-  'WEBSITES_ENABLE_APP_SERVICE_STORAGE',
+  'WEBSITES-ENABLE-APP-SERVICE-STORAGE',
   interpolate`true`,
   resourceGroup,
   vault
 );
 const dockerRegistryServerUrlSecret = createSecret(
-  'DOCKER_REGISTRY_SERVER_URL',
+  'DOCKER-REGISTRY-SERVER-URL',
   interpolate`${containerRegistry.name}.azurecr.io`,
   resourceGroup,
   vault
 );
 const dockerRegistryServerUsernameSecret = createSecret(
-  'DOCKER_REGISTRY_SERVER_USERNAME',
+  'DOCKER-REGISTRY-SERVER-USERNAME',
   adminAcrUser.username,
   resourceGroup,
   vault
 );
 const dockerRegistryServerPasswordSecret = createSecret(
-  'DOCKER_REGISTRY_SERVER_PASSWORD',
+  'DOCKER-REGISTRY-SERVER-PASSWORD',
   adminAcrUser.password,
   resourceGroup,
   vault
 );
+
 const mongoDbConnectionStringSecret = createSecret(
-  'NX_MONGO_DB_CONNECTION_STRING',
+  'NX-MONGO-DB-CONNECTION-STRING',
   connectionStrings.apply((cs) => cs.connectionStrings![0].connectionString),
   resourceGroup,
   vault
 );
 const privateBlobConnectionStringSecret = createSecret(
-  'NX_PRIVATE_BLOB_CONNECTION_STRING',
+  'NX-PRIVATE-BLOB-CONNECTION-STRING',
   prodPrivateStorageAccount.primaryEndpoints.blob,
   resourceGroup,
   vault
 );
 const privateTableConnectionStringSecret = createSecret(
-  'NX_PRIVATE_TABLE_CONNECTION_STRING',
+  'NX-PRIVATE-TABLE-CONNECTION-STRING',
   prodPrivateStorageAccount.primaryEndpoints.table,
   resourceGroup,
   vault
 );
 const publicBlobConnectionStringSecret = createSecret(
-  'NX_PUBLIC_BLOB_CONNECTION_STRING',
+  'NX-PUBLIC-BLOB-CONNECTION-STRING',
   prodPublicStorageAccount.primaryEndpoints.blob,
   resourceGroup,
   vault
 );
 const drpApiUrlSecret = createSecret(
-  'NX_DRP_API_URL',
+  'NX-DRP-API-URL',
   interpolate`${pulumiConfig.webAppApiUrl}`,
   resourceGroup,
   vault
 );
 const drpApiAdminKeySecret = createSecret(
-  'NX_DRP_API_ADMIN_KEY',
+  'NX-DRP-API-ADMIN-KEY',
   interpolate`${process.env.NX_DRP_API_ADMIN_KEY}`,
   resourceGroup,
   vault
 );
 const auth0ClientIdSecret = createSecret(
-  'NX_AUTH0_CLIENT_ID',
+  'NX-AUTH0-CLIENT-ID',
   interpolate`${process.env.NX_AUTH0_CLIENT_ID}`,
   resourceGroup,
   vault
 );
 const auth0ClientSecretSecret = createSecret(
-  'NX_AUTH0_CLIENT_SECRET',
+  'NX-AUTH0-CLIENT-SECRET',
   interpolate`${process.env.NX_AUTH0_CLIENT_SECRET}`,
   resourceGroup,
   vault
 );
 const tinyPngApiKeySecret = createSecret(
-  'NX_TINY_PNG_API_KEY',
+  'NX-TINY-PNG-API-KEY',
   interpolate`${process.env.NX_TINY_PNG_API_KEY}`,
   resourceGroup,
   vault
 );
 const ayrshareApiKeySecret = createSecret(
-  'NX_AYRSHARE_API_KEY',
+  'NX-AYRSHARE-API-KEY',
   interpolate`${process.env.NX_AYRSHARE_API_KEY}`,
   resourceGroup,
   vault

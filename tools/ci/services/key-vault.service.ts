@@ -37,8 +37,8 @@ export const createSecret = (
   secretValue: Output<string>,
   resourceGroup: ResourceGroup,
   vault: Vault
-) =>
-  new Secret(secretName.toLowerCase().replace(/_/g, ''), {
+): Secret =>
+  new Secret(secretName, {
     properties: {
       value: secretValue,
     },
