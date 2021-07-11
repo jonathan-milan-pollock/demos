@@ -4,23 +4,29 @@
 
 ---
 
+### deployments
+
+- [37 Photos](https://37-photos.vercel.app/)
+- [Dev](https://milanpollock.github.io/dark-rush-photography/ui-storybook)
+
+---
+
 ### tech stack
 
 - **_Nx_**
-- **_Angular_**
 - **_Angular Universal_**
-- **_React_**
+- **_React NextJS_**
 - **_StencilJS_**
-- **_NestJS Api_**
-- **_NestJS Mongoose_**
+- **_NestJS_**
 - **_Storybook_**
-- **_Pulumi_**
 - **_Cypress_**
-- **_Azure Durable Functions_**
-- **_Azure Blob Storage_**
+- **_Pulumi_**
+- **_Azure_**
+- **_Vercel_**
 - **_TinyPNG_**
 - **_Sharp_**
 - **_FFmpeg_**
+- **_Ayrshare_**
 
 ---
 
@@ -28,7 +34,6 @@
 
 - [architecture](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/architecture.md)
 - [dev](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/dev.md)
-- [ci](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/ci.md)
 - [references](https://github.com/milanpollock/dark-rush-photography/blob/master/tools/markdown/references.md)
 
 ---
@@ -81,8 +86,3 @@
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 
 ---
-
-## Deployments
-
-- [37 Photos](https://37-photos.vercel.app/)
-- [Dev](https://milanpollock.github.io/dark-rush-photography/ui-storybook)

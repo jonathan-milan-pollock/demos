@@ -2,6 +2,12 @@
 
 ---
 
+## Enable Features
+
+- Use Cache-Control
+- Add H2 Enabled CDN
+- Enable GZip (html, js, css)
+
 ## best practices
 
 - on Pull Request
@@ -115,7 +121,7 @@
 
 ---
 
-## Deploying Nx to Vercel
+## deploying Nx to Vercel
 
 - [Deploying to Vercel](https://nx.dev/latest/react/guides/nextjs#deploying-to-vercel)
 - In Project Settings add NPM_RC with FontAwesome PRO content
@@ -127,59 +133,37 @@
 
 ---
 
-az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+## multicontainer WebApp
 
-az webapp config container set --resource-group drp-rg --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+- As the multicontainer WebApp is in preview mode there does not appear to be a way to create the type from Pulumi
 
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
+  - Therefore run pulumi to create resources and run from ./tools/ci
 
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-// Under configuration app service plan > apps > dark-rush-photography
-fter you uploaded your Docker Compose file and clicked create, you will have to make sure App Service can access Azure Container Registry by adding the following App settings in the App Service portal:
-
-DOCKER_REGISTRY_SERVER_USERNAME = [azure-container-registry-name]
-DOCKER_REGISTRY_SERVER_URL = [azure-container-registry-name].azurecr.io
-DOCKER_REGISTRY_SERVER_PASSWORD = [password]
-
-DOCKER_REGISTRY_SERVER_USERNAME = darkrushphotography
-DOCKER_REGISTRY_SERVER_URL = darkrushphotography.azurecr.io
-DOCKER_REGISTRY_SERVER_PASSWORD = [password]
-
-//Enabled App Service logs to filesystem with retention period 1 day quota 35MB
+> az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
 
 ---
 
----
+## app Service Logs
+
+- Turned on App Service logging Filesystem Verbose
 
 ---
 
-## source map explorer
+## deploy locally if necessary
 
-- connect to nx cloud
+1. npm run dc:copy from root directory (copies both node_modules and dist)
+2. change directory to ./tools/ci
+3. az login
+4. pulumi login
+5. run pulumi up
+
+## Cypress Cloud
+
 - connect to cypress cloud
-
----
 
 - <https://mariocardinal.wordpress.com/2019/03/05/configuring-cypress-in-ci-with-azure-devops-pipelines/>
 
-## references
-
-## Enable Features
-
-- Use Cache-Control
-- Add H2 Enabled CDN
-- Enable GZip (html, js, css)
-
-## cypress
-
 browsers include edge (chrome, chromium, edge, firefox, electron)
 --config-file=/apps/website-e2e/cypress-prod.json
-
-## Cypress Cloud
 
 - cypress run --record --key 0f12e8f5-ca73-4d93-9173-cba92e770292
