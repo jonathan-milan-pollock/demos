@@ -22,14 +22,14 @@ export const createMediaServiceStorageAccount = (
 export const createMediaService = (
   mediaServiceName: string,
   resourceGroup: ResourceGroup,
-  mediaStorageAccount: StorageAccount
+  mediaServiceStorageAccount: StorageAccount
 ): MediaService =>
   new MediaService(mediaServiceName, {
     location: resourceGroup.location,
     resourceGroupName: resourceGroup.name,
     storageAccounts: [
       {
-        id: mediaStorageAccount.id,
+        id: mediaServiceStorageAccount.id,
         type: 'Primary',
       },
     ],

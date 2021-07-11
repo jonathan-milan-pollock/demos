@@ -1,4 +1,4 @@
-name: Build & Test Master
+name: Build & Test
 on:
   - pull_request
 jobs:
@@ -21,8 +21,8 @@ jobs:
         run: |
           npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
           npm install
-      - name: Storybook Copy Docs
-        run: npm run docs:json
+      - name: Storybook Docs
+        run: npm run sb:docs
       - name: Storybook Build
         run: npx nx run ui-storybook:build-storybook
       - name: Website Build
