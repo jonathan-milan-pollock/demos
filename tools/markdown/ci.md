@@ -76,8 +76,8 @@
 
 ## docker
 
-- at root create docker-compose.yml and .dockerignore file
 - create docker directory under ci and add a Docker file for each service
+- add docker compose for multi-container web app
 
 ---
 
@@ -116,11 +116,12 @@
   - also create an AZURE_CREDENTIALS secret with the following exact format
 
 ```json
-{"clientId": "<GUID>",
- "clientSecret": "<GUID>",
- "subscriptionId": "<GUID>",
- "tenantId": "<GUID>",
- (...)}
+{
+  "clientId": "<GUID>",
+  "clientSecret": "<GUID>",
+  "subscriptionId": "<GUID>",
+  "tenantId": "<GUID>"
+}
 ```
 
 ### deploying Nx to Vercel
