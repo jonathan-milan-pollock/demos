@@ -1,4 +1,4 @@
-name: Install Web App (multi-container in preview)
+name: Install Web App (separate as multi-container in preview)
 on:
   workflow_dispatch:
     branches:
