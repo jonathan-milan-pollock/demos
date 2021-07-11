@@ -31,7 +31,7 @@ jobs:
         uses: azure/CLI@v1
         working-directory: ./tools/ci/
         with:
-          inlineScript: az webapp create --resource-group ${{ env.AZ_RESOURCE_GROUP }} --plan ${{ env.AZ_APP_SERVICE_PLAN }} --name ${{ env.AZ_WEB_APP_NAME }} --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+          inlineScript: az webapp create --resource-group ${{ env.AZ_RESOURCE_GROUP }} --plan ${{ env.AZ_APP_SERVICE_PLAN }} --name ${{ env.AZ_WEB_APP_NAME }} --multicontainer-config-type compose --multicontainer-config-file ./docker/docker-compose.yml
       - name: Azure CLI script
         uses: azure/CLI@v1
         working-directory: ./tools/ci/
