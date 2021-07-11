@@ -29,10 +29,10 @@ jobs:
       - name: Azure CLI script
         uses: azure/CLI@v1
         with:
-          working-directory: ./tools/ci/
+          work-dir: ./tools/ci/
           inlineScript: az webapp create --resource-group ${{ env.AZ_RESOURCE_GROUP }} --plan ${{ env.AZ_APP_SERVICE_PLAN }} --name ${{ env.AZ_WEB_APP_NAME }} --multicontainer-config-type compose --multicontainer-config-file ./docker/docker-compose.yml
       - name: Azure CLI script
         uses: azure/CLI@v1
         with:
-          working-directory: ./tools/ci/
+          work-dir: ./tools/ci/
           inlineScript: az webapp identity assign --name ${{ env.AZ_WEB_APP_NAME }} --resource-group ${{ env.AZ_RESOURCE_GROUP }}
