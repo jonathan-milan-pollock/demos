@@ -1,6 +1,7 @@
 {
   "window.zoomLevel": 0,
   "cSpell.words": [
+    "Autobuild",
     "Buildable",
     "Chainable",
     "Exifed",
@@ -19,9 +20,11 @@
     "bestof",
     "blobstorage",
     "codedcharacterset",
+    "codeql",
     "compodoc",
     "containerregistry",
     "copyfiles",
+    "creds",
     "darkrushphotography",
     "datauri",
     "devdocuments",

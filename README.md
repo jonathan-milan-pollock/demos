@@ -47,6 +47,7 @@
 - [GlobalStats](https://gs.statcounter.com/)
 - [Screen sizes](https://screensiz.es)
 - [Markdown Emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
+- [Google Trends](https://trends.google.com/)
 
 ---
 
