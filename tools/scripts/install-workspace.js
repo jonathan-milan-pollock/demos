@@ -433,6 +433,9 @@ const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
     .then(() => console.log())
     .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/fontawesome-svg-core')
+    )
+    .then(() =>
       consoleLogOrExec(isReady, 'npm i @fortawesome/angular-fontawesome')
     )
     .then(() =>

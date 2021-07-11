@@ -24,7 +24,7 @@ import {
 } from './services/acr.service';
 import {
   createAppServicePlan,
-  createWebApp,
+  updateWebApp,
 } from './services/app-service.service';
 import { getPulumiConfig } from './pulumi-config';
 
@@ -127,6 +127,7 @@ const containerRegistry = createContainerRegistry(
   resourceGroup
 );
 const adminAcrUser = getAdminAcrUser(resourceGroup, containerRegistry);
+
 const nginxImage = createImage(
   pulumiConfig.nginxImageName,
   containerRegistry,
@@ -152,7 +153,7 @@ const appServicePlan = createAppServicePlan(
   pulumiConfig.appServicePlanName,
   resourceGroup
 );
-const webApp = createWebApp(
+const webApp = updateWebApp(
   pulumiConfig.webAppName,
   pulumiConfig.webAppApiUrl,
   resourceGroup,

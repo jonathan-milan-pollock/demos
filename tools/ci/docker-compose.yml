@@ -1,3 +1,9 @@
+#
+#
+# *** IMPORTANT: if updating this file manually run az commmand.
+# Pulumi does not install this file *** (details in ci.md, multicontainer WebApp)
+#
+#
 version: '3.8'
 
 services:
