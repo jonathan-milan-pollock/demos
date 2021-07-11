@@ -1,5 +1,7 @@
 /* NOTES: With multiple pipelines could split this into Pulumi.dev and Pulumi.prod */
+import { all, interpolate } from '@pulumi/pulumi';
 import { ResourceGroup } from '@pulumi/azure-native/resources';
+import { listDatabaseAccountConnectionStrings } from '@pulumi/azure-native/documentdb';
 
 import { createFreeMongoDbAccount } from './services/mongo-db-free.service';
 import { createServerlessMongoDbAccount } from './services/mongo-db-serverless.service';
@@ -22,15 +24,12 @@ import {
   getAdminAcrUser,
   createImage,
 } from './services/acr.service';
-import {
-  createAppServicePlan,
-  updateWebApp,
-} from './services/app-service.service';
+import { createAppServicePlan } from './services/app-service.service';
 import {
   createMediaServiceStorageAccount,
   createMediaService,
 } from './services/media.service';
-
+import { createVault, createSecret } from './services/key-vault.service';
 import { getPulumiConfig } from './pulumi-config';
 
 const pulumiConfig = getPulumiConfig();
@@ -154,22 +153,6 @@ const socketImage = createImage(
   adminAcrUser
 );
 
-const appServicePlan = createAppServicePlan(
-  pulumiConfig.appServicePlanName,
-  resourceGroup
-);
-const webApp = updateWebApp(
-  pulumiConfig.webAppName,
-  pulumiConfig.webAppApiUrl,
-  resourceGroup,
-  prodMongoDbAccount,
-  prodPrivateStorageAccount,
-  prodPublicStorageAccount,
-  containerRegistry,
-  adminAcrUser,
-  appServicePlan
-);
-
 const mediaServiceStorageAccount = createMediaServiceStorageAccount(
   pulumiConfig.mediaServiceStorageAccountName,
   resourceGroup
@@ -178,6 +161,105 @@ const mediaService = createMediaService(
   pulumiConfig.mediaServiceName,
   resourceGroup,
   mediaServiceStorageAccount
+);
+
+const vault = createVault(pulumiConfig.vaultName, resourceGroup);
+
+const connectionStrings = all([
+  resourceGroup.name,
+  prodMongoDbAccount.name,
+]).apply(([resourceGroupName, accountName]) =>
+  listDatabaseAccountConnectionStrings({ resourceGroupName, accountName })
+);
+
+const websitesEnableAppServiceStorageSecret = createSecret(
+  'WEBSITES_ENABLE_APP_SERVICE_STORAGE',
+  interpolate`true`,
+  resourceGroup,
+  vault
+);
+const dockerRegistryServerUrlSecret = createSecret(
+  'DOCKER_REGISTRY_SERVER_URL',
+  interpolate`${containerRegistry.name}.azurecr.io`,
+  resourceGroup,
+  vault
+);
+const dockerRegistryServerUsernameSecret = createSecret(
+  'DOCKER_REGISTRY_SERVER_USERNAME',
+  adminAcrUser.username,
+  resourceGroup,
+  vault
+);
+const dockerRegistryServerPasswordSecret = createSecret(
+  'DOCKER_REGISTRY_SERVER_PASSWORD',
+  adminAcrUser.password,
+  resourceGroup,
+  vault
+);
+const mongoDbConnectionStringSecret = createSecret(
+  'NX_MONGO_DB_CONNECTION_STRING',
+  connectionStrings.apply((cs) => cs.connectionStrings![0].connectionString),
+  resourceGroup,
+  vault
+);
+const privateBlobConnectionStringSecret = createSecret(
+  'NX_PRIVATE_BLOB_CONNECTION_STRING',
+  prodPrivateStorageAccount.primaryEndpoints.blob,
+  resourceGroup,
+  vault
+);
+const privateTableConnectionStringSecret = createSecret(
+  'NX_PRIVATE_TABLE_CONNECTION_STRING',
+  prodPrivateStorageAccount.primaryEndpoints.table,
+  resourceGroup,
+  vault
+);
+const publicBlobConnectionStringSecret = createSecret(
+  'NX_PUBLIC_BLOB_CONNECTION_STRING',
+  prodPublicStorageAccount.primaryEndpoints.blob,
+  resourceGroup,
+  vault
+);
+const drpApiUrlSecret = createSecret(
+  'NX_DRP_API_URL',
+  interpolate`${pulumiConfig.webAppApiUrl}`,
+  resourceGroup,
+  vault
+);
+const drpApiAdminKeySecret = createSecret(
+  'NX_DRP_API_ADMIN_KEY',
+  interpolate`${process.env.NX_DRP_API_ADMIN_KEY}`,
+  resourceGroup,
+  vault
+);
+const auth0ClientIdSecret = createSecret(
+  'NX_AUTH0_CLIENT_ID',
+  interpolate`${process.env.NX_AUTH0_CLIENT_ID}`,
+  resourceGroup,
+  vault
+);
+const auth0ClientSecretSecret = createSecret(
+  'NX_AUTH0_CLIENT_SECRET',
+  interpolate`${process.env.NX_AUTH0_CLIENT_SECRET}`,
+  resourceGroup,
+  vault
+);
+const tinyPngApiKeySecret = createSecret(
+  'NX_TINY_PNG_API_KEY',
+  interpolate`${process.env.NX_TINY_PNG_API_KEY}`,
+  resourceGroup,
+  vault
+);
+const ayrshareApiKeySecret = createSecret(
+  'NX_AYRSHARE_API_KEY',
+  interpolate`${process.env.NX_AYRSHARE_API_KEY}`,
+  resourceGroup,
+  vault
+);
+
+const appServicePlan = createAppServicePlan(
+  pulumiConfig.appServicePlanName,
+  resourceGroup
 );
 
 export const resourceGroupUrn = resourceGroup.urn;
@@ -211,8 +293,31 @@ export const websiteImageUrn = websiteImage.urn;
 export const apiImageUrn = apiImage.urn;
 export const socketImageUrn = socketImage.urn;
 
-export const appServicePlanUrn = appServicePlan.urn;
-export const webAppUrn = webApp.urn;
-
 export const mediaServiceStorageAccountUrn = mediaServiceStorageAccount.urn;
 export const mediaServiceUrn = mediaService.urn;
+
+export const vaultUrn = vault.urn;
+export const websitesEnableAppServiceStorageSecretUrn =
+  websitesEnableAppServiceStorageSecret.urn;
+export const dockerRegistryServerUrlSecretUrn =
+  dockerRegistryServerUrlSecret.urn;
+export const dockerRegistryServerUsernameSecretUrn =
+  dockerRegistryServerUsernameSecret.urn;
+export const dockerRegistryServerPasswordSecretUrn =
+  dockerRegistryServerPasswordSecret.urn;
+export const mongoDbConnectionStringSecretUrn =
+  mongoDbConnectionStringSecret.urn;
+export const privateBlobConnectionStringSecretUrn =
+  privateBlobConnectionStringSecret.urn;
+export const privateTableConnectionStringSecretUrn =
+  privateTableConnectionStringSecret.urn;
+export const publicBlobConnectionStringSecretUrn =
+  publicBlobConnectionStringSecret.urn;
+export const drpApiUrlSecretUrn = drpApiUrlSecret.urn;
+export const drpApiAdminKeySecretUrn = drpApiAdminKeySecret.urn;
+export const auth0ClientIdSecretUrn = auth0ClientIdSecret.urn;
+export const auth0ClientSecretSecretUrn = auth0ClientSecretSecret.urn;
+export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
+export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;
+
+export const appServicePlanUrn = appServicePlan.urn;

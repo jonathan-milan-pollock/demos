@@ -1,7 +1,6 @@
 #
 #
-# *** IMPORTANT: if updating this file manually run az commmand.
-# Pulumi does not install this file *** (details in ci.md, multicontainer WebApp)
+# *** IMPORTANT: run Github action update-web-app after making changes to this file
 #
 #
 version: '3.8'

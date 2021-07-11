@@ -28,11 +28,11 @@ export interface PulumiConfig {
   readonly websiteImageName: string;
   readonly apiImageName: string;
   readonly socketImageName: string;
-  readonly appServicePlanName: string;
-  readonly webAppName: string;
-  readonly webAppApiUrl: string;
   readonly mediaServiceStorageAccountName: string;
   readonly mediaServiceName: string;
+  readonly vaultName: string;
+  readonly webAppApiUrl: string;
+  readonly appServicePlanName: string;
 }
 
 export const getPulumiConfig = (): PulumiConfig => ({
@@ -63,11 +63,11 @@ export const getPulumiConfig = (): PulumiConfig => ({
   websiteImageName: config.require('websiteImageName'),
   apiImageName: config.require('apiImageName'),
   socketImageName: config.require('socketImageName'),
-  appServicePlanName: config.require('appServicePlanName'),
-  webAppName: config.require('webAppName'),
-  webAppApiUrl: config.require('webAppApiUrl'),
   mediaServiceStorageAccountName: config.require(
     'mediaServiceStorageAccountName'
   ),
   mediaServiceName: config.require('mediaServiceName'),
+  vaultName: config.require('vaultName'),
+  webAppApiUrl: config.require('webAppApiUrl'),
+  appServicePlanName: config.require('appServicePlanName'),
 });
