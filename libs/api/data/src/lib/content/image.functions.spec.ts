@@ -1,20 +1,32 @@
-import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import * as faker from 'faker';
+
+import {
+  DUMMY_MONGODB_ID,
+  Image,
+  MediaState,
+} from '@dark-rush-photography/shared/types';
 import { findPublicImages, toImage } from './image.functions';
 
 describe('image.functions', () => {
   const image = {
-    id: 'id',
-    entityId: 'entityId',
-    fileName: 'fileName',
-    state: MediaState.New,
-    order: 10,
-    isStared: true,
-    isLoved: true,
-    title: 'title',
-    description: 'description',
-    keywords: 'keywords',
-    dateCreated: 'dateCreated',
-    datePublished: 'datePublished',
+    id: faker.datatype.uuid(),
+    entityId: DUMMY_MONGODB_ID,
+    fileName: faker.lorem.word().toLowerCase(),
+    state: faker.random.arrayElement(Object.values(MediaState)),
+    order: faker.datatype.number(),
+    isStared: faker.datatype.boolean(),
+    isLoved: faker.datatype.boolean(),
+    title: faker.lorem.sentence(),
+    description: faker.lorem.paragraph(),
+    keywords: `${faker.lorem
+      .word()
+      .toLowerCase()}, ${faker.lorem
+      .word()
+      .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
+    dateCreated: faker.date.recent().toISOString(),
+    datePublished: faker.date.recent().toISOString(),
+    isGenerated: faker.datatype.boolean(),
+    isProcessing: faker.datatype.boolean(),
   } as Image;
 
   describe('toImage', () => {

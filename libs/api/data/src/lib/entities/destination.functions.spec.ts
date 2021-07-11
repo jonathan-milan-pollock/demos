@@ -1,10 +1,23 @@
+import {
+  DestinationUpdate,
+  Location,
+  SocialMediaType,
+} from '@dark-rush-photography/shared/types';
 import * as faker from 'faker';
 
-import { SocialMediaType } from '../enums/social-media-type.enum';
-import { DestinationUpdate } from '../interfaces/destination-update.interface';
-import { mockLocation } from './location.mock';
+const mockLocation = (): Location => ({
+  place: faker.company.companyName(),
+  street: faker.address.streetAddress(),
+  stateOrProvince: faker.address.state(),
+  zipCode: faker.address.zipCode(),
+  country: faker.address.country(),
+  geo: {
+    latitude: faker.address.latitude(),
+    longitude: faker.address.longitude(),
+  },
+});
 
-export const mockDestinationUpdate = (): DestinationUpdate => ({
+const mockDestinationUpdate = (): DestinationUpdate => ({
   slug: faker.lorem.word().toLowerCase(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
