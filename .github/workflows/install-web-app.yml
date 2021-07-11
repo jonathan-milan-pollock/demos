@@ -1,5 +1,5 @@
-name: Update Web App
-description: Run after Pulumi Production deployment when docker_compose.yml changes
+name: Install Web App
+description: Installs the multi-container Web App, multi-container is in preview so separate from Pulumi
 on:
   workflow_dispatch:
     branches:
