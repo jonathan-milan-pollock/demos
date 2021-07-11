@@ -1,13 +1,13 @@
 /* NOTES: With multiple pipelines could split this into Pulumi.dev and Pulumi.prod */
-import { all, interpolate } from '@pulumi/pulumi';
+import { interpolate } from '@pulumi/pulumi';
 import { ResourceGroup } from '@pulumi/azure-native/resources';
-import { listDatabaseAccountConnectionStrings } from '@pulumi/azure-native/documentdb';
 
 import { createFreeMongoDbAccount } from './services/mongo-db-free.service';
 import { createServerlessMongoDbAccount } from './services/mongo-db-serverless.service';
 import {
   createMongoDb,
   createMongoDbCollection,
+  getConnectionString,
 } from './services/mongo-db.service';
 import {
   createPrivateStorageAccount,
@@ -164,14 +164,6 @@ const mediaService = createMediaService(
 );
 
 const vault = createVault(pulumiConfig.vaultName, resourceGroup);
-
-const connectionStrings = all([
-  resourceGroup.name,
-  prodMongoDbAccount.name,
-]).apply(([resourceGroupName, accountName]) =>
-  listDatabaseAccountConnectionStrings({ resourceGroupName, accountName })
-);
-
 const websitesEnableAppServiceStorageSecret = createSecret(
   'WEBSITES-ENABLE-APP-SERVICE-STORAGE',
   interpolate`true`,
@@ -199,7 +191,7 @@ const dockerRegistryServerPasswordSecret = createSecret(
 
 const mongoDbConnectionStringSecret = createSecret(
   'NX-MONGO-DB-CONNECTION-STRING',
-  connectionStrings.apply((cs) => cs.connectionStrings![0].connectionString),
+  getConnectionString(resourceGroup, prodMongoDbAccount),
   resourceGroup,
   vault
 );
