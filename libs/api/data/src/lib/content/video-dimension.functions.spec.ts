@@ -1,4 +1,7 @@
+import * as faker from 'faker';
+
 import {
+  DUMMY_MONGODB_ID,
   VideoDimension,
   VideoDimensionType,
 } from '@dark-rush-photography/shared/types';
@@ -9,13 +12,13 @@ import {
 
 describe('video-dimension.functions', () => {
   const videoDimension = {
-    id: 'id',
-    entityId: 'entityId',
-    videoId: 'videoId',
-    type: VideoDimensionType.YouTube,
+    id: faker.datatype.uuid(),
+    entityId: DUMMY_MONGODB_ID,
+    videoId: faker.datatype.uuid(),
+    type: faker.random.arrayElement(Object.values(VideoDimensionType)),
     pixels: {
-      width: 10,
-      height: 20,
+      width: faker.datatype.number(),
+      height: faker.datatype.number(),
     },
   } as VideoDimension;
 

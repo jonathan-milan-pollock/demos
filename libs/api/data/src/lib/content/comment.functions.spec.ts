@@ -1,19 +1,29 @@
-import { Comment } from '@dark-rush-photography/shared/types';
+import * as faker from 'faker';
+
+import {
+  Comment,
+  DUMMY_MONGODB_ID,
+  User,
+} from '@dark-rush-photography/shared/types';
 import { findPublicComments, toComment } from './comment.functions';
 
 describe('comment.functions', () => {
-  const comment = {
-    id: 'id',
-    entityId: 'entityId',
-    mediaId: 'mediaId',
-    order: 1,
+  const mockUser: User = {
+    email: faker.internet.email(),
+    name: faker.name.findName(faker.name.firstName(), faker.name.lastName()),
+    image: faker.image.dataUri(),
+  };
+
+  const comment: Comment = {
+    id: faker.datatype.uuid(),
+    entityId: DUMMY_MONGODB_ID,
+    mediaId: faker.datatype.uuid(),
+    order: faker.datatype.number(),
     user: {
-      email: 'email',
-      name: 'name',
-      image: 'image',
+      ...mockUser,
     },
-    text: 'text',
-  } as Comment;
+    text: faker.lorem.sentence(),
+  };
 
   describe('toComment', () => {
     it('should return all fields of a comment', () => {

@@ -1,19 +1,30 @@
-import { Emotion, EmotionType } from '@dark-rush-photography/shared/types';
+import * as faker from 'faker';
+
+import {
+  DUMMY_MONGODB_ID,
+  Emotion,
+  EmotionType,
+  User,
+} from '@dark-rush-photography/shared/types';
 import { findPublicEmotions, toEmotion } from './emotion.functions';
 
 describe('emotion.functions', () => {
-  const emotion = {
-    id: 'id',
-    entityId: 'entityId',
-    mediaId: 'mediaId',
-    commentId: 'commentId',
-    type: EmotionType.Care,
+  const mockUser: User = {
+    email: faker.internet.email(),
+    name: faker.name.findName(faker.name.firstName(), faker.name.lastName()),
+    image: faker.image.dataUri(),
+  };
+
+  const emotion: Emotion = {
+    id: faker.datatype.uuid(),
+    entityId: DUMMY_MONGODB_ID,
+    mediaId: faker.datatype.uuid(),
+    commentId: faker.datatype.uuid(),
+    type: faker.random.arrayElement(Object.values(EmotionType)),
     user: {
-      email: 'email',
-      name: 'name',
-      image: 'image',
+      ...mockUser,
     },
-  } as Emotion;
+  };
 
   describe('toEmotion', () => {
     it('should return all fields of an emotion', () => {

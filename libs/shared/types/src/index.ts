@@ -53,16 +53,3 @@ export * from './lib/interfaces/video-dimension-add.interface';
 export * from './lib/interfaces/video-dimension.interface';
 export * from './lib/interfaces/video-update.interface';
 export * from './lib/interfaces/video.interface';
-
-// mocks
-export * from './lib/mocks/comment.mock';
-export * from './lib/mocks/destination-update.mock';
-export * from './lib/mocks/emotion.mock';
-export * from './lib/mocks/event-create.mock';
-export * from './lib/mocks/event-update.mock';
-export * from './lib/mocks/image-dimension.mock';
-export * from './lib/mocks/image.mock';
-export * from './lib/mocks/location.mock';
-export * from './lib/mocks/user.mock';
-export * from './lib/mocks/video-dimension.mock';
-export * from './lib/mocks/video.mock';
