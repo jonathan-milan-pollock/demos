@@ -138,43 +138,48 @@
 
 ## multicontainer WebApp
 
-- As the multicontainer WebApp is in preview mode run the following from root NX directory
+### As the multicontainer WebApp is in preview mode ran the following from root NX directory
 
 > az group create --resource-group DrpRg --location eastus
+>
 > az appservice plan create --name DrpAppServicePlan --resource-group DrpRg --sku S1 --is-linux
+>
 > az webapp create --resource-group DrpRg --plan DrpAppServicePlan --name darkrushphoto --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+>
+> az webapp identity assign --resource-group DrpRg --name darkrushphoto
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings WEBSITES_ENABLE_APP_SERVICE_STORAGE="true"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings DOCKER_REGISTRY_SERVER_URL="darkrushphotography.azurecr.io"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings DOCKER_REGISTRY_SERVER_USERNAME="darkrushphotography"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings DOCKER_REGISTRY_SERVER_PASSWORD="@Microsoft.KeyVault(VaultName=drpvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_MONGO_DB_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-MONGO-DB-CONNECTION-STRING)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_PRIVATE_BLOB_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PRIVATE-BLOB-CONNECTION-STRING)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_PRIVATE_TABLE_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PRIVATE-TABLE-CONNECTION-STRING)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_PUBLIC_BLOB_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PUBLIC-BLOB-CONNECTION-STRING)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_URL="https://dark-rush-photography.azurewebsites.net/api"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_ADMIN_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-NX-DRP-API-ADMIN-KEY)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AUTH0_CLIENT_ID="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AUTH0-CLIENT-ID)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AUTH0_CLIENT_SECRET="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AUTH0-CLIENT-SECRET)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_TINY_PNG_API_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-TINY-PNG-API-KEY)"
+>
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AYRSHARE_API_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AYRSHARE-API-KEY)"
 
-https://drp.scm.azurewebsites.net/api/logs/docker
+### Manually added
 
-az webapp config appsettings set –resource-group POCkubernetes –name PiluWordPress –settings WORDPRESS_DB_HOST="pilukuberpoc.mysql.database.azure.com" WORDPRESS_DB_USER="myuser@pilukuberpoc" WORDPRESS_DB_PASSWORD="mypassword" WORDPRESS_DB_NAME="wordpress" MYSQL_SSL_CA="BaltimoreCyberTrustroot.crt.pem"
-
-> az webapp log config --resource-group drp-rg --name darkrushphotography --web-server-logging filesystem
-
-> az webapp log config --resource-group drp-rg --name darkrushphotography --docker-container-logging true
-
----
-
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
-
-DOCKER_REGISTRY_SERVER_USERNAME = [azure-container-registry-name]
-DOCKER_REGISTRY_SERVER_URL = [azure-container-registry-name].azurecr.io
-DOCKER_REGISTRY_SERVER_PASSWORD = [password]
-
-DOCKER_REGISTRY_SERVER_USERNAME = darkrushphotography
-DOCKER_REGISTRY_SERVER_URL = darkrushphotography.azurecr.io
-DOCKER_REGISTRY_SERVER_PASSWORD = [password]
-
----
-
-## app Service Logs
-
-- Turned on App Service logging Filesystem Verbose
+- right parentheses to the keystore values
+- Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
 
 ---
 
