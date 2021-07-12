@@ -31,8 +31,6 @@ export interface PulumiConfig {
   readonly mediaServiceStorageAccountName: string;
   readonly mediaServiceName: string;
   readonly vaultName: string;
-  readonly webAppApiUrl: string;
-  readonly appServicePlanName: string;
 }
 
 export const getPulumiConfig = (): PulumiConfig => ({
@@ -68,6 +66,4 @@ export const getPulumiConfig = (): PulumiConfig => ({
   ),
   mediaServiceName: config.require('mediaServiceName'),
   vaultName: config.require('vaultName'),
-  webAppApiUrl: config.require('webAppApiUrl'),
-  appServicePlanName: config.require('appServicePlanName'),
 });

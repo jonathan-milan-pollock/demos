@@ -24,7 +24,6 @@ import {
   getAdminAcrUser,
   createImage,
 } from './services/acr.service';
-import { createAppServicePlan } from './services/app-service.service';
 import {
   createMediaServiceStorageAccount,
   createMediaService,
@@ -131,7 +130,6 @@ const containerRegistry = createContainerRegistry(
   resourceGroup
 );
 const adminAcrUser = getAdminAcrUser(resourceGroup, containerRegistry);
-
 const nginxImage = createImage(
   pulumiConfig.nginxImageName,
   containerRegistry,
@@ -164,18 +162,6 @@ const mediaService = createMediaService(
 );
 
 const vault = createVault(pulumiConfig.vaultName, resourceGroup);
-const websitesEnableAppServiceStorageSecret = createSecret(
-  'WEBSITES-ENABLE-APP-SERVICE-STORAGE',
-  interpolate`true`,
-  resourceGroup,
-  vault
-);
-const dockerRegistryServerUrlSecret = createSecret(
-  'DOCKER-REGISTRY-SERVER-URL',
-  interpolate`${containerRegistry.name}.azurecr.io`,
-  resourceGroup,
-  vault
-);
 const dockerRegistryServerUsernameSecret = createSecret(
   'DOCKER-REGISTRY-SERVER-USERNAME',
   adminAcrUser.username,
@@ -188,7 +174,6 @@ const dockerRegistryServerPasswordSecret = createSecret(
   resourceGroup,
   vault
 );
-
 const mongoDbConnectionStringSecret = createSecret(
   'NX-MONGO-DB-CONNECTION-STRING',
   getConnectionString(resourceGroup, prodMongoDbAccount),
@@ -210,12 +195,6 @@ const privateTableConnectionStringSecret = createSecret(
 const publicBlobConnectionStringSecret = createSecret(
   'NX-PUBLIC-BLOB-CONNECTION-STRING',
   prodPublicStorageAccount.primaryEndpoints.blob,
-  resourceGroup,
-  vault
-);
-const drpApiUrlSecret = createSecret(
-  'NX-DRP-API-URL',
-  interpolate`${pulumiConfig.webAppApiUrl}`,
   resourceGroup,
   vault
 );
@@ -248,11 +227,6 @@ const ayrshareApiKeySecret = createSecret(
   interpolate`${process.env.NX_AYRSHARE_API_KEY}`,
   resourceGroup,
   vault
-);
-
-const appServicePlan = createAppServicePlan(
-  pulumiConfig.appServicePlanName,
-  resourceGroup
 );
 
 export const resourceGroupUrn = resourceGroup.urn;
@@ -290,10 +264,6 @@ export const mediaServiceStorageAccountUrn = mediaServiceStorageAccount.urn;
 export const mediaServiceUrn = mediaService.urn;
 
 export const vaultUrn = vault.urn;
-export const websitesEnableAppServiceStorageSecretUrn =
-  websitesEnableAppServiceStorageSecret.urn;
-export const dockerRegistryServerUrlSecretUrn =
-  dockerRegistryServerUrlSecret.urn;
 export const dockerRegistryServerUsernameSecretUrn =
   dockerRegistryServerUsernameSecret.urn;
 export const dockerRegistryServerPasswordSecretUrn =
@@ -306,11 +276,8 @@ export const privateTableConnectionStringSecretUrn =
   privateTableConnectionStringSecret.urn;
 export const publicBlobConnectionStringSecretUrn =
   publicBlobConnectionStringSecret.urn;
-export const drpApiUrlSecretUrn = drpApiUrlSecret.urn;
 export const drpApiAdminKeySecretUrn = drpApiAdminKeySecret.urn;
 export const auth0ClientIdSecretUrn = auth0ClientIdSecret.urn;
 export const auth0ClientSecretSecretUrn = auth0ClientSecretSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;
-
-export const appServicePlanUrn = appServicePlan.urn;
