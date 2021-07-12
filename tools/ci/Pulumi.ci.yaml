@@ -27,5 +27,3 @@ config:
   deployment:mediaServiceStorageAccountName: mediasvcsa
   deployment:mediaServiceName: mediasvc
   deployment:vaultName: drpvault
-  deployment:webAppApiUrl: https://dark-rush-photography.azurewebsites.net/api
-  deployment:appServicePlanName: drp-app-service-plan

@@ -138,17 +138,21 @@
 
 ## multicontainer WebApp
 
-- As the multicontainer WebApp is in preview mode there does not appear to be a way to create the type from Pulumi
+- As the multicontainer WebApp is in preview mode run the following from root NX directory
 
-  - Therefore run Update Web App workflow manually after Production workflow
+> az group create --resource-group DrpRg --location eastus
+> az appservice plan create --name DrpAppServicePlan --resource-group DrpRg --sku S1 --is-linux
+> az webapp create --resource-group DrpRg --plan DrpAppServicePlan --name darkrushphoto --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
+
+https://drp.scm.azurewebsites.net/api/logs/docker
+
+az webapp config appsettings set –resource-group POCkubernetes –name PiluWordPress –settings WORDPRESS_DB_HOST="pilukuberpoc.mysql.database.azure.com" WORDPRESS_DB_USER="myuser@pilukuberpoc" WORDPRESS_DB_PASSWORD="mypassword" WORDPRESS_DB_NAME="wordpress" MYSQL_SSL_CA="BaltimoreCyberTrustroot.crt.pem"
+
+> az webapp log config --resource-group drp-rg --name darkrushphotography --web-server-logging filesystem
+
+> az webapp log config --resource-group drp-rg --name darkrushphotography --docker-container-logging true
 
 ---
-
-> az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
-
-az webapp create --resource-group drp-rg --plan drp-app-service-plan --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
-
-az webapp config container set --resource-group drp-rg --name dark-rush-photography --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
 
 az webapp config container set --name dark-rush-photography --resource-group drp-rg --docker-custom-image-name 'darkrushphotography.azurecr.io/nginx:latest' --docker-registry-server-url 'https://darkrushphotography.azurecr.io' --docker-registry-server-user 'darkrushphotography' --docker-registry-server-password '<password>'
 
