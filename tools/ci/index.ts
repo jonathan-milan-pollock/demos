@@ -162,12 +162,6 @@ const mediaService = createMediaService(
 );
 
 const vault = createVault(pulumiConfig.vaultName, resourceGroup);
-const dockerRegistryServerUsernameSecret = createSecret(
-  'DOCKER-REGISTRY-SERVER-USERNAME',
-  adminAcrUser.username,
-  resourceGroup,
-  vault
-);
 const dockerRegistryServerPasswordSecret = createSecret(
   'DOCKER-REGISTRY-SERVER-PASSWORD',
   adminAcrUser.password,
@@ -264,8 +258,6 @@ export const mediaServiceStorageAccountUrn = mediaServiceStorageAccount.urn;
 export const mediaServiceUrn = mediaService.urn;
 
 export const vaultUrn = vault.urn;
-export const dockerRegistryServerUsernameSecretUrn =
-  dockerRegistryServerUsernameSecret.urn;
 export const dockerRegistryServerPasswordSecretUrn =
   dockerRegistryServerPasswordSecret.urn;
 export const mongoDbConnectionStringSecretUrn =
