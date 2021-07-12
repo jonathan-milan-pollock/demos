@@ -2,28 +2,6 @@
 
 ---
 
-## Enable Features
-
-- Use Cache-Control
-- Add H2 Enabled CDN
-- Enable GZip (html, js, css)
-
-## Need to Add
-
-- lint
-- format:check
-- unit tests
-- deploy code coverage report
-- Will need preview environment for website?
-- runs API, UI, Website and Best Of Cypress tests headless
-  "cy:ui:headless": "nx run ui-storybook-e2e:e2e --headless",
-  "cy:web:headless": "nx run website-e2e:e2e --headless",
-  "cy:best-of:headless": "nx run best-of-e2e:e2e --headless",
-  "cy:api": "nx run api-e2e:e2e --headless",
-- Cypress e2e Deployment BrowserStack
-
----
-
 ## installation
 
 ### ci installation
@@ -49,28 +27,6 @@
 - npm i -D @pulumi/azure-native
 - npm i -D @pulumi/docker
 - create .gitignore file in tools/ci directory
-
----
-
-## post-deploy
-
-### auth
-
-- In Namecheap add DNS mapping for darkrushphotography.com
-  - CNAME Record, Host auth, Value darkrushphotography-cd-daulq4wds7ykzqff.edge.tenants.us.auth0.com. TTL Automatic
-
-### cdn
-
-- In Namecheap add DNS mapping for darkrushphotography.art
-
-  - CNAME Record, Host www, Value cdn-endpnt-prodpublicsa.azureedge.net. TTL Automatic
-
-- In Azure cdn-endpnt-prodpublicsa click Add Custom Hostname
-
-  - www.darkrushphotography.art
-
-- In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
-  - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
 
 ---
 
@@ -136,7 +92,7 @@
 
 ---
 
-## multicontainer WebApp
+### Manual creation of multicontainer WebApp
 
 ### As the multicontainer WebApp is in preview mode ran the following from root NX directory
 
@@ -166,7 +122,7 @@
 >
 > az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_URL="https://dark-rush-photography.azurewebsites.net/api"
 >
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_ADMIN_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-NX-DRP-API-ADMIN-KEY)"
+> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_ADMIN_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-DRP-API-ADMIN-KEY)"
 >
 > az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AUTH0_CLIENT_ID="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AUTH0-CLIENT-ID)"
 >
@@ -176,10 +132,34 @@
 >
 > az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AYRSHARE_API_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AYRSHARE-API-KEY)"
 
-### Manually added
+---
 
-- right parentheses to the keystore values
+## Manually added or modified
+
+- right parentheses to the keystore values of darkrushphoto application
+
 - Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
+- from KeyVault > Access Policies > Add Access Policy
+  - added Secret Management get and list to the darkrushphoto application
+  - added Key, Secret & Certificate Management to darkrushphotography@outlook.com
+
+### auth
+
+- In Namecheap add DNS mapping for darkrushphotography.com
+  - CNAME Record, Host auth, Value darkrushphotography-cd-daulq4wds7ykzqff.edge.tenants.us.auth0.com. TTL Automatic
+
+### cdn
+
+- In Namecheap add DNS mapping for darkrushphotography.art
+
+  - CNAME Record, Host www, Value cdn-endpnt-prodpublicsa.azureedge.net. TTL Automatic
+
+- In Azure cdn-endpnt-prodpublicsa click Add Custom Hostname
+
+  - www.darkrushphotography.art
+
+- In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
+  - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
 
 ---
 
@@ -191,13 +171,4 @@
 4. pulumi login
 5. run pulumi up
 
-## Cypress Cloud
-
-- connect to cypress cloud
-
-- <https://mariocardinal.wordpress.com/2019/03/05/configuring-cypress-in-ci-with-azure-devops-pipelines/>
-
-browsers include edge (chrome, chromium, edge, firefox, electron)
---config-file=/apps/website-e2e/cypress-prod.json
-
-- cypress run --record --key 0f12e8f5-ca73-4d93-9173-cba92e770292
+---
