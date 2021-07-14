@@ -390,14 +390,6 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',
     'storybook-addon-themes',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
   ],
 };
 ```
@@ -443,6 +435,25 @@ export const parameters = {
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
+```
+
+- as Storybook's default is webpack 4 when upgrading to Angular 12 webpack 5 is needed
+
+  - install:
+
+    - @storybook/builder-webpack5
+    - @storybook/manager-webpack5
+    - storybook-addon-angular-ivy
+
+  - add to .storybook/main.js
+
+```js
+ core: {
+    builder: 'webpack5',
+  },
+  angularOptions: {
+    enableIvy: true,
+  },
 ```
 
 ---
