@@ -192,12 +192,6 @@ const publicBlobConnectionStringSecret = createSecret(
   resourceGroup,
   vault
 );
-const drpApiAdminKeySecret = createSecret(
-  'NX-DRP-API-ADMIN-KEY',
-  interpolate`${process.env.NX_DRP_API_ADMIN_KEY}`,
-  resourceGroup,
-  vault
-);
 const auth0ClientIdSecret = createSecret(
   'NX-AUTH0-CLIENT-ID',
   interpolate`${process.env.NX_AUTH0_CLIENT_ID}`,
@@ -219,6 +213,12 @@ const tinyPngApiKeySecret = createSecret(
 const ayrshareApiKeySecret = createSecret(
   'NX-AYRSHARE-API-KEY',
   interpolate`${process.env.NX_AYRSHARE_API_KEY}`,
+  resourceGroup,
+  vault
+);
+const logzioTokenSecret = createSecret(
+  'NX-LOGZIO-TOKEN',
+  interpolate`${process.env.NX_LOGZIO_TOKEN}`,
   resourceGroup,
   vault
 );
@@ -268,8 +268,8 @@ export const privateTableConnectionStringSecretUrn =
   privateTableConnectionStringSecret.urn;
 export const publicBlobConnectionStringSecretUrn =
   publicBlobConnectionStringSecret.urn;
-export const drpApiAdminKeySecretUrn = drpApiAdminKeySecret.urn;
 export const auth0ClientIdSecretUrn = auth0ClientIdSecret.urn;
 export const auth0ClientSecretSecretUrn = auth0ClientSecretSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;
+export const logzioTokenSecretUrn = logzioTokenSecret.urn;

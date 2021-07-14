@@ -101,7 +101,9 @@ export class EntityProvider {
     entityModel: Model<DocumentModel>
   ): Observable<Partial<Entity>[]> {
     return from(entityModel.find({ type: entityType })).pipe(
-      concatMap((documentModels) => from(documentModels)),
+      concatMap(
+        (documentModels) => from([...(documentModels as DocumentModel[])]) //TODO: This is either DocumentModel or DocumentModel[] so fix
+      ),
       map((documentModel) => fromDocumentModel(entityType, documentModel)),
       toArray<Partial<Entity>>()
     );
@@ -124,7 +126,9 @@ export class EntityProvider {
     entityModel: Model<DocumentModel>
   ): Observable<Partial<Entity>[]> {
     return from(entityModel.find({ type: entityType })).pipe(
-      concatMap((documentModels) => from(documentModels)),
+      concatMap(
+        (documentModels) => from([...(documentModels as DocumentModel[])]) //TODO: This is either DocumentModel or DocumentModel[] so fix
+      ),
       filter((documentModel) => !documentModel.isPublic),
       map((documentModel) => fromDocumentModel(entityType, documentModel)),
       toArray<Partial<Entity>>()

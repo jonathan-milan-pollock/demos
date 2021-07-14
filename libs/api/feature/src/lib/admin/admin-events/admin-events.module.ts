@@ -1,4 +1,4 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
@@ -14,7 +14,6 @@ import { AdminEventsController } from './admin-events.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    HttpModule,
   ],
   controllers: [AdminEventsController],
   providers: [AdminEventsService, EntityProvider],

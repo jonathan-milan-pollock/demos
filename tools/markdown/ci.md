@@ -33,17 +33,17 @@
 ## docker
 
 - create docker directory under ci and add a Docker file for each service
-- add docker compose for multi-container web app
+- add docker compose for multi-container web app at root
 
 ---
 
-## setup GitHub Actions
+## github actions
 
 ### font awesome pro
 
 - create .npmrc file
 - add FONTAWESOME_NPM_AUTH_TOKEN secret in GitHub actions
-- add to pull_request.yml
+- add to Install Dependencies step of GitHub actions
 
 ```yml
 - name: Install Dependencies
@@ -94,43 +94,7 @@
 
 ### Manual creation of multicontainer WebApp
 
-### As the multicontainer WebApp is in preview mode ran the following from root NX directory
-
-> az group create --resource-group DrpRg --location eastus
->
-> az appservice plan create --name DrpAppServicePlan --resource-group DrpRg --sku S1 --is-linux
->
-> az webapp create --resource-group DrpRg --plan DrpAppServicePlan --name darkrushphoto --multicontainer-config-type compose --multicontainer-config-file docker-compose.yml
->
-> az webapp identity assign --resource-group DrpRg --name darkrushphoto
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings WEBSITES_ENABLE_APP_SERVICE_STORAGE="true"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings DOCKER_REGISTRY_SERVER_URL="darkrushphotography.azurecr.io"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings DOCKER_REGISTRY_SERVER_USERNAME="darkrushphotography"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings DOCKER_REGISTRY_SERVER_PASSWORD="@Microsoft.KeyVault(VaultName=drpvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_MONGO_DB_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-MONGO-DB-CONNECTION-STRING)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_PRIVATE_BLOB_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PRIVATE-BLOB-CONNECTION-STRING)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_PRIVATE_TABLE_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PRIVATE-TABLE-CONNECTION-STRING)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_PUBLIC_BLOB_CONNECTION_STRING="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PUBLIC-BLOB-CONNECTION-STRING)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_URL="https://dark-rush-photography.azurewebsites.net/api"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_DRP_API_ADMIN_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-DRP-API-ADMIN-KEY)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AUTH0_CLIENT_ID="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AUTH0-CLIENT-ID)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AUTH0_CLIENT_SECRET="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AUTH0-CLIENT-SECRET)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_TINY_PNG_API_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-TINY-PNG-API-KEY)"
->
-> az webapp config appsettings set --resource-group DrpRg --name darkrushphoto --settings NX_AYRSHARE_API_KEY="@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AYRSHARE-API-KEY)"
+- Ran install-multicontainer-webapp GitHub action
 
 ---
 
@@ -138,7 +102,7 @@
 
 - right parentheses to the keystore values of darkrushphoto application
 
-- Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
+- Selected Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
 - from KeyVault > Access Policies > Add Access Policy
   - added Secret Management get and list to the darkrushphoto application
   - added Key, Secret & Certificate Management to darkrushphotography@outlook.com
@@ -165,7 +129,7 @@
 
 ## deploy locally if necessary
 
-1. npm run dc:copy from root directory (copies both node_modules and dist)
+1. npm run dc:copy from root directory (copies both node_modules and dist) after build
 2. change directory to ./tools/ci
 3. az login
 4. pulumi login

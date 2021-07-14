@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { Model } from 'mongoose';
 import { combineLatest, from, Observable, of } from 'rxjs';
@@ -8,7 +9,6 @@ import { concatMap, concatMapTo, mapTo } from 'rxjs/operators';
 import {
   ImageUpdate,
   Image,
-  ENV,
   ImageDimension,
   Media,
 } from '@dark-rush-photography/shared/types';
@@ -27,7 +27,7 @@ import {
 @Injectable()
 export class ImageUpdateProvider {
   constructor(
-    @Inject(ENV) private readonly env: Env,
+    private readonly configService: ConfigService<Env>,
     private readonly imageProvider: ImageProvider
   ) {}
 
@@ -118,7 +118,9 @@ export class ImageUpdateProvider {
         combineLatest([
           of(imageDimension),
           downloadBlobToFile$(
-            this.env.privateBlobConnectionString,
+            this.configService.get<Env>('privateBlobConnectionString', {
+              infer: true,
+            }),
             getAzureStorageTypeFromMediaState(imageMedia.state),
             getBlobPathWithDimension(imageMedia, imageDimension.type),
             imageMedia.fileName
@@ -129,7 +131,9 @@ export class ImageUpdateProvider {
         return combineLatest([
           of(imageDimension),
           uploadStreamToBlob$(
-            this.env.privateBlobConnectionString,
+            this.configService.get<Env>('privateBlobConnectionString', {
+              infer: true,
+            }),
             getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
             fs.createReadStream(filePath),
             getBlobPathWithDimension(imageUpdateMedia, imageDimension.type)
@@ -138,14 +142,18 @@ export class ImageUpdateProvider {
       }),
       concatMap(([imageDimension]) =>
         deleteBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           getAzureStorageTypeFromMediaState(imageMedia.state),
           getBlobPathWithDimension(imageMedia, imageDimension.type)
         )
       ),
       concatMapTo(
         downloadBlobToFile$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           getAzureStorageTypeFromMediaState(imageMedia.state),
           getBlobPath(imageMedia),
           imageMedia.fileName
@@ -153,7 +161,9 @@ export class ImageUpdateProvider {
       ),
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
           fs.createReadStream(filePath),
           getBlobPath(imageUpdateMedia)
@@ -161,7 +171,9 @@ export class ImageUpdateProvider {
       ),
       concatMapTo(
         deleteBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           getAzureStorageTypeFromMediaState(imageMedia.state),
           getBlobPath(imageMedia)
         )

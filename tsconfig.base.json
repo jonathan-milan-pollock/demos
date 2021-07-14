@@ -34,14 +34,14 @@
       "@dark-rush-photography/image-elements/loader": [
         "dist/libs/image-elements/loader"
       ],
-      "@dark-rush-photography/shared/types": ["libs/shared/types/src/index.ts"],
-      "@dark-rush-photography/shared/util": ["libs/shared/util/src/index.ts"],
       "@dark-rush-photography/shared-server/types": [
         "libs/shared-server/types/src/index.ts"
       ],
       "@dark-rush-photography/shared-server/util": [
         "libs/shared-server/util/src/index.ts"
       ],
+      "@dark-rush-photography/shared/types": ["libs/shared/types/src/index.ts"],
+      "@dark-rush-photography/shared/util": ["libs/shared/util/src/index.ts"],
       "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
       "@dark-rush-photography/web-socket/data": [
         "libs/web-socket/data/src/index.ts"

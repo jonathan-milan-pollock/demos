@@ -1,40 +1,61 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_ISSUER,
+} from '@dark-rush-photography/shared-server/types';
+import { LogzioLogger } from '@dark-rush-photography/shared-server/util';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
+  // app.enableVersioning({
+  //   type: VersioningType.URI,
+  //});
 
-  const config = new DocumentBuilder()
-    .addBearerAuth({
-      type: 'oauth2',
-      flows: {
-        implicit: {
-          authorizationUrl:
-            'https://darkrushphotography.us.auth0.com/authorize?audience=https://www.darkrushphotography.com',
-          scopes: {},
+  /*
+  const configService = app.get(ConfigService);
+  const logzioToken = configService.get('logzioToken');
+  if (!logzioToken) {
+    throw new InternalServerErrorException('Logzio token is undefined');
+  }
+  app.useLogger(new LogzioLogger(logzioToken));
+*/
+
+  if (!environment.production) {
+    const config = new DocumentBuilder()
+      .addBearerAuth({
+        type: 'oauth2',
+        flows: {
+          implicit: {
+            authorizationUrl: `${AUTH0_ISSUER}authorize?audience=${AUTH0_AUDIENCE}`,
+            scopes: {},
+          },
         },
+      })
+      .setTitle('Dark Rush Photography API')
+      .setDescription('API for Dark Rush Photography')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config, {
+      operationIdFactory: (_controllerKey: string, methodKey: string) =>
+        methodKey,
+    });
+    SwaggerModule.setup('', app, document, {
+      swaggerOptions: {
+        persistAuthorization: true,
       },
-    })
-    .setTitle('Dark Rush Photography API')
-    .setDescription('API for Dark Rush Photography')
-    .setVersion('1.0')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config, {
-    operationIdFactory: (_controllerKey: string, methodKey: string) =>
-      methodKey,
-  });
-  SwaggerModule.setup('api', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
-    customSiteTitle: 'Dark Rush Photography API',
-  });
+      customSiteTitle: 'Dark Rush Photography API',
+    });
+  }
 
   const port = process.env.PORT || 1111;
   await app.listen(port, () => {

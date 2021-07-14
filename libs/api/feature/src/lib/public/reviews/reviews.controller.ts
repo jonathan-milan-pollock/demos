@@ -4,13 +4,14 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
 import { Review } from '@dark-rush-photography/shared/types';
-import { Public } from '@dark-rush-photography/api/util';
+import { Public } from '@dark-rush-photography/shared-server/util';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { ReviewsService } from './reviews.service';
 import { ReviewDto } from '@dark-rush-photography/api/types';
 
-@Controller('v1/reviews')
+@Controller('reviews')
 @Public()
-@ApiTags('Reviews Public')
+@ApiTags('Public Reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
@@ -22,7 +23,7 @@ export class ReviewsController {
 
   @Get(':id')
   @ApiOkResponse({ type: ReviewDto })
-  findOne$(@Param('id') id: string): Observable<Review> {
+  findOne$(@Param('id', ParseObjectIdPipe) id: string): Observable<Review> {
     return this.reviewsService.findOne$(id);
   }
 }

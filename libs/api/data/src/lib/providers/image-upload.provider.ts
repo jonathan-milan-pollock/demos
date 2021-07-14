@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { BlobUploadCommonResponse } from '@azure/storage-blob';
 import * as tinify from 'tinify';
@@ -7,11 +8,7 @@ import { Model } from 'mongoose';
 import { combineLatest, forkJoin, from, Observable, of } from 'rxjs';
 import { concatMap, concatMapTo, map, tap } from 'rxjs/operators';
 
-import {
-  ENV,
-  ImageDimensionType,
-  Media,
-} from '@dark-rush-photography/shared/types';
+import { ImageDimensionType, Media } from '@dark-rush-photography/shared/types';
 import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import {
   Env,
@@ -35,7 +32,7 @@ import {
 @Injectable()
 export class ImageUploadProvider {
   constructor(
-    @Inject(ENV) private readonly env: Env,
+    private readonly configService: ConfigService<Env>,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider
   ) {}
@@ -54,7 +51,9 @@ export class ImageUploadProvider {
       : findImageResolution(ImageDimensionType.Small);
 
     return uploadBufferToBlob$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       AzureStorageType.Private,
       file.buffer,
       getBlobPath(media)
@@ -98,7 +97,9 @@ export class ImageUploadProvider {
     entityModel: Model<DocumentModel>
   ): Observable<string> {
     return downloadBlobToFile$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       AzureStorageType.Private,
       getBlobPath(media),
       media.fileName
@@ -121,18 +122,24 @@ export class ImageUploadProvider {
 
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       AzureStorageType.Private,
       getBlobPath(media),
       media.fileName
     ).pipe(
       concatMap((filePath) => {
-        tinify.default.key = this.env.tinyPngApiKey;
+        tinify.default.key = this.configService.get<Env>('tinyPngApiKey', {
+          infer: true,
+        });
         return from(tinify.fromFile(filePath).toBuffer());
       }),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           AzureStorageType.Private,
           Buffer.from(uint8Array),
           getBlobPath(media)
@@ -146,7 +153,9 @@ export class ImageUploadProvider {
     dateCreated: string
   ): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       AzureStorageType.Private,
       getBlobPath(media),
       media.fileName
@@ -157,7 +166,9 @@ export class ImageUploadProvider {
       }),
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           AzureStorageType.Private,
           fs.createReadStream(filePath),
           getBlobPath(media)

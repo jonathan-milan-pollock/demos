@@ -1,11 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
 import { concatMap, concatMapTo, tap } from 'rxjs/operators';
 
 import {
-  ENV,
   Image,
   ImageDimension,
   Media,
@@ -23,7 +23,7 @@ import {
 @Injectable()
 export class ImageRemoveProvider {
   constructor(
-    @Inject(ENV) private readonly env: Env,
+    private readonly configService: ConfigService<Env>,
     private readonly imageProvider: ImageProvider
   ) {}
 
@@ -64,7 +64,9 @@ export class ImageRemoveProvider {
 
   removeImageBlob$(media: Media): Observable<boolean> {
     return deleteBlob$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPath(media)
     );
@@ -79,7 +81,9 @@ export class ImageRemoveProvider {
     return from(imageDimensions).pipe(
       concatMap((imageDimension) =>
         deleteBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           getAzureStorageTypeFromMediaState(media.state),
           getBlobPathWithDimension(media, imageDimension.type)
         )

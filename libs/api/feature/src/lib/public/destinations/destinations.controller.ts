@@ -5,12 +5,13 @@ import { Observable } from 'rxjs';
 
 import { Destination } from '@dark-rush-photography/shared/types';
 import { DestinationDto } from '@dark-rush-photography/api/types';
-import { Public } from '@dark-rush-photography/api/util';
+import { Public } from '@dark-rush-photography/shared-server/util';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { DestinationsService } from './destinations.service';
 
-@Controller('v1/destinations')
+@Controller('destinations')
 @Public()
-@ApiTags('Destinations Public')
+@ApiTags('Public Destinations')
 export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
@@ -22,7 +23,9 @@ export class DestinationsController {
 
   @Get(':id')
   @ApiOkResponse({ type: DestinationDto })
-  findOne$(@Param('id') id: string): Observable<Destination> {
+  findOne$(
+    @Param('id', ParseObjectIdPipe) id: string
+  ): Observable<Destination> {
     return this.destinationsService.findOne$(id);
   }
 }

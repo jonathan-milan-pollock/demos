@@ -521,6 +521,8 @@ module.exports = (config) => {
  "include": ["**/*.ts", "webpack.config.js"]
 ```
 
+- winston requires that esModuleInterop is set to true in the tsconfig.lib.json file
+
 ---
 
 ## Setup Font Awesome
@@ -562,18 +564,11 @@ export class AppModule {
 
 ### Setup Font Awesome Pro
 
-- _NOTE: Installing or running this repo does not require Font Awesome Pro_
-
 #### Add NPM Auth Token to Install Font Awesome PRO
 
 - [Setup Font Awesome Pro globally](https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers)
 - npm config set "@fortawesome:registry" <https://npm.fontawesome.com/>
 - npm config set "//npm.fontawesome.com/:\_authToken" FONTAWESOME_NPM_AUTH_TOKEN
-
-#### Install Font Awesome Pro Libraries
-
-- npm i --save-optional @fortawesome/pro-regular-svg-icons
-- npm i --save-optional @fortawesome/pro-solid-svg-icons
 
 ---
 
@@ -612,3 +607,15 @@ export class AppModule {
 - close and reopen VS Code
 
 ---
+
+## updates
+
+- In order to update NX to the latest versions
+
+  - npx nx migrate latest
+  - npm install
+  - npx nx migrate --run-migrations
+
+- In order to update npm packages all to latest
+  - npx npm-check-updates -u
+  - npm install

@@ -1,3 +1,4 @@
-import { loadEnvironment } from '@dark-rush-photography/web-socket/util';
-
-export const environment = loadEnvironment();
+export const environment = {
+  production: false,
+  drpApiUrl: 'http://localhost:1111/api',
+};

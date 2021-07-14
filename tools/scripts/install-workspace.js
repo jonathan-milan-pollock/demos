@@ -339,7 +339,12 @@ const execAddApiDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
+    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'))
+    .then(() => consoleLogOrExec(isReady, 'npm i winston'))
+    .then(() => consoleLogOrExec(isReady, 'npm i winston-logzio'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/config'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @nestjs/testing'));
 
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
@@ -449,6 +454,18 @@ const execAddFontAwesome = (isReady) =>
     )
     .then(() =>
       consoleLogOrExec(isReady, 'npm i @fortawesome/free-solid-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-duotone-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-light-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-regular-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-solid-svg-icons')
     );
 
 const execUpdateSass = (isReady) =>

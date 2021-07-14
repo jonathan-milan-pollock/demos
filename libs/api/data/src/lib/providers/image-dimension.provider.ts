@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from 'fs-extra';
-import { Injectable, Inject, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
@@ -8,7 +9,6 @@ import { combineLatest, from, Observable, of } from 'rxjs';
 import { concatMap, concatMapTo, map, tap } from 'rxjs/operators';
 
 import {
-  ENV,
   ImageDimension,
   ImageDimensionAdd,
   ImageDimensionType,
@@ -39,7 +39,7 @@ import {
 
 @Injectable()
 export class ImageDimensionProvider {
-  constructor(@Inject(ENV) private readonly env: Env) {}
+  constructor(private readonly configService: ConfigService<Env>) {}
 
   add$(
     id: string,
@@ -127,7 +127,9 @@ export class ImageDimensionProvider {
     const id = uuidv4();
     Logger.log(`Resizing image dimension ${imageResolution.type}`);
     return downloadBlobToFile$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPath(media),
       media.fileName
@@ -143,7 +145,9 @@ export class ImageDimensionProvider {
           of(imageResolution),
           of(filePath),
           uploadStreamToBlob$(
-            this.env.privateBlobConnectionString,
+            this.configService.get<Env>('privateBlobConnectionString', {
+              infer: true,
+            }),
             getAzureStorageTypeFromMediaState(media.state),
             fs.createReadStream(filePath),
             getBlobPathWithDimension(media, imageResolution.type)
@@ -197,7 +201,9 @@ export class ImageDimensionProvider {
     imageDimensionType: ImageDimensionType
   ): Observable<string> => {
     return downloadBlobAsBuffer$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPathWithDimension(media, imageDimensionType)
     ).pipe(

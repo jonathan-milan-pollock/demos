@@ -6,12 +6,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { BestOf, BestOfType } from '@dark-rush-photography/shared/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import {
   Document,
   DocumentModel,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 
 @Injectable()
 export class AdminBestOfService {

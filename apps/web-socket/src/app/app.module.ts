@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
-import { EnvModule } from './env.module';
+import configuration from '../config/configuration';
+import { AuthModule } from './auth.module';
 import { WebSocketFeatureModule } from '@dark-rush-photography/web-socket/feature';
 
 @Module({
-  imports: [EnvModule, WebSocketFeatureModule],
+  imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+      ignoreEnvFile: true,
+      isGlobal: true,
+    }),
+    AuthModule,
+    WebSocketFeatureModule,
+  ],
 })
 export class AppModule {}

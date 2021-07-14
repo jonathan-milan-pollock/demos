@@ -4,7 +4,7 @@ export interface Env {
   readonly privateBlobConnectionString: string;
   readonly privateTableConnectionString: string;
   readonly publicBlobConnectionString: string;
-  readonly drpApiAdminKey: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;
+  readonly logzioToken: string;
 }

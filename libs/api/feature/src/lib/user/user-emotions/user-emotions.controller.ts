@@ -1,13 +1,14 @@
 import {
   Controller,
   Body,
-  UseGuards,
   Delete,
   Post,
   Param,
   HttpCode,
   Query,
   Get,
+  ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -15,11 +16,16 @@ import { Observable } from 'rxjs';
 
 import { Emotion } from '@dark-rush-photography/shared/types';
 import { EmotionAddDto, EmotionDto } from '@dark-rush-photography/api/types';
-import { RolesGuard } from '@dark-rush-photography/api/util';
+import {
+  ParseObjectIdPipe,
+  User,
+  UserGuard,
+} from '@dark-rush-photography/api/util';
 import { UserEmotionsService } from './user-emotions.service';
 
-@Controller('user/v1/emotions')
-@UseGuards(RolesGuard)
+@Controller('user/emotions')
+@UseGuards(UserGuard)
+@User()
 @ApiBearerAuth()
 @ApiTags('User Emotions')
 export class UserEmotionsController {
@@ -34,8 +40,8 @@ export class UserEmotionsController {
   @Get(':id')
   @ApiOkResponse({ type: EmotionDto })
   findOne$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<Emotion> {
     return this.userEmotionsService.findOne$(id, entityId);
   }
@@ -43,8 +49,8 @@ export class UserEmotionsController {
   @Delete(':id')
   @HttpCode(204)
   remove$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
     return this.userEmotionsService.remove$(id, entityId);
   }

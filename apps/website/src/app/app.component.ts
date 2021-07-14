@@ -5,18 +5,14 @@ import { Store } from '@ngrx/store';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
-import { Auth0User } from '@dark-rush-photography/website/types';
+import { ADMIN, Auth0User } from '@dark-rush-photography/website/types';
 import {
   Auth0AuthService,
   AppState,
   selectAllReviews,
   loadReviews,
 } from '@dark-rush-photography/website/data';
-import {
-  ADMIN,
-  Destination,
-  Review,
-} from '@dark-rush-photography/shared/types';
+import { Destination, Review } from '@dark-rush-photography/shared/types';
 
 @Component({
   selector: 'drp-root',
