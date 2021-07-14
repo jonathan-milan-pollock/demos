@@ -1,24 +1,25 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { Model } from 'mongoose';
 import { from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, mapTo, tap } from 'rxjs/operators';
+import { concatMapTo, tap } from 'rxjs/operators';
 
-import { ENV, Media } from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/shared/types';
 import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import { Env } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { VideoProvider } from './video.provider';
-import { VideoDimensionProvider } from './video-dimension.provider';
 import {
   getBlobPath,
   uploadBufferToBlob$,
 } from '@dark-rush-photography/shared-server/util';
+import { VideoProvider } from './video.provider';
+import { VideoDimensionProvider } from './video-dimension.provider';
 
 @Injectable()
 export class VideoUploadProvider {
   constructor(
-    @Inject(ENV) private readonly env: Env,
+    private readonly configService: ConfigService<Env>,
     private readonly videoProvider: VideoProvider,
     private readonly videoDimensionProvider: VideoDimensionProvider
   ) {}
@@ -31,7 +32,9 @@ export class VideoUploadProvider {
     Logger.log('Uploading video', VideoUploadProvider.name);
     return from(
       uploadBufferToBlob$(
-        this.env.privateBlobConnectionString,
+        this.configService.get<Env>('privateBlobConnectionString', {
+          infer: true,
+        }),
         AzureStorageType.Private,
         file.buffer,
         getBlobPath(media)

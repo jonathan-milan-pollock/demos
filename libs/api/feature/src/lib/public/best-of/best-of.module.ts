@@ -1,4 +1,4 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
@@ -14,7 +14,6 @@ import { BestOfController } from './best-of.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    HttpModule,
   ],
   controllers: [BestOfController],
   providers: [BestOfService, EntityProvider],

@@ -2,8 +2,7 @@ import { join } from 'path';
 
 import { Module } from '@nestjs/common';
 import { AngularUniversalModule } from '@nestjs/ng-universal';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { AppServerModule } from './../../../website/src/main.server';
+import { AppServerModule } from '@dark-rush-photography/website/app';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 

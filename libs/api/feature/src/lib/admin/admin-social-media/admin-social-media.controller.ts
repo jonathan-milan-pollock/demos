@@ -4,7 +4,6 @@ import {
   HttpCode,
   Param,
   Post,
-  UseGuards,
   Get,
   Delete,
 } from '@nestjs/common';
@@ -17,16 +16,15 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, SocialMedia } from '@dark-rush-photography/shared/types';
+import { SocialMedia } from '@dark-rush-photography/shared/types';
 import {
   SocialMediaCreateDto,
   SocialMediaDto,
 } from '@dark-rush-photography/api/types';
-import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminSocialMediaService } from './admin-social-media.service';
 
-@Controller('admin/v1/social-media')
-@UseGuards(RolesGuard)
+@Controller({ path: 'admin/social-media', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Social Media')
 export class AdminSocialMediaController {
@@ -34,7 +32,6 @@ export class AdminSocialMediaController {
     private readonly adminSocialMediaService: AdminSocialMediaService
   ) {}
 
-  @Roles(ADMIN)
   @Post()
   @ApiCreatedResponse({ type: SocialMediaDto })
   create$(
@@ -43,24 +40,23 @@ export class AdminSocialMediaController {
     return this.adminSocialMediaService.create$(socialMediaCreate);
   }
 
-  @Roles(ADMIN)
   @Get()
   @ApiOkResponse({ type: [SocialMediaDto] })
   findAll$(): Observable<SocialMedia[]> {
     return this.adminSocialMediaService.findAll$();
   }
 
-  @Roles(ADMIN)
   @Get(':id')
   @ApiOkResponse({ type: SocialMediaDto })
-  findOne$(@Param('id') id: string): Observable<SocialMedia> {
+  findOne$(
+    @Param('id', ParseObjectIdPipe) id: string
+  ): Observable<SocialMedia> {
     return this.adminSocialMediaService.findOne$(id);
   }
 
-  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
-  deleteProcess$(@Param('id') id: string): Observable<void> {
+  deleteProcess$(@Param('id', ParseObjectIdPipe) id: string): Observable<void> {
     return this.adminSocialMediaService.delete$(id);
   }
 }

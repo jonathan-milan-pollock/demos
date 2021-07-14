@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 
 import { ReviewMedia } from '@dark-rush-photography/shared/types';
 import { ReviewMediaDto } from '@dark-rush-photography/api/types';
-import { Public } from '@dark-rush-photography/api/util';
+import { Public } from '@dark-rush-photography/shared-server/util';
 import { ReviewMediaService } from './review-media.service';
 
-@Controller('v1/review-media')
+@Controller({ path: 'review-media', version: '1' })
 @Public()
-@ApiTags('Review Media Public')
+@ApiTags('Public Review Media')
 export class ReviewMediaController {
   constructor(private readonly reviewMediaService: ReviewMediaService) {}
 

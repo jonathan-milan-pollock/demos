@@ -1,5 +1,6 @@
-import { HttpService, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
+import { HttpService } from '@nestjs/axios';
 
 import { from, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -7,7 +8,7 @@ import { map, switchMap } from 'rxjs/operators';
 import {
   CommentMessage,
   EmotionMessage,
-  Env,
+  EnvApiAuth,
   Message,
   MessageType,
   WebSocketClient,
@@ -20,23 +21,24 @@ import { apiAuth$ } from '@dark-rush-photography/web-socket/util';
 @Injectable()
 export class HandleMessageProvider {
   handleMessage$(
-    env: Env,
+    drpApiUrl: string,
+    apiAuth: EnvApiAuth,
     httpService: HttpService,
     message: CommentMessage | EmotionMessage
   ): Observable<Message> {
-    return apiAuth$(env.apiAuth, httpService).pipe(
+    return apiAuth$(apiAuth, httpService).pipe(
       switchMap((accessToken) => {
         switch (message.messageType) {
           case MessageType.Comment:
             return createComment$(
-              env.drpApiUrl,
+              drpApiUrl,
               httpService,
               accessToken,
               message as CommentMessage
             );
           case MessageType.Emotion:
             return createOrUpdateEmotion$(
-              env.drpApiUrl,
+              drpApiUrl,
               httpService,
               accessToken,
               message as EmotionMessage

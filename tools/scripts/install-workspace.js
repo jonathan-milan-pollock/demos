@@ -229,6 +229,12 @@ const execGenerateWebsiteLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
+        'npx nx g @nrwl/angular:lib website/app --unitTestRunner=none --tags=scope:website,type:feature --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
         'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data --prefix=drp'
       )
     )
@@ -329,6 +335,11 @@ const execAddReactMaterialUi = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i @material-ui/core'));
 
+const execAddBestOfDependencies = (isReady) =>
+  Promise.resolve(console.log('### add best of dependencies'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D eslint-config-next'));
+
 const execAddApiDependencies = (isReady) =>
   Promise.resolve(console.log('### add nestjs dependencies'))
     .then(() => console.log())
@@ -339,7 +350,12 @@ const execAddApiDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'));
+    .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'))
+    .then(() => consoleLogOrExec(isReady, 'npm i winston'))
+    .then(() => consoleLogOrExec(isReady, 'npm i winston-logzio'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/config'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @nestjs/testing'));
 
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
@@ -449,6 +465,18 @@ const execAddFontAwesome = (isReady) =>
     )
     .then(() =>
       consoleLogOrExec(isReady, 'npm i @fortawesome/free-solid-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-duotone-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-light-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-regular-svg-icons')
+    )
+    .then(() =>
+      consoleLogOrExec(isReady, 'npm i @fortawesome/pro-solid-svg-icons')
     );
 
 const execUpdateSass = (isReady) =>
@@ -495,6 +523,8 @@ const execInstall = (isReady) =>
     .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
     .then(() => execAddReactMaterialUi(isReady))
+    .then(() => console.log())
+    .then(() => execAddBestOfDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddApiDependencies(isReady))
     .then(() => console.log())

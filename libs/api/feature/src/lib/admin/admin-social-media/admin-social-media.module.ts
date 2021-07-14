@@ -1,4 +1,4 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
@@ -14,7 +14,6 @@ import { AdminSocialMediaController } from './admin-social-media.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    HttpModule,
   ],
   controllers: [AdminSocialMediaController],
   providers: [AdminSocialMediaService, EntityProvider],

@@ -2,13 +2,14 @@ import {
   Controller,
   Body,
   Put,
-  UseGuards,
   Post,
   Param,
   HttpCode,
   Delete,
   Query,
   Get,
+  ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -20,11 +21,16 @@ import {
   CommentDto,
   CommentUpdateDto,
 } from '@dark-rush-photography/api/types';
-import { RolesGuard } from '@dark-rush-photography/api/util';
+import {
+  ParseObjectIdPipe,
+  User,
+  UserGuard,
+} from '@dark-rush-photography/api/util';
 import { UserCommentsService } from './user-comments.service';
 
-@Controller('user/v1/comments')
-@UseGuards(RolesGuard)
+@Controller({ path: 'user/comments', version: '1' })
+@UseGuards(UserGuard)
+@User()
 @ApiBearerAuth()
 @ApiTags('User Comments')
 export class UserCommentsController {
@@ -39,8 +45,8 @@ export class UserCommentsController {
   @Put(':id')
   @ApiOkResponse({ type: CommentDto })
   update$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() commentUpdate: CommentUpdateDto
   ): Observable<Comment> {
     return this.userCommentsService.update$(id, entityId, commentUpdate);
@@ -49,8 +55,8 @@ export class UserCommentsController {
   @Get(':id')
   @ApiOkResponse({ type: CommentDto })
   findOne$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<Comment> {
     return this.userCommentsService.findOne$(id, entityId);
   }
@@ -58,8 +64,8 @@ export class UserCommentsController {
   @Delete(':id')
   @HttpCode(204)
   remove$(
-    @Param('id') id: string,
-    @Query('entityId') entityId: string
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
     return this.userCommentsService.remove$(id, entityId);
   }

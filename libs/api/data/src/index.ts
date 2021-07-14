@@ -1,5 +1,6 @@
 // providers
 export * from './lib/providers/comment.provider';
+export * from './lib/providers/config.provider';
 export * from './lib/providers/emotion.provider';
 export * from './lib/providers/entity-delete.provider';
 export * from './lib/providers/entity-post.provider';

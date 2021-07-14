@@ -1,16 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
-import { EntityType, ENV } from '@dark-rush-photography/shared/types';
-import { Env } from '@dark-rush-photography/api/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
 
 import { DocumentModel } from '../schema/document.schema';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class EntityUpdateProvider {
-  constructor(@Inject(ENV) private readonly env: Env) {}
-
   update$(
     entityType: EntityType,
     entityId: string,

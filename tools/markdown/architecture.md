@@ -86,24 +86,6 @@
   },
 ```
 
-- add to the website-host an implicit dependency of the website
-
-```json
-    "website-host": {
-      "tags": [],
-      "implicitDependencies": ["website"]
-    },
-```
-
-- add to api implicit dependencies of best-of and website as they are dependent on the api
-
-```json
-    "api": {
-      "tags": ["scope:api", "type:app"],
-      "implicitDependencies": ["best-of", "website"]
-    },
-```
-
 ### tsconfig.base.json
 
 - reorder configuration to match tsc init
@@ -322,12 +304,6 @@ import { WsAdapter } from '@nestjs/platform-ws';
 app.useWebSocketAdapter(new WsAdapter(app));
 ```
 
-- in nx.json add implicit dependencies
-
-```json
-  "implicitDependencies": ["best-of", "website"]
-```
-
 ---
 
 ## setup angular universal
@@ -390,14 +366,6 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',
     'storybook-addon-themes',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
   ],
 };
 ```
@@ -443,6 +411,25 @@ export const parameters = {
 
 ```json
 "styles": ["apps/website/src/styles.scss"]
+```
+
+- as Storybook's default is webpack 4 when upgrading to Angular 12 webpack 5 is needed
+
+  - install:
+
+    - @storybook/builder-webpack5
+    - @storybook/manager-webpack5
+    - storybook-addon-angular-ivy
+
+  - add to .storybook/main.js
+
+```js
+ core: {
+    builder: 'webpack5',
+  },
+  angularOptions: {
+    enableIvy: true,
+  },
 ```
 
 ---
@@ -521,6 +508,8 @@ module.exports = (config) => {
  "include": ["**/*.ts", "webpack.config.js"]
 ```
 
+- winston requires that esModuleInterop is set to true in the tsconfig.lib.json file
+
 ---
 
 ## Setup Font Awesome
@@ -562,18 +551,11 @@ export class AppModule {
 
 ### Setup Font Awesome Pro
 
-- _NOTE: Installing or running this repo does not require Font Awesome Pro_
-
 #### Add NPM Auth Token to Install Font Awesome PRO
 
 - [Setup Font Awesome Pro globally](https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers)
 - npm config set "@fortawesome:registry" <https://npm.fontawesome.com/>
 - npm config set "//npm.fontawesome.com/:\_authToken" FONTAWESOME_NPM_AUTH_TOKEN
-
-#### Install Font Awesome Pro Libraries
-
-- npm i --save-optional @fortawesome/pro-regular-svg-icons
-- npm i --save-optional @fortawesome/pro-solid-svg-icons
 
 ---
 
@@ -612,3 +594,15 @@ export class AppModule {
 - close and reopen VS Code
 
 ---
+
+## updates
+
+- In order to update NX to the latest versions
+
+  - npx nx migrate latest
+  - npm install
+  - npx nx migrate --run-migrations
+
+- In order to update npm packages all to latest
+  - npx npm-check-updates -u
+  - npm install

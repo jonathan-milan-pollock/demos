@@ -1,4 +1,4 @@
-import { HttpService } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

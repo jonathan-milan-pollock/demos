@@ -6,6 +6,9 @@
 
 ### deployments
 
+- [Dark Rush Photography](https://darkrushphoto.azurewebsites.net/)
+- [Dark Rush Photography API](https://darkrushphoto.azurewebsites.net/api)
+- [Dark Rush Photography Web Socket](https://darkrushphoto.azurewebsites.net/socket)
 - [37 Photos](https://37-photos.vercel.app/)
 - [Dev](https://milanpollock.github.io/dark-rush-photography/ui-storybook)
 
@@ -87,3 +90,5 @@
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 
 ---
+
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/milanpollock/dark-rush-photography)

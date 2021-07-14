@@ -1,11 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { Model } from 'mongoose';
 import { from, Observable, of } from 'rxjs';
 import { concatMap, concatMapTo, tap } from 'rxjs/operators';
 
 import {
-  ENV,
   Media,
   Video,
   VideoDimension,
@@ -23,7 +23,7 @@ import { VideoProvider } from './video.provider';
 @Injectable()
 export class VideoRemoveProvider {
   constructor(
-    @Inject(ENV) private readonly env: Env,
+    private readonly configService: ConfigService<Env>,
     private readonly videoProvider: VideoProvider
   ) {}
 
@@ -62,7 +62,9 @@ export class VideoRemoveProvider {
 
   removeVideoBlob$(media: Media): Observable<boolean> {
     return deleteBlob$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPath(media)
     );
@@ -79,7 +81,9 @@ export class VideoRemoveProvider {
     return from(videoDimensions).pipe(
       concatMap((videoDimension) =>
         deleteBlob$(
-          this.env.privateBlobConnectionString,
+          this.configService.get<Env>('privateBlobConnectionString', {
+            infer: true,
+          }),
           getAzureStorageTypeFromMediaState(media.state),
           getBlobPathWithDimension(media, videoDimension.type)
         )

@@ -4,7 +4,7 @@ import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ADMIN } from '@dark-rush-photography/shared/types';
+import { ADMIN } from '@dark-rush-photography/website/types'; // TODO: Move ADMIN constant to shared and remove from API
 import { Auth0User } from '@dark-rush-photography/website/types';
 //TODO: Fix this!!!
 import { Auth0AuthService } from '../store/auth/auth0-auth.service';

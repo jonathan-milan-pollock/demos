@@ -1,16 +1,22 @@
-import { HttpService, Inject, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
+  WsException,
 } from '@nestjs/websockets';
+import { HttpService } from '@nestjs/axios';
 
 import { switchMap, take } from 'rxjs/operators';
 
-import { ENV } from '@dark-rush-photography/shared/types';
-import { Env, WebSocketClient } from '@dark-rush-photography/web-socket/types';
+import {
+  Env,
+  EnvApiAuth,
+  WebSocketClient,
+} from '@dark-rush-photography/web-socket/types';
 import { HandleMessageProvider } from '@dark-rush-photography/web-socket/data';
 
 @WebSocketGateway()
@@ -19,15 +25,27 @@ export class MessagesGateway
   readonly webSocketClients: WebSocketClient[] = [];
 
   constructor(
-    @Inject(ENV) private readonly env: Env,
+    private readonly configService: ConfigService<Env>,
     private readonly httpService: HttpService,
     private readonly handleMessageProvider: HandleMessageProvider
   ) {}
 
   @SubscribeMessage('messageToServer')
   async handleMessage(@MessageBody() message: string): Promise<void> {
+    const drpApiUrl = this.configService.get<string>('drpApiUrl', {
+      infer: true,
+    });
+    if (!drpApiUrl) {
+      throw new WsException('Api Url has not been configured');
+    }
+
     return await this.handleMessageProvider
-      .handleMessage$(this.env, this.httpService, JSON.parse(message))
+      .handleMessage$(
+        drpApiUrl,
+        this.configService.get<EnvApiAuth>('apiAuth', { infer: true }),
+        this.httpService,
+        JSON.parse(message)
+      )
       .pipe(
         switchMap((responseMessage) =>
           this.handleMessageProvider.broadcastMessage$(
@@ -43,6 +61,8 @@ export class MessagesGateway
   handleConnection(webSocketClient: WebSocketClient): void {
     Logger.log('connecting client', MessagesGateway.name);
     this.webSocketClients.push(webSocketClient);
+
+    // create observable to push here
   }
 
   handleDisconnect(webSocketClient: WebSocketClient): void {

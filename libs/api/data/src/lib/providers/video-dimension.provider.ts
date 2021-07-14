@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
@@ -7,7 +8,6 @@ import { from, Observable, of } from 'rxjs';
 import { concatMap, concatMapTo, map } from 'rxjs/operators';
 
 import {
-  ENV,
   Media,
   VideoDimension,
   VideoDimensionAdd,
@@ -28,7 +28,7 @@ import {
 
 @Injectable()
 export class VideoDimensionProvider {
-  constructor(@Inject(ENV) private readonly env: Env) {}
+  constructor(private readonly configService: ConfigService<Env>) {}
 
   add$(
     entityId: string,
@@ -89,7 +89,9 @@ export class VideoDimensionProvider {
     videoDimensionType: VideoDimensionType
   ): Observable<string> => {
     return downloadBlobAsBuffer$(
-      this.env.privateBlobConnectionString,
+      this.configService.get<Env>('privateBlobConnectionString', {
+        infer: true,
+      }),
       getAzureStorageTypeFromMediaState(media.state),
       getBlobPathWithDimension(media, videoDimensionType)
     ).pipe(

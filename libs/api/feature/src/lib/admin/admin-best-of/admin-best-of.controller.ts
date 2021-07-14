@@ -2,10 +2,11 @@ import {
   Controller,
   Param,
   Post,
-  UseGuards,
   HttpCode,
   Get,
   Delete,
+  UsePipes,
+  ParseEnumPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,31 +18,26 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ADMIN, BestOf, BestOfType } from '@dark-rush-photography/shared/types';
+import { BestOf, BestOfType } from '@dark-rush-photography/shared/types';
 import { BestOfDto } from '@dark-rush-photography/api/types';
-import {
-  BestOfTypeValidationPipe,
-  Roles,
-  RolesGuard,
-} from '@dark-rush-photography/api/util';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminBestOfService } from './admin-best-of.service';
 
-@Controller('admin/v1/best-of')
-@UseGuards(RolesGuard)
+@Controller({ path: 'admin/best-of', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Best Of')
 export class AdminBestOfController {
   constructor(private readonly adminBestOfService: AdminBestOfService) {}
 
-  @Roles(ADMIN)
   @Post(':bestOfType')
   @ApiParam({
     name: 'bestOfType',
     enum: BestOfType,
   })
   @ApiCreatedResponse({ type: BestOfDto })
+  @UsePipes()
   create$(
-    @Param('bestOfType', new BestOfTypeValidationPipe())
+    @Param('bestOfType', new ParseEnumPipe(BestOfType))
     bestOfType: BestOfType
   ): Observable<BestOf> {
     return this.adminBestOfService.create$(bestOfType);
@@ -54,13 +50,12 @@ export class AdminBestOfController {
   })
   @ApiOkResponse({ type: BestOfDto })
   findOne$(
-    @Param('bestOfType', new BestOfTypeValidationPipe())
+    @Param('bestOfType', new ParseEnumPipe(BestOfType))
     bestOfType: BestOfType
   ): Observable<BestOf> {
     return this.adminBestOfService.findOne$(bestOfType);
   }
 
-  @Roles(ADMIN)
   @Delete(':bestOfType/:id')
   @ApiParam({
     name: 'bestOfType',
@@ -68,9 +63,9 @@ export class AdminBestOfController {
   })
   @HttpCode(204)
   delete$(
-    @Param('bestOfType', new BestOfTypeValidationPipe())
+    @Param('bestOfType', new ParseEnumPipe(BestOfType))
     bestOfType: BestOfType,
-    @Param('id') id: string
+    @Param('id', ParseObjectIdPipe) id: string
   ): Observable<void> {
     return this.adminBestOfService.delete$(bestOfType, id);
   }

@@ -16,6 +16,7 @@ import {
   DocumentModel,
 } from '@dark-rush-photography/api/data';
 
+//TODO: Want to get the user information from the authenticated request
 @Injectable()
 export class UserCommentsService {
   constructor(

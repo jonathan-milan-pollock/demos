@@ -16,43 +16,44 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { About, ADMIN } from '@dark-rush-photography/shared/types';
+import { About } from '@dark-rush-photography/shared/types';
 import { AboutDto } from '@dark-rush-photography/api/types';
-import { Roles, RolesGuard } from '@dark-rush-photography/api/util';
+import {
+  ParseObjectIdPipe,
+  User,
+  UserGuard,
+} from '@dark-rush-photography/api/util';
 import { AdminAboutService } from './admin-about.service';
 
-@Controller('admin/v1/about')
-@UseGuards(RolesGuard)
+@Controller({ path: 'admin/about', version: '1' })
+@UseGuards(UserGuard)
+@User()
 @ApiBearerAuth()
 @ApiTags('Admin About')
 export class AdminAboutController {
   constructor(private readonly adminAboutService: AdminAboutService) {}
 
-  @Roles(ADMIN)
   @Post(':slug')
   @ApiCreatedResponse({ type: AboutDto })
   create$(@Param('slug') slug: string): Observable<About> {
     return this.adminAboutService.create$(slug);
   }
 
-  @Roles(ADMIN)
   @Get()
   @ApiOkResponse({ type: [AboutDto] })
   findAll$(): Observable<About[]> {
     return this.adminAboutService.findAll$();
   }
 
-  @Roles(ADMIN)
   @Get(':id')
   @ApiOkResponse({ type: AboutDto })
-  findOne$(@Param('id') id: string): Observable<About> {
+  findOne$(@Param('id', ParseObjectIdPipe) id: string): Observable<About> {
     return this.adminAboutService.findOne$(id);
   }
 
-  @Roles(ADMIN)
   @Delete(':id')
   @HttpCode(204)
-  delete$(@Param('id') id: string): Observable<void> {
+  delete$(@Param('id', ParseObjectIdPipe) id: string): Observable<void> {
     return this.adminAboutService.delete$(id);
   }
 }

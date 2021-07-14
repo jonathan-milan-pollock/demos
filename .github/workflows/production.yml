@@ -65,8 +65,8 @@ jobs:
           ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
           ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          NX_DRP_API_ADMIN_KEY: ${{ secrets.NX_DRP_API_ADMIN_KEY }}
           NX_AUTH0_CLIENT_ID: ${{ secrets.NX_AUTH0_CLIENT_ID }}
           NX_AUTH0_CLIENT_SECRET: ${{ secrets.NX_AUTH0_CLIENT_SECRET }}
           NX_TINY_PNG_API_KEY: ${{ secrets.NX_TINY_PNG_API_KEY }}
           NX_AYRSHARE_API_KEY: ${{ secrets.NX_AYRSHARE_API_KEY }}
+          NX_LOGZIO_TOKEN: ${{ secrets.NX_LOGZIO_TOKEN }}

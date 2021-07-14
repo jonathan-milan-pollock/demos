@@ -1,4 +1,4 @@
-import { HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
@@ -14,7 +14,6 @@ import { AdminPhotoOfTheWeekController } from './admin-photo-of-the-week.control
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    HttpModule,
   ],
   controllers: [AdminPhotoOfTheWeekController],
   providers: [AdminPhotoOfTheWeekService, EntityProvider],
