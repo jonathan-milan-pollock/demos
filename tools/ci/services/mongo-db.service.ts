@@ -22,44 +22,6 @@ export const createMongoDb = (
     },
   });
 
-export const createMongoDbCollection = (
-  mongoDbCollectionName: string,
-  resourceGroup: ResourceGroup,
-  mongoDbAccount: DatabaseAccount,
-  mongoDbDatabase: MongoDBResourceMongoDBDatabase
-): MongoDBResourceMongoDBCollection =>
-  new MongoDBResourceMongoDBCollection(mongoDbCollectionName, {
-    collectionName: mongoDbCollectionName,
-    databaseName: mongoDbDatabase.name,
-    accountName: mongoDbAccount.name,
-    resourceGroupName: resourceGroup.name,
-    location: resourceGroup.location,
-    resource: {
-      id: mongoDbCollectionName,
-      indexes: [
-        {
-          key: {
-            keys: ['_id'],
-          },
-          options: {
-            unique: true,
-          },
-        },
-        {
-          key: {
-            keys: ['type'],
-          },
-          options: {
-            unique: false,
-          },
-        },
-      ],
-      shardKey: {
-        type: 'Hash',
-      },
-    },
-  });
-
 export const getConnectionString = (
   resourceGroup: ResourceGroup,
   mongoDbAccount: DatabaseAccount

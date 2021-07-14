@@ -6,7 +6,6 @@ import { createFreeMongoDbAccount } from './services/mongo-db-free.service';
 import { createServerlessMongoDbAccount } from './services/mongo-db-serverless.service';
 import {
   createMongoDb,
-  createMongoDbCollection,
   getConnectionString,
 } from './services/mongo-db.service';
 import {
@@ -47,12 +46,6 @@ const devMongoDb = createMongoDb(
   resourceGroup,
   devMongoDbAccount
 );
-const devMongoDbCollection = createMongoDbCollection(
-  pulumiConfig.devMongoDbCollectionName,
-  resourceGroup,
-  devMongoDbAccount,
-  devMongoDb
-);
 
 const prodMongoDbAccount = createServerlessMongoDbAccount(
   pulumiConfig.prodMongoDbAccountName,
@@ -62,12 +55,6 @@ const prodMongoDb = createMongoDb(
   pulumiConfig.prodMongoDbDatabaseName,
   resourceGroup,
   prodMongoDbAccount
-);
-const prodMongoDbCollection = createMongoDbCollection(
-  pulumiConfig.prodMongoDbCollectionName,
-  resourceGroup,
-  prodMongoDbAccount,
-  prodMongoDb
 );
 
 const devPrivateStorageAccount = createPrivateStorageAccount(
@@ -227,11 +214,9 @@ export const resourceGroupUrn = resourceGroup.urn;
 
 export const devMongoDbAccountUrn = devMongoDbAccount.urn;
 export const devMongoDbDatabaseUrn = devMongoDb.urn;
-export const devMongoDbCollectionUrn = devMongoDbCollection.urn;
 
 export const prodMongoDbAccountUrn = prodMongoDbAccount.urn;
 export const prodMongoDbDatabaseUrn = prodMongoDb.urn;
-export const prodMongoDbCollectionUrn = prodMongoDbCollection.urn;
 
 export const devPrivateStorageAccountUrn = devPrivateStorageAccount.urn;
 export const devPrivateBlobContainerUrn = devPrivateBlobContainer.urn;
