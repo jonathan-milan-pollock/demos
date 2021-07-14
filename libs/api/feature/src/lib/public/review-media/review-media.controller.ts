@@ -8,7 +8,7 @@ import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { ReviewMediaService } from './review-media.service';
 
-@Controller('review-media')
+@Controller({ path: 'review-media', version: '1' })
 @Public()
 @ApiTags('Public Review Media')
 export class ReviewMediaController {

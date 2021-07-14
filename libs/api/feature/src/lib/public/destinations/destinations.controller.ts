@@ -9,7 +9,7 @@ import { Public } from '@dark-rush-photography/shared-server/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { DestinationsService } from './destinations.service';
 
-@Controller('destinations')
+@Controller({ path: 'destinations', version: '1' })
 @Public()
 @ApiTags('Public Destinations')
 export class DestinationsController {

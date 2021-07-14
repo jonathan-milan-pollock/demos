@@ -25,7 +25,7 @@ import { MediaProcessDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminMediaProcessesService } from './admin-media-processes.service';
 
-@Controller('v1/admin/media-processes')
+@Controller({ path: 'admin/media-processes', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Media Processes')
 export class AdminMediaProcessesController {

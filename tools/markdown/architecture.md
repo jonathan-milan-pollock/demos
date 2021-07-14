@@ -86,24 +86,6 @@
   },
 ```
 
-- add to the website-host an implicit dependency of the website
-
-```json
-    "website-host": {
-      "tags": [],
-      "implicitDependencies": ["website"]
-    },
-```
-
-- add to api implicit dependencies of best-of and website as they are dependent on the api
-
-```json
-    "api": {
-      "tags": ["scope:api", "type:app"],
-      "implicitDependencies": ["best-of", "website"]
-    },
-```
-
 ### tsconfig.base.json
 
 - reorder configuration to match tsc init
@@ -320,12 +302,6 @@ import { WsAdapter } from '@nestjs/platform-ws';
 
 ```ts
 app.useWebSocketAdapter(new WsAdapter(app));
-```
-
-- in nx.json add implicit dependencies
-
-```json
-  "implicitDependencies": ["best-of", "website"]
 ```
 
 ---

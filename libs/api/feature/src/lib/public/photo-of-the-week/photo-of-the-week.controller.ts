@@ -9,7 +9,7 @@ import { Public } from '@dark-rush-photography/shared-server/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
 
-@Controller('photo-of-the-week')
+@Controller({ path: 'photo-of-the-week', version: '1' })
 @Public()
 @ApiTags('Public Photo of the Week')
 export class PhotoOfTheWeekController {

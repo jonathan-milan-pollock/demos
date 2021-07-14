@@ -26,7 +26,7 @@ import {
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminPhotoOfTheWeekService } from './admin-photo-of-the-week.service';
 
-@Controller('v1/admin/photo-of-the-week')
+@Controller({ path: 'admin/photo-of-the-week', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Photo of the Week')
 export class AdminPhotoOfTheWeekController {

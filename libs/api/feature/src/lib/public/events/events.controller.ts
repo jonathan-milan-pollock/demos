@@ -9,7 +9,7 @@ import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { EventsService } from './events.service';
 import { EventDto } from '@dark-rush-photography/api/types';
 
-@Controller('events')
+@Controller({ path: 'events', version: '1' })
 @Public()
 @ApiTags('Public Events')
 export class EventsController {

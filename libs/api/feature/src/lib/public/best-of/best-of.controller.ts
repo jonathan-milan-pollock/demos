@@ -8,7 +8,7 @@ import { BestOfDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { BestOfService } from './best-of.service';
 
-@Controller('best-of')
+@Controller({ path: 'best-of', version: '1' })
 @Public()
 @ApiTags('Public Best Of')
 export class BestOfController {

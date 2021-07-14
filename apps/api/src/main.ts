@@ -1,5 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
@@ -17,18 +22,16 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
-  // app.enableVersioning({
-  //   type: VersioningType.URI,
-  //});
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
 
-  /*
   const configService = app.get(ConfigService);
   const logzioToken = configService.get('logzioToken');
   if (!logzioToken) {
     throw new InternalServerErrorException('Logzio token is undefined');
   }
   app.useLogger(new LogzioLogger(logzioToken));
-*/
 
   if (!environment.production) {
     const config = new DocumentBuilder()

@@ -58,6 +58,7 @@
     "multicontainer",
     "nestjs",
     "ngcc",
+    "nguniversal",
     "npmrc",
     "nrwl",
     "nxext",

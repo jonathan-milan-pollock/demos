@@ -8,7 +8,7 @@ import { FavoritesDto } from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { FavoritesService } from './favorites.service';
 
-@Controller('favorites')
+@Controller({ path: 'favorites', version: '1' })
 @Public()
 @ApiTags('Public Favorites')
 export class FavoritesController {

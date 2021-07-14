@@ -9,7 +9,7 @@ import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { ReviewsService } from './reviews.service';
 import { ReviewDto } from '@dark-rush-photography/api/types';
 
-@Controller('reviews')
+@Controller({ path: 'reviews', version: '1' })
 @Public()
 @ApiTags('Public Reviews')
 export class ReviewsController {

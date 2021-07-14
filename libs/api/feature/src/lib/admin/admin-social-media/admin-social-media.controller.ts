@@ -24,7 +24,7 @@ import {
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminSocialMediaService } from './admin-social-media.service';
 
-@Controller('v1/admin/social-media')
+@Controller({ path: 'admin/social-media', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Social Media')
 export class AdminSocialMediaController {

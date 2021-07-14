@@ -22,7 +22,7 @@ import { ReviewDto, ReviewUpdateDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminReviewsService } from './admin-reviews.service';
 
-@Controller('v1/admin/reviews')
+@Controller({ path: 'admin/reviews', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Reviews')
 export class AdminReviewsController {

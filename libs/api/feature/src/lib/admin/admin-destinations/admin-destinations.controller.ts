@@ -25,7 +25,7 @@ import {
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminDestinationsService } from './admin-destinations.service';
 
-@Controller('v1/admin/destinations')
+@Controller({ path: 'admin/destinations', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Destinations')
 export class AdminDestinationsController {

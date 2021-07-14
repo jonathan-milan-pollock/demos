@@ -13,7 +13,7 @@ import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminReviewMediaService } from './admin-review-media.service';
 
-@Controller('v1/admin/review-media')
+@Controller({ path: 'admin/review-media', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Review Media')
 export class AdminReviewMediaController {

@@ -23,7 +23,7 @@ import {
 } from '@dark-rush-photography/api/util';
 import { UserEmotionsService } from './user-emotions.service';
 
-@Controller('user/emotions')
+@Controller({ path: 'user/emotions', version: '1' })
 @UseGuards(UserGuard)
 @User()
 @ApiBearerAuth()

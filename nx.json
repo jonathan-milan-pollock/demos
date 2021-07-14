@@ -27,8 +27,7 @@
   },
   "projects": {
     "api": {
-      "tags": ["scope:api", "type:app"],
-      "implicitDependencies": ["best-of", "website"]
+      "tags": ["scope:api", "type:app"]
     },
     "api-data": {
       "tags": ["scope:api", "type:data"]
@@ -91,8 +90,7 @@
       "implicitDependencies": ["ui-storybook"]
     },
     "web-socket": {
-      "tags": ["scope:web-socket", "type:app"],
-      "implicitDependencies": ["best-of", "website"]
+      "tags": ["scope:web-socket", "type:app"]
     },
     "web-socket-data": {
       "tags": ["scope:web-socket", "type:data"]
@@ -109,6 +107,9 @@
     "website": {
       "tags": ["scope:website", "type:app"]
     },
+    "website-app": {
+      "tags": ["scope:website", "type:feature"]
+    },
     "website-data": {
       "tags": ["scope:website", "type:data"]
     },
@@ -123,8 +124,7 @@
       "tags": ["scope:website", "type:feature"]
     },
     "website-host": {
-      "tags": [],
-      "implicitDependencies": ["website"]
+      "tags": ["scope:website", "type:app"]
     },
     "website-types": {
       "tags": ["scope:website", "type:types"]

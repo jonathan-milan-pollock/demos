@@ -28,7 +28,7 @@ import {
 } from '@dark-rush-photography/api/util';
 import { UserCommentsService } from './user-comments.service';
 
-@Controller('user/comments')
+@Controller({ path: 'user/comments', version: '1' })
 @UseGuards(UserGuard)
 @User()
 @ApiBearerAuth()

@@ -13,7 +13,7 @@ import { FavoritesDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminFavoritesService } from './admin-favorites.service';
 
-@Controller('v1/admin/favorites')
+@Controller({ path: 'admin/favorites', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Favorites')
 export class AdminFavoritesController {

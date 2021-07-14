@@ -25,7 +25,7 @@ import {
 } from '@dark-rush-photography/api/util';
 import { AdminAboutService } from './admin-about.service';
 
-@Controller('v1/admin/about')
+@Controller({ path: 'admin/about', version: '1' })
 @UseGuards(UserGuard)
 @User()
 @ApiBearerAuth()

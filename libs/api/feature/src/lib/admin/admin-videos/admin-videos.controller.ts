@@ -34,7 +34,7 @@ import {
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminVideosService } from './admin-videos.service';
 
-@Controller('v1/admin/videos')
+@Controller({ path: 'admin/videos', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Videos')
 export class AdminVideosController {

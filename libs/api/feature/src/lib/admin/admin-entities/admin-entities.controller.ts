@@ -20,7 +20,7 @@ import { EntityType } from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminEntitiesService } from './admin-entities.service';
 
-@Controller('v1/admin/entities')
+@Controller({ path: 'admin/entities', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Entities')
 export class AdminEntitiesController {

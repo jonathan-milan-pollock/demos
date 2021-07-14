@@ -23,7 +23,7 @@ import { BestOfDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminBestOfService } from './admin-best-of.service';
 
-@Controller('v1/admin/best-of')
+@Controller({ path: 'admin/best-of', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Best Of')
 export class AdminBestOfController {

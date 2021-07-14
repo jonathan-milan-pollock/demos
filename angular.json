@@ -768,6 +768,23 @@
         }
       }
     },
+    "website-app": {
+      "projectType": "library",
+      "root": "libs/website/app",
+      "sourceRoot": "libs/website/app/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/app/src/**/*.ts",
+              "libs/website/app/src/**/*.html"
+            ]
+          }
+        }
+      }
+    },
     "website-data": {
       "projectType": "library",
       "root": "libs/website/data",

@@ -229,6 +229,12 @@ const execGenerateWebsiteLibs = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
+        'npx nx g @nrwl/angular:lib website/app --unitTestRunner=none --tags=scope:website,type:feature --prefix=drp'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
         'npx nx g @nrwl/angular:lib website/data --unitTestRunner=jest --tags=scope:website,type:data --prefix=drp'
       )
     )
