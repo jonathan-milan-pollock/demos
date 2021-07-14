@@ -329,6 +329,11 @@ const execAddReactMaterialUi = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i @material-ui/core'));
 
+const execAddBestOfDependencies = (isReady) =>
+  Promise.resolve(console.log('### add best of dependencies'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D eslint-config-next'));
+
 const execAddApiDependencies = (isReady) =>
   Promise.resolve(console.log('### add nestjs dependencies'))
     .then(() => console.log())
@@ -512,6 +517,8 @@ const execInstall = (isReady) =>
     .then(() => execAddAngularPWA(isReady))
     .then(() => console.log())
     .then(() => execAddReactMaterialUi(isReady))
+    .then(() => console.log())
+    .then(() => execAddBestOfDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddApiDependencies(isReady))
     .then(() => console.log())
