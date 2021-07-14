@@ -25,7 +25,7 @@ import { emotionSchema } from './emotion.schema';
 
 export type DocumentModel = Document & mongoose.Document;
 
-@Schema()
+@Schema({ autoIndex: true, shardKey: { type: 'Hash' } })
 export class Document implements Entity {
   @Prop({ type: String, required: false })
   id?: string;
@@ -34,6 +34,8 @@ export class Document implements Entity {
     type: String,
     enum: Object.keys(EntityType),
     required: true,
+    index: true,
+    unique: false,
   })
   type!: EntityType;
 

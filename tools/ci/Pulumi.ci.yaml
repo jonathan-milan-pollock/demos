@@ -3,10 +3,8 @@ config:
   deployment:resourceGroupName: drp-rg
   deployment:devMongoDbAccountName: drp-dev-mongo-db-account
   deployment:devMongoDbDatabaseName: drp-dev-mongo-db-database
-  deployment:devMongoDbCollectionName: documents
   deployment:prodMongoDbAccountName: drp-prod-mongo-db-account
   deployment:prodMongoDbDatabaseName: drp-prod-mongo-db-database
-  deployment:prodMongoDbCollectionName: documents
   deployment:devPrivateStorageAccountName: devprivatesa
   deployment:devPrivateBlobContainerName: devprivate
   deployment:devPrivateUsersTableName: devusers

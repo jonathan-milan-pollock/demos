@@ -19,7 +19,7 @@ import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
         uri: configService.get('mongoDbConnectionString'),
         useNewUrlParser: true,
         useFindAndModify: false,
-        useUnifiedTopology: true,
+        useCreateIndex: true,
       }),
       inject: [ConfigService],
     }),
