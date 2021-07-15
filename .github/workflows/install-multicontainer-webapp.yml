@@ -67,7 +67,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings: '[{ "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)", "slotSetting": false }]'
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/CLI@v1
         with:
