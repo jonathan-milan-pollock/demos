@@ -67,7 +67,7 @@ jobs:
       - name: Azure set DOCKER_REGISTRY_SERVER_PASSWORD
         uses: azure/CLI@v1
         with:
-          inlineScript: az webapp config appsettings set --resource-group ${{ env.AZ_RESOURCE_GROUP }} --name ${{ env.AZ_WEB_APP_NAME }} --settings ${{ env.AZ_APPSETTINGS_SET }} DOCKER_REGISTRY_SERVER_PASSWORD=@Microsoft.KeyVault(VaultName=${{ env.AZ_KEY_VAULT }};SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)
+          inlineScript: az webapp config appsettings set --resource-group ${{ env.AZ_RESOURCE_GROUP }} --name ${{ env.AZ_WEB_APP_NAME }} --settings ${{ env.AZ_APPSETTINGS_SET }} DOCKER_REGISTRY_SERVER_PASSWORD="@Microsoft.KeyVault(VaultName=${{ env.AZ_KEY_VAULT }};SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)"
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/CLI@v1
         with:
