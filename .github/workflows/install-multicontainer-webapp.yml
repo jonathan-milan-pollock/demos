@@ -55,17 +55,17 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE", "value": ${{ env.AZ_WEBSITES_ENABLE_APP_SERVICE_STORAGE }}, "slotSetting": false }]'
+          app-settings-json: '[{ "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE", "value": "${{ env.AZ_WEBSITES_ENABLE_APP_SERVICE_STORAGE }}", "slotSetting": false }]'
       - name: Azure set DOCKER_REGISTRY_SERVER_URL
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": ${{ env.AZ_DOCKER_REGISTRY_SERVER_URL }}, "slotSetting": false }]'
+          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_URL", "value": "${{ env.AZ_DOCKER_REGISTRY_SERVER_URL }}", "slotSetting": false }]'
       - name: Azure set DOCKER_REGISTRY_SERVER_USERNAME
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_USERNAME", "value": ${{ env.AZ_DOCKER_REGISTRY_SERVER_USERNAME }}, "slotSetting": false }]'
+          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_USERNAME", "value": "${{ env.AZ_DOCKER_REGISTRY_SERVER_USERNAME }}", "slotSetting": false }]'
       - name: Azure set DOCKER_REGISTRY_SERVER_PASSWORD
         uses: azure/appservice-settings@v1
         with:
