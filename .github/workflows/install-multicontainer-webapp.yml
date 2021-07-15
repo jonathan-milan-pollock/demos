@@ -58,6 +58,10 @@ jobs:
         if: ${{ github.event.inputs.create }}"
         with:
           inlineScript: az webapp identity assign --resource-group ${{ env.AZ_RESOURCE_GROUP }} --name ${{ env.AZ_WEB_APP_NAME }}
+      - name: Azure set HTTPS_ONLY
+        uses: azure/CLI@v1
+        with:
+          inlineScript: az webapp update --resource-group ${{ env.AZ_RESOURCE_GROUP }} --name ${{ env.AZ_WEB_APP_NAME }} --https-only true
       - name: Azure set WEBSITES_ENABLE_APP_SERVICE_STORAGE
         uses: azure/CLI@v1
         with:
