@@ -1,4 +1,4 @@
-import { DestinationDto } from '@dark-rush-photography/api/types';
+import { DestinationDto } from '@dark-rush-photography/shared/types';
 
 export class Colorado extends DestinationDto {
   slug = 'colorado';

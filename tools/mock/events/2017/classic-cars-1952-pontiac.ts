@@ -1,4 +1,4 @@
-import { EventDto } from '@dark-rush-photography/api/types';
+import { EventDto } from '@dark-rush-photography/shared/types';
 
 export class ClassicCars1952Pontiac extends EventDto {
   group = 2017;
