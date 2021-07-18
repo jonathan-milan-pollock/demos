@@ -7,10 +7,11 @@ import {
   TileImageResolution,
 } from '@dark-rush-photography/api/types';
 import { resizeTileImage$ } from './resize-tile-image.functions';
-import { resizeLongestEdgeImage$ } from './resize-longest-edge.functions';
-import { resizeExactFitImageDimensions$ as resizeExactFitImage$ } from './resize-exact-fit-image.functions';
-import { resizeStandardImageDimensions$ as resizeStandardImage$ } from './resize-standard-image.functions';
+import { resizeLongestEdgeImage$ } from './resize-longest-edge-image.functions';
+import { resizeExactFitImage$ } from './resize-exact-fit-image.functions';
+import { resizeStandardImage$ } from './resize-standard-image.functions';
 
+//TODO: Fix the as word
 export const resizeImage$ = (
   fileName: string,
   filePath: string,

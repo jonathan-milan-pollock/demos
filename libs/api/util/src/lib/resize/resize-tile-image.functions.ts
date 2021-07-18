@@ -1,17 +1,16 @@
-﻿import { EMPTY, Observable } from 'rxjs';
-import { expand, mergeMap, map, filter } from 'rxjs/operators';
+﻿import { EMPTY, expand, filter, map, mergeMap, Observable } from 'rxjs';
 
-import { MediaDimensionPixels } from '@dark-rush-photography/shared/types';
+import { MediaResolution } from '@dark-rush-photography/shared/types';
 import { TileImageResolution } from '@dark-rush-photography/api/types';
-import { findImageResolutionWithFileName$ } from './image-dimension-pixels.functions';
-import { resizeLongestEdgeImage$ } from './resize-longest-edge.functions';
+import { findImageResolutionWithFileName$ } from './image-resolution.functions';
+import { resizeLongestEdgeImage$ } from './resize-longest-edge-image.functions';
 
 export const resizeAndFindDimensions$ = (
   fileName: string,
   filePath: string,
   updatedLongestEdge: number
 ): Observable<{
-  pixels: MediaDimensionPixels;
+  pixels: MediaResolution;
   filePath: string;
 }> =>
   resizeLongestEdgeImage$(fileName, filePath, updatedLongestEdge).pipe(
@@ -19,7 +18,7 @@ export const resizeAndFindDimensions$ = (
   );
 
 const isValidDimensionPixels = (
-  pixels: MediaDimensionPixels,
+  pixels: MediaResolution,
   minWidth: number,
   minHeight: number
 ) => pixels.width >= minWidth && pixels.height >= minHeight;

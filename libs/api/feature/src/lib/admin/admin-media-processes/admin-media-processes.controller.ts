@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -6,6 +7,7 @@ import {
   Param,
   ParseEnumPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -19,9 +21,11 @@ import { Observable } from 'rxjs';
 
 import {
   MediaProcess,
+  MediaProcessAdminDto,
+  MediaProcessCreateDto,
   MediaProcessType,
+  MediaProcessUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { MediaProcessDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminMediaProcessesService } from './admin-media-processes.service';
 
@@ -33,18 +37,27 @@ export class AdminMediaProcessesController {
     private readonly adminMediaProcessesService: AdminMediaProcessesService
   ) {}
 
-  @Post(':mediaProcessType/:slug')
-  @ApiParam({
-    name: 'mediaProcessType',
-    enum: MediaProcessType,
-  })
-  @ApiCreatedResponse({ type: MediaProcessDto })
+  @Post()
+  @ApiCreatedResponse({ type: MediaProcessAdminDto })
   create$(
+    @Body() mediaProcessCreate: MediaProcessCreateDto
+  ): Observable<MediaProcess> {
+    return this.adminMediaProcessesService.create$(mediaProcessCreate);
+  }
+
+  @Put(':mediaProcessType/:id')
+  @ApiOkResponse({ type: MediaProcessAdminDto })
+  update$(
     @Param('mediaProcessType', new ParseEnumPipe(MediaProcessType))
     mediaProcessType: MediaProcessType,
-    @Param('slug') slug: string
+    @Param('id') id: string,
+    @Body() mediaProcessUpdate: MediaProcessUpdateDto
   ): Observable<MediaProcess> {
-    return this.adminMediaProcessesService.create$(mediaProcessType, slug);
+    return this.adminMediaProcessesService.update$(
+      mediaProcessType,
+      id,
+      mediaProcessUpdate
+    );
   }
 
   @Post(':mediaProcessType/:id/process')
@@ -53,7 +66,7 @@ export class AdminMediaProcessesController {
     @Param('mediaProcessType', new ParseEnumPipe(MediaProcessType))
     mediaProcessType: MediaProcessType,
     @Param('id') id: string
-  ): Observable<void> {
+  ): Observable<MediaProcess> {
     return this.adminMediaProcessesService.process$(mediaProcessType, id);
   }
 
@@ -62,7 +75,7 @@ export class AdminMediaProcessesController {
     name: 'mediaProcessType',
     enum: MediaProcessType,
   })
-  @ApiOkResponse({ type: [MediaProcessDto] })
+  @ApiOkResponse({ type: [MediaProcessAdminDto] })
   findAll$(
     @Param('mediaProcessType', new ParseEnumPipe(MediaProcessType))
     mediaProcessType: MediaProcessType
@@ -71,7 +84,7 @@ export class AdminMediaProcessesController {
   }
 
   @Get(':mediaProcessType/:id')
-  @ApiOkResponse({ type: MediaProcessDto })
+  @ApiOkResponse({ type: MediaProcessAdminDto })
   findOne$(
     @Param('mediaProcessType', new ParseEnumPipe(MediaProcessType))
     mediaProcessType: MediaProcessType,

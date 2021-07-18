@@ -1,7 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { Env } from '@dark-rush-photography/api/types';
+import {
+  ImageDimensionType,
+  MediaState,
+  VideoDimensionType,
+} from '@dark-rush-photography/shared/types';
+import {
+  Env,
+  ImageArtistExif,
+  ImageResolution,
+  VideoArtistExif,
+  VideoResolution,
+} from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class ConfigProvider {
@@ -21,7 +32,7 @@ export class ConfigProvider {
     return value;
   }
 
-  get privateBlobConnectionString(): string {
+  private get privateBlobConnectionString(): string {
     const value = this.configService.get('privateBlobConnectionString', {
       infer: true,
     });
@@ -41,7 +52,7 @@ export class ConfigProvider {
     return value;
   }
 
-  get publicBlobConnectionString(): string {
+  private get publicBlobConnectionString(): string {
     const value = this.configService.get('publicBlobConnectionString', {
       infer: true,
     });
@@ -68,10 +79,92 @@ export class ConfigProvider {
   }
 
   get logzioToken(): string {
-    const value = this.configService.get('ayrshareApiKey', { infer: true });
+    const value = this.configService.get('logzioToken', { infer: true });
     if (!value) {
-      throw new BadRequestException('ayrshareApiKey undefined');
+      throw new BadRequestException('logzioToken undefined');
     }
     return value;
+  }
+
+  findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution {
+    const fn = this.configService.get('findImageResolution', { infer: true });
+    if (!fn) {
+      throw new BadRequestException('findImageResolution undefined');
+    }
+    return fn(imageDimensionType);
+  }
+
+  findThreeSixtyImageResolution(
+    imageDimensionType: ImageDimensionType
+  ): ImageResolution {
+    const fn = this.configService.get('findThreeSixtyImageResolution', {
+      infer: true,
+    });
+    if (!fn) {
+      throw new BadRequestException('findThreeSixtyImageResolution undefined');
+    }
+    return fn(imageDimensionType);
+  }
+
+  findImageVideoResolution(
+    imageDimensionType: ImageDimensionType
+  ): ImageResolution {
+    const fn = this.configService.get('findImageVideoResolution', {
+      infer: true,
+    });
+    if (!fn) {
+      throw new BadRequestException('findImageVideoResolution undefined');
+    }
+    return fn(imageDimensionType);
+  }
+
+  findVideoResolution(videoDimensionType: VideoDimensionType): VideoResolution {
+    const fn = this.configService.get('findVideoResolution', { infer: true });
+    if (!fn) {
+      throw new BadRequestException('findVideoResolution undefined');
+    }
+    return fn(videoDimensionType);
+  }
+
+  findThreeSixtyVideoResolution(
+    videoDimensionType: VideoDimensionType
+  ): VideoResolution {
+    const fn = this.configService.get('findThreeSixtyVideoResolution', {
+      infer: true,
+    });
+    if (!fn) {
+      throw new BadRequestException('findThreeSixtyVideoResolution undefined');
+    }
+    return fn(videoDimensionType);
+  }
+
+  getImageArtistExif(
+    copyrightYear: number,
+    exifDateCreated: string
+  ): ImageArtistExif {
+    const fn = this.configService.get('getImageArtistExif', { infer: true });
+    if (!fn) {
+      throw new BadRequestException('getImageArtistExif undefined');
+    }
+    return fn(copyrightYear, exifDateCreated);
+  }
+
+  getVideoArtistExif(copyrightYear: number): VideoArtistExif {
+    const fn = this.configService.get('getVideoArtistExif', { infer: true });
+    if (!fn) {
+      throw new BadRequestException('getVideoArtistExif undefined');
+    }
+    return fn(copyrightYear);
+  }
+
+  getConnectionStringFromMediaState(mediaState: MediaState): string {
+    switch (mediaState) {
+      case MediaState.New:
+      case MediaState.Selected:
+        return this.privateBlobConnectionString;
+      case MediaState.Public:
+      case MediaState.Archived:
+        return this.publicBlobConnectionString;
+    }
   }
 }

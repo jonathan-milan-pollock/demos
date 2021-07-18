@@ -1,6 +1,16 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { Env } from '@dark-rush-photography/api/types';
+
+import {
+  findImageResolution,
+  findThreeSixtyImageResolution,
+} from '@dark-rush-photography/shared/util';
+import { findImageVideoResolution } from './image-video-resolutions.config';
+import { findVideoResolution } from './video-resolutions.config';
+import { findThreeSixtyVideoResolution } from './three-sixty-video-resolutions.config';
+import { GET_IMAGE_ARTIST_EXIF } from './image-artist-exif.config';
+import { GET_VIDEO_ARTIST_EXIF } from './video-artist-exif.config';
 import { environment } from '../environments/environment';
 
 export default (): Env => {
@@ -62,5 +72,12 @@ export default (): Env => {
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
     ayrshareApiKey: process.env.NX_AYRSHARE_API_KEY,
     logzioToken: process.env.NX_LOGZIO_TOKEN,
+    findImageResolution,
+    findThreeSixtyImageResolution,
+    findImageVideoResolution,
+    findVideoResolution,
+    findThreeSixtyVideoResolution,
+    getImageArtistExif: GET_IMAGE_ARTIST_EXIF,
+    getVideoArtistExif: GET_VIDEO_ARTIST_EXIF,
   };
 };

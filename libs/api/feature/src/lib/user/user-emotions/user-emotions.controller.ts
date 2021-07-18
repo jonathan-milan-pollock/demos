@@ -14,8 +14,11 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Emotion } from '@dark-rush-photography/shared/types';
-import { EmotionAddDto, EmotionDto } from '@dark-rush-photography/api/types';
+import {
+  Emotion,
+  EmotionAddDto,
+  EmotionDto,
+} from '@dark-rush-photography/shared/types';
 import {
   ParseObjectIdPipe,
   User,

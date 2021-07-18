@@ -1,12 +1,12 @@
 import * as faker from 'faker';
 
 import {
-  DUMMY_MONGODB_ID,
   Emotion,
   EmotionType,
   User,
 } from '@dark-rush-photography/shared/types';
-import { findPublicEmotions, toEmotion } from './emotion.functions';
+import { findPublicEmotions, loadEmotion } from './emotion.functions';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
 
 describe('emotion.functions', () => {
   const mockUser: User = {
@@ -28,7 +28,7 @@ describe('emotion.functions', () => {
 
   describe('toEmotion', () => {
     it('should return all fields of an emotion', () => {
-      const result = toEmotion({ ...emotion });
+      const result = loadEmotion({ ...emotion });
       expect(result).toEqual(emotion);
     });
 
@@ -37,17 +37,17 @@ describe('emotion.functions', () => {
         _id: 'id',
         ...emotion,
       };
-      const result = toEmotion(emotionWithId);
+      const result = loadEmotion(emotionWithId);
       expect('_id' in result).toBe(false);
     });
 
     it('should have an undefined media id if not provided', () => {
-      const result = toEmotion({ ...emotion, mediaId: undefined });
+      const result = loadEmotion({ ...emotion, mediaId: undefined });
       expect(result.mediaId).toBeUndefined();
     });
 
     it('should have an undefined comment id if not provided', () => {
-      const result = toEmotion({ ...emotion, commentId: undefined });
+      const result = loadEmotion({ ...emotion, commentId: undefined });
       expect(result.commentId).toBeUndefined();
     });
   });

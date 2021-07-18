@@ -15,12 +15,12 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Comment } from '@dark-rush-photography/shared/types';
 import {
+  Comment,
   CommentAddDto,
   CommentDto,
   CommentUpdateDto,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 import {
   ParseObjectIdPipe,
   User,

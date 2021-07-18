@@ -1,4 +1,9 @@
-export * from './lib/best-of-to-entity-type.functions';
-export * from './lib/entity-to-best-of-type.functions';
-export * from './lib/entity-to-media-process-type.functions';
-export * from './lib/media-process-to-entity-type.functions';
+// config
+export * from './lib/config/image-resolutions.config';
+export * from './lib/config/three-sixty-image-resolutions.config';
+
+// enums
+export * from './lib/enums/best-of-to-entity-type.functions';
+export * from './lib/enums/entity-to-best-of-type.functions';
+export * from './lib/enums/entity-to-media-process-type.functions';
+export * from './lib/enums/media-process-to-entity-type.functions';

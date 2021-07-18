@@ -1,42 +1,41 @@
-import { EntityType, Review } from '@dark-rush-photography/shared/types';
-import { Content } from '@dark-rush-photography/api/types';
+import { Review, ReviewDto } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { toImage } from '../content/image.functions';
-import { toImageDimension } from '../content/image-dimension.functions';
+import { loadImage, loadMinimalPublicImage } from '../content/image.functions';
+import { loadImageDimension } from '../content/image-dimension.functions';
+import { PublicContent } from '@dark-rush-photography/api/types';
+import { validateEntityTitle } from './entity-validation.functions';
+import { validateOneImage } from '../content/image-validation.functions';
 
-export const newReview = (slug: string): Review =>
-  ({
-    type: EntityType.Review,
-    slug,
-    isPublic: false,
-    text: [],
-    images: [],
-    imageDimensions: [],
-  } as Review);
+export const loadNewReview = (slug: string): Review => ({
+  slug,
+  isPublic: false,
+  order: 0,
+  text: [],
+  images: [],
+  imageDimensions: [],
+});
 
-export const reviewFromDocumentModel = (
-  documentModel: DocumentModel
-): Review => ({
+export const loadReview = (documentModel: DocumentModel): Review => ({
   id: documentModel._id,
   slug: documentModel.slug,
   isPublic: documentModel.isPublic,
+  order: documentModel.order,
   title: documentModel.title,
   text: documentModel.text,
-  images: documentModel.images.map((image) => toImage(image)),
-  imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
-    toImageDimension(imageDimension)
-  ),
+  images: documentModel.images.map(loadImage),
+  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
 });
 
-export const reviewFromDocumentModelPublic = (
+export const loadReviewPublic = (
   documentModel: DocumentModel,
-  publicContent: Content
-): Review => ({
-  id: documentModel._id,
-  slug: documentModel.slug,
-  isPublic: documentModel.isPublic,
-  title: documentModel.title,
-  text: documentModel.text,
-  images: publicContent.images,
-  imageDimensions: publicContent.imageDimensions,
-});
+  publicContent: PublicContent
+): ReviewDto => {
+  const validatedImage = validateOneImage(publicContent.images);
+  return {
+    slug: documentModel.slug,
+    order: documentModel.order,
+    title: validateEntityTitle(documentModel),
+    text: documentModel.text,
+    image: loadMinimalPublicImage(validatedImage),
+  };
+};

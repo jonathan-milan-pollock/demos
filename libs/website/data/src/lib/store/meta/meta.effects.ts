@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs';
 
 import * as MetaActions from './meta.actions';
 import { MetaService } from './meta.service';

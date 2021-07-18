@@ -1,39 +1,25 @@
-import {
-  MediaProcess,
-  MediaProcessType,
-} from '@dark-rush-photography/shared/types';
-import { getEntityTypeFromMediaProcessType } from '@dark-rush-photography/shared/util';
+import { MediaProcess } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { toImage } from '../content/image.functions';
-import { toImageDimension } from '../content/image-dimension.functions';
-import { toVideo } from '../content/video.functions';
-import { toVideoDimension } from '../content/video-dimension.functions';
+import { loadImage } from '../content/image.functions';
+import { loadImageDimension } from '../content/image-dimension.functions';
+import { loadVideo } from '../content/video.functions';
+import { loadVideoDimension } from '../content/video-dimension.functions';
 
-export const newMediaProcess = (
-  mediaProcessType: MediaProcessType,
-  slug: string
-): MediaProcess =>
-  ({
-    type: getEntityTypeFromMediaProcessType(mediaProcessType),
-    slug,
-    isPublic: false,
-    images: [],
-    imageDimensions: [],
-    videos: [],
-    videoDimensions: [],
-  } as MediaProcess);
+export const loadNewMediaProcess = (slug: string): MediaProcess => ({
+  slug,
+  images: [],
+  imageDimensions: [],
+  videos: [],
+  videoDimensions: [],
+});
 
-export const mediaProcessFromDocumentModel = (
+export const loadMediaProcess = (
   documentModel: DocumentModel
 ): MediaProcess => ({
   id: documentModel._id,
   slug: documentModel.slug,
-  images: documentModel.images.map((image) => toImage(image)),
-  imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
-    toImageDimension(imageDimension)
-  ),
-  videos: documentModel.videos.map((video) => toVideo(video)),
-  videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
-    toVideoDimension(videoDimension)
-  ),
+  images: documentModel.images.map(loadImage),
+  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
+  videos: documentModel.videos.map(loadVideo),
+  videoDimensions: documentModel.videoDimensions.map(loadVideoDimension),
 });

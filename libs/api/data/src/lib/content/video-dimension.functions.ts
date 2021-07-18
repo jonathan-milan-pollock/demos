@@ -1,12 +1,15 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { VideoDimension } from '@dark-rush-photography/shared/types';
 
-import {
-  VideoDimension,
-  VideoDimensionAdd,
-} from '@dark-rush-photography/shared/types';
-import { DocumentModel } from '../schema/document.schema';
+export const findPublicVideoDimensions = (
+  videoDimensions: VideoDimension[],
+  publicVideoIds: string[]
+): VideoDimension[] => {
+  return videoDimensions
+    .filter((videoDimension) => publicVideoIds.includes(videoDimension.videoId))
+    .map((videoDimension) => loadVideoDimension(videoDimension));
+};
 
-export const toVideoDimension = (
+export const loadVideoDimension = (
   videoDimension: VideoDimension
 ): VideoDimension => {
   return {
@@ -14,35 +17,6 @@ export const toVideoDimension = (
     entityId: videoDimension.entityId,
     videoId: videoDimension.videoId,
     type: videoDimension.type,
-    pixels: videoDimension.pixels,
+    resolution: videoDimension.resolution,
   };
-};
-
-export const findPublicVideoDimensions = (
-  videoDimensions: VideoDimension[],
-  publicVideoIds: string[]
-): VideoDimension[] => {
-  return videoDimensions
-    .filter((vd) => publicVideoIds.includes(vd.videoId))
-    .map((vd) => toVideoDimension(vd));
-};
-
-export const validateAddVideoDimension = (
-  videoId: string,
-  videoDimensionAdd: VideoDimensionAdd,
-  documentModel: DocumentModel
-): DocumentModel => {
-  const videoIds = documentModel.videos.map((video) => video.id);
-  if (!videoIds.includes(videoId)) {
-    throw new NotFoundException('Could not find video for dimension');
-  }
-  const videoDimensionType = documentModel.videoDimensions.find(
-    (videoDimension) => videoDimension.type === videoDimensionAdd.type
-  );
-  if (videoDimensionType) {
-    throw new ConflictException(
-      `Video dimension type ${videoDimensionAdd.type} already exists`
-    );
-  }
-  return documentModel;
 };

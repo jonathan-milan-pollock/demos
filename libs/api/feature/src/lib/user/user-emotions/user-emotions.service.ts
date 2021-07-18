@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { mapTo, Observable } from 'rxjs';
 
-import { Emotion, EmotionAdd } from '@dark-rush-photography/shared/types';
+import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
 import {
   Document,
   DocumentModel,
@@ -20,7 +19,7 @@ export class UserEmotionsService {
     private readonly emotionProvider: EmotionProvider
   ) {}
 
-  add$(emotionAdd: EmotionAdd): Observable<Emotion> {
+  add$(emotionAdd: EmotionAddDto): Observable<Emotion> {
     return this.emotionProvider.add$(emotionAdd, this.entityModel);
   }
 

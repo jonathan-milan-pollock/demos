@@ -1,11 +1,8 @@
 import * as faker from 'faker';
 
-import {
-  Comment,
-  DUMMY_MONGODB_ID,
-  User,
-} from '@dark-rush-photography/shared/types';
-import { findPublicComments, toComment } from './comment.functions';
+import { Comment, User } from '@dark-rush-photography/shared/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
+import { findPublicComments, loadComment } from './comment.functions';
 
 describe('comment.functions', () => {
   const mockUser: User = {
@@ -27,7 +24,7 @@ describe('comment.functions', () => {
 
   describe('toComment', () => {
     it('should return all fields of a comment', () => {
-      const result = toComment({ ...comment });
+      const result = loadComment({ ...comment });
       expect(result).toEqual(comment);
     });
 
@@ -36,12 +33,12 @@ describe('comment.functions', () => {
         _id: 'id',
         ...comment,
       };
-      const result = toComment(commentWithId);
+      const result = loadComment(commentWithId);
       expect('_id' in result).toBe(false);
     });
 
     it('should have an undefined media id if not provided', () => {
-      const result = toComment({ ...comment, mediaId: undefined });
+      const result = loadComment({ ...comment, mediaId: undefined });
       expect(result.mediaId).toBeUndefined();
     });
   });

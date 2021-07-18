@@ -1,44 +1,5 @@
-import {
-  EntityCreate,
-  EntityType,
-  EntityUpdate,
-} from '@dark-rush-photography/shared/types';
-import { getAdminHeaders } from '../auth.functions';
-
-Cypress.Commands.add(
-  'createEntityAdmin',
-  (
-    entityType: EntityType,
-    entityCreate: EntityCreate
-  ): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'POST',
-      url: `/api/admin/v1/entities/${entityType}`,
-      headers: {
-        ...getAdminHeaders(),
-      },
-      body: { ...entityCreate },
-      failOnStatusCode: false,
-    })
-);
-
-Cypress.Commands.add(
-  'updateEntityAdmin',
-  (
-    entityType: EntityType,
-    id: string,
-    entityUpdate: EntityUpdate
-  ): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'PUT',
-      url: `/api/admin/v1/entities/${entityType}/${id}`,
-      headers: {
-        ...getAdminHeaders(),
-      },
-      body: { ...entityUpdate },
-      failOnStatusCode: false,
-    })
-);
+import { EntityType } from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'setIsProcessingEntityAdmin',
@@ -46,49 +7,28 @@ Cypress.Commands.add(
     entityType: EntityType,
     id: string,
     isProcessing: boolean
-  ): Cypress.Chainable<Cypress.Response> =>
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/admin/v1/entities/${entityType}/${id}/processing/${isProcessing}`,
+      url: `/api/v1/admin/entities/${entityType}/${id}/processing/${isProcessing}`,
       headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
-  'findAllEntitiesAdmin',
-  (entityType: EntityType): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/entities/${entityType}`,
-      headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
-  'findOneEntityAdmin',
-  (entityType: EntityType, id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/entities/${entityType}/${id}`,
-      headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'deleteEntityAdmin',
-  (entityType: EntityType, id: string): Cypress.Chainable<Cypress.Response> =>
+  'findIsProcessingEntityAdmin',
+  (
+    entityType: EntityType,
+    id: string
+  ): Cypress.Chainable<Cypress.Response<boolean>> =>
     cy.request({
-      method: 'DELETE',
-      url: `/api/admin/v1/entities/${entityType}/${id}`,
+      method: 'GET',
+      url: `/api/v1/admin/entities/${entityType}/${id}/processing`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

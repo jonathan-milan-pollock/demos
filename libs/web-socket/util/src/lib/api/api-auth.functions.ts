@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
 
 import {
   AUTH0_AUDIENCE,

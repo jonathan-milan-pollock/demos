@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
+  AboutProvider,
   Document,
   DocumentSchema,
   EntityProvider,
@@ -16,6 +17,6 @@ import { AboutController } from './about.controller';
     ]),
   ],
   controllers: [AboutController],
-  providers: [AboutService, EntityProvider],
+  providers: [AboutService, AboutProvider, EntityProvider],
 })
 export class AboutModule {}

@@ -1,10 +1,7 @@
 import * as faker from 'faker';
-import {
-  DUMMY_MONGODB_ID,
-  MediaState,
-  Video,
-} from '@dark-rush-photography/shared/types';
-import { findPublicVideos, toVideo } from './video.functions';
+import { MediaState, Video } from '@dark-rush-photography/shared/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
+import { findPublicVideos, loadVideo } from './video.functions';
 
 describe('video.functions', () => {
   const video: Video = {
@@ -13,26 +10,27 @@ describe('video.functions', () => {
     fileName: faker.lorem.word().toLowerCase(),
     state: faker.random.arrayElement(Object.values(MediaState)),
     order: faker.datatype.number(),
-    isStared: faker.datatype.boolean(),
+    isStarred: faker.datatype.boolean(),
     title: faker.lorem.sentence(),
     description: faker.lorem.paragraph(),
-    keywords: `${faker.lorem
-      .word()
-      .toLowerCase()}, ${faker.lorem
+    keywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
       .word()
       .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
     dateCreated: faker.date.recent().toISOString(),
     datePublished: faker.date.recent().toISOString(),
+    isThreeSixty: faker.datatype.boolean(),
+    threeSixtySettings: undefined,
     coverImageId: faker.datatype.uuid(),
     hlsUrl: faker.internet.url(),
     isFlyOver: faker.datatype.boolean(),
+    isUploaded: faker.datatype.boolean(),
     isGenerated: faker.datatype.boolean(),
     isProcessing: faker.datatype.boolean(),
   };
 
   describe('toVideo', () => {
     it('should return all fields of a video', () => {
-      const result = toVideo({ ...video });
+      const result = loadVideo({ ...video });
       expect(result).toEqual(video);
     });
 
@@ -41,7 +39,7 @@ describe('video.functions', () => {
         _id: 'id',
         ...video,
       };
-      const result = toVideo(videoWithId);
+      const result = loadVideo(videoWithId);
       expect('_id' in result).toBe(false);
     });
 

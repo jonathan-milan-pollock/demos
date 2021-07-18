@@ -8,8 +8,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { Subscription, timer } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Subscription, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'drp-progressive-image',
@@ -51,7 +50,7 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
   /**
    * Transition time between when the image is loaded and is displayed.
    */
-  @Input() transitionMilliseconds?: number = 500;
+  @Input() transitionMilliseconds: number = 500;
 
   //private readonly viewportService: ViewportService
   //constructor(

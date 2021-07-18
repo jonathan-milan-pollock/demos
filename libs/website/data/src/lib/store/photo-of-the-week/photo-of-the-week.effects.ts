@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { map, mergeMap, catchError, mergeMapTo } from 'rxjs/operators';
+import { catchError, map, mergeMap, mergeMapTo, of } from 'rxjs';
 
 import * as PhotoOfTheWeekActions from './photo-of-the-week.actions';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';

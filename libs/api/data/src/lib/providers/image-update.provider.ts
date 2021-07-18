@@ -1,64 +1,92 @@
 import * as fs from 'fs-extra';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, mapTo } from 'rxjs/operators';
+import {
+  combineLatest,
+  concatMap,
+  concatMapTo,
+  from,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 
 import {
-  ImageUpdate,
   Image,
   ImageDimension,
-  Media,
+  MediaType,
+  Location,
+  ImageUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { Env } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { ImageProvider } from './image.provider';
 import {
   deleteBlob$,
   downloadBlobToFile$,
-  getAzureStorageTypeFromMediaState,
+  exifImage$,
   getBlobPath,
-  getBlobPathWithDimension,
+  getExifDate,
+  getImageExif,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
+import { ConfigProvider } from './config.provider';
+import { MediaProvider } from './media.provider';
+import { ImageDimensionProvider } from './image-dimension.provider';
+import { ImageProvider } from './image.provider';
 
 @Injectable()
 export class ImageUpdateProvider {
+  private readonly logger: Logger;
   constructor(
-    private readonly configService: ConfigService<Env>,
-    private readonly imageProvider: ImageProvider
-  ) {}
+    private readonly configProvider: ConfigProvider,
+    private readonly mediaProvider: MediaProvider,
+    private readonly imageProvider: ImageProvider,
+    private readonly imageDimensionProvider: ImageDimensionProvider
+  ) {
+    this.logger = new Logger(ImageUpdateProvider.name);
+  }
 
   update$(
     image: Image,
-    imageUpdate: ImageUpdate,
+    imageUpdate: ImageUpdateDto,
     documentModel: DocumentModel,
     entityModel: Model<DocumentModel>
-  ): Observable<Media> {
+  ): Observable<DocumentModel> {
     return this.imageProvider
       .setIsProcessing$(image.id, image.entityId, true, entityModel)
       .pipe(
-        concatMapTo(
-          this.updateBlobPath$(
+        tap(() => this.logger.debug('Update image blob path')),
+        concatMap(() => {
+          const media = this.mediaProvider.loadMedia(
+            MediaType.Image,
+            image.id,
+            image.fileName,
+            image.state,
+            documentModel
+          );
+          const mediaUpdate = this.mediaProvider.loadMedia(
+            MediaType.Image,
+            image.id,
+            imageUpdate.fileName,
+            imageUpdate.state,
+            documentModel
+          );
+          const updateBlobPathAndExif$ = this.updateBlobPathAndExif$(
             image,
             imageUpdate,
-            this.imageProvider.getMedia(
-              image.id,
-              image.fileName,
-              image.state,
-              documentModel
-            ),
-            this.imageProvider.getMedia(
-              image.id,
-              imageUpdate.fileName,
-              imageUpdate.state,
-              documentModel
-            ),
-            documentModel.imageDimensions
-          )
-        ),
+            media,
+            mediaUpdate,
+            documentModel.imageDimensions,
+            documentModel.location
+          );
+          return combineLatest([
+            of(media),
+            of(mediaUpdate),
+            from(updateBlobPathAndExif$),
+          ]);
+        }),
+        tap(() => this.logger.debug('Update')),
         concatMapTo(
           this.imageProvider.update$(
             image.id,
@@ -74,117 +102,78 @@ export class ImageUpdateProvider {
             false,
             entityModel
           )
-        ),
-        mapTo(
-          this.imageProvider.getMedia(
-            image.id,
-            imageUpdate.fileName,
-            imageUpdate.state,
-            documentModel
-          )
         )
       );
   }
 
-  setIsProcessing$(
-    id: string,
-    entityId: string,
-    isProcessing: boolean,
-    entityModel: Model<DocumentModel>
-  ): Observable<DocumentModel> {
-    return this.imageProvider.setIsProcessing$(
-      id,
-      entityId,
-      isProcessing,
-      entityModel
-    );
-  }
-
-  updateBlobPath$ = (
+  updateBlobPathAndExif$(
     image: Image,
-    imageUpdate: ImageUpdate,
+    imageUpdate: ImageUpdateDto,
     imageMedia: Media,
     imageUpdateMedia: Media,
-    imageDimensions: ImageDimension[]
-  ): Observable<Image> => {
-    if (
-      image.fileName === imageUpdate.fileName &&
-      image.state === imageUpdate.state
-    )
-      return of(image);
-
-    return from(imageDimensions).pipe(
-      concatMap((imageDimension) =>
-        combineLatest([
-          of(imageDimension),
+    imageDimensions: ImageDimension[],
+    location?: Location
+  ): Observable<boolean> {
+    return from(imageDimensions)
+      .pipe(
+        concatMap((imageDimension) =>
+          this.imageDimensionProvider.updateBlobPathAndExif$(
+            image,
+            imageUpdate,
+            imageMedia,
+            imageUpdateMedia,
+            imageDimension,
+            location
+          )
+        )
+      )
+      .pipe(
+        tap(() => this.logger.debug('Download image')),
+        concatMapTo(
           downloadBlobToFile$(
-            this.configService.get<Env>('privateBlobConnectionString', {
-              infer: true,
-            }),
-            getAzureStorageTypeFromMediaState(imageMedia.state),
-            getBlobPathWithDimension(imageMedia, imageDimension.type),
+            this.configProvider.getConnectionStringFromMediaState(
+              imageMedia.state
+            ),
+            getBlobPath(imageMedia),
             imageMedia.fileName
-          ),
-        ])
-      ),
-      concatMap(([imageDimension, filePath]) => {
-        return combineLatest([
-          of(imageDimension),
+          )
+        ),
+        tap(() => this.logger.debug('Exif image with update')),
+        concatMap((filePath) =>
+          exifImage$(
+            filePath,
+            this.configProvider.getImageArtistExif(
+              new Date().getFullYear(),
+              image.dateCreated ?? getExifDate(new Date())
+            ),
+            getImageExif(
+              imageUpdate.datePublished ?? getExifDate(new Date()),
+              imageUpdate.title,
+              imageUpdate.description,
+              imageUpdate.keywords,
+              location
+            )
+          )
+        ),
+        tap(() => this.logger.debug('Upload image to new blob path')),
+        concatMap((filePath) =>
           uploadStreamToBlob$(
-            this.configService.get<Env>('privateBlobConnectionString', {
-              infer: true,
-            }),
-            getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
+            this.configProvider.getConnectionStringFromMediaState(
+              imageUpdateMedia.state
+            ),
             fs.createReadStream(filePath),
-            getBlobPathWithDimension(imageUpdateMedia, imageDimension.type)
-          ),
-        ]);
-      }),
-      concatMap(([imageDimension]) =>
-        deleteBlob$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          getAzureStorageTypeFromMediaState(imageMedia.state),
-          getBlobPathWithDimension(imageMedia, imageDimension.type)
+            getBlobPath(imageUpdateMedia)
+          )
+        ),
+        tap(() => this.logger.debug('Remove image at previous blob path')),
+        concatMap(() =>
+          deleteBlob$(
+            this.configProvider.getConnectionStringFromMediaState(
+              imageMedia.state
+            ),
+            getBlobPath(imageMedia)
+          )
         )
-      ),
-      concatMapTo(
-        downloadBlobToFile$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          getAzureStorageTypeFromMediaState(imageMedia.state),
-          getBlobPath(imageMedia),
-          imageMedia.fileName
-        )
-      ),
-      concatMap((filePath) =>
-        uploadStreamToBlob$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          getAzureStorageTypeFromMediaState(imageUpdateMedia.state),
-          fs.createReadStream(filePath),
-          getBlobPath(imageUpdateMedia)
-        )
-      ),
-      concatMapTo(
-        deleteBlob$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          getAzureStorageTypeFromMediaState(imageMedia.state),
-          getBlobPath(imageMedia)
-        )
-      ),
-      mapTo(image)
-    );
-  };
-
-  updateExif = (image: Image, imageUpdate: ImageUpdate): Observable<Image> => {
-    //if (image.title !== imageUpdate.title)
-    // get this comparison from the exif file
-    return of(image);
-  };
+      );
+  }
 }

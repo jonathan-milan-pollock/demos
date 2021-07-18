@@ -1,85 +1,96 @@
-import { Destination, EntityType } from '@dark-rush-photography/shared/types';
-import { Content } from '@dark-rush-photography/api/types';
+import {
+  Destination,
+  DestinationMinimalDto,
+  DestinationDto,
+} from '@dark-rush-photography/shared/types';
+import { PublicContent } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { toImage } from '../content/image.functions';
-import { toImageDimension } from '../content/image-dimension.functions';
-import { toVideo } from '../content/video.functions';
-import { toVideoDimension } from '../content/video-dimension.functions';
-import { toSocialMediaUrl } from '../content/social-media-url.functions';
-import { toComment } from '../content/comment.functions';
-import { toEmotion } from '../content/emotion.functions';
+import {
+  validateEntityDescription,
+  validateEntityLocation,
+  validateEntityTitle,
+} from './entity-validation.functions';
+import { validateFindStarredImage } from '../content/image-validation.functions';
+import { loadImage, loadMinimalPublicImage } from '../content/image.functions';
+import { loadImageDimension } from '../content/image-dimension.functions';
+import { loadMinimalPublicVideo, loadVideo } from '../content/video.functions';
+import { loadVideoDimension } from '../content/video-dimension.functions';
+import { loadSocialMediaUrl } from '../content/social-media-url.functions';
+import { findEntityComments, loadComment } from '../content/comment.functions';
+import { findEntityEmotions, loadEmotion } from '../content/emotion.functions';
 
-export const newDestination = (slug: string): Destination =>
-  ({
-    type: EntityType.Destination,
-    slug,
-    isPublic: false,
-    keywords: [],
-    useTileImage: false,
-    text: [],
-    images: [],
-    imageDimensions: [],
-    videos: [],
-    videoDimensions: [],
-    hasExtendedReality: false,
-    socialMediaUrls: [],
-    comments: [],
-    emotions: [],
-  } as Destination);
+export const loadNewDestination = (slug: string): Destination => ({
+  slug,
+  isPublic: false,
+  order: 0,
+  keywords: [],
+  text: [],
+  images: [],
+  imageDimensions: [],
+  videos: [],
+  videoDimensions: [],
+  hasExtendedReality: false,
+  socialMediaUrls: [],
+  comments: [],
+  emotions: [],
+});
 
-export const destinationFromDocumentModel = (
-  documentModel: DocumentModel
-): Destination => ({
+export const loadDestination = (documentModel: DocumentModel): Destination => ({
   id: documentModel._id,
   slug: documentModel.slug,
   isPublic: documentModel.isPublic,
+  order: documentModel.order,
   title: documentModel.title,
   description: documentModel.description,
   keywords: documentModel.keywords,
-  datePublished: documentModel.datePublished,
   location: documentModel.location,
-  useTileImage: documentModel.useTileImage,
   text: documentModel.text,
-  images: documentModel.images.map((image) => toImage(image)),
-  imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
-    toImageDimension(imageDimension)
-  ),
-  videos: documentModel.videos.map((video) => toVideo(video)),
-  videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
-    toVideoDimension(videoDimension)
-  ),
+  images: documentModel.images.map(loadImage),
+  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
+  videos: documentModel.videos.map(loadVideo),
+  videoDimensions: documentModel.videoDimensions.map(loadVideoDimension),
   hasExtendedReality: documentModel.hasExtendedReality,
   websiteUrl: documentModel.websiteUrl,
-  socialMediaUrls: documentModel.socialMediaUrls.map((socialMediaUrl) =>
-    toSocialMediaUrl(socialMediaUrl)
-  ),
-  comments: documentModel.comments.map((comment) => toComment(comment)),
-  emotions: documentModel.emotions.map((emotion) => toEmotion(emotion)),
+  socialMediaUrls: documentModel.socialMediaUrls.map(loadSocialMediaUrl),
+  comments: documentModel.comments.map(loadComment),
+  emotions: documentModel.emotions.map(loadEmotion),
 });
 
-export const destinationFromDocumentModelPublic = (
+export const loadMinimalDestinationPublic = (
   documentModel: DocumentModel,
-  publicContent: Content
-): Destination => ({
-  id: documentModel._id,
+  publicContent: PublicContent
+): DestinationMinimalDto => ({
   slug: documentModel.slug,
-  isPublic: documentModel.isPublic,
-  title: documentModel.title,
-  description: documentModel.description,
-  keywords: documentModel.keywords,
-  datePublished: documentModel.datePublished,
-  location: documentModel.location,
-  useTileImage: documentModel.useTileImage,
-  text: documentModel.text,
-  images: publicContent.images,
-  imageDimensions: publicContent.imageDimensions,
-  videos: publicContent.videos,
-  videoDimensions: publicContent.videoDimensions,
+  order: documentModel.order,
+  title: validateEntityTitle(documentModel),
+  starredImage: validateFindStarredImage(publicContent.images),
   hasExtendedReality: documentModel.hasExtendedReality,
-  websiteUrl: documentModel.websiteUrl,
-  socialMediaUrls: documentModel.socialMediaUrls.map((socialMediaUrl) =>
-    toSocialMediaUrl(socialMediaUrl)
-  ),
-  comments: publicContent.comments,
-  emotions: publicContent.emotions,
 });
+
+export const loadDestinationPublic = (
+  documentModel: DocumentModel,
+  publicContent: PublicContent
+): DestinationDto => {
+  const entityComments = findEntityComments(publicContent.comments);
+  const entityEmotions = findEntityEmotions(
+    publicContent.emotions,
+    publicContent.comments
+  );
+
+  return {
+    slug: documentModel.slug,
+    order: documentModel.order,
+    title: validateEntityTitle(documentModel),
+    description: validateEntityDescription(documentModel),
+    keywords: documentModel.keywords,
+    location: validateEntityLocation(documentModel),
+    text: documentModel.text,
+    images: publicContent.images.map(loadMinimalPublicImage),
+    videos: publicContent.videos.map(loadMinimalPublicVideo),
+    hasExtendedReality: documentModel.hasExtendedReality,
+    websiteUrl: documentModel.websiteUrl,
+    socialMediaUrls: documentModel.socialMediaUrls,
+    comments: entityComments,
+    emotions: entityEmotions,
+  };
+};

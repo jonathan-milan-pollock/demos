@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
-import { EMPTY, Observable, Subscription } from 'rxjs';
-import { map, pluck } from 'rxjs/operators';
+import { EMPTY, map, Observable, pluck, Subscription } from 'rxjs';
 
 import { ADMIN, Auth0User } from '@dark-rush-photography/website/types';
 import {

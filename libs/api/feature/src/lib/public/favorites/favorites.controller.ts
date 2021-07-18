@@ -3,8 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Favorites } from '@dark-rush-photography/shared/types';
-import { FavoritesDto } from '@dark-rush-photography/api/types';
+import { FavoritesDto } from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { FavoritesService } from './favorites.service';
 
@@ -16,7 +15,7 @@ export class FavoritesController {
 
   @Get()
   @ApiOkResponse({ type: FavoritesDto })
-  findOne$(): Observable<Favorites> {
+  findOne$(): Observable<FavoritesDto> {
     return this.favoritesService.findOne$();
   }
 }

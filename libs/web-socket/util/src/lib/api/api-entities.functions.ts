@@ -1,11 +1,11 @@
-import { HttpService, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
 
-import { Entity } from '@dark-rush-photography/shared/types';
 import { Env } from '@dark-rush-photography/web-socket/types';
 
+/*
 export const findAllEntities$ = (
   env: Env,
   httpService: HttpService,
@@ -39,3 +39,4 @@ export const findOneEntity$ = (
     })
     .pipe(map((axiosResponse) => axiosResponse.data));
 };
+*/

@@ -2,18 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { concatMap, concatMapTo, map } from 'rxjs/operators';
+import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
 
 import { DocumentModel } from '../schema/document.schema';
-import { Emotion, EmotionAdd } from '@dark-rush-photography/shared/types';
+import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { toEmotion, validateAddEmotion } from '../content/emotion.functions';
+import { validateAddEmotion } from '../content/emotion-validation.functions';
+import { loadEmotion } from '../content/emotion.functions';
 
 @Injectable()
 export class EmotionProvider {
   add$(
-    emotionAdd: EmotionAdd,
+    emotionAdd: EmotionAddDto,
     entityModel: Model<DocumentModel>
   ): Observable<Emotion> {
     const id = uuidv4();
@@ -54,7 +54,7 @@ export class EmotionProvider {
         if (!foundEmotion)
           throw new NotFoundException('Could not find emotion');
 
-        return toEmotion(foundEmotion);
+        return loadEmotion(foundEmotion);
       })
     );
   }

@@ -8,8 +8,10 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { ReviewMedia } from '@dark-rush-photography/shared/types';
-import { ReviewMediaDto } from '@dark-rush-photography/api/types';
+import {
+  ReviewMedia,
+  ReviewMediaDto,
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminReviewMediaService } from './admin-review-media.service';
 

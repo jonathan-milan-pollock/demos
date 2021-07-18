@@ -19,6 +19,7 @@ export class LogzioLogger extends ConsoleLogger {
       port: '8071',
       type: 'DEV',
       name: 'winston_logzio',
+      level: 'verbose',
     });
 
     this.logger = winston.createLogger({
@@ -28,7 +29,7 @@ export class LogzioLogger extends ConsoleLogger {
   }
 
   log(message: any, ...optionalParams: any[]): void {
-    this.logger.log('log', message);
+    this.logger.log('info', message);
     super.log(message, optionalParams);
   }
 

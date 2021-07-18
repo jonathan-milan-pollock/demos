@@ -1,16 +1,28 @@
+import * as path from 'path';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, map, mapTo, tap } from 'rxjs/operators';
+import {
+  combineLatest,
+  concatMap,
+  concatMapTo,
+  from,
+  map,
+  mapTo,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 
 import {
+  EntityType,
   Image,
   ImageDimensionType,
-  ImageUpdate,
-  ThreeSixtyImageSettings,
+  ImageUpdateDto,
+  MediaType,
+  ThreeSixtySettings,
 } from '@dark-rush-photography/shared/types';
 import {
   Document,
@@ -21,159 +33,223 @@ import {
   ImageRemoveProvider,
   ImageUpdateProvider,
   ImageUploadProvider,
+  MediaProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class AdminImagesService {
+  private readonly logger: Logger;
+
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
+    private readonly mediaProvider: MediaProvider,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider,
     private readonly imageUploadProvider: ImageUploadProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider
-  ) {}
+  ) {
+    this.logger = new Logger(AdminImagesService.name);
+  }
 
   upload$(
     entityId: string,
     fileName: string,
-    isThreeSixtyImage: boolean,
+    order: number,
+    isThreeSixty: boolean,
     file: Express.Multer.File
   ): Observable<Image> {
-    const isProcessing = true;
     const id = uuidv4();
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.entityProvider.validateEntityFound),
       map(this.entityProvider.validateProcessingEntity),
       map((documentModel) =>
-        this.imageProvider.validateImageNotFound(fileName, documentModel)
+        this.imageProvider.validateImageNotAlreadyExists(
+          fileName,
+          documentModel
+        )
       ),
       concatMap((documentModel) =>
         combineLatest([
-          of(documentModel),
-          this.imageProvider.add$(
+          this.imageProvider.addUpload$(
             id,
             entityId,
             fileName,
-            isProcessing,
+            order,
+            isThreeSixty,
+            true,
             this.entityModel
           ),
+          of(documentModel),
         ])
       ),
-      map(([documentModel, image]) => {
-        return this.imageProvider.getMedia(
+      map(([image, documentModel]) =>
+        this.mediaProvider.loadMedia(
+          MediaType.Image,
           image.id,
-          image.fileName,
+          fileName,
           image.state,
           documentModel
-        );
-      }),
+        )
+      ),
       concatMap((media) =>
         this.imageUploadProvider.upload$(
           media,
-          isThreeSixtyImage,
+          isThreeSixty,
           file,
           this.entityModel
         )
       ),
-      tap(() => Logger.log('Upload complete', AdminImagesService.name)),
+      tap(() => this.logger.debug('Upload complete')),
       concatMapTo(this.findOne$(id, entityId))
     );
   }
 
-  uploadLightroomImage$(
+  uploadLightroom$(
     lightroomPath: string,
     file: Express.Multer.File
   ): Observable<Image> {
     const lightroomMedia = this.imageProvider.getLightroomMedia(lightroomPath);
-    return this.entityProvider
-      .findOrCreate$(
-        lightroomMedia.entityType,
-        lightroomMedia.entityGroup,
-        lightroomMedia.entitySlug,
-        this.entityModel
+    return from(
+      from(
+        this.entityModel.findOne({
+          type: lightroomMedia.entityType,
+          group: lightroomMedia.entityGroup,
+          slug: lightroomMedia.entitySlug,
+        })
       )
-      .pipe(
-        concatMap((documentModel) =>
-          this.upload$(documentModel._id, lightroomMedia.fileName, false, file)
+    ).pipe(
+      concatMap((documentModel) =>
+        documentModel
+          ? of(documentModel)
+          : from(
+              new this.entityModel({
+                type: lightroomMedia.entityType,
+                group: lightroomMedia.entityGroup,
+                slug: lightroomMedia.entitySlug,
+                isPublic: [
+                  EntityType.About,
+                  EntityType.BestOfChildren,
+                  EntityType.BestOfEvents,
+                  EntityType.BestOfLandscapes,
+                  EntityType.BestOfNature,
+                  EntityType.BestOfRealEstate,
+                  EntityType.Favorites,
+                  EntityType.ReviewMedia,
+                ].includes(lightroomMedia.entityType),
+              }).save()
+            )
+      ),
+      map(this.entityProvider.validateEntityFound),
+      concatMap((documentModel) =>
+        this.upload$(
+          documentModel._id,
+          lightroomMedia.fileName,
+          +lightroomMedia.fileName.replace(
+            path.extname(lightroomMedia.fileName),
+            ''
+          ),
+          false,
+          file
         )
-      );
+      )
+    );
   }
 
   update$(
     id: string,
     entityId: string,
-    imageUpdate: ImageUpdate
+    imageUpdate: ImageUpdateDto
   ): Observable<Image> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.entityProvider.validateEntityFound),
       map(this.entityProvider.validateProcessingEntity),
       concatMap((documentModel) =>
-        combineLatest([of(documentModel), from(this.findOne$(id, entityId))])
+        combineLatest([this.findOne$(id, entityId), of(documentModel)])
       ),
-      map(([documentModel, image]) => ({
+      map(([image, documentModel]) => ({
         image: this.imageProvider.validateImageNotProcessing(image),
         documentModel,
       })),
       concatMap(({ image, documentModel }) =>
-        from(
-          this.imageUpdateProvider.update$(
-            image,
-            imageUpdate,
-            documentModel,
-            this.entityModel
-          )
+        this.imageUpdateProvider.update$(
+          image,
+          imageUpdate,
+          documentModel,
+          this.entityModel
         )
       ),
-      concatMapTo(from(this.findOne$(id, entityId)))
+      tap(() => this.logger.debug('Update complete')),
+      concatMapTo(this.findOne$(id, entityId))
     );
   }
 
-  updateThreeSixtyImageSettings$(
+  updateThreeSixtySettings$(
     id: string,
     entityId: string,
     imageDimensionType: ImageDimensionType,
-    threeSixtyImageSettings: ThreeSixtyImageSettings
-  ): Observable<void> {
+    threeSixtySettings: ThreeSixtySettings
+  ): Observable<Image> {
     return this.imageDimensionProvider
-      .updateThreeSixtyImageSettings$(
+      .updateThreeSixtySettings$(
         id,
         entityId,
         imageDimensionType,
-        threeSixtyImageSettings,
+        threeSixtySettings,
         this.entityModel
       )
-      .pipe(mapTo(undefined));
+      .pipe(concatMapTo(this.findOne$(id, entityId)));
   }
 
   setIsProcessing$(
     id: string,
     entityId: string,
     isProcessing: boolean
-  ): Observable<Image> {
+  ): Observable<void> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(this.entityProvider.validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([of(documentModel), from(this.findOne$(id, entityId))])
-      ),
+      concatMapTo(this.findOne$(id, entityId)),
       concatMapTo(
-        from(
-          this.imageUpdateProvider.setIsProcessing$(
-            id,
-            entityId,
-            isProcessing,
-            this.entityModel
-          )
+        this.imageProvider.setIsProcessing$(
+          id,
+          entityId,
+          isProcessing,
+          this.entityModel
         )
       ),
-      concatMapTo(from(this.findOne$(id, entityId)))
+      mapTo(undefined)
     );
   }
 
   findOne$(id: string, entityId: string): Observable<Image> {
     return this.imageProvider.findOne$(id, entityId, this.entityModel);
+  }
+
+  findDataUri$(
+    id: string,
+    entityId: string,
+    imageDimensionType: ImageDimensionType
+  ): Observable<string> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(this.entityProvider.validateEntityFound),
+      concatMap((documentModel) =>
+        combineLatest([this.findOne$(id, entityId), of(documentModel)])
+      ),
+      map(([image, documentModel]) =>
+        this.mediaProvider.loadMedia(
+          MediaType.Image,
+          image.id,
+          image.fileName,
+          image.state,
+          documentModel
+        )
+      ),
+      concatMap((media) =>
+        this.imageDimensionProvider.findDataUri$(media, imageDimensionType)
+      )
+    );
   }
 
   remove$(id: string, entityId: string): Observable<void> {
@@ -186,16 +262,15 @@ export class AdminImagesService {
       })),
       concatMap(({ image, documentModel }) => {
         if (image && this.imageProvider.validateImageNotProcessing(image)) {
-          return from(
-            this.imageRemoveProvider.remove$(
-              image,
-              documentModel,
-              this.entityModel
-            )
+          return this.imageRemoveProvider.remove$(
+            image,
+            documentModel,
+            this.entityModel
           );
         }
-        return of(image);
+        return of();
       }),
+      tap(() => this.logger.debug('Remove complete')),
       mapTo(undefined)
     );
   }

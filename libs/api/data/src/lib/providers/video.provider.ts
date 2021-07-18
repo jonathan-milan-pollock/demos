@@ -1,64 +1,57 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { concatMap, concatMapTo, map } from 'rxjs/operators';
+import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
 
 import {
-  Media,
   MediaState,
-  MediaType,
   Video,
-  VideoUpdate,
+  VideoAddDto,
+  VideoDto,
+  VideoUpdateDto,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { validateEntityFound } from '../entities/entity-validation.functions';
-import { getEntityTypeAllowsVideoAdd } from '../content/entity-type-allows-video-add.functions';
-import { toVideo } from '../content/video.functions';
+import {
+  validateEntityFound,
+  validateEntityIsPublic,
+} from '../entities/entity-validation.functions';
+import {
+  validateCanAddVideoToEntity,
+  validateVideoDataUriExists,
+  validateVideoFound,
+  validateVideoNotAlreadyExists,
+  validateVideoNotProcessing,
+  validateVideoPublic,
+} from '../content/video-validation.functions';
+import { loadPublicVideo, loadVideo } from '../content/video.functions';
+import { loadPublicContent } from '../content/public-content.functions';
 
 @Injectable()
 export class VideoProvider {
-  validateVideoNotFound(
+  validateVideoNotAlreadyExists(
     fileName: string,
     documentModel: DocumentModel
   ): DocumentModel {
-    const foundVideo = documentModel.videos.find(
-      (video) => video.fileName == fileName
-    );
-    if (foundVideo)
-      throw new ConflictException(
-        `Video with file name ${fileName} already exists`
-      );
-    return documentModel;
+    return validateVideoNotAlreadyExists(fileName, documentModel);
   }
 
   validateVideoNotProcessing(video: Video): Video {
-    if (video.isProcessing)
-      throw new ConflictException(
-        'Video cannot be modified as it currently being processed'
-      );
-    return video;
+    return validateVideoNotProcessing(video);
   }
 
   validateCanAddVideoToEntity(documentModel: DocumentModel): DocumentModel {
-    if (!getEntityTypeAllowsVideoAdd(documentModel.type)) {
-      throw new BadRequestException(
-        `Videos cannot be added to entity type ${documentModel.type}`
-      );
-    }
-    return documentModel;
+    return validateCanAddVideoToEntity(documentModel);
   }
 
-  add$(
+  validateVideoDataUriExists(video: Video): Video {
+    return validateVideoDataUriExists(video);
+  }
+
+  addUpload$(
     id: string,
     entityId: string,
     fileName: string,
-    hlsUrl: string,
+    isThreeSixty: boolean,
     isProcessing: boolean,
     entityModel: Model<DocumentModel>
   ): Observable<Video> {
@@ -75,15 +68,53 @@ export class VideoProvider {
                 fileName,
                 state: MediaState.New,
                 order: 0,
-                isStared: false,
-                title: '',
-                description: '',
-                keywords: '',
-                dateCreated: '',
-                datePublished: '',
-                coverImageId: '',
-                hlsUrl,
+                isStarred: false,
+                isThreeSixty,
                 isFlyOver: false,
+                isUploaded: true,
+                isGenerated: false,
+                isProcessing,
+              },
+            ],
+          })
+        )
+      ),
+      concatMapTo(this.findOne$(id, entityId, entityModel))
+    );
+  }
+
+  add$(
+    id: string,
+    entityId: string,
+    videoAdd: VideoAddDto,
+    isProcessing: boolean,
+    entityModel: Model<DocumentModel>
+  ): Observable<Video> {
+    return from(entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        from(
+          entityModel.findByIdAndUpdate(entityId, {
+            videos: [
+              ...documentModel.videos,
+              {
+                id,
+                entityId,
+                fileName: videoAdd.fileName,
+                state: MediaState.New,
+                order: videoAdd.order,
+                isStarred: videoAdd.isStarred,
+                title: videoAdd.title,
+                description: videoAdd.description,
+                keywords: videoAdd.keywords,
+                dateCreated: videoAdd.dateCreated,
+                datePublished: videoAdd.datePublished,
+                isThreeSixty: videoAdd.isThreeSixty,
+                threeSixtySettings: videoAdd.threeSixtySettings,
+                coverImageId: videoAdd.coverImageId,
+                hlsUrl: videoAdd.hlsUrl,
+                isFlyOver: videoAdd.isFlyOver,
+                isUploaded: false,
                 isGenerated: false,
                 isProcessing,
               },
@@ -98,17 +129,13 @@ export class VideoProvider {
   update$(
     id: string,
     entityId: string,
-    videoUpdate: VideoUpdate,
+    videoUpdate: VideoUpdateDto,
     entityModel: Model<DocumentModel>
-  ): Observable<Video> {
+  ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundVideo = documentModel.videos.find(
-          (video) => video.id === id
-        );
-        if (!foundVideo) throw new NotFoundException();
-
+        const foundVideo = validateVideoFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             videos: [
@@ -116,18 +143,21 @@ export class VideoProvider {
               {
                 id,
                 entityId,
-                fileName: videoUpdate.fileName ?? '',
+                fileName: videoUpdate.fileName,
                 state: videoUpdate.state,
                 order: videoUpdate.order,
-                isStared: videoUpdate.isStared,
-                title: videoUpdate.title ?? '',
-                description: videoUpdate.description ?? '',
-                keywords: videoUpdate.keywords ?? '',
+                isStarred: videoUpdate.isStarred,
+                title: videoUpdate.title,
+                description: videoUpdate.description,
+                keywords: videoUpdate.keywords,
                 dateCreated: foundVideo.dateCreated,
-                datePublished: videoUpdate.datePublished ?? '',
-                coverImageId: videoUpdate.coverImageId ?? '',
-                hlsUrl: videoUpdate.hlsUrl ?? '',
+                datePublished: videoUpdate.datePublished,
+                isThreeSixty: videoUpdate.isThreeSixty,
+                threeSixtySettings: videoUpdate.threeSixtySettings,
+                coverImageId: videoUpdate.coverImageId,
+                hlsUrl: videoUpdate.hlsUrl,
                 isFlyOver: videoUpdate.isFlyOver,
+                isUploaded: foundVideo.isUploaded,
                 isGenerated: foundVideo.isGenerated,
                 isProcessing: foundVideo.isProcessing,
               },
@@ -135,7 +165,7 @@ export class VideoProvider {
           })
         );
       }),
-      concatMapTo(this.findOne$(id, entityId, entityModel))
+      map(validateEntityFound)
     );
   }
 
@@ -147,30 +177,31 @@ export class VideoProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        const foundVideo = documentModel.videos.find((video) => video.id == id);
-        if (!foundVideo) throw new NotFoundException('Could not find video');
-
-        return toVideo(foundVideo);
+        return loadVideo(validateVideoFound(id, documentModel));
       })
     );
   }
 
-  getMedia(
+  findOnePublic$(
     id: string,
-    fileName: string,
-    state: MediaState,
-    documentModel: DocumentModel
-  ): Media {
-    return {
-      type: MediaType.Video,
-      id,
-      fileName,
-      state,
-      entityType: documentModel.type,
-      entityId: documentModel._id,
-      entityGroup: documentModel.group,
-      entitySlug: documentModel.slug,
-    };
+    entityId: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<VideoDto> {
+    return from(entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      map(validateEntityIsPublic),
+      map((documentModel) => ({
+        image: validateVideoFound(id, documentModel),
+        documentModel,
+      })),
+      map(({ image, documentModel }) => ({
+        image: validateVideoPublic(image),
+        documentModel,
+      })),
+      map(({ image, documentModel }) =>
+        loadPublicVideo(image, loadPublicContent(documentModel))
+      )
+    );
   }
 
   setDateCreated$(
@@ -182,16 +213,31 @@ export class VideoProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundVideo = documentModel.videos.find(
-          (video) => video.id === id
-        );
-        if (!foundVideo) throw new NotFoundException();
-
+        const foundVideo = validateVideoFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             videos: [
               ...documentModel.videos.filter((video) => video.id !== id),
-              { ...foundVideo, dateCreated },
+              {
+                id,
+                entityId,
+                fileName: foundVideo.fileName,
+                state: foundVideo.state,
+                order: foundVideo.order,
+                isStarred: foundVideo.isStarred,
+                title: foundVideo.title,
+                description: foundVideo.description,
+                keywords: foundVideo.keywords,
+                dateCreated,
+                datePublished: foundVideo.datePublished,
+                isThreeSixty: foundVideo.isThreeSixty,
+                coverImageId: foundVideo.coverImageId,
+                hlsUrl: foundVideo.hlsUrl,
+                isFlyOver: foundVideo.isFlyOver,
+                isUploaded: foundVideo.isUploaded,
+                isGenerated: foundVideo.isGenerated,
+                isProcessing: foundVideo.isProcessing,
+              },
             ],
           })
         );
@@ -209,16 +255,31 @@ export class VideoProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundVideo = documentModel.videos.find(
-          (video) => video.id === id
-        );
-        if (!foundVideo) throw new NotFoundException();
-
+        const foundVideo = validateVideoFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             videos: [
               ...documentModel.videos.filter((video) => video.id !== id),
-              { ...foundVideo, isGenerated },
+              {
+                id,
+                entityId,
+                fileName: foundVideo.fileName,
+                state: foundVideo.state,
+                order: foundVideo.order,
+                isStarred: foundVideo.isStarred,
+                title: foundVideo.title,
+                description: foundVideo.description,
+                keywords: foundVideo.keywords,
+                dateCreated: foundVideo.dateCreated,
+                datePublished: foundVideo.datePublished,
+                isThreeSixty: foundVideo.isThreeSixty,
+                coverImageId: foundVideo.coverImageId,
+                hlsUrl: foundVideo.hlsUrl,
+                isFlyOver: foundVideo.isFlyOver,
+                isUploaded: foundVideo.isUploaded,
+                isGenerated,
+                isProcessing: foundVideo.isProcessing,
+              },
             ],
           })
         );
@@ -236,16 +297,31 @@ export class VideoProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundVideo = documentModel.videos.find(
-          (video) => video.id === id
-        );
-        if (!foundVideo) throw new NotFoundException();
-
+        const foundVideo = validateVideoFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             videos: [
               ...documentModel.videos.filter((video) => video.id !== id),
-              { ...foundVideo, isProcessing },
+              {
+                id,
+                entityId,
+                fileName: foundVideo.fileName,
+                state: foundVideo.state,
+                order: foundVideo.order,
+                isStarred: foundVideo.isStarred,
+                title: foundVideo.title,
+                description: foundVideo.description,
+                keywords: foundVideo.keywords,
+                dateCreated: foundVideo.dateCreated,
+                datePublished: foundVideo.datePublished,
+                isThreeSixty: foundVideo.isThreeSixty,
+                coverImageId: foundVideo.coverImageId,
+                hlsUrl: foundVideo.hlsUrl,
+                isFlyOver: foundVideo.isFlyOver,
+                isUploaded: foundVideo.isUploaded,
+                isGenerated: foundVideo.isGenerated,
+                isProcessing,
+              },
             ],
           })
         );

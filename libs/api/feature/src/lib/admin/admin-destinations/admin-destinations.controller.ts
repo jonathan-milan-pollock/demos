@@ -17,11 +17,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { Destination } from '@dark-rush-photography/shared/types';
 import {
-  DestinationDto,
+  Destination,
+  DestinationAdminDto,
+  DestinationCreateDto,
   DestinationUpdateDto,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminDestinationsService } from './admin-destinations.service';
 
@@ -33,14 +34,16 @@ export class AdminDestinationsController {
     private readonly adminDestinationsService: AdminDestinationsService
   ) {}
 
-  @Post(':slug')
-  @ApiCreatedResponse({ type: DestinationDto })
-  create$(@Param('slug') slug: string): Observable<Destination> {
-    return this.adminDestinationsService.create$(slug);
+  @Post()
+  @ApiCreatedResponse({ type: DestinationAdminDto })
+  create$(
+    @Body() destinationCreate: DestinationCreateDto
+  ): Observable<Destination> {
+    return this.adminDestinationsService.create$(destinationCreate);
   }
 
   @Put(':id')
-  @ApiOkResponse({ type: DestinationDto })
+  @ApiOkResponse({ type: DestinationAdminDto })
   update$(
     @Param('id') id: string,
     @Body() destinationUpdate: DestinationUpdateDto
@@ -49,19 +52,19 @@ export class AdminDestinationsController {
   }
 
   @Post(':id/post')
-  @HttpCode(204)
-  post$(@Param('id', ParseObjectIdPipe) id: string): Observable<void> {
+  @ApiOkResponse({ type: DestinationAdminDto })
+  post$(@Param('id', ParseObjectIdPipe) id: string): Observable<Destination> {
     return this.adminDestinationsService.post$(id);
   }
 
   @Get()
-  @ApiOkResponse({ type: [DestinationDto] })
+  @ApiOkResponse({ type: [DestinationAdminDto] })
   findAll$(): Observable<Destination[]> {
     return this.adminDestinationsService.findAll$();
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: DestinationDto })
+  @ApiOkResponse({ type: DestinationAdminDto })
   findOne$(
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<Destination> {

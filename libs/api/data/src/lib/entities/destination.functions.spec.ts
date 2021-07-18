@@ -1,5 +1,5 @@
 import {
-  DestinationUpdate,
+  DestinationUpdateDto,
   Location,
   SocialMediaType,
 } from '@dark-rush-photography/shared/types';
@@ -17,8 +17,9 @@ const mockLocation = (): Location => ({
   },
 });
 
-const mockDestinationUpdate = (): DestinationUpdate => ({
+const mockDestinationUpdate = (): DestinationUpdateDto => ({
   slug: faker.lorem.word().toLowerCase(),
+  isPublic: faker.datatype.boolean(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
   keywords: [faker.lorem.word(), faker.lorem.word()],

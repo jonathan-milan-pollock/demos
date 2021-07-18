@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
-import { Observable } from 'rxjs';
-import { take, map } from 'rxjs/operators';
+import { map, Observable, take } from 'rxjs';
 
 import { Metadata } from '@dark-rush-photography/website/types';
 import { Store } from '@ngrx/store';

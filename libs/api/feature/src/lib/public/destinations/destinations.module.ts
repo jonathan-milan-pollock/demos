@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
+  DestinationProvider,
   Document,
   DocumentSchema,
   EntityProvider,
@@ -16,6 +17,6 @@ import { DestinationsController } from './destinations.controller';
     ]),
   ],
   controllers: [DestinationsController],
-  providers: [DestinationsService, EntityProvider],
+  providers: [DestinationsService, DestinationProvider, EntityProvider],
 })
 export class DestinationsModule {}

@@ -17,12 +17,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { Event } from '@dark-rush-photography/shared/types';
 import {
+  Event,
+  EventAdminDto,
   EventCreateDto,
-  EventDto,
   EventUpdateDto,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminEventsService } from './admin-events.service';
 
@@ -33,13 +33,13 @@ export class AdminEventsController {
   constructor(private readonly adminEventsService: AdminEventsService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: EventDto })
+  @ApiCreatedResponse({ type: EventAdminDto })
   create$(@Body() eventCreate: EventCreateDto): Observable<Event> {
     return this.adminEventsService.create$(eventCreate);
   }
 
   @Put(':id')
-  @ApiOkResponse({ type: EventDto })
+  @ApiOkResponse({ type: EventAdminDto })
   update$(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() eventUpdate: EventUpdateDto
@@ -48,19 +48,19 @@ export class AdminEventsController {
   }
 
   @Post(':id/post')
-  @HttpCode(204)
-  post$(@Param('id', ParseObjectIdPipe) id: string): Observable<void> {
+  @ApiOkResponse({ type: EventAdminDto })
+  post$(@Param('id', ParseObjectIdPipe) id: string): Observable<Event> {
     return this.adminEventsService.post$(id);
   }
 
   @Get()
-  @ApiOkResponse({ type: [EventDto] })
+  @ApiOkResponse({ type: [EventAdminDto] })
   findAll$(): Observable<Event[]> {
     return this.adminEventsService.findAll$();
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: EventDto })
+  @ApiOkResponse({ type: EventAdminDto })
   findOne$(@Param('id', ParseObjectIdPipe) id: string): Observable<Event> {
     return this.adminEventsService.findOne$(id);
   }

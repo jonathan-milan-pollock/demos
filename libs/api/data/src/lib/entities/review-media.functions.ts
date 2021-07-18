@@ -1,44 +1,32 @@
-import { EntityType, ReviewMedia } from '@dark-rush-photography/shared/types';
-import { Content } from '@dark-rush-photography/api/types';
+import {
+  ReviewMedia,
+  ReviewMediaDto,
+} from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { toImage } from '../content/image.functions';
-import { toImageDimension } from '../content/image-dimension.functions';
-import { toVideo } from '../content/video.functions';
-import { toVideoDimension } from '../content/video-dimension.functions';
+import { loadImage, loadMinimalPublicImage } from '../content/image.functions';
+import { loadImageDimension } from '../content/image-dimension.functions';
+import { loadMinimalPublicVideo, loadVideo } from '../content/video.functions';
+import { loadVideoDimension } from '../content/video-dimension.functions';
+import { PublicContent } from '@dark-rush-photography/api/types';
 
-export const newReviewMedia = (): ReviewMedia =>
-  ({
-    type: EntityType.ReviewMedia,
-    slug: 'media',
-    isPublic: true,
-    text: [],
-    images: [],
-    imageDimensions: [],
-    videos: [],
-    videoDimensions: [],
-  } as ReviewMedia);
-
-export const reviewMediaFromDocumentModel = (
-  documentModel: DocumentModel
-): ReviewMedia => ({
-  id: documentModel._id,
-  images: documentModel.images.map((image) => toImage(image)),
-  imageDimensions: documentModel.imageDimensions.map((imageDimension) =>
-    toImageDimension(imageDimension)
-  ),
-  videos: documentModel.videos.map((video) => toVideo(video)),
-  videoDimensions: documentModel.videoDimensions.map((videoDimension) =>
-    toVideoDimension(videoDimension)
-  ),
+export const loadNewReviewMedia = (): ReviewMedia => ({
+  images: [],
+  imageDimensions: [],
+  videos: [],
+  videoDimensions: [],
 });
 
-export const reviewMediaFromDocumentModelPublic = (
-  documentModel: DocumentModel,
-  publicContent: Content
-): ReviewMedia => ({
+export const loadReviewMedia = (documentModel: DocumentModel): ReviewMedia => ({
   id: documentModel._id,
-  images: publicContent.images,
-  imageDimensions: publicContent.imageDimensions,
-  videos: publicContent.videos,
-  videoDimensions: publicContent.videoDimensions,
+  images: documentModel.images.map(loadImage),
+  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
+  videos: documentModel.videos.map(loadVideo),
+  videoDimensions: documentModel.videoDimensions.map(loadVideoDimension),
+});
+
+export const loadReviewMediaPublic = (
+  publicContent: PublicContent
+): ReviewMediaDto => ({
+  images: publicContent.images.map(loadMinimalPublicImage),
+  videos: publicContent.videos.map(loadMinimalPublicVideo),
 });

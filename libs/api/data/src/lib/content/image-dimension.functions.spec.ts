@@ -1,35 +1,35 @@
 import * as faker from 'faker';
 
 import {
-  DUMMY_MONGODB_ID,
   ImageDimension,
   ImageDimensionType,
 } from '@dark-rush-photography/shared/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
 import {
   findPublicImageDimensions,
-  toImageDimension,
+  loadImageDimension,
 } from './image-dimension.functions';
 
 describe('image-dimension.functions', () => {
-  const imageDimension = {
+  const imageDimension: ImageDimension = {
     id: faker.datatype.uuid(),
     entityId: DUMMY_MONGODB_ID,
     imageId: faker.datatype.uuid(),
     type: faker.random.arrayElement(Object.values(ImageDimensionType)),
-    pixels: {
+    resolution: {
       width: faker.datatype.number(),
       height: faker.datatype.number(),
     },
-    threeSixtyImageSettings: {
+    threeSixtySettings: {
       pitch: faker.datatype.number(),
       yaw: faker.datatype.number(),
       hfov: faker.datatype.number(),
     },
-  } as ImageDimension;
+  };
 
   describe('toImageDimension', () => {
     it('should return all fields of an image dimension', () => {
-      const result = toImageDimension({ ...imageDimension });
+      const result = loadImageDimension({ ...imageDimension });
       expect(result).toEqual(imageDimension);
     });
 
@@ -38,7 +38,7 @@ describe('image-dimension.functions', () => {
         _id: 'id',
         ...imageDimension,
       };
-      const result = toImageDimension(imageDimensionWithId);
+      const result = loadImageDimension(imageDimensionWithId);
       expect('_id' in result).toBe(false);
     });
 
@@ -46,9 +46,9 @@ describe('image-dimension.functions', () => {
     it('should have an undefined three sixty image settings if not provided', () => {
       const result = toImageDimension({
         ...imageDimension,
-        threeSixtyImageSettings: undefined,
+        threeSixtySettings: undefined,
       });
-      expect(result.threeSixtyImageSettings).toBeUndefined();
+      expect(result.threeSixtySettings).toBeUndefined();
     });*/
   });
 

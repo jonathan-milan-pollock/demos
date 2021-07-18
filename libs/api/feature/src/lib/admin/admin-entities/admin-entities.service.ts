@@ -1,9 +1,8 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { concatMapTo, map, mapTo } from 'rxjs/operators';
+import { concatMapTo, from, map, mapTo, Observable } from 'rxjs';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
 import {
@@ -19,10 +18,6 @@ export class AdminEntitiesService {
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider
   ) {}
-
-  updateSitemap$(): Observable<string> {
-    throw new NotImplementedException();
-  }
 
   setIsProcessing$(
     entityType: EntityType,

@@ -1,60 +1,74 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { concatMapTo, tap } from 'rxjs/operators';
+import {
+  combineLatest,
+  concatMap,
+  concatMapTo,
+  map,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 
-import { Media } from '@dark-rush-photography/shared/types';
-import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
-import { Env } from '@dark-rush-photography/api/types';
+import { VideoDimensionType } from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
+  downloadBlobToFile$,
+  findVideoExifDateCreated$,
   getBlobPath,
   uploadBufferToBlob$,
-} from '@dark-rush-photography/shared-server/util';
-import { VideoProvider } from './video.provider';
+} from '@dark-rush-photography/api/util';
+import { ConfigProvider } from './config.provider';
 import { VideoDimensionProvider } from './video-dimension.provider';
+import { VideoProvider } from './video.provider';
 
 @Injectable()
 export class VideoUploadProvider {
+  private readonly logger: Logger;
+
   constructor(
-    private readonly configService: ConfigService<Env>,
+    private readonly configProvider: ConfigProvider,
     private readonly videoProvider: VideoProvider,
     private readonly videoDimensionProvider: VideoDimensionProvider
-  ) {}
+  ) {
+    this.logger = new Logger(VideoUploadProvider.name);
+  }
 
   upload$(
     media: Media,
+    isThreeSixty: boolean,
     file: Express.Multer.File,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
-    Logger.log('Uploading video', VideoUploadProvider.name);
-    return from(
-      uploadBufferToBlob$(
-        this.configService.get<Env>('privateBlobConnectionString', {
-          infer: true,
-        }),
-        AzureStorageType.Private,
-        file.buffer,
-        getBlobPath(media)
-      )
+    const youTubeResolution = isThreeSixty
+      ? this.configProvider.findThreeSixtyVideoResolution(
+          VideoDimensionType.ThreeSixtyYouTube
+        )
+      : this.configProvider.findVideoResolution(VideoDimensionType.YouTube);
+
+    return uploadBufferToBlob$(
+      this.configProvider.getConnectionStringFromMediaState(media.state),
+      file.buffer,
+      getBlobPath(media)
     ).pipe(
-      tap(() => Logger.log('Update date created', VideoUploadProvider.name)),
-      concatMapTo(from(this.updateDateCreated$(media, entityModel))),
-      tap(() => Logger.log('Exif video', VideoUploadProvider.name)),
-      tap(() => Logger.log('Resize video', VideoUploadProvider.name)),
+      tap(() => this.logger.debug('Update date video created')),
+      concatMapTo(this.updateDateCreated$(media, entityModel)),
+      tap(() => this.logger.debug('Resize video')),
       concatMapTo(
-        from(this.videoDimensionProvider.resizeVideo$(media, entityModel))
+        this.videoDimensionProvider.resize$(
+          media,
+          youTubeResolution,
+          entityModel
+        )
       ),
       concatMapTo(
-        from(
-          this.videoProvider.setIsProcessing$(
-            media.id,
-            media.entityId,
-            false,
-            entityModel
-          )
+        this.videoProvider.setIsProcessing$(
+          media.id,
+          media.entityId,
+          false,
+          entityModel
         )
       )
     );
@@ -63,22 +77,25 @@ export class VideoUploadProvider {
   updateDateCreated$(
     media: Media,
     entityModel: Model<DocumentModel>
-  ): Observable<Media> {
-    return of();
-    /*  return this.VideoProvider
-      .FindDateVideoCreated$({
-        video: media,
-      })
-      .pipe(
-        concatMap((dateCreated) =>
+  ): Observable<string> {
+    return downloadBlobToFile$(
+      this.configProvider.getConnectionStringFromMediaState(media.state),
+      getBlobPath(media),
+      media.fileName
+    ).pipe(
+      concatMap((filePath) => findVideoExifDateCreated$(filePath, new Date())),
+      concatMap((dateCreated) =>
+        combineLatest([
+          of(dateCreated),
           this.videoProvider.setDateCreated$(
             media.id,
             media.entityId,
             dateCreated,
             entityModel
-          )
-        ),
-        mapTo(media)
-      );*/
+          ),
+        ])
+      ),
+      map(([dateCreated]) => dateCreated)
+    );
   }
 }

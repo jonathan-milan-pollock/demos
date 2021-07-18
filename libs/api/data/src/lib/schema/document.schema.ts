@@ -12,8 +12,8 @@ import {
   SocialMediaUrl,
   Video,
   VideoDimension,
-  Entity,
 } from '@dark-rush-photography/shared/types';
+import { DEFAULT_ENTITY_GROUP, Entity } from '@dark-rush-photography/api/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
@@ -39,7 +39,7 @@ export class Document implements Entity {
   })
   type!: EntityType;
 
-  @Prop({ type: String, required: true, default: ' ' })
+  @Prop({ type: String, required: true, default: DEFAULT_ENTITY_GROUP })
   group!: string;
 
   @Prop({ type: String, required: true })
@@ -47,6 +47,9 @@ export class Document implements Entity {
 
   @Prop({ type: Boolean, required: true })
   isPublic!: boolean;
+
+  @Prop({ type: Number, required: true })
+  order!: number;
 
   @Prop({ type: String, required: false })
   title?: string;

@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import configuration from '../config/configuration';
+import { ConfigProviderModule } from './config-provider.module';
 import { AuthModule } from './auth.module';
 import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
 
@@ -20,9 +21,11 @@ import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
         useNewUrlParser: true,
         useFindAndModify: false,
         useCreateIndex: true,
+        useUnifiedTopology: true,
       }),
       inject: [ConfigService],
     }),
+    ConfigProviderModule,
     AuthModule,
     ApiFeatureModule,
   ],

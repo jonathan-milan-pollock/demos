@@ -1,50 +1,61 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, tap } from 'rxjs/operators';
+import { concatMap, concatMapTo, from, Observable, of, tap } from 'rxjs';
 
 import {
-  Media,
+  MediaType,
   Video,
   VideoDimension,
 } from '@dark-rush-photography/shared/types';
-import { Env } from '@dark-rush-photography/api/types';
+import { DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
-  getAzureStorageTypeFromMediaState,
   getBlobPath,
   getBlobPathWithDimension,
-} from '@dark-rush-photography/shared-server/util';
-import { DocumentModel } from '../schema/document.schema';
+} from '@dark-rush-photography/api/util';
+import { ConfigProvider } from './config.provider';
+import { MediaProvider } from './media.provider';
 import { VideoProvider } from './video.provider';
+import { Media } from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class VideoRemoveProvider {
+  private readonly logger: Logger;
+
   constructor(
-    private readonly configService: ConfigService<Env>,
+    private readonly configProvider: ConfigProvider,
+    private readonly mediaProvider: MediaProvider,
     private readonly videoProvider: VideoProvider
-  ) {}
+  ) {
+    this.logger = new Logger(VideoRemoveProvider.name);
+  }
 
   remove$(
     video: Video,
     documentModel: DocumentModel,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
-    Logger.log('Video removal started', VideoRemoveProvider.name);
+    this.logger.debug('Video removal started');
+
+    if (!video.fileName) {
+      return of(documentModel);
+    }
+
     return this.videoProvider
       .setIsProcessing$(video.id, video.entityId, true, entityModel)
       .pipe(
         concatMapTo(
           from(
             this.removeVideoBlobs$(
-              this.videoProvider.getMedia(
+              this.mediaProvider.loadMedia(
+                MediaType.Video,
                 video.id,
                 video.fileName,
                 video.state,
                 documentModel
               ),
+              video.isUploaded,
               documentModel.videoDimensions
             )
           )
@@ -54,41 +65,37 @@ export class VideoRemoveProvider {
             this.videoProvider.remove$(video.id, video.entityId, entityModel)
           )
         ),
-        tap(() =>
-          Logger.log('Video removal completed', VideoRemoveProvider.name)
-        )
+        tap(() => this.logger.debug('Video removal completed'))
       );
   }
 
-  removeVideoBlob$(media: Media): Observable<boolean> {
+  removeVideoBlob$(media: Media, isUploaded: boolean): Observable<boolean> {
+    if (!isUploaded) return of(true);
+
     return deleteBlob$(
-      this.configService.get<Env>('privateBlobConnectionString', {
-        infer: true,
-      }),
-      getAzureStorageTypeFromMediaState(media.state),
+      this.configProvider.getConnectionStringFromMediaState(media.state),
       getBlobPath(media)
     );
   }
 
   removeVideoBlobs$(
     media: Media,
+    isUploaded: boolean,
     videoDimensions: VideoDimension[]
   ): Observable<boolean> {
     if (!media.fileName) return of(true);
 
-    if (videoDimensions.length === 0) return this.removeVideoBlob$(media);
+    if (videoDimensions.length === 0)
+      return this.removeVideoBlob$(media, isUploaded);
 
     return from(videoDimensions).pipe(
       concatMap((videoDimension) =>
         deleteBlob$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          getAzureStorageTypeFromMediaState(media.state),
+          this.configProvider.getConnectionStringFromMediaState(media.state),
           getBlobPathWithDimension(media, videoDimension.type)
         )
       ),
-      concatMapTo(this.removeVideoBlob$(media))
+      concatMapTo(this.removeVideoBlob$(media, isUploaded))
     );
   }
 }
