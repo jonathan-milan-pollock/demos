@@ -2,7 +2,7 @@ import { EmotionType } from '@dark-rush-photography/shared/types';
 import { userSchema } from './user.schema';
 
 export const emotionSchema = {
-  id: { type: String, required: false },
+  id: { type: String, required: true },
   entityId: { type: String, required: true },
   mediaId: { type: String, required: false },
   commentId: { type: String, required: false },

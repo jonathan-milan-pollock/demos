@@ -5,6 +5,7 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
+  ReviewProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewsService } from './reviews.service';
 import { ReviewsController } from './reviews.controller';
@@ -16,6 +17,6 @@ import { ReviewsController } from './reviews.controller';
     ]),
   ],
   controllers: [ReviewsController],
-  providers: [ReviewsService, EntityProvider],
+  providers: [ReviewsService, ReviewProvider, EntityProvider],
 })
 export class ReviewsModule {}

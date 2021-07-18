@@ -5,7 +5,7 @@ describe('about.functions', () => {
       const result = fromDocumentModel({
         ...documentModel,
         _id: documentId,
-      } as DocumentModel);
+      });
       expect(result.id).toBe(documentId);
     });
 
@@ -14,7 +14,7 @@ describe('about.functions', () => {
       const result = fromDocumentModel({
         ...documentModel,
         _id: documentId,
-      } as DocumentModel);
+      });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { _id, ...about } = documentModel;
       expect(result).toEqual({ ...about, id: documentId });

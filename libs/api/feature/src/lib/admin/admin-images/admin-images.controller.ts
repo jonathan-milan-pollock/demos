@@ -13,6 +13,7 @@ import {
   Get,
   ParseUUIDPipe,
   ParseBoolPipe,
+  ParseEnumPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -25,13 +26,14 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { Image, ImageDimensionType } from '@dark-rush-photography/shared/types';
 import {
-  FileUploadDto,
-  ImageDto,
+  Image,
+  ImageAdminDto,
+  ImageDimensionType,
   ImageUpdateDto,
-  ThreeSixtyImageSettingsDto,
-} from '@dark-rush-photography/api/types';
+  ThreeSixtySettingsDto,
+} from '@dark-rush-photography/shared/types';
+import { FileUploadDto } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminImagesService } from './admin-images.service';
 
@@ -47,108 +49,123 @@ export class AdminImagesController {
   @ApiBody({
     type: FileUploadDto,
   })
-  @ApiOkResponse({ type: ImageDto })
+  @ApiOkResponse({ type: ImageAdminDto })
   upload$(
-    @Headers('X-FILE-NAME') fileName: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @UploadedFile() image: Express.Multer.File
   ): Observable<Image> {
-    const isThreeSixtyImage = false;
     return this.adminImagesService.upload$(
       entityId,
-      fileName,
-      isThreeSixtyImage,
+      image.originalname,
+      0,
+      false,
       image
     );
   }
 
-  @Post('upload-three-sixty-image')
+  @Post('upload-three-sixty')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     type: FileUploadDto,
   })
-  @ApiOkResponse({ type: ImageDto })
-  uploadThreeSixtyImage$(
-    @Headers('X-FILE-NAME') fileName: string,
+  @ApiOkResponse({ type: ImageAdminDto })
+  uploadThreeSixty$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @UploadedFile() threeSixtyImage: Express.Multer.File
   ): Observable<Image> {
-    const isThreeSixtyImage = true;
     return this.adminImagesService.upload$(
       entityId,
-      fileName,
-      isThreeSixtyImage,
+      threeSixtyImage.originalname,
+      0,
+      true,
       threeSixtyImage
     );
   }
 
-  @Post('upload-lightroom-image')
+  @Post('upload-lightroom')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     type: FileUploadDto,
   })
-  @ApiOkResponse({ type: ImageDto })
-  uploadLightroomImage$(
+  @ApiOkResponse({ type: ImageAdminDto })
+  uploadLightroom$(
     @Headers('X-LIGHTROOM-PATH') lightroomPath: string,
     @UploadedFile() lightroomImage: Express.Multer.File
   ): Observable<Image> {
-    return this.adminImagesService.uploadLightroomImage$(
+    return this.adminImagesService.uploadLightroom$(
       lightroomPath,
       lightroomImage
     );
   }
 
   @Put(':id')
-  @ApiOkResponse({ type: ImageDto })
+  @ApiOkResponse({ type: ImageAdminDto })
   update$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Query('entityId') entityId: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() imageUpdate: ImageUpdateDto
   ): Observable<Image> {
     return this.adminImagesService.update$(id, entityId, imageUpdate);
   }
 
-  @Put(':id/:imageDimensionType/three-sixty-image-settings')
-  @HttpCode(204)
-  updateThreeSixtyImageSettings$(
+  @Put(':id/:imageDimensionType/three-sixty-settings')
+  @ApiOkResponse({ type: ImageAdminDto })
+  updateThreeSixtySettings$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Query('entityId') entityId: string,
-    @Body() threeSixtyImageSettings: ThreeSixtyImageSettingsDto
-  ): Observable<void> {
-    return this.adminImagesService.updateThreeSixtyImageSettings$(
+    @Param('imageDimensionType', new ParseEnumPipe(ImageDimensionType))
+    imageDimensionType: ImageDimensionType,
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Body() threeSixtySettings: ThreeSixtySettingsDto
+  ): Observable<Image> {
+    return this.adminImagesService.updateThreeSixtySettings$(
       id,
       entityId,
-      ImageDimensionType.Facebook, //TODO: add parameter
-      threeSixtyImageSettings
+      imageDimensionType,
+      threeSixtySettings
     );
   }
 
   @Put(':id/processing/:isProcessing')
-  @ApiOkResponse({ type: ImageDto })
+  @ApiOkResponse({ type: ImageAdminDto })
   setIsProcessing$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Param('isProcessing', ParseBoolPipe) isProcessing: boolean,
     @Query('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<Image> {
+  ): Observable<void> {
     return this.adminImagesService.setIsProcessing$(id, entityId, isProcessing);
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: ImageDto })
+  @ApiOkResponse({ type: ImageAdminDto })
   findOne$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Query('entityId') entityId: string
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<Image> {
     return this.adminImagesService.findOne$(id, entityId);
+  }
+
+  @Get(':id/:imageDimensionType/data-uri')
+  @ApiOkResponse({ type: String })
+  findDataUri$(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Param('imageDimensionType', new ParseEnumPipe(ImageDimensionType))
+    imageDimensionType: ImageDimensionType,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<string> {
+    return this.adminImagesService.findDataUri$(
+      id,
+      entityId,
+      imageDimensionType
+    );
   }
 
   @Delete(':id')
   @HttpCode(204)
   remove$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Query('entityId') entityId: string
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
     return this.adminImagesService.remove$(id, entityId);
   }

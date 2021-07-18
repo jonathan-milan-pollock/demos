@@ -5,9 +5,7 @@ describe('bestOfCreateAdmin', () => {
     cy
       .authenticateApi()
       .then(() =>
-        Object.keys(BestOfType).forEach((key) =>
-          cy.aboutDeleteAdmin(key as BestOfType)
-        )
+        Object.keys(BestOfType).forEach((key) => cy.aboutDeleteAdmin(key))
       )
   );
 

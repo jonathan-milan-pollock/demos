@@ -96,5 +96,3 @@ _universal selectors and combinators have no effect on specificity_
 
   - border-collapse
   - border-spacing
-
-- TODO: add postcss

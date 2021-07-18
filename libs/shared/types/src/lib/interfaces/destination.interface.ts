@@ -9,19 +9,13 @@ import { Emotion } from './emotion.interface';
 
 export interface Destination {
   readonly id?: string;
-  // TODO identifier
   readonly slug: string;
   readonly isPublic: boolean;
-  // metadata
+  readonly order: number;
   readonly title?: string;
   readonly description?: string;
   readonly keywords: string[];
-  readonly datePublished?: string;
-  // location
   readonly location?: Location;
-  // display
-  readonly useTileImage: boolean;
-  // content
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];

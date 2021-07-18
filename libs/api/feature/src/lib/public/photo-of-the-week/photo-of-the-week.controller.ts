@@ -3,8 +3,10 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
-import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
+import {
+  PhotoOfTheWeekDto,
+  PhotoOfTheWeekMinimalDto,
+} from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
@@ -16,8 +18,8 @@ export class PhotoOfTheWeekController {
   constructor(private readonly photoOfTheWeekService: PhotoOfTheWeekService) {}
 
   @Get()
-  @ApiOkResponse({ type: [PhotoOfTheWeekDto] })
-  findAll$(): Observable<PhotoOfTheWeek[]> {
+  @ApiOkResponse({ type: [PhotoOfTheWeekMinimalDto] })
+  findAll$(): Observable<PhotoOfTheWeekMinimalDto[]> {
     return this.photoOfTheWeekService.findAll$();
   }
 
@@ -25,7 +27,7 @@ export class PhotoOfTheWeekController {
   @ApiOkResponse({ type: PhotoOfTheWeekDto })
   findOne$(
     @Param('id', ParseObjectIdPipe) id: string
-  ): Observable<PhotoOfTheWeek> {
+  ): Observable<PhotoOfTheWeekDto> {
     return this.photoOfTheWeekService.findOne$(id);
   }
 }

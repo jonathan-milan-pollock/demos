@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 
-import { map, switchMap, switchMapTo } from 'rxjs/operators';
+import { map, switchMapTo } from 'rxjs';
 
 import { Auth0User } from '@dark-rush-photography/website/types';
 import { Auth0AuthService } from './auth0-auth.service';

@@ -26,12 +26,6 @@ import { AdminEntitiesService } from './admin-entities.service';
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
 
-  @Get('sitemap')
-  @HttpCode(204)
-  updateSitemap$(): Observable<string> {
-    return this.adminEntitiesService.updateSitemap$();
-  }
-
   @Put(':entityType/:id/processing/:isProcessing')
   @ApiParam({
     name: 'entityType',

@@ -3,8 +3,7 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { BestOf, BestOfType } from '@dark-rush-photography/shared/types';
-import { BestOfDto } from '@dark-rush-photography/api/types';
+import { BestOfDto, BestOfType } from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { BestOfService } from './best-of.service';
 
@@ -23,7 +22,7 @@ export class BestOfController {
   findOne$(
     @Param('bestOfType', new ParseEnumPipe(BestOfType))
     bestOfType: BestOfType
-  ): Observable<BestOf> {
+  ): Observable<BestOfDto> {
     return this.bestOfService.findOne$(bestOfType);
   }
 }

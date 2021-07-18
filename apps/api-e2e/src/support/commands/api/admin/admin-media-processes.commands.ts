@@ -1,17 +1,24 @@
-import { MediaProcessType } from '@dark-rush-photography/shared/types';
-import { getAdminHeaders } from '../auth.functions';
+import {
+  MediaProcess,
+  MediaProcessType,
+} from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'createMediaProcessAdmin',
   (
-    mediaProcessType: MediaProcessType,
+    type: MediaProcessType,
     slug: string
-  ): Cypress.Chainable<Cypress.Response> =>
+  ): Cypress.Chainable<Cypress.Response<MediaProcess>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/media-processes/${mediaProcessType}/${slug}`,
+      url: '/api/v1/admin/media-processes',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
+      },
+      body: {
+        type,
+        slug,
       },
       failOnStatusCode: false,
     })
@@ -22,24 +29,26 @@ Cypress.Commands.add(
   (
     mediaProcessType: MediaProcessType,
     id: string
-  ): Cypress.Chainable<Cypress.Response> =>
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/media-processes/${mediaProcessType}/${id}/process`,
+      url: `/api/v1/admin/media-processes/${mediaProcessType}/${id}/process`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'findAllMediaProcessesAdmin',
-  (mediaProcessType: MediaProcessType): Cypress.Chainable<Cypress.Response> =>
+  (
+    mediaProcessType: MediaProcessType
+  ): Cypress.Chainable<Cypress.Response<MediaProcess[]>> =>
     cy.request({
       method: 'GET',
-      url: `/api/admin/v1/media-processes/${mediaProcessType}`,
+      url: `/api/v1/admin/media-processes/${mediaProcessType}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
@@ -49,28 +58,12 @@ Cypress.Commands.add(
   (
     mediaProcessType: MediaProcessType,
     id: string
-  ): Cypress.Chainable<Cypress.Response> =>
+  ): Cypress.Chainable<Cypress.Response<MediaProcess>> =>
     cy.request({
       method: 'GET',
-      url: `/api/admin/v1/media-processes/${mediaProcessType}/${id}`,
+      url: `/api/v1/admin/media-processes/${mediaProcessType}/${id}`,
       headers: {
-        ...getAdminHeaders(),
-      },
-      failOnStatusCode: false,
-    })
-);
-
-Cypress.Commands.add(
-  'findIsProcessingMediaProcessAdmin',
-  (
-    mediaProcessType: MediaProcessType,
-    id: string
-  ): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/media-processes/${mediaProcessType}/${id}/processing`,
-      headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
@@ -80,12 +73,12 @@ Cypress.Commands.add(
   (
     mediaProcessType: MediaProcessType,
     id: string
-  ): Cypress.Chainable<Cypress.Response> =>
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/admin/v1/media-processes/${mediaProcessType}/${id}`,
+      url: `/api/v1/admin/media-processes/${mediaProcessType}/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

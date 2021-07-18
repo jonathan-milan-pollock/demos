@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { DateCreatedExif } from '@dark-rush-photography/api/types';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, map, Observable, of } from 'rxjs';
 
-export const findExifDateCreated$ = (
+import { DateCreatedExif } from '@dark-rush-photography/api/types';
+
+export const findImageExifDateCreated$ = (
   filePath: string,
-  date: Date
+  currentDate: Date
 ): Observable<string> => {
   const exiftool = require('node-exiftool');
   const exiftoolBin = require('dist-exiftool');
   const ep = new exiftool.ExiftoolProcess(exiftoolBin);
+
   return from(ep.open()).pipe(
     map(() => ep.readMetadata(filePath, ['CreateDate'])),
     map((dateCreated: DateCreatedExif) => {
@@ -18,16 +19,22 @@ export const findExifDateCreated$ = (
         'CreateDate' in dateCreated.data[0] &&
         dateCreated.data[0].CreateDate
         ? dateCreated.data[0].CreateDate
-        : getExifDate(date);
+        : getExifDate(currentDate);
     })
   );
 };
 
+export const findVideoExifDateCreated$ = (
+  filePath: string,
+  currentDate: Date
+): Observable<string> => {
+  return of(getExifDate(currentDate));
+};
+
 export const getExifDate = (date: Date): string =>
-  `${date
+  `${date.toISOString().slice(0, 10).replace(/-/g, ':')} ${date
     .toISOString()
-    .slice(0, 10)
-    .replace(/-/g, ':')} ${date.toISOString().slice(11, 8)}`;
+    .slice(11, 8)}`;
 
 export const getIsoDateFromExifDate = (
   exifDate: string | null

@@ -2,22 +2,31 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, map, max } from 'rxjs/operators';
+import {
+  combineLatest,
+  concatMap,
+  concatMapTo,
+  from,
+  map,
+  max,
+  Observable,
+  of,
+} from 'rxjs';
 
 import {
   Comment,
-  CommentAdd,
-  CommentUpdate,
+  CommentAddDto,
+  CommentUpdateDto,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { toComment, validateAddComment } from '../content/comment.functions';
+import { validateAddComment } from '../content/comment-validation.functions';
+import { loadComment } from '../content/comment.functions';
 
 @Injectable()
 export class CommentProvider {
   add$(
-    commentAdd: CommentAdd,
+    commentAdd: CommentAddDto,
     entityModel: Model<DocumentModel>
   ): Observable<Comment> {
     const id = uuidv4();
@@ -54,7 +63,7 @@ export class CommentProvider {
   update$(
     id: string,
     entityId: string,
-    commentUpdate: CommentUpdate,
+    commentUpdate: CommentUpdateDto,
     entityModel: Model<DocumentModel>
   ): Observable<Comment> {
     return from(entityModel.findById(entityId)).pipe(
@@ -92,7 +101,7 @@ export class CommentProvider {
         if (!foundComment)
           throw new NotFoundException('Could not find comment');
 
-        return toComment(foundComment);
+        return loadComment(foundComment);
       })
     );
   }

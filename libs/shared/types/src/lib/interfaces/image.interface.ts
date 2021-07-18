@@ -6,13 +6,15 @@ export interface Image {
   readonly fileName: string;
   readonly state: MediaState;
   readonly order: number;
-  readonly isStared: boolean; //TODO: Can star 1
-  readonly isLoved: boolean; //TODO: Can love 10?
-  readonly title: string;
-  readonly description: string;
-  readonly keywords: string;
-  readonly dateCreated: string;
-  readonly datePublished: string;
+  readonly isStarred: boolean;
+  readonly isLoved: boolean;
+  readonly title?: string;
+  readonly description?: string;
+  readonly keywords?: string;
+  readonly dateCreated?: string;
+  readonly datePublished?: string;
+  readonly isThreeSixty: boolean;
+  readonly skipExif: boolean;
   readonly isGenerated: boolean;
   readonly isProcessing: boolean;
 }

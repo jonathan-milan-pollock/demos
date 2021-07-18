@@ -1,13 +1,14 @@
-import { getAdminHeaders } from '../auth.functions';
+import { Favorites } from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'createFavoritesAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<Favorites>> =>
     cy.request({
       method: 'POST',
-      url: '/api/admin/v1/favorites',
+      url: '/api/v1/admin/favorites',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       failOnStatusCode: false,
     })
@@ -15,36 +16,24 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'findOneFavoriteAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<Favorites>> =>
     cy.request({
       method: 'GET',
-      url: '/api/admin/v1/favorites',
+      url: '/api/v1/admin/favorites',
       headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
-  'findIsProcessingFavoriteAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/favorites/${id}/processing`,
-      headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'deleteFavoriteAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/admin/v1/favorites/${id}`,
+      url: `/api/v1/admin/favorites/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

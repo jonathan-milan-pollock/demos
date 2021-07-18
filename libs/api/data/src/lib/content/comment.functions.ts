@@ -1,18 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
-
-import { Comment, CommentAdd } from '@dark-rush-photography/shared/types';
-import { DocumentModel } from '../schema/document.schema';
-
-export const toComment = (comment: Comment): Comment => {
-  return {
-    id: comment.id,
-    entityId: comment.entityId,
-    mediaId: comment.mediaId,
-    order: comment.order,
-    user: comment.user,
-    text: comment.text,
-  };
-};
+import { Comment } from '@dark-rush-photography/shared/types';
 
 export const findPublicComments = (
   comments: Comment[],
@@ -23,25 +9,26 @@ export const findPublicComments = (
     (c) => c.mediaId && publicMediaIds.includes(c.mediaId)
   );
   return [
-    ...entityComments.map((c) => toComment(c)),
-    ...mediaComments.map((c) => toComment(c)),
+    ...entityComments.map((c) => loadComment(c)),
+    ...mediaComments.map((c) => loadComment(c)),
   ];
 };
 
-export const validateAddComment = (
-  commentAdd: CommentAdd,
-  documentModel: DocumentModel
-): DocumentModel => {
-  if (commentAdd.mediaId) {
-    const imageIds = documentModel.images.map((image) => image.id);
-    const videoIds = documentModel.videos.map((video) => video.id);
-    if (
-      !(
-        imageIds.includes(commentAdd.mediaId) ||
-        videoIds.includes(commentAdd.mediaId)
-      )
-    )
-      throw new NotFoundException('Could not find media for comment');
-  }
-  return documentModel;
+export const findEntityComments = (comments: Comment[]): Comment[] =>
+  comments.filter((comment) => comment.mediaId === undefined);
+
+export const findMediaComments = (
+  comments: Comment[],
+  mediaId: string
+): Comment[] => comments.filter((comment) => comment.mediaId === mediaId);
+
+export const loadComment = (comment: Comment): Comment => {
+  return {
+    id: comment.id,
+    entityId: comment.entityId,
+    mediaId: comment.mediaId,
+    order: comment.order,
+    user: comment.user,
+    text: comment.text,
+  };
 };

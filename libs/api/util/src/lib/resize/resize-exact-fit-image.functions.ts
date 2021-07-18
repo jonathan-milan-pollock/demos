@@ -1,11 +1,10 @@
 ﻿import sharp = require('sharp');
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 
 import { StandardImageResolution } from '@dark-rush-photography/api/types';
-import { createTempFile$ } from '@dark-rush-photography/shared-server/util';
+import { createTempFile$ } from '../file/file.functions';
 
-export const resizeExactFitImageDimensions$ = (
+export const resizeExactFitImage$ = (
   fileName: string,
   filePath: string,
   standardImageResolution: StandardImageResolution

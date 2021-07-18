@@ -2,8 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 import { HttpService } from '@nestjs/axios';
 
-import { from, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { from, map, Observable, of, switchMap } from 'rxjs';
 
 import {
   CommentMessage,
@@ -18,6 +17,7 @@ import { createOrUpdateEmotion$ } from '../api/emotion-api';
 
 import { apiAuth$ } from '@dark-rush-photography/web-socket/util';
 
+// TODO: Fix the as word
 @Injectable()
 export class HandleMessageProvider {
   handleMessage$(

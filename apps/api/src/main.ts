@@ -1,10 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  InternalServerErrorException,
-  Logger,
-  ValidationPipe,
-  VersioningType,
-} from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
@@ -15,7 +10,7 @@ import {
   AUTH0_ISSUER,
 } from '@dark-rush-photography/shared-server/types';
 import { LogzioLogger } from '@dark-rush-photography/shared-server/util';
-import { ConfigService } from '@nestjs/config';
+import { ConfigProvider } from '@dark-rush-photography/api/data';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,12 +21,8 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  const configService = app.get(ConfigService);
-  const logzioToken = configService.get('logzioToken');
-  if (!logzioToken) {
-    throw new InternalServerErrorException('Logzio token is undefined');
-  }
-  app.useLogger(new LogzioLogger(logzioToken));
+  const configProvider = app.get(ConfigProvider);
+  app.useLogger(new LogzioLogger(configProvider.logzioToken));
 
   if (!environment.production) {
     const config = new DocumentBuilder()

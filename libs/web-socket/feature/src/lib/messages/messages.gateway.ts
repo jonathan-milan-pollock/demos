@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { HttpService } from '@nestjs/axios';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -8,9 +9,8 @@ import {
   WebSocketGateway,
   WsException,
 } from '@nestjs/websockets';
-import { HttpService } from '@nestjs/axios';
 
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs';
 
 import {
   Env,
@@ -21,7 +21,8 @@ import { HandleMessageProvider } from '@dark-rush-photography/web-socket/data';
 
 @WebSocketGateway()
 export class MessagesGateway
-  implements OnGatewayConnection, OnGatewayDisconnect {
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   readonly webSocketClients: WebSocketClient[] = [];
 
   constructor(

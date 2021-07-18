@@ -1,54 +1,49 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { from, Observable } from 'rxjs';
-import { concatMap, concatMapTo, map } from 'rxjs/operators';
+import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
 
 import {
   Image,
+  ImageDto,
+  ImageUpdateDto,
   MediaState,
-  MediaType,
-  ImageUpdate,
-  Media,
 } from '@dark-rush-photography/shared/types';
 import { LightroomMedia } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { getLightroomMedia } from '@dark-rush-photography/api/util';
-import { validateEntityFound } from '../entities/entity-validation.functions';
-import { toImage } from '../content/image.functions';
+import {
+  validateEntityFound,
+  validateEntityIsPublic,
+} from '../entities/entity-validation.functions';
+import {
+  validateImageFound,
+  validateImageNotAlreadyExists,
+  validateImageNotProcessing,
+  validateImagePublic,
+} from '../content/image-validation.functions';
+import { loadImage, loadPublicImage } from '../content/image.functions';
+import { loadPublicContent } from '../content/public-content.functions';
 
 @Injectable()
 export class ImageProvider {
-  validateImageNotFound(
+  validateImageNotAlreadyExists(
     fileName: string,
     documentModel: DocumentModel
   ): DocumentModel {
-    const foundImage = documentModel.images.find(
-      (image) => image.fileName == fileName
-    );
-    if (foundImage)
-      throw new ConflictException(
-        `Image with file name ${fileName} already exists`
-      );
-    return documentModel;
+    return validateImageNotAlreadyExists(fileName, documentModel);
   }
 
   validateImageNotProcessing(image: Image): Image {
-    if (image.isProcessing)
-      throw new ConflictException(
-        'Image cannot be modified as it currently being processed'
-      );
-    return image;
+    return validateImageNotProcessing(image);
   }
 
-  add$(
+  addUpload$(
     id: string,
     entityId: string,
     fileName: string,
+    order: number,
+    isThreeSixty: boolean,
     isProcessing: boolean,
     entityModel: Model<DocumentModel>
   ): Observable<Image> {
@@ -64,14 +59,11 @@ export class ImageProvider {
                 entityId,
                 fileName,
                 state: MediaState.New,
-                order: 0,
-                isStared: false,
+                order,
+                isStarred: false,
                 isLoved: false,
-                title: '',
-                description: '',
-                keywords: '',
-                dateCreated: '',
-                datePublished: '',
+                isThreeSixty,
+                skipExif: false,
                 isGenerated: false,
                 isProcessing,
               },
@@ -86,17 +78,13 @@ export class ImageProvider {
   update$(
     id: string,
     entityId: string,
-    imageUpdate: ImageUpdate,
+    imageUpdate: ImageUpdateDto,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundImage = documentModel.images.find(
-          (image) => image.id === id
-        );
-        if (!foundImage) throw new NotFoundException();
-
+        const foundImage = validateImageFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             images: [
@@ -107,13 +95,15 @@ export class ImageProvider {
                 fileName: imageUpdate.fileName,
                 state: imageUpdate.state,
                 order: imageUpdate.order,
-                isStared: imageUpdate.isStared,
+                isStarred: imageUpdate.isStarred,
                 isLoved: imageUpdate.isLoved,
-                title: imageUpdate.title ?? '',
-                description: imageUpdate.description ?? '',
-                keywords: imageUpdate.keywords ?? '',
+                title: imageUpdate.title,
+                description: imageUpdate.description,
+                keywords: imageUpdate.keywords,
                 dateCreated: foundImage.dateCreated,
-                datePublished: imageUpdate.datePublished ?? '',
+                datePublished: imageUpdate.datePublished,
+                isThreeSixty: foundImage.isThreeSixty,
+                skipExif: foundImage.skipExif,
                 isGenerated: foundImage.isGenerated,
                 isProcessing: foundImage.isProcessing,
               },
@@ -133,30 +123,31 @@ export class ImageProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        const foundImage = documentModel.images.find((image) => image.id == id);
-        if (!foundImage) throw new NotFoundException('Could not find image');
-
-        return toImage(foundImage);
+        return loadImage(validateImageFound(id, documentModel));
       })
     );
   }
 
-  getMedia(
+  findOnePublic$(
     id: string,
-    fileName: string,
-    state: MediaState,
-    documentModel: DocumentModel
-  ): Media {
-    return {
-      type: MediaType.Image,
-      id,
-      fileName,
-      state,
-      entityType: documentModel.type,
-      entityId: documentModel._id,
-      entityGroup: documentModel.group,
-      entitySlug: documentModel.slug,
-    };
+    entityId: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<ImageDto> {
+    return from(entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      map(validateEntityIsPublic),
+      map((documentModel) => ({
+        image: validateImageFound(id, documentModel),
+        documentModel,
+      })),
+      map(({ image, documentModel }) => ({
+        image: validateImagePublic(image),
+        documentModel,
+      })),
+      map(({ image, documentModel }) =>
+        loadPublicImage(image, loadPublicContent(documentModel))
+      )
+    );
   }
 
   getLightroomMedia(lightroomPath: string): LightroomMedia {
@@ -172,28 +163,26 @@ export class ImageProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundImage = documentModel.images.find(
-          (image) => image.id === id
-        );
-        if (!foundImage) throw new NotFoundException();
-
+        const foundImage = validateImageFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images.filter((image) => image.id !== id),
               {
-                id: foundImage.id,
-                entityId: foundImage.entityId,
+                id,
+                entityId,
                 fileName: foundImage.fileName,
                 state: foundImage.state,
                 order: foundImage.order,
-                isStared: foundImage.isStared,
+                isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
                 title: foundImage.title,
                 description: foundImage.description,
                 keywords: foundImage.keywords,
-                dateCreated: dateCreated,
+                dateCreated,
                 datePublished: foundImage.datePublished,
+                isThreeSixty: foundImage.isThreeSixty,
+                skipExif: foundImage.skipExif,
                 isGenerated: foundImage.isGenerated,
                 isProcessing: foundImage.isProcessing,
               },
@@ -214,29 +203,27 @@ export class ImageProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundImage = documentModel.images.find(
-          (image) => image.id === id
-        );
-        if (!foundImage) throw new NotFoundException();
-
+        const foundImage = validateImageFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images.filter((image) => image.id !== id),
               {
-                id: foundImage.id,
-                entityId: foundImage.entityId,
+                id,
+                entityId,
                 fileName: foundImage.fileName,
                 state: foundImage.state,
                 order: foundImage.order,
-                isStared: foundImage.isStared,
+                isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
                 title: foundImage.title,
                 description: foundImage.description,
                 keywords: foundImage.keywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: foundImage.datePublished,
-                isGenerated: isGenerated,
+                isThreeSixty: foundImage.isThreeSixty,
+                skipExif: foundImage.skipExif,
+                isGenerated,
                 isProcessing: foundImage.isProcessing,
               },
             ],
@@ -256,30 +243,28 @@ export class ImageProvider {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundImage = documentModel.images.find(
-          (image) => image.id === id
-        );
-        if (!foundImage) throw new NotFoundException();
-
+        const foundImage = validateImageFound(id, documentModel);
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images.filter((image) => image.id !== id),
               {
-                id: foundImage.id,
-                entityId: foundImage.entityId,
+                id,
+                entityId,
                 fileName: foundImage.fileName,
                 state: foundImage.state,
                 order: foundImage.order,
-                isStared: foundImage.isStared,
+                isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
                 title: foundImage.title,
                 description: foundImage.description,
                 keywords: foundImage.keywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: foundImage.datePublished,
+                isThreeSixty: foundImage.isThreeSixty,
+                skipExif: foundImage.skipExif,
                 isGenerated: foundImage.isGenerated,
-                isProcessing: isProcessing,
+                isProcessing,
               },
             ],
           })

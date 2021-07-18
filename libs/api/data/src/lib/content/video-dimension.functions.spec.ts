@@ -1,10 +1,10 @@
 import * as faker from 'faker';
 
 import {
-  DUMMY_MONGODB_ID,
   VideoDimension,
   VideoDimensionType,
 } from '@dark-rush-photography/shared/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
 import {
   findPublicVideoDimensions,
   toVideoDimension,
@@ -16,7 +16,7 @@ describe('video-dimension.functions', () => {
     entityId: DUMMY_MONGODB_ID,
     videoId: faker.datatype.uuid(),
     type: faker.random.arrayElement(Object.values(VideoDimensionType)),
-    pixels: {
+    resolution: {
       width: faker.datatype.number(),
       height: faker.datatype.number(),
     },

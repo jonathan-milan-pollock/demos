@@ -17,12 +17,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
 import {
+  PhotoOfTheWeek,
   PhotoOfTheWeekCreateDto,
   PhotoOfTheWeekDto,
   PhotoOfTheWeekUpdateDto,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminPhotoOfTheWeekService } from './admin-photo-of-the-week.service';
 
@@ -52,8 +52,10 @@ export class AdminPhotoOfTheWeekController {
   }
 
   @Post(':id/post')
-  @HttpCode(204)
-  postProcess$(@Param('id', ParseObjectIdPipe) id: string): Observable<void> {
+  @ApiOkResponse({ type: PhotoOfTheWeekDto })
+  postProcess$(
+    @Param('id', ParseObjectIdPipe) id: string
+  ): Observable<PhotoOfTheWeek> {
     return this.adminPhotoOfTheWeekService.post$(id);
   }
 

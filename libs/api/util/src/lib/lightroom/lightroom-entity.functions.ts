@@ -2,11 +2,11 @@ import { BadRequestException } from '@nestjs/common';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
 import {
+  DEFAULT_ENTITY_GROUP,
   FAVORITES_SLUG,
   LightroomMedia,
   REVIEW_MEDIA_SLUG,
 } from '@dark-rush-photography/api/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 
 export const getAbout = (fileNameSections: string[]): LightroomMedia => {
   return {

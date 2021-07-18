@@ -5,6 +5,7 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
+  MediaProvider,
   VideoProvider,
   VideoDimensionProvider,
   VideoRemoveProvider,
@@ -24,6 +25,7 @@ import { AdminVideosController } from './admin-videos.controller';
   providers: [
     AdminVideosService,
     EntityProvider,
+    MediaProvider,
     VideoProvider,
     VideoDimensionProvider,
     VideoUploadProvider,

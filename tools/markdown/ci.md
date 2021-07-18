@@ -92,6 +92,8 @@
 
 ---
 
+- set GitHub actions retention to 30 days
+
 ### Manual creation of multicontainer WebApp
 
 - Ran install-multicontainer-webapp GitHub action

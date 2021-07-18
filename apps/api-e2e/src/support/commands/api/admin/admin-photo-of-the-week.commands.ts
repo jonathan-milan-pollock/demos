@@ -1,22 +1,20 @@
 import {
-  PhotoOfTheWeekCreate,
+  PhotoOfTheWeek,
   PhotoOfTheWeekUpdate,
 } from '@dark-rush-photography/shared/types';
-import { getAdminHeaders } from '../auth.functions';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'createPhotoOfTheWeekAdmin',
-  (
-    photoOfTheWeekCreate: PhotoOfTheWeekCreate
-  ): Cypress.Chainable<Cypress.Response> =>
+  (slug: string): Cypress.Chainable<Cypress.Response<PhotoOfTheWeek>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/photo-of-the-week`,
+      url: '/api/v1/admin/photo-of-the-week',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       body: {
-        ...photoOfTheWeekCreate,
+        slug,
       },
       failOnStatusCode: false,
     })
@@ -27,12 +25,12 @@ Cypress.Commands.add(
   (
     id: string,
     photoOfTheWeekUpdate: PhotoOfTheWeekUpdate
-  ): Cypress.Chainable<Cypress.Response> =>
+  ): Cypress.Chainable<Cypress.Response<PhotoOfTheWeek>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/admin/v1/photo-of-the-week/${id}`,
+      url: `/api/v1/admin/photo-of-the-week/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       body: { ...photoOfTheWeekUpdate },
       failOnStatusCode: false,
@@ -41,61 +39,49 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'postPhotoOfTheWeekAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<PhotoOfTheWeek>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/events/${id}/post`,
+      url: `/api/v1/admin/photo-of-the-week/${id}/post`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'findAllPhotoOfTheWeekAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<PhotoOfTheWeek[]>> =>
     cy.request({
       method: 'GET',
-      url: '/api/admin/v1/photo-of-the-week',
+      url: '/api/v1/admin/photo-of-the-week',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'findOnePhotoOfTheWeekAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<PhotoOfTheWeek>> =>
     cy.request({
       method: 'GET',
-      url: `/api/admin/v1/photo-of-the-week/${id}`,
+      url: `/api/v1/admin/photo-of-the-week/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'findIsProcessingPhotoOfTheWeekAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/photo-of-the-week/${id}/processing`,
-      headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
   'deletePhotoOfTheWeekAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/admin/v1/photo-of-the-week/${id}`,
+      url: `/api/v1/admin/photo-of-the-week/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

@@ -6,6 +6,7 @@ import {
   Post,
   Get,
   Delete,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,11 +17,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { SocialMedia } from '@dark-rush-photography/shared/types';
 import {
+  SocialMedia,
+  SocialMediaAdminDto,
   SocialMediaCreateDto,
-  SocialMediaDto,
-} from '@dark-rush-photography/api/types';
+  SocialMediaUpdateDto,
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminSocialMediaService } from './admin-social-media.service';
 
@@ -33,21 +35,30 @@ export class AdminSocialMediaController {
   ) {}
 
   @Post()
-  @ApiCreatedResponse({ type: SocialMediaDto })
+  @ApiCreatedResponse({ type: SocialMediaAdminDto })
   create$(
     @Body() socialMediaCreate: SocialMediaCreateDto
   ): Observable<SocialMedia> {
     return this.adminSocialMediaService.create$(socialMediaCreate);
   }
 
+  @Put(':id')
+  @ApiOkResponse({ type: SocialMediaUpdateDto })
+  update$(
+    @Param('id') id: string,
+    @Body() socialMediaUpdate: SocialMediaUpdateDto
+  ): Observable<SocialMedia> {
+    return this.adminSocialMediaService.update$(id, socialMediaUpdate);
+  }
+
   @Get()
-  @ApiOkResponse({ type: [SocialMediaDto] })
+  @ApiOkResponse({ type: [SocialMediaAdminDto] })
   findAll$(): Observable<SocialMedia[]> {
     return this.adminSocialMediaService.findAll$();
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: SocialMediaDto })
+  @ApiOkResponse({ type: SocialMediaAdminDto })
   findOne$(
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<SocialMedia> {

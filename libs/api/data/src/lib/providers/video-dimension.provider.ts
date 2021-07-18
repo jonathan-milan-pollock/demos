@@ -1,55 +1,87 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs-extra';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, map } from 'rxjs/operators';
+import {
+  combineLatest,
+  concatMap,
+  concatMapTo,
+  from,
+  map,
+  mapTo,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
 
 import {
-  Media,
   VideoDimension,
-  VideoDimensionAdd,
+  VideoDimensionAddDto,
   VideoDimensionType,
+  VideoUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { Env } from '@dark-rush-photography/api/types';
+import { Media, VideoResolution } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   downloadBlobAsBuffer$,
-  getAzureStorageTypeFromMediaState,
   getBlobPathWithDimension,
-} from '@dark-rush-photography/shared-server/util';
+  getBlobPath,
+  uploadStreamToBlob$,
+  exifVideo$,
+  downloadBlobToFile$,
+  deleteBlob$,
+  resizeVideo$,
+  findVideoResolution$,
+} from '@dark-rush-photography/api/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
-  toVideoDimension,
-  validateAddVideoDimension,
-} from '../content/video-dimension.functions';
+  validateVideoDimensionNotAlreadyExists,
+  validateVideoDocumentModelFound,
+} from '../content/video-validation.functions';
+import { loadVideoDimension } from '../content/video-dimension.functions';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class VideoDimensionProvider {
-  constructor(private readonly configService: ConfigService<Env>) {}
+  private readonly logger: Logger;
+
+  constructor(private readonly configProvider: ConfigProvider) {
+    this.logger = new Logger(VideoDimensionProvider.name);
+  }
 
   add$(
+    id: string,
     entityId: string,
     videoId: string,
-    videoDimensionAdd: VideoDimensionAdd,
+    videoDimensionAdd: VideoDimensionAddDto,
     entityModel: Model<DocumentModel>
   ): Observable<VideoDimension> {
-    const id = uuidv4();
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      concatMap((documentModel) => {
-        const validatedDocumentModel = validateAddVideoDimension(
+      map((documentModel) =>
+        validateVideoDocumentModelFound(videoId, documentModel)
+      ),
+      map((documentModel) =>
+        validateVideoDimensionNotAlreadyExists(
           videoId,
           videoDimensionAdd,
           documentModel
-        );
+        )
+      ),
+      concatMap((documentModel) => {
         return from(
           entityModel.findByIdAndUpdate(entityId, {
             videoDimensions: [
-              ...validatedDocumentModel.videoDimensions,
-              { ...videoDimensionAdd, id, entityId, videoId },
+              ...documentModel.videoDimensions,
+              {
+                id,
+                entityId,
+                videoId,
+                type: videoDimensionAdd.type,
+                resolution: videoDimensionAdd.resolution,
+              },
             ],
           })
         );
@@ -58,11 +90,107 @@ export class VideoDimensionProvider {
     );
   }
 
-  resizeVideo$(
+  updateBlobPathAndExif$(
+    videoUpdate: VideoUpdateDto,
+    videoMedia: Media,
+    videoUpdateMedia: Media,
+    videoDimension: VideoDimension
+  ): Observable<boolean> {
+    return downloadBlobToFile$(
+      this.configProvider.getConnectionStringFromMediaState(videoMedia.state),
+      getBlobPathWithDimension(videoMedia, videoDimension.type),
+      videoMedia.fileName
+    ).pipe(
+      tap(() =>
+        this.logger.debug(
+          `Exif video dimension ${videoDimension.type} with update`
+        )
+      ),
+      concatMap((filePath) =>
+        exifVideo$(
+          filePath,
+          this.configProvider.getVideoArtistExif(new Date().getFullYear()),
+          {
+            title: videoUpdate.title,
+            description: videoUpdate.description,
+          }
+        )
+      ),
+      tap(() =>
+        this.logger.debug(
+          `Upload video dimension ${videoDimension.type} to new blob path`
+        )
+      ),
+      concatMap((filePath) =>
+        uploadStreamToBlob$(
+          this.configProvider.getConnectionStringFromMediaState(
+            videoUpdateMedia.state
+          ),
+          fs.createReadStream(filePath),
+          getBlobPathWithDimension(videoUpdateMedia, videoDimension.type)
+        )
+      ),
+      tap(() =>
+        this.logger.debug(
+          `Remove video dimension ${videoDimension.type} at previous blob path`
+        )
+      ),
+      concatMap(() =>
+        deleteBlob$(
+          this.configProvider.getConnectionStringFromMediaState(
+            videoMedia.state
+          ),
+          getBlobPathWithDimension(videoMedia, videoDimension.type)
+        )
+      ),
+      mapTo(true)
+    );
+  }
+
+  resize$(
     media: Media,
+    videoResolution: VideoResolution,
     entityModel: Model<DocumentModel>
-  ): Observable<Media> {
-    return of();
+  ): Observable<VideoDimension> {
+    const id = uuidv4();
+    Logger.log(`Resizing video dimension ${videoResolution.type}`);
+    return downloadBlobToFile$(
+      this.configProvider.getConnectionStringFromMediaState(media.state),
+      getBlobPath(media),
+      media.fileName
+    ).pipe(
+      concatMap((filePath) =>
+        resizeVideo$(media.fileName, filePath, videoResolution)
+      ),
+      concatMap((filePath) =>
+        combineLatest([
+          of(filePath),
+          uploadStreamToBlob$(
+            this.configProvider.getConnectionStringFromMediaState(media.state),
+            fs.createReadStream(filePath),
+            getBlobPathWithDimension(media, videoResolution.type)
+          ),
+        ])
+      ),
+      tap(() => Logger.log(`Finding video resolution ${videoResolution.type}`)),
+      concatMap(([filePath]) => findVideoResolution$(filePath)),
+      tap(() => Logger.log(`Adding video dimension ${videoResolution.type}`)),
+      concatMap((resolution) =>
+        this.add$(
+          id,
+          media.entityId,
+          media.id,
+          {
+            type: videoResolution.type,
+            resolution,
+          },
+          entityModel
+        )
+      ),
+      tap(() =>
+        Logger.log(`Resizing video dimension ${videoResolution.type} complete`)
+      )
+    );
   }
 
   findOne$(
@@ -79,20 +207,17 @@ export class VideoDimensionProvider {
         if (!foundVideoDimension)
           throw new NotFoundException('Could not find video dimension');
 
-        return toVideoDimension(foundVideoDimension);
+        return loadVideoDimension(foundVideoDimension);
       })
     );
   }
 
-  findDataUri = (
+  findDataUri$(
     media: Media,
     videoDimensionType: VideoDimensionType
-  ): Observable<string> => {
+  ): Observable<string> {
     return downloadBlobAsBuffer$(
-      this.configService.get<Env>('privateBlobConnectionString', {
-        infer: true,
-      }),
-      getAzureStorageTypeFromMediaState(media.state),
+      this.configProvider.getConnectionStringFromMediaState(media.state),
       getBlobPathWithDimension(media, videoDimensionType)
     ).pipe(
       map((buffer) => {
@@ -101,5 +226,5 @@ export class VideoDimensionProvider {
         return parser.format('.mp4', buffer).content;
       })
     );
-  };
+  }
 }

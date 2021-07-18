@@ -3,8 +3,10 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Destination } from '@dark-rush-photography/shared/types';
-import { DestinationDto } from '@dark-rush-photography/api/types';
+import {
+  DestinationDto,
+  DestinationMinimalDto,
+} from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { DestinationsService } from './destinations.service';
@@ -16,8 +18,8 @@ export class DestinationsController {
   constructor(private readonly destinationsService: DestinationsService) {}
 
   @Get()
-  @ApiOkResponse({ type: [DestinationDto] })
-  findAll$(): Observable<Destination[]> {
+  @ApiOkResponse({ type: [DestinationMinimalDto] })
+  findAll$(): Observable<DestinationMinimalDto[]> {
     return this.destinationsService.findAll$();
   }
 
@@ -25,7 +27,7 @@ export class DestinationsController {
   @ApiOkResponse({ type: DestinationDto })
   findOne$(
     @Param('id', ParseObjectIdPipe) id: string
-  ): Observable<Destination> {
+  ): Observable<DestinationDto> {
     return this.destinationsService.findOne$(id);
   }
 }

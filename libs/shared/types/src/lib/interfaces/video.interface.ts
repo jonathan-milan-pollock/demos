@@ -1,4 +1,5 @@
 import { MediaState } from '../enums/media-state.enum';
+import { ThreeSixtySettings } from './three-sixty-settings.interface';
 
 export interface Video {
   readonly id: string;
@@ -6,15 +7,18 @@ export interface Video {
   readonly fileName: string;
   readonly state: MediaState;
   readonly order: number;
-  readonly isStared: boolean; //TODO: Can star 1
-  readonly title: string;
-  readonly description: string;
-  readonly keywords: string;
-  readonly dateCreated: string;
-  readonly datePublished: string;
-  readonly coverImageId: string;
-  readonly hlsUrl: string;
+  readonly isStarred: boolean;
+  readonly title?: string;
+  readonly description?: string;
+  readonly keywords?: string;
+  readonly dateCreated?: string;
+  readonly datePublished?: string;
+  readonly isThreeSixty: boolean;
+  readonly threeSixtySettings?: ThreeSixtySettings;
+  readonly coverImageId?: string;
+  readonly hlsUrl?: string;
   readonly isFlyOver: boolean;
+  readonly isUploaded: boolean;
   readonly isGenerated: boolean;
   readonly isProcessing: boolean;
 }

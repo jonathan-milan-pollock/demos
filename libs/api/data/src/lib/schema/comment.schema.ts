@@ -1,7 +1,7 @@
 import { userSchema } from './user.schema';
 
 export const commentSchema = {
-  id: { type: String, required: false },
+  id: { type: String, required: true },
   entityId: { type: String, required: true },
   mediaId: { type: String, required: false },
   order: { type: Number, required: true },

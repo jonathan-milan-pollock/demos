@@ -1,72 +1,72 @@
-import * as fs from 'fs-extra';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import { BlobUploadCommonResponse } from '@azure/storage-blob';
 import * as tinify from 'tinify';
 import { Model } from 'mongoose';
-import { combineLatest, forkJoin, from, Observable, of } from 'rxjs';
-import { concatMap, concatMapTo, map, tap } from 'rxjs/operators';
-
-import { ImageDimensionType, Media } from '@dark-rush-photography/shared/types';
-import { AzureStorageType } from '@dark-rush-photography/shared-server/types';
 import {
-  Env,
-  findImageResolution,
-  findThreeSixtyImageResolution,
-} from '@dark-rush-photography/api/types';
+  combineLatest,
+  concatMap,
+  concatMapTo,
+  forkJoin,
+  from,
+  map,
+  Observable,
+  of,
+  tap,
+} from 'rxjs';
+
+import { ImageDimensionType } from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
-  exifImageArtist$,
-  findExifDateCreated$,
-} from '@dark-rush-photography/api/util';
-import { ImageProvider } from './image.provider';
-import { ImageDimensionProvider } from './image-dimension.provider';
-import {
   downloadBlobToFile$,
+  findImageExifDateCreated$,
   getBlobPath,
   uploadBufferToBlob$,
-  uploadStreamToBlob$,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
+import { ConfigProvider } from './config.provider';
+import { ImageDimensionProvider } from './image-dimension.provider';
+import { ImageProvider } from './image.provider';
 
 @Injectable()
 export class ImageUploadProvider {
+  private readonly logger: Logger;
+
   constructor(
-    private readonly configService: ConfigService<Env>,
+    private readonly configProvider: ConfigProvider,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider
-  ) {}
+  ) {
+    this.logger = new Logger(ImageUploadProvider.name);
+  }
 
   upload$(
     media: Media,
-    isThreeSixtyImage: boolean,
+    isThreeSixty: boolean,
     file: Express.Multer.File,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
-    const tileResolution = isThreeSixtyImage
-      ? findThreeSixtyImageResolution(ImageDimensionType.ThreeSixtyTile)
-      : findImageResolution(ImageDimensionType.Tile);
-    const smallResolution = isThreeSixtyImage
-      ? findThreeSixtyImageResolution(ImageDimensionType.Small)
-      : findImageResolution(ImageDimensionType.Small);
+    const tileResolution = isThreeSixty
+      ? this.configProvider.findThreeSixtyImageResolution(
+          ImageDimensionType.ThreeSixtyTile
+        )
+      : this.configProvider.findImageResolution(ImageDimensionType.Tile);
+    const smallResolution = isThreeSixty
+      ? this.configProvider.findThreeSixtyImageResolution(
+          ImageDimensionType.ThreeSixtySmall
+        )
+      : this.configProvider.findImageResolution(ImageDimensionType.Small);
 
     return uploadBufferToBlob$(
-      this.configService.get<Env>('privateBlobConnectionString', {
-        infer: true,
-      }),
-      AzureStorageType.Private,
+      this.configProvider.getConnectionStringFromMediaState(media.state),
       file.buffer,
       getBlobPath(media)
     ).pipe(
-      tap(() => Logger.log('Update date created', ImageUploadProvider.name)),
+      tap(() => this.logger.debug('Update date image created')),
       concatMapTo(this.updateDateCreated$(media, entityModel)),
-      tap(() => Logger.log('Tinify image', ImageUploadProvider.name)),
-      concatMap((dateCreated) =>
-        combineLatest([of(dateCreated), from(this.tinifyImage$(media))])
-      ),
-      tap(() => Logger.log('Exif image', ImageUploadProvider.name)),
-      concatMap(([dateCreated]) => this.exifImageArtist$(media, dateCreated)),
-      tap(() => Logger.log('Resize image', ImageUploadProvider.name)),
+      tap(() => this.logger.debug('Tinify image')),
+      concatMapTo(this.tinifyImage$(media)),
+      tap(() => this.logger.debug('Resize image')),
       concatMapTo(
         forkJoin([
           this.imageDimensionProvider.resize$(
@@ -97,14 +97,11 @@ export class ImageUploadProvider {
     entityModel: Model<DocumentModel>
   ): Observable<string> {
     return downloadBlobToFile$(
-      this.configService.get<Env>('privateBlobConnectionString', {
-        infer: true,
-      }),
-      AzureStorageType.Private,
+      this.configProvider.getConnectionStringFromMediaState(media.state),
       getBlobPath(media),
       media.fileName
     ).pipe(
-      concatMap((filePath) => findExifDateCreated$(filePath, new Date())),
+      concatMap((filePath) => findImageExifDateCreated$(filePath, new Date())),
       concatMap((dateCreated) =>
         combineLatest([
           of(dateCreated),
@@ -122,55 +119,18 @@ export class ImageUploadProvider {
 
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.configService.get<Env>('privateBlobConnectionString', {
-        infer: true,
-      }),
-      AzureStorageType.Private,
+      this.configProvider.getConnectionStringFromMediaState(media.state),
       getBlobPath(media),
       media.fileName
     ).pipe(
       concatMap((filePath) => {
-        tinify.default.key = this.configService.get<Env>('tinyPngApiKey', {
-          infer: true,
-        });
+        tinify.default.key = this.configProvider.tinyPngApiKey;
         return from(tinify.fromFile(filePath).toBuffer());
       }),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          AzureStorageType.Private,
+          this.configProvider.getConnectionStringFromMediaState(media.state),
           Buffer.from(uint8Array),
-          getBlobPath(media)
-        )
-      )
-    );
-  }
-
-  exifImageArtist$(
-    media: Media,
-    dateCreated: string
-  ): Observable<BlobUploadCommonResponse> {
-    return downloadBlobToFile$(
-      this.configService.get<Env>('privateBlobConnectionString', {
-        infer: true,
-      }),
-      AzureStorageType.Private,
-      getBlobPath(media),
-      media.fileName
-    ).pipe(
-      concatMap((filePath) => {
-        const date = new Date();
-        return exifImageArtist$(filePath, date.getFullYear(), dateCreated);
-      }),
-      concatMap((filePath) =>
-        uploadStreamToBlob$(
-          this.configService.get<Env>('privateBlobConnectionString', {
-            infer: true,
-          }),
-          AzureStorageType.Private,
-          fs.createReadStream(filePath),
           getBlobPath(media)
         )
       )

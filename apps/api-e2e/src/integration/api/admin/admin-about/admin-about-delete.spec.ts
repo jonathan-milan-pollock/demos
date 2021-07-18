@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { About, DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
+import { About } from '@dark-rush-photography/shared/types';
 
 describe('aboutDeleteAdmin', () => {
   beforeEach(() =>

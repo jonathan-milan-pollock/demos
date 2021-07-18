@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
 
 import { ADMIN } from '@dark-rush-photography/website/types'; // TODO: Move ADMIN constant to shared and remove from API
 import { Auth0User } from '@dark-rush-photography/website/types';

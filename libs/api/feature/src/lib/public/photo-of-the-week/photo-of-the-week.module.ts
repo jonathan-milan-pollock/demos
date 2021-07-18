@@ -5,6 +5,7 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
+  PhotoOfTheWeekProvider,
 } from '@dark-rush-photography/api/data';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
 import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
@@ -16,6 +17,6 @@ import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
     ]),
   ],
   controllers: [PhotoOfTheWeekController],
-  providers: [PhotoOfTheWeekService, EntityProvider],
+  providers: [PhotoOfTheWeekService, PhotoOfTheWeekProvider, EntityProvider],
 })
 export class PhotoOfTheWeekModule {}

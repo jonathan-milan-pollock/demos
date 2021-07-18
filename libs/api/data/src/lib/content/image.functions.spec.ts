@@ -8,26 +8,26 @@ import {
 import { findPublicImages, toImage } from './image.functions';
 
 describe('image.functions', () => {
-  const image = {
+  const image: Image = {
     id: faker.datatype.uuid(),
     entityId: DUMMY_MONGODB_ID,
     fileName: faker.lorem.word().toLowerCase(),
     state: faker.random.arrayElement(Object.values(MediaState)),
     order: faker.datatype.number(),
-    isStared: faker.datatype.boolean(),
+    isStarred: faker.datatype.boolean(),
     isLoved: faker.datatype.boolean(),
     title: faker.lorem.sentence(),
     description: faker.lorem.paragraph(),
-    keywords: `${faker.lorem
-      .word()
-      .toLowerCase()}, ${faker.lorem
+    keywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
       .word()
       .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
     dateCreated: faker.date.recent().toISOString(),
     datePublished: faker.date.recent().toISOString(),
+    isThreeSixty: faker.datatype.boolean(),
+    skipExif: faker.datatype.boolean(),
     isGenerated: faker.datatype.boolean(),
     isProcessing: faker.datatype.boolean(),
-  } as Image;
+  };
 
   describe('toImage', () => {
     it('should return all fields of an image', () => {

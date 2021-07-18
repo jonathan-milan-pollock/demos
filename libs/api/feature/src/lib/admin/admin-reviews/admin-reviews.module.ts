@@ -4,7 +4,20 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
+  EntityDeleteProvider,
+  EntityPostProvider,
   EntityProvider,
+  EntityUpdateProvider,
+  ImageDimensionProvider,
+  ImageProvider,
+  ImageRemoveProvider,
+  ImageUpdateProvider,
+  MediaProvider,
+  ReviewProvider,
+  VideoDimensionProvider,
+  VideoProvider,
+  VideoRemoveProvider,
+  VideoUpdateProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminReviewsService } from './admin-reviews.service';
 import { AdminReviewsController } from './admin-reviews.controller';
@@ -16,6 +29,22 @@ import { AdminReviewsController } from './admin-reviews.controller';
     ]),
   ],
   controllers: [AdminReviewsController],
-  providers: [AdminReviewsService, EntityProvider],
+  providers: [
+    AdminReviewsService,
+    ReviewProvider,
+    EntityProvider,
+    EntityUpdateProvider,
+    EntityPostProvider,
+    EntityDeleteProvider,
+    MediaProvider,
+    ImageProvider,
+    ImageUpdateProvider,
+    ImageRemoveProvider,
+    ImageDimensionProvider,
+    VideoProvider,
+    VideoUpdateProvider,
+    VideoRemoveProvider,
+    VideoDimensionProvider,
+  ],
 })
 export class AdminReviewsModule {}

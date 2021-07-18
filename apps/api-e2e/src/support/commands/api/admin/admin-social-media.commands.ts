@@ -1,13 +1,21 @@
-import { getAdminHeaders } from '../auth.functions';
+import { SocialMedia } from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'createSocialMediaAdmin',
-  (slug: string): Cypress.Chainable<Cypress.Response> =>
+  (
+    group: string,
+    slug: string
+  ): Cypress.Chainable<Cypress.Response<SocialMedia>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/social-media/${slug}`,
+      url: '/api/v1/admin/social-media',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
+      },
+      body: {
+        group,
+        slug,
       },
       failOnStatusCode: false,
     })
@@ -15,49 +23,37 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'findAllSocialMediaAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<SocialMedia[]>> =>
     cy.request({
       method: 'GET',
-      url: '/api/admin/v1/social-media',
+      url: '/api/v1/admin/social-media',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'findOneSocialMediaAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<SocialMedia>> =>
     cy.request({
       method: 'GET',
-      url: `/api/admin/v1/social-media/${id}`,
+      url: `/api/v1/admin/social-media/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'findIsProcessingSocialMediaAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/social-media/${id}/processing`,
-      headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
   'deleteSocialMediaAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/admin/v1/social-media/${id}`,
+      url: `/api/v1/admin/social-media/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

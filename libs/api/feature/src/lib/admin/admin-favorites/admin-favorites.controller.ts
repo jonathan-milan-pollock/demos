@@ -8,8 +8,10 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { Favorites } from '@dark-rush-photography/shared/types';
-import { FavoritesDto } from '@dark-rush-photography/api/types';
+import {
+  Favorites,
+  FavoritesAdminDto,
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminFavoritesService } from './admin-favorites.service';
 
@@ -20,13 +22,13 @@ export class AdminFavoritesController {
   constructor(private readonly adminFavoritesService: AdminFavoritesService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: FavoritesDto })
+  @ApiCreatedResponse({ type: FavoritesAdminDto })
   create$(): Observable<Favorites> {
     return this.adminFavoritesService.create$();
   }
 
   @Get()
-  @ApiOkResponse({ type: FavoritesDto })
+  @ApiOkResponse({ type: FavoritesAdminDto })
   findOne$(): Observable<Favorites> {
     return this.adminFavoritesService.findOne$();
   }

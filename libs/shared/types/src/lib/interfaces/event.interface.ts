@@ -11,6 +11,7 @@ export interface Event {
   readonly group: string;
   readonly slug: string;
   readonly isPublic: boolean;
+  readonly order: number;
   readonly title?: string;
   readonly description?: string;
   readonly keywords: string[];

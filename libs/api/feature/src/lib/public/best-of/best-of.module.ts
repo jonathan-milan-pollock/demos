@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
+  BestOfProvider,
   Document,
   DocumentSchema,
   EntityProvider,
@@ -16,6 +17,6 @@ import { BestOfController } from './best-of.controller';
     ]),
   ],
   controllers: [BestOfController],
-  providers: [BestOfService, EntityProvider],
+  providers: [BestOfService, BestOfProvider, EntityProvider],
 })
 export class BestOfModule {}

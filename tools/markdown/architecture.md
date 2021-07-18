@@ -88,7 +88,6 @@
 
 ### tsconfig.base.json
 
-- reorder configuration to match tsc init
 - add strict true
 
 ```json
@@ -120,12 +119,10 @@
 "codeCoverage": true
 ```
 
-### reorder apps and libs so nx console displays projects in correct order
+### reorder apps and libs
 
 - order apps then libs in source order
-  - angular.json
   - jest.config.js (only has testable libs)
-  - nx.json
   - tsconfig.base.json (only has libs)
 
 ---
@@ -241,7 +238,7 @@ preloadingStrategy: PreloadAllModules;
 
 ### add type definition for multer
 
-- add the following to index.ts of shared-server/types and api/data for Express.Multer.File
+- add the following to index.ts of api/types for Express.Multer.File
 
 ```ts
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -508,7 +505,9 @@ module.exports = (config) => {
  "include": ["**/*.ts", "webpack.config.js"]
 ```
 
-- winston requires that esModuleInterop is set to true in the tsconfig.lib.json file
+- winston requires that esModuleInterop is set to true
+  - set in tsconfig.app.json file of api and web-socket apps
+  - set in tsconfig.lib.json file of shared-server util
 
 ---
 

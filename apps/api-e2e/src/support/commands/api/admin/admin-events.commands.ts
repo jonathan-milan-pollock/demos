@@ -1,17 +1,18 @@
-import { EventCreate, EventUpdate } from '@dark-rush-photography/shared/types';
-import { getAdminHeaders } from '../auth.functions';
+import { Event, EventUpdate } from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'createEventAdmin',
-  (eventCreate: EventCreate): Cypress.Chainable<Cypress.Response> =>
+  (group: string, slug: string): Cypress.Chainable<Cypress.Response<Event>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/events`,
+      url: '/api/v1/admin/events',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       body: {
-        ...eventCreate,
+        group,
+        slug,
       },
       failOnStatusCode: false,
     })
@@ -19,12 +20,15 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'updateEventAdmin',
-  (id: string, eventUpdate: EventUpdate): Cypress.Chainable<Cypress.Response> =>
+  (
+    id: string,
+    eventUpdate: EventUpdate
+  ): Cypress.Chainable<Cypress.Response<Event>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/admin/v1/events/${id}`,
+      url: `/api/v1/admin/events/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       body: { ...eventUpdate },
       failOnStatusCode: false,
@@ -33,61 +37,49 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'postEventAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<Event>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/events/${id}/post`,
+      url: `/api/v1/admin/events/${id}/post`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'findAllEventsAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<Event[]>> =>
     cy.request({
       method: 'GET',
-      url: '/api/admin/v1/events',
+      url: '/api/v1/admin/events',
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'findOneEventAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<Event>> =>
     cy.request({
       method: 'GET',
-      url: `/api/admin/v1/events/${id}`,
+      url: `/api/v1/admin/events/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'findIsProcessingEventAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/events/${id}/processing`,
-      headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
   'deleteEventAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/admin/v1/events/${id}`,
+      url: `/api/v1/admin/events/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

@@ -4,7 +4,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
+  EntityDeleteProvider,
   EntityProvider,
+  ImageProvider,
+  ImageRemoveProvider,
+  MediaProvider,
+  ReviewMediaProvider,
+  VideoProvider,
+  VideoRemoveProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminReviewMediaService } from './admin-review-media.service';
 import { AdminReviewMediaController } from './admin-review-media.controller';
@@ -16,6 +23,16 @@ import { AdminReviewMediaController } from './admin-review-media.controller';
     ]),
   ],
   controllers: [AdminReviewMediaController],
-  providers: [AdminReviewMediaService, EntityProvider],
+  providers: [
+    AdminReviewMediaService,
+    ReviewMediaProvider,
+    EntityProvider,
+    EntityDeleteProvider,
+    MediaProvider,
+    ImageProvider,
+    ImageRemoveProvider,
+    VideoProvider,
+    VideoRemoveProvider,
+  ],
 })
 export class AdminReviewMediaModule {}

@@ -1,50 +1,33 @@
 import { Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { from, Observable, of } from 'rxjs';
 import {
   concatMap,
   concatMapTo,
   filter,
+  from,
   map,
   mapTo,
-  toArray,
-} from 'rxjs/operators';
+  Observable,
+  of,
+} from 'rxjs';
 
-import {
-  BestOfType,
-  Entity,
-  EntityType,
-  MediaProcessType,
-} from '@dark-rush-photography/shared/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
-  fromDocumentModel,
-  fromDocumentModelPublic,
-  newEntity,
-} from '../entities/entity.functions';
-import {
-  validateEntityCreate,
   validateEntityType,
   validateEntityFound,
   validateEntityIsPublic,
-  validateEntityNotFound,
+  validateEntityNotAlreadyCreated,
   validateOneEntity,
   validateProcessingEntity,
+  validateNotProcessingEntity,
+  validateEntityCreate,
 } from '../entities/entity-validation.functions';
 
 @Injectable()
 export class EntityProvider {
-  getEntityTypeFromBestOfType(bestOfType: BestOfType): EntityType {
-    return this.getEntityTypeFromBestOfType(bestOfType);
-  }
-
-  getEntityTypeFromMediaProcessType(
-    mediaProcessType: MediaProcessType
-  ): EntityType {
-    return this.getEntityTypeFromMediaProcessType(mediaProcessType);
-  }
-
+  //TODO: Put these in order of the validate file and check if all needed
   validateEntityFound(documentModel: DocumentModel | null): DocumentModel {
     return validateEntityFound(documentModel);
   }
@@ -56,12 +39,24 @@ export class EntityProvider {
     return validateEntityType(entityType, documentModel);
   }
 
-  validateOneEntity(documentModels: Partial<Entity>[]): Partial<Entity> {
+  validateOneEntity(documentModels: DocumentModel[]): DocumentModel {
     return validateOneEntity(documentModels);
+  }
+
+  validateEntityIsPublic(documentModel: DocumentModel): DocumentModel {
+    return validateEntityIsPublic(documentModel);
   }
 
   validateProcessingEntity(documentModel: DocumentModel): DocumentModel {
     return validateProcessingEntity(documentModel);
+  }
+
+  validateNotProcessingEntity(documentModel: DocumentModel): DocumentModel {
+    return validateNotProcessingEntity(documentModel);
+  }
+
+  validateEntityCreate(documentModel: DocumentModel): DocumentModel {
+    return validateEntityCreate(documentModel);
   }
 
   create$(
@@ -69,43 +64,36 @@ export class EntityProvider {
     group: string,
     slug: string,
     entityModel: Model<DocumentModel>
-  ): Observable<Partial<Entity>> {
+  ): Observable<void> {
     return from(entityModel.findOne({ type: entityType, group, slug })).pipe(
-      map(validateEntityNotFound),
-      concatMapTo(from(new entityModel(newEntity(entityType, slug)).save())),
-      map(validateEntityCreate),
-      map((documentModel) => fromDocumentModel(entityType, documentModel))
+      map(validateEntityNotAlreadyCreated)
     );
   }
 
-  findOrCreate$(
+  setIsProcessing$(
     entityType: EntityType,
-    group: string,
-    slug: string,
+    id: string,
+    isProcessing: boolean,
     entityModel: Model<DocumentModel>
-  ): Observable<DocumentModel> {
-    return from(
-      from(entityModel.findOne({ type: entityType, group, slug }))
-    ).pipe(
-      concatMap((documentModel) =>
-        documentModel
-          ? of(documentModel)
-          : from(new entityModel(newEntity(entityType, slug)).save())
-      ),
-      map(validateEntityFound)
+  ): Observable<void> {
+    return from(entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      concatMapTo(from(entityModel.findByIdAndUpdate(id, { isProcessing }))),
+      mapTo(undefined)
     );
   }
 
   findAll$(
     entityType: EntityType,
     entityModel: Model<DocumentModel>
-  ): Observable<Partial<Entity>[]> {
+  ): Observable<DocumentModel> {
     return from(entityModel.find({ type: entityType })).pipe(
-      concatMap(
-        (documentModels) => from([...(documentModels as DocumentModel[])]) //TODO: This is either DocumentModel or DocumentModel[] so fix
-      ),
-      map((documentModel) => fromDocumentModel(entityType, documentModel)),
-      toArray<Partial<Entity>>()
+      concatMap((documentModels) =>
+        Array.isArray(documentModels)
+          ? from(documentModels)
+          : of(documentModels)
+      )
     );
   }
 
@@ -113,25 +101,24 @@ export class EntityProvider {
     entityType: EntityType,
     id: string,
     entityModel: Model<DocumentModel>
-  ): Observable<Partial<Entity>> {
+  ): Observable<DocumentModel> {
     return from(entityModel.findById(id)).pipe(
       map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
-      map((documentModel) => fromDocumentModel(entityType, documentModel))
+      map((documentModel) => validateEntityType(entityType, documentModel))
     );
   }
 
   findAllPublic$(
     entityType: EntityType,
     entityModel: Model<DocumentModel>
-  ): Observable<Partial<Entity>[]> {
+  ): Observable<DocumentModel> {
     return from(entityModel.find({ type: entityType })).pipe(
-      concatMap(
-        (documentModels) => from([...(documentModels as DocumentModel[])]) //TODO: This is either DocumentModel or DocumentModel[] so fix
+      concatMap((documentModels) =>
+        Array.isArray(documentModels)
+          ? from(documentModels)
+          : of(documentModels)
       ),
-      filter((documentModel) => !documentModel.isPublic),
-      map((documentModel) => fromDocumentModel(entityType, documentModel)),
-      toArray<Partial<Entity>>()
+      filter((documentModel) => !documentModel.isPublic)
     );
   }
 
@@ -139,12 +126,11 @@ export class EntityProvider {
     entityType: EntityType,
     id: string,
     entityModel: Model<DocumentModel>
-  ): Observable<Partial<Entity>> {
+  ): Observable<DocumentModel> {
     return from(entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map(validateEntityIsPublic),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
-      map((documentModel) => fromDocumentModelPublic(entityType, documentModel))
+      map((documentModel) => validateEntityType(entityType, documentModel))
     );
   }
 

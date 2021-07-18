@@ -1,12 +1,12 @@
 import { Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
 
 import { Emotion } from '@dark-rush-photography/shared/types';
 import { EmotionMessage } from '@dark-rush-photography/web-socket/types';
 
+// TODO: Fix the as word
 export const createOrUpdateEmotion$ = (
   drpApiUrl: string,
   httpService: HttpService,

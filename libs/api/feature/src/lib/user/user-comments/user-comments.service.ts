@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { mapTo, Observable } from 'rxjs';
 
 import {
   Comment,
-  CommentAdd,
-  CommentUpdate,
+  CommentAddDto,
+  CommentUpdateDto,
 } from '@dark-rush-photography/shared/types';
 import {
   CommentProvider,
@@ -25,14 +24,14 @@ export class UserCommentsService {
     private readonly commentProvider: CommentProvider
   ) {}
 
-  add$(commentAdd: CommentAdd): Observable<Comment> {
+  add$(commentAdd: CommentAddDto): Observable<Comment> {
     return this.commentProvider.add$(commentAdd, this.entityModel);
   }
 
   update$(
     id: string,
     entityId: string,
-    commentUpdate: CommentUpdate
+    commentUpdate: CommentUpdateDto
   ): Observable<Comment> {
     return this.commentProvider.update$(
       id,

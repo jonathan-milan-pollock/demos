@@ -3,11 +3,10 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Event } from '@dark-rush-photography/shared/types';
+import { EventDto, EventMinimalDto } from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/shared-server/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { EventsService } from './events.service';
-import { EventDto } from '@dark-rush-photography/api/types';
 
 @Controller({ path: 'events', version: '1' })
 @Public()
@@ -16,14 +15,14 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Get()
-  @ApiOkResponse({ type: [EventDto] })
-  findAll$(): Observable<Event[]> {
+  @ApiOkResponse({ type: [EventMinimalDto] })
+  findAll$(): Observable<EventMinimalDto[]> {
     return this.eventsService.findAll$();
   }
 
   @Get(':id')
   @ApiOkResponse({ type: EventDto })
-  findOne$(@Param('id', ParseObjectIdPipe) id: string): Observable<Event> {
+  findOne$(@Param('id', ParseObjectIdPipe) id: string): Observable<EventDto> {
     return this.eventsService.findOne$(id);
   }
 }

@@ -1,13 +1,14 @@
-import { getAdminHeaders } from '../auth.functions';
+import { ReviewMedia } from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'createReviewMediaAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<ReviewMedia>> =>
     cy.request({
       method: 'POST',
-      url: `/api/admin/v1/review-media`,
+      url: `/api/v1/admin/review-media`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
       failOnStatusCode: false,
     })
@@ -15,36 +16,24 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'findOneReviewMediaAdmin',
-  (): Cypress.Chainable<Cypress.Response> =>
+  (): Cypress.Chainable<Cypress.Response<ReviewMedia>> =>
     cy.request({
       method: 'GET',
-      url: '/api/admin/v1/review-media',
+      url: '/api/v1/admin/review-media',
       headers: {
-        ...getAdminHeaders(),
-      },
-    })
-);
-
-Cypress.Commands.add(
-  'findIsProcessingReviewMediaAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/review-media/${id}/processing`,
-      headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );
 
 Cypress.Commands.add(
   'deleteReviewMediaAdmin',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
+  (id: string): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/admin/v1/review-media/${id}`,
+      url: `/api/v1/admin/review-media/${id}`,
       headers: {
-        ...getAdminHeaders(),
+        ...getAuthHeaders(),
       },
     })
 );

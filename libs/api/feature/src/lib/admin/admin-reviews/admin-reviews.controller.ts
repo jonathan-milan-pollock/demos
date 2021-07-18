@@ -17,8 +17,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { Review } from '@dark-rush-photography/shared/types';
-import { ReviewDto, ReviewUpdateDto } from '@dark-rush-photography/api/types';
+import {
+  Review,
+  ReviewCreateDto,
+  ReviewDto,
+  ReviewUpdateDto,
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminReviewsService } from './admin-reviews.service';
 
@@ -28,10 +32,10 @@ import { AdminReviewsService } from './admin-reviews.service';
 export class AdminReviewsController {
   constructor(private readonly adminReviewsService: AdminReviewsService) {}
 
-  @Post(':slug')
+  @Post()
   @ApiCreatedResponse({ type: ReviewDto })
-  create$(@Param('slug') slug: string): Observable<Review> {
-    return this.adminReviewsService.create$(slug);
+  create$(@Body() reviewCreate: ReviewCreateDto): Observable<Review> {
+    return this.adminReviewsService.create$(reviewCreate);
   }
 
   @Put(':id')
@@ -44,8 +48,8 @@ export class AdminReviewsController {
   }
 
   @Post(':id/post')
-  @HttpCode(204)
-  postProcess$(@Param('id') id: string): Observable<void> {
+  @ApiOkResponse({ type: ReviewDto })
+  postProcess$(@Param('id') id: string): Observable<Review> {
     return this.adminReviewsService.post$(id);
   }
 

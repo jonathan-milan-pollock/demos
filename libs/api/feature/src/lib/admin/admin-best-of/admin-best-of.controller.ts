@@ -18,8 +18,11 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { BestOf, BestOfType } from '@dark-rush-photography/shared/types';
-import { BestOfDto } from '@dark-rush-photography/api/types';
+import {
+  BestOf,
+  BestOfAdminDto,
+  BestOfType,
+} from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminBestOfService } from './admin-best-of.service';
 
@@ -34,7 +37,7 @@ export class AdminBestOfController {
     name: 'bestOfType',
     enum: BestOfType,
   })
-  @ApiCreatedResponse({ type: BestOfDto })
+  @ApiCreatedResponse({ type: BestOfAdminDto })
   @UsePipes()
   create$(
     @Param('bestOfType', new ParseEnumPipe(BestOfType))
@@ -48,7 +51,7 @@ export class AdminBestOfController {
     name: 'bestOfType',
     enum: BestOfType,
   })
-  @ApiOkResponse({ type: BestOfDto })
+  @ApiOkResponse({ type: BestOfAdminDto })
   findOne$(
     @Param('bestOfType', new ParseEnumPipe(BestOfType))
     bestOfType: BestOfType
