@@ -14,6 +14,7 @@ export interface Video {
   readonly dateCreated?: string;
   readonly datePublished?: string;
   readonly isThreeSixty: boolean;
+  //TODo: three sixty settings needs to be on the video dimension
   readonly threeSixtySettings?: ThreeSixtySettings;
   readonly coverImageId?: string;
   readonly hlsUrl?: string;
