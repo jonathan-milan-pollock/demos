@@ -21,6 +21,7 @@ export interface Destination {
   readonly imageDimensions: ImageDimension[];
   readonly videos: Video[];
   readonly videoDimensions: VideoDimension[];
+  //TODO: Remove has extended reality
   readonly hasExtendedReality: boolean;
   readonly websiteUrl?: string;
   readonly socialMediaUrls: SocialMediaUrl[];

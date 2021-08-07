@@ -25,6 +25,10 @@
 - [Install Augury](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd?hl=en)
 - **_Temporarily_** [Install ChromeVox When Actively Testing Accessibility](https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en)
 
+### On Mac needed to run
+
+> npm install -g agentkeepalive
+
 ### Chrome Settings
 
 > Open Mobile View and Enable Show Device Frame in Mobile Settings

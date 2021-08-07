@@ -1,6 +1,7 @@
 import { MediaState } from '../enums/media-state.enum';
 
 export interface Image {
+  //TODO: Should this be nullable?
   readonly id: string;
   readonly entityId: string;
   readonly fileName: string;
@@ -9,6 +10,7 @@ export interface Image {
   readonly isStarred: boolean;
   readonly isLoved: boolean;
   readonly title?: string;
+  // TODO: description needs to be non nullable
   readonly description?: string;
   readonly keywords?: string;
   readonly dateCreated?: string;
