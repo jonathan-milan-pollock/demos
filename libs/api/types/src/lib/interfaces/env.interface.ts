@@ -9,13 +9,19 @@ import { VideoArtistExif } from './video-artist-exif.interface';
 
 export interface Env {
   readonly production: boolean;
+  readonly dropboxOwnerEmail: string;
+  readonly websitesDropboxClientId: string;
+  readonly websitesDropboxClientSecret: string;
+  readonly clientsDropboxClientId: string;
+  readonly clientsDropboxClientSecret: string;
   readonly mongoDbConnectionString: string;
   readonly privateBlobConnectionString: string;
-  readonly privateTableConnectionString: string;
   readonly publicBlobConnectionString: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;
   readonly logzioToken: string;
+  getWebsitesDropboxRedirectUri(protocol: string, host?: string): string;
+  getClientsDropboxRedirectUri(protocol: string, host?: string): string;
   findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution;
   findThreeSixtyImageResolution(
     imageDimensionType: ImageDimensionType

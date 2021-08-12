@@ -4,11 +4,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { map, Observable, toArray } from 'rxjs';
 
-import { BestOfDto, BestOfType } from '@dark-rush-photography/shared/types';
+import { BestOfDto, EntityType } from '@dark-rush-photography/shared/types';
 import {
-  BestOfProvider,
   Document,
   DocumentModel,
+  EntityLoadProvider,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -17,19 +17,13 @@ export class BestOfService {
   constructor(
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
-    private readonly bestOfProvider: BestOfProvider,
-    private readonly entityProvider: EntityProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly entityLoadProvider: EntityLoadProvider
   ) {}
 
-  findOne$(bestOfType: BestOfType): Observable<BestOfDto> {
-    const entityType =
-      this.bestOfProvider.getEntityTypeFromBestOfType(bestOfType);
+  findAll$(): Observable<BestOfDto[]> {
     return this.entityProvider
-      .findAllPublic$(entityType, this.bestOfModel)
-      .pipe(
-        toArray<DocumentModel>(),
-        map(this.entityProvider.validateOneEntity),
-        map(this.bestOfProvider.loadBestOfPublic)
-      );
+      .findAllPublic$(EntityType.BestOf, this.bestOfModel)
+      .pipe(map(this.entityLoadProvider.loadBestOfPublic), toArray<BestOfDto>());
   }
 }

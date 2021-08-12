@@ -5,6 +5,7 @@ import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
 import { AboutModule } from './about/about.module';
 import { BestOfModule } from './best-of/best-of.module';
 import { DestinationsModule } from './destinations/destinations.module';
+import { DropboxModule } from './dropbox/dropbox.module';
 import { EventsModule } from './events/events.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { ImagesModule } from './images/images.module';
@@ -16,12 +17,14 @@ import { VideosModule } from './videos/videos.module';
 
 @Module({
   imports: [
+        //TODO: Don't believe this is needed
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
     AboutModule,
     BestOfModule,
     DestinationsModule,
+    DropboxModule,
     EventsModule,
     FavoritesModule,
     ImagesModule,

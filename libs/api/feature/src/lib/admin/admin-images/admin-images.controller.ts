@@ -5,7 +5,6 @@ import {
   Put,
   Post,
   HttpCode,
-  Headers,
   Delete,
   Query,
   UseInterceptors,
@@ -57,7 +56,6 @@ export class AdminImagesController {
     return this.adminImagesService.upload$(
       entityId,
       image.originalname,
-      0,
       false,
       image
     );
@@ -77,26 +75,8 @@ export class AdminImagesController {
     return this.adminImagesService.upload$(
       entityId,
       threeSixtyImage.originalname,
-      0,
       true,
       threeSixtyImage
-    );
-  }
-
-  @Post('upload-lightroom')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: FileUploadDto,
-  })
-  @ApiOkResponse({ type: ImageAdminDto })
-  uploadLightroom$(
-    @Headers('X-LIGHTROOM-PATH') lightroomPath: string,
-    @UploadedFile() lightroomImage: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminImagesService.uploadLightroom$(
-      lightroomPath,
-      lightroomImage
     );
   }
 

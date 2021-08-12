@@ -1,6 +1,5 @@
 import {
   ImageDimensionType,
-  PhotoOfTheWeek,
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
 } from '@dark-rush-photography/shared/types';
@@ -16,48 +15,9 @@ import {
   validateFindImageDimension,
   validateFindStarredImage,
 } from '../content/image-validation.functions';
-import { loadImage, loadMinimalPublicImage } from '../content/image.functions';
-import { loadImageDimension } from '../content/image-dimension.functions';
-import { findEntityComments, loadComment } from '../content/comment.functions';
-import { findEntityEmotions, loadEmotion } from '../content/emotion.functions';
-
-export const loadNewPhotoOfTheWeek = (
-  group: string,
-  slug: string
-): PhotoOfTheWeek => ({
-  group,
-  slug,
-  isPublic: false,
-  order: 0,
-  keywords: [],
-  useTileImage: false,
-  text: [],
-  images: [],
-  imageDimensions: [],
-  comments: [],
-  emotions: [],
-});
-
-export const loadPhotoOfTheWeek = (
-  documentModel: DocumentModel
-): PhotoOfTheWeek => ({
-  id: documentModel._id,
-  group: documentModel.group,
-  slug: documentModel.slug,
-  isPublic: documentModel.isPublic,
-  order: documentModel.order,
-  title: documentModel.title,
-  description: documentModel.description,
-  keywords: documentModel.keywords,
-  datePublished: documentModel.datePublished,
-  location: documentModel.location,
-  useTileImage: documentModel.useTileImage,
-  text: documentModel.text,
-  images: documentModel.images.map(loadImage),
-  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
-  comments: documentModel.comments.map(loadComment),
-  emotions: documentModel.emotions.map(loadEmotion),
-});
+import { loadMinimalPublicImage } from '../content/image.functions';
+import { findEntityComments } from '../content/comment.functions';
+import { findEntityEmotions } from '../content/emotion.functions';
 
 export const loadMinimalPhotoOfTheWeekPublic = (
   documentModel: DocumentModel,

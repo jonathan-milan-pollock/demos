@@ -17,10 +17,6 @@ export * from './lib/exif/exif-video.functions';
 // file
 export * from './lib/file/file.functions';
 
-// lightroom
-export * from './lib/lightroom/lightroom-entity.functions';
-export * from './lib/lightroom/lightroom-media.functions';
-
 // media-processes
 export * from './lib/media-processes/image-video.functions';
 

@@ -4,8 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
+  EntityLoadProvider,
   EntityProvider,
-  PhotoOfTheWeekProvider,
 } from '@dark-rush-photography/api/data';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
 import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
@@ -17,6 +17,6 @@ import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
     ]),
   ],
   controllers: [PhotoOfTheWeekController],
-  providers: [PhotoOfTheWeekService, PhotoOfTheWeekProvider, EntityProvider],
+  providers: [PhotoOfTheWeekService, EntityProvider, EntityLoadProvider],
 })
 export class PhotoOfTheWeekModule {}

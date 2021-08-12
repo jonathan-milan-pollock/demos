@@ -12,5 +12,7 @@
     "@pulumi/docker": "^3.0.0",
     "@pulumi/pulumi": "^3.6.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@pulumi/mongodbatlas": "^2.1.1"
+  }
 }

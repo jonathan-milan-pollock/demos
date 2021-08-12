@@ -12,7 +12,10 @@ import {
   of,
 } from 'rxjs';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
+import {
+  EntityCreateDto,
+  EntityType,
+} from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   validateEntityType,
@@ -24,9 +27,12 @@ import {
   validateNotProcessingEntity,
   validateEntityCreate,
 } from '../entities/entity-validation.functions';
+import { loadDocumentModelsArray } from '../entities/entity.functions';
 
 @Injectable()
 export class EntityProvider {
+
+
   //TODO: Put these in order of the validate file and check if all needed
   validateEntityFound(documentModel: DocumentModel | null): DocumentModel {
     return validateEntityFound(documentModel);
@@ -60,14 +66,16 @@ export class EntityProvider {
   }
 
   create$(
-    entityType: EntityType,
-    group: string,
-    slug: string,
+    entityCreate: EntityCreateDto,
     entityModel: Model<DocumentModel>
   ): Observable<void> {
-    return from(entityModel.findOne({ type: entityType, group, slug })).pipe(
-      map(validateEntityNotAlreadyCreated)
-    );
+    return from(
+      entityModel.findOne({
+        type: entityCreate.type,
+        group: entityCreate.group,
+        slug: entityCreate.slug,
+      })
+    ).pipe(map(validateEntityNotAlreadyCreated));
   }
 
   setIsProcessing$(
@@ -89,11 +97,7 @@ export class EntityProvider {
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
     return from(entityModel.find({ type: entityType })).pipe(
-      concatMap((documentModels) =>
-        Array.isArray(documentModels)
-          ? from(documentModels)
-          : of(documentModels)
-      )
+      concatMap(loadDocumentModelsArray)
     );
   }
 
@@ -113,12 +117,8 @@ export class EntityProvider {
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
     return from(entityModel.find({ type: entityType })).pipe(
-      concatMap((documentModels) =>
-        Array.isArray(documentModels)
-          ? from(documentModels)
-          : of(documentModels)
-      ),
-      filter((documentModel) => !documentModel.isPublic)
+      concatMap(loadDocumentModelsArray),
+      filter((documentModel) => documentModel.isPublic)
     );
   }
 

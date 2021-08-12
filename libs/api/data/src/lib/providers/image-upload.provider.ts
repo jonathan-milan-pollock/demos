@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { BlobUploadCommonResponse } from '@azure/storage-blob';
-import * as tinify from 'tinify';
 import { Model } from 'mongoose';
 import {
   combineLatest,
@@ -14,6 +12,8 @@ import {
   of,
   tap,
 } from 'rxjs';
+import { BlobUploadCommonResponse } from '@azure/storage-blob';
+import * as tinify from 'tinify';
 
 import { ImageDimensionType } from '@dark-rush-photography/shared/types';
 import { Media } from '@dark-rush-photography/api/types';
@@ -40,10 +40,20 @@ export class ImageUploadProvider {
     this.logger = new Logger(ImageUploadProvider.name);
   }
 
+  uploadBufferToBlob$(
+    media: Media,
+    file: Express.Multer.File
+  ): Observable<BlobUploadCommonResponse> {
+    return uploadBufferToBlob$(
+      this.configProvider.getConnectionStringFromMediaState(media.state),
+      file.buffer,
+      getBlobPath(media)
+    );
+  }
+
   upload$(
     media: Media,
     isThreeSixty: boolean,
-    file: Express.Multer.File,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
     const tileResolution = isThreeSixty
@@ -57,13 +67,8 @@ export class ImageUploadProvider {
         )
       : this.configProvider.findImageResolution(ImageDimensionType.Small);
 
-    return uploadBufferToBlob$(
-      this.configProvider.getConnectionStringFromMediaState(media.state),
-      file.buffer,
-      getBlobPath(media)
-    ).pipe(
-      tap(() => this.logger.debug('Update date image created')),
-      concatMapTo(this.updateDateCreated$(media, entityModel)),
+    this.logger.debug('Update date image created');
+    return this.updateDateCreated$(media, entityModel).pipe(
       tap(() => this.logger.debug('Tinify image')),
       concatMapTo(this.tinifyImage$(media)),
       tap(() => this.logger.debug('Resize image')),

@@ -10,35 +10,35 @@ describe('entity-to-media-process-type.functions', () => {
   describe('getMediaProcessTypeFromEntityType', () => {
     it('should return image video', () => {
       const result = getMediaProcessTypeFromEntityType(
-        EntityType.MediaProcessImageVideo
+        EntityType.ImageVideo
       );
       expect(result).toBe(MediaProcessType.ImageVideo);
     });
 
     it('should return social media image', () => {
       const result = getMediaProcessTypeFromEntityType(
-        EntityType.MediaProcessSocialMediaImage
+        EntityType.ImagePost
       );
       expect(result).toBe(MediaProcessType.SocialMediaImage);
     });
 
     it('should return social media three sixty image', () => {
       const result = getMediaProcessTypeFromEntityType(
-        EntityType.MediaProcessSocialMediaThreeSixtyImage
+        EntityType.ThreeSixtyImagePost
       );
       expect(result).toBe(MediaProcessType.SocialMediaThreeSixtyImage);
     });
 
     it('should return social media video', () => {
       const result = getMediaProcessTypeFromEntityType(
-        EntityType.MediaProcessSocialMediaVideo
+        EntityType.VideoPost
       );
       expect(result).toBe(MediaProcessType.SocialMediaVideo);
     });
 
     it('should return social media three sixty video', () => {
       const result = getMediaProcessTypeFromEntityType(
-        EntityType.MediaProcessSocialMediaThreeSixtyVideo
+        EntityType.ThreeSixtyVideoPost
       );
       expect(result).toBe(MediaProcessType.SocialMediaThreeSixtyVideo);
     });

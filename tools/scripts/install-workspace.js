@@ -343,19 +343,22 @@ const execAddBestOfDependencies = (isReady) =>
 const execAddApiDependencies = (isReady) =>
   Promise.resolve(console.log('### add nestjs dependencies'))
     .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @nestjs/testing'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/cron'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
     .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-database'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'))
     .then(() => consoleLogOrExec(isReady, 'npm i winston'))
     .then(() => consoleLogOrExec(isReady, 'npm i winston-logzio'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/config'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @nestjs/testing'));
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/schedule'));
 
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
@@ -443,7 +446,9 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i datauri'))
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
-    .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'));
+    .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'))
+    .then(() => consoleLogOrExec(isReady, 'npm i dropbox'))
+    .then(() => consoleLogOrExec(isReady, 'npm i node-fetch'));
 
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))

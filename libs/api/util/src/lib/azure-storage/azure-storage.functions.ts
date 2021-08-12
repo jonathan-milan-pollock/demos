@@ -12,6 +12,7 @@ import {
   mergeMap,
   Observable,
   of,
+  pluck,
   switchMap,
 } from 'rxjs';
 
@@ -21,10 +22,14 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { Media } from '@dark-rush-photography/api/types';
 import { createTempFile$, writeStreamToFile$ } from '../file/file.functions';
-import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
+import {
+  getAzureStorageBlockBlobClient$,
+  getAzureStorageContainerClient$,
+} from './azure-storage-block-blob-client.functions';
 import { getAzureStorageBlobPrefix } from './azure-storage-blob-path.functions';
 import { downloadBlobAsStream$ } from './azure-storage-blob-stream.functions';
 
+//TODO: Move these to azure-storage-blob-path
 export const getBlobPath = (media: Media): string => {
   const blobPrefix = getAzureStorageBlobPrefix(media);
   return `${blobPrefix}/${media.fileName}`;
@@ -112,5 +117,19 @@ export const deleteBlob$ = (
   return getAzureStorageBlockBlobClient$(connectionString, blobPath).pipe(
     switchMap((blockBlobClient) => from(blockBlobClient.deleteIfExists())),
     map((blobDeleteIfExistsResponse) => blobDeleteIfExistsResponse.succeeded)
+  );
+};
+
+//TODO: Do We need this?
+export const listBlobs$ = (
+  connectionString: string,
+  blobPrefix: string
+): Observable<string> => {
+  Logger.log(`Listing blobs at ${blobPrefix}`, listBlobs$.name);
+  return getAzureStorageContainerClient$(connectionString).pipe(
+    switchMap((containerClient) =>
+      from(containerClient.listBlobsFlat({ prefix: blobPrefix }))
+    ),
+    pluck('name')
   );
 };

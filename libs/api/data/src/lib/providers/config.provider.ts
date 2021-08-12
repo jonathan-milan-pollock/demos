@@ -22,6 +22,56 @@ export class ConfigProvider {
     return this.configService.get('production') === 'true';
   }
 
+  get dropboxOwnerEmail(): string {
+    const value = this.configService.get('dropboxOwnerEmail', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('dropboxOwnerEmail undefined');
+    }
+    return value;
+  }
+
+  get websitesDropboxClientId(): string {
+    const value = this.configService.get('websitesDropboxClientId', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('websitesDropboxClientId undefined');
+    }
+    return value;
+  }
+
+  get websitesDropboxClientSecret(): string {
+    const value = this.configService.get('websitesDropboxClientSecret', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('websitesDropboxClientSecret undefined');
+    }
+    return value;
+  }
+
+  get clientsDropboxClientId(): string {
+    const value = this.configService.get('clientsDropboxClientId', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('clientsDropboxClientId undefined');
+    }
+    return value;
+  }
+
+  get clientsDropboxClientSecret(): string {
+    const value = this.configService.get('clientsDropboxClientSecret', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('clientsDropboxClientSecret undefined');
+    }
+    return value;
+  }
+
   get mongoDbConnectionString(): string {
     const value = this.configService.get('mongoDbConnectionString', {
       infer: true,
@@ -32,7 +82,18 @@ export class ConfigProvider {
     return value;
   }
 
-  private get privateBlobConnectionString(): string {
+  getConnectionStringFromMediaState(mediaState: MediaState): string {
+    switch (mediaState) {
+      case MediaState.New:
+      case MediaState.Selected:
+        return this.privateBlobConnectionString;
+      case MediaState.Public:
+      case MediaState.Archived:
+        return this.publicBlobConnectionString;
+    }
+  }
+
+  get privateBlobConnectionString(): string {
     const value = this.configService.get('privateBlobConnectionString', {
       infer: true,
     });
@@ -42,17 +103,7 @@ export class ConfigProvider {
     return value;
   }
 
-  get privateTableConnectionString(): string {
-    const value = this.configService.get('privateTableConnectionString', {
-      infer: true,
-    });
-    if (!value) {
-      throw new BadRequestException('privateTableConnectionString undefined');
-    }
-    return value;
-  }
-
-  private get publicBlobConnectionString(): string {
+  get publicBlobConnectionString(): string {
     const value = this.configService.get('publicBlobConnectionString', {
       infer: true,
     });
@@ -84,6 +135,26 @@ export class ConfigProvider {
       throw new BadRequestException('logzioToken undefined');
     }
     return value;
+  }
+
+  getWebsitesDropboxRedirectUri(protocol: string, host?: string): string {
+    const fn = this.configService.get('getWebsitesDropboxRedirectUri', {
+      infer: true,
+    });
+    if (!fn) {
+      throw new BadRequestException('getWebsitesDropboxRedirectUri undefined');
+    }
+    return fn(protocol, host);
+  }
+
+  getClientsDropboxRedirectUri(protocol: string, host?: string): string {
+    const fn = this.configService.get('getClientsDropboxRedirectUri', {
+      infer: true,
+    });
+    if (!fn) {
+      throw new BadRequestException('getClientsDropboxRedirectUri undefined');
+    }
+    return fn(protocol, host);
   }
 
   findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution {
@@ -155,16 +226,5 @@ export class ConfigProvider {
       throw new BadRequestException('getVideoArtistExif undefined');
     }
     return fn(copyrightYear);
-  }
-
-  getConnectionStringFromMediaState(mediaState: MediaState): string {
-    switch (mediaState) {
-      case MediaState.New:
-      case MediaState.Selected:
-        return this.privateBlobConnectionString;
-      case MediaState.Public:
-      case MediaState.Archived:
-        return this.publicBlobConnectionString;
-    }
   }
 }

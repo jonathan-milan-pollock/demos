@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  AboutProvider,
   Document,
   DocumentSchema,
+  EntityLoadProvider,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
 import { AboutService } from './about.service';
@@ -17,6 +17,6 @@ import { AboutController } from './about.controller';
     ]),
   ],
   controllers: [AboutController],
-  providers: [AboutService, AboutProvider, EntityProvider],
+  providers: [AboutService, EntityProvider, EntityLoadProvider],
 })
 export class AboutModule {}

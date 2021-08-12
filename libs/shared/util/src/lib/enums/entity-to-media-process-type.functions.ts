@@ -4,15 +4,15 @@ import {
 } from '@dark-rush-photography/shared/types';
 
 const entityToMediaProcessTypeMap = new Map<EntityType, MediaProcessType>([
-  [EntityType.MediaProcessImageVideo, MediaProcessType.ImageVideo],
-  [EntityType.MediaProcessSocialMediaImage, MediaProcessType.SocialMediaImage],
+  [EntityType.ImageVideo, MediaProcessType.ImageVideo],
+  [EntityType.ImagePost, MediaProcessType.SocialMediaImage],
   [
-    EntityType.MediaProcessSocialMediaThreeSixtyImage,
+    EntityType.ThreeSixtyImagePost,
     MediaProcessType.SocialMediaThreeSixtyImage,
   ],
-  [EntityType.MediaProcessSocialMediaVideo, MediaProcessType.SocialMediaVideo],
+  [EntityType.VideoPost, MediaProcessType.SocialMediaVideo],
   [
-    EntityType.MediaProcessSocialMediaThreeSixtyVideo,
+    EntityType.ThreeSixtyVideoPost,
     MediaProcessType.SocialMediaThreeSixtyVideo,
   ],
 ]);

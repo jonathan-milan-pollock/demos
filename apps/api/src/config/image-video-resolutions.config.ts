@@ -8,7 +8,7 @@ import {
   TileImageResolution,
 } from '@dark-rush-photography/api/types';
 
-export const findImageVideoResolution = (
+export const GET_IMAGE_VIDEO_RESOLUTION = (
   imageDimensionType: ImageDimensionType
 ): ImageResolution => {
   const imageVideoResolution = IMAGE_VIDEO_RESOLUTIONS.find(

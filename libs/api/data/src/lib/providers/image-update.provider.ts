@@ -30,8 +30,8 @@ import {
   getImageExif,
   uploadStreamToBlob$,
 } from '@dark-rush-photography/api/util';
+import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
-import { MediaProvider } from './media.provider';
 import { ImageDimensionProvider } from './image-dimension.provider';
 import { ImageProvider } from './image.provider';
 
@@ -40,7 +40,6 @@ export class ImageUpdateProvider {
   private readonly logger: Logger;
   constructor(
     private readonly configProvider: ConfigProvider,
-    private readonly mediaProvider: MediaProvider,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider
   ) {
@@ -58,14 +57,14 @@ export class ImageUpdateProvider {
       .pipe(
         tap(() => this.logger.debug('Update image blob path')),
         concatMap(() => {
-          const media = this.mediaProvider.loadMedia(
+          const media = loadMedia(
             MediaType.Image,
             image.id,
             image.fileName,
             image.state,
             documentModel
           );
-          const mediaUpdate = this.mediaProvider.loadMedia(
+          const mediaUpdate = loadMedia(
             MediaType.Image,
             image.id,
             imageUpdate.fileName,

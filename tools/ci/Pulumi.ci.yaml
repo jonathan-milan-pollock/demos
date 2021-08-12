@@ -7,10 +7,8 @@ config:
   deployment:prodMongoDbDatabaseName: drp-prod-mongo-db-database
   deployment:devPrivateStorageAccountName: devprivatesa
   deployment:devPrivateBlobContainerName: devprivate
-  deployment:devPrivateUsersTableName: devusers
   deployment:prodPrivateStorageAccountName: prodprivatesa
   deployment:prodPrivateBlobContainerName: prodprivate
-  deployment:prodPrivateUsersTableName: produsers
   deployment:devPublicStorageAccountName: devpublicsa
   deployment:devPublicBlobContainerName: devpublic
   deployment:prodPublicStorageAccountName: prodpublicsa

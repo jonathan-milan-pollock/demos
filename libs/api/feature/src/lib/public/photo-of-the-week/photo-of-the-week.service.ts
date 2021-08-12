@@ -13,7 +13,7 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  PhotoOfTheWeekProvider,
+  EntityLoadProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,15 +21,15 @@ export class PhotoOfTheWeekService {
   constructor(
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
-    private readonly entityProvider: EntityProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly entityLoadProvider: EntityLoadProvider
   ) {}
 
   findAll$(): Observable<PhotoOfTheWeekMinimalDto[]> {
     return this.entityProvider
       .findAllPublic$(EntityType.PhotoOfTheWeek, this.photoOfTheWeekModel)
       .pipe(
-        map(this.photoOfTheWeekProvider.loadMinimalPhotoOfTheWeekPublic),
+        map(this.entityLoadProvider.loadMinimalPhotoOfTheWeekPublic),
         toArray<PhotoOfTheWeekMinimalDto>()
       );
   }
@@ -37,6 +37,6 @@ export class PhotoOfTheWeekService {
   findOne$(id: string): Observable<PhotoOfTheWeekDto> {
     return this.entityProvider
       .findOnePublic$(EntityType.PhotoOfTheWeek, id, this.photoOfTheWeekModel)
-      .pipe(map(this.photoOfTheWeekProvider.loadPhotoOfTheWeekPublic));
+      .pipe(map(this.entityLoadProvider.loadPhotoOfTheWeekPublic));
   }
 }

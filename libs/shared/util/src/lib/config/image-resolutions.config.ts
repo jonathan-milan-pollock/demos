@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { ImageDimensionType } from '@dark-rush-photography/shared/types';
+//TODO: Move these to shared types
 import {
   ImageResolution,
   LongestEdgeImageResolution,
