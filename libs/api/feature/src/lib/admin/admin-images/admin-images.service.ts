@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -17,7 +16,6 @@ import {
 } from 'rxjs';
 
 import {
-  EntityType,
   Image,
   ImageDimensionType,
   ImageUpdateDto,
@@ -33,7 +31,6 @@ import {
   ImageRemoveProvider,
   ImageUpdateProvider,
   ImageUploadProvider,
-  MediaProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -44,7 +41,6 @@ export class AdminImagesService {
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly mediaProvider: MediaProvider,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider,
     private readonly imageUploadProvider: ImageUploadProvider,
@@ -57,7 +53,6 @@ export class AdminImagesService {
   upload$(
     entityId: string,
     fileName: string,
-    order: number,
     isThreeSixty: boolean,
     file: Express.Multer.File
   ): Observable<Image> {
@@ -73,11 +68,10 @@ export class AdminImagesService {
       ),
       concatMap((documentModel) =>
         combineLatest([
-          this.imageProvider.addUpload$(
+          this.imageProvider.add$(
             id,
             entityId,
             fileName,
-            order,
             isThreeSixty,
             true,
             this.entityModel
@@ -86,7 +80,7 @@ export class AdminImagesService {
         ])
       ),
       map(([image, documentModel]) =>
-        this.mediaProvider.loadMedia(
+        this.imageProvider.loadMedia(
           MediaType.Image,
           image.id,
           fileName,
@@ -95,66 +89,15 @@ export class AdminImagesService {
         )
       ),
       concatMap((media) =>
-        this.imageUploadProvider.upload$(
-          media,
-          isThreeSixty,
-          file,
-          this.entityModel
-        )
+        this.imageUploadProvider
+          .uploadBufferToBlob$(media, file)
+          .pipe(mapTo(media))
+      ),
+      concatMap((media) =>
+        this.imageUploadProvider.upload$(media, isThreeSixty, this.entityModel)
       ),
       tap(() => this.logger.debug('Upload complete')),
       concatMapTo(this.findOne$(id, entityId))
-    );
-  }
-
-  uploadLightroom$(
-    lightroomPath: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    const lightroomMedia = this.imageProvider.getLightroomMedia(lightroomPath);
-    return from(
-      from(
-        this.entityModel.findOne({
-          type: lightroomMedia.entityType,
-          group: lightroomMedia.entityGroup,
-          slug: lightroomMedia.entitySlug,
-        })
-      )
-    ).pipe(
-      concatMap((documentModel) =>
-        documentModel
-          ? of(documentModel)
-          : from(
-              new this.entityModel({
-                type: lightroomMedia.entityType,
-                group: lightroomMedia.entityGroup,
-                slug: lightroomMedia.entitySlug,
-                isPublic: [
-                  EntityType.About,
-                  EntityType.BestOfChildren,
-                  EntityType.BestOfEvents,
-                  EntityType.BestOfLandscapes,
-                  EntityType.BestOfNature,
-                  EntityType.BestOfRealEstate,
-                  EntityType.Favorites,
-                  EntityType.ReviewMedia,
-                ].includes(lightroomMedia.entityType),
-              }).save()
-            )
-      ),
-      map(this.entityProvider.validateEntityFound),
-      concatMap((documentModel) =>
-        this.upload$(
-          documentModel._id,
-          lightroomMedia.fileName,
-          +lightroomMedia.fileName.replace(
-            path.extname(lightroomMedia.fileName),
-            ''
-          ),
-          false,
-          file
-        )
-      )
     );
   }
 
@@ -238,7 +181,7 @@ export class AdminImagesService {
         combineLatest([this.findOne$(id, entityId), of(documentModel)])
       ),
       map(([image, documentModel]) =>
-        this.mediaProvider.loadMedia(
+        this.imageProvider.loadMedia(
           MediaType.Image,
           image.id,
           image.fileName,

@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { VideoDimensionType } from '@dark-rush-photography/shared/types';
 import { VideoResolution } from '@dark-rush-photography/api/types';
 
-export const findThreeSixtyVideoResolution = (
+export const GET_THREE_SIXTY_VIDEO_RESOLUTION = (
   videoDimensionType: VideoDimensionType
 ): VideoResolution => {
   const threeSixtyVideoResolution = THREE_SIXTY_VIDEO_RESOLUTIONS.find(

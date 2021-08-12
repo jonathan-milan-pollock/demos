@@ -12,6 +12,7 @@ import { loadEmotion } from '../content/emotion.functions';
 
 @Injectable()
 export class EmotionProvider {
+  
   add$(
     emotionAdd: EmotionAddDto,
     entityModel: Model<DocumentModel>

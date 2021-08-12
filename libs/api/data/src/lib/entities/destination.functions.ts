@@ -1,60 +1,35 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { BadRequestException, Logger } from '@nestjs/common';
+
+import { Model } from 'mongoose';
+const fetch = require('node-fetch');
+const Dropbox = require('dropbox').Dropbox;
+
 import {
-  Destination,
   DestinationMinimalDto,
   DestinationDto,
+  EntityType,
 } from '@dark-rush-photography/shared/types';
-import { PublicContent } from '@dark-rush-photography/api/types';
+import {
+  DEFAULT_ENTITY_GROUP,
+  DropboxListFoldersItem,
+  DropboxListFoldersResponse,
+  DropboxTag,
+  PublicContent,
+} from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
+import { loadNewEntity } from './entity.functions';
 import {
   validateEntityDescription,
   validateEntityLocation,
   validateEntityTitle,
 } from './entity-validation.functions';
 import { validateFindStarredImage } from '../content/image-validation.functions';
-import { loadImage, loadMinimalPublicImage } from '../content/image.functions';
-import { loadImageDimension } from '../content/image-dimension.functions';
-import { loadMinimalPublicVideo, loadVideo } from '../content/video.functions';
-import { loadVideoDimension } from '../content/video-dimension.functions';
-import { loadSocialMediaUrl } from '../content/social-media-url.functions';
-import { findEntityComments, loadComment } from '../content/comment.functions';
-import { findEntityEmotions, loadEmotion } from '../content/emotion.functions';
+import { loadMinimalPublicImage } from '../content/image.functions';
+import { loadMinimalPublicVideo } from '../content/video.functions';
+import { findEntityComments } from '../content/comment.functions';
+import { findEntityEmotions } from '../content/emotion.functions';
 
-export const loadNewDestination = (slug: string): Destination => ({
-  slug,
-  isPublic: false,
-  order: 0,
-  keywords: [],
-  text: [],
-  images: [],
-  imageDimensions: [],
-  videos: [],
-  videoDimensions: [],
-  hasExtendedReality: false,
-  socialMediaUrls: [],
-  comments: [],
-  emotions: [],
-});
-
-export const loadDestination = (documentModel: DocumentModel): Destination => ({
-  id: documentModel._id,
-  slug: documentModel.slug,
-  isPublic: documentModel.isPublic,
-  order: documentModel.order,
-  title: documentModel.title,
-  description: documentModel.description,
-  keywords: documentModel.keywords,
-  location: documentModel.location,
-  text: documentModel.text,
-  images: documentModel.images.map(loadImage),
-  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
-  videos: documentModel.videos.map(loadVideo),
-  videoDimensions: documentModel.videoDimensions.map(loadVideoDimension),
-  hasExtendedReality: documentModel.hasExtendedReality,
-  websiteUrl: documentModel.websiteUrl,
-  socialMediaUrls: documentModel.socialMediaUrls.map(loadSocialMediaUrl),
-  comments: documentModel.comments.map(loadComment),
-  emotions: documentModel.emotions.map(loadEmotion),
-});
 
 export const loadMinimalDestinationPublic = (
   documentModel: DocumentModel,
@@ -94,3 +69,65 @@ export const loadDestinationPublic = (
     emotions: entityEmotions,
   };
 };
+
+export const updateDestinationDropbox = (
+  entityModel: Model<DocumentModel>,
+  websitesDropboxClientId: string,
+  websitesDropboxClientSecret: string,
+  refreshToken: string
+): void => {
+  const dropbox = new Dropbox({
+    fetch,
+    clientId: websitesDropboxClientId,
+    clientSecret: websitesDropboxClientSecret,
+  });
+  dropbox.auth.setRefreshToken(refreshToken);
+
+  dropbox
+    .filesListFolder({ path: `/websites/destinations/` })
+    .then((response: DropboxListFoldersResponse) => {
+      if (response.status !== 200) throw new BadRequestException();
+      return response.result.entries;
+    })
+    .then((folders: DropboxListFoldersItem[]) => {
+      createDestinationEntities(entityModel, folders);
+        return folders;
+    })
+    .then((folders: DropboxListFoldersItem[]) => {
+      addDestinationImages(entityModel, folders);
+      return folders;
+  });
+};
+
+export const createDestinationEntities = (
+  entityModel: Model<DocumentModel>,
+  folders: DropboxListFoldersItem[]
+): void => {
+  return folders
+    .filter((folder) => folder['.tag'] === DropboxTag.folder)
+    .forEach(async (folder) => {
+      const documentModels = await entityModel
+        .find({ type: EntityType.Destination, slug: folder.name });
+      if (documentModels.length == 0) {
+        new entityModel({
+          ...loadNewEntity({
+            type: EntityType.Destination,
+            group: DEFAULT_ENTITY_GROUP,
+            slug: folder.name,
+            isPublic: true,
+          }),
+        }).save();
+      }
+
+      // add images
+
+    });
+};
+
+export const addDestinationImages = (
+  entityModel: Model<DocumentModel>,
+  folders: DropboxListFoldersItem[]
+): void => {
+  Logger.log('add images')
+}
+

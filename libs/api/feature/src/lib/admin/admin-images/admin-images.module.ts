@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityProvider,
-  MediaProvider,
   ImageDimensionProvider,
   ImageProvider,
   ImageRemoveProvider,
@@ -25,7 +24,6 @@ import { AdminImagesController } from './admin-images.controller';
   providers: [
     AdminImagesService,
     EntityProvider,
-    MediaProvider,
     ImageProvider,
     ImageDimensionProvider,
     ImageUploadProvider,

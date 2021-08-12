@@ -8,16 +8,16 @@ import {
   Video,
   VideoDimension,
 } from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
   getBlobPath,
   getBlobPathWithDimension,
 } from '@dark-rush-photography/api/util';
+import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
-import { MediaProvider } from './media.provider';
 import { VideoProvider } from './video.provider';
-import { Media } from '@dark-rush-photography/api/types';
 
 @Injectable()
 export class VideoRemoveProvider {
@@ -25,7 +25,6 @@ export class VideoRemoveProvider {
 
   constructor(
     private readonly configProvider: ConfigProvider,
-    private readonly mediaProvider: MediaProvider,
     private readonly videoProvider: VideoProvider
   ) {
     this.logger = new Logger(VideoRemoveProvider.name);
@@ -48,7 +47,7 @@ export class VideoRemoveProvider {
         concatMapTo(
           from(
             this.removeVideoBlobs$(
-              this.mediaProvider.loadMedia(
+              loadMedia(
                 MediaType.Video,
                 video.id,
                 video.fileName,

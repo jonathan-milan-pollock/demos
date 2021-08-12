@@ -26,7 +26,6 @@ import {
   Document,
   DocumentModel,
   EntityProvider,
-  MediaProvider,
   VideoDimensionProvider,
   VideoProvider,
   VideoRemoveProvider,
@@ -42,7 +41,6 @@ export class AdminVideosService {
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly mediaProvider: MediaProvider,
     private readonly videoProvider: VideoProvider,
     private readonly videoDimensionProvider: VideoDimensionProvider,
     private readonly videoUploadProvider: VideoUploadProvider,
@@ -83,7 +81,7 @@ export class AdminVideosService {
         ])
       ),
       map(([video, documentModel]) => {
-        return this.mediaProvider.loadMedia(
+        return this.videoProvider.loadMedia(
           MediaType.Video,
           video.id,
           fileName,
@@ -182,7 +180,7 @@ export class AdminVideosService {
         documentModel,
       })),
       map(({ video, documentModel }) => {
-        return this.mediaProvider.loadMedia(
+        return this.videoProvider.loadMedia(
           MediaType.Video,
           video.id,
           video.fileName,

@@ -11,7 +11,6 @@ import {
 import {
   createPrivateStorageAccount,
   createPrivateBlobContainer,
-  createPrivateTable,
 } from './services/storage-account-private.service';
 import {
   createPublicStorageAccount,
@@ -66,11 +65,7 @@ const devPrivateBlobContainer = createPrivateBlobContainer(
   resourceGroup,
   devPrivateStorageAccount
 );
-const devPrivateUsersTableName = createPrivateTable(
-  pulumiConfig.devPrivateUsersTableName,
-  resourceGroup,
-  devPrivateStorageAccount
-);
+
 const devPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.devPublicStorageAccountName,
   resourceGroup
@@ -90,11 +85,7 @@ const prodPrivateBlobContainer = createPrivateBlobContainer(
   resourceGroup,
   prodPrivateStorageAccount
 );
-const prodPrivateUsersTableName = createPrivateTable(
-  pulumiConfig.prodPrivateUsersTableName,
-  resourceGroup,
-  prodPrivateStorageAccount
-);
+
 const prodPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.prodPublicStorageAccountName,
   resourceGroup
@@ -104,6 +95,7 @@ const prodPublicBlobContainer = createPublicBlobContainer(
   resourceGroup,
   prodPublicStorageAccount
 );
+
 const cdnProfile = createCdnProfile(pulumiConfig.cdnProfileName, resourceGroup);
 const cdnEndpoint = createCdnEndpoint(
   pulumiConfig.cdnEndpointName,
@@ -220,13 +212,11 @@ export const prodMongoDbDatabaseUrn = prodMongoDb.urn;
 
 export const devPrivateStorageAccountUrn = devPrivateStorageAccount.urn;
 export const devPrivateBlobContainerUrn = devPrivateBlobContainer.urn;
-export const devPrivateUsersTableNameUrn = devPrivateUsersTableName.urn;
 export const devPublicStorageAccountUrn = devPublicStorageAccount.urn;
 export const devPublicBlobContainerUrn = devPublicBlobContainer.urn;
 
 export const prodPrivateStorageAccountUrn = prodPrivateStorageAccount.urn;
 export const prodPrivateBlobContainerUrn = prodPrivateBlobContainer.urn;
-export const prodPrivateUsersTableNameUrn = prodPrivateUsersTableName.urn;
 export const prodPublicStorageAccountUrn = prodPublicStorageAccount.urn;
 export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
 

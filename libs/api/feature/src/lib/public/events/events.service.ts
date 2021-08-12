@@ -13,7 +13,7 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  EventProvider,
+  EntityLoadProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,15 +21,15 @@ export class EventsService {
   constructor(
     @InjectModel(Document.name)
     private readonly eventModel: Model<DocumentModel>,
-    private readonly eventProvider: EventProvider,
-    private readonly entityProvider: EntityProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly entityLoadProvider: EntityLoadProvider
   ) {}
 
   findAll$(): Observable<EventMinimalDto[]> {
     return this.entityProvider
       .findAllPublic$(EntityType.Event, this.eventModel)
       .pipe(
-        map(this.eventProvider.loadMinimalEventPublic),
+        map(this.entityLoadProvider.loadMinimalEventPublic),
         toArray<EventMinimalDto>()
       );
   }
@@ -37,6 +37,6 @@ export class EventsService {
   findOne$(id: string): Observable<EventDto> {
     return this.entityProvider
       .findOnePublic$(EntityType.Event, id, this.eventModel)
-      .pipe(map(this.eventProvider.loadEventPublic));
+      .pipe(map(this.entityLoadProvider.loadEventPublic));
   }
 }

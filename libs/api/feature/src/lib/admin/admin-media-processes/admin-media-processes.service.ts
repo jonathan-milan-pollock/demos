@@ -38,9 +38,12 @@ export class AdminMediaProcessesService {
       );
     return this.entityProvider
       .create$(
-        entityType,
-        DEFAULT_ENTITY_GROUP,
-        mediaProcessCreate.slug,
+        {
+          type: entityType,
+          group: DEFAULT_ENTITY_GROUP,
+          slug: mediaProcessCreate.slug,
+          isPublic: false,
+        },
         this.mediaProcessModel
       )
       .pipe(

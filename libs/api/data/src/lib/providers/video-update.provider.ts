@@ -27,8 +27,8 @@ import {
   getBlobPath,
   uploadStreamToBlob$,
 } from '@dark-rush-photography/api/util';
+import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
-import { MediaProvider } from './media.provider';
 import { VideoDimensionProvider } from './video-dimension.provider';
 import { VideoProvider } from './video.provider';
 import { validateCanUpdateVideo } from '../content/video-validation.functions';
@@ -38,7 +38,6 @@ export class VideoUpdateProvider {
   private readonly logger: Logger;
   constructor(
     private readonly configProvider: ConfigProvider,
-    private readonly mediaProvider: MediaProvider,
     private readonly videoProvider: VideoProvider,
     private readonly videoDimensionProvider: VideoDimensionProvider
   ) {
@@ -62,14 +61,14 @@ export class VideoUpdateProvider {
       .pipe(
         tap(() => this.logger.debug('Update video blob path')),
         concatMap(() => {
-          const media = this.mediaProvider.loadMedia(
+          const media = loadMedia(
             MediaType.Video,
             validatedVideo.id,
             validatedVideo.fileName,
             validatedVideo.state,
             documentModel
           );
-          const mediaUpdate = this.mediaProvider.loadMedia(
+          const mediaUpdate = loadMedia(
             MediaType.Video,
             video.id,
             videoUpdate.fileName,

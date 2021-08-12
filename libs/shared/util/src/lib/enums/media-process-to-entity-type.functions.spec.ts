@@ -12,35 +12,35 @@ describe('media-process-to-entity-type.functions', () => {
       const result = getEntityTypeFromMediaProcessType(
         MediaProcessType.ImageVideo
       );
-      expect(result).toBe(EntityType.MediaProcessImageVideo);
+      expect(result).toBe(EntityType.ImageVideo);
     });
 
     it('should return social media image', () => {
       const result = getEntityTypeFromMediaProcessType(
         MediaProcessType.SocialMediaImage
       );
-      expect(result).toBe(EntityType.MediaProcessSocialMediaImage);
+      expect(result).toBe(EntityType.ImagePost);
     });
 
     it('should return social media three sixty image', () => {
       const result = getEntityTypeFromMediaProcessType(
         MediaProcessType.SocialMediaThreeSixtyImage
       );
-      expect(result).toBe(EntityType.MediaProcessSocialMediaThreeSixtyImage);
+      expect(result).toBe(EntityType.ThreeSixtyImagePost);
     });
 
     it('should return social media video', () => {
       const result = getEntityTypeFromMediaProcessType(
         MediaProcessType.SocialMediaVideo
       );
-      expect(result).toBe(EntityType.MediaProcessSocialMediaVideo);
+      expect(result).toBe(EntityType.VideoPost);
     });
 
     it('should return social media three sixty video', () => {
       const result = getEntityTypeFromMediaProcessType(
         MediaProcessType.SocialMediaThreeSixtyVideo
       );
-      expect(result).toBe(EntityType.MediaProcessSocialMediaThreeSixtyVideo);
+      expect(result).toBe(EntityType.ThreeSixtyVideoPost);
     });
 
     it('should throw a range error if media process type is not an entity type', () => {

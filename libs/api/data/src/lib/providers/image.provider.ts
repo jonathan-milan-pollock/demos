@@ -8,10 +8,10 @@ import {
   ImageDto,
   ImageUpdateDto,
   MediaState,
+  MediaType,
 } from '@dark-rush-photography/shared/types';
-import { LightroomMedia } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { getLightroomMedia } from '@dark-rush-photography/api/util';
 import {
   validateEntityFound,
   validateEntityIsPublic,
@@ -24,6 +24,7 @@ import {
 } from '../content/image-validation.functions';
 import { loadImage, loadPublicImage } from '../content/image.functions';
 import { loadPublicContent } from '../content/public-content.functions';
+import { loadMedia } from '../content/media.functions';
 
 @Injectable()
 export class ImageProvider {
@@ -38,11 +39,20 @@ export class ImageProvider {
     return validateImageNotProcessing(image);
   }
 
-  addUpload$(
+  loadMedia(
+    type: MediaType,
+    id: string,
+    fileName: string,
+    state: MediaState,
+    documentModel: DocumentModel
+  ): Media {
+    return loadMedia(type, id, fileName, state, documentModel);
+  }
+
+  add$(
     id: string,
     entityId: string,
     fileName: string,
-    order: number,
     isThreeSixty: boolean,
     isProcessing: boolean,
     entityModel: Model<DocumentModel>
@@ -59,7 +69,7 @@ export class ImageProvider {
                 entityId,
                 fileName,
                 state: MediaState.New,
-                order,
+                order: 0,
                 isStarred: false,
                 isLoved: false,
                 isThreeSixty,
@@ -148,10 +158,6 @@ export class ImageProvider {
         loadPublicImage(image, loadPublicContent(documentModel))
       )
     );
-  }
-
-  getLightroomMedia(lightroomPath: string): LightroomMedia {
-    return getLightroomMedia(lightroomPath);
   }
 
   setDateCreated$(

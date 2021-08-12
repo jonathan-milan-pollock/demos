@@ -1,17 +1,25 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { BadRequestException, Logger } from '@nestjs/common';
+
+import { Model } from 'mongoose';
+const fetch = require('node-fetch');
+const Dropbox = require('dropbox').Dropbox;
+
 import {
-  Event,
   EventMinimalDto,
   ImageDimensionType,
   EventDto,
+  EntityType,
 } from '@dark-rush-photography/shared/types';
+import {
+  DEFAULT_ENTITY_GROUP,
+  DropboxListFoldersItem,
+  DropboxListFoldersResponse,
+  DropboxTag,
+  PublicContent,
+} from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { loadImage, loadMinimalPublicImage } from '../content/image.functions';
-import { loadImageDimension } from '../content/image-dimension.functions';
-import { loadMinimalPublicVideo, loadVideo } from '../content/video.functions';
-import { loadVideoDimension } from '../content/video-dimension.functions';
-import { findEntityComments, loadComment } from '../content/comment.functions';
-import { findEntityEmotions, loadEmotion } from '../content/emotion.functions';
-import { PublicContent } from '@dark-rush-photography/api/types';
+import { loadNewEntity } from './entity.functions';
 import {
   validateEntityDateCreated,
   validateEntityDescription,
@@ -22,44 +30,10 @@ import {
   validateFindImageDimension,
   validateFindStarredImage,
 } from '../content/image-validation.functions';
-
-export const loadNewEvent = (group: string, slug: string): Event => ({
-  group,
-  slug,
-  isPublic: false,
-  order: 0,
-  keywords: [],
-  useTileImage: false,
-  text: [],
-  images: [],
-  imageDimensions: [],
-  videos: [],
-  videoDimensions: [],
-  comments: [],
-  emotions: [],
-});
-
-export const loadEvent = (documentModel: DocumentModel): Event => ({
-  id: documentModel._id,
-  group: documentModel.group,
-  slug: documentModel.slug,
-  isPublic: documentModel.isPublic,
-  order: documentModel.order,
-  title: documentModel.title,
-  description: documentModel.description,
-  keywords: documentModel.keywords,
-  dateCreated: documentModel.dateCreated,
-  datePublished: documentModel.datePublished,
-  location: documentModel.location,
-  useTileImage: documentModel.useTileImage,
-  text: documentModel.text,
-  images: documentModel.images.map(loadImage),
-  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
-  videos: documentModel.videos.map(loadVideo),
-  videoDimensions: documentModel.videoDimensions.map(loadVideoDimension),
-  comments: documentModel.comments.map(loadComment),
-  emotions: documentModel.emotions.map(loadEmotion),
-});
+import { loadMinimalPublicImage } from '../content/image.functions';
+import { loadMinimalPublicVideo } from '../content/video.functions';
+import { findEntityComments } from '../content/comment.functions';
+import { findEntityEmotions } from '../content/emotion.functions';
 
 export const loadMinimalEventPublic = (
   documentModel: DocumentModel,
@@ -107,3 +81,65 @@ export const loadEventPublic = (
     emotions: entityEmotions,
   };
 };
+
+export const updateEventDropbox = (
+  entityModel: Model<DocumentModel>,
+  websitesDropboxClientId: string,
+  websitesDropboxClientSecret: string,
+  refreshToken: string
+): void => {
+  const dropbox = new Dropbox({
+    fetch,
+    clientId: websitesDropboxClientId,
+    clientSecret: websitesDropboxClientSecret,
+  });
+  dropbox.auth.setRefreshToken(refreshToken);
+
+  dropbox
+    .filesListFolder({ path: `/websites/events/` })
+    .then((response: DropboxListFoldersResponse) => {
+      if (response.status !== 200) throw new BadRequestException();
+      return response.result.entries;
+    })
+    .then((folders: DropboxListFoldersItem[]) => {
+      createEventEntities(entityModel, folders);
+        return folders;
+    })
+    .then((folders: DropboxListFoldersItem[]) => {
+      addEventImages(entityModel, folders);
+      return folders;
+  });
+};
+
+export const createEventEntities = (
+  entityModel: Model<DocumentModel>,
+  folders: DropboxListFoldersItem[]
+): void => {
+  return folders
+    .filter((folder) => folder['.tag'] === DropboxTag.folder)
+    .forEach(async (folder) => {
+      const documentModels = await entityModel
+        .find({ type: EntityType.Event, slug: folder.name });
+      if (documentModels.length == 0) {
+        new entityModel({
+          ...loadNewEntity({
+            type: EntityType.Destination,
+            group: DEFAULT_ENTITY_GROUP,
+            slug: folder.name,
+            isPublic: true,
+          }),
+        }).save();
+      }
+
+      // add images
+
+    });
+};
+
+export const addEventImages = (
+  entityModel: Model<DocumentModel>,
+  folders: DropboxListFoldersItem[]
+): void => {
+  Logger.log('add images')
+}
+

@@ -2,7 +2,7 @@ import { VideoResolution } from '@dark-rush-photography/api/types';
 import { VideoDimensionType } from '@dark-rush-photography/shared/types';
 import { BadRequestException } from '@nestjs/common';
 
-export const findVideoResolution = (
+export const GET_VIDEO_RESOLUTION = (
   videoDimensionType: VideoDimensionType
 ): VideoResolution => {
   const videoResolution = VIDEO_RESOLUTIONS.find(

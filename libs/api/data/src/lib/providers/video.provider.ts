@@ -5,12 +5,15 @@ import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
 
 import {
   MediaState,
+  MediaType,
   Video,
   VideoAddDto,
   VideoDto,
   VideoUpdateDto,
 } from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
+import { loadMedia } from '../content/media.functions';
 import {
   validateEntityFound,
   validateEntityIsPublic,
@@ -45,6 +48,16 @@ export class VideoProvider {
 
   validateVideoDataUriExists(video: Video): Video {
     return validateVideoDataUriExists(video);
+  }
+
+  loadMedia(
+    type: MediaType,
+    id: string,
+    fileName: string,
+    state: MediaState,
+    documentModel: DocumentModel
+  ): Media {
+    return loadMedia(type, id, fileName, state, documentModel);
   }
 
   addUpload$(

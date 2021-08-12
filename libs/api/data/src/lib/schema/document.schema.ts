@@ -12,8 +12,9 @@ import {
   SocialMediaUrl,
   Video,
   VideoDimension,
+  Entity,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP, Entity } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';

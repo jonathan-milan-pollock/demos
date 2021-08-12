@@ -13,7 +13,7 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  DestinationProvider,
+  EntityLoadProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,15 +21,15 @@ export class DestinationsService {
   constructor(
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
-    private readonly destinationProvider: DestinationProvider,
-    private readonly entityProvider: EntityProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly entityLoadProvider: EntityLoadProvider
   ) {}
 
   findAll$(): Observable<DestinationMinimalDto[]> {
     return this.entityProvider
       .findAllPublic$(EntityType.Destination, this.destinationModel)
       .pipe(
-        map(this.destinationProvider.loadMinimalDestinationPublic),
+        map(this.entityLoadProvider.loadMinimalDestinationPublic),
         toArray<DestinationMinimalDto>()
       );
   }
@@ -37,6 +37,6 @@ export class DestinationsService {
   findOne$(id: string): Observable<DestinationDto> {
     return this.entityProvider
       .findOnePublic$(EntityType.Destination, id, this.destinationModel)
-      .pipe(map(this.destinationProvider.loadDestinationPublic));
+      .pipe(map(this.entityLoadProvider.loadDestinationPublic));
   }
 }

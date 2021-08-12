@@ -9,7 +9,7 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  FavoritesProvider,
+  EntityLoadProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,8 +17,8 @@ export class FavoritesService {
   constructor(
     @InjectModel(Document.name)
     private readonly favoritesModel: Model<DocumentModel>,
-    private readonly favoritesProvider: FavoritesProvider,
-    private readonly entityProvider: EntityProvider
+    private readonly entityProvider: EntityProvider,
+    private readonly entityLoadProvider: EntityLoadProvider
   ) {}
 
   findOne$(): Observable<FavoritesDto> {
@@ -27,7 +27,7 @@ export class FavoritesService {
       .pipe(
         toArray<DocumentModel>(),
         map(this.entityProvider.validateOneEntity),
-        map(this.favoritesProvider.loadFavoritesPublic)
+        map(this.entityLoadProvider.loadFavoritesPublic)
       );
   }
 }
