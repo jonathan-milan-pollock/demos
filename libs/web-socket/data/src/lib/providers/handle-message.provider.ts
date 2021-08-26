@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 import { HttpService } from '@nestjs/axios';
 
-import { from, map, Observable, of, switchMap } from 'rxjs';
+import { concatMap, from, map, Observable, of } from 'rxjs';
 
 import {
   CommentMessage,
@@ -27,7 +27,7 @@ export class HandleMessageProvider {
     message: CommentMessage | EmotionMessage
   ): Observable<Message> {
     return apiAuth$(apiAuth, httpService).pipe(
-      switchMap((accessToken) => {
+      concatMap((accessToken) => {
         switch (message.messageType) {
           case MessageType.Comment:
             return createComment$(

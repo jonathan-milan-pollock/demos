@@ -9,7 +9,7 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  EntityLoadProvider,
+  ReviewProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,12 +18,12 @@ export class ReviewsService {
     @InjectModel(Document.name)
     private readonly reviewModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly entityLoadProvider: EntityLoadProvider
+    private readonly reviewProvider: ReviewProvider
   ) {}
 
   findAll$(): Observable<ReviewDto[]> {
     return this.entityProvider
       .findAllPublic$(EntityType.Review, this.reviewModel)
-      .pipe(map(this.entityLoadProvider.loadReviewPublic), toArray<ReviewDto>());
+      .pipe(map(this.reviewProvider.loadReviewPublic), toArray<ReviewDto>());
   }
 }

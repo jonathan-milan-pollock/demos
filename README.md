@@ -30,6 +30,7 @@
 - **_Sharp_**
 - **_FFmpeg_**
 - **_Ayrshare_**
+- **_MultCloud_**
 
 ---
 

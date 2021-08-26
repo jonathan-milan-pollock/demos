@@ -77,6 +77,12 @@ const execGenerateApps = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
+        'npx nx g @nrwl/nest:app serverless --unitTestRunner=none --tags=scope:serverless,type:app'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
         'npx nx g @nrwl/nest:app web-socket --unitTestRunner=none --tags=scope:web-socket,type:app'
       )
     );
@@ -153,9 +159,43 @@ const execGenerateImageElementsLibs = (isReady) =>
       )
     );
 
+const execGenerateServerlessLibs = (isReady) =>
+  Promise.resolve(console.log('#### serverless libraries'))
+    .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib serverless/data --unitTestRunner=jest --tags=scope:serverless,type:data'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib serverless/feature --unitTestRunner=none --tags=scope:serverless,type:feature'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib serverless/types --unitTestRunner=none --tags=scope:serverless,type:types'
+      )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib serverless/util --unitTestRunner=jest --tags=scope:serverless,type:util'
+      )
+    );
+
 const execGenerateSharedServerLibs = (isReady) =>
   Promise.resolve(console.log('#### shared-server libraries'))
     .then(() => console.log())
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data'
+      )
+    )
     .then(() =>
       consoleLogOrExec(
         isReady,
@@ -345,7 +385,6 @@ const execAddApiDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nestjs/testing'))
-    .then(() => consoleLogOrExec(isReady, 'npm i -D @types/cron'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
     .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
@@ -354,11 +393,15 @@ const execAddApiDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-database'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'))
-    .then(() => consoleLogOrExec(isReady, 'npm i winston'))
-    .then(() => consoleLogOrExec(isReady, 'npm i winston-logzio'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/config'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/schedule'));
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'));
+
+const execAddServerlessDependencies = (isReady) =>
+  Promise.resolve(console.log('### add serverless'))
+    .then(() => console.log())
+    .then(() => consoleLogOrExec(isReady, 'npm i @azure/functions'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
+    .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
 
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
@@ -448,7 +491,8 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
     .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'))
     .then(() => consoleLogOrExec(isReady, 'npm i dropbox'))
-    .then(() => consoleLogOrExec(isReady, 'npm i node-fetch'));
+    .then(() => consoleLogOrExec(isReady, 'npm i node-fetch'))
+    .then(() => consoleLogOrExec(isReady, 'npm i googleapis'));
 
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
@@ -532,6 +576,8 @@ const execInstall = (isReady) =>
     .then(() => execAddBestOfDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddApiDependencies(isReady))
+    .then(() => console.log())
+    .then(() => execAddServerlessDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddWebSocketDependencies(isReady))
     .then(() => console.log())

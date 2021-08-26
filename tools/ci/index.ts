@@ -195,12 +195,6 @@ const ayrshareApiKeySecret = createSecret(
   resourceGroup,
   vault
 );
-const logzioTokenSecret = createSecret(
-  'NX-LOGZIO-TOKEN',
-  interpolate`${process.env.NX_LOGZIO_TOKEN}`,
-  resourceGroup,
-  vault
-);
 
 export const resourceGroupUrn = resourceGroup.urn;
 
@@ -247,4 +241,3 @@ export const auth0ClientIdSecretUrn = auth0ClientIdSecret.urn;
 export const auth0ClientSecretSecretUrn = auth0ClientSecretSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;
-export const logzioTokenSecretUrn = logzioTokenSecret.urn;

@@ -12,7 +12,7 @@ import {
   DocumentModel,
   Document,
   EntityProvider,
-  EntityLoadProvider,
+  ReviewMediaProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ReviewMediaService {
     @InjectModel(Document.name)
     private readonly reviewMediaModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly entityLoadProvider: EntityLoadProvider
+    private readonly reviewMediaProvider: ReviewMediaProvider
   ) {}
 
   findOne$(): Observable<ReviewMediaDto> {
@@ -30,7 +30,7 @@ export class ReviewMediaService {
       .pipe(
         toArray<DocumentModel>(),
         map(this.entityProvider.validateOneEntity),
-        map(this.entityLoadProvider.loadReviewMediaPublic)
+        map(this.reviewMediaProvider.loadReviewMediaPublic)
       );
   }
 }

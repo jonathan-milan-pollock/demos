@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
+import { concatMap, concatMapTo, from, map, Observable, tap } from 'rxjs';
 
 import {
   Image,
@@ -10,8 +11,8 @@ import {
   MediaState,
   MediaType,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
-import { DocumentModel } from '../schema/document.schema';
+import { Media } from '@dark-rush-photography/shared-server/types';
+import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
   validateEntityIsPublic,
@@ -28,6 +29,11 @@ import { loadMedia } from '../content/media.functions';
 
 @Injectable()
 export class ImageProvider {
+  constructor(
+    @InjectModel(Document.name)
+    private readonly entityModel: Model<DocumentModel>
+  ) {}
+
   validateImageNotAlreadyExists(
     fileName: string,
     documentModel: DocumentModel
@@ -54,14 +60,13 @@ export class ImageProvider {
     entityId: string,
     fileName: string,
     isThreeSixty: boolean,
-    isProcessing: boolean,
-    entityModel: Model<DocumentModel>
+    isProcessing: boolean
   ): Observable<Image> {
-    return from(entityModel.findById(entityId)).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) =>
         from(
-          entityModel.findByIdAndUpdate(entityId, {
+          this.entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images,
               {
@@ -81,7 +86,7 @@ export class ImageProvider {
           })
         )
       ),
-      concatMapTo(this.findOne$(id, entityId, entityModel))
+      concatMapTo(this.findOne$(id, entityId))
     );
   }
 
@@ -125,12 +130,8 @@ export class ImageProvider {
     );
   }
 
-  findOne$(
-    id: string,
-    entityId: string,
-    entityModel: Model<DocumentModel>
-  ): Observable<Image> {
-    return from(entityModel.findById(entityId)).pipe(
+  findOne$(id: string, entityId: string): Observable<Image> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
         return loadImage(validateImageFound(id, documentModel));

@@ -2,17 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import {
-  ImageDimensionType,
-  MediaState,
-  VideoDimensionType,
-} from '@dark-rush-photography/shared/types';
-import {
   Env,
   ImageArtistExif,
-  ImageResolution,
   VideoArtistExif,
-  VideoResolution,
 } from '@dark-rush-photography/api/types';
+import { MediaState } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ConfigProvider {
@@ -22,52 +16,72 @@ export class ConfigProvider {
     return this.configService.get('production') === 'true';
   }
 
-  get dropboxOwnerEmail(): string {
-    const value = this.configService.get('dropboxOwnerEmail', {
+  get googleDriveClientEmail(): string {
+    const value = this.configService.get('googleDriveClientEmail', {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('dropboxOwnerEmail undefined');
+      throw new BadRequestException('googleDriveClientEmail undefined');
     }
     return value;
   }
 
-  get websitesDropboxClientId(): string {
-    const value = this.configService.get('websitesDropboxClientId', {
+  get googleDrivePrivateKey(): string {
+    const value = this.configService.get('googleDrivePrivateKey', {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('websitesDropboxClientId undefined');
+      throw new BadRequestException('googleDrivePrivateKey undefined');
     }
     return value;
   }
 
-  get websitesDropboxClientSecret(): string {
-    const value = this.configService.get('websitesDropboxClientSecret', {
+  get googleDriveClientsFolderId(): string {
+    const value = this.configService.get('googleDriveClientsFolderId', {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('websitesDropboxClientSecret undefined');
+      throw new BadRequestException('googleDriveClientsFolderId undefined');
     }
     return value;
   }
 
-  get clientsDropboxClientId(): string {
-    const value = this.configService.get('clientsDropboxClientId', {
+  get googleDriveWebsitesFolderId(): string {
+    const value = this.configService.get('googleDriveWebsitesFolderId', {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('clientsDropboxClientId undefined');
+      throw new BadRequestException('googleDriveWebsitesFolderId undefined');
     }
     return value;
   }
 
-  get clientsDropboxClientSecret(): string {
-    const value = this.configService.get('clientsDropboxClientSecret', {
+  get dropboxEmail(): string {
+    const value = this.configService.get('dropboxEmail', {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('clientsDropboxClientSecret undefined');
+      throw new BadRequestException('dropboxEmail undefined');
+    }
+    return value;
+  }
+
+  get dropboxClientId(): string {
+    const value = this.configService.get('dropboxClientId', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('dropboxClientId undefined');
+    }
+    return value;
+  }
+
+  get dropboxClientSecret(): string {
+    const value = this.configService.get('dropboxClientSecret', {
+      infer: true,
+    });
+    if (!value) {
+      throw new BadRequestException('dropboxClientSecret undefined');
     }
     return value;
   }
@@ -86,29 +100,36 @@ export class ConfigProvider {
     switch (mediaState) {
       case MediaState.New:
       case MediaState.Selected:
-        return this.privateBlobConnectionString;
+        return this.privateAzureStorageConnectionString;
       case MediaState.Public:
       case MediaState.Archived:
-        return this.publicBlobConnectionString;
+        return this.publicAzureStorageConnectionString;
     }
   }
 
-  get privateBlobConnectionString(): string {
-    const value = this.configService.get('privateBlobConnectionString', {
-      infer: true,
-    });
+  get privateAzureStorageConnectionString(): string {
+    const value = this.configService.get(
+      'privateAzureStorageConnectionString',
+      {
+        infer: true,
+      }
+    );
     if (!value) {
-      throw new BadRequestException('privateBlobConnectionString undefined');
+      throw new BadRequestException(
+        'privateAzureStorageConnectionString undefined'
+      );
     }
     return value;
   }
 
-  get publicBlobConnectionString(): string {
-    const value = this.configService.get('publicBlobConnectionString', {
+  get publicAzureStorageConnectionString(): string {
+    const value = this.configService.get('publicAzureStorageConnectionString', {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('publicBlobConnectionString undefined');
+      throw new BadRequestException(
+        'publicAzureStorageConnectionString undefined'
+      );
     }
     return value;
   }
@@ -129,84 +150,14 @@ export class ConfigProvider {
     return value;
   }
 
-  get logzioToken(): string {
-    const value = this.configService.get('logzioToken', { infer: true });
-    if (!value) {
-      throw new BadRequestException('logzioToken undefined');
-    }
-    return value;
-  }
-
-  getWebsitesDropboxRedirectUri(protocol: string, host?: string): string {
-    const fn = this.configService.get('getWebsitesDropboxRedirectUri', {
+  getDropboxRedirectUri(protocol: string, host?: string): string {
+    const fn = this.configService.get('getDropboxRedirectUri', {
       infer: true,
     });
     if (!fn) {
-      throw new BadRequestException('getWebsitesDropboxRedirectUri undefined');
+      throw new BadRequestException('getDropboxRedirectUri undefined');
     }
     return fn(protocol, host);
-  }
-
-  getClientsDropboxRedirectUri(protocol: string, host?: string): string {
-    const fn = this.configService.get('getClientsDropboxRedirectUri', {
-      infer: true,
-    });
-    if (!fn) {
-      throw new BadRequestException('getClientsDropboxRedirectUri undefined');
-    }
-    return fn(protocol, host);
-  }
-
-  findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution {
-    const fn = this.configService.get('findImageResolution', { infer: true });
-    if (!fn) {
-      throw new BadRequestException('findImageResolution undefined');
-    }
-    return fn(imageDimensionType);
-  }
-
-  findThreeSixtyImageResolution(
-    imageDimensionType: ImageDimensionType
-  ): ImageResolution {
-    const fn = this.configService.get('findThreeSixtyImageResolution', {
-      infer: true,
-    });
-    if (!fn) {
-      throw new BadRequestException('findThreeSixtyImageResolution undefined');
-    }
-    return fn(imageDimensionType);
-  }
-
-  findImageVideoResolution(
-    imageDimensionType: ImageDimensionType
-  ): ImageResolution {
-    const fn = this.configService.get('findImageVideoResolution', {
-      infer: true,
-    });
-    if (!fn) {
-      throw new BadRequestException('findImageVideoResolution undefined');
-    }
-    return fn(imageDimensionType);
-  }
-
-  findVideoResolution(videoDimensionType: VideoDimensionType): VideoResolution {
-    const fn = this.configService.get('findVideoResolution', { infer: true });
-    if (!fn) {
-      throw new BadRequestException('findVideoResolution undefined');
-    }
-    return fn(videoDimensionType);
-  }
-
-  findThreeSixtyVideoResolution(
-    videoDimensionType: VideoDimensionType
-  ): VideoResolution {
-    const fn = this.configService.get('findThreeSixtyVideoResolution', {
-      infer: true,
-    });
-    if (!fn) {
-      throw new BadRequestException('findThreeSixtyVideoResolution undefined');
-    }
-    return fn(videoDimensionType);
   }
 
   getImageArtistExif(

@@ -11,7 +11,7 @@ import {
   VideoDto,
   VideoUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadMedia } from '../content/media.functions';
 import {

@@ -1,15 +1,14 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { ImageDimensionType } from '@dark-rush-photography/shared/types';
-//TODO: Move these to shared types
 import {
+  ImageDimensionType,
   ImageResolution,
   LongestEdgeImageResolution,
   StandardImageResolution,
   TileImageResolution,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 
-export const findImageResolution = (
+export const FIND_IMAGE_RESOLUTION = (
   imageDimensionType: ImageDimensionType
 ): ImageResolution => {
   const imageResolution = IMAGE_RESOLUTIONS.find(

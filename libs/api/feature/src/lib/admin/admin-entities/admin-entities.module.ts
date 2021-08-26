@@ -5,7 +5,6 @@ import {
   Document,
   DocumentSchema,
   EntityDeleteProvider,
-  EntityLoadProvider,
   EntityPostProvider,
   EntityProvider,
   EntityUpdateProvider,
@@ -31,7 +30,6 @@ import { AdminEntitiesController } from './admin-entities.controller';
   providers: [
     AdminEntitiesService,
     EntityProvider,
-    EntityLoadProvider,
     EntityUpdateProvider,
     EntityPostProvider,
     EntityDeleteProvider,

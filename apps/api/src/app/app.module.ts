@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
-import { ScheduleModule } from '@nestjs/schedule';
 
-import { Auth0UserTable } from '@dark-rush-photography/api/data';
+import { Auth0UserTable } from '@dark-rush-photography/shared-server/data';
 import { ApiFeatureModule } from '@dark-rush-photography/api/feature';
-import { AuthModule } from './auth.module';
 import configuration from '../config/configuration';
+import { AuthModule } from './auth.module';
 import { ConfigProviderModule } from './config-provider.module';
 
 @Module({
@@ -31,7 +30,6 @@ import { ConfigProviderModule } from './config-provider.module';
       table: 'Auth0User',
       createTableIfNotExists: true,
     }),
-    ScheduleModule.forRoot(),
     ConfigProviderModule,
     AuthModule,
     ApiFeatureModule,

@@ -4,22 +4,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
-  AboutProvider,
-  ClientsDropboxUpdateProvider,
-  ClientsDropboxUpdateTable,
-  ClientsDropboxUserProvider,
-  ClientsDropboxUserTable,
+  DropboxUpdateProvider,
+  DropboxUserProvider,
   Document,
   DocumentSchema,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageUploadProvider,
-  WebsitesDropboxUpdateEntitiesProvider,
-  WebsitesDropboxUpdateProvider,
-  WebsitesDropboxUpdateTable,
-  WebsitesDropboxUserProvider,
-  WebsitesDropboxUserTable,
 } from '@dark-rush-photography/api/data';
+import { DropboxUserTable } from '@dark-rush-photography/shared-server/data';
 import { AdminDropboxService } from './admin-dropbox.service';
 import { AdminDropboxController } from './admin-dropbox.controller';
 
@@ -29,35 +19,12 @@ import { AdminDropboxController } from './admin-dropbox.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(WebsitesDropboxUserTable, {
-      table: 'WebsitesDropboxUser',
-      createTableIfNotExists: true,
-    }),
-    AzureTableStorageModule.forFeature(ClientsDropboxUserTable, {
-      table: 'ClientsDropboxUser',
-      createTableIfNotExists: true,
-    }),
-    AzureTableStorageModule.forFeature(WebsitesDropboxUpdateTable, {
-      table: 'WebsitesDropboxUpdate',
-      createTableIfNotExists: true,
-    }),
-    AzureTableStorageModule.forFeature(ClientsDropboxUpdateTable, {
-      table: 'ClientsDropboxUpdate',
+    AzureTableStorageModule.forFeature(DropboxUserTable, {
+      table: 'DropboxUser',
       createTableIfNotExists: true,
     }),
   ],
   controllers: [AdminDropboxController],
-  providers: [
-    AdminDropboxService,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageDimensionProvider,
-    WebsitesDropboxUserProvider,
-    ClientsDropboxUserProvider,
-    WebsitesDropboxUpdateProvider,
-    ClientsDropboxUpdateProvider,
-    WebsitesDropboxUpdateEntitiesProvider,
-    AboutProvider
-  ],
+  providers: [AdminDropboxService, DropboxUserProvider, DropboxUpdateProvider],
 })
 export class AdminDropboxModule {}

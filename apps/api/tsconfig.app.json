@@ -5,8 +5,7 @@
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2015",
-    "esModuleInterop": true
+    "target": "es2015"
   },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts", "webpack.config.js"]

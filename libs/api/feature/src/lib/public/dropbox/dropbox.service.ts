@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as express from 'express';
-import { BadRequestException, Injectable, Req } from '@nestjs/common';
+import { Injectable, NotFoundException, Req } from '@nestjs/common';
 
 import { concatMap, from, map, mapTo, Observable } from 'rxjs';
 const fetch = require('node-fetch');
@@ -8,32 +8,32 @@ const Dropbox = require('dropbox').Dropbox;
 
 import { DropboxToken } from '@dark-rush-photography/api/types';
 import {
-  ClientsDropboxUserProvider,
+  DropboxUserProvider,
   ConfigProvider,
-  WebsitesDropboxUserProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class DropboxService {
   constructor(
     private readonly configProvider: ConfigProvider,
-    private readonly websitesDropboxUserProvider: WebsitesDropboxUserProvider,
-    private readonly clientsDropboxUserProvider: ClientsDropboxUserProvider,
+    private readonly dropboxUserProvider: DropboxUserProvider
   ) {}
 
-  websitesRedirect$(
+  redirect$(
     @Req() request: express.Request,
-    code: string
+    code: string,
+    status: string
   ): Observable<void> {
+    //TODO: Do something with status (should be unique data)
     const dropbox = new Dropbox({
       fetch,
-      clientId: this.configProvider.websitesDropboxClientId,
-      clientSecret: this.configProvider.websitesDropboxClientSecret,
+      clientId: this.configProvider.dropboxClientId,
+      clientSecret: this.configProvider.dropboxClientSecret,
     });
 
     return from(
       dropbox.auth.getAccessTokenFromCode(
-        this.configProvider.getWebsitesDropboxRedirectUri(
+        this.configProvider.getDropboxRedirectUri(
           request.protocol,
           request.headers.host
         ),
@@ -43,51 +43,15 @@ export class DropboxService {
       map((token) => {
         const dropboxToken = token as DropboxToken;
         if (dropboxToken.status !== 200)
-          throw new BadRequestException('Unable to find token');
+          throw new NotFoundException('Unable to find token');
 
         return dropboxToken.result.refresh_token;
       }),
       concatMap((refreshToken) =>
-        this.websitesDropboxUserProvider.findEmail$(refreshToken)
+        this.dropboxUserProvider.findEmail$(refreshToken)
       ),
-      concatMap((user) =>
-        this.websitesDropboxUserProvider.createOrUpdateUser$(user)
-      ),
-      mapTo(undefined)
-    );
-  }
-
-  clientsRedirect$(
-    @Req() request: express.Request,
-    code: string
-  ): Observable<void> {
-    const dropbox = new Dropbox({
-      fetch,
-      clientId: this.configProvider.clientsDropboxClientId,
-      clientSecret: this.configProvider.clientsDropboxClientSecret,
-    });
-
-    return from(
-      dropbox.auth.getAccessTokenFromCode(
-        this.configProvider.getWebsitesDropboxRedirectUri(
-          request.protocol,
-          request.headers.host
-        ),
-        code
-      )
-    ).pipe(
-      map((token) => {
-        const dropboxToken = token as DropboxToken;
-        if (dropboxToken.status !== 200)
-          throw new BadRequestException('Unable to find token');
-
-        return dropboxToken.result.refresh_token;
-      }),
-      concatMap((refreshToken) =>
-        this.clientsDropboxUserProvider.findEmail$(refreshToken)
-      ),
-      concatMap((user) =>
-        this.clientsDropboxUserProvider.createOrUpdateUser$(user)
+      concatMap((userTable) =>
+        this.dropboxUserProvider.createOrUpdateUser$(userTable)
       ),
       mapTo(undefined)
     );

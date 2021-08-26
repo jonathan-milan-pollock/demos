@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { BadRequestException } from '@nestjs/common';
-import {
-  DropboxListFoldersItem,
-  DropboxListFoldersResponse,
-} from '@dark-rush-photography/api/types';
 import { Entity, EntityCreateDto } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadImage } from '../content/image.functions';
@@ -65,14 +58,6 @@ export const loadEntity = (documentModel: DocumentModel): Entity => ({
   comments: documentModel.comments.map(loadComment),
   emotions: documentModel.emotions.map(loadEmotion),
 });
-
-export const validateDropboxListFoldersResponse = (
-  response: any
-): DropboxListFoldersItem[] => {
-  const listFolderResponse = response as DropboxListFoldersResponse;
-  if (listFolderResponse.status !== 200) throw new BadRequestException();
-  return listFolderResponse.result.entries;
-};
 
 export const loadDocumentModelsArray = (
   documentModels: DocumentModel | DocumentModel[]

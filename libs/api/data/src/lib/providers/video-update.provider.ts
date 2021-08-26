@@ -18,15 +18,15 @@ import {
   VideoDimension,
   VideoUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
+//import { exifVideo$ } from '@dark-rush-photography/api/util';
 import {
   deleteBlob$,
   downloadBlobToFile$,
-  exifVideo$,
-  getBlobPath,
+  getAzureStorageBlobPath,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared-server/util';
 import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
 import { VideoDimensionProvider } from './video-dimension.provider';
@@ -128,21 +128,21 @@ export class VideoUpdateProvider {
           this.configProvider.getConnectionStringFromMediaState(
             videoMedia.state
           ),
-          getBlobPath(videoMedia),
+          getAzureStorageBlobPath(videoMedia),
           videoMedia.fileName
         )
       ),
       tap(() => this.logger.debug(`Exif video with update`)),
-      concatMap((filePath) =>
-        exifVideo$(
-          filePath,
-          this.configProvider.getVideoArtistExif(new Date().getFullYear()),
-          {
-            title: videoUpdate.title,
-            description: videoUpdate.description,
-          }
-        )
-      ),
+      //concatMap((filePath) =>
+      //  exifVideo$(
+      //    filePath,
+      //    this.configProvider.getVideoArtistExif(new Date().getFullYear()),
+      //    {
+      //      title: videoUpdate.title,
+      //      description: videoUpdate.description,
+      //   }
+      // )
+      //),
       tap(() => this.logger.debug('Upload video to new blob path')),
       concatMap((filePath) =>
         uploadStreamToBlob$(
@@ -150,7 +150,7 @@ export class VideoUpdateProvider {
             videoUpdateMedia.state
           ),
           fs.createReadStream(filePath),
-          getBlobPath(videoUpdateMedia)
+          getAzureStorageBlobPath(videoUpdateMedia)
         )
       ),
       tap(() => this.logger.debug('Remove video at previous blob path')),
@@ -159,7 +159,7 @@ export class VideoUpdateProvider {
           this.configProvider.getConnectionStringFromMediaState(
             videoMedia.state
           ),
-          getBlobPath(videoMedia)
+          getAzureStorageBlobPath(videoMedia)
         )
       )
     );

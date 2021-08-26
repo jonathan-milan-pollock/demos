@@ -1,4 +1,4 @@
-name: Install Multicontainer Web App
+name: 'Install Multicontainer Web App'
 on:
   workflow_dispatch:
     branches:
@@ -76,21 +76,16 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_MONGO_DB_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-MONGO-DB-CONNECTION-STRING)", "slotSetting": false }]'
-      - name: Azure set NX_PRIVATE_BLOB_CONNECTION_STRING
+      - name: Azure set AZURE_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_PRIVATE_BLOB_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PRIVATE-BLOB-CONNECTION-STRING)", "slotSetting": false }]'
-      - name: Azure set NX_PRIVATE_TABLE_CONNECTION_STRING
+          app-settings-json: '[{ "name": "AZURE_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=AZURE-CONNECTION-STRING)", "slotSetting": false }]'
+      - name: Azure set AZURE_CONNECTION_STRING_PUBLIC
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_PRIVATE_TABLE_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-PRIVATE-TABLE-CONNECTION-STRING)", "slotSetting": false }]'
-      - name: Azure set NX_PUBLIC_BLOB_CONNECTION_STRING
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_PUBLIC_BLOB_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=NX-PUBLIC-BLOB-CONNECTION-STRING)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=AZURE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
       - name: Azure set NX_AUTH0_CLIENT_ID
         uses: azure/appservice-settings@v1
         with:
@@ -111,8 +106,3 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_AYRSHARE_API_KEY", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AYRSHARE-API-KEY)", "slotSetting": false }]'
-      - name: Azure set NX_LOGZIO_TOKEN
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_LOGZIO_TOKEN", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-LOGZIO-TOKEN)", "slotSetting": false }]'
