@@ -19,17 +19,19 @@ import {
   Location,
   ImageUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
+//import {
+//  exifImage$,
+//  getExifDate,
+//  getImageExif,
+//} from '@dark-rush-photography/api/util';
 import {
   deleteBlob$,
   downloadBlobToFile$,
-  exifImage$,
-  getBlobPath,
-  getExifDate,
-  getImageExif,
+  getAzureStorageBlobPath,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared-server/util';
 import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
 import { ImageDimensionProvider } from './image-dimension.provider';
@@ -133,27 +135,27 @@ export class ImageUpdateProvider {
             this.configProvider.getConnectionStringFromMediaState(
               imageMedia.state
             ),
-            getBlobPath(imageMedia),
+            getAzureStorageBlobPath(imageMedia),
             imageMedia.fileName
           )
         ),
         tap(() => this.logger.debug('Exif image with update')),
-        concatMap((filePath) =>
-          exifImage$(
-            filePath,
-            this.configProvider.getImageArtistExif(
-              new Date().getFullYear(),
-              image.dateCreated ?? getExifDate(new Date())
-            ),
-            getImageExif(
-              imageUpdate.datePublished ?? getExifDate(new Date()),
-              imageUpdate.title,
-              imageUpdate.description,
-              imageUpdate.keywords,
-              location
-            )
-          )
-        ),
+        //  concatMap((filePath) =>
+        //   exifImage$(
+        //     filePath,
+        //     this.configProvider.getImageArtistExif(
+        //       new Date().getFullYear(),
+        //       image.dateCreated ?? getExifDate(new Date())
+        //     ),
+        //     getImageExif(
+        //       imageUpdate.datePublished ?? getExifDate(new Date()),
+        //       imageUpdate.title,
+        //       imageUpdate.description,
+        //       imageUpdate.keywords,
+        //       location
+        //     )
+        //   )
+        // ),
         tap(() => this.logger.debug('Upload image to new blob path')),
         concatMap((filePath) =>
           uploadStreamToBlob$(
@@ -161,7 +163,7 @@ export class ImageUpdateProvider {
               imageUpdateMedia.state
             ),
             fs.createReadStream(filePath),
-            getBlobPath(imageUpdateMedia)
+            getAzureStorageBlobPath(imageUpdateMedia)
           )
         ),
         tap(() => this.logger.debug('Remove image at previous blob path')),
@@ -170,7 +172,7 @@ export class ImageUpdateProvider {
             this.configProvider.getConnectionStringFromMediaState(
               imageMedia.state
             ),
-            getBlobPath(imageMedia)
+            getAzureStorageBlobPath(imageMedia)
           )
         )
       );

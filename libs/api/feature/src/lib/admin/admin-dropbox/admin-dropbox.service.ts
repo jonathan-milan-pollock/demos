@@ -1,38 +1,55 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as express from 'express';
-import { Injectable, Req } from '@nestjs/common';
+import { Injectable, NotFoundException, Req } from '@nestjs/common';
+import { InjectRepository, Repository } from '@nestjs/azure-database';
 
-import { mapTo, Observable } from 'rxjs';
+import { concatMap, from, map, mapTo, Observable, of, pluck } from 'rxjs';
 const fetch = require('node-fetch');
 const Dropbox = require('dropbox').Dropbox;
 
 import {
-  ClientsDropboxUpdateProvider,
+  DropboxUpdateProvider,
   ConfigProvider,
-  WebsitesDropboxUpdateProvider,
 } from '@dark-rush-photography/api/data';
+import { DropboxUserTable } from '@dark-rush-photography/shared-server/data';
 
 @Injectable()
 export class AdminDropboxService {
   constructor(
     private readonly configProvider: ConfigProvider,
-    private readonly websitesDropboxUpdateProvider: WebsitesDropboxUpdateProvider,
-    private readonly clientsDropboxUpdateProvider: ClientsDropboxUpdateProvider
+    @InjectRepository(DropboxUserTable)
+    private readonly userRepository: Repository<DropboxUserTable>,
+    private readonly dropboxUpdateProvider: DropboxUpdateProvider
   ) {}
 
-  websitesRedirectUri(@Req() request: express.Request): string {
+  haveRefreshToken$(): Observable<boolean> {
+    return from(this.userRepository.findAll()).pipe(
+      pluck('entries'),
+      map((entries) => {
+        const userTable = entries.find(
+          (entry: DropboxUserTable) =>
+            entry.email === this.configProvider.dropboxEmail
+        );
+        return !!userTable && !!userTable.refreshToken;
+      })
+    );
+  }
+
+  redirectUri(@Req() request: express.Request): string {
     const dropbox = new Dropbox({
       fetch,
-      clientId: this.configProvider.websitesDropboxClientId,
-      clientSecret: this.configProvider.websitesDropboxClientSecret,
+      clientId: this.configProvider.dropboxClientId,
+      clientSecret: this.configProvider.dropboxClientSecret,
     });
+
+    const redirectUri = this.configProvider.getDropboxRedirectUri(
+      request.protocol,
+      request.headers.host
+    );
 
     return dropbox.auth
       .getAuthenticationUrl(
-        this.configProvider.getWebsitesDropboxRedirectUri(
-          request.protocol,
-          request.headers.host
-        ),
+        redirectUri,
         null,
         'code',
         'offline',
@@ -45,40 +62,20 @@ export class AdminDropboxService {
       });
   }
 
-  clientsRedirectUri(@Req() request: express.Request): string {
-    const dropbox = new Dropbox({
-      fetch,
-      clientId: this.configProvider.websitesDropboxClientId,
-      clientSecret: this.configProvider.websitesDropboxClientSecret,
-    });
-
-    return dropbox.auth
-      .getAuthenticationUrl(
-        this.configProvider.getClientsDropboxRedirectUri(
-          request.protocol,
-          request.headers.host
-        ),
-        null,
-        'code',
-        'offline',
-        null,
-        'none',
-        false
-      )
-      .then((authenticationUrl: string) => {
-        return authenticationUrl;
-      });
-  }
-
-  websitesUpdate$(): Observable<void> {
-    return this.websitesDropboxUpdateProvider
-      .addUpdate$()
-      .pipe(mapTo(undefined));
-  }
-
-  clientsUpdate$(): Observable<void> {
-    return this.clientsDropboxUpdateProvider
-      .addUpdate$()
-      .pipe(mapTo(undefined));
+  update$(): Observable<void> {
+    return from(this.userRepository.findAll()).pipe(
+      pluck('entries'),
+      concatMap((entries) => {
+        const userTable = entries.find(
+          (entry: DropboxUserTable) =>
+            entry.email === this.configProvider.dropboxEmail
+        );
+        if (userTable && userTable.refreshToken) {
+          return of(undefined);
+        }
+        throw new NotFoundException('Dropbox refresh token was not found');
+      }),
+      mapTo(undefined)
+    );
   }
 }

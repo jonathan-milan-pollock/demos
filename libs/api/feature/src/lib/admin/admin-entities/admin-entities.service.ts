@@ -17,7 +17,6 @@ import {
   EntityUpdateProvider,
   EntityDeleteProvider,
   EntityPostProvider,
-  EntityLoadProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -26,7 +25,6 @@ export class AdminEntitiesService {
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly entityLoadProvider: EntityLoadProvider,
     private readonly entityUpdateProvider: EntityUpdateProvider,
     private readonly entityPostProvider: EntityPostProvider,
     private readonly entityDeleteProvider: EntityDeleteProvider
@@ -37,12 +35,12 @@ export class AdminEntitiesService {
       concatMapTo(
         from(
           new this.entityModel({
-            ...this.entityLoadProvider.loadNewEntity(entityCreate),
+            ...this.entityProvider.loadNewEntity(entityCreate),
           }).save()
         )
       ),
       map(this.entityProvider.validateEntityCreate),
-      map(this.entityLoadProvider.loadEntity)
+      map(this.entityProvider.loadEntity)
     );
   }
 
@@ -125,13 +123,13 @@ export class AdminEntitiesService {
   findAll$(entityType: EntityType): Observable<Entity[]> {
     return this.entityProvider
       .findAll$(entityType, this.entityModel)
-      .pipe(map(this.entityLoadProvider.loadEntity), toArray<Entity>());
+      .pipe(map(this.entityProvider.loadEntity), toArray<Entity>());
   }
 
   findOne$(entityType: EntityType, id: string): Observable<Entity> {
     return this.entityProvider
       .findOne$(entityType, id, this.entityModel)
-      .pipe(map(this.entityLoadProvider.loadEntity));
+      .pipe(map(this.entityProvider.loadEntity));
   }
 
   findIsProcessing$(entityType: EntityType, id: string): Observable<boolean> {

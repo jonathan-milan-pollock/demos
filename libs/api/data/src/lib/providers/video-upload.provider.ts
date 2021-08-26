@@ -12,14 +12,14 @@ import {
 } from 'rxjs';
 
 import { VideoDimensionType } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
+//import { findVideoExifDateCreated$ } from '@dark-rush-photography/api/util';
 import {
   downloadBlobToFile$,
-  findVideoExifDateCreated$,
-  getBlobPath,
+  getAzureStorageBlobPath,
   uploadBufferToBlob$,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared-server/util';
 import { ConfigProvider } from './config.provider';
 import { VideoDimensionProvider } from './video-dimension.provider';
 import { VideoProvider } from './video.provider';
@@ -42,27 +42,27 @@ export class VideoUploadProvider {
     file: Express.Multer.File,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
-    const youTubeResolution = isThreeSixty
-      ? this.configProvider.findThreeSixtyVideoResolution(
-          VideoDimensionType.ThreeSixtyYouTube
-        )
-      : this.configProvider.findVideoResolution(VideoDimensionType.YouTube);
+    // const youTubeResolution = isThreeSixty
+    //   ? this.configProvider.findThreeSixtyVideoResolution(
+    //       VideoDimensionType.ThreeSixtyYouTube
+    //     )
+    //   : this.configProvider.findVideoResolution(VideoDimensionType.YouTube);
 
     return uploadBufferToBlob$(
       this.configProvider.getConnectionStringFromMediaState(media.state),
       file.buffer,
-      getBlobPath(media)
+      getAzureStorageBlobPath(media)
     ).pipe(
       tap(() => this.logger.debug('Update date video created')),
       concatMapTo(this.updateDateCreated$(media, entityModel)),
       tap(() => this.logger.debug('Resize video')),
-      concatMapTo(
-        this.videoDimensionProvider.resize$(
-          media,
-          youTubeResolution,
-          entityModel
-        )
-      ),
+      //   concatMapTo(
+      //     this.videoDimensionProvider.resize$(
+      //       media,
+      //       youTubeResolution,
+      //       entityModel
+      //     )
+      //   ),
       concatMapTo(
         this.videoProvider.setIsProcessing$(
           media.id,
@@ -80,10 +80,10 @@ export class VideoUploadProvider {
   ): Observable<string> {
     return downloadBlobToFile$(
       this.configProvider.getConnectionStringFromMediaState(media.state),
-      getBlobPath(media),
+      getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
-      concatMap((filePath) => findVideoExifDateCreated$(filePath, new Date())),
+      //concatMap((filePath) => findVideoExifDateCreated$(filePath, new Date())),
       concatMap((dateCreated) =>
         combineLatest([
           of(dateCreated),

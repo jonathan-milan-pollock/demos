@@ -24,22 +24,25 @@ import {
   ThreeSixtySettings,
   ImageDimensionAddDto,
   ImageUpdateDto,
+  ImageResolution,
 } from '@dark-rush-photography/shared/types';
-import { ImageResolution, Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
+//import {
+//  exifImage$,
+//  findImageResolution$,
+//  getExifDate,
+//  getImageExif,
+//  resizeImage$,
+//} from '@dark-rush-photography/api/util';
 import {
   deleteBlob$,
   downloadBlobAsBuffer$,
   downloadBlobToFile$,
-  exifImage$,
-  findImageResolution$,
-  getBlobPath,
-  getBlobPathWithDimension,
-  getExifDate,
-  getImageExif,
-  resizeImage$,
+  getAzureStorageBlobPath,
+  getAzureStorageBlobPathWithDimension,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared-server/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   validateImageDimensionNotAlreadyExists,
@@ -65,9 +68,9 @@ export class ImageDimensionProvider {
   ): Observable<ImageDimension> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map((documentModel) =>
-        validateImageDocumentModelFound(imageId, documentModel)
-      ),
+      map((documentModel) => {
+        return validateImageDocumentModelFound(imageId, documentModel);
+      }),
       map((documentModel) =>
         validateImageDimensionNotAlreadyExists(
           imageId,
@@ -150,7 +153,7 @@ export class ImageDimensionProvider {
   ): Observable<boolean> {
     return downloadBlobToFile$(
       this.configProvider.getConnectionStringFromMediaState(imageMedia.state),
-      getBlobPathWithDimension(imageMedia, imageDimension.type),
+      getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type),
       imageMedia.fileName
     ).pipe(
       tap(() =>
@@ -158,7 +161,7 @@ export class ImageDimensionProvider {
           `Exif image dimension ${imageDimension.type} with update`
         )
       ),
-      concatMap((filePath) =>
+      /*     concatMap((filePath) =>
         exifImage$(
           filePath,
           this.configProvider.getImageArtistExif(
@@ -185,20 +188,23 @@ export class ImageDimensionProvider {
             imageUpdateMedia.state
           ),
           fs.createReadStream(filePath),
-          getBlobPathWithDimension(imageUpdateMedia, imageDimension.type)
+          getAzureStorageBlobPathWithDimension(
+            imageUpdateMedia,
+            imageDimension.type
+          )
         )
       ),
       tap(() =>
         this.logger.debug(
           `Remove image dimension ${imageDimension.type} at previous blob path`
         )
-      ),
+      ),*/
       concatMap(() =>
         deleteBlob$(
           this.configProvider.getConnectionStringFromMediaState(
             imageMedia.state
           ),
-          getBlobPathWithDimension(imageMedia, imageDimension.type)
+          getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type)
         )
       ),
       mapTo(true)
@@ -209,15 +215,19 @@ export class ImageDimensionProvider {
     media: Media,
     imageResolution: ImageResolution,
     entityModel: Model<DocumentModel>
-  ): Observable<ImageDimension> {
+  ): Observable<string> {
     const id = uuidv4();
-    Logger.log(`Resizing image dimension ${imageResolution.type}`);
     return downloadBlobToFile$(
       this.configProvider.getConnectionStringFromMediaState(media.state),
-      getBlobPath(media),
+      getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
-      concatMap((filePath) =>
+      tap(() =>
+        this.logger.log(
+          `Resizing ${imageResolution.type} image ${media.fileName}`
+        )
+      )
+      /* concatMap((filePath) =>
         resizeImage$(media.fileName, filePath, imageResolution)
       ),
       concatMap((filePath) =>
@@ -226,13 +236,16 @@ export class ImageDimensionProvider {
           uploadStreamToBlob$(
             this.configProvider.getConnectionStringFromMediaState(media.state),
             fs.createReadStream(filePath),
-            getBlobPathWithDimension(media, imageResolution.type)
+            getAzureStorageBlobPathWithDimension(media, imageResolution.type)
           ),
         ])
       ),
-      tap(() => Logger.log(`Finding image resolution ${imageResolution.type}`)),
       concatMap(([filePath]) => findImageResolution$(filePath)),
-      tap(() => Logger.log(`Adding image dimension ${imageResolution.type}`)),
+      tap(() =>
+        this.logger.log(
+          `Adding ${imageResolution.type} image dimension ${media.fileName}`
+        )
+      ),
       concatMap((resolution) =>
         this.add$(
           id,
@@ -244,10 +257,7 @@ export class ImageDimensionProvider {
           },
           entityModel
         )
-      ),
-      tap(() =>
-        Logger.log(`Resizing image dimension ${imageResolution.type} complete`)
-      )
+      )*/
     );
   }
 
@@ -263,7 +273,7 @@ export class ImageDimensionProvider {
           (imageDimension) => imageDimension.id == id
         );
         if (!foundImageDimension)
-          throw new NotFoundException('Could not find image dimension');
+          throw new NotFoundException(`Could not find image dimension ${id}`);
 
         return loadImageDimension(foundImageDimension);
       })
@@ -276,7 +286,7 @@ export class ImageDimensionProvider {
   ): Observable<string> {
     return downloadBlobAsBuffer$(
       this.configProvider.getConnectionStringFromMediaState(media.state),
-      getBlobPathWithDimension(media, imageDimensionType)
+      getAzureStorageBlobPathWithDimension(media, imageDimensionType)
     ).pipe(
       map((buffer) => {
         const datauri = require('datauri/parser');

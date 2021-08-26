@@ -13,6 +13,7 @@ import {
 } from 'rxjs';
 
 import {
+  Entity,
   EntityCreateDto,
   EntityType,
 } from '@dark-rush-photography/shared/types';
@@ -27,12 +28,14 @@ import {
   validateNotProcessingEntity,
   validateEntityCreate,
 } from '../entities/entity-validation.functions';
-import { loadDocumentModelsArray } from '../entities/entity.functions';
+import {
+  loadDocumentModelsArray,
+  loadEntity,
+  loadNewEntity,
+} from '../entities/entity.functions';
 
 @Injectable()
 export class EntityProvider {
-
-
   //TODO: Put these in order of the validate file and check if all needed
   validateEntityFound(documentModel: DocumentModel | null): DocumentModel {
     return validateEntityFound(documentModel);
@@ -132,6 +135,14 @@ export class EntityProvider {
       map(validateEntityIsPublic),
       map((documentModel) => validateEntityType(entityType, documentModel))
     );
+  }
+
+  loadNewEntity(entityCreate: EntityCreateDto): Entity {
+    return loadNewEntity(entityCreate);
+  }
+
+  loadEntity(documentModel: DocumentModel): Entity {
+    return loadEntity(documentModel);
   }
 
   delete$(

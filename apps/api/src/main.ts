@@ -9,8 +9,6 @@ import {
   AUTH0_AUDIENCE,
   AUTH0_ISSUER,
 } from '@dark-rush-photography/shared-server/types';
-import { LogzioLogger } from '@dark-rush-photography/shared-server/util';
-import { ConfigProvider } from '@dark-rush-photography/api/data';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,9 +18,6 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
-
-  const configProvider = app.get(ConfigProvider);
-  app.useLogger(new LogzioLogger(configProvider.logzioToken));
 
   if (!environment.production) {
     const config = new DocumentBuilder()

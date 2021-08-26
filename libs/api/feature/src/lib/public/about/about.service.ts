@@ -6,9 +6,9 @@ import { map, Observable, toArray } from 'rxjs';
 
 import { AboutDto, EntityType } from '@dark-rush-photography/shared/types';
 import {
+  AboutProvider,
   Document,
   DocumentModel,
-  EntityLoadProvider,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -18,12 +18,12 @@ export class AboutService {
     @InjectModel(Document.name)
     private readonly aboutModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly entityLoadProvider: EntityLoadProvider
+    private readonly aboutProvider: AboutProvider
   ) {}
 
   findAll$(): Observable<AboutDto[]> {
     return this.entityProvider
       .findAllPublic$(EntityType.About, this.aboutModel)
-      .pipe(map(this.entityLoadProvider.loadAboutPublic), toArray<AboutDto>());
+      .pipe(map(this.aboutProvider.loadAboutPublic), toArray<AboutDto>());
   }
 }

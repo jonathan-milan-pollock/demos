@@ -68,14 +68,7 @@ export class AdminImagesService {
       ),
       concatMap((documentModel) =>
         combineLatest([
-          this.imageProvider.add$(
-            id,
-            entityId,
-            fileName,
-            isThreeSixty,
-            true,
-            this.entityModel
-          ),
+          this.imageProvider.add$(id, entityId, fileName, isThreeSixty, true),
           of(documentModel),
         ])
       ),
@@ -89,13 +82,11 @@ export class AdminImagesService {
         )
       ),
       concatMap((media) =>
-        this.imageUploadProvider
-          .uploadBufferToBlob$(media, file)
-          .pipe(mapTo(media))
+        this.imageUploadProvider.upload$(media, file).pipe(mapTo(media))
       ),
-      concatMap((media) =>
-        this.imageUploadProvider.upload$(media, isThreeSixty, this.entityModel)
-      ),
+      // concatMap((media) =>
+      //   this.imageUploadProvider.process$(media, isThreeSixty, this.entityModel)
+      // ),
       tap(() => this.logger.debug('Upload complete')),
       concatMapTo(this.findOne$(id, entityId))
     );
@@ -167,7 +158,7 @@ export class AdminImagesService {
   }
 
   findOne$(id: string, entityId: string): Observable<Image> {
-    return this.imageProvider.findOne$(id, entityId, this.entityModel);
+    return this.imageProvider.findOne$(id, entityId);
   }
 
   findDataUri$(

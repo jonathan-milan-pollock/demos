@@ -70,6 +70,24 @@
     "image-elements": {
       "tags": ["scope:image-elements", "type:ui"]
     },
+    "serverless": {
+      "tags": ["scope:serverless", "type:app"]
+    },
+    "serverless-data": {
+      "tags": ["scope:serverless", "type:data"]
+    },
+    "serverless-feature": {
+      "tags": ["scope:serverless", "type:feature"]
+    },
+    "serverless-types": {
+      "tags": ["scope:serverless", "type:types"]
+    },
+    "serverless-util": {
+      "tags": ["scope:serverless", "type:util"]
+    },
+    "shared-server-data": {
+      "tags": ["scope:shared-server", "type:data"]
+    },
     "shared-server-types": {
       "tags": ["scope:shared-server", "type:types"]
     },

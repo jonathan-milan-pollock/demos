@@ -8,13 +8,13 @@ import {
   Video,
   VideoDimension,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
-  getBlobPath,
-  getBlobPathWithDimension,
-} from '@dark-rush-photography/api/util';
+  getAzureStorageBlobPath,
+  getAzureStorageBlobPathWithDimension,
+} from '@dark-rush-photography/shared-server/util';
 import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
 import { VideoProvider } from './video.provider';
@@ -73,7 +73,7 @@ export class VideoRemoveProvider {
 
     return deleteBlob$(
       this.configProvider.getConnectionStringFromMediaState(media.state),
-      getBlobPath(media)
+      getAzureStorageBlobPath(media)
     );
   }
 
@@ -91,7 +91,7 @@ export class VideoRemoveProvider {
       concatMap((videoDimension) =>
         deleteBlob$(
           this.configProvider.getConnectionStringFromMediaState(media.state),
-          getBlobPathWithDimension(media, videoDimension.type)
+          getAzureStorageBlobPathWithDimension(media, videoDimension.type)
         )
       ),
       concatMapTo(this.removeVideoBlob$(media, isUploaded))

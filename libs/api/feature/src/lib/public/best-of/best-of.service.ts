@@ -6,9 +6,9 @@ import { map, Observable, toArray } from 'rxjs';
 
 import { BestOfDto, EntityType } from '@dark-rush-photography/shared/types';
 import {
+  BestOfProvider,
   Document,
   DocumentModel,
-  EntityLoadProvider,
   EntityProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -18,12 +18,12 @@ export class BestOfService {
     @InjectModel(Document.name)
     private readonly bestOfModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
-    private readonly entityLoadProvider: EntityLoadProvider
+    private readonly bestOfProvider: BestOfProvider
   ) {}
 
   findAll$(): Observable<BestOfDto[]> {
     return this.entityProvider
       .findAllPublic$(EntityType.BestOf, this.bestOfModel)
-      .pipe(map(this.entityLoadProvider.loadBestOfPublic), toArray<BestOfDto>());
+      .pipe(map(this.bestOfProvider.loadBestOfPublic), toArray<BestOfDto>());
   }
 }

@@ -1,195 +1,120 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import * as fs from 'fs-extra';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import {
   combineLatest,
   concatMap,
   concatMapTo,
-  filter,
   from,
-  map,
   mapTo,
   Observable,
   of,
 } from 'rxjs';
-const fetch = require('node-fetch');
-const Dropbox = require('dropbox').Dropbox;
+import { drive_v3 } from 'googleapis';
 
+import { AboutDto, EntityType } from '@dark-rush-photography/shared/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
 import {
-  DEFAULT_ENTITY_GROUP,
-  DropboxListFoldersItem,
-  DropboxTag,
-  DropboxTemporaryLinkResponse,
-} from '@dark-rush-photography/api/types';
-import { EntityType, MediaType } from '@dark-rush-photography/shared/types';
-import { DocumentModel, Document } from '../schema/document.schema';
-import {
-  createTempFile$,
-  getBlobPath,
-  uploadBufferToBlob$,
-  uploadStreamToBlob$,
-  writeStreamToFile$,
-} from '@dark-rush-photography/api/util';
+  getGoogleDriveFolderWithName$,
+  getGoogleDriveFolders$,
+} from '@dark-rush-photography/shared-server/util';
+import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
-  validateDropboxListFoldersResponse,
 } from '../entities/entity.functions';
+import { loadPublicContent } from '../content/public-content.functions';
+import { loadMinimalPublicImage } from '../content/image.functions';
+import { loadMinimalPublicVideo } from '../content/video.functions';
 import { ConfigProvider } from './config.provider';
-import { ImageProvider } from './image.provider';
-import { ImageUploadProvider } from './image-upload.provider';
+import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
 @Injectable()
 export class AboutProvider {
   readonly logger: Logger;
 
   constructor(
-    private readonly httpService: HttpService,
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly imageProvider: ImageProvider,
-    private readonly imageUploadProvider: ImageUploadProvider
+    private readonly googleDriveWebsitesProvider: GoogleDriveWebsitesProvider
   ) {
     this.logger = new Logger(AboutProvider.name);
   }
 
-  update$(ownerRefreshToken: string): Observable<unknown> {
-    const dropbox = new Dropbox({
-      fetch,
-      clientId: this.configProvider.websitesDropboxClientId,
-      clientSecret: this.configProvider.websitesDropboxClientSecret,
-    });
-    dropbox.auth.setRefreshToken(ownerRefreshToken);
+  loadAboutPublic(documentModel: DocumentModel): AboutDto {
+    const publicContent = loadPublicContent(documentModel);
+    return {
+      slug: documentModel.slug,
+      order: documentModel.order,
+      images: publicContent.images.map(loadMinimalPublicImage),
+      videos: publicContent.videos.map(loadMinimalPublicVideo),
+    };
+  }
 
-    return from(dropbox.filesListFolder({ path: `/websites/about/` })).pipe(
-      map(validateDropboxListFoldersResponse),
-      concatMap((entries) => from(entries)),
-      filter((folder) => folder['.tag'] === DropboxTag.folder),
-      concatMap((folder) =>
+  sync$(drive: drive_v3.Drive, slugName: string): Observable<void> {
+    return from(
+      getGoogleDriveFolderWithName$(
+        drive,
+        this.configProvider.googleDriveWebsitesFolderId,
+        'about'
+      )
+    ).pipe(
+      concatMap((googleDriveFolder) =>
+        from(
+          getGoogleDriveFolderWithName$(drive, googleDriveFolder.id, slugName)
+        )
+      ),
+      concatMap((aboutEntityFolder) =>
         combineLatest([
-          of(folder),
+          of(aboutEntityFolder),
           from(
-            this.entityModel.find({ type: EntityType.About, slug: folder.name })
+            this.entityModel.find({
+              type: EntityType.About,
+              slug: aboutEntityFolder.name,
+            })
           ),
         ])
       ),
-      concatMap(([folder, documentModels]) => {
+      concatMap(([aboutEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          return combineLatest([of(folder), of(documentModelsArray[0])]);
+          //TODO: Verify that only 1
+          this.logger.log(`Found entity ${aboutEntityFolder.name}`);
+          return combineLatest([
+            getGoogleDriveFolderWithName$(
+              drive,
+              aboutEntityFolder.id,
+              'images'
+            ),
+            of(documentModelsArray[0]),
+          ]);
         }
 
+        this.logger.log(`Creating entity ${aboutEntityFolder.name}`);
         return combineLatest([
-          of(folder),
+          getGoogleDriveFolderWithName$(drive, aboutEntityFolder.id, 'images'),
           from(
             new this.entityModel({
               ...loadNewEntity({
                 type: EntityType.About,
                 group: DEFAULT_ENTITY_GROUP,
-                slug: folder.name,
-                isPublic: true,
+                slug: aboutEntityFolder.name,
+                isPublic: false,
               }),
             }).save()
           ),
         ]);
       }),
-      concatMap(([folder, documentModel]) =>
-        this.addImages$(ownerRefreshToken, folder, documentModel)
-      )
-    );
-  }
-
-  addImages$(
-    ownerRefreshToken: string,
-    folder: DropboxListFoldersItem,
-    documentModel: DocumentModel
-  ): Observable<unknown> {
-    const dropbox = new Dropbox({
-      fetch,
-      clientId: this.configProvider.websitesDropboxClientId,
-      clientSecret: this.configProvider.websitesDropboxClientSecret,
-    });
-    dropbox.auth.setRefreshToken(ownerRefreshToken);
-
-    //TODO: Delete all new images for the document model
-    return from(
-      dropbox.filesListFolder({
-        path: `/websites/about/${folder.name}/images`,
-      })
-    ).pipe(
-      map(validateDropboxListFoldersResponse),
-      concatMap((dropboxImages) => from(dropboxImages)),
-      concatMap((dropboxImage) =>
-        combineLatest([
-          of(dropboxImage),
-          from(
-            dropbox.filesGetTemporaryLink({ path: dropboxImage.path_display })
-          ),
-        ])
-      ),
-      concatMap(([dropboxImage, response]) => {
-        const id = uuidv4();
-        return combineLatest([
-          of(response),
-          this.imageProvider.add$(
-            id,
-            documentModel._id,
-            dropboxImage.name,
-            false,
-            true,
-            this.entityModel
-          ),
-        ]);
-      }),
-      map(([response, image]) => ({
-        response,
-        media: this.imageProvider.loadMedia(
-          MediaType.Image,
-          image.id,
-          image.fileName,
-          image.state,
+      concatMap(([imagesFolder, documentModel]) =>
+        this.googleDriveWebsitesProvider.sync$(
+          drive,
+          imagesFolder,
           documentModel
-        ),
-      })),
-      map(({ response, media }) => {
-        const temporaryLinkResponse = response as DropboxTemporaryLinkResponse;
-        if (temporaryLinkResponse.status !== 200)
-          throw new BadRequestException();
-        return { link: temporaryLinkResponse.result.link, media };
-      }),
-      concatMap(({ link, media }) =>
-        combineLatest([
-          of(media),
-          this.httpService.get(link, { responseType: 'stream' }),
-        ])
+        )
       ),
-      concatMap(([media, stream]) =>
-        combineLatest([
-          of(media),
-          writeStreamToFile$(stream.data, media.fileName),
-        ])
-      ),
-      concatMap(([media, filePath]) => {
-        const connectionString =
-          this.configProvider.getConnectionStringFromMediaState(media.state);
-        return combineLatest([
-          of(media),
-          uploadStreamToBlob$(
-            connectionString,
-            fs.createReadStream(filePath),
-            getBlobPath(media)
-          ),
-        ]);
-      }),
-      concatMap(([media]) =>
-        this.imageUploadProvider.upload$(media, false, this.entityModel)
-      )
+      mapTo(undefined)
     );
   }
 }
