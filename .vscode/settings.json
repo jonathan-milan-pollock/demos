@@ -4,7 +4,6 @@
     "Autobuild",
     "Buildable",
     "Chainable",
-    "Exifed",
     "Haha",
     "INSTRUMENTATIONKEY",
     "Iptc",
@@ -44,8 +43,6 @@
     "dtos",
     "eastus",
     "endpnt",
-    "exif",
-    "exiftool",
     "fontawesome",
     "fortawesome",
     "hfov",
@@ -98,5 +95,5 @@
   "azureFunctions.projectRuntime": "~3",
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.preDeployTask": "npm prune",
-  "azureFunctions.projectSubpath": "dist\\apps\\serverless"
+  "azureFunctions.projectSubpath": "dist/apps/serverless"
 }
