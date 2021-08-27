@@ -5,7 +5,6 @@
 ## best practices
 
 - imports should be in 3 sections Platform, 3rd Parties, Own Code
-- exports, imports, and declarations should be ordered by file name
 - prefer named not default exports to keep names consistent
 - use undefined or unknown instead of null
 - use underscores as number separators
@@ -25,9 +24,29 @@
 - [Install Augury](https://chrome.google.com/webstore/detail/augury/elgalmkoelokbchhkhacckoklkejnhcd?hl=en)
 - **_Temporarily_** [Install ChromeVox When Actively Testing Accessibility](https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en)
 
-### On Mac needed to run
+### On Mac
 
+- run
+
+> xcode-select --install
 > npm install -g agentkeepalive
+> brew install vips
+> brew link openexr
+> brew reinstall Imath
+> brew tap azure/functions
+> brew install azure-functions-core-tools@3
+
+#### if upgrading on a machine that has serverless 2.x installed
+
+> brew link --overwrite azure-functions-core-tools@3
+
+- add environment variables to ~/etc/.zshrc
+
+- manually download extension bundle for serverless as getting error that value cannot be null (happens if bundle download takes too long)
+
+  - ran func start --verbose to determine error
+  - download <https://functionscdn.azureedge.net/public/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/2.6.1/Microsoft.Azure.Functions.ExtensionBundle.2.6.1_any-any.zip>
+  - unzip contents to /Users/username/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/2.6.1
 
 ### Chrome Settings
 

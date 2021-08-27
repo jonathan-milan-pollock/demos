@@ -98,7 +98,6 @@
     "class-validator": "^0.13.1",
     "core-js": "^3.15.2",
     "datauri": "^3.0.0",
-    "dist-exiftool": "^10.53.0",
     "document-register-element": "1.13.1",
     "dropbox": "^10.5.0",
     "durable-functions": "^1.5.2",
@@ -107,10 +106,8 @@
     "fs-extra": "^10.0.0",
     "googleapis": "^84.0.0",
     "jwks-rsa": "^2.0.3",
-    "mongodb-client-encryption": "^1.2.6",
     "mongoose": "^5.13.2",
     "next": "^11.0.1",
-    "node-exiftool": "^2.3.0",
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -215,6 +212,5 @@
     "ts-node": "~10.1.0",
     "typescript": "^4.3.5",
     "url-loader": "^4.1.1"
-  },
-  "optionalDependencies": {}
+  }
 }

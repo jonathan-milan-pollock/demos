@@ -1,28 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { from, map, Observable, of } from 'rxjs';
-
-import { DateCreatedExif } from '@dark-rush-photography/api/types';
-
-export const findImageExifDateCreated$ = (
-  filePath: string,
-  currentDate: Date
-): Observable<string> => {
-  const exiftool = require('node-exiftool');
-  const exiftoolBin = require('dist-exiftool');
-  const ep = new exiftool.ExiftoolProcess(exiftoolBin);
-
-  return from(ep.open()).pipe(
-    map(() => ep.readMetadata(filePath, ['CreateDate'])),
-    map((dateCreated: DateCreatedExif) => {
-      return dateCreated.data &&
-        dateCreated.data.length > 0 &&
-        'CreateDate' in dateCreated.data[0] &&
-        dateCreated.data[0].CreateDate
-        ? dateCreated.data[0].CreateDate
-        : getExifDate(currentDate);
-    })
-  );
-};
+import { Observable, of } from 'rxjs';
 
 export const findVideoExifDateCreated$ = (
   filePath: string,

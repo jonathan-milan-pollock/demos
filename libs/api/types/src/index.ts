@@ -13,7 +13,6 @@ export * from './lib/dtos/file-upload.dto';
 export * from './lib/enums/dropbox-tag.enum';
 
 // interfaces
-export * from './lib/interfaces/date-created-exif.interface';
 export * from './lib/interfaces/dropbox-list-folders-item.interface';
 export * from './lib/interfaces/dropbox-list-folders-response.interface';
 export * from './lib/interfaces/dropbox-list-folders-result.interface';
