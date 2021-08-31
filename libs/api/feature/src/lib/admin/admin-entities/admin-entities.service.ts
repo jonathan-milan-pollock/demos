@@ -5,8 +5,9 @@ import { Model } from 'mongoose';
 import { concatMapTo, from, map, mapTo, Observable, toArray } from 'rxjs';
 
 import {
-  Entity,
+  EntityAdminDto,
   EntityCreateDto,
+  EntityMinimalDto,
   EntityType,
   EntityUpdateDto,
 } from '@dark-rush-photography/shared/types';
@@ -30,7 +31,7 @@ export class AdminEntitiesService {
     private readonly entityDeleteProvider: EntityDeleteProvider
   ) {}
 
-  create$(entityCreate: EntityCreateDto): Observable<Entity> {
+  create$(entityCreate: EntityCreateDto): Observable<EntityAdminDto> {
     return this.entityProvider.create$(entityCreate, this.entityModel).pipe(
       concatMapTo(
         from(
@@ -44,39 +45,39 @@ export class AdminEntitiesService {
     );
   }
 
-  update$(id: string, entityUpdate: EntityUpdateDto): Observable<Entity> {
+  update$(
+    entityType: EntityType,
+    id: string,
+    entityUpdate: EntityUpdateDto
+  ): Observable<EntityAdminDto> {
     return from(this.entityModel.findById(id)).pipe(
       map(this.entityProvider.validateEntityFound),
       map(this.entityProvider.validateNotProcessingEntity),
       concatMapTo(
         this.entityProvider.setIsProcessing$(
-          entityUpdate.type,
+          entityType,
           id,
           true,
           this.entityModel
         )
       ),
       concatMapTo(
-        this.entityUpdateProvider.update$(
-          entityUpdate.type,
-          id,
-          this.entityModel
-        )
+        this.entityUpdateProvider.update$(entityType, id, this.entityModel)
       ),
       concatMapTo(this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })),
       concatMapTo(
         this.entityProvider.setIsProcessing$(
-          entityUpdate.type,
+          entityType,
           id,
           false,
           this.entityModel
         )
       ),
-      concatMapTo(this.findOne$(entityUpdate.type, id))
+      concatMapTo(this.findOne$(entityType, id))
     );
   }
 
-  post$(entityType: EntityType, id: string): Observable<Entity> {
+  post$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
     return from(this.entityModel.findById(id)).pipe(
       map(this.entityProvider.validateEntityFound),
       map(this.entityProvider.validateNotProcessingEntity),
@@ -120,13 +121,16 @@ export class AdminEntitiesService {
     );
   }
 
-  findAll$(entityType: EntityType): Observable<Entity[]> {
+  findAll$(entityType: EntityType): Observable<EntityMinimalDto[]> {
     return this.entityProvider
       .findAll$(entityType, this.entityModel)
-      .pipe(map(this.entityProvider.loadEntity), toArray<Entity>());
+      .pipe(
+        map(this.entityProvider.loadEntityMinimal),
+        toArray<EntityMinimalDto>()
+      );
   }
 
-  findOne$(entityType: EntityType, id: string): Observable<Entity> {
+  findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
     return this.entityProvider
       .findOne$(entityType, id, this.entityModel)
       .pipe(map(this.entityProvider.loadEntity));

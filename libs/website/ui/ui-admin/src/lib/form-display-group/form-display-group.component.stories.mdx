@@ -19,9 +19,9 @@ import { WebsiteUiUiAdminModule } from '../website-ui-ui-admin.module';
 />
 
 export const displayGroup = new FormGroup({
-  useTileImage: new FormControl(null),
+  tileImageIsCentered: new FormControl(null),
 });
-export const useTileImageFormControlName = 'useTileImage';
+export const tileImageIsCenteredFormControlName = 'tileImageIsCentered';
 
 # Form Display Group
 
@@ -29,7 +29,7 @@ export const useTileImageFormControlName = 'useTileImage';
   height="500px"
   name="Default"
   args={{
-    useTileImageFormControlName,
+    tileImageIsCenteredFormControlName,
   }}
 >
   {(args) => <drp-form-display-group {...args} displayGroup={displayGroup} />}

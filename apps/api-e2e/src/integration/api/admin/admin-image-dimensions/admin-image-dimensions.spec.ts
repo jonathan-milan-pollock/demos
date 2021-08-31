@@ -140,7 +140,6 @@ describe('Admin Image Dimensions API', () => {
             images: [],
             imageDimensions: [],
             videos: [],
-            videoDimensions: [],
             comments: [],
             emotions: [],
           });
@@ -163,7 +162,6 @@ describe('Admin Image Dimensions API', () => {
               images: [],
               imageDimensions: [],
               videos: [],
-              videoDimensions: [],
               comments: [],
               emotions: [],
             })

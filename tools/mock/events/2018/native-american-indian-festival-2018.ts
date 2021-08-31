@@ -23,19 +23,19 @@ export class NativeAmericanIndianFestival2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
     `
       "For the last several years, I've had the opportunity to "
-      "attend Stone Mountain Park's Native American Festival and " 
-      "Pow Wow." 
+      "attend Stone Mountain Park's Native American Festival and "
+      "Pow Wow."
       `,
     `
-      "As one of my favorite past times was having sassafras tea" "with my grandmother, I was excited when I was Jim" "Sawgrass, a speaker of Creek Indians, making sassafras tea" 
+      "As one of my favorite past times was having sassafras tea" "with my grandmother, I was excited when I was Jim" "Sawgrass, a speaker of Creek Indians, making sassafras tea"
       "at the event. What a wonderful surprise!"
       `,
     `
-      "This experience at the event and the day spent in the" "culture and soul of Native American Indians dancing," "playing music, and sharing stories was amazing. Growing up" 
+      "This experience at the event and the day spent in the" "culture and soul of Native American Indians dancing," "playing music, and sharing stories was amazing. Growing up"
       "in a family with both sides Muskogee Creek Indian, this" "day brought back so many wonderful memories!"
       `,
   ];

@@ -23,16 +23,15 @@ export class SandySpringsFestival2017 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
     `
       You could sense the excitement at the 2017 Sandy
-      Springs Festival for the Grand Opening of City Springs. 
+      Springs Festival for the Grand Opening of City Springs.
       I enjoyed the chalk art and seeing local friends.
       `,
   ];
   images = [];
-  threeSixtyImages = [];
   videos = [];
 
   private constructor() {

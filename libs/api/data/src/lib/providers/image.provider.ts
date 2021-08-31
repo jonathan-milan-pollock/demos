@@ -1,8 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { concatMap, concatMapTo, from, map, Observable, tap } from 'rxjs';
+import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
 
 import {
   Image,
@@ -15,7 +15,7 @@ import { Media } from '@dark-rush-photography/shared-server/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
-  validateEntityIsPublic,
+  validateEntityIsPosted,
 } from '../entities/entity-validation.functions';
 import {
   validateImageFound,
@@ -59,6 +59,7 @@ export class ImageProvider {
     id: string,
     entityId: string,
     fileName: string,
+    order: number,
     isThreeSixty: boolean,
     isProcessing: boolean
   ): Observable<Image> {
@@ -74,12 +75,11 @@ export class ImageProvider {
                 entityId,
                 fileName,
                 state: MediaState.New,
-                order: 0,
+                order,
                 isStarred: false,
                 isLoved: false,
-                isThreeSixty,
                 skipExif: false,
-                isGenerated: false,
+                isThreeSixty,
                 isProcessing,
               },
             ],
@@ -112,14 +112,13 @@ export class ImageProvider {
                 order: imageUpdate.order,
                 isStarred: imageUpdate.isStarred,
                 isLoved: imageUpdate.isLoved,
-                title: imageUpdate.title,
-                description: imageUpdate.description,
-                keywords: imageUpdate.keywords,
+                seoTitle: imageUpdate.title,
+                seoDescription: imageUpdate.description,
+                seoKeywords: imageUpdate.keywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: imageUpdate.datePublished,
-                isThreeSixty: foundImage.isThreeSixty,
                 skipExif: foundImage.skipExif,
-                isGenerated: foundImage.isGenerated,
+                isThreeSixty: foundImage.isThreeSixty,
                 isProcessing: foundImage.isProcessing,
               },
             ],
@@ -146,7 +145,7 @@ export class ImageProvider {
   ): Observable<ImageDto> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateEntityIsPublic),
+      map(validateEntityIsPosted),
       map((documentModel) => ({
         image: validateImageFound(id, documentModel),
         documentModel,
@@ -183,54 +182,13 @@ export class ImageProvider {
                 order: foundImage.order,
                 isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
-                title: foundImage.title,
-                description: foundImage.description,
-                keywords: foundImage.keywords,
+                seoTitle: foundImage.seoTitle,
+                seoDescription: foundImage.seoDescription,
+                seoKeywords: foundImage.seoKeywords,
                 dateCreated,
                 datePublished: foundImage.datePublished,
-                isThreeSixty: foundImage.isThreeSixty,
                 skipExif: foundImage.skipExif,
-                isGenerated: foundImage.isGenerated,
-                isProcessing: foundImage.isProcessing,
-              },
-            ],
-          })
-        );
-      }),
-      map(validateEntityFound)
-    );
-  }
-
-  setIsGenerated$(
-    id: string,
-    entityId: string,
-    isGenerated: boolean,
-    entityModel: Model<DocumentModel>
-  ): Observable<DocumentModel> {
-    return from(entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) => {
-        const foundImage = validateImageFound(id, documentModel);
-        return from(
-          entityModel.findByIdAndUpdate(entityId, {
-            images: [
-              ...documentModel.images.filter((image) => image.id !== id),
-              {
-                id,
-                entityId,
-                fileName: foundImage.fileName,
-                state: foundImage.state,
-                order: foundImage.order,
-                isStarred: foundImage.isStarred,
-                isLoved: foundImage.isLoved,
-                title: foundImage.title,
-                description: foundImage.description,
-                keywords: foundImage.keywords,
-                dateCreated: foundImage.dateCreated,
-                datePublished: foundImage.datePublished,
                 isThreeSixty: foundImage.isThreeSixty,
-                skipExif: foundImage.skipExif,
-                isGenerated,
                 isProcessing: foundImage.isProcessing,
               },
             ],
@@ -263,14 +221,13 @@ export class ImageProvider {
                 order: foundImage.order,
                 isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
-                title: foundImage.title,
-                description: foundImage.description,
-                keywords: foundImage.keywords,
+                seoTitle: foundImage.seoTitle,
+                seoDescription: foundImage.seoDescription,
+                seoKeywords: foundImage.seoKeywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: foundImage.datePublished,
-                isThreeSixty: foundImage.isThreeSixty,
                 skipExif: foundImage.skipExif,
-                isGenerated: foundImage.isGenerated,
+                isThreeSixty: foundImage.isThreeSixty,
                 isProcessing,
               },
             ],

@@ -1,10 +1,4 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsString,
-  Min,
-  ValidateNested,
-} from 'class-validator';
+import { IsInt, IsString, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { ImageMinimalDto } from './image-minimal.dto';
@@ -23,7 +17,4 @@ export class DestinationMinimalDto {
   @ValidateNested()
   @Type(() => ImageMinimalDto)
   starredImage!: ImageMinimalDto;
-
-  @IsBoolean()
-  hasExtendedReality!: boolean;
 }

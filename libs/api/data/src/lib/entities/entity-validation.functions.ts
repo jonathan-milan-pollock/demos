@@ -72,24 +72,25 @@ export const validateEntityCreate = (
   return documentModel;
 };
 
-export const validateEntityIsPublic = (
+export const validateEntityIsPosted = (
   documentModel: DocumentModel
 ): DocumentModel => {
-  if (!documentModel.isPublic) throw new NotFoundException();
+  if (!documentModel.isPosted) throw new NotFoundException();
   return documentModel;
 };
 
 export const validateEntityTitle = (documentModel: DocumentModel): string => {
-  if (!documentModel.title) throw new ConflictException('Title was not found');
-  return documentModel.title;
+  if (!documentModel.seoTitle)
+    throw new ConflictException('Title was not found');
+  return documentModel.seoTitle;
 };
 
 export const validateEntityDescription = (
   documentModel: DocumentModel
 ): string => {
-  if (!documentModel.description)
+  if (!documentModel.seoDescription)
     throw new ConflictException('Description was not found');
-  return documentModel.description;
+  return documentModel.seoDescription;
 };
 
 export const validateEntityDateCreated = (

@@ -21,6 +21,7 @@ export * from './lib/interfaces/dropbox-token.interface';
 export * from './lib/interfaces/dropbox-user-account-response.interface';
 export * from './lib/interfaces/dropbox-user-account-result.interface';
 export * from './lib/interfaces/env.interface';
+export * from './lib/interfaces/facebook-carousel-image.interface';
 export * from './lib/interfaces/image-artist-exif.interface';
 export * from './lib/interfaces/image-exif.interface';
 export * from './lib/interfaces/public-content.interface';

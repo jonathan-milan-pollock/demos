@@ -18,7 +18,8 @@ import {
   styleUrls: ['./admin-photo-of-the-week.component.scss'],
 })
 export class AdminPhotoOfTheWeekComponent
-  implements OnInit, CanComponentDeactivate {
+  implements OnInit, CanComponentDeactivate
+{
   adminPhotoOfTheWeekForm?: FormGroup;
   identifierGroup?: FormGroup;
   groups = [1, 2, 3];
@@ -63,7 +64,7 @@ export class AdminPhotoOfTheWeekComponent
     });
 
     this.displayGroup = new FormGroup({
-      useTileImage: new FormControl(null),
+      tileImageIsCentered: new FormControl(null),
     });
 
     this.adminPhotoOfTheWeekForm = new FormGroup({

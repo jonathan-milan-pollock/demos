@@ -24,8 +24,8 @@ export class MetaEventResolver implements Resolve<Metadata> {
       map(
         (event) =>
           ({
-            title: event.events[0].title,
-            description: event.events[0].description,
+            title: event.events[0].seoTitle,
+            description: event.events[0].seoDescription,
             url: route.url.toString(),
           } as Metadata)
       )

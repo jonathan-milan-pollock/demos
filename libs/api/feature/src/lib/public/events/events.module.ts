@@ -12,6 +12,9 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
@@ -33,6 +36,9 @@ import { EventsController } from './events.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class EventsModule {}

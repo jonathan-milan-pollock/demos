@@ -68,7 +68,14 @@ export class AdminImagesService {
       ),
       concatMap((documentModel) =>
         combineLatest([
-          this.imageProvider.add$(id, entityId, fileName, isThreeSixty, true),
+          this.imageProvider.add$(
+            id,
+            entityId,
+            fileName,
+            0,
+            isThreeSixty,
+            true
+          ),
           of(documentModel),
         ])
       ),
@@ -159,31 +166,6 @@ export class AdminImagesService {
 
   findOne$(id: string, entityId: string): Observable<Image> {
     return this.imageProvider.findOne$(id, entityId);
-  }
-
-  findDataUri$(
-    id: string,
-    entityId: string,
-    imageDimensionType: ImageDimensionType
-  ): Observable<string> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(this.entityProvider.validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([this.findOne$(id, entityId), of(documentModel)])
-      ),
-      map(([image, documentModel]) =>
-        this.imageProvider.loadMedia(
-          MediaType.Image,
-          image.id,
-          image.fileName,
-          image.state,
-          documentModel
-        )
-      ),
-      concatMap((media) =>
-        this.imageDimensionProvider.findDataUri$(media, imageDimensionType)
-      )
-    );
   }
 
   remove$(id: string, entityId: string): Observable<void> {

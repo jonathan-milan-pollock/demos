@@ -21,7 +21,7 @@ export class RoverRoverPleaseComeOver extends PhotoOfTheWeekDto {
     stateOrProvince: 'Florida',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

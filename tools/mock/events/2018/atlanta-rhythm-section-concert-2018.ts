@@ -24,13 +24,13 @@ export class AtlantaRhythmSectionConcert2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
     `
       In the cool of the evenin' when everything is gettin' kind of
       "groovy", Atlanta Rhythm Section (ARS) took the stage and performed
       an amazing concert. I loved being the photographer, getting to
-      know the band, and listening to them perform. 
+      know the band, and listening to them perform.
     `,
     `
       Love is kinda crazy with a spooky little girl like me!

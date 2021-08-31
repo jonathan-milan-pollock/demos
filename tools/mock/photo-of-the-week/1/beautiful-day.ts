@@ -19,7 +19,7 @@ export class BeautifulDay extends PhotoOfTheWeekDto {
   dateCreated = new Date(2019, 6, 15).toISOString().substring(0, 10);
   datePublished = new Date(2019, 6, 15).toISOString().substring(0, 10);
   location = { city: 'Sicily', country: 'Italy' };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

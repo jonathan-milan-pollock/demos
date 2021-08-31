@@ -12,6 +12,9 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { BestOfService } from './best-of.service';
 import { BestOfController } from './best-of.controller';
@@ -33,6 +36,9 @@ import { BestOfController } from './best-of.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class BestOfModule {}

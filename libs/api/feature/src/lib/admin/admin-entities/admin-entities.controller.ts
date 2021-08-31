@@ -21,9 +21,9 @@ import {
 import { Observable } from 'rxjs';
 
 import {
-  Entity,
   EntityAdminDto,
   EntityCreateDto,
+  EntityMinimalDto,
   EntityType,
   EntityUpdateDto,
 } from '@dark-rush-photography/shared/types';
@@ -38,20 +38,26 @@ export class AdminEntitiesController {
 
   @Post()
   @ApiCreatedResponse({ type: EntityAdminDto })
-  create$(@Body() entityCreate: EntityCreateDto): Observable<Entity> {
+  create$(@Body() entityCreate: EntityCreateDto): Observable<EntityAdminDto> {
     return this.adminEntitiesService.create$(entityCreate);
   }
 
-  @Put(':id')
+  @Put(':entityType/:id')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
   @ApiOkResponse({ type: EntityAdminDto })
   update$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() entityUpdate: EntityUpdateDto
-  ): Observable<Entity> {
-    return this.adminEntitiesService.update$(id, entityUpdate);
+  ): Observable<EntityAdminDto> {
+    return this.adminEntitiesService.update$(entityType, id, entityUpdate);
   }
 
-  @Post(':id/post')
+  @Post(':entityType/:id/website-post')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
@@ -61,7 +67,21 @@ export class AdminEntitiesController {
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string
-  ): Observable<Entity> {
+  ): Observable<EntityAdminDto> {
+    return this.adminEntitiesService.post$(entityType, id);
+  }
+
+  @Post(':entityType/:id/social-media-post')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
+  @ApiOkResponse({ type: EntityAdminDto })
+  socialMediaPost$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType,
+    @Param('id', ParseObjectIdPipe) id: string
+  ): Observable<EntityAdminDto> {
     return this.adminEntitiesService.post$(entityType, id);
   }
 
@@ -84,20 +104,20 @@ export class AdminEntitiesController {
     );
   }
 
-  @Get()
+  @Get(':entityType')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
   })
-  @ApiOkResponse({ type: [EntityAdminDto] })
+  @ApiOkResponse({ type: [EntityMinimalDto] })
   findAll$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType
-  ): Observable<Entity[]> {
+  ): Observable<EntityMinimalDto[]> {
     return this.adminEntitiesService.findAll$(entityType);
   }
 
-  @Get(':id')
+  @Get(':entityType/:id')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
@@ -107,7 +127,7 @@ export class AdminEntitiesController {
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string
-  ): Observable<Entity> {
+  ): Observable<EntityAdminDto> {
     return this.adminEntitiesService.findOne$(entityType, id);
   }
 
@@ -125,8 +145,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findIsProcessing$(entityType, id);
   }
 
-  @Delete(':id')
-  //TODO: Is this necessary?
+  @Delete(':entityType/:id')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,

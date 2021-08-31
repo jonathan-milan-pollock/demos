@@ -26,7 +26,7 @@ export class SweetHomeDressing extends PhotoOfTheWeekDto {
     stateOrProvince: 'Alabama',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

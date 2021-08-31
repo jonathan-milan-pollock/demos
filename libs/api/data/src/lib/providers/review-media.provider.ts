@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -10,10 +9,8 @@ import {
   EntityType,
   ReviewMediaDto,
 } from '@dark-rush-photography/shared/types';
-import {
-  DEFAULT_ENTITY_GROUP,
-  REVIEW_MEDIA_SLUG,
-} from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
+import { REVIEW_MEDIA_SLUG } from '@dark-rush-photography/api/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -22,7 +19,6 @@ import {
 } from '../entities/entity.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
-import { loadMinimalPublicVideo } from '../content/video.functions';
 import { ConfigProvider } from './config.provider';
 import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
@@ -43,7 +39,6 @@ export class ReviewMediaProvider {
     const publicContent = loadPublicContent(documentModel);
     return {
       images: publicContent.images.map(loadMinimalPublicImage),
-      videos: publicContent.videos.map(loadMinimalPublicVideo),
     };
   }
 
@@ -76,7 +71,7 @@ export class ReviewMediaProvider {
                     type: EntityType.ReviewMedia,
                     group: DEFAULT_ENTITY_GROUP,
                     slug: REVIEW_MEDIA_SLUG,
-                    isPublic: true,
+                    isPosted: true,
                   }),
                 }).save()
               ),

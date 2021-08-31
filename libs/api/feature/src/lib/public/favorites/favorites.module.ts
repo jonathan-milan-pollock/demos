@@ -12,6 +12,9 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { FavoritesService } from './favorites.service';
 import { FavoritesController } from './favorites.controller';
@@ -33,6 +36,9 @@ import { FavoritesController } from './favorites.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class FavoritesModule {}

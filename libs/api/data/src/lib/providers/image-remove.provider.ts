@@ -9,7 +9,6 @@ import {
   from,
   Observable,
   of,
-  takeLast,
   tap,
   toArray,
 } from 'rxjs';
@@ -20,8 +19,10 @@ import {
   MediaState,
   MediaType,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import {
+  DEFAULT_ENTITY_GROUP,
+  Media,
+} from '@dark-rush-photography/shared-server/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
@@ -109,7 +110,7 @@ export class ImageRemoveProvider {
   ): Observable<boolean> {
     if (imageDimensions.length === 0) {
       return deleteBlob$(
-        this.configProvider.getConnectionStringFromMediaState(media.state),
+        this.configProvider.azureStorageConnectionStringBlobs,
         getAzureStorageBlobPath(media)
       );
     }
@@ -117,14 +118,14 @@ export class ImageRemoveProvider {
     return from(imageDimensions).pipe(
       concatMap((imageDimension) =>
         deleteBlob$(
-          this.configProvider.getConnectionStringFromMediaState(media.state),
+          this.configProvider.azureStorageConnectionStringBlobs,
           getAzureStorageBlobPathWithDimension(media, imageDimension.type)
         )
       ),
       toArray<boolean>(),
       concatMapTo(
         deleteBlob$(
-          this.configProvider.getConnectionStringFromMediaState(media.state),
+          this.configProvider.azureStorageConnectionStringBlobs,
           getAzureStorageBlobPath(media)
         )
       )

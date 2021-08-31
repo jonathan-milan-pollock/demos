@@ -24,7 +24,7 @@ export const getGoogleDriveFolderWithName$ = (
   ).pipe(
     map((res) => {
       if (!res.data || !res.data.files || res.data.files.length === 0)
-        throw new BadRequestException('Could not find folder');
+        throw new BadRequestException(`Could not find folder ${folderName}`);
 
       if (res.data.files.length > 1) {
         throw new BadRequestException('More that one folder found');
@@ -40,7 +40,7 @@ export const getGoogleDriveFolders$ = (
 ): Observable<GoogleDriveFolder[]> => {
   return from(
     drive.files.list({
-      q: `'${parentFolderId}' in parents and mimeType = 'application/vnd.google-apps.folder'`,
+      q: `'${parentFolderId}' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'`,
     })
   ).pipe(map((res) => res.data.files as GoogleDriveFolder[]));
 };

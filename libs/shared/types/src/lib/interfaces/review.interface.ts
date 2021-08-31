@@ -4,10 +4,10 @@ import { ImageDimension } from './image-dimension.interface';
 export interface Review {
   readonly id?: string;
   readonly slug: string;
-  readonly isPublic: boolean;
   readonly order: number;
-  readonly title?: string;
+  readonly seoTitle?: string;
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];
+  readonly isPosted: boolean;
 }

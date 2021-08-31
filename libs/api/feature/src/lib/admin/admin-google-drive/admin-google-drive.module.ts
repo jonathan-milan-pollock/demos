@@ -18,9 +18,12 @@ import {
   ImageRemoveProvider,
   ImageUploadProvider,
   PhotoOfTheWeekProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
   ReviewMediaProvider,
   ReviewProvider,
   SocialMediaProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminGoogleDriveService } from './admin-google-drive.service';
 import { AdminGoogleDriveController } from './admin-google-drive.controller';
@@ -51,6 +54,9 @@ import { AdminGoogleDriveController } from './admin-google-drive.controller';
     ImageDimensionProvider,
     GoogleDriveClientsProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class AdminGoogleDriveModule {}

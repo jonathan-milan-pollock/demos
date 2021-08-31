@@ -5,7 +5,7 @@ export class SouthCobbArtsAllianceStorytellingFestival2017 extends EventDto {
   slug = 'south-cobb-arts-alliance-storytelling-festival-2017';
   title = 'South Cobb Arts Alliance, Storytelling Festival, 2017';
   description = `
-    The Storytelling Festival was the perfect 
+    The Storytelling Festival was the perfect
     event for children of all ages (including me!) at the
     Mable House in Mableton, Georgia.
   `;
@@ -31,14 +31,14 @@ export class SouthCobbArtsAllianceStorytellingFestival2017 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
     `
-        Sandra Miller, president of South Cobb Arts Alliance (SCAA), 
+        Sandra Miller, president of South Cobb Arts Alliance (SCAA),
         a wonderful lady that I don't get to see often enough,
         invited me to shoot the Storytelling Festival. It was a
-        great event with costumed performers telling stories, 
-        "face" painting, clowns, dancing, and signing. It was the perfect 
+        great event with costumed performers telling stories,
+        "face" painting, clowns, dancing, and signing. It was the perfect
         event for children of all ages (including me!) at the
         Mable House in Mableton, Georgia.
         `,

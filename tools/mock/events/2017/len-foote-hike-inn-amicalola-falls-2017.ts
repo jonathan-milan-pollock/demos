@@ -25,7 +25,7 @@ export class LenFooteHikeInnAmicalolaFalls2017 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
     `
       I appreciate my good friend Bill Buford, the manager of
@@ -40,7 +40,7 @@ export class LenFooteHikeInnAmicalolaFalls2017 extends EventDto {
       to travel and photograph the world!
       `,
     `
-      I would love an opportunity to visit him at the Grand 
+      I would love an opportunity to visit him at the Grand
       Canyon National Park in Arizona where he now lives.
     `,
   ];

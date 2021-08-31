@@ -23,7 +23,7 @@ export class FlowersInTheMist extends PhotoOfTheWeekDto {
     stateOrProvince: 'North Carolina',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

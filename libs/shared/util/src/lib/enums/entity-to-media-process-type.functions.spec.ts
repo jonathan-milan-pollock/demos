@@ -9,16 +9,12 @@ import { getMediaProcessTypeFromEntityType } from './entity-to-media-process-typ
 describe('entity-to-media-process-type.functions', () => {
   describe('getMediaProcessTypeFromEntityType', () => {
     it('should return image video', () => {
-      const result = getMediaProcessTypeFromEntityType(
-        EntityType.ImageVideo
-      );
+      const result = getMediaProcessTypeFromEntityType(EntityType.ImageVideo);
       expect(result).toBe(MediaProcessType.ImageVideo);
     });
 
     it('should return social media image', () => {
-      const result = getMediaProcessTypeFromEntityType(
-        EntityType.ImagePost
-      );
+      const result = getMediaProcessTypeFromEntityType(EntityType.ImagePost);
       expect(result).toBe(MediaProcessType.SocialMediaImage);
     });
 
@@ -27,20 +23,6 @@ describe('entity-to-media-process-type.functions', () => {
         EntityType.ThreeSixtyImagePost
       );
       expect(result).toBe(MediaProcessType.SocialMediaThreeSixtyImage);
-    });
-
-    it('should return social media video', () => {
-      const result = getMediaProcessTypeFromEntityType(
-        EntityType.VideoPost
-      );
-      expect(result).toBe(MediaProcessType.SocialMediaVideo);
-    });
-
-    it('should return social media three sixty video', () => {
-      const result = getMediaProcessTypeFromEntityType(
-        EntityType.ThreeSixtyVideoPost
-      );
-      expect(result).toBe(MediaProcessType.SocialMediaThreeSixtyVideo);
     });
 
     it('should throw a range error if entity type is not a media process type', () => {

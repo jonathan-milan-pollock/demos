@@ -12,10 +12,8 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUpdateProvider,
-  VideoDimensionProvider,
   VideoProvider,
   VideoRemoveProvider,
-  VideoUpdateProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminEntitiesService } from './admin-entities.service';
 import { AdminEntitiesController } from './admin-entities.controller';
@@ -38,9 +36,7 @@ import { AdminEntitiesController } from './admin-entities.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     VideoProvider,
-    VideoUpdateProvider,
     VideoRemoveProvider,
-    VideoDimensionProvider,
   ],
 })
 export class AdminEntitiesModule {}

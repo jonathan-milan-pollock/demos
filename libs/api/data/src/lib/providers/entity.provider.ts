@@ -14,14 +14,16 @@ import {
 
 import {
   Entity,
+  EntityAdminDto,
   EntityCreateDto,
+  EntityMinimalDto,
   EntityType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   validateEntityType,
   validateEntityFound,
-  validateEntityIsPublic,
+  validateEntityIsPosted,
   validateEntityNotAlreadyCreated,
   validateOneEntity,
   validateProcessingEntity,
@@ -31,6 +33,7 @@ import {
 import {
   loadDocumentModelsArray,
   loadEntity,
+  loadEntityMinimal,
   loadNewEntity,
 } from '../entities/entity.functions';
 
@@ -52,8 +55,8 @@ export class EntityProvider {
     return validateOneEntity(documentModels);
   }
 
-  validateEntityIsPublic(documentModel: DocumentModel): DocumentModel {
-    return validateEntityIsPublic(documentModel);
+  validateEntityIsPosted(documentModel: DocumentModel): DocumentModel {
+    return validateEntityIsPosted(documentModel);
   }
 
   validateProcessingEntity(documentModel: DocumentModel): DocumentModel {
@@ -121,7 +124,7 @@ export class EntityProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.find({ type: entityType })).pipe(
       concatMap(loadDocumentModelsArray),
-      filter((documentModel) => documentModel.isPublic)
+      filter((documentModel) => documentModel.isPosted)
     );
   }
 
@@ -132,7 +135,7 @@ export class EntityProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.findById(id)).pipe(
       map(validateEntityFound),
-      map(validateEntityIsPublic),
+      map(validateEntityIsPosted),
       map((documentModel) => validateEntityType(entityType, documentModel))
     );
   }
@@ -141,8 +144,12 @@ export class EntityProvider {
     return loadNewEntity(entityCreate);
   }
 
-  loadEntity(documentModel: DocumentModel): Entity {
+  loadEntity(documentModel: DocumentModel): EntityAdminDto {
     return loadEntity(documentModel);
+  }
+
+  loadEntityMinimal(documentModel: DocumentModel): EntityMinimalDto {
+    return loadEntityMinimal(documentModel);
   }
 
   delete$(

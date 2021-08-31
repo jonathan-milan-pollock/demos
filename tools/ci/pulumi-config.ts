@@ -10,9 +10,7 @@ export interface PulumiConfig {
   readonly prodMongoDbAccountName: string;
   readonly prodMongoDbDatabaseName: string;
   readonly devPrivateStorageAccountName: string;
-  readonly devPrivateBlobContainerName: string;
   readonly prodPrivateStorageAccountName: string;
-  readonly prodPrivateBlobContainerName: string;
   readonly devPublicStorageAccountName: string;
   readonly devPublicBlobContainerName: string;
   readonly prodPublicStorageAccountName: string;
@@ -37,11 +35,9 @@ export const getPulumiConfig = (): PulumiConfig => ({
   prodMongoDbAccountName: config.require('prodMongoDbAccountName'),
   prodMongoDbDatabaseName: config.require('prodMongoDbDatabaseName'),
   devPrivateStorageAccountName: config.require('devPrivateStorageAccountName'),
-  devPrivateBlobContainerName: config.require('devPrivateBlobContainerName'),
   prodPrivateStorageAccountName: config.require(
     'prodPrivateStorageAccountName'
   ),
-  prodPrivateBlobContainerName: config.require('prodPrivateBlobContainerName'),
   devPublicStorageAccountName: config.require('devPublicStorageAccountName'),
   devPublicBlobContainerName: config.require('devPublicBlobContainerName'),
   prodPublicStorageAccountName: config.require('prodPublicStorageAccountName'),

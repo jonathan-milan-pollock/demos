@@ -29,10 +29,7 @@ import {
 import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
 //import {
-//  exifImage$,
 //  findImageResolution$,
-//  getExifDate,
-//  getImageExif,
 //  resizeImage$,
 //} from '@dark-rush-photography/api/util';
 import {
@@ -143,7 +140,7 @@ export class ImageDimensionProvider {
     );
   }
 
-  updateBlobPathAndExif$(
+  updateBlobPath$(
     image: Image,
     imageUpdate: ImageUpdateDto,
     imageMedia: Media,
@@ -152,7 +149,7 @@ export class ImageDimensionProvider {
     location?: Location
   ): Observable<boolean> {
     return downloadBlobToFile$(
-      this.configProvider.getConnectionStringFromMediaState(imageMedia.state),
+      this.configProvider.azureStorageConnectionStringBlobs,
       getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type),
       imageMedia.fileName
     ).pipe(
@@ -161,22 +158,7 @@ export class ImageDimensionProvider {
           `Exif image dimension ${imageDimension.type} with update`
         )
       ),
-      /*     concatMap((filePath) =>
-        exifImage$(
-          filePath,
-          this.configProvider.getImageArtistExif(
-            new Date().getFullYear(),
-            image.dateCreated ?? getExifDate(new Date())
-          ),
-          getImageExif(
-            imageUpdate.datePublished ?? getExifDate(new Date()),
-            imageUpdate.title,
-            imageUpdate.description,
-            imageUpdate.keywords,
-            location
-          )
-        )
-      ),
+      /*
       tap(() =>
         this.logger.debug(
           `Upload image dimension ${imageDimension.type} to new blob path`
@@ -184,7 +166,7 @@ export class ImageDimensionProvider {
       ),
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.configProvider.getConnectionStringFromMediaState(
+          this.configProvider.azureStorageConnectionStringBlobs(
             imageUpdateMedia.state
           ),
           fs.createReadStream(filePath),
@@ -201,9 +183,7 @@ export class ImageDimensionProvider {
       ),*/
       concatMap(() =>
         deleteBlob$(
-          this.configProvider.getConnectionStringFromMediaState(
-            imageMedia.state
-          ),
+          this.configProvider.azureStorageConnectionStringBlobs,
           getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type)
         )
       ),
@@ -218,7 +198,7 @@ export class ImageDimensionProvider {
   ): Observable<string> {
     const id = uuidv4();
     return downloadBlobToFile$(
-      this.configProvider.getConnectionStringFromMediaState(media.state),
+      this.configProvider.azureStorageConnectionStringBlobs,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -234,7 +214,7 @@ export class ImageDimensionProvider {
         combineLatest([
           of(filePath),
           uploadStreamToBlob$(
-            this.configProvider.getConnectionStringFromMediaState(media.state),
+            this.configProvider.azureStorageConnectionStringBlobs,
             fs.createReadStream(filePath),
             getAzureStorageBlobPathWithDimension(media, imageResolution.type)
           ),
@@ -276,22 +256,6 @@ export class ImageDimensionProvider {
           throw new NotFoundException(`Could not find image dimension ${id}`);
 
         return loadImageDimension(foundImageDimension);
-      })
-    );
-  }
-
-  findDataUri$(
-    media: Media,
-    imageDimensionType: ImageDimensionType
-  ): Observable<string> {
-    return downloadBlobAsBuffer$(
-      this.configProvider.getConnectionStringFromMediaState(media.state),
-      getAzureStorageBlobPathWithDimension(media, imageDimensionType)
-    ).pipe(
-      map((buffer) => {
-        const datauri = require('datauri/parser');
-        const parser = new datauri();
-        return parser.format('.jpg', buffer).content;
       })
     );
   }

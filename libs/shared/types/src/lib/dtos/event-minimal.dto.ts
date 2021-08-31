@@ -26,7 +26,7 @@ export class EventMinimalDto {
   title!: string;
 
   @IsBoolean()
-  useTileImage!: boolean;
+  tileImageIsCentered!: boolean;
 
   @ValidateNested()
   @Type(() => ImageMinimalDto)

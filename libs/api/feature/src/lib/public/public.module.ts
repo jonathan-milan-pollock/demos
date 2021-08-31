@@ -11,7 +11,6 @@ import { PhotoOfTheWeekModule } from './photo-of-the-week/photo-of-the-week.modu
 import { ReviewMediaModule } from './review-media/review-media.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { SitemapModule } from './sitemap/sitemap.module';
-import { VideosModule } from './videos/videos.module';
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { VideosModule } from './videos/videos.module';
     ReviewMediaModule,
     ReviewsModule,
     SitemapModule,
-    VideosModule,
   ],
 })
 export class PublicModule {}

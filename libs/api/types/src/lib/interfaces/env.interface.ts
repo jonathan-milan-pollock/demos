@@ -1,3 +1,9 @@
+import {
+  ImageDimensionType,
+  ImageResolution,
+  VideoDimensionType,
+  VideoResolution,
+} from '@dark-rush-photography/shared/types';
 import { ImageArtistExif } from './image-artist-exif.interface';
 import { VideoArtistExif } from './video-artist-exif.interface';
 
@@ -11,10 +17,14 @@ export interface Env {
   readonly dropboxClientId: string;
   readonly dropboxClientSecret: string;
   readonly mongoDbConnectionString: string;
-  readonly privateAzureStorageConnectionString: string;
-  readonly publicAzureStorageConnectionString: string;
+  readonly azureStorageConnectionStringBlobs: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;
+  findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution;
+  findThreeSixtyImageResolution(
+    imageDimensionType: ImageDimensionType
+  ): ImageResolution;
+  findVideoResolution(videoDimensionType: VideoDimensionType): VideoResolution;
   getDropboxRedirectUri(protocol: string, host?: string): string;
   getImageArtistExif(
     copyrightYear: number,

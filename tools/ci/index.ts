@@ -8,10 +8,7 @@ import {
   createMongoDb,
   getConnectionString,
 } from './services/mongo-db.service';
-import {
-  createPrivateStorageAccount,
-  createPrivateBlobContainer,
-} from './services/storage-account-private.service';
+import { createPrivateStorageAccount } from './services/storage-account-private.service';
 import {
   createPublicStorageAccount,
   createPublicBlobContainer,
@@ -60,11 +57,6 @@ const devPrivateStorageAccount = createPrivateStorageAccount(
   pulumiConfig.devPrivateStorageAccountName,
   resourceGroup
 );
-const devPrivateBlobContainer = createPrivateBlobContainer(
-  pulumiConfig.devPrivateBlobContainerName,
-  resourceGroup,
-  devPrivateStorageAccount
-);
 
 const devPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.devPublicStorageAccountName,
@@ -79,11 +71,6 @@ const devPublicBlobContainer = createPublicBlobContainer(
 const prodPrivateStorageAccount = createPrivateStorageAccount(
   pulumiConfig.prodPrivateStorageAccountName,
   resourceGroup
-);
-const prodPrivateBlobContainer = createPrivateBlobContainer(
-  pulumiConfig.prodPrivateBlobContainerName,
-  resourceGroup,
-  prodPrivateStorageAccount
 );
 
 const prodPublicStorageAccount = createPublicStorageAccount(
@@ -205,12 +192,10 @@ export const prodMongoDbAccountUrn = prodMongoDbAccount.urn;
 export const prodMongoDbDatabaseUrn = prodMongoDb.urn;
 
 export const devPrivateStorageAccountUrn = devPrivateStorageAccount.urn;
-export const devPrivateBlobContainerUrn = devPrivateBlobContainer.urn;
 export const devPublicStorageAccountUrn = devPublicStorageAccount.urn;
 export const devPublicBlobContainerUrn = devPublicBlobContainer.urn;
 
 export const prodPrivateStorageAccountUrn = prodPrivateStorageAccount.urn;
-export const prodPrivateBlobContainerUrn = prodPrivateBlobContainer.urn;
 export const prodPublicStorageAccountUrn = prodPublicStorageAccount.urn;
 export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
 

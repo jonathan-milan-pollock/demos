@@ -8,5 +8,5 @@ import { FormGroup } from '@angular/forms';
 })
 export class FormDisplayGroupComponent {
   @Input() displayGroup?: FormGroup;
-  @Input() useTileImageFormControlName = '';
+  @Input() centerButtonImageFormControlName = '';
 }

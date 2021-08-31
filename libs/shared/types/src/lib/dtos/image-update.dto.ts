@@ -47,8 +47,8 @@ export class ImageUpdateDto {
   datePublished?: string;
 
   @IsBoolean()
-  isThreeSixty!: boolean;
+  skipExif!: boolean;
 
   @IsBoolean()
-  skipExif!: boolean;
+  isThreeSixty!: boolean;
 }

@@ -6,13 +6,11 @@ config:
   deployment:prodMongoDbAccountName: drp-prod-mongo-db-account
   deployment:prodMongoDbDatabaseName: drp-prod-mongo-db-database
   deployment:devPrivateStorageAccountName: devprivatesa
-  deployment:devPrivateBlobContainerName: devprivate
   deployment:prodPrivateStorageAccountName: prodprivatesa
-  deployment:prodPrivateBlobContainerName: prodprivate
   deployment:devPublicStorageAccountName: devpublicsa
-  deployment:devPublicBlobContainerName: devpublic
+  deployment:devPublicBlobContainerName: images
   deployment:prodPublicStorageAccountName: prodpublicsa
-  deployment:prodPublicBlobContainerName: prodpublic
+  deployment:prodPublicBlobContainerName: images
   deployment:cdnProfileName: drp-cdn
   deployment:cdnEndpointName: dark-rush-photography
   deployment:containerRegistryName: darkrushphotography

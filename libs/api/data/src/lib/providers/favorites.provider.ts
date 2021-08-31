@@ -6,10 +6,8 @@ import { combineLatest, concatMap, from, mapTo, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { EntityType, FavoritesDto } from '@dark-rush-photography/shared/types';
-import {
-  DEFAULT_ENTITY_GROUP,
-  FAVORITES_SLUG,
-} from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
+import { FAVORITES_SLUG } from '@dark-rush-photography/api/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -18,7 +16,6 @@ import {
 } from '../entities/entity.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
-import { loadMinimalPublicVideo } from '../content/video.functions';
 import { ConfigProvider } from './config.provider';
 import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
@@ -39,7 +36,6 @@ export class FavoritesProvider {
     const publicContent = loadPublicContent(documentModel);
     return {
       images: publicContent.images.map(loadMinimalPublicImage),
-      videos: publicContent.videos.map(loadMinimalPublicVideo),
     };
   }
 
@@ -75,7 +71,7 @@ export class FavoritesProvider {
                     type: EntityType.Favorites,
                     group: DEFAULT_ENTITY_GROUP,
                     slug: FAVORITES_SLUG,
-                    isPublic: true,
+                    isPosted: true,
                   }),
                 }).save()
               ),

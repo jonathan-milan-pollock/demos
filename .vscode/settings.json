@@ -4,6 +4,7 @@
     "Autobuild",
     "Buildable",
     "Chainable",
+    "Exif",
     "Haha",
     "INSTRUMENTATIONKEY",
     "Iptc",
@@ -31,7 +32,6 @@
     "creds",
     "darkrushphoto",
     "darkrushphotography",
-    "datauri",
     "devdocuments",
     "devprivate",
     "devprivatesa",
@@ -88,12 +88,5 @@
     "vcodec",
     "websockets",
     "youtube"
-  ],
-  "azureFunctions.deploySubpath": ".",
-  "azureFunctions.postDeployTask": "npm install",
-  "azureFunctions.projectLanguage": "TypeScript",
-  "azureFunctions.projectRuntime": "~3",
-  "debug.internalConsoleOptions": "neverOpen",
-  "azureFunctions.preDeployTask": "npm prune",
-  "azureFunctions.projectSubpath": "dist/apps/serverless"
+  ]
 }

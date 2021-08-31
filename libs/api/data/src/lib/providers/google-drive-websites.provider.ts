@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
+import * as path from 'path';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -24,15 +24,16 @@ import { getGoogleDriveImages$ } from '@dark-rush-photography/shared-server/util
 import { DocumentModel } from '../schema/document.schema';
 import { ImageProvider } from './image.provider';
 import { ImageRemoveProvider } from './image-remove.provider';
+import { ProcessSyncImageProvider } from './process-sync-image.provider';
 
 @Injectable()
 export class GoogleDriveWebsitesProvider {
   private readonly logger: Logger;
 
   constructor(
-    private readonly httpService: HttpService,
     private readonly imageProvider: ImageProvider,
-    private readonly imageRemoveProvider: ImageRemoveProvider
+    private readonly imageRemoveProvider: ImageRemoveProvider,
+    private readonly processSyncImageProvider: ProcessSyncImageProvider
   ) {
     this.logger = new Logger(GoogleDriveWebsitesProvider.name);
   }
@@ -48,14 +49,18 @@ export class GoogleDriveWebsitesProvider {
       concatMapTo(getGoogleDriveImages$(drive, folder.id)),
       concatMap((googleDriveImages) => from(googleDriveImages)),
       concatMap((googleDriveImage) => {
-        this.logger.log(`Adding data image ${googleDriveImage.name}`);
         const id = uuidv4();
+        const fileName = googleDriveImage.name;
+        const orderFileName = fileName.substring(fileName.lastIndexOf('-'));
+        const parsedFileName = path.parse(orderFileName);
+
         return combineLatest([
           of(googleDriveImage.id),
           this.imageProvider.add$(
             id,
             documentModel._id,
-            googleDriveImage.name,
+            `${id}${parsedFileName.ext}`,
+            +parsedFileName.name,
             false,
             true
           ),
@@ -75,19 +80,10 @@ export class GoogleDriveWebsitesProvider {
         },
       })),
       toArray<SyncImage>(),
-      concatMap((syncImages) =>
-        this.httpService.post(
-          'http://localhost:3333/api/sync-images',
-          syncImages,
-          {
-            //TODO: Add function key
-          }
-        )
-      ),
-      map((response) => {
-        if (response.status !== 202)
-          throw new BadRequestException('Unable to sync images');
-      })
+      concatMap((syncImages) => from(syncImages)),
+      concatMap((syncImage) =>
+        this.processSyncImageProvider.processSyncImage$(drive, syncImage)
+      )
     );
   }
 }

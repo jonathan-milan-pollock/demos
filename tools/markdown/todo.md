@@ -103,7 +103,6 @@ export interface Destination {
 readonly id?: string;
 // TODO identifier
 readonly slug: string;
-readonly isPublic: boolean;
 readonly order: number;
 // metadata
 readonly title?: string;
@@ -113,18 +112,15 @@ readonly datePublished?: string;
 // location
 readonly location?: Location;
 // display
-readonly useTileImage: boolean;
+readonly tileImageIsCentered: boolean;
 // content
 readonly text: string[];
 readonly images: Image[];
 readonly imageDimensions: ImageDimension[];
 readonly videos: Video[];
-readonly videoDimensions: VideoDimension[];
-readonly hasExtendedReality: boolean;
-readonly websiteUrl?: string;
-readonly socialMediaUrls: SocialMediaUrl[];
 readonly comments: Comment[];
 readonly emotions: Emotion[];
+readonly isPosted: boolean;
 }
 
 Image

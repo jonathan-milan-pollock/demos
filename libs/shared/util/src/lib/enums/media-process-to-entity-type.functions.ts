@@ -6,15 +6,7 @@ import {
 const mediaProcessToEntityTypeMap = new Map<MediaProcessType, EntityType>([
   [MediaProcessType.ImageVideo, EntityType.ImageVideo],
   [MediaProcessType.SocialMediaImage, EntityType.ImagePost],
-  [
-    MediaProcessType.SocialMediaThreeSixtyImage,
-    EntityType.ThreeSixtyImagePost,
-  ],
-  [MediaProcessType.SocialMediaVideo, EntityType.VideoPost],
-  [
-    MediaProcessType.SocialMediaThreeSixtyVideo,
-    EntityType.ThreeSixtyVideoPost,
-  ],
+  [MediaProcessType.SocialMediaThreeSixtyImage, EntityType.ThreeSixtyImagePost],
 ]);
 
 export const getEntityTypeFromMediaProcessType = (

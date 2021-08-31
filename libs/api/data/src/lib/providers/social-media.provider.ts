@@ -7,7 +7,7 @@ import { combineLatest, concatMap, from, mapTo, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -58,7 +58,7 @@ export class SocialMediaProvider {
                     type: EntityType.SocialMedia,
                     group: DEFAULT_ENTITY_GROUP,
                     slug: folder.name,
-                    isPublic: false,
+                    isPosted: false,
                   }),
                 }).save()
               ),

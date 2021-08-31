@@ -13,5 +13,5 @@ export class EntityCreateDto {
   slug!: string;
 
   @IsBoolean()
-  isPublic!: boolean;
+  isPosted!: boolean;
 }

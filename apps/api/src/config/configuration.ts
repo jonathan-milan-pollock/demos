@@ -1,6 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { Env } from '@dark-rush-photography/api/types';
+import {
+  FIND_IMAGE_RESOLUTION,
+  FIND_THREE_SIXTY_IMAGE_RESOLUTION,
+} from '@dark-rush-photography/shared/util';
+import { FIND_VIDEO_RESOLUTION } from './video-resolutions.config';
 import { GET_DROPBOX_REDIRECT_URI } from './dropbox-redirect.config';
 import { GET_IMAGE_ARTIST_EXIF } from './image-artist-exif.config';
 import { GET_VIDEO_ARTIST_EXIF } from './video-artist-exif.config';
@@ -61,9 +66,9 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC) {
+  if (!process.env.AZURE_STORAGE_CONNECTION_STRING_BLOBS) {
     throw new BadRequestException(
-      'Please add AZURE_STORAGE_CONNECTION_STRING_PUBLIC to environment variables'
+      'Please add AZURE_STORAGE_CONNECTION_STRING_BLOBS to environment variables'
     );
   }
 
@@ -89,12 +94,13 @@ export default (): Env => {
     dropboxClientId: process.env.NX_DROPBOX_CLIENT_ID,
     dropboxClientSecret: process.env.NX_DROPBOX_CLIENT_SECRET,
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
-    privateAzureStorageConnectionString:
-      process.env.AZURE_STORAGE_CONNECTION_STRING,
-    publicAzureStorageConnectionString:
-      process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC,
+    azureStorageConnectionStringBlobs:
+      process.env.AZURE_STORAGE_CONNECTION_STRING_BLOBS,
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
     ayrshareApiKey: process.env.NX_AYRSHARE_API_KEY,
+    findImageResolution: FIND_IMAGE_RESOLUTION,
+    findThreeSixtyImageResolution: FIND_THREE_SIXTY_IMAGE_RESOLUTION,
+    findVideoResolution: FIND_VIDEO_RESOLUTION,
     getDropboxRedirectUri: GET_DROPBOX_REDIRECT_URI,
     getImageArtistExif: GET_IMAGE_ARTIST_EXIF,
     getVideoArtistExif: GET_VIDEO_ARTIST_EXIF,

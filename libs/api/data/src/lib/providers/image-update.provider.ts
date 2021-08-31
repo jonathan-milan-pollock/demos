@@ -22,7 +22,6 @@ import {
 import { Media } from '@dark-rush-photography/shared-server/types';
 import { DocumentModel } from '../schema/document.schema';
 //import {
-//  exifImage$,
 //  getExifDate,
 //  getImageExif,
 //} from '@dark-rush-photography/api/util';
@@ -118,7 +117,7 @@ export class ImageUpdateProvider {
     return from(imageDimensions)
       .pipe(
         concatMap((imageDimension) =>
-          this.imageDimensionProvider.updateBlobPathAndExif$(
+          this.imageDimensionProvider.updateBlobPath$(
             image,
             imageUpdate,
             imageMedia,
@@ -132,36 +131,15 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Download image')),
         concatMapTo(
           downloadBlobToFile$(
-            this.configProvider.getConnectionStringFromMediaState(
-              imageMedia.state
-            ),
+            this.configProvider.azureStorageConnectionStringBlobs,
             getAzureStorageBlobPath(imageMedia),
             imageMedia.fileName
           )
         ),
-        tap(() => this.logger.debug('Exif image with update')),
-        //  concatMap((filePath) =>
-        //   exifImage$(
-        //     filePath,
-        //     this.configProvider.getImageArtistExif(
-        //       new Date().getFullYear(),
-        //       image.dateCreated ?? getExifDate(new Date())
-        //     ),
-        //     getImageExif(
-        //       imageUpdate.datePublished ?? getExifDate(new Date()),
-        //       imageUpdate.title,
-        //       imageUpdate.description,
-        //       imageUpdate.keywords,
-        //       location
-        //     )
-        //   )
-        // ),
         tap(() => this.logger.debug('Upload image to new blob path')),
         concatMap((filePath) =>
           uploadStreamToBlob$(
-            this.configProvider.getConnectionStringFromMediaState(
-              imageUpdateMedia.state
-            ),
+            this.configProvider.azureStorageConnectionStringBlobs,
             fs.createReadStream(filePath),
             getAzureStorageBlobPath(imageUpdateMedia)
           )
@@ -169,9 +147,7 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Remove image at previous blob path')),
         concatMap(() =>
           deleteBlob$(
-            this.configProvider.getConnectionStringFromMediaState(
-              imageMedia.state
-            ),
+            this.configProvider.azureStorageConnectionStringBlobs,
             getAzureStorageBlobPath(imageMedia)
           )
         )

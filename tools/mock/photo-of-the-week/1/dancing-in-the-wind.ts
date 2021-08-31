@@ -17,7 +17,7 @@ export class DancingInTheWind extends PhotoOfTheWeekDto {
   dateCreated = new Date(2019, 5, 26).toISOString().substring(0, 10);
   datePublished = new Date(2019, 5, 26).toISOString().substring(0, 10);
   location = { country: 'United States' };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

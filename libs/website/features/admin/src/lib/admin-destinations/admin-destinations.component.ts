@@ -43,9 +43,8 @@ export class AdminDestinationsComponent implements OnInit {
   readonly content: {
     readonly text: string[];
     readonly images?: ReadonlySet<Image>;
-    readonly threeSixtyImages?: ReadonlySet<ThreeSixtyImage>;
     readonly videos?: ReadonlySet<Video>;
   };
-  
+
   */
 }

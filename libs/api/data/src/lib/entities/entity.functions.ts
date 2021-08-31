@@ -1,62 +1,69 @@
-import { Entity, EntityCreateDto } from '@dark-rush-photography/shared/types';
+import {
+  Entity,
+  EntityAdminDto,
+  EntityCreateDto,
+  EntityMinimalDto,
+} from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { loadImage } from '../content/image.functions';
-import { loadImageDimension } from '../content/image-dimension.functions';
-import { loadVideo } from '../content/video.functions';
-import { loadVideoDimension } from '../content/video-dimension.functions';
-import { loadSocialMediaUrl } from '../content/social-media-url.functions';
 import { loadComment } from '../content/comment.functions';
 import { loadEmotion } from '../content/emotion.functions';
+import { loadImage } from '../content/image.functions';
+import { loadVideo } from '../content/video.functions';
 
 export const loadNewEntity = (entityCreate: EntityCreateDto): Entity => ({
   type: entityCreate.type,
   group: entityCreate.group,
   slug: entityCreate.slug,
-  isPublic: entityCreate.isPublic,
   order: 0,
-  title: '',
-  description: '',
-  keywords: [],
+  seoTitle: '',
+  seoDescription: '',
+  seoKeywords: [],
   location: {
     country: 'United States',
   },
-  useTileImage: false,
+  tileImageIsCentered: false,
   text: [],
   images: [],
   imageDimensions: [],
   videos: [],
-  videoDimensions: [],
-  hasExtendedReality: false,
-  websiteUrl: '',
-  socialMediaUrls: [],
   comments: [],
   emotions: [],
+  isPosted: entityCreate.isPosted,
+  isProcessing: false,
 });
 
-export const loadEntity = (documentModel: DocumentModel): Entity => ({
+export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
   id: documentModel._id,
   type: documentModel.type,
   group: documentModel.group,
   slug: documentModel.slug,
-  isPublic: documentModel.isPublic,
   order: documentModel.order,
-  title: documentModel.title,
-  description: documentModel.description,
-  keywords: documentModel.keywords,
+  seoTitle: documentModel.seoTitle,
+  seoDescription: documentModel.seoDescription,
+  seoKeywords: documentModel.seoKeywords,
   dateCreated: documentModel.dateCreated,
   datePublished: documentModel.datePublished,
   location: documentModel.location,
-  useTileImage: documentModel.useTileImage,
+  tileImageIsCentered: documentModel.tileImageIsCentered,
   text: documentModel.text,
-  images: documentModel.images.map(loadImage),
-  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
-  videos: documentModel.videos.map(loadVideo),
-  videoDimensions: documentModel.videoDimensions.map(loadVideoDimension),
-  hasExtendedReality: documentModel.hasExtendedReality,
-  websiteUrl: documentModel.websiteUrl,
-  socialMediaUrls: documentModel.socialMediaUrls.map(loadSocialMediaUrl),
   comments: documentModel.comments.map(loadComment),
   emotions: documentModel.emotions.map(loadEmotion),
+  images: documentModel.images.map(loadImage),
+  video:
+    documentModel.videos.length > 0
+      ? documentModel.videos.map(loadVideo)[0]
+      : undefined,
+  isPosted: documentModel.isPosted,
+  isProcessing: documentModel.isProcessing,
+});
+
+export const loadEntityMinimal = (
+  documentModel: DocumentModel
+): EntityMinimalDto => ({
+  id: documentModel._id,
+  type: documentModel.type,
+  group: documentModel.group,
+  slug: documentModel.slug,
 });
 
 export const loadDocumentModelsArray = (

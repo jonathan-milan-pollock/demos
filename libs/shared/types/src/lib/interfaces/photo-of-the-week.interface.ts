@@ -8,17 +8,17 @@ export interface PhotoOfTheWeek {
   readonly id?: string;
   readonly group: string;
   readonly slug: string;
-  readonly isPublic: boolean;
   readonly order: number;
-  readonly title?: string;
+  readonly seoTitle?: string;
   readonly description?: string;
-  readonly keywords: string[];
+  readonly seoKeywords: string[];
   readonly datePublished?: string;
   readonly location?: Location;
-  readonly useTileImage: boolean;
+  readonly tileImageIsCentered: boolean;
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];
   readonly comments: Comment[];
   readonly emotions: Emotion[];
+  readonly isPosted: boolean;
 }

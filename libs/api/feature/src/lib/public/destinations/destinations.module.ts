@@ -12,6 +12,9 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { DestinationsService } from './destinations.service';
 import { DestinationsController } from './destinations.controller';
@@ -33,6 +36,9 @@ import { DestinationsController } from './destinations.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class DestinationsModule {}
