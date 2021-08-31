@@ -29,12 +29,10 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminEntitiesService } from './admin-entities.service';
-import { Public } from '@dark-rush-photography/shared-server/util';
 
 @Controller({ path: 'admin/entities', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Entities')
-@Public()
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
 

@@ -6,8 +6,8 @@ export const reviewAdapter: EntityAdapter<Review> = createEntityAdapter<Review>(
   {
     selectId: (review: Review): string => (review.id ? review.id : ''),
     sortComparer: (review1: Review, review2: Review): number =>
-      review1.title && review2.title
-        ? review1.title.localeCompare(review2.title)
+      review1.seoTitle && review2.seoTitle
+        ? review1.seoTitle.localeCompare(review2.seoTitle)
         : 0,
   }
 );
