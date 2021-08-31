@@ -16,16 +16,15 @@ describe('image.functions', () => {
     order: faker.datatype.number(),
     isStarred: faker.datatype.boolean(),
     isLoved: faker.datatype.boolean(),
-    title: faker.lorem.sentence(),
-    description: faker.lorem.paragraph(),
-    keywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
+    seoTitle: faker.lorem.sentence(),
+    seoDescription: faker.lorem.paragraph(),
+    seoKeywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
       .word()
       .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
     dateCreated: faker.date.recent().toISOString(),
     datePublished: faker.date.recent().toISOString(),
-    isThreeSixty: faker.datatype.boolean(),
     skipExif: faker.datatype.boolean(),
-    isGenerated: faker.datatype.boolean(),
+    isThreeSixty: faker.datatype.boolean(),
     isProcessing: faker.datatype.boolean(),
   };
 
@@ -59,7 +58,7 @@ describe('image.functions', () => {
     it('should include images that are public', () => {
       const images = [
         { ...image, state: MediaState.New },
-        { ...image, state: MediaState.Public },
+        { ...image, state: MediaState.Posted },
       ];
 
       const result = findPublicImages(images);

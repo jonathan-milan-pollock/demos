@@ -45,7 +45,7 @@ export class ImageUploadProvider {
     file: Express.Multer.File
   ): Observable<BlobUploadCommonResponse> {
     return uploadBufferToBlob$(
-      this.configProvider.getConnectionStringFromMediaState(media.state),
+      this.configProvider.azureStorageConnectionStringBlobs,
       file.buffer,
       getAzureStorageBlobPath(media)
     );
@@ -94,7 +94,7 @@ export class ImageUploadProvider {
     entityModel: Model<DocumentModel>
   ): Observable<string> {
     return downloadBlobToFile$(
-      this.configProvider.getConnectionStringFromMediaState(media.state),
+      this.configProvider.azureStorageConnectionStringBlobs,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -120,7 +120,7 @@ export class ImageUploadProvider {
 
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.configProvider.getConnectionStringFromMediaState(media.state),
+      this.configProvider.azureStorageConnectionStringBlobs,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -131,7 +131,7 @@ export class ImageUploadProvider {
       tap(() => this.logger.log(`Tinified image ${media.fileName}`)),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
-          this.configProvider.getConnectionStringFromMediaState(media.state),
+          this.configProvider.azureStorageConnectionStringBlobs,
           Buffer.from(uint8Array as Uint8Array),
           getAzureStorageBlobPath(media)
         )

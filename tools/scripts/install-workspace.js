@@ -77,12 +77,6 @@ const execGenerateApps = (isReady) =>
     .then(() =>
       consoleLogOrExec(
         isReady,
-        'npx nx g @nrwl/nest:app serverless --unitTestRunner=none --tags=scope:serverless,type:app'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
         'npx nx g @nrwl/nest:app web-socket --unitTestRunner=none --tags=scope:web-socket,type:app'
       )
     );
@@ -156,34 +150,6 @@ const execGenerateImageElementsLibs = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nxext/stencil:lib image-elements --style=scss --tags=scope:image-elements,type:ui --publishable --importPath=@dark-rush-photography/image-elements'
-      )
-    );
-
-const execGenerateServerlessLibs = (isReady) =>
-  Promise.resolve(console.log('#### serverless libraries'))
-    .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/data --unitTestRunner=jest --tags=scope:serverless,type:data'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/feature --unitTestRunner=none --tags=scope:serverless,type:feature'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/types --unitTestRunner=none --tags=scope:serverless,type:types'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib serverless/util --unitTestRunner=jest --tags=scope:serverless,type:util'
       )
     );
 
@@ -396,13 +362,6 @@ const execAddApiDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/config'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'));
 
-const execAddServerlessDependencies = (isReady) =>
-  Promise.resolve(console.log('### add serverless'))
-    .then(() => console.log())
-    .then(() => consoleLogOrExec(isReady, 'npm i @azure/functions'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-func-http'))
-    .then(() => consoleLogOrExec(isReady, 'npm i durable-functions'));
-
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
     .then(() => console.log())
@@ -485,9 +444,6 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i tinify'))
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
-    .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
-    .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
-    .then(() => consoleLogOrExec(isReady, 'npm i datauri'))
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
     .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'))
     .then(() => consoleLogOrExec(isReady, 'npm i dropbox'))
@@ -551,8 +507,6 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateImageElementsLibs(isReady))
     .then(() => console.log())
-    .then(() => execGenerateServerlessLibs(isReady))
-    .then(() => console.log())
     .then(() => execGenerateSharedServerLibs(isReady))
     .then(() => console.log())
     .then(() => execGenerateSharedLibs(isReady))
@@ -576,8 +530,6 @@ const execInstall = (isReady) =>
     .then(() => execAddBestOfDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddApiDependencies(isReady))
-    .then(() => console.log())
-    .then(() => execAddServerlessDependencies(isReady))
     .then(() => console.log())
     .then(() => execAddWebSocketDependencies(isReady))
     .then(() => console.log())

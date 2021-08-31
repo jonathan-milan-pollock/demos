@@ -9,18 +9,14 @@ import {
   Image,
   ImageDimension,
   Location,
-  SocialMediaUrl,
   Video,
-  VideoDimension,
   Entity,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
 import { videoSchema } from './video.schema';
-import { videoDimensionSchema } from './video-dimension.schema';
-import { socialMediaUrlSchema } from './social-media-url.schema';
 import { commentSchema } from './comment.schema';
 import { emotionSchema } from './emotion.schema';
 
@@ -46,20 +42,17 @@ export class Document implements Entity {
   @Prop({ type: String, required: true })
   slug!: string;
 
-  @Prop({ type: Boolean, required: true })
-  isPublic!: boolean;
-
   @Prop({ type: Number, required: true })
   order!: number;
 
   @Prop({ type: String, required: false })
-  title?: string;
+  seoTitle?: string;
 
   @Prop({ type: String, required: false })
-  description?: string;
+  seoDescription?: string;
 
   @Prop({ type: [String], required: true })
-  keywords!: string[];
+  seoKeywords!: string[];
 
   @Prop({ type: String, required: false })
   dateCreated?: string;
@@ -74,7 +67,7 @@ export class Document implements Entity {
   location?: Location;
 
   @Prop({ type: Boolean, required: true, default: false })
-  useTileImage!: boolean;
+  tileImageIsCentered!: boolean;
 
   @Prop({ type: [String], required: true })
   text!: string[];
@@ -97,26 +90,14 @@ export class Document implements Entity {
   })
   videos!: Video[];
 
-  @Prop({
-    type: [videoDimensionSchema],
-    required: true,
-  })
-  videoDimensions!: VideoDimension[];
-
-  @Prop({ type: Boolean, required: true, default: false })
-  hasExtendedReality!: boolean;
-
-  @Prop({ type: String, required: false })
-  websiteUrl?: string;
-
-  @Prop({ type: [socialMediaUrlSchema], required: true })
-  socialMediaUrls!: SocialMediaUrl[];
-
   @Prop({ type: [commentSchema], required: true })
   comments!: Comment[];
 
   @Prop({ type: [emotionSchema], required: true })
   emotions!: Emotion[];
+
+  @Prop({ type: Boolean, required: true })
+  isPosted!: boolean;
 
   @Prop({ type: Boolean, required: true, default: false })
   isProcessing!: boolean;

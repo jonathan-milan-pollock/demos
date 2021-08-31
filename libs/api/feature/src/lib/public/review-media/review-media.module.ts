@@ -11,7 +11,10 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
   ReviewMediaProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewMediaService } from './review-media.service';
 import { ReviewMediaController } from './review-media.controller';
@@ -33,6 +36,9 @@ import { ReviewMediaController } from './review-media.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class ReviewMediaModule {}

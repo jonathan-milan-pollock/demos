@@ -12,6 +12,9 @@ import {
   ImageRemoveProvider,
   ImageUploadProvider,
   PhotoOfTheWeekProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
 import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
@@ -33,6 +36,9 @@ import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class PhotoOfTheWeekModule {}

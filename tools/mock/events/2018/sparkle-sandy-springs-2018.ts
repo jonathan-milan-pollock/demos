@@ -14,7 +14,7 @@ export class SparkleSandySprings2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

@@ -33,20 +33,8 @@
 > brew install vips
 > brew link openexr
 > brew reinstall Imath
-> brew tap azure/functions
-> brew install azure-functions-core-tools@3
-
-#### if upgrading on a machine that has serverless 2.x installed
-
-> brew link --overwrite azure-functions-core-tools@3
 
 - add environment variables to ~/etc/.zshrc
-
-- manually download extension bundle for serverless as getting error that value cannot be null (happens if bundle download takes too long)
-
-  - ran func start --verbose to determine error
-  - download <https://functionscdn.azureedge.net/public/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/2.6.1/Microsoft.Azure.Functions.ExtensionBundle.2.6.1_any-any.zip>
-  - unzip contents to /Users/username/.azure-functions-core-tools/Functions/ExtensionBundles/Microsoft.Azure.Functions.ExtensionBundle/2.6.1
 
 ### Chrome Settings
 

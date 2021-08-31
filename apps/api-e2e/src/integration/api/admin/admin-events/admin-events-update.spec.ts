@@ -121,7 +121,6 @@ describe('Admin Destinations API', () => {
             images: [],
             imageDimensions: [],
             videos: [],
-            videoDimensions: [],
             comments: [],
             emotions: [],
           });
@@ -144,7 +143,6 @@ describe('Admin Destinations API', () => {
               images: [],
               imageDimensions: [],
               videos: [],
-              videoDimensions: [],
               comments: [],
               emotions: [],
             })

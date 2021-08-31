@@ -7,8 +7,6 @@ export enum EntityType {
   ImageVideo = 'ImageVideo',
   ImagePost = 'ImagePost',
   ThreeSixtyImagePost = 'ThreeSixtyImagePost',
-  VideoPost = 'VideoPost',
-  ThreeSixtyVideoPost = 'ThreeSixtyVideoPost',
   PhotoOfTheWeek = 'PhotoOfTheWeek',
   ReviewMedia = 'ReviewMedia',
   Review = 'Review',

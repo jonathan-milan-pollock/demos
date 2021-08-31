@@ -29,20 +29,6 @@ describe('media-process-to-entity-type.functions', () => {
       expect(result).toBe(EntityType.ThreeSixtyImagePost);
     });
 
-    it('should return social media video', () => {
-      const result = getEntityTypeFromMediaProcessType(
-        MediaProcessType.SocialMediaVideo
-      );
-      expect(result).toBe(EntityType.VideoPost);
-    });
-
-    it('should return social media three sixty video', () => {
-      const result = getEntityTypeFromMediaProcessType(
-        MediaProcessType.SocialMediaThreeSixtyVideo
-      );
-      expect(result).toBe(EntityType.ThreeSixtyVideoPost);
-    });
-
     it('should throw a range error if media process type is not an entity type', () => {
       const mediaProcessType = '' as MediaProcessType;
       expect(() => {

@@ -31,7 +31,7 @@ export class PhotoOfTheWeekMinimalDto {
   datePublished!: string;
 
   @IsBoolean()
-  useTileImage!: boolean;
+  tileImageIsCentered!: boolean;
 
   @ValidateNested()
   @Type(() => ImageMinimalDto)

@@ -10,8 +10,11 @@ import {
   DestinationMinimalDto,
   EntityType,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
-import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
+import {
+  getGoogleDriveFolders$,
+  getGoogleDriveFolderWithName$,
+} from '@dark-rush-photography/shared-server/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
@@ -25,7 +28,6 @@ import {
 import { loadPublicContent } from '../content/public-content.functions';
 import { validateFindStarredImage } from '../content/image-validation.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
-import { loadMinimalPublicVideo } from '../content/video.functions';
 import { findEntityComments } from '../content/comment.functions';
 import { findEntityEmotions } from '../content/emotion.functions';
 import { ConfigProvider } from './config.provider';
@@ -53,7 +55,6 @@ export class DestinationProvider {
       order: documentModel.order,
       title: validateEntityTitle(documentModel),
       starredImage: validateFindStarredImage(publicContent.images),
-      hasExtendedReality: documentModel.hasExtendedReality,
     };
   }
 
@@ -70,17 +71,76 @@ export class DestinationProvider {
       order: documentModel.order,
       title: validateEntityTitle(documentModel),
       description: validateEntityDescription(documentModel),
-      keywords: documentModel.keywords,
+      keywords: documentModel.seoKeywords,
       location: validateEntityLocation(documentModel),
       text: documentModel.text,
       images: publicContent.images.map(loadMinimalPublicImage),
-      videos: publicContent.videos.map(loadMinimalPublicVideo),
-      hasExtendedReality: documentModel.hasExtendedReality,
-      websiteUrl: documentModel.websiteUrl,
-      socialMediaUrls: documentModel.socialMediaUrls,
       comments: entityComments,
       emotions: entityEmotions,
     };
+  }
+
+  sync$(drive: drive_v3.Drive): Observable<void> {
+    return from(
+      getGoogleDriveFolderWithName$(
+        drive,
+        this.configProvider.googleDriveWebsitesFolderId,
+        'destinations'
+      )
+    ).pipe(
+      concatMap((destinationsFolder) =>
+        getGoogleDriveFolders$(drive, destinationsFolder.id)
+      ),
+      concatMap((destinationFolders) => from(destinationFolders)),
+      concatMap((destinationEntityFolder) =>
+        combineLatest([
+          of(destinationEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.Destination,
+              slug: destinationEntityFolder.name,
+            })
+          ),
+        ])
+      ),
+      concatMap(([aboutEntityFolder, documentModels]) => {
+        const documentModelsArray = loadDocumentModelsArray(documentModels);
+        if (documentModelsArray.length > 0) {
+          this.logger.log(`Found entity ${aboutEntityFolder.name}`);
+          return combineLatest([
+            getGoogleDriveFolderWithName$(
+              drive,
+              aboutEntityFolder.id,
+              'images'
+            ),
+            of(documentModelsArray[0]),
+          ]);
+        }
+
+        this.logger.log(`Creating entity ${aboutEntityFolder.name}`);
+        return combineLatest([
+          getGoogleDriveFolderWithName$(drive, aboutEntityFolder.id, 'images'),
+          from(
+            new this.entityModel({
+              ...loadNewEntity({
+                type: EntityType.About,
+                group: DEFAULT_ENTITY_GROUP,
+                slug: aboutEntityFolder.name,
+                isPosted: false,
+              }),
+            }).save()
+          ),
+        ]);
+      }),
+      concatMap(([imagesFolder, documentModel]) =>
+        this.googleDriveWebsitesProvider.sync$(
+          drive,
+          imagesFolder,
+          documentModel
+        )
+      ),
+      mapTo(undefined)
+    );
   }
 
   update$(drive: drive_v3.Drive): Observable<void> {
@@ -114,7 +174,7 @@ export class DestinationProvider {
                     type: EntityType.Destination,
                     group: DEFAULT_ENTITY_GROUP,
                     slug: folder.name,
-                    isPublic: false,
+                    isPosted: false,
                   }),
                 }).save()
               ),

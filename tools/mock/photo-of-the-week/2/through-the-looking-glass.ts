@@ -4,7 +4,7 @@ export class ThroughTheLookingGlass extends PhotoOfTheWeekDto {
   group = 2;
   slug = 'through-the-looking-glass';
   title = 'Through the Looking Glass';
-  description = `I enjoy the colors in this photo, as the colors in front of the 
+  description = `I enjoy the colors in this photo, as the colors in front of the
     menu are the same color as the marble.`;
   keywords = [
     'Palm Beach',
@@ -21,7 +21,7 @@ export class ThroughTheLookingGlass extends PhotoOfTheWeekDto {
     stateOrProvince: 'Florida',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

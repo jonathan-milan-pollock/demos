@@ -1,4 +1,4 @@
-import { ImageDimensionType } from '@dark-rush-photography/shared/types';
+import { ImageDimensionType } from '../enums/image-dimension-type.enum';
 
 export interface ImageResolution {
   readonly type: ImageDimensionType;

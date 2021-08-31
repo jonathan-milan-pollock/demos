@@ -26,11 +26,11 @@ export class EscapeToTheMountains2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
     `
-      On the weekend of October 6, 2018 my longtime friend Donna 
-      Jeffries and I escaped to the mountains. Visiting Helen, 
+      On the weekend of October 6, 2018 my longtime friend Donna
+      Jeffries and I escaped to the mountains. Visiting Helen,
       Blue Ridge and Sautee there were so many amazing moments
       but there are three that stand out.
       `,
@@ -42,12 +42,12 @@ export class EscapeToTheMountains2018 extends EventDto {
       even had the opportunity to meet his wife.
       `,
     `
-      Another amazing moment was on the hay ride at Smithgall 
+      Another amazing moment was on the hay ride at Smithgall
       Woods State Park. Since I was child, a dream has been to
       be a National Geographic photographer. To my surprise the
       hay ride driver had seen my photography gear and stopped
       when he had reached a particularly scenic location. He
-      then announced to the passengers that he had to stop for a 
+      then announced to the passengers that he had to stop for a
       National Geographic photographer to take pictures. When
       everyone on the hayride turned to look at me, I realized
       he meant me! Phenomenal!

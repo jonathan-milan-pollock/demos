@@ -148,7 +148,6 @@ describe('Admin Events API', () => {
             images: [],
             imageDimensions: [],
             videos: [],
-            videoDimensions: [],
             comments: [],
             emotions: [],
           });
@@ -175,7 +174,6 @@ describe('Admin Events API', () => {
               images: [],
               imageDimensions: [],
               videos: [],
-              videoDimensions: [],
               comments: [],
               emotions: [],
             })

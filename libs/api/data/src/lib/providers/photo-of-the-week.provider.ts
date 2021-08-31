@@ -12,7 +12,7 @@ import {
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -60,7 +60,7 @@ export class PhotoOfTheWeekProvider {
       order: documentModel.order,
       title: validateEntityTitle(documentModel),
       datePublished: validateEntityDatePublished(documentModel),
-      useTileImage: documentModel.useTileImage,
+      tileImageIsCentered: documentModel.tileImageIsCentered,
       starredImage: validateFindStarredImage(publicContent.images),
       starredTileImageDimensions: validateFindImageDimension(
         starredImage.id,
@@ -84,7 +84,7 @@ export class PhotoOfTheWeekProvider {
       order: documentModel.order,
       title: validateEntityTitle(documentModel),
       description: validateEntityDescription(documentModel),
-      keywords: documentModel.keywords,
+      keywords: documentModel.seoKeywords,
       datePublished: validateEntityDatePublished(documentModel),
       location: validateEntityLocation(documentModel),
       text: documentModel.text,
@@ -122,7 +122,7 @@ export class PhotoOfTheWeekProvider {
                     type: EntityType.About,
                     group: DEFAULT_ENTITY_GROUP,
                     slug: folder.name,
-                    isPublic: false,
+                    isPosted: false,
                   }),
                 }).save()
               ),

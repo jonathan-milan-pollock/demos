@@ -10,7 +10,7 @@ import { findMediaEmotions } from './emotion.functions';
 
 export const findPublicImages = (images: Image[]): Image[] => {
   return images
-    .filter((image) => image.state == MediaState.Public)
+    .filter((image) => image.state == MediaState.Posted)
     .map(loadImage);
 };
 
@@ -22,14 +22,13 @@ export const loadImage = (image: Image): Image => ({
   order: image.order,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
-  title: image.title,
-  description: image.description,
-  keywords: image.keywords,
+  seoTitle: image.seoTitle,
+  seoDescription: image.seoDescription,
+  seoKeywords: image.seoKeywords,
   dateCreated: image.dateCreated,
   datePublished: image.datePublished,
-  isThreeSixty: image.isThreeSixty,
   skipExif: image.skipExif,
-  isGenerated: image.isGenerated,
+  isThreeSixty: image.isThreeSixty,
   isProcessing: image.isProcessing,
 });
 
@@ -39,7 +38,7 @@ export const loadMinimalPublicImage = (image: Image): ImageMinimalDto => {
     entityId: image.entityId,
     fileName: image.fileName,
     order: image.order,
-    title: image.title,
+    title: image.seoTitle,
     isThreeSixty: image.isThreeSixty,
   };
 };
@@ -60,9 +59,9 @@ export const loadPublicImage = (
     entityId: image.entityId,
     fileName: image.fileName,
     order: image.order,
-    title: image.title,
-    description: image.description,
-    keywords: image.keywords,
+    title: image.seoTitle,
+    description: image.seoDescription,
+    keywords: image.seoKeywords,
     isThreeSixty: image.isThreeSixty,
     comments: imageComments,
     emotions: imageEmotions,

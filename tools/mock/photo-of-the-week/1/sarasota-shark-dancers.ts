@@ -5,8 +5,8 @@ export class SarasotaSharkDancers extends PhotoOfTheWeekDto {
   slug = 'sarasota-shark-dancers';
   title = 'Sarasota Shark Dancers';
   description = `
-    This is at Sarasota Florida's Sarasota Ski A Rees Water Ski Show. 
-    It makes me think of Jaws actually! They were performing so to me 
+    This is at Sarasota Florida's Sarasota Ski A Rees Water Ski Show.
+    It makes me think of Jaws actually! They were performing so to me
     this photo was an easy shot it wasn't staged, it's just what it is.`;
   keywords = [
     'Sarasota Ski A Rees Ski Show',
@@ -27,7 +27,7 @@ export class SarasotaSharkDancers extends PhotoOfTheWeekDto {
     stateOrProvince: 'Florida',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

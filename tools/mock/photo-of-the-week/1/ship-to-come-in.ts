@@ -5,8 +5,8 @@ export class ShipToComeIn extends PhotoOfTheWeekDto {
   slug = 'ship-to-come-in';
   title = 'Waiting for my Ship to Come In';
   description = `
-    This is at Sarasota Florida's Sarasota Ski A Rees Water Ski Show. 
-    It makes me think of Jaws actually! They were performing so to me 
+    This is at Sarasota Florida's Sarasota Ski A Rees Water Ski Show.
+    It makes me think of Jaws actually! They were performing so to me
     this photo was an easy shot it wasn't staged, it's just what it is.`;
   keywords = [
     'Northport',
@@ -26,7 +26,7 @@ export class ShipToComeIn extends PhotoOfTheWeekDto {
     stateOrProvince: 'Michigan',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

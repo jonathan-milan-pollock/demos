@@ -38,31 +38,29 @@ export class ImageAdminDto implements Image {
 
   @IsString()
   @IsOptional()
-  title?: string;
+  seoTitle?: string;
 
   @IsString()
   @IsOptional()
-  description?: string;
+  seoDescription?: string;
 
   @IsString()
   @IsOptional()
-  keywords?: string;
+  seoKeywords?: string;
 
   @IsISO8601()
-  dateCreated!: string;
+  @IsOptional()
+  dateCreated?: string;
 
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
 
   @IsBoolean()
-  isThreeSixty!: boolean;
-
-  @IsBoolean()
   skipExif!: boolean;
 
   @IsBoolean()
-  isGenerated!: boolean;
+  isThreeSixty!: boolean;
 
   @IsBoolean()
   isProcessing!: boolean;

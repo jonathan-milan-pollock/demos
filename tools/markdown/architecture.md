@@ -287,28 +287,6 @@ import { Multer } from 'multer';
 
 ---
 
-## setup serverless
-
-- in angular.json for app
-
-  - remove assets from angular.json
-  - add /dist/src at end of output path
-
-- choco install azure-functions-core-tools-3
-- dist/apps/serverless was selected as azure functions project
-- allowed azure functions access for firewall
-- install Azurite and start blobs, queues, and tables from the bottom of VSCode
-- add Azurite files to .gitignore
-
-```shell
-# azurite
-__azurite*
-__blobstorage__
-__queuestorage__
-```
-
----
-
 ## setup web socket
 
 - in main.ts

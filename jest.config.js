@@ -5,8 +5,6 @@ module.exports = {
     '<rootDir>/libs/best-of/data',
     '<rootDir>/libs/best-of/util',
     '<rootDir>/libs/image-elements',
-    '<rootDir>/libs/serverless/data',
-    '<rootDir>/libs/serverless/util',
     '<rootDir>/libs/shared/util',
     '<rootDir>/libs/shared-server/data',
     '<rootDir>/libs/shared-server/util',

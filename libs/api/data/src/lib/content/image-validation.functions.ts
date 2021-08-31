@@ -36,7 +36,7 @@ export const validateImageDocumentModelFound = (
 };
 
 export const validateImagePublic = (image: Image): Image => {
-  if (image.state !== MediaState.Public) throw new NotFoundException();
+  if (image.state !== MediaState.Posted) throw new NotFoundException();
   return image;
 };
 

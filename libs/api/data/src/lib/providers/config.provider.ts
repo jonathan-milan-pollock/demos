@@ -2,11 +2,16 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import {
+  ImageDimensionType,
+  ImageResolution,
+  VideoDimensionType,
+  VideoResolution,
+} from '@dark-rush-photography/shared/types';
+import {
   Env,
   ImageArtistExif,
   VideoArtistExif,
 } from '@dark-rush-photography/api/types';
-import { MediaState } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ConfigProvider {
@@ -96,39 +101,13 @@ export class ConfigProvider {
     return value;
   }
 
-  getConnectionStringFromMediaState(mediaState: MediaState): string {
-    switch (mediaState) {
-      case MediaState.New:
-      case MediaState.Selected:
-        return this.privateAzureStorageConnectionString;
-      case MediaState.Public:
-      case MediaState.Archived:
-        return this.publicAzureStorageConnectionString;
-    }
-  }
-
-  get privateAzureStorageConnectionString(): string {
-    const value = this.configService.get(
-      'privateAzureStorageConnectionString',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'privateAzureStorageConnectionString undefined'
-      );
-    }
-    return value;
-  }
-
-  get publicAzureStorageConnectionString(): string {
-    const value = this.configService.get('publicAzureStorageConnectionString', {
+  get azureStorageConnectionStringBlobs(): string {
+    const value = this.configService.get('azureStorageConnectionStringBlobs', {
       infer: true,
     });
     if (!value) {
       throw new BadRequestException(
-        'publicAzureStorageConnectionString undefined'
+        'azureStorageConnectionStringBlobs undefined'
       );
     }
     return value;
@@ -158,6 +137,34 @@ export class ConfigProvider {
       throw new BadRequestException('getDropboxRedirectUri undefined');
     }
     return fn(protocol, host);
+  }
+
+  findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution {
+    const fn = this.configService.get('findImageResolution', { infer: true });
+    if (!fn) {
+      throw new BadRequestException('findImageResolution undefined');
+    }
+    return fn(imageDimensionType);
+  }
+
+  findThreeSixtyImageResolution(
+    imageDimensionType: ImageDimensionType
+  ): ImageResolution {
+    const fn = this.configService.get('findThreeSixtyImageResolution', {
+      infer: true,
+    });
+    if (!fn) {
+      throw new BadRequestException('findThreeSixtyImageResolution undefined');
+    }
+    return fn(imageDimensionType);
+  }
+
+  findVideoResolution(videoDimensionType: VideoDimensionType): VideoResolution {
+    const fn = this.configService.get('findVideoResolution', { infer: true });
+    if (!fn) {
+      throw new BadRequestException('findVideoResolution undefined');
+    }
+    return fn(videoDimensionType);
   }
 
   getImageArtistExif(

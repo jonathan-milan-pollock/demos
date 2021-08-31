@@ -11,7 +11,10 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
+  ProcessSyncImageProvider,
+  ResizeImageProvider,
   ReviewProvider,
+  TinifyImageProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewsService } from './reviews.service';
 import { ReviewsController } from './reviews.controller';
@@ -33,6 +36,9 @@ import { ReviewsController } from './reviews.controller';
     ImageRemoveProvider,
     ImageDimensionProvider,
     GoogleDriveWebsitesProvider,
+    ProcessSyncImageProvider,
+    TinifyImageProvider,
+    ResizeImageProvider,
   ],
 })
 export class ReviewsModule {}

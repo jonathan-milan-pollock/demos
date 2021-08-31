@@ -11,20 +11,17 @@ describe('video.functions', () => {
     state: faker.random.arrayElement(Object.values(MediaState)),
     order: faker.datatype.number(),
     isStarred: faker.datatype.boolean(),
-    title: faker.lorem.sentence(),
-    description: faker.lorem.paragraph(),
-    keywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
+    seoTitle: faker.lorem.sentence(),
+    seoDescription: faker.lorem.paragraph(),
+    seoKeywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
       .word()
       .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
     dateCreated: faker.date.recent().toISOString(),
     datePublished: faker.date.recent().toISOString(),
     isThreeSixty: faker.datatype.boolean(),
     threeSixtySettings: undefined,
-    coverImageId: faker.datatype.uuid(),
     hlsUrl: faker.internet.url(),
-    isFlyOver: faker.datatype.boolean(),
     isUploaded: faker.datatype.boolean(),
-    isGenerated: faker.datatype.boolean(),
     isProcessing: faker.datatype.boolean(),
   };
 
@@ -82,7 +79,7 @@ describe('video.functions', () => {
     it('should include videos that are public', () => {
       const videos = [
         { ...video, state: MediaState.New },
-        { ...video, state: MediaState.Public },
+        { ...video, state: MediaState.Posted },
       ];
 
       const result = findPublicVideos(videos);

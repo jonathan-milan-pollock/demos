@@ -126,21 +126,6 @@ export class AdminImagesController {
     return this.adminImagesService.findOne$(id, entityId);
   }
 
-  @Get(':id/:imageDimensionType/data-uri')
-  @ApiOkResponse({ type: String })
-  findDataUri$(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Param('imageDimensionType', new ParseEnumPipe(ImageDimensionType))
-    imageDimensionType: ImageDimensionType,
-    @Query('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<string> {
-    return this.adminImagesService.findDataUri$(
-      id,
-      entityId,
-      imageDimensionType
-    );
-  }
-
   @Delete(':id')
   @HttpCode(204)
   remove$(

@@ -4,7 +4,7 @@ export class AsTheWindBlows extends PhotoOfTheWeekDto {
   group = 2;
   slug = 'as-the-wind-blows';
   title = 'As the Wind Blows';
-  description = `I was getting off the train and saw so many cool lights that I 
+  description = `I was getting off the train and saw so many cool lights that I
     kinda forgot what train I was supposed to get on!`;
   keywords = ['train', 'Milan', 'Italy', 'fast', 'Railway Station', 'colorful'];
   dateCreated = new Date(2020, 3, 1).toISOString().substring(0, 10);
@@ -14,7 +14,7 @@ export class AsTheWindBlows extends PhotoOfTheWeekDto {
     stateOrProvince: 'Milan',
     country: 'Italy',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
 
   private constructor() {
     super();

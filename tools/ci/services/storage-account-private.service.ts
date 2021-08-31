@@ -3,7 +3,7 @@ import {
   StorageAccount,
   SkuName,
   Kind,
-  BlobContainer
+  BlobContainer,
 } from '@pulumi/azure-native/storage';
 
 export const createPrivateStorageAccount = (
@@ -21,15 +21,4 @@ export const createPrivateStorageAccount = (
     allowBlobPublicAccess: false,
     enableHttpsTrafficOnly: true,
     minimumTlsVersion: 'TLS1_2',
-  });
-
-export const createPrivateBlobContainer = (
-  privateBlobContainerName: string,
-  resourceGroup: ResourceGroup,
-  storageAccount: StorageAccount
-): BlobContainer =>
-  new BlobContainer(privateBlobContainerName, {
-    containerName: privateBlobContainerName,
-    resourceGroupName: resourceGroup.name,
-    accountName: storageAccount.name,
   });

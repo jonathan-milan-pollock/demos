@@ -5,16 +5,17 @@ import { Model } from 'mongoose';
 import {
   combineLatest,
   concatMap,
-  concatMapTo,
   from,
   mapTo,
   Observable,
   of,
+  pluck,
+  toArray,
 } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { AboutDto, EntityType } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import {
   getGoogleDriveFolderWithName$,
   getGoogleDriveFolders$,
@@ -26,7 +27,6 @@ import {
 } from '../entities/entity.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
-import { loadMinimalPublicVideo } from '../content/video.functions';
 import { ConfigProvider } from './config.provider';
 import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
@@ -49,11 +49,10 @@ export class AboutProvider {
       slug: documentModel.slug,
       order: documentModel.order,
       images: publicContent.images.map(loadMinimalPublicImage),
-      videos: publicContent.videos.map(loadMinimalPublicVideo),
     };
   }
 
-  sync$(drive: drive_v3.Drive, slugName: string): Observable<void> {
+  findFolders$(drive: drive_v3.Drive): Observable<string[]> {
     return from(
       getGoogleDriveFolderWithName$(
         drive,
@@ -61,10 +60,23 @@ export class AboutProvider {
         'about'
       )
     ).pipe(
-      concatMap((googleDriveFolder) =>
-        from(
-          getGoogleDriveFolderWithName$(drive, googleDriveFolder.id, slugName)
-        )
+      concatMap((aboutFolder) => getGoogleDriveFolders$(drive, aboutFolder.id)),
+      concatMap((aboutFolders) => from(aboutFolders)),
+      pluck('name'),
+      toArray<string>()
+    );
+  }
+
+  sync$(drive: drive_v3.Drive, folderName: string): Observable<void> {
+    return from(
+      getGoogleDriveFolderWithName$(
+        drive,
+        this.configProvider.googleDriveWebsitesFolderId,
+        'about'
+      )
+    ).pipe(
+      concatMap((aboutFolder) =>
+        getGoogleDriveFolderWithName$(drive, aboutFolder.id, folderName)
       ),
       concatMap((aboutEntityFolder) =>
         combineLatest([
@@ -80,7 +92,6 @@ export class AboutProvider {
       concatMap(([aboutEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          //TODO: Verify that only 1
           this.logger.log(`Found entity ${aboutEntityFolder.name}`);
           return combineLatest([
             getGoogleDriveFolderWithName$(
@@ -101,7 +112,7 @@ export class AboutProvider {
                 type: EntityType.About,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: aboutEntityFolder.name,
-                isPublic: false,
+                isPosted: false,
               }),
             }).save()
           ),

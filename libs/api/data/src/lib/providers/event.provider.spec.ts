@@ -27,7 +27,7 @@ const mockEventUpdate = (): EventUpdate => ({
   dateCreated: faker.date.recent().toISOString(),
   datePublished: faker.date.recent().toISOString(),
   location: { ...mockLocation() },
-  useTileImage: faker.datatype.boolean(),
+  tileImageIsCentered: faker.datatype.boolean(),
   text: [faker.lorem.paragraph(), faker.lorem.paragraph()],
 });
 

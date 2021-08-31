@@ -30,7 +30,6 @@ import {
   validateFindStarredImage,
 } from '../content/image-validation.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
-import { loadMinimalPublicVideo } from '../content/video.functions';
 import { findEntityComments } from '../content/comment.functions';
 import { findEntityEmotions } from '../content/emotion.functions';
 import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
@@ -56,7 +55,7 @@ export class EventProvider {
       slug: documentModel.slug,
       order: documentModel.order,
       title: validateEntityTitle(documentModel),
-      useTileImage: documentModel.useTileImage,
+      tileImageIsCentered: documentModel.tileImageIsCentered,
       starredImage,
       starredTileImageDimensions: validateFindImageDimension(
         starredImage.id,
@@ -80,12 +79,11 @@ export class EventProvider {
       order: documentModel.order,
       title: validateEntityTitle(documentModel),
       description: validateEntityDescription(documentModel),
-      keywords: documentModel.keywords,
+      keywords: documentModel.seoKeywords,
       dateCreated: validateEntityDateCreated(documentModel),
       location: validateEntityLocation(documentModel),
       text: documentModel.text,
       images: publicContent.images.map(loadMinimalPublicImage),
-      videos: publicContent.videos.map(loadMinimalPublicVideo),
       comments: entityComments,
       emotions: entityEmotions,
     };
@@ -119,7 +117,7 @@ export class EventProvider {
                     type: EntityType.About,
                     group: '',
                     slug: folder.name,
-                    isPublic: false,
+                    isPosted: false,
                   }),
                 }).save()
               ),

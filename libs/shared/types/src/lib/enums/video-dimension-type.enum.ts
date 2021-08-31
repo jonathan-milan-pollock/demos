@@ -4,9 +4,4 @@ export enum VideoDimensionType {
   LinkedIn = 'LinkedIn',
   GoogleBusiness = 'GoogleBusiness',
   YouTube = 'YouTube',
-  ThreeSixtyFacebook = 'ThreeSixtyFacebook',
-  ThreeSixtyInstagram = 'ThreeSixtyInstagram',
-  ThreeSixtyLinkedIn = 'ThreeSixtyLinkedIn',
-  ThreeSixtyGoogleBusiness = 'ThreeSixtyGoogleBusiness',
-  ThreeSixtyYouTube = 'ThreeSixtyYouTube',
 }

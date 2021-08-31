@@ -20,15 +20,14 @@ export * from './lib/providers/image-remove.provider';
 export * from './lib/providers/image-update.provider';
 export * from './lib/providers/image-upload.provider';
 export * from './lib/providers/image.provider';
-export * from './lib/providers/media-process.provider';
 export * from './lib/providers/photo-of-the-week.provider';
+export * from './lib/providers/process-sync-image.provider';
+export * from './lib/providers/resize-image.provider';
 export * from './lib/providers/review-media.provider';
 export * from './lib/providers/review.provider';
 export * from './lib/providers/social-media.provider';
-export * from './lib/providers/video-dimension.provider';
+export * from './lib/providers/tinify-image.provider';
 export * from './lib/providers/video-remove.provider';
-export * from './lib/providers/video-update.provider';
-export * from './lib/providers/video-upload.provider';
 export * from './lib/providers/video.provider';
 
 // schema

@@ -19,16 +19,11 @@ import {
   validateEntityType,
 } from '../entities/entity-validation.functions';
 import { validateImageDateCreated } from '../content/image-validation.functions';
-import { validateVideoDateCreated } from '../content/video-validation.functions';
 import { ImageUpdateProvider } from './image-update.provider';
-import { VideoUpdateProvider } from './video-update.provider';
 
 @Injectable()
 export class EntityPostProvider {
-  constructor(
-    private readonly imageUpdateProvider: ImageUpdateProvider,
-    private readonly videoUpdateProvider: VideoUpdateProvider
-  ) {}
+  constructor(private readonly imageUpdateProvider: ImageUpdateProvider) {}
 
   post$(
     entityType: EntityType,
@@ -53,17 +48,17 @@ export class EntityPostProvider {
           image,
           {
             fileName: `${documentModel.slug}${path.extname(image.fileName)}`,
-            state: MediaState.Public,
+            state: MediaState.Posted,
             order: image.order,
             isStarred: image.isStarred,
             isLoved: image.isLoved,
-            title: image.title,
-            description: image.description,
-            keywords: image.keywords,
+            title: image.seoTitle,
+            description: image.seoDescription,
+            keywords: image.seoKeywords,
             dateCreated: validateImageDateCreated(image),
             datePublished: image.datePublished,
-            isThreeSixty: image.isThreeSixty,
             skipExif: image.skipExif,
+            isThreeSixty: image.isThreeSixty,
           },
           documentModel,
           entityModel
@@ -79,29 +74,17 @@ export class EntityPostProvider {
           of(documentModel),
         ])
       ),
-      concatMap(([video, documentModel]) =>
-        this.videoUpdateProvider.update$(
-          video,
-          {
-            fileName: `${documentModel.slug}${path.extname(video.fileName)}`,
-            state: MediaState.Public,
-            order: video.order,
-            isStarred: video.isStarred,
-            title: video.title,
-            description: video.description,
-            keywords: video.keywords,
-            dateCreated: validateVideoDateCreated(video),
-            datePublished: video.datePublished,
-            isThreeSixty: video.isThreeSixty,
-            threeSixtySettings: video.threeSixtySettings,
-            coverImageId: video.coverImageId,
-            hlsUrl: video.hlsUrl,
-            isFlyOver: video.isFlyOver,
-          },
-          documentModel,
-          entityModel
-        )
-      ),
+      //concatMap(([video, documentModel]) =>
+      //  this.videoProvider.update$(
+      //    video,
+      //    {
+      //      fileName: `${documentModel.slug}${path.extname(video.fileName)}`,
+      //      state: MediaState.Posted,
+      //    },
+      //    documentModel,
+      //    entityModel
+      //  )
+      //),
       mapTo(undefined)
     );
   }

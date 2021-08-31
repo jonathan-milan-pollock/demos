@@ -4,7 +4,7 @@ export class AintNoMountainHighEnough extends PhotoOfTheWeekDto {
   group = 1;
   slug = 'aint-no-mountain-high-enough';
   title = "Ain't No Mountain High Enough";
-  description = `I held onto this Coke bottle like it was my wubby 
+  description = `I held onto this Coke bottle like it was my wubby
     for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park.
   `;
   keywords = [
@@ -23,9 +23,9 @@ export class AintNoMountainHighEnough extends PhotoOfTheWeekDto {
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
-  useTileImage = false;
+  tileImageIsCentered = false;
   text = [
-    `I held onto this Coke bottle like it was my wubby 
+    `I held onto this Coke bottle like it was my wubby
     for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park.
   `,
   ];
