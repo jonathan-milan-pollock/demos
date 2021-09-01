@@ -205,7 +205,7 @@ const azureStorageConnectionStringSecret = createSecret(
   vault
 );
 const azureStorageConnectionStringPublicSecret = createSecret(
-  'AZURE-STORAGE-CONNECTION-STRING-PUBLIC',
+  'AZURE-STORAGE-BLOB-CONNECTION-STRING-PUBLIC',
   prodPublicStorageAccount.primaryEndpoints.blob,
   resourceGroup,
   vault
@@ -216,7 +216,6 @@ const azureStorageBlobContainerNameSecret = createSecret(
   resourceGroup,
   vault
 );
-
 const tinyPngApiKeySecret = createSecret(
   'NX-TINY-PNG-API-KEY',
   interpolate`${process.env.NX_TINY_PNG_API_KEY}`,
