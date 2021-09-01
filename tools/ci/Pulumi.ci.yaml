@@ -8,7 +8,7 @@ config:
   deployment:devPrivateStorageAccountName: devprivatesa
   deployment:prodPrivateStorageAccountName: prodprivatesa
   deployment:devPublicStorageAccountName: devpublicsa
-  deployment:devPublicBlobContainerName: images
+  deployment:devPublicBlobContainerName: devimages
   deployment:prodPublicStorageAccountName: prodpublicsa
   deployment:prodPublicBlobContainerName: images
   deployment:cdnProfileName: drp-cdn
