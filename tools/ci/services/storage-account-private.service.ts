@@ -1,10 +1,5 @@
 import { ResourceGroup } from '@pulumi/azure-native/resources';
-import {
-  StorageAccount,
-  SkuName,
-  Kind,
-  BlobContainer,
-} from '@pulumi/azure-native/storage';
+import { StorageAccount, SkuName, Kind } from '@pulumi/azure-native/storage';
 
 export const createPrivateStorageAccount = (
   privateStorageAccountName: string,

@@ -3,7 +3,6 @@ import { ResourceGroup } from '@pulumi/azure-native/resources';
 import {
   DatabaseAccount,
   MongoDBResourceMongoDBDatabase,
-  MongoDBResourceMongoDBCollection,
   listDatabaseAccountConnectionStrings,
 } from '@pulumi/azure-native/documentdb';
 
@@ -23,6 +22,7 @@ export const createMongoDb = (
   });
 
 export const getConnectionString = (
+  mongoDbDatabaseName: string,
   resourceGroup: ResourceGroup,
   mongoDbAccount: DatabaseAccount
 ): Output<string> => {
@@ -32,7 +32,9 @@ export const getConnectionString = (
   ]).apply(([resourceGroupName, accountName]) =>
     listDatabaseAccountConnectionStrings({ resourceGroupName, accountName })
   );
-  return connectionStrings.apply(
-    (cs) => cs.connectionStrings![0].connectionString
-  );
+  return connectionStrings.apply((cs) => {
+    const connectionString = cs.connectionStrings![0].connectionString;
+    const connectionStringSegments = connectionString.split('?');
+    return `${connectionStringSegments[0]}${mongoDbDatabaseName}?${connectionStringSegments[1]}`;
+  });
 };

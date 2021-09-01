@@ -7,9 +7,14 @@ import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-clie
 
 export const downloadBlobAsStream$ = (
   connectionString: string,
+  containerName: string,
   blobPath: string
 ): Observable<NodeJS.ReadableStream> => {
-  return getAzureStorageBlockBlobClient$(connectionString, blobPath).pipe(
+  return getAzureStorageBlockBlobClient$(
+    connectionString,
+    containerName,
+    blobPath
+  ).pipe(
     concatMap((blockBlobClient) => from(blockBlobClient.download())),
     map((blobDownloadResponseParsed: BlobDownloadResponseParsed) => {
       if (!blobDownloadResponseParsed.readableStreamBody) {
