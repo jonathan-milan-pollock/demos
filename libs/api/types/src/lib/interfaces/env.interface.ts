@@ -17,7 +17,8 @@ export interface Env {
   readonly dropboxClientId: string;
   readonly dropboxClientSecret: string;
   readonly mongoDbConnectionString: string;
-  readonly azureStorageConnectionStringBlobs: string;
+  readonly azureStorageBlobConnectionStringPublic: string;
+  readonly azureStorageBlobContainerNamePublic: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;
   findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution;

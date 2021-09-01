@@ -134,30 +134,6 @@ const dockerRegistryServerPasswordSecret = createSecret(
   resourceGroup,
   vault
 );
-const mongoDbConnectionStringSecret = createSecret(
-  'NX-MONGO-DB-CONNECTION-STRING',
-  getConnectionString(resourceGroup, prodMongoDbAccount),
-  resourceGroup,
-  vault
-);
-const privateBlobConnectionStringSecret = createSecret(
-  'NX-PRIVATE-BLOB-CONNECTION-STRING',
-  prodPrivateStorageAccount.primaryEndpoints.blob,
-  resourceGroup,
-  vault
-);
-const privateTableConnectionStringSecret = createSecret(
-  'NX-PRIVATE-TABLE-CONNECTION-STRING',
-  prodPrivateStorageAccount.primaryEndpoints.table,
-  resourceGroup,
-  vault
-);
-const publicBlobConnectionStringSecret = createSecret(
-  'NX-PUBLIC-BLOB-CONNECTION-STRING',
-  prodPublicStorageAccount.primaryEndpoints.blob,
-  resourceGroup,
-  vault
-);
 const auth0ClientIdSecret = createSecret(
   'NX-AUTH0-CLIENT-ID',
   interpolate`${process.env.NX_AUTH0_CLIENT_ID}`,
@@ -170,6 +146,77 @@ const auth0ClientSecretSecret = createSecret(
   resourceGroup,
   vault
 );
+const googleDriveClientEmailSecret = createSecret(
+  'NX-GOOGLE-DRIVE-CLIENT-EMAIL',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_CLIENT_EMAIL}`,
+  resourceGroup,
+  vault
+);
+const googleDrivePrivateKeySecret = createSecret(
+  'NX-GOOGLE-DRIVE-PRIVATE-KEY',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_PRIVATE_KEY}`,
+  resourceGroup,
+  vault
+);
+const googleDriveClientsFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-CLIENTS-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID}`,
+  resourceGroup,
+  vault
+);
+const googleDriveWebsitesFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-WEBSITES-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID}`,
+  resourceGroup,
+  vault
+);
+const dropboxEmailSecret = createSecret(
+  'NX-DROPBOX-EMAIL',
+  interpolate`${process.env.NX_DROPBOX_EMAIL}`,
+  resourceGroup,
+  vault
+);
+const dropboxClientIdSecret = createSecret(
+  'NX-DROPBOX-CLIENT-ID',
+  interpolate`${process.env.NX_DROPBOX_CLIENT_ID}`,
+  resourceGroup,
+  vault
+);
+const dropboxClientSecretSecret = createSecret(
+  'NX-DROPBOX-CLIENT-SECRET',
+  interpolate`${process.env.NX_DROPBOX_CLIENT_SECRET}`,
+  resourceGroup,
+  vault
+);
+const mongoDbConnectionStringSecret = createSecret(
+  'NX-MONGO-DB-CONNECTION-STRING',
+  getConnectionString(
+    pulumiConfig.prodMongoDbDatabaseName,
+    resourceGroup,
+    prodMongoDbAccount
+  ),
+  resourceGroup,
+  vault
+);
+const azureStorageConnectionStringSecret = createSecret(
+  'AZURE-STORAGE-CONNECTION-STRING',
+  prodPrivateStorageAccount.primaryEndpoints.table,
+  resourceGroup,
+  vault
+);
+const azureStorageConnectionStringPublicSecret = createSecret(
+  'AZURE-STORAGE-CONNECTION-STRING-PUBLIC',
+  prodPublicStorageAccount.primaryEndpoints.blob,
+  resourceGroup,
+  vault
+);
+const azureStorageBlobContainerNameSecret = createSecret(
+  'AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC',
+  interpolate`${process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC}`,
+  resourceGroup,
+  vault
+);
+
 const tinyPngApiKeySecret = createSecret(
   'NX-TINY-PNG-API-KEY',
   interpolate`${process.env.NX_TINY_PNG_API_KEY}`,
@@ -214,15 +261,24 @@ export const mediaServiceUrn = mediaService.urn;
 export const vaultUrn = vault.urn;
 export const dockerRegistryServerPasswordSecretUrn =
   dockerRegistryServerPasswordSecret.urn;
-export const mongoDbConnectionStringSecretUrn =
-  mongoDbConnectionStringSecret.urn;
-export const privateBlobConnectionStringSecretUrn =
-  privateBlobConnectionStringSecret.urn;
-export const privateTableConnectionStringSecretUrn =
-  privateTableConnectionStringSecret.urn;
-export const publicBlobConnectionStringSecretUrn =
-  publicBlobConnectionStringSecret.urn;
 export const auth0ClientIdSecretUrn = auth0ClientIdSecret.urn;
 export const auth0ClientSecretSecretUrn = auth0ClientSecretSecret.urn;
+export const googleDriveClientEmailSecretUrn = googleDriveClientEmailSecret.urn;
+export const googleDrivePrivateKeySecretUrn = googleDrivePrivateKeySecret.urn;
+export const googleDriveClientsFolderIdSecretUrn =
+  googleDriveClientsFolderIdSecret.urn;
+export const googleDriveWebsitesFolderIdSecretUrn =
+  googleDriveWebsitesFolderIdSecret.urn;
+export const dropboxEmailSecretUrn = dropboxEmailSecret.urn;
+export const dropboxClientIdSecretUrn = dropboxClientIdSecret.urn;
+export const dropboxClientSecretSecretUrn = dropboxClientSecretSecret.urn;
+export const mongoDbConnectionStringSecretUrn =
+  mongoDbConnectionStringSecret.urn;
+export const azureStorageConnectionStringSecretUrn =
+  azureStorageConnectionStringSecret.urn;
+export const azureStorageConnectionStringPublicSecretUrn =
+  azureStorageConnectionStringPublicSecret.urn;
+export const azureStorageBlobContainerNameSecretUrn =
+  azureStorageBlobContainerNameSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;

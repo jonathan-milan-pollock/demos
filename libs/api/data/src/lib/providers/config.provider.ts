@@ -101,13 +101,31 @@ export class ConfigProvider {
     return value;
   }
 
-  get azureStorageConnectionStringBlobs(): string {
-    const value = this.configService.get('azureStorageConnectionStringBlobs', {
-      infer: true,
-    });
+  get azureStorageBlobConnectionStringPublic(): string {
+    const value = this.configService.get(
+      'azureStorageBlobConnectionStringPublic',
+      {
+        infer: true,
+      }
+    );
     if (!value) {
       throw new BadRequestException(
-        'azureStorageConnectionStringBlobs undefined'
+        'azureStorageBlobConnectionStringPublic undefined'
+      );
+    }
+    return value;
+  }
+
+  get azureStorageBlobContainerNamePublic(): string {
+    const value = this.configService.get(
+      'azureStorageBlobContainerNamePublic',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'azureStorageBlobContainerNamePublic undefined'
       );
     }
     return value;

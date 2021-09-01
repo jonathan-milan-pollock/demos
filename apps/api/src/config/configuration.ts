@@ -66,9 +66,15 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.AZURE_STORAGE_CONNECTION_STRING_BLOBS) {
+  if (!process.env.AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC) {
     throw new BadRequestException(
-      'Please add AZURE_STORAGE_CONNECTION_STRING_BLOBS to environment variables'
+      'Please add AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC to environment variables'
+    );
+  }
+
+  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC) {
+    throw new BadRequestException(
+      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC to environment variables'
     );
   }
 
@@ -94,8 +100,10 @@ export default (): Env => {
     dropboxClientId: process.env.NX_DROPBOX_CLIENT_ID,
     dropboxClientSecret: process.env.NX_DROPBOX_CLIENT_SECRET,
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
-    azureStorageConnectionStringBlobs:
-      process.env.AZURE_STORAGE_CONNECTION_STRING_BLOBS,
+    azureStorageBlobConnectionStringPublic:
+      process.env.AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC,
+    azureStorageBlobContainerNamePublic:
+      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC,
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
     ayrshareApiKey: process.env.NX_AYRSHARE_API_KEY,
     findImageResolution: FIND_IMAGE_RESOLUTION,

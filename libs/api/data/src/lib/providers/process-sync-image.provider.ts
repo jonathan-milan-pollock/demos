@@ -40,7 +40,8 @@ export class ProcessSyncImageProvider {
     return from(writeGoogleDriveFileToPath(drive, googleDriveImageId)).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.configProvider.azureStorageConnectionStringBlobs,
+          this.configProvider.azureStorageBlobConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
           getAzureStorageBlobPath(media)
         )

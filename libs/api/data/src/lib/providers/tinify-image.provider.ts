@@ -23,7 +23,8 @@ export class TinifyImageProvider {
 
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.configProvider.azureStorageConnectionStringBlobs,
+      this.configProvider.azureStorageBlobConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -34,7 +35,8 @@ export class TinifyImageProvider {
       tap(() => this.logger.log(`Tinified image ${media.fileName}`)),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
-          this.configProvider.azureStorageConnectionStringBlobs,
+          this.configProvider.azureStorageBlobConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           Buffer.from(uint8Array as Uint8Array),
           getAzureStorageBlobPath(media)
         )
