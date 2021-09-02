@@ -446,8 +446,6 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
     .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'))
-    .then(() => consoleLogOrExec(isReady, 'npm i dropbox'))
-    .then(() => consoleLogOrExec(isReady, 'npm i node-fetch'))
     .then(() => consoleLogOrExec(isReady, 'npm i googleapis'));
 
 const execAddFontAwesome = (isReady) =>

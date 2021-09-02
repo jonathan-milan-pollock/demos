@@ -61,36 +61,6 @@ export class ConfigProvider {
     return value;
   }
 
-  get dropboxEmail(): string {
-    const value = this.configService.get('dropboxEmail', {
-      infer: true,
-    });
-    if (!value) {
-      throw new BadRequestException('dropboxEmail undefined');
-    }
-    return value;
-  }
-
-  get dropboxClientId(): string {
-    const value = this.configService.get('dropboxClientId', {
-      infer: true,
-    });
-    if (!value) {
-      throw new BadRequestException('dropboxClientId undefined');
-    }
-    return value;
-  }
-
-  get dropboxClientSecret(): string {
-    const value = this.configService.get('dropboxClientSecret', {
-      infer: true,
-    });
-    if (!value) {
-      throw new BadRequestException('dropboxClientSecret undefined');
-    }
-    return value;
-  }
-
   get mongoDbConnectionString(): string {
     const value = this.configService.get('mongoDbConnectionString', {
       infer: true,
@@ -145,16 +115,6 @@ export class ConfigProvider {
       throw new BadRequestException('ayrshareApiKey undefined');
     }
     return value;
-  }
-
-  getDropboxRedirectUri(protocol: string, host?: string): string {
-    const fn = this.configService.get('getDropboxRedirectUri', {
-      infer: true,
-    });
-    if (!fn) {
-      throw new BadRequestException('getDropboxRedirectUri undefined');
-    }
-    return fn(protocol, host);
   }
 
   findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution {

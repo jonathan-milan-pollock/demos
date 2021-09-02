@@ -13,9 +13,6 @@ export interface Env {
   readonly googleDrivePrivateKey: string;
   readonly googleDriveClientsFolderId: string;
   readonly googleDriveWebsitesFolderId: string;
-  readonly dropboxEmail: string;
-  readonly dropboxClientId: string;
-  readonly dropboxClientSecret: string;
   readonly mongoDbConnectionString: string;
   readonly azureStorageBlobConnectionStringPublic: string;
   readonly azureStorageBlobContainerNamePublic: string;
@@ -26,7 +23,6 @@ export interface Env {
     imageDimensionType: ImageDimensionType
   ): ImageResolution;
   findVideoResolution(videoDimensionType: VideoDimensionType): VideoResolution;
-  getDropboxRedirectUri(protocol: string, host?: string): string;
   getImageArtistExif(
     copyrightYear: number,
     exifDateCreated: string

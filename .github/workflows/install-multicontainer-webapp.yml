@@ -101,21 +101,6 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-GOOGLE-DRIVE-WEBSITES-FOLDER-ID)", "slotSetting": false }]'
-      - name: Azure set NX_DROPBOX_EMAIL
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_DROPBOX_EMAIL", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-DROPBOX-EMAIL)", "slotSetting": false }]'
-      - name: Azure set NX_DROPBOX_CLIENT_ID
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_DROPBOX_CLIENT_ID", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-DROPBOX-CLIENT-ID)", "slotSetting": false }]'
-      - name: Azure set NX_DROPBOX_CLIENT_SECRET
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_DROPBOX_CLIENT_SECRET", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-DROPBOX-CLIENT-SECRET)", "slotSetting": false }]'
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:
