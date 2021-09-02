@@ -102,8 +102,6 @@
 
 ## Manually added or modified
 
-- right parentheses to the keystore values of darkrushphoto application
-
 - Selected Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
 - from KeyVault > Access Policies > Add Access Policy
   - added Secret Management get and list to the darkrushphoto application

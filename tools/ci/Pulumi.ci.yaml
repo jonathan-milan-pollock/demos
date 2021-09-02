@@ -20,4 +20,4 @@ config:
   deployment:socketImageName: socket
   deployment:mediaServiceStorageAccountName: mediasvcsa
   deployment:mediaServiceName: mediasvc
-  deployment:vaultName: drpvault
+  deployment:vaultName: drpkeyvault
