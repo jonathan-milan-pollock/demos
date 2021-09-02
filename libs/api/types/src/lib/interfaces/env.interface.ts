@@ -14,7 +14,7 @@ export interface Env {
   readonly googleDriveClientsFolderId: string;
   readonly googleDriveWebsitesFolderId: string;
   readonly mongoDbConnectionString: string;
-  readonly azureStorageBlobConnectionStringPublic: string;
+  readonly azureStorageConnectionStringPublic: string;
   readonly azureStorageBlobContainerNamePublic: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;

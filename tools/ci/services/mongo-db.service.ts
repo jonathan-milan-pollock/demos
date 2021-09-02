@@ -21,7 +21,7 @@ export const createMongoDb = (
     },
   });
 
-export const getConnectionString = (
+export const getMongoDbConnectionString = (
   mongoDbDatabaseName: string,
   resourceGroup: ResourceGroup,
   mongoDbAccount: DatabaseAccount

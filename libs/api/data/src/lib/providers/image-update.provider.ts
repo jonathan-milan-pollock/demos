@@ -131,7 +131,7 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Download image')),
         concatMapTo(
           downloadBlobToFile$(
-            this.configProvider.azureStorageBlobConnectionStringPublic,
+            this.configProvider.azureStorageConnectionStringPublic,
             this.configProvider.azureStorageBlobContainerNamePublic,
             getAzureStorageBlobPath(imageMedia),
             imageMedia.fileName
@@ -140,7 +140,7 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Upload image to new blob path')),
         concatMap((filePath) =>
           uploadStreamToBlob$(
-            this.configProvider.azureStorageBlobConnectionStringPublic,
+            this.configProvider.azureStorageConnectionStringPublic,
             this.configProvider.azureStorageBlobContainerNamePublic,
             fs.createReadStream(filePath),
             getAzureStorageBlobPath(imageUpdateMedia)
@@ -149,7 +149,7 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Remove image at previous blob path')),
         concatMap(() =>
           deleteBlob$(
-            this.configProvider.azureStorageBlobConnectionStringPublic,
+            this.configProvider.azureStorageConnectionStringPublic,
             this.configProvider.azureStorageBlobContainerNamePublic,
             getAzureStorageBlobPath(imageMedia)
           )

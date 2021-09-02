@@ -71,16 +71,13 @@ export class ConfigProvider {
     return value;
   }
 
-  get azureStorageBlobConnectionStringPublic(): string {
-    const value = this.configService.get(
-      'azureStorageBlobConnectionStringPublic',
-      {
-        infer: true,
-      }
-    );
+  get azureStorageConnectionStringPublic(): string {
+    const value = this.configService.get('azureStorageConnectionStringPublic', {
+      infer: true,
+    });
     if (!value) {
       throw new BadRequestException(
-        'azureStorageBlobConnectionStringPublic undefined'
+        'azureStorageConnectionStringPublic undefined'
       );
     }
     return value;

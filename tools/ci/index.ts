@@ -1,29 +1,29 @@
-/* NOTES: With multiple pipelines could split this into Pulumi.dev and Pulumi.prod */
 import { interpolate } from '@pulumi/pulumi';
 import { ResourceGroup } from '@pulumi/azure-native/resources';
 
+import {
+  createContainerRegistry,
+  getAdminAcrUser,
+  createImage,
+} from './services/acr.service';
+import { createCdnProfile, createCdnEndpoint } from './services/cdn.service';
+import { createVault, createSecret } from './services/key-vault.service';
+import {
+  createMediaServiceStorageAccount,
+  createMediaService,
+} from './services/media.service';
 import { createFreeMongoDbAccount } from './services/mongo-db-free.service';
 import { createServerlessMongoDbAccount } from './services/mongo-db-serverless.service';
 import {
   createMongoDb,
-  getConnectionString,
+  getMongoDbConnectionString,
 } from './services/mongo-db.service';
 import { createPrivateStorageAccount } from './services/storage-account-private.service';
 import {
   createPublicStorageAccount,
   createPublicBlobContainer,
 } from './services/storage-account-public.service';
-import { createCdnProfile, createCdnEndpoint } from './services/cdn.service';
-import {
-  createContainerRegistry,
-  getAdminAcrUser,
-  createImage,
-} from './services/acr.service';
-import {
-  createMediaServiceStorageAccount,
-  createMediaService,
-} from './services/media.service';
-import { createVault, createSecret } from './services/key-vault.service';
+import { getStorageAccountConnectionString } from './services/storage-account.service';
 import { getPulumiConfig } from './pulumi-config';
 
 const pulumiConfig = getPulumiConfig();
@@ -172,7 +172,7 @@ const googleDriveWebsitesFolderIdSecret = createSecret(
 );
 const mongoDbConnectionStringSecret = createSecret(
   'NX-MONGO-DB-CONNECTION-STRING',
-  getConnectionString(
+  getMongoDbConnectionString(
     pulumiConfig.prodMongoDbDatabaseName,
     resourceGroup,
     prodMongoDbAccount
@@ -182,13 +182,19 @@ const mongoDbConnectionStringSecret = createSecret(
 );
 const azureStorageConnectionStringSecret = createSecret(
   'AZURE-STORAGE-CONNECTION-STRING',
-  prodPrivateStorageAccount.primaryEndpoints.table,
+  getStorageAccountConnectionString(
+    pulumiConfig.prodPrivateStorageAccountName,
+    resourceGroup
+  ),
   resourceGroup,
   vault
 );
 const azureStorageConnectionStringPublicSecret = createSecret(
-  'AZURE-STORAGE-BLOB-CONNECTION-STRING-PUBLIC',
-  prodPublicStorageAccount.primaryEndpoints.blob,
+  'AZURE-STORAGE-CONNECTION-STRING-PUBLIC',
+  getStorageAccountConnectionString(
+    pulumiConfig.prodPublicStorageAccountName,
+    resourceGroup
+  ),
   resourceGroup,
   vault
 );

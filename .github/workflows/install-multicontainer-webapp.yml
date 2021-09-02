@@ -111,11 +111,11 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=AZURE-STORAGE-CONNECTION-STRING)", "slotSetting": false }]'
-      - name: Azure set AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC
+      - name: Azure set AZURE_STORAGE_CONNECTION_STRING_PUBLIC
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=AZURE-STORAGE-BLOB-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=AZURE-STORAGE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
       - name: Azure set AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC
         uses: azure/appservice-settings@v1
         with:
