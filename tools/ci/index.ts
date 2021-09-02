@@ -170,24 +170,6 @@ const googleDriveWebsitesFolderIdSecret = createSecret(
   resourceGroup,
   vault
 );
-const dropboxEmailSecret = createSecret(
-  'NX-DROPBOX-EMAIL',
-  interpolate`${process.env.NX_DROPBOX_EMAIL}`,
-  resourceGroup,
-  vault
-);
-const dropboxClientIdSecret = createSecret(
-  'NX-DROPBOX-CLIENT-ID',
-  interpolate`${process.env.NX_DROPBOX_CLIENT_ID}`,
-  resourceGroup,
-  vault
-);
-const dropboxClientSecretSecret = createSecret(
-  'NX-DROPBOX-CLIENT-SECRET',
-  interpolate`${process.env.NX_DROPBOX_CLIENT_SECRET}`,
-  resourceGroup,
-  vault
-);
 const mongoDbConnectionStringSecret = createSecret(
   'NX-MONGO-DB-CONNECTION-STRING',
   getConnectionString(
@@ -268,9 +250,6 @@ export const googleDriveClientsFolderIdSecretUrn =
   googleDriveClientsFolderIdSecret.urn;
 export const googleDriveWebsitesFolderIdSecretUrn =
   googleDriveWebsitesFolderIdSecret.urn;
-export const dropboxEmailSecretUrn = dropboxEmailSecret.urn;
-export const dropboxClientIdSecretUrn = dropboxClientIdSecret.urn;
-export const dropboxClientSecretSecretUrn = dropboxClientSecretSecret.urn;
 export const mongoDbConnectionStringSecretUrn =
   mongoDbConnectionStringSecret.urn;
 export const azureStorageConnectionStringSecretUrn =

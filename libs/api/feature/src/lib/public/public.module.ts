@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { AboutModule } from './about/about.module';
 import { BestOfModule } from './best-of/best-of.module';
 import { DestinationsModule } from './destinations/destinations.module';
-import { DropboxModule } from './dropbox/dropbox.module';
 import { EventsModule } from './events/events.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { ImagesModule } from './images/images.module';
@@ -17,7 +16,6 @@ import { SitemapModule } from './sitemap/sitemap.module';
     AboutModule,
     BestOfModule,
     DestinationsModule,
-    DropboxModule,
     EventsModule,
     FavoritesModule,
     ImagesModule,

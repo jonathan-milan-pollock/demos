@@ -273,23 +273,3 @@ cy.url().should('include', '/commands/actions');
       .should('have.value', 'face@email.com');
 
 });
-
-## GoogleDrive
-
-- <https://medium.com/@bretcameron/how-to-use-the-google-drive-api-with-javascript-57a6cc9e5262>
-
-- From <https://console.cloud.google.com/>
-  - Dark Rush Photography application was created
-  - From Credentials screen create Service Account
-    - Name: Google Drive
-    - Description: Access Google Drive
-  - Access Keys tab for the Service Account
-    - Add Key then select JSON
-  - Enable the Google Drive API <https://console.developers.google.com/apis/api/drive.googleapis.com>
-  - Within Google Drive share folders with email from the JSON key
-
-## Dropbox
-
-- Create Dropbox App at <https://www.dropbox.com/developers/apps>
-  - Disable allow public clients
-  - Add Redirect Uri <http://localhost:1111/api/v1/dropbox/clients-redirect>

@@ -4,8 +4,6 @@ export * from './lib/providers/best-of.provider';
 export * from './lib/providers/comment.provider';
 export * from './lib/providers/config.provider';
 export * from './lib/providers/destination.provider';
-export * from './lib/providers/dropbox-update.provider';
-export * from './lib/providers/dropbox-user.provider';
 export * from './lib/providers/emotion.provider';
 export * from './lib/providers/entity-delete.provider';
 export * from './lib/providers/entity-post.provider';
