@@ -260,5 +260,3 @@ export const azureStorageBlobContainerNameSecretUrn =
   azureStorageBlobContainerNameSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;
-export const azureStorageBlobContainerName =
-  process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC;
