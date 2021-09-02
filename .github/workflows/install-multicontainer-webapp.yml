@@ -75,7 +75,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_ID", "value": "@Microsoft.KeyVault(VaultName==drpkeyvault;SecretName=NX-AUTH0-CLIENT-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-AUTH0-CLIENT-ID)", "slotSetting": false }]'
       - name: Azure set NX_AUTH0_CLIENT_SECRET
         uses: azure/appservice-settings@v1
         with:
@@ -115,7 +115,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpkeyvault;SecretName=AZURE-STORAGE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=AZURE-STORAGE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
       - name: Azure set AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC
         uses: azure/appservice-settings@v1
         with:

@@ -127,6 +127,26 @@
 
 ---
 
+## setup Google Drive
+
+- <https://medium.com/@bretcameron/how-to-use-the-google-drive-api-with-javascript-57a6cc9e5262>
+
+- From <https://console.cloud.google.com/>
+
+  - Dark Rush Photography application was created
+  - From Credentials screen create Service Account
+    - Name: Google Drive
+    - Description: Access Google Drive
+  - Access Keys tab for the Service Account
+    - Add Key then select JSON
+  - Enable the Google Drive API <https://console.developers.google.com/apis/api/drive.googleapis.com>
+  - Within Google Drive share folders with email from the JSON key
+
+- Register domain https://darkrushphoto.azurewebsites.net/
+  - TODO Change domain registration when published to https://darkrushphotography.com
+
+---
+
 ## deploy locally if necessary
 
 1. npm run dc:copy from root directory (copies both node_modules and dist) after build
