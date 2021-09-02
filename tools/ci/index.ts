@@ -127,6 +127,7 @@ const mediaService = createMediaService(
   mediaServiceStorageAccount
 );
 
+/*
 const vault = createVault(pulumiConfig.vaultName, resourceGroup);
 const dockerRegistryServerPasswordSecret = createSecret(
   'DOCKER-REGISTRY-SERVER-PASSWORD',
@@ -216,6 +217,7 @@ const ayrshareApiKeySecret = createSecret(
   resourceGroup,
   vault
 );
+*/
 
 export const resourceGroupUrn = resourceGroup.urn;
 
@@ -245,6 +247,7 @@ export const socketImageUrn = socketImage.urn;
 export const mediaServiceStorageAccountUrn = mediaServiceStorageAccount.urn;
 export const mediaServiceUrn = mediaService.urn;
 
+/*
 export const vaultUrn = vault.urn;
 export const dockerRegistryServerPasswordSecretUrn =
   dockerRegistryServerPasswordSecret.urn;
@@ -266,3 +269,4 @@ export const azureStorageBlobContainerNameSecretUrn =
   azureStorageBlobContainerNameSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;
+*/
