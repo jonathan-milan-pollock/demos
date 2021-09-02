@@ -70,64 +70,64 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)", "slotSetting": false }]'
       - name: Azure set NX_AUTH0_CLIENT_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_ID", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=NX-AUTH0-CLIENT-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_ID", "value": "@Microsoft.KeyVault(VaultName==drpkeyvault;SecretName=NX-AUTH0-CLIENT-ID)", "slotSetting": false }]'
       - name: Azure set NX_AUTH0_CLIENT_SECRET
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_SECRET", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AUTH0-CLIENT-SECRET)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_SECRET", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-AUTH0-CLIENT-SECRET)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_CLIENT_EMAIL
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_CLIENT_EMAIL", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-GOOGLE-DRIVE-CLIENT-EMAIL)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_CLIENT_EMAIL", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-CLIENT-EMAIL)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_PRIVATE_KEY
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_PRIVATE_KEY", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-GOOGLE-DRIVE-PRIVATE-KEY)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_PRIVATE_KEY", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-PRIVATE-KEY)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-GOOGLE-DRIVE-CLIENTS-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-CLIENTS-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-GOOGLE-DRIVE-WEBSITES-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-WEBSITES-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_MONGO_DB_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-MONGO-DB-CONNECTION-STRING)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_MONGO_DB_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-MONGO-DB-CONNECTION-STRING)", "slotSetting": false }]'
       - name: Azure set AZURE_STORAGE_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=AZURE-STORAGE-CONNECTION-STRING)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=AZURE-STORAGE-CONNECTION-STRING)", "slotSetting": false }]'
       - name: Azure set AZURE_STORAGE_CONNECTION_STRING_PUBLIC
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=AZURE-STORAGE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpkeyvault;SecretName=AZURE-STORAGE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
       - name: Azure set AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpvault;SecretName=AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpkeyvault;SecretName=AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC)", "slotSetting": false }]'
       - name: Azure set NX_TINY_PNG_API_KEY
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_TINY_PNG_API_KEY", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-TINY-PNG-API-KEY)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_TINY_PNG_API_KEY", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-TINY-PNG-API-KEY)", "slotSetting": false }]'
       - name: Azure set NX_AYRSHARE_API_KEY
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_AYRSHARE_API_KEY", "value": "@Microsoft.KeyVault(VaultName=drpvault;SecretName=NX-AYRSHARE-API-KEY)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_AYRSHARE_API_KEY", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-AYRSHARE-API-KEY)", "slotSetting": false }]'
