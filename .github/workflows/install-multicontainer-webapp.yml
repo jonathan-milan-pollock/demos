@@ -120,7 +120,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC", "value": "@Microsoft.KeyVault(VaultName==drpkeyvault;SecretName=AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC)", "slotSetting": false }]'
       - name: Azure set NX_TINY_PNG_API_KEY
         uses: azure/appservice-settings@v1
         with:
