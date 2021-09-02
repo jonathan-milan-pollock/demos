@@ -110,7 +110,7 @@ export class ImageRemoveProvider {
   ): Observable<boolean> {
     if (imageDimensions.length === 0) {
       return deleteBlob$(
-        this.configProvider.azureStorageBlobConnectionStringPublic,
+        this.configProvider.azureStorageConnectionStringPublic,
         this.configProvider.azureStorageBlobContainerNamePublic,
         getAzureStorageBlobPath(media)
       );
@@ -119,7 +119,7 @@ export class ImageRemoveProvider {
     return from(imageDimensions).pipe(
       concatMap((imageDimension) =>
         deleteBlob$(
-          this.configProvider.azureStorageBlobConnectionStringPublic,
+          this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPathWithDimension(media, imageDimension.type)
         )
@@ -127,7 +127,7 @@ export class ImageRemoveProvider {
       toArray<boolean>(),
       concatMapTo(
         deleteBlob$(
-          this.configProvider.azureStorageBlobConnectionStringPublic,
+          this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPath(media)
         )

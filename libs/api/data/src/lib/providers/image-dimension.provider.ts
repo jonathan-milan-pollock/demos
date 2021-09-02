@@ -149,7 +149,7 @@ export class ImageDimensionProvider {
     location?: Location
   ): Observable<boolean> {
     return downloadBlobToFile$(
-      this.configProvider.azureStorageBlobConnectionStringPublic,
+      this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type),
       imageMedia.fileName
@@ -184,7 +184,7 @@ export class ImageDimensionProvider {
       ),*/
       concatMap(() =>
         deleteBlob$(
-          this.configProvider.azureStorageBlobConnectionStringPublic,
+          this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type)
         )
@@ -200,7 +200,7 @@ export class ImageDimensionProvider {
   ): Observable<string> {
     const id = uuidv4();
     return downloadBlobToFile$(
-      this.configProvider.azureStorageBlobConnectionStringPublic,
+      this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPath(media),
       media.fileName

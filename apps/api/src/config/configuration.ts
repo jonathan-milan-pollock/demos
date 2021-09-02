@@ -47,9 +47,9 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC) {
+  if (!process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC) {
     throw new BadRequestException(
-      'Please add AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC to environment variables'
+      'Please add AZURE_STORAGE_CONNECTION_STRING_PUBLIC to environment variables'
     );
   }
 
@@ -78,8 +78,8 @@ export default (): Env => {
     googleDriveClientsFolderId: process.env.NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID,
     googleDriveWebsitesFolderId: process.env.NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID,
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
-    azureStorageBlobConnectionStringPublic:
-      process.env.AZURE_STORAGE_BLOB_CONNECTION_STRING_PUBLIC,
+    azureStorageConnectionStringPublic:
+      process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC,
     azureStorageBlobContainerNamePublic:
       process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC,
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
