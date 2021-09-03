@@ -56,7 +56,7 @@
 
 - Install Pulumi GitHub App <https://github.com/apps/pulumi>
 
-### Github secrets
+### github secrets
 
 - Create GitHub secret for PULUMI_ACCESS_TOKEN at <https://app.pulumi.com/milanpollock/settings/tokens>
 - Create GitHub secrets for Azure Credentials
@@ -90,17 +90,19 @@
 //npm.fontawesome.com/:_authToken=YOUR_FONTAWESOME_TOKEN_HERE
 ```
 
----
+### github actions retention
 
-- set GitHub actions retention to 30 days
+- set github actions retention to 30 days
 
-### Manual creation of multicontainer WebApp
+### manual creation of multicontainer WebApp
 
 - Ran install-multicontainer-webapp GitHub action
 
 ---
 
 ## Manually added or modified
+
+### logging
 
 - Selected Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
 - from KeyVault > Access Policies > Add Access Policy
@@ -125,6 +127,47 @@
 - In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
   - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
 
+### custom domains
+
+#### darkrushphotography.com
+
+- In Azure darkrushphoto App Service > Custom Domains
+  - Select add custom domain and enter darkrushphotography.com
+  - In Namecheap create DNS TXT and A records
+- In Azure darkrushphoto App Service > Custom Domains
+  - Select add custom domain and enter www.darkrushphotography.com
+  - In Namecheap create DNS TXT and CNAME records
+- In Azure create App Service Certificate
+  - Add to DrpRg resource group which was added for multicontainer app
+  - Select Standard, naked domain darkrushphotography.com, certificate name drpcertificate, auto renewal enable
+  - Then select Create
+- In Azure create Key Vault for the certificate drpkeyvaultcerts
+  - Keep Access Policy for darkrushphotography@outlook.com and Public endpoint settings
+- From drpcertificate Certificate configuration
+  - Select drpkeyvaultcerts
+- In Namecheap add TXT record to verify domain of certificate
+- In darkrushphoto App Service Custom Domains for assigned custom domain darkrushphotography.com
+  - Select Add binding
+  - Select Import App Service Certificate and select drpcertificate
+  - For TLS/SSL bindings select Private Certificate Thumbprint
+  - Select IP SSL as there will only be one certificate mapped to this IP
+- In darkrushphoto App Service Custom Domains for assigned custom domain www.darkrushphotography.com
+  - Select Add binding
+  - Select Import App Service Certificate and select drpcertificate
+  - For TLS/SSL bindings select Private Certificate Thumbprint
+  - Select IP SSL as there will only be one certificate mapped to this IP
+- Verify that <https://darkrushphotography.com> is secured
+- Verify that <https://www.darkrushphotography.com> is secured
+
+#### 37.photos
+
+- In vercel.com Settings > Domains
+  - Choose add and then add www.37.photos and redirect 37.photos to it
+  - In Namecheap add A and CNAME records
+- Also, in Namecheap select No email service
+- Verify that <https://37.photos> is secured
+- Verify that <https://www.37.photos> is secured
+
 ---
 
 ## setup Google Drive
@@ -142,8 +185,8 @@
   - Enable the Google Drive API <https://console.developers.google.com/apis/api/drive.googleapis.com>
   - Within Google Drive share folders with email from the JSON key
 
-- Register domain https://darkrushphoto.azurewebsites.net/
-  - TODO Change domain registration when published to https://darkrushphotography.com
+- Register domain darkrushphotography.com
+  - <https://search.google.com/search-console/welcome?hl=en&utm_source=wmx&utm_medium=deprecation-pane&utm_content=home>
 
 ---
 
