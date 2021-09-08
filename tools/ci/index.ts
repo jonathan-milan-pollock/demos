@@ -18,7 +18,10 @@ import {
   createMongoDb,
   getMongoDbConnectionString,
 } from './services/mongo-db.service';
-import { createPrivateStorageAccount } from './services/storage-account-private.service';
+import {
+  createPrivateBlobContainer,
+  createPrivateStorageAccount,
+} from './services/storage-account-private.service';
 import {
   createPublicStorageAccount,
   createPublicBlobContainer,
@@ -57,6 +60,11 @@ const devPrivateStorageAccount = createPrivateStorageAccount(
   pulumiConfig.devPrivateStorageAccountName,
   resourceGroup
 );
+const devPrivateBlobContainer = createPrivateBlobContainer(
+  pulumiConfig.devPrivateBlobContainerName,
+  resourceGroup,
+  devPrivateStorageAccount
+);
 
 const devPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.devPublicStorageAccountName,
@@ -71,6 +79,11 @@ const devPublicBlobContainer = createPublicBlobContainer(
 const prodPrivateStorageAccount = createPrivateStorageAccount(
   pulumiConfig.prodPrivateStorageAccountName,
   resourceGroup
+);
+const prodPrivateBlobContainer = createPrivateBlobContainer(
+  pulumiConfig.prodPrivateBlobContainerName,
+  resourceGroup,
+  prodPrivateStorageAccount
 );
 
 const prodPublicStorageAccount = createPublicStorageAccount(
@@ -111,11 +124,6 @@ const apiImage = createImage(
   containerRegistry,
   adminAcrUser
 );
-const socketImage = createImage(
-  pulumiConfig.socketImageName,
-  containerRegistry,
-  adminAcrUser
-);
 
 const mediaServiceStorageAccount = createMediaServiceStorageAccount(
   pulumiConfig.mediaServiceStorageAccountName,
@@ -134,18 +142,6 @@ const dockerRegistryServerPasswordSecret = createSecret(
   resourceGroup,
   vault
 );
-const auth0ClientIdSecret = createSecret(
-  'NX-AUTH0-CLIENT-ID',
-  interpolate`${process.env.NX_AUTH0_CLIENT_ID}`,
-  resourceGroup,
-  vault
-);
-const auth0ClientSecretSecret = createSecret(
-  'NX-AUTH0-CLIENT-SECRET',
-  interpolate`${process.env.NX_AUTH0_CLIENT_SECRET}`,
-  resourceGroup,
-  vault
-);
 const googleDriveClientEmailSecret = createSecret(
   'NX-GOOGLE-DRIVE-CLIENT-EMAIL',
   interpolate`${process.env.NX_GOOGLE_DRIVE_CLIENT_EMAIL}`,
@@ -158,15 +154,15 @@ const googleDrivePrivateKeySecret = createSecret(
   resourceGroup,
   vault
 );
-const googleDriveClientsFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-CLIENTS-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID}`,
+const googleDriveDarkRushPhotographyFolderIdSecret = createSecret(
+  'NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID}`,
   resourceGroup,
   vault
 );
-const googleDriveWebsitesFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-WEBSITES-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID}`,
+const googleDriveDarkRushFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID}`,
   resourceGroup,
   vault
 );
@@ -226,10 +222,12 @@ export const prodMongoDbAccountUrn = prodMongoDbAccount.urn;
 export const prodMongoDbDatabaseUrn = prodMongoDb.urn;
 
 export const devPrivateStorageAccountUrn = devPrivateStorageAccount.urn;
+export const devPrivateBlobContainerUrn = devPrivateBlobContainer.urn;
 export const devPublicStorageAccountUrn = devPublicStorageAccount.urn;
 export const devPublicBlobContainerUrn = devPublicBlobContainer.urn;
 
 export const prodPrivateStorageAccountUrn = prodPrivateStorageAccount.urn;
+export const prodPrivateBlobContainerUrn = prodPrivateBlobContainer.urn;
 export const prodPublicStorageAccountUrn = prodPublicStorageAccount.urn;
 export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
 
@@ -240,7 +238,6 @@ export const containerRegistryUrn = containerRegistry.urn;
 export const nginxImageUrn = nginxImage.urn;
 export const websiteImageUrn = websiteImage.urn;
 export const apiImageUrn = apiImage.urn;
-export const socketImageUrn = socketImage.urn;
 
 export const mediaServiceStorageAccountUrn = mediaServiceStorageAccount.urn;
 export const mediaServiceUrn = mediaService.urn;
@@ -248,14 +245,12 @@ export const mediaServiceUrn = mediaService.urn;
 export const vaultUrn = vault.urn;
 export const dockerRegistryServerPasswordSecretUrn =
   dockerRegistryServerPasswordSecret.urn;
-export const auth0ClientIdSecretUrn = auth0ClientIdSecret.urn;
-export const auth0ClientSecretSecretUrn = auth0ClientSecretSecret.urn;
 export const googleDriveClientEmailSecretUrn = googleDriveClientEmailSecret.urn;
 export const googleDrivePrivateKeySecretUrn = googleDrivePrivateKeySecret.urn;
-export const googleDriveClientsFolderIdSecretUrn =
-  googleDriveClientsFolderIdSecret.urn;
-export const googleDriveWebsitesFolderIdSecretUrn =
-  googleDriveWebsitesFolderIdSecret.urn;
+export const googleDriveDarkRushPhotographyFolderIdSecretUrn =
+  googleDriveDarkRushPhotographyFolderIdSecret.urn;
+export const googleDriveDarkRushFolderIdSecretUrn =
+  googleDriveDarkRushFolderIdSecret.urn;
 export const mongoDbConnectionStringSecretUrn =
   mongoDbConnectionStringSecret.urn;
 export const azureStorageConnectionStringSecretUrn =
