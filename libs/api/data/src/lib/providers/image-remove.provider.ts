@@ -98,7 +98,7 @@ export class ImageRemoveProvider {
     if (imageDimensions.length === 0) {
       return deleteBlob$(
         this.configProvider.getAzureStorageConnectionString(media.state),
-        this.configProvider.azureStorageBlobContainerName,
+        this.configProvider.getAzureStorageBlobContainerName(media.state),
         getAzureStorageBlobPath(media)
       );
     }
@@ -107,7 +107,7 @@ export class ImageRemoveProvider {
       concatMap((imageDimension) =>
         deleteBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.azureStorageBlobContainerName,
+          this.configProvider.getAzureStorageBlobContainerName(media.state),
           getAzureStorageBlobPathWithDimension(media, imageDimension.type)
         )
       ),
@@ -115,7 +115,7 @@ export class ImageRemoveProvider {
       concatMap(() =>
         deleteBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.azureStorageBlobContainerName,
+          this.configProvider.getAzureStorageBlobContainerName(media.state),
           getAzureStorageBlobPath(media)
         )
       )

@@ -46,15 +46,9 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.NX_SHARED_PHOTO_ALBUM_PUSH_NOTIFICATION_ADDRESS) {
+  if (!process.env.NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS) {
     throw new BadRequestException(
-      'Please add NX_SHARED_PHOTO_ALBUM_PUSH_NOTIFICATION_ADDRESS to environment variables'
-    );
-  }
-
-  if (!process.env.NX_WEBSITES_ENTITY_PUSH_NOTIFICATION_ADDRESS) {
-    throw new BadRequestException(
-      'Please add NX_WEBSITES_ENTITY_PUSH_NOTIFICATION_ADDRESS to environment variables'
+      'Please add NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS to environment variables'
     );
   }
 
@@ -76,9 +70,15 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME) {
+  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PRIVATE) {
     throw new BadRequestException(
-      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME to environment variables'
+      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME_PRIVATE to environment variables'
+    );
+  }
+
+  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC) {
+    throw new BadRequestException(
+      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC to environment variables'
     );
   }
 
@@ -108,17 +108,17 @@ export default (): Env => {
       process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID,
     googleDriveDarkRushPhotographyFolderId:
       process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID,
-    sharedPhotoAlbumPushNotificationAddress:
-      process.env.NX_SHARED_PHOTO_ALBUM_PUSH_NOTIFICATION_ADDRESS,
-    websitesEntityPushNotificationAddress:
-      process.env.NX_WEBSITES_ENTITY_PUSH_NOTIFICATION_ADDRESS,
+    entityPushNotificationsAddress:
+      process.env.NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS,
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
     azureStorageConnectionStringPrivate:
       process.env.AZURE_STORAGE_CONNECTION_STRING,
     azureStorageConnectionStringPublic:
       process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC,
-    azureStorageBlobContainerName:
-      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME,
+    azureStorageBlobContainerNamePrivate:
+      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PRIVATE,
+    azureStorageBlobContainerNamePublic:
+      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC,
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
     ayrshareApiKey: process.env.NX_AYRSHARE_API_KEY,
   };

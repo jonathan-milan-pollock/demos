@@ -5,6 +5,12 @@
     "nrwl.angular-console",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
-    "ms-vscode.vscode-node-azure-pack"
+    "ms-vscode.vscode-node-azure-pack",
+    "pkief.material-icon-theme",
+    "streetsidesoftware.code-spell-checker",
+    "christian-kohler.path-intellisense",
+    "dbaeumer.vscode-eslint",
+    "shd101wyy.markdown-preview-enhanced",
+    "davidanson.vscode-markdownlint"
   ]
 }

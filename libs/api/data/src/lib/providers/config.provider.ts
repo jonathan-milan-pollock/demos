@@ -107,32 +107,12 @@ export class ConfigProvider {
     return value;
   }
 
-  get sharedPhotoAlbumPushNotificationAddress(): string {
-    const value = this.configService.get(
-      'sharedPhotoAlbumPushNotificationAddress',
-      {
-        infer: true,
-      }
-    );
+  get entityPushNotificationsAddress(): string {
+    const value = this.configService.get('entityPushNotificationsAddress', {
+      infer: true,
+    });
     if (!value) {
-      throw new BadRequestException(
-        'sharedPhotoAlbumPushNotificationAddress undefined'
-      );
-    }
-    return value;
-  }
-
-  get websitesEntityPushNotificationAddress(): string {
-    const value = this.configService.get(
-      'websitesEntityPushNotificationAddress',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'websitesEntityPushNotificationAddress undefined'
-      );
+      throw new BadRequestException('entityPushNotificationsAddress undefined');
     }
     return value;
   }
@@ -157,7 +137,7 @@ export class ConfigProvider {
         return this.azureStorageConnectionStringPublic;
       default:
         throw new BadRequestException(
-          `Azure storage connection string is not found for media state ${mediaState}`
+          `Azure storage connection string not found for media state ${mediaState}`
         );
     }
   }
@@ -189,12 +169,47 @@ export class ConfigProvider {
     return value;
   }
 
-  get azureStorageBlobContainerName(): string {
-    const value = this.configService.get('azureStorageBlobContainerName', {
-      infer: true,
-    });
+  getAzureStorageBlobContainerName(mediaState: MediaState): string {
+    switch (mediaState) {
+      case MediaState.New:
+      case MediaState.Selected:
+        return this.azureStorageBlobContainerNamePrivate;
+      case MediaState.Posted:
+      case MediaState.Archived:
+        return this.azureStorageBlobContainerNamePublic;
+      default:
+        throw new BadRequestException(
+          `Azure storage blob container name not found for media state ${mediaState}`
+        );
+    }
+  }
+
+  get azureStorageBlobContainerNamePrivate(): string {
+    const value = this.configService.get(
+      'azureStorageBlobContainerNamePrivate',
+      {
+        infer: true,
+      }
+    );
     if (!value) {
-      throw new BadRequestException('azureStorageBlobContainerName undefined');
+      throw new BadRequestException(
+        'azureStorageBlobContainerNamePrivate undefined'
+      );
+    }
+    return value;
+  }
+
+  get azureStorageBlobContainerNamePublic(): string {
+    const value = this.configService.get(
+      'azureStorageBlobContainerNamePublic',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'azureStorageBlobContainerNamePublic undefined'
+      );
     }
     return value;
   }

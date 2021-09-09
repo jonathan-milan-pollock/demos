@@ -132,7 +132,7 @@ export class ImageUpdateProvider {
         concatMapTo(
           downloadBlobToFile$(
             this.configProvider.getAzureStorageConnectionString(media.state),
-            this.configProvider.azureStorageBlobContainerName,
+            this.configProvider.getAzureStorageBlobContainerName(media.state),
             getAzureStorageBlobPath(media),
             media.fileName
           )
@@ -141,7 +141,7 @@ export class ImageUpdateProvider {
         concatMap((filePath) =>
           uploadStreamToBlob$(
             this.configProvider.getAzureStorageConnectionString(media.state),
-            this.configProvider.azureStorageBlobContainerName,
+            this.configProvider.getAzureStorageBlobContainerName(media.state),
             fs.createReadStream(filePath),
             getAzureStorageBlobPath(imageUpdateMedia)
           )
@@ -150,7 +150,7 @@ export class ImageUpdateProvider {
         concatMap(() =>
           deleteBlob$(
             this.configProvider.getAzureStorageConnectionString(media.state),
-            this.configProvider.azureStorageBlobContainerName,
+            this.configProvider.getAzureStorageBlobContainerName(media.state),
             getAzureStorageBlobPath(media)
           )
         )
