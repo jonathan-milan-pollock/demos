@@ -85,7 +85,7 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
