@@ -173,7 +173,7 @@ const googleDriveWebsitesWatermarkedFolderIdSecret = createSecret(
   vault
 );
 const googleDriveWebsitesWithoutWatermarkFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER_ID',
+  'NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER-ID',
   interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID}`,
   resourceGroup,
   vault
