@@ -154,15 +154,39 @@ const googleDrivePrivateKeySecret = createSecret(
   resourceGroup,
   vault
 );
-const googleDriveDarkRushPhotographyFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID}`,
+const googleDriveSharedWatermarkedFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-SHARED-WATERMARKED-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID}`,
   resourceGroup,
   vault
 );
-const googleDriveDarkRushFolderIdSecret = createSecret(
+const googleDriveSharedWithoutWatermarFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-SHARED-WITHOUT-WATERMARK-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID}`,
+  resourceGroup,
+  vault
+);
+const googleDriveWebsitesWatermarkedFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-WEBSITES-WATERMARKED-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID}`,
+  resourceGroup,
+  vault
+);
+const googleDriveWebsitesWithoutWatermarkFolderIdSecret = createSecret(
+  'NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER_ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID}`,
+  resourceGroup,
+  vault
+);
+const googleDriveDarkRushPhotographyFolderIdSecret = createSecret(
   'NX-GOOGLE-DRIVE-DARK-RUSH-PHOTOGRAPHY-FOLDER-ID',
   interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID}`,
+  resourceGroup,
+  vault
+);
+const entityPushNotificationsAddressSecret = createSecret(
+  'NX-ENTITY-PUSH-NOTIFICATIONS-ADDRESS',
+  interpolate`${process.env.NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS}`,
   resourceGroup,
   vault
 );
@@ -194,9 +218,15 @@ const azureStorageConnectionStringPublicSecret = createSecret(
   resourceGroup,
   vault
 );
-const azureStorageBlobContainerNameSecret = createSecret(
+const azureStorageBlobContainerNamePrivateSecret = createSecret(
+  'AZURE-STORAGE-BLOB-CONTAINER-NAME-PRIVATE',
+  interpolate`${pulumiConfig.prodPrivateBlobContainerName}`,
+  resourceGroup,
+  vault
+);
+const azureStorageBlobContainerNamePublicSecret = createSecret(
   'AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC',
-  interpolate`${process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC}`,
+  interpolate`${pulumiConfig.prodPublicBlobContainerName}`,
   resourceGroup,
   vault
 );
@@ -247,17 +277,27 @@ export const dockerRegistryServerPasswordSecretUrn =
   dockerRegistryServerPasswordSecret.urn;
 export const googleDriveClientEmailSecretUrn = googleDriveClientEmailSecret.urn;
 export const googleDrivePrivateKeySecretUrn = googleDrivePrivateKeySecret.urn;
+export const googleDriveSharedWatermarkedFolderIdSecretUrn =
+  googleDriveSharedWatermarkedFolderIdSecret.urn;
+export const googleDriveSharedWithoutWatermarFolderIdSecretUrn =
+  googleDriveSharedWithoutWatermarFolderIdSecret.urn;
+export const googleDriveWebsitesWatermarkedFolderIdSecretUrn =
+  googleDriveWebsitesWatermarkedFolderIdSecret.urn;
+export const googleDriveWebsitesWithoutWatermarkFolderIdSecretUrn =
+  googleDriveWebsitesWithoutWatermarkFolderIdSecret.urn;
 export const googleDriveDarkRushPhotographyFolderIdSecretUrn =
   googleDriveDarkRushPhotographyFolderIdSecret.urn;
-export const googleDriveDarkRushFolderIdSecretUrn =
-  googleDriveDarkRushFolderIdSecret.urn;
+export const entityPushNotificationsAddressSecretUrn =
+  entityPushNotificationsAddressSecret.urn;
 export const mongoDbConnectionStringSecretUrn =
   mongoDbConnectionStringSecret.urn;
 export const azureStorageConnectionStringSecretUrn =
   azureStorageConnectionStringSecret.urn;
 export const azureStorageConnectionStringPublicSecretUrn =
   azureStorageConnectionStringPublicSecret.urn;
-export const azureStorageBlobContainerNameSecretUrn =
-  azureStorageBlobContainerNameSecret.urn;
+export const azureStorageBlobContainerNamePrivateSecretUrn =
+  azureStorageBlobContainerNamePrivateSecret.urn;
+export const azureStorageBlobContainerNamePublicSecretUrn =
+  azureStorageBlobContainerNamePublicSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;
 export const ayrshareApiKeySecretUrn = ayrshareApiKeySecret.urn;

@@ -81,16 +81,36 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_PRIVATE_KEY", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-PRIVATE-KEY)", "slotSetting": false }]'
-      - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID
+      - name: Azure set NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-SHARED-WATERMARKED-FOLDER-ID)", "slotSetting": false }]'
+      - name: Azure set NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZ_WEB_APP_NAME }}
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-SHARED-WITHOUT-WATERMARK-FOLDER-ID)", "slotSetting": false }]'
+      - name: Azure set NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZ_WEB_APP_NAME }}
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-WEBSITES-WATERMARKED-FOLDER-ID)", "slotSetting": false }]'
+      - name: Azure set NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZ_WEB_APP_NAME }}
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID)", "slotSetting": false }]'
+      - name: Azure set NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZ_WEB_APP_NAME }}
+          app-settings-json: '[{ "name": "NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-ENTITY-PUSH-NOTIFICATIONS-ADDRESS)", "slotSetting": false }]'
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:
@@ -106,6 +126,11 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "AZURE_STORAGE_CONNECTION_STRING_PUBLIC", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=AZURE-STORAGE-CONNECTION-STRING-PUBLIC)", "slotSetting": false }]'
+      - name: Azure set AZURE_STORAGE_BLOB_CONTAINER_NAME_PRIVATE
+        uses: azure/appservice-settings@v1
+        with:
+          app-name: ${{ env.AZ_WEB_APP_NAME }}
+          app-settings-json: '[{ "name": "AZURE_STORAGE_BLOB_CONTAINER_NAME_PRIVATE", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=AZURE-STORAGE-BLOB-CONTAINER-NAME-PRIVATE)", "slotSetting": false }]'
       - name: Azure set AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC
         uses: azure/appservice-settings@v1
         with:
