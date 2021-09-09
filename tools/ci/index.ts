@@ -155,13 +155,13 @@ const googleDrivePrivateKeySecret = createSecret(
   vault
 );
 const googleDriveDarkRushPhotographyFolderIdSecret = createSecret(
-  'NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID',
+  'NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID',
   interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID}`,
   resourceGroup,
   vault
 );
 const googleDriveDarkRushFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID',
+  'NX-GOOGLE-DRIVE-DARK-RUSH-PHOTOGRAPHY-FOLDER-ID',
   interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID}`,
   resourceGroup,
   vault
