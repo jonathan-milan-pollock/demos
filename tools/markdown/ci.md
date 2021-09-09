@@ -100,11 +100,11 @@
 
 ---
 
-## Manually added or modified
+## manually added or modified
 
 ### logging
 
-- Selected Application logging Filesystem (used default of 35MB Quota and Retention Period days 1)
+- Selected App Service Logs Filesystem logging (used default of 35MB Quota and Retention Period days 1)
 - from KeyVault > Access Policies > Add Access Policy
   - added Secret Management get and list Key permissions for tenant darkrushphoto application
   - added Key, Secret & Certificate Management to darkrushphotography@outlook.com
@@ -115,6 +115,8 @@
   - CNAME Record, Host auth, Value darkrushphotography-cd-daulq4wds7ykzqff.edge.tenants.us.auth0.com. TTL Automatic
 
 ### cdn
+
+#### darkrushphotography.art
 
 - In Namecheap add DNS mapping for darkrushphotography.art
 

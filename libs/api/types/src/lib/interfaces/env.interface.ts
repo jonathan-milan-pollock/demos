@@ -7,12 +7,12 @@ export interface Env {
   readonly googleDriveWebsitesWatermarkedFolderId: string;
   readonly googleDriveWebsitesWithoutWatermarkFolderId: string;
   readonly googleDriveDarkRushPhotographyFolderId: string;
-  readonly sharedPhotoAlbumPushNotificationAddress: string;
-  readonly websitesEntityPushNotificationAddress: string;
+  readonly entityPushNotificationsAddress: string;
   readonly mongoDbConnectionString: string;
   readonly azureStorageConnectionStringPrivate: string;
   readonly azureStorageConnectionStringPublic: string;
-  readonly azureStorageBlobContainerName: string;
+  readonly azureStorageBlobContainerNamePrivate: string;
+  readonly azureStorageBlobContainerNamePublic: string;
   readonly tinyPngApiKey: string;
   readonly ayrshareApiKey: string;
 }

@@ -133,16 +133,16 @@ export class ImageDimensionProvider {
   updateBlobPath$(
     image: Image,
     imageUpdate: ImageUpdateDto,
-    imageMedia: Media,
+    media: Media,
     imageUpdateMedia: Media,
     imageDimension: ImageDimension,
     location?: Location
   ): Observable<boolean> {
     return downloadBlobToFile$(
-      this.configProvider.getAzureStorageConnectionString(imageMedia.state),
-      this.configProvider.azureStorageBlobContainerName,
-      getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type),
-      imageMedia.fileName
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.getAzureStorageBlobContainerName(media.state),
+      getAzureStorageBlobPathWithDimension(media, imageDimension.type),
+      media.fileName
     ).pipe(
       tap(() =>
         this.logger.debug(
@@ -174,9 +174,9 @@ export class ImageDimensionProvider {
       ),*/
       concatMap(() =>
         deleteBlob$(
-          this.configProvider.getAzureStorageConnectionString(imageMedia.state),
-          this.configProvider.azureStorageBlobContainerName,
-          getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type)
+          this.configProvider.getAzureStorageConnectionString(media.state),
+          this.configProvider.getAzureStorageBlobContainerName(media.state),
+          getAzureStorageBlobPathWithDimension(media, imageDimension.type)
         )
       ),
       map(() => true)
@@ -191,7 +191,7 @@ export class ImageDimensionProvider {
     const id = uuidv4();
     return downloadBlobToFile$(
       this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.azureStorageBlobContainerName,
+      this.configProvider.getAzureStorageBlobContainerName(media.state),
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(

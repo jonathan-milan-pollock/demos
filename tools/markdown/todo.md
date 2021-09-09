@@ -81,11 +81,6 @@ TODO: Make note about Auth0 roles and how added to the user
   }
 ```
 
-// Delete Entity
-// 1. Did slug change??
-// Need status back on the image
-// 2. Did the title, description, keywords, date published change
-
 ## source map explorer
 
 export interface Destination {

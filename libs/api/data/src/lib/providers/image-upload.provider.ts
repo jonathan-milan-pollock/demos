@@ -37,7 +37,7 @@ export class ImageUploadProvider {
   ): Observable<BlobUploadCommonResponse> {
     return uploadBufferToBlob$(
       this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.azureStorageBlobContainerName,
+      this.configProvider.getAzureStorageBlobContainerName(media.state),
       file.buffer,
       getAzureStorageBlobPath(media)
     );
@@ -113,7 +113,7 @@ export class ImageUploadProvider {
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
       this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.azureStorageBlobContainerName,
+      this.configProvider.getAzureStorageBlobContainerName(media.state),
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -125,7 +125,7 @@ export class ImageUploadProvider {
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.azureStorageBlobContainerName,
+          this.configProvider.getAzureStorageBlobContainerName(media.state),
           Buffer.from(uint8Array as Uint8Array),
           getAzureStorageBlobPath(media)
         )

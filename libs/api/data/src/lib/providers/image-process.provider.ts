@@ -39,7 +39,7 @@ export class ImageProcessProvider {
       concatMap((filePath) =>
         uploadStreamToBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.azureStorageBlobContainerName,
+          this.configProvider.getAzureStorageBlobContainerName(media.state),
           fs.createReadStream(filePath),
           getAzureStorageBlobPath(media)
         )
