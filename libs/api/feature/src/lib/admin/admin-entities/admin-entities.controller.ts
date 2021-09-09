@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
@@ -22,7 +21,6 @@ import { Observable } from 'rxjs';
 
 import {
   EntityAdminDto,
-  EntityCreateDto,
   EntityMinimalDto,
   EntityType,
   EntityUpdateDto,
@@ -35,12 +33,6 @@ import { AdminEntitiesService } from './admin-entities.service';
 @ApiTags('Admin Entities')
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
-
-  @Post()
-  @ApiCreatedResponse({ type: EntityAdminDto })
-  create$(@Body() entityCreate: EntityCreateDto): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.create$(entityCreate);
-  }
 
   @Put(':entityType/:id')
   @ApiParam({
@@ -63,12 +55,12 @@ export class AdminEntitiesController {
     enum: EntityType,
   })
   @ApiOkResponse({ type: EntityAdminDto })
-  post$(
+  websitePost$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.post$(entityType, id);
+    return this.adminEntitiesService.websitePost$(entityType, id);
   }
 
   @Post(':entityType/:id/social-media-post')
@@ -82,7 +74,7 @@ export class AdminEntitiesController {
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.post$(entityType, id);
+    return this.adminEntitiesService.socialMediaPost$(entityType, id);
   }
 
   @Put(':entityType/:id/processing/:isProcessing')
@@ -117,6 +109,19 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findAll$(entityType);
   }
 
+  @Get(':entityType/groups')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
+  @ApiOkResponse({ type: [String] })
+  findAllGroups$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType
+  ): Observable<string[]> {
+    return this.adminEntitiesService.findAllGroups$(entityType);
+  }
+
   @Get(':entityType/:id')
   @ApiParam({
     name: 'entityType',
@@ -129,6 +134,20 @@ export class AdminEntitiesController {
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<EntityAdminDto> {
     return this.adminEntitiesService.findOne$(entityType, id);
+  }
+
+  @Get(':entityType/group/:group')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
+  @ApiOkResponse({ type: [EntityMinimalDto] })
+  findAllInGroup$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType,
+    @Param('group') group: string
+  ): Observable<EntityMinimalDto[]> {
+    return this.adminEntitiesService.findAllInGroup$(entityType, group);
   }
 
   @Get(':entityType/:id/processing')

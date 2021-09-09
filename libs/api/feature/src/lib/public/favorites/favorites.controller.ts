@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
 import { FavoritesDto } from '@dark-rush-photography/shared/types';
-import { Public } from '@dark-rush-photography/shared-server/util';
+import { Public } from '@dark-rush-photography/api/util';
 import { FavoritesService } from './favorites.service';
 
 @Controller({ path: 'favorites', version: '1' })

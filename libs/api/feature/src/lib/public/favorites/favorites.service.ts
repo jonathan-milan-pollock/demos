@@ -10,6 +10,7 @@ import {
   Document,
   EntityProvider,
   FavoritesProvider,
+  validateOneEntity,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -26,7 +27,7 @@ export class FavoritesService {
       .findAllPublic$(EntityType.Favorites, this.favoritesModel)
       .pipe(
         toArray<DocumentModel>(),
-        map(this.entityProvider.validateOneEntity),
+        map(validateOneEntity),
         map(this.favoritesProvider.loadFavoritesPublic)
       );
   }

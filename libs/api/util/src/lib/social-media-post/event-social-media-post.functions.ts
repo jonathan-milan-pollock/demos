@@ -10,7 +10,7 @@ export const getEventGoogleBusinessPost = (event: Event): string =>
   `
     ${event.title}
 
-    ${event.description}
+    ${event.seoDescription}
 
     More images at: https://www.darkrushphotography.com/events/${event.slug}
 `;
@@ -22,24 +22,24 @@ export const getEventInstagramPost = (event: Event): string =>
 
     @darkrushphotography
     #YourShotPhotographer
-    ${event.keywords?.join('#').trimEnd()}
+    ${event.seoKeywords?.join('#').trimEnd()}
 `;
 
 export const getEventLinkedInPost = (event: Event): string =>
   `
     ${event.title}
 
-    ${event.description}
+    ${event.seoDescription}
     More images at: https://www.darkrushphotography.com/events/${event.slug}
 
-    ${event.keywords?.join('#').trimEnd()}
+    ${event.seoKeywords?.join('#').trimEnd()}
 `;
 
 export const getEventYouTubePost = (event: Event): string =>
   `
     ${event.title}
-    ${event.description}
+    ${event.seoDescription}
     More images at: https://www.darkrushphotography.com/events/${event.slug}
 
-    ${event.keywords?.join('#').trimEnd()}
+    ${event.seoKeywords?.join('#').trimEnd()}
 `;

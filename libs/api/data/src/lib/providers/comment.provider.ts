@@ -2,16 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import {
-  combineLatest,
-  concatMap,
-  concatMapTo,
-  from,
-  map,
-  max,
-  Observable,
-  of,
-} from 'rxjs';
+import { combineLatest, concatMap, from, map, max, Observable, of } from 'rxjs';
 
 import {
   Comment,
@@ -56,7 +47,7 @@ export class CommentProvider {
           })
         );
       }),
-      concatMapTo(this.findOne$(id, commentAdd.entityId, entityModel))
+      concatMap(() => this.findOne$(id, commentAdd.entityId, entityModel))
     );
   }
 
@@ -83,7 +74,7 @@ export class CommentProvider {
           })
         );
       }),
-      concatMapTo(this.findOne$(id, entityId, entityModel))
+      concatMap(() => this.findOne$(id, entityId, entityModel))
     );
   }
 

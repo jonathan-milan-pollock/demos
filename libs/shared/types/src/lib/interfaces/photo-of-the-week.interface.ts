@@ -9,7 +9,7 @@ export interface PhotoOfTheWeek {
   readonly group: string;
   readonly slug: string;
   readonly order: number;
-  readonly seoTitle?: string;
+  readonly title?: string;
   readonly description?: string;
   readonly seoKeywords: string[];
   readonly datePublished?: string;

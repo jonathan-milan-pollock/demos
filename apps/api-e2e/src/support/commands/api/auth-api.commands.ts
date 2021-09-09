@@ -1,7 +1,4 @@
-import {
-  AUTH0_AUDIENCE,
-  AUTH0_ISSUER,
-} from '@dark-rush-photography/shared-server/types';
+import { AUTH0_AUDIENCE, AUTH0_ISSUER } from '@dark-rush-photography/api/types';
 
 Cypress.Commands.add('authenticateApi', async (): Promise<string> => {
   if (Cypress.env('ACCESS_TOKEN'))

@@ -9,7 +9,7 @@ import { MetaService } from '@dark-rush-photography/website/data';
 })
 export class EventComponent implements OnInit {
   slug = 'classic-1952-pontiac';
-  seoTitle = 'Classic 1952 Pontiac';
+  title = 'Classic 1952 Pontiac';
   seoDescription = 'a Classic 1952 Pontiac';
 
   constructor(

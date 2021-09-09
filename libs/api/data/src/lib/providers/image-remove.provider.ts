@@ -2,16 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import {
-  concatMap,
-  concatMapTo,
-  filter,
-  from,
-  Observable,
-  of,
-  tap,
-  toArray,
-} from 'rxjs';
+import { concatMap, filter, from, Observable, of, tap, toArray } from 'rxjs';
 
 import {
   Image,
@@ -19,16 +10,13 @@ import {
   MediaState,
   MediaType,
 } from '@dark-rush-photography/shared/types';
-import {
-  DEFAULT_ENTITY_GROUP,
-  Media,
-} from '@dark-rush-photography/shared-server/types';
+import { DEFAULT_ENTITY_GROUP, Media } from '@dark-rush-photography/api/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
   getAzureStorageBlobPath,
   getAzureStorageBlobPathWithDimension,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
 import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
 import { ImageProvider } from './image.provider';
@@ -47,6 +35,11 @@ export class ImageRemoveProvider {
   }
 
   removeNewImages$(documentModel: DocumentModel): Observable<DocumentModel> {
+    if (documentModel.images.length === 0) {
+      this.logger.log('Document model does not have any images');
+      return of(documentModel);
+    }
+
     if (documentModel.group === DEFAULT_ENTITY_GROUP) {
       this.logger.log(
         `Removing ${documentModel.type} ${documentModel.slug} images`
@@ -57,12 +50,6 @@ export class ImageRemoveProvider {
       );
     }
 
-    if (documentModel.images.length === 0) {
-      this.logger.log('Document model does not have any images');
-      return of(documentModel);
-    }
-
-    //TODO: map(this.entityProvider.validateProcessingEntity)
     return from(documentModel.images).pipe(
       filter((image) => image.state === MediaState.New),
       concatMap((image) => this.remove$(image, documentModel, this.entityModel))
@@ -77,7 +64,7 @@ export class ImageRemoveProvider {
     return this.imageProvider
       .setIsProcessing$(image.id, image.entityId, true, entityModel)
       .pipe(
-        concatMapTo(
+        concatMap(() =>
           from(
             this.removeImageBlobs$(
               loadMedia(
@@ -96,7 +83,7 @@ export class ImageRemoveProvider {
         tap(() =>
           this.logger.log(`Removing data ${image.id} ${image.fileName}`)
         ),
-        concatMapTo(
+        concatMap(() =>
           from(
             this.imageProvider.remove$(image.id, image.entityId, entityModel)
           )
@@ -110,8 +97,8 @@ export class ImageRemoveProvider {
   ): Observable<boolean> {
     if (imageDimensions.length === 0) {
       return deleteBlob$(
-        this.configProvider.azureStorageConnectionStringPublic,
-        this.configProvider.azureStorageBlobContainerNamePublic,
+        this.configProvider.getAzureStorageConnectionString(media.state),
+        this.configProvider.azureStorageBlobContainerName,
         getAzureStorageBlobPath(media)
       );
     }
@@ -119,16 +106,16 @@ export class ImageRemoveProvider {
     return from(imageDimensions).pipe(
       concatMap((imageDimension) =>
         deleteBlob$(
-          this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
+          this.configProvider.getAzureStorageConnectionString(media.state),
+          this.configProvider.azureStorageBlobContainerName,
           getAzureStorageBlobPathWithDimension(media, imageDimension.type)
         )
       ),
       toArray<boolean>(),
-      concatMapTo(
+      concatMap(() =>
         deleteBlob$(
-          this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
+          this.configProvider.getAzureStorageConnectionString(media.state),
+          this.configProvider.azureStorageBlobContainerName,
           getAzureStorageBlobPath(media)
         )
       )

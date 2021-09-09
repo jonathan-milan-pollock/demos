@@ -19,7 +19,7 @@ import {
   Location,
   ImageUpdateDto,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 //import {
 //  getExifDate,
@@ -30,7 +30,7 @@ import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
 import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
 import { ImageDimensionProvider } from './image-dimension.provider';
@@ -109,7 +109,7 @@ export class ImageUpdateProvider {
   updateBlobPathAndExif$(
     image: Image,
     imageUpdate: ImageUpdateDto,
-    imageMedia: Media,
+    media: Media,
     imageUpdateMedia: Media,
     imageDimensions: ImageDimension[],
     location?: Location
@@ -120,7 +120,7 @@ export class ImageUpdateProvider {
           this.imageDimensionProvider.updateBlobPath$(
             image,
             imageUpdate,
-            imageMedia,
+            media,
             imageUpdateMedia,
             imageDimension,
             location
@@ -131,17 +131,17 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Download image')),
         concatMapTo(
           downloadBlobToFile$(
-            this.configProvider.azureStorageConnectionStringPublic,
-            this.configProvider.azureStorageBlobContainerNamePublic,
-            getAzureStorageBlobPath(imageMedia),
-            imageMedia.fileName
+            this.configProvider.getAzureStorageConnectionString(media.state),
+            this.configProvider.azureStorageBlobContainerName,
+            getAzureStorageBlobPath(media),
+            media.fileName
           )
         ),
         tap(() => this.logger.debug('Upload image to new blob path')),
         concatMap((filePath) =>
           uploadStreamToBlob$(
-            this.configProvider.azureStorageConnectionStringPublic,
-            this.configProvider.azureStorageBlobContainerNamePublic,
+            this.configProvider.getAzureStorageConnectionString(media.state),
+            this.configProvider.azureStorageBlobContainerName,
             fs.createReadStream(filePath),
             getAzureStorageBlobPath(imageUpdateMedia)
           )
@@ -149,9 +149,9 @@ export class ImageUpdateProvider {
         tap(() => this.logger.debug('Remove image at previous blob path')),
         concatMap(() =>
           deleteBlob$(
-            this.configProvider.azureStorageConnectionStringPublic,
-            this.configProvider.azureStorageBlobContainerNamePublic,
-            getAzureStorageBlobPath(imageMedia)
+            this.configProvider.getAzureStorageConnectionString(media.state),
+            this.configProvider.azureStorageBlobContainerName,
+            getAzureStorageBlobPath(media)
           )
         )
       );

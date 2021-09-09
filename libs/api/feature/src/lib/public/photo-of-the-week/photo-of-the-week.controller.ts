@@ -7,7 +7,7 @@ import {
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
 } from '@dark-rush-photography/shared/types';
-import { Public } from '@dark-rush-photography/shared-server/util';
+import { Public } from '@dark-rush-photography/api/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
 

@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
+  Auth0UserTable,
   Document,
   DocumentSchema,
   EmotionProvider,
@@ -14,6 +16,10 @@ import { UserEmotionsController } from './user-emotions.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    AzureTableStorageModule.forFeature(Auth0UserTable, {
+      table: 'Auth0User',
+      createTableIfNotExists: true,
+    }),
   ],
   controllers: [UserEmotionsController],
   providers: [UserEmotionsService, EmotionProvider],

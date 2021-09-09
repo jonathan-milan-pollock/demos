@@ -3,27 +3,18 @@ import { Injectable, Logger } from '@nestjs/common';
 import { BlobUploadCommonResponse } from '@azure/storage-blob';
 
 import { Model } from 'mongoose';
-import {
-  combineLatest,
-  concatMap,
-  concatMapTo,
-  from,
-  map,
-  Observable,
-  of,
-  tap,
-} from 'rxjs';
+import { concatMap, from, Observable, tap } from 'rxjs';
 const tinify = require('tinify');
 
 import { ImageDimensionType } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 //import { findImageExifDateCreated$ } from '@dark-rush-photography/api/util';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
   uploadBufferToBlob$,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
 import { ConfigProvider } from './config.provider';
 import { ImageProvider } from './image.provider';
 import { ImageDimensionProvider } from './image-dimension.provider';
@@ -45,8 +36,8 @@ export class ImageUploadProvider {
     file: Express.Multer.File
   ): Observable<BlobUploadCommonResponse> {
     return uploadBufferToBlob$(
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.azureStorageBlobContainerName,
       file.buffer,
       getAzureStorageBlobPath(media)
     );
@@ -70,14 +61,14 @@ export class ImageUploadProvider {
       : this.configProvider.findImageResolution(ImageDimensionType.Small);
 
     return this.updateDateCreated$(media, entityModel).pipe(
-   //   concatMapTo(this.tinifyImage$(media)),
-   //   concatMapTo(
+   //   concatMap(this.tinifyImage$(media)),
+   //   concatMap(
    //     this.imageDimensionProvider.resize$(media, tileResolution, entityModel)
    //   ),
-   //   concatMapTo(
+   //   concatMap(
    //     this.imageDimensionProvider.resize$(media, smallResolution, entityModel)
    //   ),
-      concatMapTo(
+      concatMap(
         this.imageProvider.setIsProcessing$(
           media.id,
           media.entityId,
@@ -121,8 +112,8 @@ export class ImageUploadProvider {
 
   tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.azureStorageBlobContainerName,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -133,8 +124,8 @@ export class ImageUploadProvider {
       tap(() => this.logger.log(`Tinified image ${media.fileName}`)),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
-          this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
+          this.configProvider.getAzureStorageConnectionString(media.state),
+          this.configProvider.azureStorageBlobContainerName,
           Buffer.from(uint8Array as Uint8Array),
           getAzureStorageBlobPath(media)
         )

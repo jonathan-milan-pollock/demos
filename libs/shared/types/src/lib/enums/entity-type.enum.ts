@@ -10,5 +10,6 @@ export enum EntityType {
   PhotoOfTheWeek = 'PhotoOfTheWeek',
   ReviewMedia = 'ReviewMedia',
   Review = 'Review',
+  SharedPhotoAlbum = 'SharedPhotoAlbum',
   SocialMedia = 'SocialMedia',
 }

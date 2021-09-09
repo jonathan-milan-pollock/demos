@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { concatMap, from, map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
-import { concatMapTo, from, map, mapTo, Observable, toArray } from 'rxjs';
 
 import {
   EntityAdminDto,
-  EntityCreateDto,
   EntityMinimalDto,
   EntityType,
   EntityUpdateDto,
 } from '@dark-rush-photography/shared/types';
+import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import {
   DocumentModel,
   Document,
@@ -18,32 +18,27 @@ import {
   EntityUpdateProvider,
   EntityDeleteProvider,
   EntityPostProvider,
+  ConfigProvider,
+  EntityLoadProvider,
+  loadEntity,
+  loadEntityMinimal,
+  validateEntityType,
+  validateEntityFound,
+  validateNotProcessingEntity,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class AdminEntitiesService {
   constructor(
+    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly entityProvider: EntityProvider,
+    private readonly entityLoadProvider: EntityLoadProvider,
     private readonly entityUpdateProvider: EntityUpdateProvider,
     private readonly entityPostProvider: EntityPostProvider,
     private readonly entityDeleteProvider: EntityDeleteProvider
   ) {}
-
-  create$(entityCreate: EntityCreateDto): Observable<EntityAdminDto> {
-    return this.entityProvider.create$(entityCreate, this.entityModel).pipe(
-      concatMapTo(
-        from(
-          new this.entityModel({
-            ...this.entityProvider.loadNewEntity(entityCreate),
-          }).save()
-        )
-      ),
-      map(this.entityProvider.validateEntityCreate),
-      map(this.entityProvider.loadEntity)
-    );
-  }
 
   update$(
     entityType: EntityType,
@@ -51,9 +46,9 @@ export class AdminEntitiesService {
     entityUpdate: EntityUpdateDto
   ): Observable<EntityAdminDto> {
     return from(this.entityModel.findById(id)).pipe(
-      map(this.entityProvider.validateEntityFound),
-      map(this.entityProvider.validateNotProcessingEntity),
-      concatMapTo(
+      map(validateEntityFound),
+      map(validateNotProcessingEntity),
+      concatMap(() =>
         this.entityProvider.setIsProcessing$(
           entityType,
           id,
@@ -61,11 +56,13 @@ export class AdminEntitiesService {
           this.entityModel
         )
       ),
-      concatMapTo(
+      concatMap(() =>
         this.entityUpdateProvider.update$(entityType, id, this.entityModel)
       ),
-      concatMapTo(this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })),
-      concatMapTo(
+      concatMap(() =>
+        this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })
+      ),
+      concatMap(() =>
         this.entityProvider.setIsProcessing$(
           entityType,
           id,
@@ -73,15 +70,15 @@ export class AdminEntitiesService {
           this.entityModel
         )
       ),
-      concatMapTo(this.findOne$(entityType, id))
+      concatMap(() => this.findOne$(entityType, id))
     );
   }
 
-  post$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
+  websitePost$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
     return from(this.entityModel.findById(id)).pipe(
-      map(this.entityProvider.validateEntityFound),
-      map(this.entityProvider.validateNotProcessingEntity),
-      concatMapTo(
+      map(validateEntityFound),
+      map(validateNotProcessingEntity),
+      concatMap(() =>
         this.entityProvider.setIsProcessing$(
           entityType,
           id,
@@ -89,10 +86,10 @@ export class AdminEntitiesService {
           this.entityModel
         )
       ),
-      concatMapTo(
+      concatMap(() =>
         this.entityPostProvider.post$(entityType, id, this.entityModel)
       ),
-      concatMapTo(
+      concatMap(() =>
         this.entityProvider.setIsProcessing$(
           entityType,
           id,
@@ -100,7 +97,37 @@ export class AdminEntitiesService {
           this.entityModel
         )
       ),
-      concatMapTo(this.findOne$(entityType, id))
+      concatMap(() => this.findOne$(entityType, id))
+    );
+  }
+
+  socialMediaPost$(
+    entityType: EntityType,
+    id: string
+  ): Observable<EntityAdminDto> {
+    return from(this.entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map(validateNotProcessingEntity),
+      concatMap(() =>
+        this.entityProvider.setIsProcessing$(
+          entityType,
+          id,
+          true,
+          this.entityModel
+        )
+      ),
+      concatMap(() =>
+        this.entityPostProvider.post$(entityType, id, this.entityModel)
+      ),
+      concatMap(() =>
+        this.entityProvider.setIsProcessing$(
+          entityType,
+          id,
+          false,
+          this.entityModel
+        )
+      ),
+      concatMap(() => this.findOne$(entityType, id))
     );
   }
 
@@ -110,47 +137,80 @@ export class AdminEntitiesService {
     isProcessing: boolean
   ): Observable<void> {
     return from(this.entityModel.findById(id)).pipe(
-      map(this.entityProvider.validateEntityFound),
-      map((documentModel) =>
-        this.entityProvider.validateEntityType(entityType, documentModel)
-      ),
-      concatMapTo(
+      map(validateEntityFound),
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      concatMap(() =>
         from(this.entityModel.findByIdAndUpdate(id, { isProcessing }))
       ),
-      mapTo(undefined)
+      map(() => undefined)
     );
   }
 
   findAll$(entityType: EntityType): Observable<EntityMinimalDto[]> {
-    return this.entityProvider
-      .findAll$(entityType, this.entityModel)
+    const googleDrive = getGoogleDrive(
+      this.configProvider.googleDriveClientEmail,
+      this.configProvider.googleDrivePrivateKey
+    );
+    return this.entityLoadProvider.load(googleDrive, entityType).pipe(
+      concatMap(() =>
+        this.entityProvider.findAll$(entityType, this.entityModel)
+      ),
+      map(loadEntityMinimal),
+      toArray<EntityMinimalDto>()
+    );
+  }
+
+  findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
+    return this.entityProvider.findOne$(id, this.entityModel).pipe(
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      map(loadEntity)
+    );
+  }
+
+  findAllGroups$(entityType: EntityType): Observable<string[]> {
+    const googleDrive = getGoogleDrive(
+      this.configProvider.googleDriveClientEmail,
+      this.configProvider.googleDrivePrivateKey
+    );
+    return this.entityLoadProvider.loadGroups$(googleDrive, entityType);
+  }
+
+  findAllInGroup$(
+    entityType: EntityType,
+    group: string
+  ): Observable<EntityMinimalDto[]> {
+    const googleDrive = getGoogleDrive(
+      this.configProvider.googleDriveClientEmail,
+      this.configProvider.googleDrivePrivateKey
+    );
+    return this.entityLoadProvider
+      .loadForGroup$(googleDrive, entityType, group)
       .pipe(
-        map(this.entityProvider.loadEntityMinimal),
+        concatMap(() =>
+          this.entityProvider.findAllInGroup$(
+            entityType,
+            group,
+            this.entityModel
+          )
+        ),
+        map(loadEntityMinimal),
         toArray<EntityMinimalDto>()
       );
   }
 
-  findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
-    return this.entityProvider
-      .findOne$(entityType, id, this.entityModel)
-      .pipe(map(this.entityProvider.loadEntity));
-  }
-
   findIsProcessing$(entityType: EntityType, id: string): Observable<boolean> {
     return from(this.entityModel.findById(id)).pipe(
-      map(this.entityProvider.validateEntityFound),
-      map((documentModel) =>
-        this.entityProvider.validateEntityType(entityType, documentModel)
-      ),
+      map(validateEntityFound),
+      map((documentModel) => validateEntityType(entityType, documentModel)),
       map((documentModel) => documentModel.isProcessing)
     );
   }
 
   delete$(entityType: EntityType, id: string): Observable<void> {
     return from(this.entityModel.findById(id)).pipe(
-      map(this.entityProvider.validateEntityFound),
-      map(this.entityProvider.validateNotProcessingEntity),
-      concatMapTo(
+      map(validateEntityFound),
+      map(validateNotProcessingEntity),
+      concatMap(() =>
         this.entityProvider.setIsProcessing$(
           entityType,
           id,
@@ -158,7 +218,7 @@ export class AdminEntitiesService {
           this.entityModel
         )
       ),
-      concatMapTo(
+      concatMap(() =>
         this.entityDeleteProvider.delete$(entityType, id, this.entityModel)
       )
     );

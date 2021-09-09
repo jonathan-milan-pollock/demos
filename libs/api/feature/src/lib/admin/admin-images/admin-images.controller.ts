@@ -117,6 +117,14 @@ export class AdminImagesController {
     return this.adminImagesService.setIsProcessing$(id, entityId, isProcessing);
   }
 
+  @Get('load-new-images')
+  @ApiOkResponse({ type: [ImageAdminDto] })
+  loadNewImages$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<ImageAdminDto[]> {
+    return this.adminImagesService.loadNewImages$(entityId);
+  }
+
   @Get(':id')
   @ApiOkResponse({ type: ImageAdminDto })
   findOne$(

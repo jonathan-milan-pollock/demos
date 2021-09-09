@@ -38,7 +38,7 @@ export class ImageAdminDto implements Image {
 
   @IsString()
   @IsOptional()
-  seoTitle?: string;
+  title?: string;
 
   @IsString()
   @IsOptional()

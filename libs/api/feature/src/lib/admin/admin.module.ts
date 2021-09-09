@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
 
 import { AdminEntitiesModule } from './admin-entities/admin-entities.module';
-import { AdminGoogleDriveModule } from './admin-google-drive/admin-google-drive.module';
 import { AdminImagesModule } from './admin-images/admin-images.module';
+import { AdminMediaProcessesModule } from './admin-media-processes/admin-media-processes.module';
+import { AdminSharedPhotoAlbumsModule } from './admin-shared-photo-albums/admin-shared-photo-albums.module';
 
 @Module({
-  imports: [AdminEntitiesModule, AdminGoogleDriveModule, AdminImagesModule],
+  imports: [
+    AdminEntitiesModule,
+    AdminImagesModule,
+    AdminMediaProcessesModule,
+    AdminSharedPhotoAlbumsModule,
+  ],
 })
 export class AdminModule {}

@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
 import { ReviewMediaDto } from '@dark-rush-photography/shared/types';
-import { Public } from '@dark-rush-photography/shared-server/util';
+import { Public } from '@dark-rush-photography/api/util';
 import { ReviewMediaService } from './review-media.service';
 
 @Controller({ path: 'review-media', version: '1' })

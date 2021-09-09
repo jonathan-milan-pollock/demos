@@ -1,8 +1,8 @@
 import sharp = require('sharp');
-import { concatMap, from, mapTo, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
-import { createTempFile$ } from '@dark-rush-photography/shared-server/util';
 import { findImageResolution$ } from './image-resolution.functions';
+import { createTempFile$ } from '../file/file.functions';
 
 export const resizeLongestEdgeImage$ = (
   fileName: string,
@@ -32,7 +32,7 @@ export const resizeLongestEdgeImageWidth$ = (
 ): Observable<string> => {
   return from(
     sharp(filePath).resize(longestEdge, undefined).toFile(newFilePath)
-  ).pipe(mapTo(newFilePath));
+  ).pipe(map(() => newFilePath));
 };
 
 export const resizeLongestEdgeImageHeight$ = (
@@ -42,5 +42,5 @@ export const resizeLongestEdgeImageHeight$ = (
 ): Observable<string> => {
   return from(
     sharp(filePath).resize(undefined, longestEdge).toFile(newFilePath)
-  ).pipe(mapTo(newFilePath));
+  ).pipe(map(() => newFilePath));
 };

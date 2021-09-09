@@ -58,11 +58,10 @@ export const validateNotProcessingEntity = (
   return documentModel;
 };
 
-export const validateEntityNotAlreadyCreated = (
+export const validateEntityNotFound = (
   documentModel: DocumentModel | null
 ): void => {
-  if (documentModel)
-    throw new ConflictException('Entity has already been created');
+  if (documentModel) throw new ConflictException('Entity already exists');
 };
 
 export const validateEntityCreate = (
@@ -80,9 +79,8 @@ export const validateEntityIsPosted = (
 };
 
 export const validateEntityTitle = (documentModel: DocumentModel): string => {
-  if (!documentModel.seoTitle)
-    throw new ConflictException('Title was not found');
-  return documentModel.seoTitle;
+  if (!documentModel.title) throw new ConflictException('Title was not found');
+  return documentModel.title;
 };
 
 export const validateEntityDescription = (

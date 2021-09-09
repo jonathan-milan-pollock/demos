@@ -8,6 +8,7 @@ import { MediaProcess } from './media-process.interface';
 import { PhotoOfTheWeek } from './photo-of-the-week.interface';
 import { ReviewMedia } from './review-media.interface';
 import { Review } from './review.interface';
+import { SharedWith } from './shared-with.interface';
 import { SocialMedia } from './social-media.interface';
 
 export interface Entity
@@ -20,6 +21,7 @@ export interface Entity
     PhotoOfTheWeek,
     ReviewMedia,
     Review,
+    SharedWith,
     SocialMedia {
   readonly type: EntityType;
   readonly isProcessing: boolean;

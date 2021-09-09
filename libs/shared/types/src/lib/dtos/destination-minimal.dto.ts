@@ -11,9 +11,6 @@ export class DestinationMinimalDto {
   @Min(0)
   order!: number;
 
-  @IsString()
-  title!: string;
-
   @ValidateNested()
   @Type(() => ImageMinimalDto)
   starredImage!: ImageMinimalDto;

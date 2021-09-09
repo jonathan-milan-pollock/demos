@@ -3,11 +3,11 @@ import * as path from 'path';
 import * as os from 'os';
 
 import { v4 as uuidv4 } from 'uuid';
-import { from, mapTo, Observable } from 'rxjs';
+import { from, map, Observable } from 'rxjs';
 
 export const createTempFile$ = (fileName: string): Observable<string> => {
   const filePath = path.join(os.tmpdir(), uuidv4(), fileName);
-  return from(fs.ensureFile(filePath)).pipe(mapTo(filePath));
+  return from(fs.ensureFile(filePath)).pipe(map(() => filePath));
 };
 
 export const writeStreamToFile = (

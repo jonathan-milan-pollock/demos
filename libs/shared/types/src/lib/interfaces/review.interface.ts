@@ -5,7 +5,7 @@ export interface Review {
   readonly id?: string;
   readonly slug: string;
   readonly order: number;
-  readonly seoTitle?: string;
+  readonly title?: string;
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];

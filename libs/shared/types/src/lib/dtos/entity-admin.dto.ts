@@ -37,7 +37,7 @@ export class EntityAdminDto {
 
   @IsString()
   @IsOptional()
-  seoTitle?: string;
+  title?: string;
 
   @IsString()
   @IsOptional()

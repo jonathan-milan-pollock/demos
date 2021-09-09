@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 import { DocumentModel } from '../schema/document.schema';
 import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
@@ -12,7 +12,6 @@ import { loadEmotion } from '../content/emotion.functions';
 
 @Injectable()
 export class EmotionProvider {
-  
   add$(
     emotionAdd: EmotionAddDto,
     entityModel: Model<DocumentModel>
@@ -37,7 +36,7 @@ export class EmotionProvider {
           })
         );
       }),
-      concatMapTo(this.findOne$(id, emotionAdd.entityId, entityModel))
+      concatMap(() => this.findOne$(id, emotionAdd.entityId, entityModel))
     );
   }
 

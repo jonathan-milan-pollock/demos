@@ -1,24 +1,40 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import {
+  combineLatest,
+  concatMap,
+  from,
+  last,
+  map,
+  Observable,
+  of,
+} from 'rxjs';
 import { Model } from 'mongoose';
-import { combineLatest, concatMap, from, mapTo, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { EntityType, ReviewDto } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
-import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
+import {
+  DEFAULT_ENTITY_GROUP,
+  GoogleDriveFolder,
+} from '@dark-rush-photography/api/types';
+import {
+  getGoogleDriveFolders$,
+  getGoogleDriveFolderWithName$,
+} from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
-import { validateEntityTitle } from '../entities/entity-validation.functions';
+import {
+  validateEntityFound,
+  validateEntityTitle,
+} from '../entities/entity-validation.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { validateOneImage } from '../content/image-validation.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
 import { ConfigProvider } from './config.provider';
-import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
 @Injectable()
 export class ReviewProvider {
@@ -27,8 +43,7 @@ export class ReviewProvider {
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly googleDriveWebsitesProvider: GoogleDriveWebsitesProvider
+    private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(ReviewProvider.name);
   }
@@ -45,46 +60,87 @@ export class ReviewProvider {
     };
   }
 
-  update$(drive: drive_v3.Drive): Observable<void> {
+  create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
       getGoogleDriveFolderWithName$(
-        drive,
-        this.configProvider.googleDriveWebsitesFolderId,
-        'about'
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+        'reviews'
       )
     ).pipe(
-      concatMap((folder) =>
-        from(
-          this.entityModel.find({ type: EntityType.About, slug: folder.name })
-        ).pipe(
-          concatMap((documentModels) => {
-            const documentModelsArray = loadDocumentModelsArray(documentModels);
-            if (documentModelsArray.length > 0) {
-              this.logger.log(`Found entity ${folder.name}`);
-              return combineLatest([of(folder), of(documentModelsArray[0])]);
-            }
-
-            this.logger.log(`Creating entity ${folder.name}`);
-            return combineLatest([
-              of(folder),
-              from(
-                new this.entityModel({
-                  ...loadNewEntity({
-                    type: EntityType.Review,
-                    group: DEFAULT_ENTITY_GROUP,
-                    slug: folder.name,
-                    isPosted: false,
-                  }),
-                }).save()
-              ),
-            ]);
-          }),
-          concatMap(([folder, documentModel]) =>
-            this.googleDriveWebsitesProvider.sync$(drive, folder, documentModel)
-          )
-        )
+      concatMap((reviewsFolder) =>
+        getGoogleDriveFolders$(googleDrive, reviewsFolder.id)
       ),
-      mapTo(undefined)
+      concatMap((reviewEntityFolders) => from(reviewEntityFolders)),
+      concatMap((reviewEntityFolder) =>
+        combineLatest([
+          of(reviewEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.Review,
+              slug: reviewEntityFolder.name,
+            })
+          ),
+        ])
+      ),
+      concatMap(([reviewEntityFolder, documentModels]) => {
+        const documentModelsArray = loadDocumentModelsArray(documentModels);
+        if (documentModelsArray.length > 0) {
+          this.logger.log(`Found entity ${reviewEntityFolder.name}`);
+          return of(documentModelsArray[0]);
+        }
+
+        this.logger.log(`Creating entity ${reviewEntityFolder.name}`);
+        return from(
+          new this.entityModel({
+            ...loadNewEntity(EntityType.Review, {
+              group: DEFAULT_ENTITY_GROUP,
+              slug: reviewEntityFolder.name,
+              isPosted: false,
+            }),
+          }).save()
+        );
+      }),
+      last(),
+      map(() => undefined)
+    );
+  }
+
+  findNewImagesFolder$(
+    googleDrive: drive_v3.Drive,
+    entityId: string
+  ): Observable<{
+    documentModel: DocumentModel;
+    imagesFolder: GoogleDriveFolder;
+  }> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+            'reviews'
+          ),
+        ])
+      ),
+      concatMap(([documentModel, reviewsFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            reviewsFolder.id,
+            documentModel.slug
+          ),
+        ])
+      ),
+      map(([documentModel, entityImagesFolder]) => {
+        return {
+          documentModel: documentModel,
+          imagesFolder: entityImagesFolder,
+        };
+      })
     );
   }
 }

@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { Public } from '@dark-rush-photography/shared-server/util';
+import { Public } from '@dark-rush-photography/api/util';
 import { SitemapService } from './sitemap.service';
 
 @Controller({ path: 'reviews', version: '1' })

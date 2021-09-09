@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, mergeMapTo, of } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
 import * as DestinationActions from './destination.actions';
 import { DestinationsService } from './destinations.service';
@@ -16,7 +16,7 @@ export class DestinationEffects {
   loadDestinations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DestinationActions.loadDestinations),
-      mergeMapTo(
+      mergeMap(() =>
         this.destinationsService.getAll$().pipe(
           map((destinations) =>
             DestinationActions.loadDestinationsSuccess({ destinations })

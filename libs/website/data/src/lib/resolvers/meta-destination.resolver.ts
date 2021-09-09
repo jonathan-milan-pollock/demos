@@ -20,7 +20,7 @@ export class MetaDestinationResolver implements Resolve<DynamicPageMetadata> {
     /*
     return (
       {
-        title: this.seoTitle,
+        title: this.title,
         description: ``,
       },
       `/destinations/${this.slug}`

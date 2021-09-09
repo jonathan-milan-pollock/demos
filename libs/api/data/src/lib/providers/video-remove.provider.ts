@@ -1,15 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { concatMapTo, from, Observable, of, tap } from 'rxjs';
+import { concatMap, from, Observable, of, tap } from 'rxjs';
 
 import { MediaType, Video } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
   getAzureStorageBlobPath,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
 import { loadMedia } from '../content/media.functions';
 import { ConfigProvider } from './config.provider';
 import { VideoProvider } from './video.provider';
@@ -45,7 +45,7 @@ export class VideoRemoveProvider {
         documentModel
       )
     ).pipe(
-      concatMapTo(
+      concatMap(() =>
         from(this.videoProvider.remove$(video.id, video.entityId, entityModel))
       ),
       tap(() => this.logger.debug('Video removal completed'))
@@ -54,8 +54,8 @@ export class VideoRemoveProvider {
 
   removeVideoBlob$(media: Media): Observable<boolean> {
     return deleteBlob$(
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.azureStorageBlobContainerName,
       getAzureStorageBlobPath(media)
     );
   }

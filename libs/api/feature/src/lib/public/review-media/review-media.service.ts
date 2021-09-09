@@ -13,6 +13,7 @@ import {
   Document,
   EntityProvider,
   ReviewMediaProvider,
+  validateOneEntity,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -29,7 +30,7 @@ export class ReviewMediaService {
       .findAllPublic$(EntityType.ReviewMedia, this.reviewMediaModel)
       .pipe(
         toArray<DocumentModel>(),
-        map(this.entityProvider.validateOneEntity),
+        map(validateOneEntity),
         map(this.reviewMediaProvider.loadReviewMediaPublic)
       );
   }

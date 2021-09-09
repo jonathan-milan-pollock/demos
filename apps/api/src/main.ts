@@ -1,18 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { WsAdapter } from '@nestjs/platform-ws';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import {
-  AUTH0_AUDIENCE,
-  AUTH0_ISSUER,
-} from '@dark-rush-photography/shared-server/types';
+import { AUTH0_AUDIENCE, AUTH0_ISSUER } from '@dark-rush-photography/api/types';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.useWebSocketAdapter(new WsAdapter(app));
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
   app.enableVersioning({
@@ -49,6 +48,7 @@ async function bootstrap() {
   const port = process.env.PORT || 1111;
   await app.listen(port, () => {
     Logger.log(`API listening on port ${port}`, bootstrap.name);
+    Logger.log(`Listening at ws://localhost:${port}`, bootstrap.name);
   });
 }
 

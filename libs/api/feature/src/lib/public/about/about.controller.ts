@@ -4,7 +4,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 
 import { AboutDto } from '@dark-rush-photography/shared/types';
-import { Public } from '@dark-rush-photography/shared-server/util';
+import { Public } from '@dark-rush-photography/api/util';
 import { AboutService } from './about.service';
 
 @Controller({ path: 'about', version: '1' })

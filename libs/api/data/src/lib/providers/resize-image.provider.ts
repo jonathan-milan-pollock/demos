@@ -4,14 +4,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { concatMap, Observable, tap } from 'rxjs';
 
 import { ImageResolution } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { resizeImage$ } from '@dark-rush-photography/api/util';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
   getAzureStorageBlobPathWithDimension,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
 import { ConfigProvider } from './config.provider';
 import { BlobUploadCommonResponse } from '@azure/storage-blob';
 
@@ -28,8 +28,8 @@ export class ResizeImageProvider {
     imageResolution: ImageResolution
   ): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.azureStorageBlobContainerName,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(
@@ -43,8 +43,8 @@ export class ResizeImageProvider {
       ),
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
+          this.configProvider.getAzureStorageConnectionString(media.state),
+          this.configProvider.azureStorageBlobContainerName,
           fs.createReadStream(filePath),
           getAzureStorageBlobPathWithDimension(media, imageResolution.type)
         )
