@@ -23,11 +23,3 @@ services:
       - PORT=8081
     ports:
       - 8081:8081
-
-  socket:
-    image: darkrushphotography.azurecr.io/socket:latest
-    container_name: socket
-    environment:
-      - PORT=8082
-    ports:
-      - 8082:8082
