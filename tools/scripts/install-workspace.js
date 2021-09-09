@@ -73,12 +73,6 @@ const execGenerateApps = (isReady) =>
         isReady,
         'npx nx g @nrwl/nest:app api --unitTestRunner=none --tags=scope:api,type:app'
       )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:app web-socket --unitTestRunner=none --tags=scope:web-socket,type:app'
-      )
     );
 
 const execGenerateApiLibs = (isReady) =>
@@ -153,28 +147,6 @@ const execGenerateImageElementsLibs = (isReady) =>
       )
     );
 
-const execGenerateSharedServerLibs = (isReady) =>
-  Promise.resolve(console.log('#### shared-server libraries'))
-    .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/data --unitTestRunner=jest --tags=scope:shared-server,type:data'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/types --unitTestRunner=none --tags=scope:shared-server,type:types'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib shared-server/util --unitTestRunner=jest --tags=scope:shared-server,type:util'
-      )
-    );
-
 const execGenerateSharedLibs = (isReady) =>
   Promise.resolve(console.log('#### shared libraries'))
     .then(() => console.log())
@@ -182,12 +154,6 @@ const execGenerateSharedLibs = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/workspace:lib shared/types --unitTestRunner=none --tags=scope:shared,type:types'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/workspace:lib shared/util --unitTestRunner=jest --tags=scope:shared,type:util'
       )
     );
 
@@ -198,34 +164,6 @@ const execGenerateUiStorybook = (isReady) =>
       consoleLogOrExec(
         isReady,
         'npx nx g @nrwl/angular:lib ui-storybook --unitTestRunner=none --tags=scope:ui-storybook,type:ui --prefix=drp'
-      )
-    );
-
-const execGenerateWebSocketLibs = (isReady) =>
-  Promise.resolve(console.log('#### web socket libraries'))
-    .then(() => console.log())
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib web-socket/data --unitTestRunner=jest --tags=scope:web-socket,type:data'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib web-socket/feature --unitTestRunner=none --tags=scope:web-socket,type:feature'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib web-socket/types --unitTestRunner=none --tags=scope:web-socket,type:types'
-      )
-    )
-    .then(() =>
-      consoleLogOrExec(
-        isReady,
-        'npx nx g @nrwl/nest:lib web-socket/util --unitTestRunner=jest --tags=scope:web-socket,type:util'
       )
     );
 
@@ -355,12 +293,12 @@ const execAddApiDependencies = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i mongoose'))
-    .then(() => consoleLogOrExec(isReady, 'npm i mongodb-client-encryption'))
     .then(() => consoleLogOrExec(isReady, 'npm i saslprep'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/azure-database'))
     .then(() => consoleLogOrExec(isReady, 'npm i @azure/storage-blob'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/config'))
-    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'));
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/axios'))
+    .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/schedule'));
 
 const execAddWebSocketDependencies = (isReady) =>
   Promise.resolve(console.log('### add websocket dependencies'))
@@ -446,7 +384,8 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
     .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'))
-    .then(() => consoleLogOrExec(isReady, 'npm i googleapis'));
+    .then(() => consoleLogOrExec(isReady, 'npm i googleapis'))
+    .then(() => consoleLogOrExec(isReady, 'npm i datauri'));
 
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))
@@ -505,13 +444,9 @@ const execInstall = (isReady) =>
     .then(() => console.log())
     .then(() => execGenerateImageElementsLibs(isReady))
     .then(() => console.log())
-    .then(() => execGenerateSharedServerLibs(isReady))
-    .then(() => console.log())
     .then(() => execGenerateSharedLibs(isReady))
     .then(() => console.log())
     .then(() => execGenerateUiStorybook(isReady))
-    .then(() => console.log())
-    .then(() => execGenerateWebSocketLibs(isReady))
     .then(() => console.log())
     .then(() => execGenerateWebsiteLibs(isReady))
     .then(() => console.log())

@@ -1,34 +1,36 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Model } from 'mongoose';
 import {
   combineLatest,
   concatMap,
   from,
-  mapTo,
+  last,
+  map,
   Observable,
   of,
-  pluck,
-  toArray,
 } from 'rxjs';
+import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
 import { AboutDto, EntityType } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
 import {
-  getGoogleDriveFolderWithName$,
+  DEFAULT_ENTITY_GROUP,
+  GoogleDriveFolder,
+} from '@dark-rush-photography/api/types';
+import {
   getGoogleDriveFolders$,
-} from '@dark-rush-photography/shared-server/util';
+  getGoogleDriveFolderWithName$,
+} from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
 import { ConfigProvider } from './config.provider';
-import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
 @Injectable()
 export class AboutProvider {
@@ -37,8 +39,7 @@ export class AboutProvider {
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly googleDriveWebsitesProvider: GoogleDriveWebsitesProvider
+    private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(AboutProvider.name);
   }
@@ -52,32 +53,18 @@ export class AboutProvider {
     };
   }
 
-  findFolders$(drive: drive_v3.Drive): Observable<string[]> {
+  create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
       getGoogleDriveFolderWithName$(
-        drive,
-        this.configProvider.googleDriveWebsitesFolderId,
-        'about'
-      )
-    ).pipe(
-      concatMap((aboutFolder) => getGoogleDriveFolders$(drive, aboutFolder.id)),
-      concatMap((aboutFolders) => from(aboutFolders)),
-      pluck('name'),
-      toArray<string>()
-    );
-  }
-
-  sync$(drive: drive_v3.Drive, folderName: string): Observable<void> {
-    return from(
-      getGoogleDriveFolderWithName$(
-        drive,
-        this.configProvider.googleDriveWebsitesFolderId,
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
         'about'
       )
     ).pipe(
       concatMap((aboutFolder) =>
-        getGoogleDriveFolderWithName$(drive, aboutFolder.id, folderName)
+        getGoogleDriveFolders$(googleDrive, aboutFolder.id)
       ),
+      concatMap((aboutEntityFolders) => from(aboutEntityFolders)),
       concatMap((aboutEntityFolder) =>
         combineLatest([
           of(aboutEntityFolder),
@@ -93,39 +80,70 @@ export class AboutProvider {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
           this.logger.log(`Found entity ${aboutEntityFolder.name}`);
-          return combineLatest([
-            getGoogleDriveFolderWithName$(
-              drive,
-              aboutEntityFolder.id,
-              'images'
-            ),
-            of(documentModelsArray[0]),
-          ]);
+          return of(documentModelsArray[0]);
         }
 
         this.logger.log(`Creating entity ${aboutEntityFolder.name}`);
-        return combineLatest([
-          getGoogleDriveFolderWithName$(drive, aboutEntityFolder.id, 'images'),
-          from(
-            new this.entityModel({
-              ...loadNewEntity({
-                type: EntityType.About,
-                group: DEFAULT_ENTITY_GROUP,
-                slug: aboutEntityFolder.name,
-                isPosted: false,
-              }),
-            }).save()
-          ),
-        ]);
+        return from(
+          new this.entityModel({
+            ...loadNewEntity(EntityType.About, {
+              group: DEFAULT_ENTITY_GROUP,
+              slug: aboutEntityFolder.name,
+              isPosted: false,
+            }),
+          }).save()
+        );
       }),
-      concatMap(([imagesFolder, documentModel]) =>
-        this.googleDriveWebsitesProvider.sync$(
-          drive,
-          imagesFolder,
-          documentModel
-        )
+      last(),
+      map(() => undefined)
+    );
+  }
+
+  findNewImagesFolder$(
+    googleDrive: drive_v3.Drive,
+    entityId: string
+  ): Observable<{
+    documentModel: DocumentModel;
+    imagesFolder: GoogleDriveFolder;
+  }> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+            'about'
+          ),
+        ])
       ),
-      mapTo(undefined)
+      concatMap(([documentModel, aboutFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            aboutFolder.id,
+            documentModel.slug
+          ),
+        ])
+      ),
+      concatMap(([documentModel, aboutEntityFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            aboutEntityFolder.id,
+            'images'
+          ),
+        ])
+      ),
+      map(([documentModel, entityImagesFolder]) => {
+        return {
+          documentModel: documentModel,
+          imagesFolder: entityImagesFolder,
+        };
+      })
     );
   }
 }

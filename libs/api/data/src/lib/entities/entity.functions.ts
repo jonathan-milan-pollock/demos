@@ -1,8 +1,9 @@
 import {
   Entity,
   EntityAdminDto,
-  EntityCreateDto,
+  EntityCreate,
   EntityMinimalDto,
+  EntityType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadComment } from '../content/comment.functions';
@@ -10,12 +11,15 @@ import { loadEmotion } from '../content/emotion.functions';
 import { loadImage } from '../content/image.functions';
 import { loadVideo } from '../content/video.functions';
 
-export const loadNewEntity = (entityCreate: EntityCreateDto): Entity => ({
-  type: entityCreate.type,
+export const loadNewEntity = (
+  entityType: EntityType,
+  entityCreate: EntityCreate
+): Entity => ({
+  type: entityType,
   group: entityCreate.group,
   slug: entityCreate.slug,
   order: 0,
-  seoTitle: '',
+  title: '',
   seoDescription: '',
   seoKeywords: [],
   location: {
@@ -38,7 +42,7 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
   group: documentModel.group,
   slug: documentModel.slug,
   order: documentModel.order,
-  seoTitle: documentModel.seoTitle,
+  title: documentModel.title,
   seoDescription: documentModel.seoDescription,
   seoKeywords: documentModel.seoKeywords,
   dateCreated: documentModel.dateCreated,

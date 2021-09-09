@@ -9,7 +9,7 @@ export const getPhotoOfTheWeekFacebookPost = (
     ${photoOfTheWeek.location}
     https://www.darkrushphotography.com/photo-of-the-week/${photoOfTheWeek.slug}
     ${photoOfTheWeek.description}
-    ${photoOfTheWeek.keywords.join(', ').trimEnd()}
+    ${photoOfTheWeek.seoKeywords.join(', ').trimEnd()}
 `;
 
 export const getPhotoOfTheWeekInstagramPost = (
@@ -24,7 +24,7 @@ export const getPhotoOfTheWeekInstagramPost = (
 
     @darkrushphotography
     #YourShotPhotographer
-    ${photoOfTheWeek.keywords.join('#').trimEnd()}
+    ${photoOfTheWeek.seoKeywords.join('#').trimEnd()}
 `;
 
 export const getPhotoOfTheWeekLinkedInPost = (
@@ -38,5 +38,5 @@ export const getPhotoOfTheWeekLinkedInPost = (
       photoOfTheWeek.slug
     }
 
-    ${photoOfTheWeek.keywords.join('#').trimEnd()}
+    ${photoOfTheWeek.seoKeywords.join('#').trimEnd()}
 `;

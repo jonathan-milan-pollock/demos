@@ -1,13 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { Env } from '@dark-rush-photography/api/types';
-import {
-  FIND_IMAGE_RESOLUTION,
-  FIND_THREE_SIXTY_IMAGE_RESOLUTION,
-} from '@dark-rush-photography/shared/util';
-import { FIND_VIDEO_RESOLUTION } from './video-resolutions.config';
-import { GET_IMAGE_ARTIST_EXIF } from './image-artist-exif.config';
-import { GET_VIDEO_ARTIST_EXIF } from './video-artist-exif.config';
 import { environment } from '../environments/environment';
 
 export default (): Env => {
@@ -23,15 +16,45 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID) {
+  if (!process.env.NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID) {
     throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID to environment variables'
+      'Please add NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID to environment variables'
     );
   }
 
-  if (!process.env.NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID) {
+  if (!process.env.NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID) {
     throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID to environment variables'
+      'Please add NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID to environment variables'
+    );
+  }
+
+  if (!process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID) {
+    throw new BadRequestException(
+      'Please add NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID to environment variables'
+    );
+  }
+
+  if (!process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID) {
+    throw new BadRequestException(
+      'Please add NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID to environment variables'
+    );
+  }
+
+  if (!process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID) {
+    throw new BadRequestException(
+      'Please add NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID to environment variables'
+    );
+  }
+
+  if (!process.env.NX_SHARED_PHOTO_ALBUM_PUSH_NOTIFICATION_ADDRESS) {
+    throw new BadRequestException(
+      'Please add NX_SHARED_PHOTO_ALBUM_PUSH_NOTIFICATION_ADDRESS to environment variables'
+    );
+  }
+
+  if (!process.env.NX_WEBSITES_ENTITY_PUSH_NOTIFICATION_ADDRESS) {
+    throw new BadRequestException(
+      'Please add NX_WEBSITES_ENTITY_PUSH_NOTIFICATION_ADDRESS to environment variables'
     );
   }
 
@@ -53,9 +76,9 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC) {
+  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME) {
     throw new BadRequestException(
-      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC to environment variables'
+      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME to environment variables'
     );
   }
 
@@ -75,19 +98,28 @@ export default (): Env => {
     production: environment.production,
     googleDriveClientEmail: process.env.NX_GOOGLE_DRIVE_CLIENT_EMAIL,
     googleDrivePrivateKey: process.env.NX_GOOGLE_DRIVE_PRIVATE_KEY,
-    googleDriveClientsFolderId: process.env.NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID,
-    googleDriveWebsitesFolderId: process.env.NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID,
+    googleDriveSharedWatermarkedFolderId:
+      process.env.NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID,
+    googleDriveSharedWithoutWatermarkFolderId:
+      process.env.NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID,
+    googleDriveWebsitesWatermarkedFolderId:
+      process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID,
+    googleDriveWebsitesWithoutWatermarkFolderId:
+      process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID,
+    googleDriveDarkRushPhotographyFolderId:
+      process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID,
+    sharedPhotoAlbumPushNotificationAddress:
+      process.env.NX_SHARED_PHOTO_ALBUM_PUSH_NOTIFICATION_ADDRESS,
+    websitesEntityPushNotificationAddress:
+      process.env.NX_WEBSITES_ENTITY_PUSH_NOTIFICATION_ADDRESS,
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
+    azureStorageConnectionStringPrivate:
+      process.env.AZURE_STORAGE_CONNECTION_STRING,
     azureStorageConnectionStringPublic:
       process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC,
-    azureStorageBlobContainerNamePublic:
-      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC,
+    azureStorageBlobContainerName:
+      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME,
     tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
     ayrshareApiKey: process.env.NX_AYRSHARE_API_KEY,
-    findImageResolution: FIND_IMAGE_RESOLUTION,
-    findThreeSixtyImageResolution: FIND_THREE_SIXTY_IMAGE_RESOLUTION,
-    findVideoResolution: FIND_VIDEO_RESOLUTION,
-    getImageArtistExif: GET_IMAGE_ARTIST_EXIF,
-    getVideoArtistExif: GET_VIDEO_ARTIST_EXIF,
   };
 };

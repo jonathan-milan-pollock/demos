@@ -73,7 +73,7 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
     }
     this.imageLoaded$ = of(false);
     this.imageLoaded$ = timer(this.transitionMilliseconds).pipe(
-      mapTo(true)
+      map(true)
     );
   }*/
 
@@ -85,13 +85,13 @@ export class ProgressiveImageComponent implements AfterViewInit, OnDestroy {
     //if (imageElement.loading) {
     //  console.log('after view init if');
     //  this.imageLoaded$ = merge(fromEvent(imageElement, 'load')).pipe(
-    //    concatMapTo(timer(this.transitionMilliseconds)),
-    //    mapTo(true)
+    //    concatMap(timer(this.transitionMilliseconds)),
+    //    map(true)
     //  );
     //} else {
     //console.log('after view init else');
     //this.imageLoaded$ = of(true); //timer(this.transitionMilliseconds).pipe(
-    // mapTo(true)
+    // map(true)
     //);
     //}
     //const thumbnailDivElement = this.thumbnail?.nativeElement as HTMLDivElement;

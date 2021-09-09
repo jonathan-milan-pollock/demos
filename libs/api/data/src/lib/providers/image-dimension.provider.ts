@@ -4,17 +4,7 @@ import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
-import {
-  combineLatest,
-  concatMap,
-  concatMapTo,
-  from,
-  map,
-  mapTo,
-  Observable,
-  of,
-  tap,
-} from 'rxjs';
+import { combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
 
 import {
   ImageDimension,
@@ -26,12 +16,12 @@ import {
   ImageUpdateDto,
   ImageResolution,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-//import {
-//  findImageResolution$,
-//  resizeImage$,
-//} from '@dark-rush-photography/api/util';
+import {
+  findImageResolution$,
+  resizeImage$,
+} from '@dark-rush-photography/api/util';
 import {
   deleteBlob$,
   downloadBlobAsBuffer$,
@@ -39,7 +29,7 @@ import {
   getAzureStorageBlobPath,
   getAzureStorageBlobPathWithDimension,
   uploadStreamToBlob$,
-} from '@dark-rush-photography/shared-server/util';
+} from '@dark-rush-photography/api/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   validateImageDimensionNotAlreadyExists,
@@ -92,7 +82,7 @@ export class ImageDimensionProvider {
           })
         );
       }),
-      concatMapTo(this.findOne$(id, entityId, entityModel))
+      concatMap(() => this.findOne$(id, entityId, entityModel))
     );
   }
 
@@ -149,8 +139,8 @@ export class ImageDimensionProvider {
     location?: Location
   ): Observable<boolean> {
     return downloadBlobToFile$(
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
+      this.configProvider.getAzureStorageConnectionString(imageMedia.state),
+      this.configProvider.azureStorageBlobContainerName,
       getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type),
       imageMedia.fileName
     ).pipe(
@@ -184,12 +174,12 @@ export class ImageDimensionProvider {
       ),*/
       concatMap(() =>
         deleteBlob$(
-          this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
+          this.configProvider.getAzureStorageConnectionString(imageMedia.state),
+          this.configProvider.azureStorageBlobContainerName,
           getAzureStorageBlobPathWithDimension(imageMedia, imageDimension.type)
         )
       ),
-      mapTo(true)
+      map(() => true)
     );
   }
 
@@ -200,8 +190,8 @@ export class ImageDimensionProvider {
   ): Observable<string> {
     const id = uuidv4();
     return downloadBlobToFile$(
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.azureStorageBlobContainerName,
       getAzureStorageBlobPath(media),
       media.fileName
     ).pipe(

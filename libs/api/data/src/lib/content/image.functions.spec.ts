@@ -16,7 +16,7 @@ describe('image.functions', () => {
     order: faker.datatype.number(),
     isStarred: faker.datatype.boolean(),
     isLoved: faker.datatype.boolean(),
-    seoTitle: faker.lorem.sentence(),
+    title: faker.lorem.sentence(),
     seoDescription: faker.lorem.paragraph(),
     seoKeywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
       .word()

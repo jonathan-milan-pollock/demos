@@ -22,7 +22,7 @@ export const loadImage = (image: Image): Image => ({
   order: image.order,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
-  seoTitle: image.seoTitle,
+  title: image.title,
   seoDescription: image.seoDescription,
   seoKeywords: image.seoKeywords,
   dateCreated: image.dateCreated,
@@ -38,7 +38,7 @@ export const loadMinimalPublicImage = (image: Image): ImageMinimalDto => {
     entityId: image.entityId,
     fileName: image.fileName,
     order: image.order,
-    title: image.seoTitle,
+    title: image.title,
     isThreeSixty: image.isThreeSixty,
   };
 };
@@ -59,7 +59,7 @@ export const loadPublicImage = (
     entityId: image.entityId,
     fileName: image.fileName,
     order: image.order,
-    title: image.seoTitle,
+    title: image.title,
     description: image.seoDescription,
     keywords: image.seoKeywords,
     isThreeSixty: image.isThreeSixty,

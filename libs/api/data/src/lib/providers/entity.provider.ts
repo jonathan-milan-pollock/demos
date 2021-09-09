@@ -1,89 +1,19 @@
 import { Injectable } from '@nestjs/common';
 
+import { concatMap, filter, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
-import {
-  concatMap,
-  concatMapTo,
-  filter,
-  from,
-  map,
-  mapTo,
-  Observable,
-  of,
-} from 'rxjs';
 
-import {
-  Entity,
-  EntityAdminDto,
-  EntityCreateDto,
-  EntityMinimalDto,
-  EntityType,
-} from '@dark-rush-photography/shared/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
+import { loadDocumentModelsArray } from '../entities/entity.functions';
 import {
   validateEntityType,
   validateEntityFound,
   validateEntityIsPosted,
-  validateEntityNotAlreadyCreated,
-  validateOneEntity,
-  validateProcessingEntity,
-  validateNotProcessingEntity,
-  validateEntityCreate,
 } from '../entities/entity-validation.functions';
-import {
-  loadDocumentModelsArray,
-  loadEntity,
-  loadEntityMinimal,
-  loadNewEntity,
-} from '../entities/entity.functions';
 
 @Injectable()
 export class EntityProvider {
-  //TODO: Put these in order of the validate file and check if all needed
-  validateEntityFound(documentModel: DocumentModel | null): DocumentModel {
-    return validateEntityFound(documentModel);
-  }
-
-  validateEntityType(
-    entityType: EntityType,
-    documentModel: DocumentModel
-  ): DocumentModel {
-    return validateEntityType(entityType, documentModel);
-  }
-
-  validateOneEntity(documentModels: DocumentModel[]): DocumentModel {
-    return validateOneEntity(documentModels);
-  }
-
-  validateEntityIsPosted(documentModel: DocumentModel): DocumentModel {
-    return validateEntityIsPosted(documentModel);
-  }
-
-  validateProcessingEntity(documentModel: DocumentModel): DocumentModel {
-    return validateProcessingEntity(documentModel);
-  }
-
-  validateNotProcessingEntity(documentModel: DocumentModel): DocumentModel {
-    return validateNotProcessingEntity(documentModel);
-  }
-
-  validateEntityCreate(documentModel: DocumentModel): DocumentModel {
-    return validateEntityCreate(documentModel);
-  }
-
-  create$(
-    entityCreate: EntityCreateDto,
-    entityModel: Model<DocumentModel>
-  ): Observable<void> {
-    return from(
-      entityModel.findOne({
-        type: entityCreate.type,
-        group: entityCreate.group,
-        slug: entityCreate.slug,
-      })
-    ).pipe(map(validateEntityNotAlreadyCreated));
-  }
-
   setIsProcessing$(
     entityType: EntityType,
     id: string,
@@ -93,8 +23,10 @@ export class EntityProvider {
     return from(entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
-      concatMapTo(from(entityModel.findByIdAndUpdate(id, { isProcessing }))),
-      mapTo(undefined)
+      concatMap(() =>
+        from(entityModel.findByIdAndUpdate(id, { isProcessing }))
+      ),
+      map(() => undefined)
     );
   }
 
@@ -107,15 +39,21 @@ export class EntityProvider {
     );
   }
 
-  findOne$(
+  findAllInGroup$(
     entityType: EntityType,
+    group: string,
+    entityModel: Model<DocumentModel>
+  ): Observable<DocumentModel> {
+    return from(entityModel.find({ type: entityType, group })).pipe(
+      concatMap(loadDocumentModelsArray)
+    );
+  }
+
+  findOne$(
     id: string,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
-    return from(entityModel.findById(id)).pipe(
-      map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel))
-    );
+    return from(entityModel.findById(id)).pipe(map(validateEntityFound));
   }
 
   findAllPublic$(
@@ -140,18 +78,6 @@ export class EntityProvider {
     );
   }
 
-  loadNewEntity(entityCreate: EntityCreateDto): Entity {
-    return loadNewEntity(entityCreate);
-  }
-
-  loadEntity(documentModel: DocumentModel): EntityAdminDto {
-    return loadEntity(documentModel);
-  }
-
-  loadEntityMinimal(documentModel: DocumentModel): EntityMinimalDto {
-    return loadEntityMinimal(documentModel);
-  }
-
   delete$(
     entityType: EntityType,
     id: string,
@@ -166,7 +92,7 @@ export class EntityProvider {
       concatMap((documentModel) =>
         documentModel ? from(entityModel.findByIdAndDelete(id)) : of()
       ),
-      mapTo(undefined)
+      map(() => undefined)
     );
   }
 }

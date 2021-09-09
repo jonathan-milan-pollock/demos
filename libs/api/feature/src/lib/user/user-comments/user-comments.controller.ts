@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
+//TODO: HtmlEncode text
 import {
   Comment,
   CommentAddDto,

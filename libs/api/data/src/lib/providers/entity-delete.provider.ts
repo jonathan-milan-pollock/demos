@@ -1,15 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import {
-  combineLatest,
-  concatMap,
-  from,
-  map,
-  mapTo,
-  Observable,
-  of,
-} from 'rxjs';
+import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -47,7 +39,7 @@ export class EntityDeleteProvider {
       concatMap(([video, documentModel]) =>
         this.videoRemoveProvider.remove$(video, documentModel, entityModel)
       ),
-      mapTo(undefined)
+      map(() => undefined)
     );
   }
 }

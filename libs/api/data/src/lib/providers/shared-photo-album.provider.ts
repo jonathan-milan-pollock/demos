@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository, Repository } from '@nestjs/azure-database';
 
 import {
   combineLatest,
   concatMap,
-  concatMapTo,
+  distinct,
+  forkJoin,
   from,
-  lastValueFrom,
+  last,
   map,
+  mergeMap,
   Observable,
   of,
+  pluck,
   toArray,
 } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import {
+  EntityType,
   ImageDimensionType,
   ImageResolution,
 } from '@dark-rush-photography/shared/types';
@@ -31,9 +34,18 @@ import {
   getGoogleDriveFolders$,
   getGoogleDriveImageFiles$,
   resizeImage$,
+  findImageResolution,
+  getGoogleDriveFolderWithName$,
+  googleDriveFolderWithNameExists$,
 } from '@dark-rush-photography/api/util';
-import { SharedPhotoAlbumTable } from '@dark-rush-photography/shared-server/data';
 import { ConfigProvider } from './config.provider';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Document, DocumentModel } from '../schema/document.schema';
+import {
+  loadDocumentModelsArray,
+  loadNewEntity,
+} from '../entities/entity.functions';
 
 @Injectable()
 export class SharedPhotoAlbumProvider {
@@ -43,16 +55,12 @@ export class SharedPhotoAlbumProvider {
 
   constructor(
     private readonly configProvider: ConfigProvider,
-    @InjectRepository(SharedPhotoAlbumTable)
-    private readonly sharedPhotoAlbumRepository: Repository<SharedPhotoAlbumTable>
+    @InjectModel(Document.name)
+    private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(SharedPhotoAlbumProvider.name);
-    this.smallResolution = this.configProvider.findImageResolution(
-      ImageDimensionType.Small
-    );
-    this.mediumResolution = this.configProvider.findImageResolution(
-      ImageDimensionType.Medium
-    );
+    this.smallResolution = findImageResolution(ImageDimensionType.Small);
+    this.mediumResolution = findImageResolution(ImageDimensionType.Medium);
   }
 
   findPhotoAlbumFolders$(
@@ -177,6 +185,127 @@ export class SharedPhotoAlbumProvider {
           highResDataUri: (highResDataUri as { base64: string }).base64,
         } as SharedImage;
       })
+    );
+  }
+
+  loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
+    return combineLatest([
+      from(
+        getGoogleDriveFolderById$(
+          googleDrive,
+          this.configProvider.googleDriveSharedWatermarkedFolderId
+        )
+      ),
+      from(
+        getGoogleDriveFolderById$(
+          googleDrive,
+          this.configProvider.googleDriveSharedWithoutWatermarkFolderId
+        )
+      ),
+    ]).pipe(
+      concatMap(([watermarkedFolder, withoutWatermarkFolder]) =>
+        forkJoin([
+          from(getGoogleDriveFolders$(googleDrive, watermarkedFolder.id)),
+          from(getGoogleDriveFolders$(googleDrive, withoutWatermarkFolder.id)),
+        ])
+      ),
+      mergeMap((sharedWithFolders) => from(sharedWithFolders)),
+      concatMap((sharedWithFolders) => from(sharedWithFolders)),
+      distinct((sharedWithFolder) => sharedWithFolder.name),
+      pluck('name'),
+      toArray<string>()
+    );
+  }
+
+  createForGroup$(
+    googleDrive: drive_v3.Drive,
+    sharedWith: string
+  ): Observable<void> {
+    return combineLatest([
+      from(
+        getGoogleDriveFolderById$(
+          googleDrive,
+          this.configProvider.googleDriveSharedWatermarkedFolderId
+        )
+      ),
+      from(
+        getGoogleDriveFolderById$(
+          googleDrive,
+          this.configProvider.googleDriveSharedWithoutWatermarkFolderId
+        )
+      ),
+    ]).pipe(
+      concatMap(([watermarkedFolder, withoutWatermarkFolder]) =>
+        combineLatest([
+          of(watermarkedFolder),
+          from(
+            googleDriveFolderWithNameExists$(
+              googleDrive,
+              watermarkedFolder.id,
+              sharedWith
+            )
+          ),
+          of(withoutWatermarkFolder),
+        ])
+      ),
+      concatMap(
+        ([
+          watermarkedSharedWithFolder,
+          watermarkedSharedWithFolderExists,
+          withoutWatermarkSharedWithFolder,
+        ]) => {
+          if (watermarkedSharedWithFolderExists) {
+            return getGoogleDriveFolderWithName$(
+              googleDrive,
+              watermarkedSharedWithFolder.id,
+              sharedWith
+            );
+          }
+          return getGoogleDriveFolderWithName$(
+            googleDrive,
+            withoutWatermarkSharedWithFolder.id,
+            sharedWith
+          );
+        }
+      ),
+      concatMap((sharedWithFolder) =>
+        getGoogleDriveFolders$(googleDrive, sharedWithFolder.id)
+      ),
+      concatMap((sharedPhotoAlbumEntityFolders) =>
+        from(sharedPhotoAlbumEntityFolders)
+      ),
+      concatMap((sharedPhotoAlbumEntityFolder) =>
+        combineLatest([
+          of(sharedPhotoAlbumEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.SharedPhotoAlbum,
+              group: sharedWith,
+              slug: sharedPhotoAlbumEntityFolder.name,
+            })
+          ),
+        ])
+      ),
+      concatMap(([sharedPhotoAlbumEntityFolder, documentModels]) => {
+        const documentModelsArray = loadDocumentModelsArray(documentModels);
+        if (documentModelsArray.length > 0) {
+          this.logger.log(`Found entity ${sharedPhotoAlbumEntityFolder.name}`);
+          return of(documentModelsArray[0]);
+        }
+
+        this.logger.log(`Creating entity ${sharedPhotoAlbumEntityFolder.name}`);
+        return from(
+          new this.entityModel({
+            ...loadNewEntity(EntityType.SharedPhotoAlbum, {
+              group: sharedWith,
+              slug: sharedPhotoAlbumEntityFolder.name,
+              isPosted: false,
+            }),
+          }).save()
+        );
+      }),
+      last(),
+      map(() => undefined)
     );
   }
 }

@@ -1,5 +1,7 @@
-import { FAVORITES_SLUG } from '@dark-rush-photography/shared-server/types';
-import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
+import {
+  DUMMY_MONGODB_ID,
+  FAVORITES_SLUG,
+} from '@dark-rush-photography/api/types';
 
 describe('Admin Favorites API', () => {
   const authorization = '';

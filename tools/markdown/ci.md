@@ -104,9 +104,9 @@
 
 ### logging
 
-- Selected Application logging Filesystem (used default of 35MB Quota, Retention Period days 1)
+- Selected Application logging Filesystem (used default of 35MB Quota and Retention Period days 1)
 - from KeyVault > Access Policies > Add Access Policy
-  - added Secret Management get and list to the darkrushphoto application
+  - added Secret Management get and list Key permissions for tenant darkrushphoto application
   - added Key, Secret & Certificate Management to darkrushphotography@outlook.com
 
 ### auth

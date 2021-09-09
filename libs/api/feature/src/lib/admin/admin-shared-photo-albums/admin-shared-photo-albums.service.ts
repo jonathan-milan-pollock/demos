@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository, Repository } from '@nestjs/azure-database';
 
 import { v4 as uuidv4 } from 'uuid';
-import { concatMapTo, from, mapTo, Observable, of } from 'rxjs';
+import { from, map, Observable, of } from 'rxjs';
 
 import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
 import {
@@ -10,7 +10,7 @@ import {
   getGoogleDriveFolderParents$,
   watchFolder$,
 } from '@dark-rush-photography/api/util';
-import { GoogleDriveChannelTable } from '@dark-rush-photography/shared-server/data';
+import { GoogleDriveChannelTable } from '@dark-rush-photography/api/data';
 import {
   ConfigProvider,
   SharedPhotoAlbumProvider,
@@ -44,10 +44,10 @@ export class AdminSharedPhotoAlbumsService {
 
     return from(
       this.googleDriveChannelRepository.create(channel, channelId)
-    ).pipe(mapTo(true));
+    ).pipe(map(() => true));
 
     /*.pipe(
-      concatMapTo(
+      concatMap(
         watchFolder$(
           googleDrive,
           channelId,

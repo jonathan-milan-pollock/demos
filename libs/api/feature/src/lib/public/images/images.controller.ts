@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { ImageDto } from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
-import { Public } from '@dark-rush-photography/shared-server/util';
+import { Public } from '@dark-rush-photography/api/util';
 import { ImagesService } from './images.service';
 
 @Controller({ path: 'images', version: '1' })

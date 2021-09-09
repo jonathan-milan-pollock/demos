@@ -14,25 +14,13 @@
             "depConstraints": [
               {
                 "sourceTag": "scope:api",
-                "onlyDependOnLibsWithTags": [
-                  "scope:api",
-                  "scope:shared-server",
-                  "scope:shared"
-                ]
+                "onlyDependOnLibsWithTags": ["scope:api", "scope:shared"]
               },
               {
                 "sourceTag": "scope:best-of",
                 "onlyDependOnLibsWithTags": [
                   "scope:best-of",
                   "scope:image-elements",
-                  "scope:shared"
-                ]
-              },
-              {
-                "sourceTag": "scope:web-socket",
-                "onlyDependOnLibsWithTags": [
-                  "scope:web-socket",
-                  "scope:shared-server",
                   "scope:shared"
                 ]
               },
@@ -54,13 +42,6 @@
               {
                 "sourceTag": "scope:shared",
                 "onlyDependOnLibsWithTags": ["scope:shared"]
-              },
-              {
-                "sourceTag": "scope:shared-server",
-                "onlyDependOnLibsWithTags": [
-                  "scope:shared-server",
-                  "scope:shared"
-                ]
               },
               {
                 "sourceTag": "type:app",

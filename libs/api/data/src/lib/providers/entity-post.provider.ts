@@ -2,15 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import * as path from 'path';
 import { Model } from 'mongoose';
-import {
-  combineLatest,
-  concatMap,
-  from,
-  map,
-  mapTo,
-  Observable,
-  of,
-} from 'rxjs';
+import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 
 import { EntityType, MediaState } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -52,7 +44,7 @@ export class EntityPostProvider {
             order: image.order,
             isStarred: image.isStarred,
             isLoved: image.isLoved,
-            title: image.seoTitle,
+            title: image.title,
             description: image.seoDescription,
             keywords: image.seoKeywords,
             dateCreated: validateImageDateCreated(image),
@@ -85,7 +77,7 @@ export class EntityPostProvider {
       //    entityModel
       //  )
       //),
-      mapTo(undefined)
+      map(() => undefined)
     );
   }
 }

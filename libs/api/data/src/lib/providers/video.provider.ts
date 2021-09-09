@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 
 import { Model } from 'mongoose';
-import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 import {
   MediaState,
   MediaType,
   Video,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadMedia } from '../content/media.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
@@ -50,7 +50,7 @@ export class VideoProvider {
           })
         )
       ),
-      concatMapTo(this.findOne$(id, entityId, entityModel))
+      concatMap(() => this.findOne$(id, entityId, entityModel))
     );
   }
 

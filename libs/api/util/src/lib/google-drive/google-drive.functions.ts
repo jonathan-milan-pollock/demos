@@ -4,7 +4,7 @@ import * as os from 'os';
 import { BadRequestException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
-import { from, map, mapTo, Observable } from 'rxjs';
+import { from, map, Observable } from 'rxjs';
 import { drive_v3, google } from 'googleapis';
 
 import {
@@ -44,6 +44,30 @@ export const watchFolder$ = (
       },
     })
   ).pipe(map((response) => response.status == 200));
+};
+
+export const googleDriveFolderWithNameExists$ = (
+  googleDrive: drive_v3.Drive,
+  parentFolderId: string,
+  folderName: string
+): Observable<boolean> => {
+  return from(
+    googleDrive.files.list({
+      q: `'${parentFolderId}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder'`,
+      fields: 'files(id, name)',
+    })
+  ).pipe(
+    map((response) => {
+      if (
+        response.data &&
+        response.data.files &&
+        response.data.files.length > 0
+      ) {
+        return true;
+      }
+      return false;
+    })
+  );
 };
 
 export const getGoogleDriveFolderWithName$ = (
@@ -93,6 +117,7 @@ export const getGoogleDriveFolders$ = (
     googleDrive.files.list({
       q: `'${parentFolderId}' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'`,
       fields: 'files(id, name)',
+      pageSize: 1_000,
     })
   ).pipe(map((response) => response.data.files as GoogleDriveFolder[]));
 };
@@ -105,6 +130,7 @@ export const getGoogleDriveImageFiles$ = (
     googleDrive.files.list({
       q: `'${folderId}' in parents and trashed = false and mimeType = 'image/jpeg'`,
       fields: 'files(id, name)',
+      pageSize: 1_000,
     })
   ).pipe(map((response) => response.data.files as GoogleDriveFile[]));
 };
@@ -190,5 +216,5 @@ export const deleteGoogleDriveFolder$ = (
     googleDrive.files.delete({
       fileId: folderId,
     })
-  ).pipe(mapTo(undefined));
+  ).pipe(map(() => undefined));
 };

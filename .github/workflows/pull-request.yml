@@ -31,5 +31,3 @@ jobs:
         run: npx nx run best-of:build:production
       - name: Api Build
         run: npx nx run api:build:production
-      - name: Web Socket Build
-        run: npx nx run web-socket:build:production

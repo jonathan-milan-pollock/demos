@@ -9,7 +9,7 @@ export interface Event {
   readonly group: string;
   readonly slug: string;
   readonly order: number;
-  readonly seoTitle?: string;
+  readonly title?: string;
   readonly seoDescription?: string;
   readonly seoKeywords: string[];
   readonly dateCreated?: string;

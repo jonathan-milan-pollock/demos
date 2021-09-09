@@ -10,7 +10,7 @@ import { MetaService } from '@dark-rush-photography/website/data';
 })
 export class DestinationComponent implements OnInit {
   slug = '';
-  seoTitle = 'Colorado';
+  title = 'Colorado';
   seoDescription = 'in Colorado';
 
   constructor(

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, mergeMapTo, of } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
 import * as EventActions from './event.actions';
 import { EventsService } from './events.service';
@@ -16,7 +16,7 @@ export class EventEffects {
   loadEvents$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventActions.loadEvents),
-      mergeMapTo(
+      mergeMap(() =>
         this.eventsService.getAll$().pipe(
           map((events) => EventActions.loadEventsSuccess({ events })),
           catchError((error) => of(EventActions.loadEventsFailure(error)))

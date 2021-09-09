@@ -11,7 +11,7 @@ describe('video.functions', () => {
     state: faker.random.arrayElement(Object.values(MediaState)),
     order: faker.datatype.number(),
     isStarred: faker.datatype.boolean(),
-    seoTitle: faker.lorem.sentence(),
+    title: faker.lorem.sentence(),
     seoDescription: faker.lorem.paragraph(),
     seoKeywords: `${faker.lorem.word().toLowerCase()}, ${faker.lorem
       .word()

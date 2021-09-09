@@ -1,9 +1,18 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import {
+  combineLatest,
+  concatMap,
+  from,
+  last,
+  map,
+  Observable,
+  of,
+  pluck,
+  toArray,
+} from 'rxjs';
 import { Model } from 'mongoose';
-import { combineLatest, concatMap, from, mapTo, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import {
@@ -12,8 +21,11 @@ import {
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
-import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
+import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
+import {
+  getGoogleDriveFolders$,
+  getGoogleDriveFolderWithName$,
+} from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
@@ -22,6 +34,7 @@ import {
 import {
   validateEntityDatePublished,
   validateEntityDescription,
+  validateEntityFound,
   validateEntityLocation,
   validateEntityTitle,
 } from '../entities/entity-validation.functions';
@@ -34,7 +47,6 @@ import { loadMinimalPublicImage } from '../content/image.functions';
 import { findEntityComments } from '../content/comment.functions';
 import { findEntityEmotions } from '../content/emotion.functions';
 import { ConfigProvider } from './config.provider';
-import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
 
 @Injectable()
 export class PhotoOfTheWeekProvider {
@@ -43,8 +55,7 @@ export class PhotoOfTheWeekProvider {
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly googleDriveWebsitesProvider: GoogleDriveWebsitesProvider
+    private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(PhotoOfTheWeekProvider.name);
   }
@@ -94,46 +105,131 @@ export class PhotoOfTheWeekProvider {
     };
   }
 
-  update$(drive: drive_v3.Drive): Observable<void> {
+  loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
     return from(
       getGoogleDriveFolderWithName$(
-        drive,
-        this.configProvider.googleDriveWebsitesFolderId,
-        'about'
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWatermarkedFolderId,
+        'photo-of-the-week'
       )
     ).pipe(
-      concatMap((folder) =>
-        from(
-          this.entityModel.find({ type: EntityType.About, slug: folder.name })
-        ).pipe(
-          concatMap((documentModels) => {
-            const documentModelsArray = loadDocumentModelsArray(documentModels);
-            if (documentModelsArray.length > 0) {
-              this.logger.log(`Found entity ${folder.name}`);
-              return combineLatest([of(folder), of(documentModelsArray[0])]);
-            }
+      concatMap((photoOfTheWeekFolder) =>
+        getGoogleDriveFolders$(googleDrive, photoOfTheWeekFolder.id)
+      ),
+      concatMap((photoOfTheWeekGroupFolders) =>
+        from(photoOfTheWeekGroupFolders)
+      ),
+      pluck('name'),
+      toArray<string>()
+    );
+  }
 
-            this.logger.log(`Creating entity ${folder.name}`);
-            return combineLatest([
-              of(folder),
-              from(
-                new this.entityModel({
-                  ...loadNewEntity({
-                    type: EntityType.About,
-                    group: DEFAULT_ENTITY_GROUP,
-                    slug: folder.name,
-                    isPosted: false,
-                  }),
-                }).save()
-              ),
-            ]);
-          }),
-          concatMap(([folder, documentModel]) =>
-            this.googleDriveWebsitesProvider.sync$(drive, folder, documentModel)
-          )
+  createForGroup$(
+    googleDrive: drive_v3.Drive,
+    group: string
+  ): Observable<void> {
+    return from(
+      getGoogleDriveFolderWithName$(
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWatermarkedFolderId,
+        'photo-of-the-week'
+      )
+    ).pipe(
+      concatMap((photoOfTheWeekFolder) =>
+        getGoogleDriveFolderWithName$(
+          googleDrive,
+          photoOfTheWeekFolder.id,
+          group
         )
       ),
-      mapTo(undefined)
+      concatMap((photoOfTheWeekGroupFolder) =>
+        getGoogleDriveFolders$(googleDrive, photoOfTheWeekGroupFolder.id)
+      ),
+      concatMap((photoOFTheWeekEntityFolders) =>
+        from(photoOFTheWeekEntityFolders)
+      ),
+      concatMap((photoOfTheWeekEntityFolder) =>
+        combineLatest([
+          of(photoOfTheWeekEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.PhotoOfTheWeek,
+              group: group,
+              slug: photoOfTheWeekEntityFolder.name,
+            })
+          ),
+        ])
+      ),
+      concatMap(([photoOfTheWeekEntityFolder, documentModels]) => {
+        const documentModelsArray = loadDocumentModelsArray(documentModels);
+        if (documentModelsArray.length > 0) {
+          this.logger.log(
+            `Found photo of the week entity ${photoOfTheWeekEntityFolder.name}`
+          );
+          return of(documentModelsArray[0]);
+        }
+
+        this.logger.log(`Creating entity ${photoOfTheWeekEntityFolder.name}`);
+        return from(
+          new this.entityModel({
+            ...loadNewEntity(EntityType.PhotoOfTheWeek, {
+              group,
+              slug: photoOfTheWeekEntityFolder.name,
+              isPosted: false,
+            }),
+          }).save()
+        );
+      }),
+      last(),
+      map(() => undefined)
+    );
+  }
+
+  findNewImagesFolder$(
+    googleDrive: drive_v3.Drive,
+    entityId: string
+  ): Observable<{
+    documentModel: DocumentModel;
+    imagesFolder: GoogleDriveFolder;
+  }> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            this.configProvider.googleDriveWebsitesWatermarkedFolderId,
+            'photo-of-the-week'
+          ),
+        ])
+      ),
+      concatMap(([documentModel, photoOfTheWeekFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            photoOfTheWeekFolder.id,
+            documentModel.group
+          ),
+        ])
+      ),
+      concatMap(([documentModel, photoOfTheWeekGroupFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            photoOfTheWeekGroupFolder.id,
+            documentModel.slug
+          ),
+        ])
+      ),
+      map(([documentModel, entityImagesFolder]) => {
+        return {
+          documentModel: documentModel,
+          imagesFolder: entityImagesFolder,
+        };
+      })
     );
   }
 }

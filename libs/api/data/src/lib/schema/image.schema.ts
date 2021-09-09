@@ -12,7 +12,7 @@ export const imageSchema = {
   order: { type: Number, required: true },
   isStarred: { type: Boolean, required: true },
   isLoved: { type: Boolean, required: true },
-  seoTitle: { type: String, required: false },
+  title: { type: String, required: false },
   seoDescription: { type: String, required: false },
   seoKeywords: { type: String, required: false },
   dateCreated: { type: String, required: false },

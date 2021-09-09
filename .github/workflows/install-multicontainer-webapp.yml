@@ -71,16 +71,6 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "DOCKER_REGISTRY_SERVER_PASSWORD", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=DOCKER-REGISTRY-SERVER-PASSWORD)", "slotSetting": false }]'
-      - name: Azure set NX_AUTH0_CLIENT_ID
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-AUTH0-CLIENT-ID)", "slotSetting": false }]'
-      - name: Azure set NX_AUTH0_CLIENT_SECRET
-        uses: azure/appservice-settings@v1
-        with:
-          app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_AUTH0_CLIENT_SECRET", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-AUTH0-CLIENT-SECRET)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_CLIENT_EMAIL
         uses: azure/appservice-settings@v1
         with:
@@ -91,16 +81,16 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_PRIVATE_KEY", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-PRIVATE-KEY)", "slotSetting": false }]'
-      - name: Azure set NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID
+      - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_CLIENTS_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-CLIENTS-FOLDER-ID)", "slotSetting": false }]'
-      - name: Azure set NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID)", "slotSetting": false }]'
+      - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-WEBSITES-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:

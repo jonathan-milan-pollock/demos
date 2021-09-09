@@ -11,7 +11,6 @@ import { resizeLongestEdgeImage$ } from './resize-longest-edge-image.functions';
 import { resizeExactFitImage$ } from './resize-exact-fit-image.functions';
 import { resizeStandardImage$ } from './resize-standard-image.functions';
 
-//TODO: Fix the as word
 export const resizeImage$ = (
   fileName: string,
   filePath: string,

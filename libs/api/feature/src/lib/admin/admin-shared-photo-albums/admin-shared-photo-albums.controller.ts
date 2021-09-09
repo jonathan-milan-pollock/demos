@@ -3,8 +3,10 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { GoogleDriveFolderDto } from '@dark-rush-photography/shared/types';
-import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
+import {
+  GoogleDriveFolder,
+  GoogleDriveFolderDto,
+} from '@dark-rush-photography/api/types';
 import { AdminSharedPhotoAlbumsService } from './admin-shared-photo-albums.service';
 
 @Controller({ path: 'admin/shared-photo-albums', version: '1' })

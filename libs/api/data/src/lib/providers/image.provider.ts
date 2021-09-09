@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { concatMap, concatMapTo, from, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 import {
   Image,
@@ -11,7 +11,7 @@ import {
   MediaState,
   MediaType,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared-server/types';
+import { Media } from '@dark-rush-photography/api/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
@@ -86,7 +86,7 @@ export class ImageProvider {
           })
         )
       ),
-      concatMapTo(this.findOne$(id, entityId))
+      concatMap(() => this.findOne$(id, entityId))
     );
   }
 
@@ -112,7 +112,7 @@ export class ImageProvider {
                 order: imageUpdate.order,
                 isStarred: imageUpdate.isStarred,
                 isLoved: imageUpdate.isLoved,
-                seoTitle: imageUpdate.title,
+                title: imageUpdate.title,
                 seoDescription: imageUpdate.description,
                 seoKeywords: imageUpdate.keywords,
                 dateCreated: foundImage.dateCreated,
@@ -182,7 +182,7 @@ export class ImageProvider {
                 order: foundImage.order,
                 isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
-                seoTitle: foundImage.seoTitle,
+                title: foundImage.title,
                 seoDescription: foundImage.seoDescription,
                 seoKeywords: foundImage.seoKeywords,
                 dateCreated,
@@ -221,7 +221,7 @@ export class ImageProvider {
                 order: foundImage.order,
                 isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
-                seoTitle: foundImage.seoTitle,
+                title: foundImage.title,
                 seoDescription: foundImage.seoDescription,
                 seoKeywords: foundImage.seoKeywords,
                 dateCreated: foundImage.dateCreated,

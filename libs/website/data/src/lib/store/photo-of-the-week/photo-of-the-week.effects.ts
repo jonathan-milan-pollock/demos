@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, mergeMapTo, of } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
 import * as PhotoOfTheWeekActions from './photo-of-the-week.actions';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
@@ -16,7 +16,7 @@ export class PhotoOfTheWeekEffects {
   loadPhotoOfTheWeek$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PhotoOfTheWeekActions.loadPhotoOfTheWeek),
-      mergeMapTo(
+      mergeMap(() =>
         this.photoOfTheWeeksService.getAll$().pipe(
           map((photoOfTheWeek) =>
             PhotoOfTheWeekActions.loadPhotoOfTheWeekSuccess({ photoOfTheWeek })

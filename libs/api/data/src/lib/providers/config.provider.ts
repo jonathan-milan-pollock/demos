@@ -1,17 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import {
-  ImageDimensionType,
-  ImageResolution,
-  VideoDimensionType,
-  VideoResolution,
-} from '@dark-rush-photography/shared/types';
-import {
-  Env,
-  ImageArtistExif,
-  VideoArtistExif,
-} from '@dark-rush-photography/api/types';
+import { Env } from '@dark-rush-photography/api/types';
+import { MediaState } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ConfigProvider {
@@ -41,22 +32,107 @@ export class ConfigProvider {
     return value;
   }
 
-  get googleDriveClientsFolderId(): string {
-    const value = this.configService.get('googleDriveClientsFolderId', {
-      infer: true,
-    });
+  get googleDriveSharedWatermarkedFolderId(): string {
+    const value = this.configService.get(
+      'googleDriveSharedWatermarkedFolderId',
+      {
+        infer: true,
+      }
+    );
     if (!value) {
-      throw new BadRequestException('googleDriveClientsFolderId undefined');
+      throw new BadRequestException(
+        'googleDriveSharedWatermarkedFolderId undefined'
+      );
     }
     return value;
   }
 
-  get googleDriveWebsitesFolderId(): string {
-    const value = this.configService.get('googleDriveWebsitesFolderId', {
-      infer: true,
-    });
+  get googleDriveSharedWithoutWatermarkFolderId(): string {
+    const value = this.configService.get(
+      'googleDriveSharedWithoutWatermarkFolderId',
+      {
+        infer: true,
+      }
+    );
     if (!value) {
-      throw new BadRequestException('googleDriveWebsitesFolderId undefined');
+      throw new BadRequestException(
+        'googleDriveSharedWithoutWatermarkFolderId undefined'
+      );
+    }
+    return value;
+  }
+
+  get googleDriveWebsitesWatermarkedFolderId(): string {
+    const value = this.configService.get(
+      'googleDriveWebsitesWatermarkedFolderId',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'googleDriveWebsitesWatermarkedFolderId undefined'
+      );
+    }
+    return value;
+  }
+
+  get googleDriveWebsitesWithoutWatermarkFolderId(): string {
+    const value = this.configService.get(
+      'googleDriveWebsitesWithoutWatermarkFolderId',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'googleDriveWebsitesWithoutWatermarkFolderId undefined'
+      );
+    }
+    return value;
+  }
+
+  get googleDriveDarkRushPhotographyFolderId(): string {
+    const value = this.configService.get(
+      'googleDriveDarkRushPhotographyFolderId',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'googleDriveDarkRushPhotographyFolderId undefined'
+      );
+    }
+    return value;
+  }
+
+  get sharedPhotoAlbumPushNotificationAddress(): string {
+    const value = this.configService.get(
+      'sharedPhotoAlbumPushNotificationAddress',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'sharedPhotoAlbumPushNotificationAddress undefined'
+      );
+    }
+    return value;
+  }
+
+  get websitesEntityPushNotificationAddress(): string {
+    const value = this.configService.get(
+      'websitesEntityPushNotificationAddress',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'websitesEntityPushNotificationAddress undefined'
+      );
     }
     return value;
   }
@@ -67,6 +143,36 @@ export class ConfigProvider {
     });
     if (!value) {
       throw new BadRequestException('mongoDbConnectionString undefined');
+    }
+    return value;
+  }
+
+  getAzureStorageConnectionString(mediaState: MediaState): string {
+    switch (mediaState) {
+      case MediaState.New:
+      case MediaState.Selected:
+        return this.azureStorageConnectionStringPrivate;
+      case MediaState.Posted:
+      case MediaState.Archived:
+        return this.azureStorageConnectionStringPublic;
+      default:
+        throw new BadRequestException(
+          `Azure storage connection string is not found for media state ${mediaState}`
+        );
+    }
+  }
+
+  get azureStorageConnectionStringPrivate(): string {
+    const value = this.configService.get(
+      'azureStorageConnectionStringPrivate',
+      {
+        infer: true,
+      }
+    );
+    if (!value) {
+      throw new BadRequestException(
+        'azureStorageConnectionStringPrivate undefined'
+      );
     }
     return value;
   }
@@ -83,17 +189,12 @@ export class ConfigProvider {
     return value;
   }
 
-  get azureStorageBlobContainerNamePublic(): string {
-    const value = this.configService.get(
-      'azureStorageBlobContainerNamePublic',
-      {
-        infer: true,
-      }
-    );
+  get azureStorageBlobContainerName(): string {
+    const value = this.configService.get('azureStorageBlobContainerName', {
+      infer: true,
+    });
     if (!value) {
-      throw new BadRequestException(
-        'azureStorageBlobContainerNamePublic undefined'
-      );
+      throw new BadRequestException('azureStorageBlobContainerName undefined');
     }
     return value;
   }
@@ -112,52 +213,5 @@ export class ConfigProvider {
       throw new BadRequestException('ayrshareApiKey undefined');
     }
     return value;
-  }
-
-  findImageResolution(imageDimensionType: ImageDimensionType): ImageResolution {
-    const fn = this.configService.get('findImageResolution', { infer: true });
-    if (!fn) {
-      throw new BadRequestException('findImageResolution undefined');
-    }
-    return fn(imageDimensionType);
-  }
-
-  findThreeSixtyImageResolution(
-    imageDimensionType: ImageDimensionType
-  ): ImageResolution {
-    const fn = this.configService.get('findThreeSixtyImageResolution', {
-      infer: true,
-    });
-    if (!fn) {
-      throw new BadRequestException('findThreeSixtyImageResolution undefined');
-    }
-    return fn(imageDimensionType);
-  }
-
-  findVideoResolution(videoDimensionType: VideoDimensionType): VideoResolution {
-    const fn = this.configService.get('findVideoResolution', { infer: true });
-    if (!fn) {
-      throw new BadRequestException('findVideoResolution undefined');
-    }
-    return fn(videoDimensionType);
-  }
-
-  getImageArtistExif(
-    copyrightYear: number,
-    exifDateCreated: string
-  ): ImageArtistExif {
-    const fn = this.configService.get('getImageArtistExif', { infer: true });
-    if (!fn) {
-      throw new BadRequestException('getImageArtistExif undefined');
-    }
-    return fn(copyrightYear, exifDateCreated);
-  }
-
-  getVideoArtistExif(copyrightYear: number): VideoArtistExif {
-    const fn = this.configService.get('getVideoArtistExif', { infer: true });
-    if (!fn) {
-      throw new BadRequestException('getVideoArtistExif undefined');
-    }
-    return fn(copyrightYear);
   }
 }

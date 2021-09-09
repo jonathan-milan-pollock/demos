@@ -1,21 +1,33 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import {
+  combineLatest,
+  concatMap,
+  from,
+  last,
+  map,
+  Observable,
+  of,
+  pluck,
+  toArray,
+} from 'rxjs';
 import { Model } from 'mongoose';
-import { combineLatest, concatMap, from, mapTo, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
-import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/shared-server/util';
+import {
+  getGoogleDriveFolders$,
+  getGoogleDriveFolderWithName$,
+} from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
 import { ConfigProvider } from './config.provider';
-import { GoogleDriveWebsitesProvider } from './google-drive-websites.provider';
+import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 
 @Injectable()
 export class SocialMediaProvider {
@@ -24,52 +36,136 @@ export class SocialMediaProvider {
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly googleDriveWebsitesProvider: GoogleDriveWebsitesProvider
+    private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(SocialMediaProvider.name);
   }
 
-  update$(drive: drive_v3.Drive): Observable<void> {
+  loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
     return from(
       getGoogleDriveFolderWithName$(
-        drive,
-        this.configProvider.googleDriveWebsitesFolderId,
-        'about'
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+        'social-media'
       )
     ).pipe(
-      concatMap((folder) =>
-        from(
-          this.entityModel.find({ type: EntityType.About, slug: folder.name })
-        ).pipe(
-          concatMap((documentModels) => {
-            const documentModelsArray = loadDocumentModelsArray(documentModels);
-            if (documentModelsArray.length > 0) {
-              this.logger.log(`Found entity ${folder.name}`);
-              return combineLatest([of(folder), of(documentModelsArray[0])]);
-            }
-
-            this.logger.log(`Creating entity ${folder.name}`);
-            return combineLatest([
-              of(folder),
-              from(
-                new this.entityModel({
-                  ...loadNewEntity({
-                    type: EntityType.SocialMedia,
-                    group: DEFAULT_ENTITY_GROUP,
-                    slug: folder.name,
-                    isPosted: false,
-                  }),
-                }).save()
-              ),
-            ]);
-          }),
-          concatMap(([folder, documentModel]) =>
-            this.googleDriveWebsitesProvider.sync$(drive, folder, documentModel)
-          )
-        )
+      concatMap((socialMediaFolder) =>
+        getGoogleDriveFolders$(googleDrive, socialMediaFolder.id)
       ),
-      mapTo(undefined)
+      concatMap((socialMediaGroupFolders) => from(socialMediaGroupFolders)),
+      pluck('name'),
+      toArray<string>()
+    );
+  }
+
+  createForGroup$(
+    googleDrive: drive_v3.Drive,
+    group: string
+  ): Observable<void> {
+    return from(
+      getGoogleDriveFolderWithName$(
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+        'social-media'
+      )
+    ).pipe(
+      concatMap((socialMediaFolder) =>
+        getGoogleDriveFolderWithName$(googleDrive, socialMediaFolder.id, group)
+      ),
+      concatMap((socialMediaGroupFolder) =>
+        getGoogleDriveFolders$(googleDrive, socialMediaGroupFolder.id)
+      ),
+      concatMap((socialMediaEntityFolders) => from(socialMediaEntityFolders)),
+      concatMap((socialMediaEntityFolder) =>
+        combineLatest([
+          of(socialMediaEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.SocialMedia,
+              group: group,
+              slug: socialMediaEntityFolder.name,
+            })
+          ),
+        ])
+      ),
+      concatMap(([socialMediaEntityFolder, documentModels]) => {
+        const documentModelsArray = loadDocumentModelsArray(documentModels);
+        if (documentModelsArray.length > 0) {
+          this.logger.log(`Found entity ${socialMediaEntityFolder.name}`);
+          return of(documentModelsArray[0]);
+        }
+
+        this.logger.log(`Creating entity ${socialMediaEntityFolder.name}`);
+        return from(
+          new this.entityModel({
+            ...loadNewEntity(EntityType.SocialMedia, {
+              group,
+              slug: socialMediaEntityFolder.name,
+              isPosted: false,
+            }),
+          }).save()
+        );
+      }),
+      last(),
+      map(() => undefined)
+    );
+  }
+
+  findNewImagesFolder$(
+    googleDrive: drive_v3.Drive,
+    entityId: string
+  ): Observable<{
+    documentModel: DocumentModel;
+    imagesFolder: GoogleDriveFolder;
+  }> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+            'social-media'
+          ),
+        ])
+      ),
+      concatMap(([documentModel, socialMediaFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            socialMediaFolder.id,
+            documentModel.group
+          ),
+        ])
+      ),
+      concatMap(([documentModel, socialMediaGroupFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            socialMediaGroupFolder.id,
+            documentModel.slug
+          ),
+        ])
+      ),
+      concatMap(([documentModel, socialMediaEntityFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            socialMediaEntityFolder.id,
+            'images'
+          ),
+        ])
+      ),
+      map(([documentModel, entityImagesFolder]) => {
+        return {
+          documentModel: documentModel,
+          imagesFolder: entityImagesFolder,
+        };
+      })
     );
   }
 }

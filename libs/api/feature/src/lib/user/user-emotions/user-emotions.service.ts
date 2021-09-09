@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
-import { mapTo, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
 import {
@@ -30,6 +30,6 @@ export class UserEmotionsService {
   remove$(id: string, entityId: string): Observable<void> {
     return this.emotionProvider
       .remove$(id, entityId, this.entityModel)
-      .pipe(mapTo(undefined));
+      .pipe(map(() => undefined));
   }
 }

@@ -12,7 +12,7 @@ import {
   Video,
   Entity,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared-server/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
@@ -46,7 +46,7 @@ export class Document implements Entity {
   order!: number;
 
   @Prop({ type: String, required: false })
-  seoTitle?: string;
+  title?: string;
 
   @Prop({ type: String, required: false })
   seoDescription?: string;
