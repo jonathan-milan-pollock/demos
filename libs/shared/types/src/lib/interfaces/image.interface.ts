@@ -3,8 +3,9 @@ import { MediaState } from '../enums/media-state.enum';
 export interface Image {
   readonly id: string;
   readonly entityId: string;
-  readonly fileName: string;
   readonly state: MediaState;
+  readonly blobPathId: string;
+  readonly fileName: string;
   readonly order: number;
   readonly isStarred: boolean;
   readonly isLoved: boolean;
@@ -15,5 +16,4 @@ export interface Image {
   readonly datePublished?: string;
   readonly skipExif: boolean;
   readonly isThreeSixty: boolean;
-  readonly isProcessing: boolean;
 }

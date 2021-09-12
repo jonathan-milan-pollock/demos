@@ -15,9 +15,9 @@
           tabindex="-1"
           class="image-gallery-slide"
           [ngClass]="{
-            left: i == currentIndex - 1,
-            center: i == currentIndex,
-            right: i == currentIndex + 1
+            left: i === currentIndex - 1,
+            center: i === currentIndex,
+            right: i === currentIndex + 1
           }"
           [ngStyle]="{
             transition: slideTransition,
@@ -37,7 +37,7 @@
         *ngIf="images.length > 1"
         type="button"
         class="image-gallery-icon image-gallery-right-nav"
-        [disabled]="currentIndex == images.length - 1"
+        [disabled]="currentIndex === images.length - 1"
         (click)="onNextSlide()"
       >
         &gt;

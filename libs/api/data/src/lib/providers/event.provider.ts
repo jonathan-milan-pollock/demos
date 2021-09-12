@@ -21,7 +21,7 @@ import {
   EventMinimalDto,
   ImageDimensionType,
 } from '@dark-rush-photography/shared/types';
-import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
+import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,

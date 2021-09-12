@@ -1,23 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import {
-  Image,
-  ImageDimensionType,
-  ImageUpdate,
-  ThreeSixtySettings,
-} from '@dark-rush-photography/shared/types';
+//import * as fs from 'fs-extra';
+//import * as path from 'path';
+//import { StreamableFile } from '@nestjs/common';
 import { getAuthHeaders } from '../auth.functions';
 
 Cypress.Commands.add(
   'uploadImageAdmin',
-  async (entityId: string, filePath: string): Promise<Image> => {
+  async (entityId: string, filePath: string): Promise<any> => {
     const FormData = require('form-data');
     const formData = new FormData();
     formData.append(
-      'file',
-      fs.readFileSync(filePath, 'utf8'),
-      path.basename(filePath)
+      'file'
+      //fs.readFileSync(filePath, 'utf8'),
+      //path.basename(filePath)
     );
 
     return fetch(`/api/v1/admin/images/upload?entityId=${entityId}`, {
@@ -35,13 +31,13 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'uploadThreeSixtyImageAdmin',
-  async (entityId: string, filePath: string): Promise<Image> => {
+  async (entityId: string, filePath: string): Promise<any> => {
     const FormData = require('form-data');
     const formData = new FormData();
     formData.append(
-      'file',
-      fs.readFileSync(filePath, 'utf8'),
-      path.basename(filePath)
+      'file'
+      //  fs.readFileSync(filePath, 'utf8'),
+      //  path.basename(filePath)
     );
 
     return fetch(
@@ -61,122 +57,104 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'uploadLightroomImageAdmin',
-  async (lightroomPath: string, filePath: string): Promise<Image> => {
-    const FormData = require('form-data');
-    const formData = new FormData();
-    formData.append(
-      'file',
-      fs.readFileSync(filePath, 'utf8'),
-      path.basename(filePath)
-    );
-
-    return fetch('/api/v1/admin/images/upload-lightroom', {
-      method: 'POST',
+  'updateImageAdmin',
+  async (id: string, entityId: string, imageUpdate: any): Promise<any> => {
+    return fetch(`/api/v1/admin/images/${id}?entityId=${entityId}`, {
+      method: 'PUT',
       headers: {
         ...getAuthHeaders(),
-        'Content-Length': formData.getLengthSync(),
-        'X-LIGHTROOM-PATH': lightroomPath,
       },
-      body: formData,
+      body: JSON.stringify({
+        ...imageUpdate,
+      }),
     })
       .then((response) => response.json())
-      .then((json) => json);
+      .then((json) => JSON.parse(json));
   }
 );
 
 Cypress.Commands.add(
-  'updateImageAdmin',
-  (
-    id: string,
-    entityId: string,
-    imageUpdate: ImageUpdate
-  ): Cypress.Chainable<Cypress.Response<Image>> =>
-    cy.request({
-      method: 'PUT',
-      url: `/api/v1/admin/images/${id}?entityId=${entityId}`,
-      headers: {
-        ...getAuthHeaders(),
-      },
-      body: {
-        ...imageUpdate,
-      },
-    })
-);
-
-Cypress.Commands.add(
   'updateThreeSixtySettingsImageAdmin',
-  (
+  async (
     id: string,
     entityId: string,
-    imageDimensionType: ImageDimensionType,
-    threeSixtySettings: ThreeSixtySettings
-  ): Cypress.Chainable<Cypress.Response<Image>> =>
-    cy.request({
-      method: 'PUT',
-      url: `/api/v1/admin/images/${id}/${imageDimensionType}/three-sixty-settings?entityId=${entityId}`,
-      headers: {
-        ...getAuthHeaders(),
-      },
-      body: {
-        ...threeSixtySettings,
-      },
-    })
+    imageDimensionType: string,
+    threeSixtySettings: any
+  ): Promise<any> => {
+    return fetch(
+      `/api/v1/admin/images/${id}/${imageDimensionType}/three-sixty-settings?entityId=${entityId}`,
+      {
+        method: 'PUT',
+        headers: {
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({
+          ...threeSixtySettings,
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
 );
 
 Cypress.Commands.add(
-  'setIsProcessingImageAdmin',
-  (
-    id: string,
-    entityId: string,
-    isProcessing: boolean
-  ): Cypress.Chainable<Cypress.Response<void>> =>
-    cy.request({
-      method: 'PUT',
-      url: `/api/v1/admin/images/${id}/processing/${isProcessing}?entityId=${entityId}`,
+  'findAllImageAdmin',
+  async (entityId: string, state: string): Promise<any> => {
+    return fetch(`/api/v1/admin/images?entityId=${entityId}&state=${state}`, {
+      method: 'GET',
       headers: {
         ...getAuthHeaders(),
       },
     })
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
 );
 
 Cypress.Commands.add(
   'findOneImageAdmin',
-  (id: string, entityId: string): Cypress.Chainable<Cypress.Response<Image>> =>
-    cy.request({
+  async (id: string, entityId: string): Promise<any> => {
+    return fetch(`/api/v1/admin/images/${id}?entityId=${entityId}`, {
       method: 'GET',
-      url: `/api/v1/admin/images/${id}?entityId=${entityId}`,
       headers: {
         ...getAuthHeaders(),
       },
-      failOnStatusCode: false,
     })
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
 );
 
 Cypress.Commands.add(
-  'findDataUriImageAdmin',
-  (
+  'streamImageAdmin',
+  async (
     id: string,
     entityId: string,
-    imageDimensionType: ImageDimensionType
-  ): Cypress.Chainable<Cypress.Response<string>> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/v1/admin/images/${id}/${imageDimensionType}/data-uri?entityId=${entityId}`,
-      headers: {
-        ...getAuthHeaders(),
-      },
-    })
+    imageDimensionType: string
+  ): Promise<any> => {
+    return fetch(
+      `/api/v1/admin/images/${id}/${imageDimensionType}/string?entityId=${entityId}`,
+      {
+        method: 'GET',
+        headers: {
+          ...getAuthHeaders(),
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
 );
 
 Cypress.Commands.add(
   'removeImageAdmin',
-  (id: string, entityId: string): Cypress.Chainable<Cypress.Response<void>> =>
-    cy.request({
+  async (id: string, entityId: string): Promise<void> => {
+    return fetch(`/api/v1/admin/images/${id}?entityId=${entityId}`, {
       method: 'DELETE',
-      url: `/api/v1/admin/images/${id}?entityId=${entityId}`,
       headers: {
         ...getAuthHeaders(),
       },
-    })
+    }).then(() => undefined);
+  }
 );

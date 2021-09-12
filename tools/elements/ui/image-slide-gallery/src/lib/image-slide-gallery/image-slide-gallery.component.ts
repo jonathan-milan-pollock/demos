@@ -83,7 +83,7 @@ export class ImageSlideGalleryComponent implements AfterViewInit, OnDestroy {
     const key = parseInt(event.keyCode || event.which || 0, 10);
     const ENTER_KEY_CODE = 66;
     const SPACE_BAR_KEY_CODE = 62;
-    return key == ENTER_KEY_CODE || key == SPACE_BAR_KEY_CODE;
+    return key === ENTER_KEY_CODE || key === SPACE_BAR_KEY_CODE;
   }
 
   //ngOnChanges(changes: SimpleChanges): void {
@@ -160,7 +160,7 @@ export class ImageSlideGalleryComponent implements AfterViewInit, OnDestroy {
     if (this.isTransitioning) return;
 
     const nextIndex = this.currentIndex - 1;
-    if (this.images.length == 2) {
+    if (this.images.length === 2) {
       /*
         When there are only 2 slides fake a tiny slide to get the slides
         on the correct side for transitioning
@@ -179,7 +179,7 @@ export class ImageSlideGalleryComponent implements AfterViewInit, OnDestroy {
     if (this.isTransitioning) return;
 
     const nextIndex = this.currentIndex + 1;
-    if (this.images.length == 2) {
+    if (this.images.length === 2) {
       const fakeTinySlide = this.currentSlideOffset - 0.001;
       this.currentSlideOffset = fakeTinySlide;
       this.slideTransition = 'none';

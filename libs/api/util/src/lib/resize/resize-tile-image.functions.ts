@@ -2,7 +2,7 @@
 
 import {
   MediaResolution,
-  TileImageResolution,
+  ImageDimensionTileConfig,
 } from '@dark-rush-photography/shared/types';
 import { findImageResolutionWithFileName$ } from './image-resolution.functions';
 import { resizeLongestEdgeImage$ } from './resize-longest-edge-image.functions';
@@ -28,7 +28,7 @@ const isValidDimensionPixels = (
 export const resizeTileImage$ = (
   fileName: string,
   filePath: string,
-  imageDimensionTileConfig: TileImageResolution
+  imageDimensionTileConfig: ImageDimensionTileConfig
 ): Observable<string> => {
   const { minPixels, longestEdge } = imageDimensionTileConfig;
 

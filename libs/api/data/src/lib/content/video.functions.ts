@@ -4,7 +4,8 @@ export const loadVideo = (video: Video): Video => {
   return {
     id: video.id,
     entityId: video.entityId,
-    fileName: video.fileName,
     state: video.state,
+    blobPathId: video.blobPathId,
+    fileName: video.fileName,
   };
 };

@@ -21,13 +21,13 @@ function TopNavigationBar(props: TopNavigationBarProps): JSX.Element {
             <TopNavigationBarButton
               icon={faHome}
               text="Home"
-              isSelected={props.activeLink == '/'}
+              isSelected={props.activeLink === '/'}
               onClick={() => props.onLinkClicked('/')}
             ></TopNavigationBarButton>
             <TopNavigationBarButton
               icon={faInfoCircle}
               text="About"
-              isSelected={props.activeLink == '/about'}
+              isSelected={props.activeLink === '/about'}
               onClick={() => props.onLinkClicked('/about')}
             ></TopNavigationBarButton>
           </div>

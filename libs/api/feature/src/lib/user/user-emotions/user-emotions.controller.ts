@@ -10,7 +10,12 @@ import {
   ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -38,6 +43,26 @@ export class UserEmotionsController {
   @ApiOkResponse({ type: EmotionDto })
   addEntityEmotion$(@Body() emotionAdd: EmotionAddDto): Observable<Emotion> {
     return this.userEmotionsService.add$(emotionAdd);
+  }
+
+  @Get()
+  @ApiQuery({
+    name: 'mediaId',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'commentId',
+    required: false,
+    type: String,
+  })
+  @ApiOkResponse({ type: [EmotionDto] })
+  findAll$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Query('mediaId', ParseObjectIdPipe) mediaId: string,
+    @Query('mediaId', ParseObjectIdPipe) commentId: string
+  ): Observable<Emotion[]> {
+    return this.userEmotionsService.findAll$(entityId, mediaId, commentId);
   }
 
   @Get(':id')

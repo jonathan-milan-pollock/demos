@@ -1,7 +1,5 @@
-import { About } from '@dark-rush-photography/shared/types';
-
 describe('Admin About API', () => {
-  const authorization = '';
+  /*  const authorization = '';
 
   const create = (slug: string) =>
     cy.request({
@@ -81,5 +79,5 @@ describe('Admin About API', () => {
       .its('body.id')
       .then((id) => deleteAbout(id))
       .then(() => findAll().its('body.length').should('equal', 0));
-  });
+  });*/
 });

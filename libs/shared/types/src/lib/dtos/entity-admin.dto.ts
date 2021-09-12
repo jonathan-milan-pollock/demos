@@ -90,8 +90,8 @@ export class EntityAdminDto {
   video?: VideoDto;
 
   @IsBoolean()
-  isPosted!: boolean;
+  isPublished!: boolean;
 
   @IsBoolean()
-  isProcessing!: boolean;
+  isPublishing!: boolean;
 }

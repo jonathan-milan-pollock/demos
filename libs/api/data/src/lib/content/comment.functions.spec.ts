@@ -1,7 +1,7 @@
 import * as faker from 'faker';
 
 import { Comment, User } from '@dark-rush-photography/shared/types';
-import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { findPublicComments, loadComment } from './comment.functions';
 
 describe('comment.functions', () => {

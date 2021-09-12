@@ -2,14 +2,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { BlobUploadCommonResponse } from '@azure/storage-blob';
 
-import { Model } from 'mongoose';
-import { concatMap, from, Observable, tap } from 'rxjs';
-const tinify = require('tinify');
+import { Observable } from 'rxjs';
 
-import { ImageDimensionType } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
+import {
+  ImageDimensionType,
+  MediaState,
+} from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-//import { findImageExifDateCreated$ } from '@dark-rush-photography/api/util';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
@@ -32,14 +32,16 @@ export class ImageUploadProvider {
   }
 
   upload$(
-    media: Media,
+    state: MediaState,
+    blobPathId: string,
+    fileName: string,
     file: Express.Multer.File
   ): Observable<BlobUploadCommonResponse> {
     return uploadBufferToBlob$(
-      this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.getAzureStorageBlobContainerName(media.state),
+      this.configProvider.getAzureStorageConnectionString(state),
+      this.configProvider.getAzureStorageBlobContainerName(state),
       file.buffer,
-      getAzureStorageBlobPath(media)
+      getAzureStorageBlobPath(blobPathId, fileName)
     );
   }
 
@@ -68,68 +70,8 @@ export class ImageUploadProvider {
    //   concatMap(
    //     this.imageDimensionProvider.resize$(media, smallResolution, entityModel)
    //   ),
-      concatMap(
-        this.imageProvider.setIsProcessing$(
-          media.id,
-          media.entityId,
-          false,
-          entityModel
-        )
-      ),
-      tap(() => this.logger.log(`processing ${media.fileName} complete`))
+      tap(() => this.logger.log(`Publishing ${media.fileName} complete`))
     );
   }
 */
-  /*
-  updateDateCreated$(
-    media: Media,
-    entityModel: Model<DocumentModel>
-  ): Observable<string> {
-    return downloadBlobToFile$(
-      this.configProvider.azureStorageConnectionStringBlobs,
-      getAzureStorageBlobPath(media),
-      media.fileName
-    ).pipe(
-      concatMap((filePath) => findImageExifDateCreated$(filePath, new Date())),
-      concatMap((dateCreated) =>
-        combineLatest([
-          of(dateCreated),
-          this.imageProvider.setDateCreated$(
-            media.id,
-            media.entityId,
-            dateCreated,
-            entityModel
-          ),
-        ])
-      ),
-      tap(([dateCreated]) =>
-        this.logger.debug(`Date image ${media.fileName} created ${dateCreated}`)
-      ),
-      map(([dateCreated]) => dateCreated)
-    );
-  }
-*/
-
-  tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
-    return downloadBlobToFile$(
-      this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.getAzureStorageBlobContainerName(media.state),
-      getAzureStorageBlobPath(media),
-      media.fileName
-    ).pipe(
-      concatMap((filePath) => {
-        tinify.default.key = this.configProvider.tinyPngApiKey;
-        return from(tinify.fromFile(filePath).toBuffer());
-      }),
-      tap(() => this.logger.log(`Tinified image ${media.fileName}`)),
-      concatMap((uint8Array) =>
-        uploadBufferToBlob$(
-          this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.getAzureStorageBlobContainerName(media.state),
-          Buffer.from(uint8Array as Uint8Array),
-          getAzureStorageBlobPath(media)
-        )
-      )
-    );
-  }
 }

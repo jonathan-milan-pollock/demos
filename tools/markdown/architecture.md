@@ -238,7 +238,7 @@ preloadingStrategy: PreloadAllModules;
 
 ### add type definition for multer
 
-- add the following to index.ts of api/types for Express.Multer.File
+- add the following to index.ts of shared/types for Express.Multer.File
 
 ```ts
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

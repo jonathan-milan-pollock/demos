@@ -7,7 +7,7 @@ export const validateVideoFound = (
   id: string,
   documentModel: DocumentModel
 ): Video => {
-  const foundVideo = documentModel.videos.find((video) => video.id == id);
+  const foundVideo = documentModel.videos.find((video) => video.id === id);
   if (!foundVideo) throw new NotFoundException('Video was not found');
   return foundVideo;
 };

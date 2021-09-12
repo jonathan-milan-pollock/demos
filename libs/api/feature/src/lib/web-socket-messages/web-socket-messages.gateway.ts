@@ -4,7 +4,7 @@ import {
   WebSocketGateway,
 } from '@nestjs/websockets';
 
-import { WebSocketClient } from '@dark-rush-photography/api/types';
+import { WebSocketClient } from '@dark-rush-photography/shared/types';
 import { WebSocketMessageProvider } from '@dark-rush-photography/api/data';
 
 @WebSocketGateway()

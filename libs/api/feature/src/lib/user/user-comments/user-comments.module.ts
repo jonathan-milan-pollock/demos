@@ -9,15 +9,15 @@ import {
 } from '@dark-rush-photography/api/data';
 import { UserCommentsService } from './user-comments.service';
 import { UserCommentsController } from './user-comments.controller';
-import { Auth0UserTable } from '@dark-rush-photography/api/data';
+import { UserTable } from '@dark-rush-photography/api/data';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(Auth0UserTable, {
-      table: 'Auth0User',
+    AzureTableStorageModule.forFeature(UserTable, {
+      table: 'User',
       createTableIfNotExists: true,
     }),
   ],

@@ -1,18 +1,9 @@
-Cypress.Commands.add(
-  'findAllAboutPublic',
-  (): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: '/api/v1/about',
-    })
-);
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-Cypress.Commands.add(
-  'findOneAboutPublic',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
-      method: 'GET',
-      url: `/api/v1/about/${id}`,
-      failOnStatusCode: false,
-    })
-);
+Cypress.Commands.add('findAllAboutPublic', async (): Promise<any[]> => {
+  return fetch('v1/api/about', {
+    method: 'GET',
+  })
+    .then((response) => response.json())
+    .then((json) => JSON.parse(json));
+});

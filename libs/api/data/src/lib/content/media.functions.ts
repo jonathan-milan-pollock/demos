@@ -1,20 +1,16 @@
-import { MediaState, MediaType } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
-import { DocumentModel } from '../schema/document.schema';
+import { MediaState } from '@dark-rush-photography/shared/types';
+import { Media } from '@dark-rush-photography/shared/types';
 
 export const loadMedia = (
-  type: MediaType,
   id: string,
-  fileName: string,
+  entityId: string,
   state: MediaState,
-  documentModel: DocumentModel
+  blobPathId: string,
+  fileName: string
 ): Media => ({
-  type,
   id,
-  fileName,
+  entityId,
   state,
-  entityType: documentModel.type,
-  entityId: documentModel._id,
-  entityGroup: documentModel.group,
-  entitySlug: documentModel.slug,
+  blobPathId,
+  fileName,
 });

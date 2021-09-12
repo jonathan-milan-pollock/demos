@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars */
 // ***********************************************
 // This example commands.js shows you how to
@@ -11,288 +12,129 @@
 
 // Import commands.js using ES2015 syntax:
 declare namespace Cypress {
-  interface Chainable<Subject>
-    extends ApiAuth<Subject>,
-      ApiAdminAbout<Subject>,
-      ApiAdminBestOf<Subject>,
-      ApiAdminDestinations<Subject>,
-      ApiAdminEntities<Subject>,
-      ApiAdminEvents<Subject>,
-      ApiAdminFavorites<Subject>,
-      ApiAdminImageDimensions<Subject>,
-      ApiAdminImages<Subject> {}
-
-  interface ApiAuth<Subject> {
-    authenticateApi(): Promise<string>;
-  }
-
-  interface ApiAdminAbout<Subject> {
-    createAboutAdmin(slug: string): Cypress.Chainable<Cypress.Response>;
-    findAllAboutAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOneAboutAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingAboutAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    deleteAboutAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminBestOf<Subject> {
-    createBestOfAdmin(bestOfType: string): Cypress.Chainable<Cypress.Response>;
-    findOneBestOfAdmin(bestOfType: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingBestOfAdmin(
-      bestOfType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteBestOfAdmin(
-      bestOfType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminDestinations<Subject> {
-    createDestinationAdmin(slug: string): Cypress.Chainable<Cypress.Response>;
-    updateDestinationAdmin(
-      id: string,
-      destinationUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    postDestinationAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findAllDestinationsAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOneDestinationAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingDestinationAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteDestinationAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminEntities<Subject> {
-    createEntityAdmin(
-      entityType: string,
-      entityCreate: string
-    ): Cypress.Chainable<Cypress.Response>;
+  interface Chainable<Subject> {
+    // api admin entities
+    watchEntityAdmin(entityType: string, id: string): Promise<any>;
+    socialMediaPostEntityAdmin(entityType: string, id: string): Promise<any>;
     updateEntityAdmin(
       entityType: string,
       id: string,
-      entityUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    setIsProcessingEntityAdmin(
+      entityUpdate: any
+    ): Promise<any>;
+    publishEntityAdmin(entityType: string, id: string): Promise<any>;
+    setIsPublishingEntityAdmin(
       entityType: string,
       id: string,
-      isProcessing: boolean
-    ): Cypress.Chainable<Cypress.Response>;
-    findAllEntitiesAdmin(
+      isPublishing: boolean
+    ): Promise<any>;
+    findAllGroupsEntityAdmin(entityType: string): Promise<any[]>;
+    findAllEntityAdmin(
       entityType: string
-    ): Cypress.Chainable<Cypress.Response>;
-    findOneEntityAdmin(
+    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    findOneEntityAdmin(entityType: string, id: string): Promise<any>;
+    findIsPublishingEntityAdmin(
       entityType: string,
       id: string
-    ): Cypress.Chainable<Cypress.Response>;
+    ): Promise<boolean>;
     deleteEntityAdmin(
       entityType: string,
       id: string
-    ): Cypress.Chainable<Cypress.Response>;
-  }
+    ): Cypress.Chainable<Cypress.Response<boolean>>;
 
-  interface ApiAdminEvents<Subject> {
-    createEventAdmin(eventCreate: string): Cypress.Chainable<Cypress.Response>;
-    updateEventAdmin(
-      id: string,
-      eventUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    postEventAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findAllEventsAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOneEventAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingEventAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    deleteEventAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminFavorites<Subject> {
-    createFavoriteAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOneFavoritesAdmin(): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingFavoriteAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteFavoritesAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminImageDimensions<Subject> {
-    addImageDimensionAdmin(
+    // api admin images
+    uploadImageAdmin(entityId: string, filePath: string): Promise<any>;
+    uploadThreeSixtyImageAdmin(
       entityId: string,
-      imageId: string
-    ): Cypress.Chainable<Cypress.Response>;
-    updateImageDimensionAdmin(
-      id: string,
-      entityId: string,
-      imageDimensionUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    findOneImageDimensionAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    dataUriImageDimensionAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminImages<Subject> {
-    addImageAdmin(slug: string): Cypress.Chainable<Cypress.Response>;
+      filePath: string
+    ): Promise<any>;
     updateImageAdmin(
-      slug: string,
-      imageUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    findOneImageAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    postImageAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    removeImageAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminMediaProcesses<Subject> {
-    createMediaProcessAdmin(
-      mediaProcessType: string,
-      slug: string
-    ): Cypress.Chainable<Cypress.Response>;
-    processMediaProcessAdmin(
-      mediaProcessType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    findAllMediaProcessesAdmin(
-      mediaProcessType: string
-    ): Cypress.Chainable<Cypress.Response>;
-    findOneMediaProcessAdmin(
-      mediaProcessType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingMediaProcessAdmin(
-      mediaProcessType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteMediaProcessAdmin(
-      mediaProcessType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiAdminPhotoOfTheWeek<Subject> {
-    createPhotoOfTheWeekAdmin(
-      photoOfTheWeekCreate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    updatePhotoOfTheWeekAdmin(
       id: string,
-      photoOfTheWeekUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    postPhotoOfTheWeekAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findAllPhotoOfTheWeekAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOnePhotoOfTheWeekAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingPhotoOfTheWeekAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deletePhotoOfTheWeekAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+      entityId: string,
+      imageUpdate: any
+    ): Promise<any>;
+    updateThreeSixtySettingsImageAdmin(
+      id: string,
+      entityId: string,
+      imageDimensionType: string,
+      threeSixtySettings: any
+    ): Promise<any>;
+    findAllImagesAdmin(entityId: string, state: string): Promise<any[]>;
+    findOneImageAdmin(id: string, entityId: string): Promise<any>;
+    streamImageAdmin(
+      id: string,
+      entityId: string,
+      imageDimensionType: string
+    ): Promise<any>;
+    removeImageAdmin(id: string, entityId: string): Promise<void>;
 
-  interface AdminReviewMedia<Subject> {
-    createReviewMediaAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOneReviewMediaAdmin(): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingReviewMediaAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteReviewMediaAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api admin media processes
+    createMediaProcessAdmin(
+      mediaProcessType: any,
+      mediaProcessCreate: any
+    ): Cypress.Chainable<Cypress.Response<any>>;
 
-  interface AdminReviews<Subject> {
-    createReviewAdmin(slug: string): Cypress.Chainable<Cypress.Response>;
-    updateReviewAdmin(
-      slug: string,
-      destinationsUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    postReviewAdmin(): Cypress.Chainable<Cypress.Response>;
-    findAllReviewsAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findOneReviewAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingReviewAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteReviewAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public about
+    findAllAboutPublic(): Promise<string[]>;
+    findOneAboutPublic(): Promise<string[]>;
 
-  interface AdminSocialMedia<Subject> {
-    createSocialMediaAdmin(slug: string): Cypress.Chainable<Cypress.Response>;
-    findAllSocialMediaAdmin(): Cypress.Chainable<Cypress.Response>;
-    findOneSocialMediaAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    findIsProcessingSocialMediaAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    deleteSocialMediaAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public best-of
+    findAllBestOfPublic(): Promise<string[]>;
+    findOneBestOfPublic(): Promise<string>;
 
-  interface AdminVideoDimensions<Subject> {
-    videoDimensionsCreateAdmin(
-      slug: string
-    ): Cypress.Chainable<Cypress.Response>;
-    videoDimensionsUpdateAdmin(
-      slug: string,
-      destinationsUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    videoDimensionsFindAllAdmin(): Cypress.Chainable<Cypress.Response>;
-    videoDimensionsFindOneAdmin(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-    videoDimensionsPostAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    videoDimensionsDeleteAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public destinations
+    findAllDestinationsPublic(): Promise<string[]>;
+    findOneDestinationPublic(id: string): Promise<string>;
 
-  interface AdminVideos<Subject> {
-    videosCreateAdmin(slug: string): Cypress.Chainable<Cypress.Response>;
-    videosUpdateAdmin(
-      slug: string,
-      destinationsUpdate: string
-    ): Cypress.Chainable<Cypress.Response>;
-    videosFindAllAdmin(): Cypress.Chainable<Cypress.Response>;
-    videosFindOneAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    videosPostAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-    videosDeleteAdmin(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public entity-push-notifications
+    // api public events
+    findAllEventsPublic(): Promise<string[]>;
+    findOneEventPublic(id: string): Promise<string>;
 
-  interface ApiPublicAbout<Subject> {
-    findAllAboutPublic(): Cypress.Chainable<Cypress.Response>;
-    findOneAboutPublic(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public favorites
+    findOneFavoritesPublic(): Promise<string>;
 
-  interface ApiPublicBestOf<Subject> {
-    bestOfFindOnePublic(
-      bestOfType: string
-    ): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public images
+    findOneImagePublic(): Promise<string>;
 
-  interface ApiPublicDestinations<Subject> {
-    findAllDestinationsPublic(): Cypress.Chainable<Cypress.Response>;
-    findOneDestinationPublic(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public photo-of-the-week
+    findAllPhotoOfTheWeekPublic(): Promise<string[]>;
+    findOnePhotoOfTheWeekPublic(id: string): Promise<string>;
 
-  interface ApiPublicEvents<Subject> {
-    findAllEventsPublic(): Cypress.Chainable<Cypress.Response>;
-    findOneEventPublic(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public review-media
+    findOneReviewMediaPublic(): Promise<string>;
 
-  interface ApiPublicFavorites<Subject> {
-    favoritesFindOnePublic(): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public reviews
+    findAllReviewsPublic(): Promise<string[]>;
 
-  interface ApiPublicPhotoOfTheWeek<Subject> {
-    findAllPhotoOfTheWeekPublic(): Cypress.Chainable<Cypress.Response>;
-    findOnePhotoOfTheWeekPublic(
-      id: string
-    ): Cypress.Chainable<Cypress.Response>;
-  }
+    // api public sitemap
+    findSitemapPublic(): Promise<string>;
 
-  interface ApiPublicReviewMedia<Subject> {
-    findOneReviewMediaPublic(): Cypress.Chainable<Cypress.Response>;
-  }
+    // api user comments
+    addCommentUser(): Promise<string[]>;
+    updateCommentUser(
+      id: string,
+      entityId: string,
+      commentUpdate: string
+    ): Promise<string>;
+    findAllCommentsUser(
+      id: string,
+      entityId: string,
+      mediaId?: string
+    ): Promise<string[]>;
+    findOneCommentUser(id: string, entityId: string): Promise<string[]>;
+    removeCommentUser(id: string, entityId: string): Promise<void>;
 
-  interface ApiPublicReviews<Subject> {
-    findAllReviewsPublic(): Cypress.Chainable<Cypress.Response>;
-    findOneReviewPublic(id: string): Cypress.Chainable<Cypress.Response>;
-  }
+    // api user emotions
+    addEmotionUser(): Promise<string[]>;
+    findAllEmotionsUser(
+      id: string,
+      entityId: string,
+      mediaId?: string
+    ): Promise<string[]>;
+    findOneEmotionUser(id: string, entityId: string): Promise<string[]>;
+    removeEmotionUser(id: string, entityId: string): Promise<void>;
 
-  interface ApiUserComments<Subject> {
-    commentsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    commentsUpdateUser(id: string): Cypress.Chainable<Cypress.Response>;
-    commentsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
-    commentsStartingUser(id: string): Cypress.Chainable<Cypress.Response>;
-    commentsEndingUser(id: string): Cypress.Chainable<Cypress.Response>;
-  }
-
-  interface ApiUserEmotions<Subject> {
-    emotionsCreateUser(slug: string): Cypress.Chainable<Cypress.Response>;
-    emotionsDeleteUser(id: string): Cypress.Chainable<Cypress.Response>;
+    // api auth
+    authenticateApi(): Promise<string>;
   }
 }

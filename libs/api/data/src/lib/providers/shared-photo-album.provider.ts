@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
 import {
   combineLatest,
@@ -15,43 +16,29 @@ import {
   pluck,
   toArray,
 } from 'rxjs';
+import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
+import { EntityType } from '@dark-rush-photography/shared/types';
+import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 import {
-  EntityType,
-  ImageDimensionType,
-  ImageResolution,
-} from '@dark-rush-photography/shared/types';
-import {
-  GoogleDriveFile,
-  GoogleDriveFolder,
-  SharedImage,
-  SharedPhotoAlbum,
-} from '@dark-rush-photography/api/types';
-import {
-  downloadGoogleDriveFile,
   getGoogleDriveFolderById$,
   getGoogleDriveFolders$,
-  getGoogleDriveImageFiles$,
-  resizeImage$,
-  findImageResolution,
   getGoogleDriveFolderWithName$,
   googleDriveFolderWithNameExists$,
 } from '@dark-rush-photography/api/util';
-import { ConfigProvider } from './config.provider';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class SharedPhotoAlbumProvider {
   private readonly logger: Logger;
-  private readonly smallResolution: ImageResolution;
-  private readonly mediumResolution: ImageResolution;
 
   constructor(
     private readonly configProvider: ConfigProvider,
@@ -59,133 +46,6 @@ export class SharedPhotoAlbumProvider {
     private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(SharedPhotoAlbumProvider.name);
-    this.smallResolution = findImageResolution(ImageDimensionType.Small);
-    this.mediumResolution = findImageResolution(ImageDimensionType.Medium);
-  }
-
-  findPhotoAlbumFolders$(
-    googleDrive: drive_v3.Drive,
-    sharedWithFolderId: string
-  ): Observable<SharedPhotoAlbum[]> {
-    return getGoogleDriveFolders$(googleDrive, sharedWithFolderId).pipe(
-      concatMap((photoAlbumFolders) => from(photoAlbumFolders)),
-      concatMap((photoAlbumFolder) =>
-        combineLatest([
-          of(photoAlbumFolder),
-          getGoogleDriveImageFiles$(googleDrive, photoAlbumFolder.id),
-        ])
-      ),
-      concatMap(([photoAlbumFolder, imageFiles]) =>
-        this.loadAllPhotoAlbumImages$(googleDrive, photoAlbumFolder, imageFiles)
-      ),
-      toArray<SharedPhotoAlbum>()
-    );
-  }
-
-  findPhotoAlbumFolder$(
-    googleDrive: drive_v3.Drive,
-    photoAlbumFolderId: string
-  ): Observable<SharedPhotoAlbum> {
-    return getGoogleDriveFolderById$(googleDrive, photoAlbumFolderId).pipe(
-      concatMap((photoAlbumFolder) =>
-        combineLatest([
-          of(photoAlbumFolder),
-          getGoogleDriveImageFiles$(googleDrive, photoAlbumFolderId),
-        ])
-      ),
-      concatMap(([photoAlbumFolder, imageFiles]) =>
-        this.loadAllPhotoAlbumImages$(googleDrive, photoAlbumFolder, imageFiles)
-      )
-    );
-  }
-
-  loadFirstPhotoAlbumImage$(
-    googleDrive: drive_v3.Drive,
-    sharedPhotoAlbumFolder: GoogleDriveFolder,
-    sharedImageFiles: GoogleDriveFile[]
-  ): Observable<SharedPhotoAlbum> {
-    if (sharedImageFiles.length == 0) {
-      return of({
-        id: sharedPhotoAlbumFolder.id,
-        name: sharedPhotoAlbumFolder.name,
-        lowResDataUri: '',
-        highResDataUri: '',
-        imagesCount: sharedImageFiles.length,
-      });
-    }
-
-    return of(sharedImageFiles[0]).pipe(
-      concatMap((sharedImageFile) =>
-        this.loadImageFileDataUri$(googleDrive, sharedImageFile)
-      ),
-      map((sharedImage) => {
-        return {
-          id: sharedPhotoAlbumFolder.id,
-          name: sharedPhotoAlbumFolder.name,
-          lowResDataUri: sharedImage.lowResDataUri,
-          highResDataUri: sharedImage.highResDataUri,
-          imagesCount: sharedImageFiles.length,
-        };
-      })
-    );
-  }
-
-  loadAllPhotoAlbumImages$(
-    googleDrive: drive_v3.Drive,
-    sharedPhotoAlbumFolder: GoogleDriveFolder,
-    sharedImageFiles: GoogleDriveFile[]
-  ): Observable<SharedPhotoAlbum> {
-    if (sharedImageFiles.length == 0) {
-      return of({
-        id: sharedPhotoAlbumFolder.id,
-        name: sharedPhotoAlbumFolder.name,
-        lowResDataUri: '',
-        highResDataUri: '',
-        imagesCount: sharedImageFiles.length,
-      });
-    }
-
-    return from(sharedImageFiles).pipe(
-      concatMap((sharedImageFile) =>
-        this.loadImageFileDataUri$(googleDrive, sharedImageFile)
-      ),
-      map((sharedImage) => {
-        return {
-          id: sharedPhotoAlbumFolder.id,
-          name: sharedPhotoAlbumFolder.name,
-          lowResDataUri: sharedImage.lowResDataUri,
-          highResDataUri: sharedImage.highResDataUri,
-          imagesCount: sharedImageFiles.length,
-        };
-      })
-    );
-  }
-
-  loadImageFileDataUri$(
-    googleDrive: drive_v3.Drive,
-    sharesImageFile: GoogleDriveFile
-  ): Observable<SharedImage> {
-    const datauri = require('datauri');
-    return from(downloadGoogleDriveFile(googleDrive, sharesImageFile.id)).pipe(
-      concatMap((filePath) =>
-        combineLatest([
-          resizeImage$(sharesImageFile.name, filePath, this.smallResolution),
-          resizeImage$(sharesImageFile.name, filePath, this.mediumResolution),
-        ])
-      ),
-      concatMap(([lowResFilePath, highResFilePath]) =>
-        combineLatest([
-          from(datauri(lowResFilePath)),
-          from(datauri(highResFilePath)),
-        ])
-      ),
-      map(([lowResDataUri, highResDataUri]) => {
-        return {
-          lowResDataUri: (lowResDataUri as { base64: string }).base64,
-          highResDataUri: (highResDataUri as { base64: string }).base64,
-        } as SharedImage;
-      })
-    );
   }
 
   loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
@@ -221,6 +81,96 @@ export class SharedPhotoAlbumProvider {
     googleDrive: drive_v3.Drive,
     sharedWith: string
   ): Observable<void> {
+    return this.findSharedWithFolder$(googleDrive, sharedWith).pipe(
+      concatMap((sharedWithFolder) =>
+        getGoogleDriveFolders$(googleDrive, sharedWithFolder.id)
+      ),
+      concatMap((sharedPhotoAlbumEntityFolders) =>
+        from(sharedPhotoAlbumEntityFolders)
+      ),
+      concatMap((sharedPhotoAlbumEntityFolder) =>
+        combineLatest([
+          of(sharedPhotoAlbumEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.SharedPhotoAlbum,
+              group: sharedWith,
+              slug: sharedPhotoAlbumEntityFolder.name,
+            })
+          ),
+        ])
+      ),
+      concatMap(([sharedPhotoAlbumEntityFolder, documentModels]) => {
+        const documentModelsArray = loadDocumentModelsArray(documentModels);
+        if (documentModelsArray.length > 0) {
+          this.logger.log(`Found entity ${sharedPhotoAlbumEntityFolder.name}`);
+          return of(documentModelsArray[0]);
+        }
+
+        this.logger.log(`Creating entity ${sharedPhotoAlbumEntityFolder.name}`);
+        return from(
+          new this.entityModel({
+            ...loadNewEntity(EntityType.SharedPhotoAlbum, {
+              group: sharedWith,
+              slug: sharedPhotoAlbumEntityFolder.name,
+              isPosted: false,
+            }),
+          }).save()
+        );
+      }),
+      last(),
+      map(() => undefined)
+    );
+  }
+
+  findNewImagesFolder$(
+    googleDrive: drive_v3.Drive,
+    entityId: string
+  ): Observable<{
+    documentModel: DocumentModel;
+    imagesFolder: GoogleDriveFolder;
+  }> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        combineLatest([
+          of(documentModel),
+          this.findSharedWithFolder$(googleDrive, documentModel.group),
+        ])
+      ),
+      concatMap(([documentModel, socialMediaGroupFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            socialMediaGroupFolder.id,
+            documentModel.slug
+          ),
+        ])
+      ),
+      concatMap(([documentModel, socialMediaEntityFolder]) =>
+        combineLatest([
+          of(documentModel),
+          getGoogleDriveFolderWithName$(
+            googleDrive,
+            socialMediaEntityFolder.id,
+            'images'
+          ),
+        ])
+      ),
+      map(([documentModel, entityImagesFolder]) => {
+        return {
+          documentModel: documentModel,
+          imagesFolder: entityImagesFolder,
+        };
+      })
+    );
+  }
+
+  findSharedWithFolder$(
+    googleDrive: drive_v3.Drive,
+    sharedWith: string
+  ): Observable<GoogleDriveFolder> {
     return combineLatest([
       from(
         getGoogleDriveFolderById$(
@@ -267,45 +217,7 @@ export class SharedPhotoAlbumProvider {
             sharedWith
           );
         }
-      ),
-      concatMap((sharedWithFolder) =>
-        getGoogleDriveFolders$(googleDrive, sharedWithFolder.id)
-      ),
-      concatMap((sharedPhotoAlbumEntityFolders) =>
-        from(sharedPhotoAlbumEntityFolders)
-      ),
-      concatMap((sharedPhotoAlbumEntityFolder) =>
-        combineLatest([
-          of(sharedPhotoAlbumEntityFolder),
-          from(
-            this.entityModel.find({
-              type: EntityType.SharedPhotoAlbum,
-              group: sharedWith,
-              slug: sharedPhotoAlbumEntityFolder.name,
-            })
-          ),
-        ])
-      ),
-      concatMap(([sharedPhotoAlbumEntityFolder, documentModels]) => {
-        const documentModelsArray = loadDocumentModelsArray(documentModels);
-        if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${sharedPhotoAlbumEntityFolder.name}`);
-          return of(documentModelsArray[0]);
-        }
-
-        this.logger.log(`Creating entity ${sharedPhotoAlbumEntityFolder.name}`);
-        return from(
-          new this.entityModel({
-            ...loadNewEntity(EntityType.SharedPhotoAlbum, {
-              group: sharedWith,
-              slug: sharedPhotoAlbumEntityFolder.name,
-              isPosted: false,
-            }),
-          }).save()
-        );
-      }),
-      last(),
-      map(() => undefined)
+      )
     );
   }
 }

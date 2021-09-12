@@ -25,7 +25,6 @@ describe('image.functions', () => {
     datePublished: faker.date.recent().toISOString(),
     skipExif: faker.datatype.boolean(),
     isThreeSixty: faker.datatype.boolean(),
-    isProcessing: faker.datatype.boolean(),
   };
 
   describe('toImage', () => {

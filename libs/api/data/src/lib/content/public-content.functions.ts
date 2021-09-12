@@ -1,4 +1,4 @@
-import { PublicContent } from '@dark-rush-photography/api/types';
+import { PublicContent } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import { findPublicImageDimensions } from './image-dimension.functions';
 import { findPublicImages } from './image.functions';

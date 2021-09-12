@@ -13,7 +13,7 @@ export class ReviewValidators {
     ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> =>
       new Promise<{ duplicate: boolean }>((resolve) => {
         setTimeout(() => {
-          if (control.value == 'aint-no-mountain-high-enough') {
+          if (control.value === 'aint-no-mountain-high-enough') {
             resolve({ duplicate: true });
           }
         }, 1_500);

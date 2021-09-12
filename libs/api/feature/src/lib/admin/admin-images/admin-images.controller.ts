@@ -11,7 +11,6 @@ import {
   UploadedFile,
   Get,
   ParseUUIDPipe,
-  ParseBoolPipe,
   ParseEnumPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -30,9 +29,10 @@ import {
   ImageAdminDto,
   ImageDimensionType,
   ImageUpdateDto,
+  MediaState,
   ThreeSixtySettingsDto,
 } from '@dark-rush-photography/shared/types';
-import { FileUploadDto } from '@dark-rush-photography/api/types';
+import { FileUploadDto } from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminImagesService } from './admin-images.service';
 
@@ -107,22 +107,13 @@ export class AdminImagesController {
     );
   }
 
-  @Put(':id/processing/:isProcessing')
-  @ApiOkResponse({ type: ImageAdminDto })
-  setIsProcessing$(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Param('isProcessing', ParseBoolPipe) isProcessing: boolean,
-    @Query('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<void> {
-    return this.adminImagesService.setIsProcessing$(id, entityId, isProcessing);
-  }
-
-  @Get('load-new-images')
+  @Get()
   @ApiOkResponse({ type: [ImageAdminDto] })
-  loadNewImages$(
-    @Query('entityId', ParseObjectIdPipe) entityId: string
+  findAll$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Query('state', ParseObjectIdPipe) state: MediaState
   ): Observable<ImageAdminDto[]> {
-    return this.adminImagesService.loadNewImages$(entityId);
+    return this.adminImagesService.findAll$(entityId, state);
   }
 
   @Get(':id')

@@ -127,17 +127,17 @@ export class ConfigProvider {
     return value;
   }
 
-  getAzureStorageConnectionString(mediaState: MediaState): string {
-    switch (mediaState) {
+  getAzureStorageConnectionString(state: MediaState): string {
+    switch (state) {
       case MediaState.New:
       case MediaState.Selected:
         return this.azureStorageConnectionStringPrivate;
-      case MediaState.Posted:
+      case MediaState.Published:
       case MediaState.Archived:
         return this.azureStorageConnectionStringPublic;
       default:
         throw new BadRequestException(
-          `Azure storage connection string not found for media state ${mediaState}`
+          `Azure storage connection string not found for media state ${state}`
         );
     }
   }
@@ -169,17 +169,17 @@ export class ConfigProvider {
     return value;
   }
 
-  getAzureStorageBlobContainerName(mediaState: MediaState): string {
-    switch (mediaState) {
+  getAzureStorageBlobContainerName(state: MediaState): string {
+    switch (state) {
       case MediaState.New:
       case MediaState.Selected:
         return this.azureStorageBlobContainerNamePrivate;
-      case MediaState.Posted:
+      case MediaState.Published:
       case MediaState.Archived:
         return this.azureStorageBlobContainerNamePublic;
       default:
         throw new BadRequestException(
-          `Azure storage blob container name not found for media state ${mediaState}`
+          `Azure storage blob container name not found for media state ${state}`
         );
     }
   }

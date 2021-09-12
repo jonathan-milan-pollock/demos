@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 import { MediaState, Video } from '@dark-rush-photography/shared/types';
-import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { findPublicVideos, loadVideo } from './video.functions';
 
 describe('video.functions', () => {
@@ -22,7 +22,6 @@ describe('video.functions', () => {
     threeSixtySettings: undefined,
     hlsUrl: faker.internet.url(),
     isUploaded: faker.datatype.boolean(),
-    isProcessing: faker.datatype.boolean(),
   };
 
   describe('toVideo', () => {

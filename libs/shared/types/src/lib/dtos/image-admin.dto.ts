@@ -11,9 +11,8 @@ import {
 } from 'class-validator';
 
 import { MediaState } from '../enums/media-state.enum';
-import { Image } from '../interfaces/image.interface';
 
-export class ImageAdminDto implements Image {
+export class ImageAdminDto {
   @IsUUID()
   id!: string;
 
@@ -61,7 +60,4 @@ export class ImageAdminDto implements Image {
 
   @IsBoolean()
   isThreeSixty!: boolean;
-
-  @IsBoolean()
-  isProcessing!: boolean;
 }

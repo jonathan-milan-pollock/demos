@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Model } from 'mongoose';
 import { map, Observable } from 'rxjs';
+import { Model } from 'mongoose';
 
 import {
   Comment,
@@ -39,6 +39,10 @@ export class UserCommentsService {
       commentUpdate,
       this.entityModel
     );
+  }
+
+  findAll$(entityId: string, mediaId?: string): Observable<Comment[]> {
+    return this.commentProvider.findAll$(entityId, this.entityModel, mediaId);
   }
 
   findOne$(id: string, entityId: string): Observable<Comment> {

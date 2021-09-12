@@ -1,4 +1,5 @@
-import { AUTH0_AUDIENCE, AUTH0_ISSUER } from '@dark-rush-photography/api/types';
+export const AUTH0_AUDIENCE = 'https://www.darkrushphotography.com';
+export const AUTH0_ISSUER = 'https://darkrushphotography.us.auth0.com/';
 
 Cypress.Commands.add('authenticateApi', async (): Promise<string> => {
   if (Cypress.env('ACCESS_TOKEN'))

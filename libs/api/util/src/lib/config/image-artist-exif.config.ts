@@ -1,4 +1,4 @@
-import { ImageArtistExif } from '@dark-rush-photography/api/types';
+import { ImageArtistExif } from '@dark-rush-photography/shared/types';
 
 export const GET_IMAGE_ARTIST_EXIF = (
   copyrightYear: number,

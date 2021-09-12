@@ -21,7 +21,7 @@ import {
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
 } from '@dark-rush-photography/shared/types';
-import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
+import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,

@@ -15,7 +15,7 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { AdminMediaProcessesService } from './admin-media-processes.service';
 
-@Controller({ path: 'admin/entities', version: '1' })
+@Controller({ path: 'admin/media-processes', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Media Processes')
 export class AdminMediaProcessesController {

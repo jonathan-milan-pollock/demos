@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Model } from 'mongoose';
 import { Observable, of } from 'rxjs';
+import { Model } from 'mongoose';
 
 import {
   DocumentModel,

@@ -26,7 +26,7 @@ import {
   loadNewEntity,
 } from '../entities/entity.functions';
 import { ConfigProvider } from './config.provider';
-import { GoogleDriveFolder } from '@dark-rush-photography/api/types';
+import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 
 @Injectable()

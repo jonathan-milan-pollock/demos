@@ -1,5 +1,3 @@
-import { About } from '@dark-rush-photography/shared/types';
-
 describe('Admin About API', () => {
   const authorization = '';
 
@@ -43,7 +41,7 @@ describe('Admin About API', () => {
   beforeEach(() => {
     findAll().then(($body) => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      $body.body.forEach((about: About) => deleteAbout(about.id!));
+      // $body.body.forEach((about: About) => deleteAbout(about.id!));
     });
   });
 

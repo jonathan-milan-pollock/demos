@@ -26,20 +26,20 @@ export class EntityUpdateDto {
   title!: string;
 
   @IsString()
-  description!: string;
+  seoDescription!: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => String)
-  keywords: string[] = [];
+  seoKeywords: string[] = [];
 
   @IsString()
   @IsOptional()
-  dateCreated!: string;
+  dateCreated?: string;
 
   @IsString()
   @IsOptional()
-  datePublished!: string;
+  datePublished?: string;
 
   @ValidateNested()
   @Type(() => LocationDto)

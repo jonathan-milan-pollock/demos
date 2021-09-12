@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { Observable } from 'rxjs';
 
-import { IS_PUBLIC, JWT } from '@dark-rush-photography/api/types';
+import { IS_PUBLIC, JWT } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(JWT) {

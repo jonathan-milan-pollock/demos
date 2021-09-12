@@ -4,7 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 
-import { AUTH0_AUDIENCE, AUTH0_ISSUER } from '@dark-rush-photography/api/types';
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_ISSUER,
+} from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

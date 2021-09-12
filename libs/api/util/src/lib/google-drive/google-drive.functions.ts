@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { ParsedPath } from 'path/posix';
 import * as os from 'os';
 import { BadRequestException } from '@nestjs/common';
 
@@ -10,7 +11,7 @@ import { drive_v3, google } from 'googleapis';
 import {
   GoogleDriveFile,
   GoogleDriveFolder,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 
 export const getGoogleDrive = (
   clientEmail: string,
@@ -24,6 +25,14 @@ export const getGoogleDrive = (
   );
 
   return google.drive({ version: 'v3', auth });
+};
+
+export const getOrderFromGoogleDriveImageFileName = (
+  googleDriveImageFileName: string
+): ParsedPath => {
+  const fileName = googleDriveImageFileName;
+  const orderFileName = fileName.substring(fileName.lastIndexOf('-') + 1);
+  return path.parse(orderFileName);
 };
 
 export const watchFolder$ = (
@@ -43,7 +52,7 @@ export const watchFolder$ = (
         address: pushNotificationAddress,
       },
     })
-  ).pipe(map((response) => response.status == 200));
+  ).pipe(map((response) => response.status === 200));
 };
 
 export const googleDriveFolderWithNameExists$ = (

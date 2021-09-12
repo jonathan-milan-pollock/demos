@@ -32,8 +32,8 @@ export const loadNewEntity = (
   videos: [],
   comments: [],
   emotions: [],
-  isPosted: entityCreate.isPosted,
-  isProcessing: false,
+  isPublic: entityCreate.isPosted,
+  isPublishing: false,
 });
 
 export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
@@ -57,8 +57,8 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
     documentModel.videos.length > 0
       ? documentModel.videos.map(loadVideo)[0]
       : undefined,
-  isPosted: documentModel.isPosted,
-  isProcessing: documentModel.isProcessing,
+  isPublished: documentModel.isPublic,
+  isPublishing: documentModel.isPublishing,
 });
 
 export const loadEntityMinimal = (

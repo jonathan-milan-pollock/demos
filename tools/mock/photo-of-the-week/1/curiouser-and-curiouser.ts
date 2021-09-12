@@ -1,4 +1,4 @@
-import { PhotoOfTheWeekDto } from '@dark-rush-photography/api/types';
+import { PhotoOfTheWeekDto } from '@dark-rush-photography/shared/types';
 
 export class CuriouserAndCuriouser extends PhotoOfTheWeekDto {
   group = 1;

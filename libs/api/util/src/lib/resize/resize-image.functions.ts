@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
 
 import {
-  ImageResolution,
-  LongestEdgeImageResolution,
-  StandardImageResolution,
-  TileImageResolution,
+  ImageDimensionConfig,
+  ImageDimensionLongestEdgeConfig,
+  ImageDimensionStandardConfig,
+  ImageDimensionTileConfig,
 } from '@dark-rush-photography/shared/types';
 import { resizeTileImage$ } from './resize-tile-image.functions';
 import { resizeLongestEdgeImage$ } from './resize-longest-edge-image.functions';
@@ -14,13 +14,13 @@ import { resizeStandardImage$ } from './resize-standard-image.functions';
 export const resizeImage$ = (
   fileName: string,
   filePath: string,
-  imageResolution: ImageResolution
+  imageResolution: ImageDimensionConfig
 ): Observable<string> => {
   if ('minPixels' in imageResolution) {
     return resizeTileImage$(
       fileName,
       filePath,
-      imageResolution as TileImageResolution
+      imageResolution as ImageDimensionTileConfig
     );
   }
 
@@ -28,16 +28,17 @@ export const resizeImage$ = (
     return resizeLongestEdgeImage$(
       fileName,
       filePath,
-      (imageResolution as LongestEdgeImageResolution).longestEdge
+      (imageResolution as ImageDimensionLongestEdgeConfig).longestEdge
     );
   }
 
-  const standardImageResolution = imageResolution as StandardImageResolution;
+  const standardImageResolution =
+    imageResolution as ImageDimensionStandardConfig;
   if (standardImageResolution.exactFit) {
     return resizeExactFitImage$(
       fileName,
       filePath,
-      imageResolution as StandardImageResolution
+      imageResolution as ImageDimensionStandardConfig
     );
   }
 
