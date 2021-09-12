@@ -4,7 +4,7 @@ import {
   ImageDimension,
   ImageDimensionType,
 } from '@dark-rush-photography/shared/types';
-import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import {
   findPublicImageDimensions,
   loadImageDimension,

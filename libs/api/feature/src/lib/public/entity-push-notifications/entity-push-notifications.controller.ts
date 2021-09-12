@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { GoogleDrivePushNotificationType } from '@dark-rush-photography/api/types';
+import { EntityPushNotificationType } from '@dark-rush-photography/shared/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { EntitiesPushNotificationsService } from './entity-push-notifications.service';
 
@@ -19,17 +19,16 @@ export class EntityPushNotificationsController {
   @ApiOkResponse({ type: String })
   @HttpCode(200)
   create$(
-    @Headers('X-Goog-Channel-ID') googleChannelId: string,
-    @Headers('X-Goog-Channel-Token') googleChannelToken: string,
-    @Headers('X-Goog-Resource-ID') googleResourceId: string,
-    @Headers('X-Goog-Resource-State') googleResourceState: string
+    @Headers('X-Goog-Channel-ID') channelId: string,
+    @Headers('X-Goog-Channel-Token') channelToken: string,
+    @Headers('X-Goog-Resource-ID') resourceId: string,
+    @Headers('X-Goog-Resource-State') resourceState: string
   ): Observable<void> {
     return this.entitiesPushNotificationsService.create$({
-      googleChannelId,
-      googleChannelToken,
-      googleResourceId,
-      googleResourceState:
-        googleResourceState.toLowerCase() as GoogleDrivePushNotificationType,
+      channelId,
+      channelToken,
+      resourceId,
+      resourceState: resourceState.toLowerCase() as EntityPushNotificationType,
     });
   }
 }

@@ -1,7 +1,11 @@
 import { Reflector } from '@nestjs/core';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 
-import { AUTH0_ROLES, IS_USER, ADMIN } from '@dark-rush-photography/api/types';
+import {
+  AUTH0_ROLES,
+  IS_USER,
+  ADMIN,
+} from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class UserGuard implements CanActivate {

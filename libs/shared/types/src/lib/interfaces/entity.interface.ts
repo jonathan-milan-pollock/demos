@@ -8,7 +8,7 @@ import { MediaProcess } from './media-process.interface';
 import { PhotoOfTheWeek } from './photo-of-the-week.interface';
 import { ReviewMedia } from './review-media.interface';
 import { Review } from './review.interface';
-import { SharedWith } from './shared-with.interface';
+import { SharedPhotoAlbum } from './shared-photo-album.interface';
 import { SocialMedia } from './social-media.interface';
 
 export interface Entity
@@ -21,8 +21,8 @@ export interface Entity
     PhotoOfTheWeek,
     ReviewMedia,
     Review,
-    SharedWith,
+    SharedPhotoAlbum,
     SocialMedia {
   readonly type: EntityType;
-  readonly isProcessing: boolean;
+  readonly isPublishing: boolean;
 }

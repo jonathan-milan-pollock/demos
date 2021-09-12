@@ -5,7 +5,7 @@ import { BlobUploadCommonResponse } from '@azure/storage-blob';
 import { concatMap, from, Observable, tap } from 'rxjs';
 const tinify = require('tinify');
 
-import { Media } from '@dark-rush-photography/api/types';
+import { Media } from '@dark-rush-photography/shared/types';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
@@ -25,7 +25,7 @@ export class TinifyImageProvider {
     return downloadBlobToFile$(
       this.configProvider.getAzureStorageConnectionString(media.state),
       this.configProvider.getAzureStorageBlobContainerName(media.state),
-      getAzureStorageBlobPath(media),
+      getAzureStorageBlobPath(media.blobPathId, media.fileName),
       media.fileName
     ).pipe(
       concatMap((filePath) => {
@@ -38,7 +38,7 @@ export class TinifyImageProvider {
           this.configProvider.getAzureStorageConnectionString(media.state),
           this.configProvider.getAzureStorageBlobContainerName(media.state),
           Buffer.from(uint8Array as Uint8Array),
-          getAzureStorageBlobPath(media)
+          getAzureStorageBlobPath(media.blobPathId, media.fileName)
         )
       )
     );

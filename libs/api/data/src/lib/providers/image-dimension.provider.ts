@@ -1,23 +1,17 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import * as fs from 'fs-extra';
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { v4 as uuidv4 } from 'uuid';
-import { Model } from 'mongoose';
 import { combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
+import { Model } from 'mongoose';
 
 import {
   ImageDimension,
   ImageDimensionType,
-  Image,
-  Location,
   ThreeSixtySettings,
-  ImageDimensionAddDto,
-  ImageUpdateDto,
-  ImageResolution,
+  MediaResolution,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
-import { DocumentModel } from '../schema/document.schema';
+import { Document, DocumentModel } from '../schema/document.schema';
 import {
   findImageResolution$,
   resizeImage$,
@@ -37,52 +31,53 @@ import {
 } from '../content/image-validation.functions';
 import { loadImageDimension } from '../content/image-dimension.functions';
 import { ConfigProvider } from './config.provider';
+import { Media } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ImageDimensionProvider {
   private readonly logger: Logger;
 
-  constructor(private readonly configProvider: ConfigProvider) {
+  constructor(
+    private readonly configProvider: ConfigProvider,
+    @InjectModel(Document.name)
+    private readonly entityModel: Model<DocumentModel>
+  ) {
     this.logger = new Logger(ImageDimensionProvider.name);
   }
 
   add$(
     id: string,
-    entityId: string,
     imageId: string,
-    imageDimensionAdd: ImageDimensionAddDto,
-    entityModel: Model<DocumentModel>
+    entityId: string,
+    type: ImageDimensionType,
+    resolution: MediaResolution
   ): Observable<ImageDimension> {
-    return from(entityModel.findById(entityId)).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
         return validateImageDocumentModelFound(imageId, documentModel);
       }),
       map((documentModel) =>
-        validateImageDimensionNotAlreadyExists(
-          imageId,
-          imageDimensionAdd.type,
-          documentModel
-        )
+        validateImageDimensionNotAlreadyExists(imageId, type, documentModel)
       ),
       concatMap((documentModel) => {
         return from(
-          entityModel.findByIdAndUpdate(entityId, {
+          this.entityModel.findByIdAndUpdate(entityId, {
             imageDimensions: [
               ...documentModel.imageDimensions,
               {
                 id,
                 entityId,
                 imageId,
-                type: imageDimensionAdd.type,
-                resolution: imageDimensionAdd.resolution,
+                type: type,
+                resolution,
                 threeSixtySettings: { pitch: 0, yaw: 0, hfov: 0 },
               },
             ],
           })
         );
       }),
-      concatMap(() => this.findOne$(id, entityId, entityModel))
+      concatMap(() => this.findOne$(id, entityId, this.entityModel))
     );
   }
 
@@ -131,24 +126,20 @@ export class ImageDimensionProvider {
   }
 
   updateBlobPath$(
-    image: Image,
-    imageUpdate: ImageUpdateDto,
     media: Media,
-    imageUpdateMedia: Media,
-    imageDimension: ImageDimension,
-    location?: Location
+    updateMedia: Media,
+    imageDimension: ImageDimension
   ): Observable<boolean> {
     return downloadBlobToFile$(
       this.configProvider.getAzureStorageConnectionString(media.state),
       this.configProvider.getAzureStorageBlobContainerName(media.state),
-      getAzureStorageBlobPathWithDimension(media, imageDimension.type),
+      getAzureStorageBlobPathWithDimension(
+        media.blobPathId,
+        media.fileName,
+        imageDimension.type
+      ),
       media.fileName
     ).pipe(
-      tap(() =>
-        this.logger.debug(
-          `Exif image dimension ${imageDimension.type} with update`
-        )
-      ),
       /*
       tap(() =>
         this.logger.debug(
@@ -176,61 +167,14 @@ export class ImageDimensionProvider {
         deleteBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),
           this.configProvider.getAzureStorageBlobContainerName(media.state),
-          getAzureStorageBlobPathWithDimension(media, imageDimension.type)
+          getAzureStorageBlobPathWithDimension(
+            media.blobPathId,
+            media.fileName,
+            imageDimension.type
+          )
         )
       ),
       map(() => true)
-    );
-  }
-
-  resize$(
-    media: Media,
-    imageResolution: ImageResolution,
-    entityModel: Model<DocumentModel>
-  ): Observable<string> {
-    const id = uuidv4();
-    return downloadBlobToFile$(
-      this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.getAzureStorageBlobContainerName(media.state),
-      getAzureStorageBlobPath(media),
-      media.fileName
-    ).pipe(
-      tap(() =>
-        this.logger.log(
-          `Resizing ${imageResolution.type} image ${media.fileName}`
-        )
-      )
-      /* concatMap((filePath) =>
-        resizeImage$(media.fileName, filePath, imageResolution)
-      ),
-      concatMap((filePath) =>
-        combineLatest([
-          of(filePath),
-          uploadStreamToBlob$(
-            this.configProvider.azureStorageConnectionStringBlobs,
-            fs.createReadStream(filePath),
-            getAzureStorageBlobPathWithDimension(media, imageResolution.type)
-          ),
-        ])
-      ),
-      concatMap(([filePath]) => findImageResolution$(filePath)),
-      tap(() =>
-        this.logger.log(
-          `Adding ${imageResolution.type} image dimension ${media.fileName}`
-        )
-      ),
-      concatMap((resolution) =>
-        this.add$(
-          id,
-          media.entityId,
-          media.id,
-          {
-            type: imageResolution.type,
-            resolution,
-          },
-          entityModel
-        )
-      )*/
     );
   }
 
@@ -243,7 +187,7 @@ export class ImageDimensionProvider {
       map(validateEntityFound),
       map((documentModel) => {
         const foundImageDimension = documentModel.imageDimensions.find(
-          (imageDimension) => imageDimension.id == id
+          (imageDimension) => imageDimension.id === id
         );
         if (!foundImageDimension)
           throw new NotFoundException(`Could not find image dimension ${id}`);

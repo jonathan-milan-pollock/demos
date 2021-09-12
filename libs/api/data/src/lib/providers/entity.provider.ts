@@ -14,17 +14,17 @@ import {
 
 @Injectable()
 export class EntityProvider {
-  setIsProcessing$(
+  setIsPublishing$(
     entityType: EntityType,
     id: string,
-    isProcessing: boolean,
+    isPublishing: boolean,
     entityModel: Model<DocumentModel>
   ): Observable<void> {
     return from(entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
       concatMap(() =>
-        from(entityModel.findByIdAndUpdate(id, { isProcessing }))
+        from(entityModel.findByIdAndUpdate(id, { isPublishing: isPublishing }))
       ),
       map(() => undefined)
     );
@@ -62,7 +62,7 @@ export class EntityProvider {
   ): Observable<DocumentModel> {
     return from(entityModel.find({ type: entityType })).pipe(
       concatMap(loadDocumentModelsArray),
-      filter((documentModel) => documentModel.isPosted)
+      filter((documentModel) => documentModel.isPublic)
     );
   }
 
@@ -75,24 +75,6 @@ export class EntityProvider {
       map(validateEntityFound),
       map(validateEntityIsPosted),
       map((documentModel) => validateEntityType(entityType, documentModel))
-    );
-  }
-
-  delete$(
-    entityType: EntityType,
-    id: string,
-    entityModel: Model<DocumentModel>
-  ): Observable<void> {
-    return from(entityModel.findById(id)).pipe(
-      map((documentModel) =>
-        documentModel
-          ? validateEntityType(entityType, documentModel)
-          : of(documentModel)
-      ),
-      concatMap((documentModel) =>
-        documentModel ? from(entityModel.findByIdAndDelete(id)) : of()
-      ),
-      map(() => undefined)
     );
   }
 }

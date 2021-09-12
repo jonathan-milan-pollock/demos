@@ -6,7 +6,10 @@ import { WsAdapter } from '@nestjs/platform-ws';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import { AUTH0_AUDIENCE, AUTH0_ISSUER } from '@dark-rush-photography/api/types';
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_ISSUER,
+} from '@dark-rush-photography/shared/types';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

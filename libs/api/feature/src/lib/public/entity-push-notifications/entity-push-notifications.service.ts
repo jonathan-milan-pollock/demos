@@ -4,40 +4,38 @@ import { InjectRepository, Repository } from '@nestjs/azure-database';
 import { from, map, Observable, of } from 'rxjs';
 
 import {
-  GoogleDrivePushNotification,
-  GoogleDrivePushNotificationType,
-} from '@dark-rush-photography/api/types';
-import { GoogleDriveChannelTable } from '@dark-rush-photography/api/data';
+  EntityPushNotification,
+  EntityPushNotificationType,
+} from '@dark-rush-photography/shared/types';
+import { EntityPushNotificationsTable } from '@dark-rush-photography/api/data';
 import { WebSocketMessageProvider } from '@dark-rush-photography/api/data';
 
 @Injectable()
 export class EntitiesPushNotificationsService {
   constructor(
-    @InjectRepository(GoogleDriveChannelTable)
-    private readonly googleDriveChannelRepository: Repository<GoogleDriveChannelTable>,
+    @InjectRepository(EntityPushNotificationsTable)
+    private readonly entityPushNotificationsRepository: Repository<EntityPushNotificationsTable>,
     private readonly webSocketMessageProvider: WebSocketMessageProvider
   ) {}
 
-  create$(
-    googleDrivePushNotification: GoogleDrivePushNotification
-  ): Observable<void> {
+  create$(entityPushNotification: EntityPushNotification): Observable<void> {
     return from(
-      this.googleDriveChannelRepository.findAll(
-        this.googleDriveChannelRepository.where(
+      this.entityPushNotificationsRepository.findAll(
+        this.entityPushNotificationsRepository.where(
           'key == ? and token == ?',
-          googleDrivePushNotification.googleChannelId,
-          googleDrivePushNotification.googleChannelToken
+          entityPushNotification.channelId,
+          entityPushNotification.channelToken
         )
       )
     ).pipe(
       map((response) => {
-        if (response.entries.length == 0) {
+        if (response.entries.length === 0) {
           return of(undefined);
         }
 
         if (
-          googleDrivePushNotification.googleResourceState ==
-          GoogleDrivePushNotificationType.Add
+          entityPushNotification.resourceState ===
+          EntityPushNotificationType.Add
         ) {
           this.webSocketMessageProvider.sendMessage(`adding image`);
         }

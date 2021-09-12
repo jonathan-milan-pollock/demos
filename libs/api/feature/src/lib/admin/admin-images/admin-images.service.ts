@@ -1,18 +1,20 @@
-import { Injectable, Logger } from '@nestjs/common';
+import * as fs from 'fs-extra';
+import { join } from 'path';
+import { Injectable, Logger, StreamableFile } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
-import { Model } from 'mongoose';
 import { combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
+import { Model } from 'mongoose';
 
 import {
   Image,
   ImageDimensionType,
   ImageUpdateDto,
   MediaState,
-  MediaType,
   ThreeSixtySettings,
 } from '@dark-rush-photography/shared/types';
+import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import {
   ConfigProvider,
   Document,
@@ -26,9 +28,7 @@ import {
   ImageUploadProvider,
   loadImage,
   validateEntityFound,
-  validateProcessingEntity,
 } from '@dark-rush-photography/api/data';
-import { getGoogleDrive } from '@dark-rush-photography/api/util';
 
 @Injectable()
 export class AdminImagesService {
@@ -58,37 +58,26 @@ export class AdminImagesService {
     const id = uuidv4();
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateProcessingEntity),
-      map((documentModel) =>
+      map((documentModel) => {
         this.imageProvider.validateImageNotAlreadyExists(
           fileName,
           documentModel
-        )
-      ),
+        );
+        return documentModel;
+      }),
       concatMap((documentModel) =>
         combineLatest([
-          this.imageProvider.add$(
-            id,
-            entityId,
-            fileName,
-            0,
-            isThreeSixty,
-            true
-          ),
           of(documentModel),
+          this.imageProvider.add$(id, entityId, fileName, 0, isThreeSixty),
         ])
       ),
-      map(([image, documentModel]) =>
-        this.imageProvider.loadMedia(
-          MediaType.Image,
-          image.id,
-          fileName,
+      concatMap(([documentModel, image]) =>
+        this.imageUploadProvider.upload$(
           image.state,
-          documentModel
+          image.blobPathId,
+          image.fileName,
+          file
         )
-      ),
-      concatMap((media) =>
-        this.imageUploadProvider.upload$(media, file).pipe(map(() => media))
       ),
       // concatMap((media) =>
       //   this.imageUploadProvider.process$(media, isThreeSixty, this.entityModel)
@@ -105,15 +94,10 @@ export class AdminImagesService {
   ): Observable<Image> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateProcessingEntity),
       concatMap((documentModel) =>
         combineLatest([this.findOne$(id, entityId), of(documentModel)])
       ),
-      map(([image, documentModel]) => ({
-        image: this.imageProvider.validateImageNotProcessing(image),
-        documentModel,
-      })),
-      concatMap(({ image, documentModel }) =>
+      concatMap(([image, documentModel]) =>
         this.imageUpdateProvider.update$(
           image,
           imageUpdate,
@@ -143,27 +127,28 @@ export class AdminImagesService {
       .pipe(concatMap(() => this.findOne$(id, entityId)));
   }
 
-  setIsProcessing$(
-    id: string,
-    entityId: string,
-    isProcessing: boolean
-  ): Observable<void> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap(() => this.findOne$(id, entityId)),
-      concatMap(() =>
-        this.imageProvider.setIsProcessing$(
-          id,
-          entityId,
-          isProcessing,
-          this.entityModel
-        )
-      ),
-      map(() => undefined)
-    );
+  select$(id: string, entityId: string): Observable<Image> {
+    return of(); // goes from new to selected
   }
 
-  loadNewImages$(entityId: string): Observable<Image[]> {
+  // can update images that are selected or published
+  // can remove images that are selected or published
+
+  archive$(id: string, entityId: string): Observable<Image> {
+    return of();
+    // only published images can be archived
+    // can no longer edit and can no longer update it
+    // change the media state
+    // remove needs to check that not removing a an archived file name
+    // also make a copy?
+  }
+
+  unarchive$(id: string, entityId: string): Observable<Image> {
+    return of();
+    // changes the state back to published=
+  }
+
+  findAll$(entityId: string, state: MediaState): Observable<Image[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
@@ -179,7 +164,7 @@ export class AdminImagesService {
       concatMap(() => this.entityProvider.findOne$(entityId, this.entityModel)),
       map((documentModel) =>
         documentModel.images
-          .filter((image) => image.state == MediaState.New)
+          .filter((image) => image.state === MediaState.New)
           .map(loadImage)
       )
     );
@@ -189,21 +174,28 @@ export class AdminImagesService {
     return this.imageProvider.findOne$(id, entityId);
   }
 
+  stream$(
+    id: string,
+    imageDimensionType: ImageDimensionType,
+    entityId: string
+  ): Promise<StreamableFile> {
+    return Promise.resolve(
+      new StreamableFile(
+        fs.createReadStream(join(process.cwd(), 'package.json'))
+      )
+    );
+  }
+
   remove$(id: string, entityId: string): Observable<void> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateProcessingEntity),
       map((documentModel) => ({
-        image: documentModel.images.find((image) => image.id == id),
+        image: documentModel.images.find((image) => image.id === id),
         documentModel,
       })),
       concatMap(({ image, documentModel }) => {
-        if (image && this.imageProvider.validateImageNotProcessing(image)) {
-          return this.imageRemoveProvider.remove$(
-            image,
-            documentModel,
-            this.entityModel
-          );
+        if (image && image.state === MediaState.Published) {
+          return this.imageRemoveProvider.remove$(image, documentModel);
         }
         return of();
       }),

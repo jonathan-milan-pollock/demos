@@ -21,5 +21,5 @@ export interface Event {
   readonly imageDimensions: ImageDimension[];
   readonly comments: Comment[];
   readonly emotions: Emotion[];
-  readonly isPosted: boolean;
+  readonly isPublic: boolean;
 }

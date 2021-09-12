@@ -2,15 +2,15 @@ import { NotFoundException } from '@nestjs/common';
 
 import {
   ImageDimensionType,
-  ImageResolution,
-  LongestEdgeImageResolution,
-  StandardImageResolution,
-  TileImageResolution,
+  ImageDimensionConfig,
+  ImageDimensionLongestEdgeConfig,
+  ImageDimensionStandardConfig,
+  ImageDimensionTileConfig,
 } from '@dark-rush-photography/shared/types';
 
 export const findThreeSixtyImageResolution = (
   imageDimensionType: ImageDimensionType
-): ImageResolution => {
+): ImageDimensionConfig => {
   const threeSixtyImageResolution = THREE_SIXTY_IMAGE_RESOLUTIONS.find(
     (imageResolution) => imageResolution.type === imageDimensionType
   );
@@ -22,9 +22,9 @@ export const findThreeSixtyImageResolution = (
 };
 
 export const THREE_SIXTY_IMAGE_RESOLUTIONS: (
-  | StandardImageResolution
-  | LongestEdgeImageResolution
-  | TileImageResolution
+  | ImageDimensionStandardConfig
+  | ImageDimensionLongestEdgeConfig
+  | ImageDimensionTileConfig
 )[] = [
   {
     type: ImageDimensionType.ThreeSixtyTile,

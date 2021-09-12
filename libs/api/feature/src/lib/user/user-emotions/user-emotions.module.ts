@@ -3,10 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
-  Auth0UserTable,
   Document,
   DocumentSchema,
   EmotionProvider,
+  UserTable,
 } from '@dark-rush-photography/api/data';
 import { UserEmotionsService } from './user-emotions.service';
 import { UserEmotionsController } from './user-emotions.controller';
@@ -16,8 +16,8 @@ import { UserEmotionsController } from './user-emotions.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(Auth0UserTable, {
-      table: 'Auth0User',
+    AzureTableStorageModule.forFeature(UserTable, {
+      table: 'User',
       createTableIfNotExists: true,
     }),
   ],

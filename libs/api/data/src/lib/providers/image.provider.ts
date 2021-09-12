@@ -1,17 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Model } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
+import { Model } from 'mongoose';
 
 import {
   Image,
   ImageDto,
   ImageUpdateDto,
   MediaState,
-  MediaType,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/api/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
@@ -20,12 +19,10 @@ import {
 import {
   validateImageFound,
   validateImageNotAlreadyExists,
-  validateImageNotProcessing,
   validateImagePublic,
 } from '../content/image-validation.functions';
 import { loadImage, loadPublicImage } from '../content/image.functions';
 import { loadPublicContent } from '../content/public-content.functions';
-import { loadMedia } from '../content/media.functions';
 
 @Injectable()
 export class ImageProvider {
@@ -41,27 +38,12 @@ export class ImageProvider {
     return validateImageNotAlreadyExists(fileName, documentModel);
   }
 
-  validateImageNotProcessing(image: Image): Image {
-    return validateImageNotProcessing(image);
-  }
-
-  loadMedia(
-    type: MediaType,
-    id: string,
-    fileName: string,
-    state: MediaState,
-    documentModel: DocumentModel
-  ): Media {
-    return loadMedia(type, id, fileName, state, documentModel);
-  }
-
   add$(
     id: string,
     entityId: string,
     fileName: string,
     order: number,
-    isThreeSixty: boolean,
-    isProcessing: boolean
+    isThreeSixty: boolean
   ): Observable<Image> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
@@ -73,14 +55,14 @@ export class ImageProvider {
               {
                 id,
                 entityId,
-                fileName,
                 state: MediaState.New,
+                blobPathId: uuidv4(),
+                fileName,
                 order,
                 isStarred: false,
                 isLoved: false,
                 skipExif: false,
                 isThreeSixty,
-                isProcessing,
               },
             ],
           })
@@ -107,8 +89,9 @@ export class ImageProvider {
               {
                 id,
                 entityId,
+                state: foundImage.state,
+                blobPathId: foundImage.blobPathId,
                 fileName: imageUpdate.fileName,
-                state: imageUpdate.state,
                 order: imageUpdate.order,
                 isStarred: imageUpdate.isStarred,
                 isLoved: imageUpdate.isLoved,
@@ -119,7 +102,6 @@ export class ImageProvider {
                 datePublished: imageUpdate.datePublished,
                 skipExif: foundImage.skipExif,
                 isThreeSixty: foundImage.isThreeSixty,
-                isProcessing: foundImage.isProcessing,
               },
             ],
           })
@@ -160,12 +142,27 @@ export class ImageProvider {
     );
   }
 
-  setDateCreated$(
+  changeState$(
     id: string,
     entityId: string,
-    dateCreated: string,
+    previousState: MediaState,
+    newState: MediaState,
     entityModel: Model<DocumentModel>
   ): Observable<DocumentModel> {
+    if (
+      !(
+        (previousState === MediaState.New &&
+          newState === MediaState.Selected) ||
+        (previousState === MediaState.Selected &&
+          newState === MediaState.Published) ||
+        (previousState === MediaState.Published &&
+          newState === MediaState.Archived) ||
+        (previousState === MediaState.Archived &&
+          newState === MediaState.Published)
+      )
+    ) {
+      throw new ConflictException('Invalid change in state');
+    }
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
@@ -177,47 +174,9 @@ export class ImageProvider {
               {
                 id,
                 entityId,
+                state: newState,
+                blobPathId: foundImage.blobPathId,
                 fileName: foundImage.fileName,
-                state: foundImage.state,
-                order: foundImage.order,
-                isStarred: foundImage.isStarred,
-                isLoved: foundImage.isLoved,
-                title: foundImage.title,
-                seoDescription: foundImage.seoDescription,
-                seoKeywords: foundImage.seoKeywords,
-                dateCreated,
-                datePublished: foundImage.datePublished,
-                skipExif: foundImage.skipExif,
-                isThreeSixty: foundImage.isThreeSixty,
-                isProcessing: foundImage.isProcessing,
-              },
-            ],
-          })
-        );
-      }),
-      map(validateEntityFound)
-    );
-  }
-
-  setIsProcessing$(
-    id: string,
-    entityId: string,
-    isProcessing: boolean,
-    entityModel: Model<DocumentModel>
-  ): Observable<DocumentModel> {
-    return from(entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) => {
-        const foundImage = validateImageFound(id, documentModel);
-        return from(
-          entityModel.findByIdAndUpdate(entityId, {
-            images: [
-              ...documentModel.images.filter((image) => image.id !== id),
-              {
-                id,
-                entityId,
-                fileName: foundImage.fileName,
-                state: foundImage.state,
                 order: foundImage.order,
                 isStarred: foundImage.isStarred,
                 isLoved: foundImage.isLoved,
@@ -228,7 +187,6 @@ export class ImageProvider {
                 datePublished: foundImage.datePublished,
                 skipExif: foundImage.skipExif,
                 isThreeSixty: foundImage.isThreeSixty,
-                isProcessing,
               },
             ],
           })

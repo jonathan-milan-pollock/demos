@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Model } from 'mongoose';
 import { map, Observable } from 'rxjs';
+import { Model } from 'mongoose';
 
 import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
 import {
@@ -21,6 +21,19 @@ export class UserEmotionsService {
 
   add$(emotionAdd: EmotionAddDto): Observable<Emotion> {
     return this.emotionProvider.add$(emotionAdd, this.entityModel);
+  }
+
+  findAll$(
+    entityId: string,
+    mediaId?: string,
+    commentId?: string
+  ): Observable<Emotion[]> {
+    return this.emotionProvider.findAll$(
+      entityId,
+      this.entityModel,
+      mediaId,
+      commentId
+    );
   }
 
   findOne$(id: string, entityId: string): Observable<Emotion> {

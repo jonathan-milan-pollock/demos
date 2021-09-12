@@ -9,11 +9,13 @@ import {
   Post,
   Body,
   Delete,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -34,33 +36,18 @@ import { AdminEntitiesService } from './admin-entities.service';
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
 
-  @Put(':entityType/:id')
+  @Post(':entityType/:id/watch')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
   })
-  @ApiOkResponse({ type: EntityAdminDto })
-  update$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() entityUpdate: EntityUpdateDto
-  ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.update$(entityType, id, entityUpdate);
-  }
-
-  @Post(':entityType/:id/website-post')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: EntityAdminDto })
-  websitePost$(
+  @ApiOkResponse({ type: Boolean })
+  watch$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.websitePost$(entityType, id);
+    return this.adminEntitiesService.watch$(entityType, id);
   }
 
   @Post(':entityType/:id/social-media-post')
@@ -77,36 +64,52 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.socialMediaPost$(entityType, id);
   }
 
-  @Put(':entityType/:id/processing/:isProcessing')
+  @Put(':entityType/:id')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
+  @ApiOkResponse({ type: EntityAdminDto })
+  update$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType,
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() entityUpdate: EntityUpdateDto
+  ): Observable<EntityAdminDto> {
+    return this.adminEntitiesService.update$(entityType, id, entityUpdate);
+  }
+
+  @Put(':entityType/:id/publish')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
+  @ApiOkResponse({ type: EntityAdminDto })
+  publish$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType,
+    @Param('id', ParseObjectIdPipe) id: string
+  ): Observable<EntityAdminDto> {
+    return this.adminEntitiesService.websitePost$(entityType, id);
+  }
+
+  @Put(':entityType/:id/publishing/:isPublishing')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
   })
   @HttpCode(204)
-  setIsProcessing$(
+  setIsPublishing$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string,
-    @Param('isProcessing', ParseBoolPipe) isProcessing: boolean
+    @Param('isPublishing', ParseBoolPipe) isPublishing: boolean
   ): Observable<void> {
-    return this.adminEntitiesService.setIsProcessing$(
+    return this.adminEntitiesService.setIsPublishing$(
       entityType,
       id,
-      isProcessing
+      isPublishing
     );
-  }
-
-  @Get(':entityType')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: [EntityMinimalDto] })
-  findAll$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType
-  ): Observable<EntityMinimalDto[]> {
-    return this.adminEntitiesService.findAll$(entityType);
   }
 
   @Get(':entityType/groups')
@@ -120,6 +123,25 @@ export class AdminEntitiesController {
     entityType: EntityType
   ): Observable<string[]> {
     return this.adminEntitiesService.findAllGroups$(entityType);
+  }
+
+  @Get(':entityType')
+  @ApiParam({
+    name: 'entityType',
+    enum: EntityType,
+  })
+  @ApiQuery({
+    name: 'group',
+    required: false,
+    type: String,
+  })
+  @ApiOkResponse({ type: [EntityMinimalDto] })
+  findAll$(
+    @Param('entityType', new ParseEnumPipe(EntityType))
+    entityType: EntityType,
+    @Query('group') group?: string
+  ): Observable<EntityMinimalDto[]> {
+    return this.adminEntitiesService.findAll$(entityType, group);
   }
 
   @Get(':entityType/:id')
@@ -136,32 +158,18 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findOne$(entityType, id);
   }
 
-  @Get(':entityType/group/:group')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: [EntityMinimalDto] })
-  findAllInGroup$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('group') group: string
-  ): Observable<EntityMinimalDto[]> {
-    return this.adminEntitiesService.findAllInGroup$(entityType, group);
-  }
-
-  @Get(':entityType/:id/processing')
+  @Get(':entityType/:id/publishing')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
   })
   @ApiOkResponse({ type: Boolean })
-  findIsProcessing$(
+  findIsPublishing$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
     @Param('id', ParseObjectIdPipe) id: string
   ): Observable<boolean> {
-    return this.adminEntitiesService.findIsProcessing$(entityType, id);
+    return this.adminEntitiesService.findIsPublishing$(entityType, id);
   }
 
   @Delete(':entityType/:id')

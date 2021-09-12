@@ -18,7 +18,7 @@
       </a>
       <a
         class="top-nav-bar-button"
-        [ngClass]="{ 'top-nav-bar-button-active': activeLink == '/reviews' }"
+        [ngClass]="{ 'top-nav-bar-button-active': activeLink === '/reviews' }"
         mat-raised-button
         aria-label="Link to Reviews Page"
         data-testid="reviews-button"
@@ -33,7 +33,7 @@
       </a>
       <a
         class="top-nav-bar-button"
-        [ngClass]="{ 'top-nav-bar-button-active': activeLink == '/about' }"
+        [ngClass]="{ 'top-nav-bar-button-active': activeLink === '/about' }"
         mat-raised-button
         aria-label="Link to About Page"
         data-testid="about-button"

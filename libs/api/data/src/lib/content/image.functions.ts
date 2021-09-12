@@ -1,4 +1,4 @@
-import { PublicContent } from '@dark-rush-photography/api/types';
+import { PublicContent } from '@dark-rush-photography/shared/types';
 import {
   Image,
   ImageDto,
@@ -10,15 +10,16 @@ import { findMediaEmotions } from './emotion.functions';
 
 export const findPublicImages = (images: Image[]): Image[] => {
   return images
-    .filter((image) => image.state == MediaState.Posted)
+    .filter((image) => image.state === MediaState.Published)
     .map(loadImage);
 };
 
 export const loadImage = (image: Image): Image => ({
   id: image.id,
   entityId: image.entityId,
-  fileName: image.fileName,
   state: image.state,
+  blobPathId: image.blobPathId,
+  fileName: image.fileName,
   order: image.order,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
@@ -29,7 +30,6 @@ export const loadImage = (image: Image): Image => ({
   datePublished: image.datePublished,
   skipExif: image.skipExif,
   isThreeSixty: image.isThreeSixty,
-  isProcessing: image.isProcessing,
 });
 
 export const loadMinimalPublicImage = (image: Image): ImageMinimalDto => {

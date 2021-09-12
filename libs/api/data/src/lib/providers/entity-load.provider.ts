@@ -197,6 +197,18 @@ export class EntityLoadProvider {
               )
             )
           );
+      case EntityType.SharedPhotoAlbum:
+        return this.sharedPhotoAlbumProvider
+          .findNewImagesFolder$(googleDrive, entityId)
+          .pipe(
+            concatMap((newImagesFolder) =>
+              this.imagesProcessProvider.processNewImages$(
+                googleDrive,
+                newImagesFolder.documentModel,
+                newImagesFolder.imagesFolder
+              )
+            )
+          );
       case EntityType.SocialMedia:
         return this.socialMediaProvider
           .findNewImagesFolder$(googleDrive, entityId)

@@ -1,9 +1,9 @@
 <nav mat-tab-nav-bar class="tab-bar">
   <a
     class="tab"
-    [ngClass]="{ 'tab-active': activeUrl == '/' }"
+    [ngClass]="{ 'tab-active': activeUrl === '/' }"
     mat-tab-link
-    [active]="activeUrl == '/'"
+    [active]="activeUrl === '/'"
     aria-label="Link to Favorites"
     (click)="onTabClicked('/')"
   >
@@ -12,9 +12,9 @@
   </a>
   <a
     class="tab"
-    [ngClass]="{ 'tab-active': activeUrl == '/photo-of-the-week' }"
+    [ngClass]="{ 'tab-active': activeUrl === '/photo-of-the-week' }"
     mat-tab-link
-    [active]="activeUrl == '/photo-of-the-week'"
+    [active]="activeUrl === '/photo-of-the-week'"
     aria-label="Link to Photo of the Week"
     (click)="onTabClicked('/photo-of-the-week')"
   >
@@ -23,9 +23,9 @@
   </a>
   <a
     class="tab"
-    [ngClass]="{ 'tab-active': activeUrl == '/events' }"
+    [ngClass]="{ 'tab-active': activeUrl === '/events' }"
     mat-tab-link
-    [active]="activeUrl == '/events'"
+    [active]="activeUrl === '/events'"
     aria-label="Link to Events"
     (click)="onTabClicked('/events')"
   >
@@ -34,9 +34,9 @@
   </a>
   <a
     class="tab"
-    [ngClass]="{ 'tab-active': activeUrl == '/destinations' }"
+    [ngClass]="{ 'tab-active': activeUrl === '/destinations' }"
     mat-tab-link
-    [active]="activeUrl == '/destinations'"
+    [active]="activeUrl === '/destinations'"
     aria-label="Link to Destinations"
     (click)="onTabClicked('/destinations')"
   >
@@ -46,9 +46,9 @@
   <a
     *ngIf="isAdmin"
     class="tab"
-    [ngClass]="{ 'tab-active': activeUrl == '/admin' }"
+    [ngClass]="{ 'tab-active': activeUrl === '/admin' }"
     mat-tab-link
-    [active]="activeUrl == '/admin'"
+    [active]="activeUrl === '/admin'"
     aria-label="Link to Admin"
     (click)="onTabClicked('/admin')"
   >

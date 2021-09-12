@@ -9,5 +9,5 @@ export interface Review {
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];
-  readonly isPosted: boolean;
+  readonly isPublic: boolean;
 }

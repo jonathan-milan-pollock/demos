@@ -1,18 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 Cypress.Commands.add(
   'findAllPhotoOfTheWeekPublic',
-  (): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
+  async (): Promise<any[]> => {
+    return fetch('/api/v1/photo-of-the-week', {
       method: 'GET',
-      url: '/api/v1/photo-of-the-week',
     })
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
 );
 
 Cypress.Commands.add(
   'findOnePhotoOfTheWeekPublic',
-  (id: string): Cypress.Chainable<Cypress.Response> =>
-    cy.request({
+  async (id: string): Promise<any> => {
+    return fetch(`/api/v1/photo-of-the-week/${id}`, {
       method: 'GET',
-      url: `/api/v1/photo-of-the-week/${id}`,
-      failOnStatusCode: false,
     })
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
 );

@@ -6,7 +6,6 @@ export * from './lib/content/emotion.functions';
 export * from './lib/content/image-dimension.functions';
 export * from './lib/content/image-validation.functions';
 export * from './lib/content/image.functions';
-export * from './lib/content/media.functions';
 export * from './lib/content/public-content.functions';
 export * from './lib/content/video-validation.functions';
 export * from './lib/content/video.functions';
@@ -22,10 +21,8 @@ export * from './lib/providers/comment.provider';
 export * from './lib/providers/config.provider';
 export * from './lib/providers/destination.provider';
 export * from './lib/providers/emotion.provider';
-export * from './lib/providers/entity-delete.provider';
 export * from './lib/providers/entity-load.provider';
 export * from './lib/providers/entity-post.provider';
-export * from './lib/providers/entity-update.provider';
 export * from './lib/providers/entity.provider';
 export * from './lib/providers/event.provider';
 export * from './lib/providers/favorites.provider';
@@ -51,5 +48,5 @@ export * from './lib/providers/web-socket-message.provider';
 export * from './lib/schema/document.schema';
 
 // tables
-export * from './lib/tables/auth0-user.table';
-export * from './lib/tables/google-drive-channel.table';
+export * from './lib/tables/entity-push-notifications.table';
+export * from './lib/tables/user.table';

@@ -18,7 +18,7 @@ export const validateImageFound = (
 };
 
 export const validateOneImage = (images: Image[]): Image => {
-  if (images.length == 0) throw new NotFoundException();
+  if (images.length === 0) throw new NotFoundException();
 
   if (images.length > 1)
     throw new ConflictException('More than one image was found');
@@ -36,7 +36,7 @@ export const validateImageDocumentModelFound = (
 };
 
 export const validateImagePublic = (image: Image): Image => {
-  if (image.state !== MediaState.Posted) throw new NotFoundException();
+  if (image.state !== MediaState.Published) throw new NotFoundException();
   return image;
 };
 
@@ -45,21 +45,13 @@ export const validateImageNotAlreadyExists = (
   documentModel: DocumentModel
 ): DocumentModel => {
   const foundImage = documentModel.images.find(
-    (image) => image.fileName == fileName
+    (image) => image.fileName === fileName
   );
   if (foundImage)
     throw new ConflictException(
       `Image with file name ${fileName} already exists`
     );
   return documentModel;
-};
-
-export const validateImageNotProcessing = (image: Image): Image => {
-  if (image.isProcessing)
-    throw new ConflictException(
-      'Image cannot be modified as it currently being processed'
-    );
-  return image;
 };
 
 export const validateFindStarredImage = (images: Image[]): Image => {

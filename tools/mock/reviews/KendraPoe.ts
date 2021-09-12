@@ -1,4 +1,4 @@
-import { ReviewDto } from '@dark-rush-photography/api/types';
+import { ReviewDto } from '@dark-rush-photography/shared/types';
 
 export class KendraPoe extends ReviewDto {
   title = 'Kendra Poe';

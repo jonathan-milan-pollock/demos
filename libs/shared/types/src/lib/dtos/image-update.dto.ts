@@ -1,6 +1,5 @@
 import {
   IsBoolean,
-  IsEnum,
   IsInt,
   IsISO8601,
   IsOptional,
@@ -8,14 +7,9 @@ import {
   Min,
 } from 'class-validator';
 
-import { MediaState } from '../enums/media-state.enum';
-
 export class ImageUpdateDto {
   @IsString()
   fileName!: string;
-
-  @IsEnum(MediaState)
-  state!: MediaState;
 
   @IsInt()
   @Min(0)

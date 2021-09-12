@@ -6,7 +6,7 @@ import {
   User,
 } from '@dark-rush-photography/shared/types';
 import { findPublicEmotions, loadEmotion } from './emotion.functions';
-import { DUMMY_MONGODB_ID } from '@dark-rush-photography/api/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 
 describe('emotion.functions', () => {
   const mockUser: User = {

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
-import { Model } from 'mongoose';
 import { concatMap, from, map, Observable } from 'rxjs';
+import { Model } from 'mongoose';
 
 import { DocumentModel } from '../schema/document.schema';
 import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
@@ -40,6 +40,26 @@ export class EmotionProvider {
     );
   }
 
+  findAll$(
+    entityId: string,
+    entityModel: Model<DocumentModel>,
+    mediaId?: string,
+    commentId?: string
+  ): Observable<Emotion[]> {
+    return from(entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      map((documentModel) => {
+        const emotions = documentModel.emotions.filter(
+          (emotion) =>
+            emotion.entityId === entityId &&
+            emotion.mediaId === mediaId &&
+            emotion.commentId === commentId
+        );
+        return emotions.map(loadEmotion);
+      })
+    );
+  }
+
   findOne$(
     id: string,
     entityId: string,
@@ -49,7 +69,7 @@ export class EmotionProvider {
       map(validateEntityFound),
       map((documentModel) => {
         const foundEmotion = documentModel.emotions.find(
-          (emotion) => emotion.id == id
+          (emotion) => emotion.id === id
         );
         if (!foundEmotion)
           throw new NotFoundException('Could not find emotion');

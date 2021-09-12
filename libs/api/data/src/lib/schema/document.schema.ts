@@ -12,7 +12,7 @@ import {
   Video,
   Entity,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
@@ -97,10 +97,10 @@ export class Document implements Entity {
   emotions!: Emotion[];
 
   @Prop({ type: Boolean, required: true })
-  isPosted!: boolean;
+  isPublic!: boolean;
 
   @Prop({ type: Boolean, required: true, default: false })
-  isProcessing!: boolean;
+  isPublishing!: boolean;
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);

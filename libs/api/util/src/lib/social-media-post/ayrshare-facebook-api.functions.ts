@@ -1,6 +1,6 @@
 import { from, Observable } from 'rxjs';
 
-import { FacebookCarouselImage } from '@dark-rush-photography/api/types';
+import { FacebookCarouselImage } from '@dark-rush-photography/shared/types';
 
 export const ayrsharePostImageOrVideoToFacebook$ = (
   ayrshareApiKey: string,

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
   AboutProvider,
@@ -9,10 +10,8 @@ import {
   DocumentSchema,
   ImagesProcessProvider,
   EntityLoadProvider,
-  EntityDeleteProvider,
   EntityPostProvider,
   EntityProvider,
-  EntityUpdateProvider,
   EventProvider,
   FavoritesProvider,
   ImageDimensionProvider,
@@ -29,6 +28,7 @@ import {
   VideoRemoveProvider,
   SharedPhotoAlbumProvider,
   ImageProcessProvider,
+  EntityPushNotificationsTable,
 } from '@dark-rush-photography/api/data';
 import { AdminEntitiesService } from './admin-entities.service';
 import { AdminEntitiesController } from './admin-entities.controller';
@@ -38,15 +38,17 @@ import { AdminEntitiesController } from './admin-entities.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    AzureTableStorageModule.forFeature(EntityPushNotificationsTable, {
+      table: 'EntityPushNotifications',
+      createTableIfNotExists: true,
+    }),
   ],
   controllers: [AdminEntitiesController],
   providers: [
     AdminEntitiesService,
     EntityProvider,
     EntityLoadProvider,
-    EntityUpdateProvider,
     EntityPostProvider,
-    EntityDeleteProvider,
     AboutProvider,
     BestOfProvider,
     DestinationProvider,

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { from, lastValueFrom, map, Observable, of, tap } from 'rxjs';
 
-import { WebSocketClient } from '@dark-rush-photography/api/types';
+import { WebSocketClient } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class WebSocketMessageProvider {
@@ -21,7 +21,7 @@ export class WebSocketMessageProvider {
   handleDisconnect(webSocketClient: WebSocketClient): void {
     this.logger.log('disconnect client');
     for (let i = 0; i < this.webSocketClients.length; i++) {
-      if (this.webSocketClients[i] == webSocketClient) {
+      if (this.webSocketClients[i] === webSocketClient) {
         this.webSocketClients.splice(i, 1);
         break;
       }
@@ -31,7 +31,7 @@ export class WebSocketMessageProvider {
   sendMessage(message: string): Promise<void> {
     this.logger.log('sending message');
     const webSocketClients = [...this.webSocketClients];
-    if (webSocketClients.length == 0) {
+    if (webSocketClients.length === 0) {
       this.logger.log('no clients found');
       return Promise.resolve(undefined);
     }

@@ -1,8 +1,8 @@
+import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 
-import * as path from 'path';
-import { Model } from 'mongoose';
 import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
+import { Model } from 'mongoose';
 
 import { EntityType, MediaState } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -27,20 +27,19 @@ export class EntityPostProvider {
       map((documentModel) => validateEntityType(entityType, documentModel)),
       concatMap((documentModel) =>
         combineLatest([
+          of(documentModel),
           from(
             documentModel.images.filter(
               (image) => image.state === MediaState.Selected
             )
           ),
-          of(documentModel),
         ])
       ),
-      concatMap(([image, documentModel]) =>
+      concatMap(([documentModel, image]) =>
         this.imageUpdateProvider.update$(
           image,
           {
             fileName: `${documentModel.slug}${path.extname(image.fileName)}`,
-            state: MediaState.Posted,
             order: image.order,
             isStarred: image.isStarred,
             isLoved: image.isLoved,

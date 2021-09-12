@@ -28,7 +28,7 @@ export const validateEntityType = (
 export const validateOneEntity = (
   documentModels: DocumentModel[]
 ): DocumentModel => {
-  if (documentModels.length == 0) throw new NotFoundException();
+  if (documentModels.length === 0) throw new NotFoundException();
 
   if (documentModels.length > 1)
     throw new ConflictException('More than one entity was found');
@@ -36,29 +36,18 @@ export const validateOneEntity = (
   return documentModels[0];
 };
 
-export const validateProcessingEntity = (
+export const validateNotPublishingEntity = (
   documentModel: DocumentModel
 ): DocumentModel => {
-  if (!documentModel.isProcessing) {
+  if (documentModel.isPublishing) {
     throw new ConflictException(
-      'Entity cannot be modified unless it is being processed'
+      'Entity cannot be modified as it currently being published'
     );
   }
   return documentModel;
 };
 
-export const validateNotProcessingEntity = (
-  documentModel: DocumentModel
-): DocumentModel => {
-  if (documentModel.isProcessing) {
-    throw new ConflictException(
-      'Entity cannot be modified as it currently being processed'
-    );
-  }
-  return documentModel;
-};
-
-export const validateEntityNotFound = (
+export const validateEntityNotAlreadyExists = (
   documentModel: DocumentModel | null
 ): void => {
   if (documentModel) throw new ConflictException('Entity already exists');
@@ -74,7 +63,7 @@ export const validateEntityCreate = (
 export const validateEntityIsPosted = (
   documentModel: DocumentModel
 ): DocumentModel => {
-  if (!documentModel.isPosted) throw new NotFoundException();
+  if (!documentModel.isPublic) throw new NotFoundException();
   return documentModel;
 };
 

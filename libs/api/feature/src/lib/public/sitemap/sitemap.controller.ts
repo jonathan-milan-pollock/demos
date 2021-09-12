@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Public } from '@dark-rush-photography/api/util';
 import { SitemapService } from './sitemap.service';
 
-@Controller({ path: 'reviews', version: '1' })
+@Controller({ path: 'sitemap', version: '1' })
 @Public()
 @ApiTags('Public Sitemap')
 export class SitemapController {

@@ -1,4 +1,4 @@
-import { EventDto } from '@dark-rush-photography/api/types';
+import { EventDto } from '@dark-rush-photography/shared/types';
 
 export class EscapeToTheMountains2018 extends EventDto {
   group = 2018;

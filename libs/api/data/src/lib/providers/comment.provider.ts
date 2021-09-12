@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
-import { Model } from 'mongoose';
 import { combineLatest, concatMap, from, map, max, Observable, of } from 'rxjs';
+import { Model } from 'mongoose';
 
 import {
   Comment,
@@ -61,7 +61,7 @@ export class CommentProvider {
       map(validateEntityFound),
       concatMap((documentModel) => {
         const foundComment = documentModel.comments.find(
-          (comment) => comment.id == id
+          (comment) => comment.id === id
         );
         if (!foundComment) throw new NotFoundException();
 
@@ -78,6 +78,23 @@ export class CommentProvider {
     );
   }
 
+  findAll$(
+    entityId: string,
+    entityModel: Model<DocumentModel>,
+    mediaId?: string
+  ): Observable<Comment[]> {
+    return from(entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      map((documentModel) => {
+        const comments = documentModel.comments.filter(
+          (comment) =>
+            comment.entityId === entityId && comment.mediaId === mediaId
+        );
+        return comments.map(loadComment);
+      })
+    );
+  }
+
   findOne$(
     id: string,
     entityId: string,
@@ -87,7 +104,7 @@ export class CommentProvider {
       map(validateEntityFound),
       map((documentModel) => {
         const foundComment = documentModel.comments.find(
-          (comment) => comment.id == id
+          (comment) => comment.id === id
         );
         if (!foundComment)
           throw new NotFoundException('Could not find comment');

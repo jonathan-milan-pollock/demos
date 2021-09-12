@@ -1,5 +1,5 @@
 import { Location } from '@dark-rush-photography/shared/types';
-import { ImageExif } from '@dark-rush-photography/api/types';
+import { ImageExif } from '@dark-rush-photography/shared/types';
 
 export const getImageExif = (
   datePublished: string,

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 
-import { JWT } from '@dark-rush-photography/api/types';
+import { JWT } from '@dark-rush-photography/shared/types';
 import { JwtAuthGuard, JwtStrategy } from '@dark-rush-photography/api/util';
 
 @Module({

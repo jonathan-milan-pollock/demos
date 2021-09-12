@@ -11,7 +11,12 @@ import {
   ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
@@ -53,11 +58,26 @@ export class UserCommentsController {
     return this.userCommentsService.update$(id, entityId, commentUpdate);
   }
 
+  @Get()
+  @ApiQuery({
+    name: 'mediaId',
+    required: false,
+    type: String,
+  })
+  @ApiOkResponse({ type: [CommentDto] })
+  findAll$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Query('mediaId', ParseObjectIdPipe) mediaId?: string
+  ): Observable<Comment[]> {
+    return this.userCommentsService.findAll$(entityId, mediaId);
+  }
+
   @Get(':id')
   @ApiOkResponse({ type: CommentDto })
   findOne$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Query('entityId', ParseObjectIdPipe) entityId: string
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Query('mediaId', ParseObjectIdPipe) mediaId?: string
   ): Observable<Comment> {
     return this.userCommentsService.findOne$(id, entityId);
   }

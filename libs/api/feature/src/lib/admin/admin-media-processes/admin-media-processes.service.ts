@@ -9,13 +9,13 @@ import {
   MediaProcessCreateDto,
   MediaProcessType,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/api/types';
+import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared/types';
 import { getEntityTypeFromMediaProcessType } from '@dark-rush-photography/api/util';
 import {
   DocumentModel,
   Document,
   loadNewEntity,
-  validateEntityNotFound,
+  validateEntityNotAlreadyExists,
   validateEntityCreate,
   loadEntity,
 } from '@dark-rush-photography/api/data';
@@ -38,7 +38,7 @@ export class AdminMediaProcessesService {
         slug: mediaProcessCreate.slug,
       })
     ).pipe(
-      map(validateEntityNotFound),
+      map(validateEntityNotAlreadyExists),
       concatMap(() => {
         return from(
           new this.entityModel({

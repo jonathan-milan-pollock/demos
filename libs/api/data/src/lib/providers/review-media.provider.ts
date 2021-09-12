@@ -21,7 +21,7 @@ import {
   DEFAULT_ENTITY_GROUP,
   GoogleDriveFolder,
   REVIEW_MEDIA_SLUG,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,

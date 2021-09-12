@@ -10,7 +10,7 @@ import {
   DEFAULT_ENTITY_GROUP,
   FAVORITES_SLUG,
   GoogleDriveFolder,
-} from '@dark-rush-photography/api/types';
+} from '@dark-rush-photography/shared/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {

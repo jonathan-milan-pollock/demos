@@ -1,6 +1,9 @@
 import { Observable, of } from 'rxjs';
 
-import { VideoArtistExif, VideoExif } from '@dark-rush-photography/api/types';
+import {
+  VideoArtistExif,
+  VideoExif,
+} from '@dark-rush-photography/shared/types';
 
 export const exifVideo$ = (
   filePath: string,
