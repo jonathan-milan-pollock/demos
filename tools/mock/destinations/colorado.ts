@@ -13,7 +13,7 @@ export class Colorado extends DestinationDto {
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
   text = ['Please welcome me to Colorado so I can discover you'];
 
   private constructor() {

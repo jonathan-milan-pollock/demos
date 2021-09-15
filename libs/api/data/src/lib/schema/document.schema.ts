@@ -11,8 +11,8 @@ import {
   Location,
   Video,
   Entity,
+  DEFAULT_ENTITY_GROUP,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageDimensionSchema } from './image-dimension.schema';
@@ -24,9 +24,6 @@ export type DocumentModel = Document & mongoose.Document;
 
 @Schema({ autoIndex: true, shardKey: { type: 'Hash' } })
 export class Document implements Entity {
-  @Prop({ type: String, required: false })
-  id?: string;
-
   @Prop({
     type: String,
     enum: Object.keys(EntityType),
@@ -35,6 +32,12 @@ export class Document implements Entity {
     unique: false,
   })
   type!: EntityType;
+
+  @Prop({ type: String, required: false })
+  id?: string;
+
+  @Prop({ type: String, required: false })
+  googleDriveFolderId?: string;
 
   @Prop({ type: String, required: true, default: DEFAULT_ENTITY_GROUP })
   group!: string;
@@ -67,7 +70,7 @@ export class Document implements Entity {
   location?: Location;
 
   @Prop({ type: Boolean, required: true, default: false })
-  tileImageIsCentered!: boolean;
+  photoAlbumImageIsCentered!: boolean;
 
   @Prop({ type: [String], required: true })
   text!: string[];
@@ -101,6 +104,9 @@ export class Document implements Entity {
 
   @Prop({ type: Boolean, required: true, default: false })
   isPublishing!: boolean;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  isPublished!: boolean;
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);

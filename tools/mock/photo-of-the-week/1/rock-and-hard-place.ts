@@ -23,7 +23,7 @@ export class RockAndHardPlace extends PhotoOfTheWeekDto {
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

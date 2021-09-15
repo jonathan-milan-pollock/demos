@@ -15,6 +15,6 @@ export class SitemapController {
   @Get('sitemap')
   @ApiOkResponse({ type: String })
   findSitemap$(): Observable<string> {
-    return this.sitemapService.findSitemap$();
+    return this.sitemapService.loadSitemap$();
   }
 }

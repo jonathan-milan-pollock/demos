@@ -22,7 +22,7 @@ export class EenyMeenyMinyMoe extends PhotoOfTheWeekDto {
     stateOrProvince: 'Alabama',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

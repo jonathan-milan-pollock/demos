@@ -4,15 +4,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { EntityType } from '@dark-rush-photography/shared/types';
 import {
-  EntityType,
   PhotoOfTheWeekMinimalDto,
   PhotoOfTheWeekDto,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  EntityProvider,
+  EntityPublicProvider,
   PhotoOfTheWeekProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -21,7 +21,7 @@ export class PhotoOfTheWeekService {
   constructor(
     @InjectModel(Document.name)
     private readonly photoOfTheWeekModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
+    private readonly entityProvider: EntityPublicProvider,
     private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider
   ) {}
 

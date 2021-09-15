@@ -5,14 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  EntityProvider,
+  EntityPublicProvider,
   ImageDimensionProvider,
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
-  ResizeImageProvider,
+  ImageResizeProvider,
   ReviewProvider,
-  TinifyImageProvider,
+  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewsService } from './reviews.service';
 import { ReviewsController } from './reviews.controller';
@@ -27,14 +27,14 @@ import { ReviewsController } from './reviews.controller';
   controllers: [ReviewsController],
   providers: [
     ReviewsService,
-    EntityProvider,
+    EntityPublicProvider,
     ReviewProvider,
     ImageProvider,
     ImageUploadProvider,
     ImageRemoveProvider,
     ImageDimensionProvider,
-    TinifyImageProvider,
-    ResizeImageProvider,
+    ImageTinifyProvider,
+    ImageResizeProvider,
   ],
 })
 export class ReviewsModule {}

@@ -8,17 +8,14 @@ import { IS_PUBLIC, JWT } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(JWT) {
-  constructor(private reflector: Reflector) {
+  constructor(private readonly reflector: Reflector) {
     super();
   }
 
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublic = this.reflector.get<boolean>(IS_PUBLIC, context.getClass());
     return isPublic ? true : super.canActivate(context);
   }
 }

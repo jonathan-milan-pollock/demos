@@ -10,24 +10,25 @@ import { Model } from 'mongoose';
 import {
   Image,
   ImageDimensionType,
-  ImageUpdateDto,
   MediaState,
   ThreeSixtySettings,
 } from '@dark-rush-photography/shared/types';
+import { ImageUpdateDto } from '@dark-rush-photography/api/types';
 import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import {
   ConfigProvider,
   Document,
   DocumentModel,
-  EntityLoadProvider,
-  EntityProvider,
   ImageDimensionProvider,
+  ImageLoadNewFolderProvider,
   ImageProvider,
   ImageRemoveProvider,
   ImageUpdateProvider,
   ImageUploadProvider,
   loadImage,
   validateEntityFound,
+  validateEntityNotPublishing,
+  validateImageNotAlreadyExists,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -38,10 +39,9 @@ export class AdminImagesService {
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
-    private readonly entityLoadProvider: EntityLoadProvider,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider,
+    private readonly imageLoadNewFolderProvider: ImageLoadNewFolderProvider,
     private readonly imageUploadProvider: ImageUploadProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider
@@ -59,10 +59,7 @@ export class AdminImagesService {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        this.imageProvider.validateImageNotAlreadyExists(
-          fileName,
-          documentModel
-        );
+        validateImageNotAlreadyExists(fileName, documentModel);
         return documentModel;
       }),
       concatMap((documentModel) =>
@@ -94,18 +91,13 @@ export class AdminImagesService {
   ): Observable<Image> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
+      map(validateEntityNotPublishing),
       concatMap((documentModel) =>
         combineLatest([this.findOne$(id, entityId), of(documentModel)])
       ),
       concatMap(([image, documentModel]) =>
-        this.imageUpdateProvider.update$(
-          image,
-          imageUpdate,
-          documentModel,
-          this.entityModel
-        )
+        this.imageUpdateProvider.update$(image, imageUpdate, documentModel)
       ),
-      tap(() => this.logger.debug('Update complete')),
       concatMap(() => this.findOne$(id, entityId))
     );
   }
@@ -153,15 +145,17 @@ export class AdminImagesService {
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
-    return this.entityProvider.findOne$(entityId, this.entityModel).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
       concatMap((documentModel) =>
-        this.entityLoadProvider.loadNewImages$(
+        this.imageLoadNewFolderProvider.loadNewImages$(
           googleDrive,
           documentModel.type,
           entityId
         )
       ),
-      concatMap(() => this.entityProvider.findOne$(entityId, this.entityModel)),
+      concatMap(() => from(this.entityModel.findById(entityId))),
+      map(validateEntityFound),
       map((documentModel) =>
         documentModel.images
           .filter((image) => image.state === MediaState.New)

@@ -4,18 +4,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { Comment } from '@dark-rush-photography/shared/types';
 import {
-  Comment,
   CommentAddDto,
   CommentUpdateDto,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import {
   CommentProvider,
   Document,
   DocumentModel,
 } from '@dark-rush-photography/api/data';
 
-//TODO: Want to get the user information from the authenticated request
 @Injectable()
 export class UserCommentsService {
   constructor(

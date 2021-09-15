@@ -4,16 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
-import {
-  EntityType,
-  ReviewMediaDto,
-} from '@dark-rush-photography/shared/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
+import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  EntityProvider,
+  EntityPublicProvider,
   ReviewMediaProvider,
-  validateOneEntity,
+  validateOneEntityFound,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -21,7 +19,7 @@ export class ReviewMediaService {
   constructor(
     @InjectModel(Document.name)
     private readonly reviewMediaModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
+    private readonly entityProvider: EntityPublicProvider,
     private readonly reviewMediaProvider: ReviewMediaProvider
   ) {}
 
@@ -30,7 +28,7 @@ export class ReviewMediaService {
       .findAllPublic$(EntityType.ReviewMedia, this.reviewMediaModel)
       .pipe(
         toArray<DocumentModel>(),
-        map(validateOneEntity),
+        map(validateOneEntityFound),
         map(this.reviewMediaProvider.loadReviewMediaPublic)
       );
   }

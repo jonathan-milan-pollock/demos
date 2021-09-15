@@ -1,12 +1,14 @@
 {
   "window.zoomLevel": 0,
   "cSpell.words": [
+    "abouts",
     "adal",
     "appservice",
     "appsettings",
     "atsc",
     "Autobuild",
     "autocrlf",
+    "Autosize",
     "ayrshare",
     "azurecr",
     "bestof",
@@ -61,6 +63,7 @@
     "nestjs",
     "ngcc",
     "ngrx",
+    "ngsw",
     "nguniversal",
     "nosniff",
     "npmrc",

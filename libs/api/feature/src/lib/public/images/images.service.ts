@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { ImageDto } from '@dark-rush-photography/shared/types';
+import { ImageDto } from '@dark-rush-photography/api/types';
 import {
   Document,
   DocumentModel,
@@ -20,6 +20,6 @@ export class ImagesService {
   ) {}
 
   findOne$(id: string, entityId: string): Observable<ImageDto> {
-    return this.imageProvider.findOnePublic$(id, entityId, this.entityModel);
+    return this.imageProvider.findOnePublic$(id, entityId);
   }
 }

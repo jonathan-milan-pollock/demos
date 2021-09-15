@@ -13,11 +13,12 @@ import {
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
-import { BestOfDto, EntityType } from '@dark-rush-photography/shared/types';
 import {
   DEFAULT_ENTITY_GROUP,
+  EntityType,
   GoogleDriveFolder,
 } from '@dark-rush-photography/shared/types';
+import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -85,11 +86,15 @@ export class BestOfProvider {
         this.logger.log(`Creating entity ${bestOfEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.BestOf, {
-              group: DEFAULT_ENTITY_GROUP,
-              slug: bestOfEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.BestOf,
+              {
+                group: DEFAULT_ENTITY_GROUP,
+                slug: bestOfEntityFolder.name,
+                isPublic: false,
+              },
+              bestOfEntityFolder.id
+            ),
           }).save()
         );
       }),

@@ -21,7 +21,7 @@ export class StopLookListen extends PhotoOfTheWeekDto {
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

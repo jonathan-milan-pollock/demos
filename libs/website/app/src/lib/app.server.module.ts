@@ -3,8 +3,8 @@ import { ServerModule } from '@angular/platform-server';
 
 import { AppModule } from './app.module';
 import {
-  Auth0AuthService,
-  Auth0AuthServiceMock,
+  AuthenticationService,
+  AuthenticationMockService,
   DestinationsService,
   DestinationsServiceMock,
   ReviewsService,
@@ -17,8 +17,8 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent],
   providers: [
     {
-      provide: Auth0AuthService,
-      useClass: Auth0AuthServiceMock,
+      provide: AuthenticationService,
+      useClass: AuthenticationMockService,
     },
     {
       provide: DestinationsService,

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-namespace */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -14,28 +15,43 @@
 declare namespace Cypress {
   interface Chainable<Subject> {
     // api admin entities
-    watchEntityAdmin(entityType: string, id: string): Promise<any>;
-    socialMediaPostEntityAdmin(entityType: string, id: string): Promise<any>;
+    watchEntityAdmin(
+      entityType: string,
+      id: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    socialMediaPostEntityAdmin(
+      entityType: string,
+      id: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
     updateEntityAdmin(
       entityType: string,
       id: string,
       entityUpdate: any
-    ): Promise<any>;
-    publishEntityAdmin(entityType: string, id: string): Promise<any>;
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    publishEntityAdmin(
+      entityType: string,
+      id: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
     setIsPublishingEntityAdmin(
       entityType: string,
       id: string,
       isPublishing: boolean
-    ): Promise<any>;
-    findAllGroupsEntityAdmin(entityType: string): Promise<any[]>;
-    findAllEntityAdmin(
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    findAllGroupsEntityAdmin(
       entityType: string
+    ): Cypress.Chainable<Cypress.Response<string[]>>;
+    findAllEntityAdmin(
+      entityType: string,
+      group?: string
     ): Cypress.Chainable<Cypress.Response<any[]>>;
-    findOneEntityAdmin(entityType: string, id: string): Promise<any>;
+    findOneEntityAdmin(
+      entityType: string,
+      id: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
     findIsPublishingEntityAdmin(
       entityType: string,
       id: string
-    ): Promise<boolean>;
+    ): Cypress.Chainable<Cypress.Response<boolean>>;
     deleteEntityAdmin(
       entityType: string,
       id: string
@@ -135,6 +151,7 @@ declare namespace Cypress {
     removeEmotionUser(id: string, entityId: string): Promise<void>;
 
     // api auth
-    authenticateApi(): Promise<string>;
+    loginAdmin(): Promise<string>;
+    loginUser(): Promise<string>;
   }
 }

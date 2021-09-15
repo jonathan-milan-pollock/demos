@@ -5,12 +5,13 @@ import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
-import { EntityType, FavoritesDto } from '@dark-rush-photography/shared/types';
 import {
   DEFAULT_ENTITY_GROUP,
+  EntityType,
   FAVORITES_SLUG,
   GoogleDriveFolder,
 } from '@dark-rush-photography/shared/types';
+import { FavoritesDto } from '@dark-rush-photography/api/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -41,14 +42,33 @@ export class FavoritesProvider {
     };
   }
 
-  create$(): Observable<void> {
+  create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
-      this.entityModel.find({
-        type: EntityType.Favorites,
-        slug: FAVORITES_SLUG,
-      })
+      getGoogleDriveFolderWithName$(
+        googleDrive,
+        this.configProvider.googleDriveWebsitesWatermarkedFolderId,
+        'favorites'
+      )
     ).pipe(
-      concatMap((documentModels) => {
+      concatMap((favoritesFolder) =>
+        getGoogleDriveFolderWithName$(
+          googleDrive,
+          favoritesFolder.id,
+          FAVORITES_SLUG
+        )
+      ),
+      concatMap((favoritesEntityFolder) =>
+        combineLatest([
+          of(favoritesEntityFolder),
+          from(
+            this.entityModel.find({
+              type: EntityType.Favorites,
+              slug: FAVORITES_SLUG,
+            })
+          ),
+        ])
+      ),
+      concatMap(([favoritesEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
           this.logger.log('Found favorites entity');
@@ -58,11 +78,15 @@ export class FavoritesProvider {
         this.logger.log('Creating favorites entity');
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.Favorites, {
-              group: DEFAULT_ENTITY_GROUP,
-              slug: FAVORITES_SLUG,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.Favorites,
+              {
+                group: DEFAULT_ENTITY_GROUP,
+                slug: FAVORITES_SLUG,
+                isPublic: false,
+              },
+              favoritesEntityFolder.id
+            ),
           }).save()
         );
       }),

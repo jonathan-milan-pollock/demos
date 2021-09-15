@@ -4,12 +4,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { AboutDto, EntityType } from '@dark-rush-photography/shared/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
+import { AboutDto } from '@dark-rush-photography/api/types';
 import {
   AboutProvider,
   Document,
   DocumentModel,
-  EntityProvider,
+  EntityPublicProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class AboutService {
   constructor(
     @InjectModel(Document.name)
     private readonly aboutModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
+    private readonly entityProvider: EntityPublicProvider,
     private readonly aboutProvider: AboutProvider
   ) {}
 

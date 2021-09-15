@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { EmotionAddDto } from '@dark-rush-photography/shared/types';
+import { EmotionAddDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 
 export const validateAddEmotion = (

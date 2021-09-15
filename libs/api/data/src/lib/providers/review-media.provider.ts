@@ -14,14 +14,12 @@ import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
 import {
-  EntityType,
-  ReviewMediaDto,
-} from '@dark-rush-photography/shared/types';
-import {
   DEFAULT_ENTITY_GROUP,
+  EntityType,
   GoogleDriveFolder,
   REVIEW_MEDIA_SLUG,
 } from '@dark-rush-photography/shared/types';
+import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -88,11 +86,15 @@ export class ReviewMediaProvider {
         this.logger.log(`Creating entity ${socialMediaEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.ReviewMedia, {
-              group: DEFAULT_ENTITY_GROUP,
-              slug: REVIEW_MEDIA_SLUG,
-              isPosted: true,
-            }),
+            ...loadNewEntity(
+              EntityType.ReviewMedia,
+              {
+                group: DEFAULT_ENTITY_GROUP,
+                slug: REVIEW_MEDIA_SLUG,
+                isPublic: true,
+              },
+              socialMediaEntityFolder.id
+            ),
           }).save()
         );
       }),

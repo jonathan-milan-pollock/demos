@@ -26,7 +26,7 @@ export class ShipToComeIn extends PhotoOfTheWeekDto {
     stateOrProvince: 'Michigan',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

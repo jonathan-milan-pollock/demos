@@ -24,5 +24,7 @@ export interface Entity
     SharedPhotoAlbum,
     SocialMedia {
   readonly type: EntityType;
+  readonly googleDriveFolderId?: string;
   readonly isPublishing: boolean;
+  readonly isPublished: boolean;
 }

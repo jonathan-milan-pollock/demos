@@ -21,7 +21,7 @@ export class ZigZags extends PhotoOfTheWeekDto {
     city: 'Georgia',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

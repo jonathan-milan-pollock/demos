@@ -10,6 +10,7 @@ import {
   Body,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -21,21 +22,27 @@ import {
 
 import { Observable } from 'rxjs';
 
+import { EntityType } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
   EntityMinimalDto,
-  EntityType,
   EntityUpdateDto,
-} from '@dark-rush-photography/shared/types';
-import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/api/types';
+import {
+  AdminAuthGuard,
+  AdminRole,
+  ParseObjectIdPipe,
+} from '@dark-rush-photography/api/util';
 import { AdminEntitiesService } from './admin-entities.service';
 
 @Controller({ path: 'admin/entities', version: '1' })
+@UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
 @ApiTags('Admin Entities')
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
 
+  @AdminRole()
   @Post(':entityType/:id/watch')
   @ApiParam({
     name: 'entityType',
@@ -50,6 +57,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.watch$(entityType, id);
   }
 
+  @AdminRole()
   @Post(':entityType/:id/social-media-post')
   @ApiParam({
     name: 'entityType',
@@ -64,6 +72,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.socialMediaPost$(entityType, id);
   }
 
+  @AdminRole()
   @Put(':entityType/:id')
   @ApiParam({
     name: 'entityType',
@@ -79,6 +88,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.update$(entityType, id, entityUpdate);
   }
 
+  @AdminRole()
   @Put(':entityType/:id/publish')
   @ApiParam({
     name: 'entityType',
@@ -88,11 +98,17 @@ export class AdminEntitiesController {
   publish$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query('renameMediaWithEntitySlug') renameMediaWithEntitySlug: boolean
   ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.websitePost$(entityType, id);
+    return this.adminEntitiesService.publish$(
+      entityType,
+      id,
+      renameMediaWithEntitySlug
+    );
   }
 
+  @AdminRole()
   @Put(':entityType/:id/publishing/:isPublishing')
   @ApiParam({
     name: 'entityType',
@@ -112,6 +128,7 @@ export class AdminEntitiesController {
     );
   }
 
+  @AdminRole()
   @Get(':entityType/groups')
   @ApiParam({
     name: 'entityType',
@@ -125,6 +142,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findAllGroups$(entityType);
   }
 
+  @AdminRole()
   @Get(':entityType')
   @ApiParam({
     name: 'entityType',
@@ -144,6 +162,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findAll$(entityType, group);
   }
 
+  @AdminRole()
   @Get(':entityType/:id')
   @ApiParam({
     name: 'entityType',
@@ -158,6 +177,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findOne$(entityType, id);
   }
 
+  @AdminRole()
   @Get(':entityType/:id/publishing')
   @ApiParam({
     name: 'entityType',
@@ -172,6 +192,7 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findIsPublishing$(entityType, id);
   }
 
+  @AdminRole()
   @Delete(':entityType/:id')
   @ApiParam({
     name: 'entityType',

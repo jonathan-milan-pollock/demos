@@ -8,7 +8,6 @@ import {
   Query,
   Get,
   ParseUUIDPipe,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -19,21 +18,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import {
-  Emotion,
-  EmotionAddDto,
-  EmotionDto,
-} from '@dark-rush-photography/shared/types';
-import {
-  ParseObjectIdPipe,
-  User,
-  UserGuard,
-} from '@dark-rush-photography/api/util';
+import { Emotion } from '@dark-rush-photography/shared/types';
+import { EmotionAddDto, EmotionDto } from '@dark-rush-photography/api/types';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { UserEmotionsService } from './user-emotions.service';
 
 @Controller({ path: 'user/emotions', version: '1' })
-@UseGuards(UserGuard)
-@User()
 @ApiBearerAuth()
 @ApiTags('User Emotions')
 export class UserEmotionsController {

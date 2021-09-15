@@ -12,12 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { DetailComponent } from './detail/detail.component';
-import { FormCoordinatesGroupComponent } from './form-coordinates-group/form-coordinates-group.component';
-import { FormDisplayGroupComponent } from './form-display-group/form-display-group.component';
-import { FormDocumentMetadataGroupComponent } from './form-document-metadata-group/form-document-metadata-group.component';
-import { FormIdentifierGroupComponent } from './form-identifier-group/form-identifier-group.component';
-import { FormLocationGroupComponent } from './form-location-group/form-location-group.component';
-import { FormReviewGroupComponent } from './form-review-group/form-review-group.component';
+import { ImagePostFormComponent } from './image-post-form/image-post-form.component';
 import { MasterComponent } from './master/master.component';
 import { TopNavBarComponent } from './top-nav-bar/top-nav-bar.component';
 import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-common';
@@ -38,23 +33,13 @@ import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-co
   ],
   declarations: [
     DetailComponent,
-    FormCoordinatesGroupComponent,
-    FormDisplayGroupComponent,
-    FormDocumentMetadataGroupComponent,
-    FormIdentifierGroupComponent,
-    FormLocationGroupComponent,
-    FormReviewGroupComponent,
+    ImagePostFormComponent,
     MasterComponent,
     TopNavBarComponent,
   ],
   exports: [
     DetailComponent,
-    FormCoordinatesGroupComponent,
-    FormDisplayGroupComponent,
-    FormDocumentMetadataGroupComponent,
-    FormIdentifierGroupComponent,
-    FormLocationGroupComponent,
-    FormReviewGroupComponent,
+    ImagePostFormComponent,
     MasterComponent,
     TopNavBarComponent,
   ],

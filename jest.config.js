@@ -8,5 +8,6 @@ module.exports = {
     '<rootDir>/libs/website/data',
     '<rootDir>/libs/website/ui/ui-directives',
     '<rootDir>/libs/website/util',
+    '<rootDir>/libs/shared/util',
   ],
 };

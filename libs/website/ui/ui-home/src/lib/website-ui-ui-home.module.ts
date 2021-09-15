@@ -15,7 +15,7 @@ import { EventGalleryComponent } from './event-gallery/event-gallery.component';
 import { EventGridGalleryComponent } from './event-grid-gallery/event-grid-gallery.component';
 import { EventGridGalleryImageComponent } from './event-grid-gallery-image/event-grid-gallery-image.component';
 import { EventMasterComponent } from './event-master/event-master.component';
-import { HomeImagesComponent } from './home-images/home-images.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 import { PhotoOfTheWeekDetailComponent } from './photo-of-the-week-detail/photo-of-the-week-detail.component';
 import { PhotoOfTheWeekMasterComponent } from './photo-of-the-week-master/photo-of-the-week-master.component';
 import { ReviewDetailComponent } from './review-detail/review-detail.component';
@@ -23,7 +23,6 @@ import { ReviewMasterComponent } from './review-master/review-master.component';
 import { ReviewsDetailComponent } from './reviews-detail/reviews-detail.component';
 import { ReviewsMasterComponent } from './reviews-master/reviews-master.component';
 import { WebsiteUiUiCommonModule } from '@dark-rush-photography/website/ui/ui-common';
-import { config } from '@fortawesome/fontawesome-svg-core';
 
 @NgModule({
   imports: [
@@ -44,7 +43,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
     EventGridGalleryComponent,
     EventGridGalleryImageComponent,
     EventMasterComponent,
-    HomeImagesComponent,
+    FavoritesComponent,
     PhotoOfTheWeekDetailComponent,
     PhotoOfTheWeekMasterComponent,
     ReviewDetailComponent,
@@ -60,7 +59,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
     EventGridGalleryComponent,
     EventGridGalleryImageComponent,
     EventMasterComponent,
-    HomeImagesComponent,
+    FavoritesComponent,
     PhotoOfTheWeekDetailComponent,
     PhotoOfTheWeekMasterComponent,
     ReviewDetailComponent,

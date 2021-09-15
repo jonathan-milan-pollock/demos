@@ -5,14 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  EntityProvider,
+  EntityPublicProvider,
   FavoritesProvider,
   ImageDimensionProvider,
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
-  ResizeImageProvider,
-  TinifyImageProvider,
+  ImageResizeProvider,
+  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { FavoritesService } from './favorites.service';
 import { FavoritesController } from './favorites.controller';
@@ -27,14 +27,14 @@ import { FavoritesController } from './favorites.controller';
   controllers: [FavoritesController],
   providers: [
     FavoritesService,
-    EntityProvider,
+    EntityPublicProvider,
     FavoritesProvider,
     ImageProvider,
     ImageUploadProvider,
     ImageRemoveProvider,
     ImageDimensionProvider,
-    TinifyImageProvider,
-    ResizeImageProvider,
+    ImageTinifyProvider,
+    ImageResizeProvider,
   ],
 })
 export class FavoritesModule {}

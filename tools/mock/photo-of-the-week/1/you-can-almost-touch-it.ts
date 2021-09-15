@@ -17,7 +17,7 @@ export class YouCanAlmostTouchIt extends PhotoOfTheWeekDto {
   dateCreated = new Date(2019, 4, 25).toISOString().substring(0, 10);
   datePublished = new Date(2019, 4, 25).toISOString().substring(0, 10);
   location = { city: 'Mexico City', country: 'United States' };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

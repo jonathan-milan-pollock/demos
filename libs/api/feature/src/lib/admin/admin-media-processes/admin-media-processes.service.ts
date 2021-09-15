@@ -5,19 +5,21 @@ import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  EntityAdminDto,
-  MediaProcessCreateDto,
+  DEFAULT_ENTITY_GROUP,
   MediaProcessType,
 } from '@dark-rush-photography/shared/types';
-import { DEFAULT_ENTITY_GROUP } from '@dark-rush-photography/shared/types';
-import { getEntityTypeFromMediaProcessType } from '@dark-rush-photography/api/util';
+import {
+  EntityAdminDto,
+  MediaProcessCreateDto,
+} from '@dark-rush-photography/api/types';
+import { getEntityTypeFromMediaProcessType } from '@dark-rush-photography/shared/util';
 import {
   DocumentModel,
   Document,
   loadNewEntity,
   validateEntityNotAlreadyExists,
-  validateEntityCreate,
   loadEntity,
+  validateEntityFound,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -47,13 +49,13 @@ export class AdminMediaProcessesService {
               {
                 ...mediaProcessCreate,
                 group: DEFAULT_ENTITY_GROUP,
-                isPosted: false,
+                isPublic: false,
               }
             ),
           }).save()
         );
       }),
-      map(validateEntityCreate),
+      map(validateEntityFound),
       map(loadEntity)
     );
   }

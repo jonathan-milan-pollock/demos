@@ -9,7 +9,7 @@ export class StopForTexts extends PhotoOfTheWeekDto {
   dateCreated = new Date(2020, 3, 8).toISOString().substring(0, 10);
   datePublished = new Date(2020, 3, 8).toISOString().substring(0, 10);
   location = { city: 'Venice', country: 'Italy' };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

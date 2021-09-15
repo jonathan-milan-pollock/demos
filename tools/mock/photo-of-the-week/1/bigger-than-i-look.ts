@@ -24,7 +24,7 @@ export class BiggerThanILook extends PhotoOfTheWeekDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

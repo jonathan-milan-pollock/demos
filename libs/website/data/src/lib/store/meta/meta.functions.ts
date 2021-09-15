@@ -48,45 +48,10 @@ export const getMetadata = (page: Page): Metadata | undefined => {
         title: 'Admin',
         description: 'Administration for Dark Rush Photography',
       };
-    case Page.AdminHomePage:
+    case Page.AdminImagePost:
       return {
-        title: 'Admin Home Page',
-        description: 'Administrate Home Page for Dark Rush Photography',
-      };
-    case Page.AdminReviews:
-      return {
-        title: 'Admin Reviews',
-        description: 'Administrate Reviews for Dark Rush Photography',
-      };
-    case Page.AdminPhotoOfTheWeek:
-      return {
-        title: 'Admin Photo of the Week',
-        description: 'Administrate Photo of the Week for Dark Rush Photography',
-      };
-    case Page.AdminEvents:
-      return {
-        title: 'Admin Events',
-        description: 'Administrate Events for Dark Rush Photography',
-      };
-    case Page.AdminDestinations:
-      return {
-        title: 'Admin Destinations',
-        description: 'Administrate Destinations for Dark Rush Photography',
-      };
-    case Page.AdminVideos:
-      return {
-        title: 'Admin Videos',
-        description: 'Administrate Videos for Dark Rush Photography',
-      };
-    case Page.AdminSitemap:
-      return {
-        title: 'Admin Sitemap',
-        description: 'Administrate Sitemap for Dark Rush Photography',
-      };
-    case Page.AdminSettings:
-      return {
-        title: 'Admin Settings',
-        description: 'Administrate Settings for Dark Rush Photography',
+        title: 'Admin Image Post',
+        description: 'Administrate Image Posts for Dark Rush Photography',
       };
   }
 };

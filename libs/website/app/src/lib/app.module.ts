@@ -7,29 +7,10 @@ import { AuthModule, AuthHttpInterceptor } from '@auth0/auth0-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { config } from '@fortawesome/fontawesome-svg-core';
 
-import {
-  Auth0AuthService,
-  DestinationsService,
-  ReviewsService,
-  //ReviewsServiceMock,
-} from '@dark-rush-photography/website/data';
+import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-//import { RootStoreModule } from './root-store.module';
-import { WebsiteUiUiShellModule } from '@dark-rush-photography/website/ui/ui-shell';
-
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-
-import {
-  // AuthStoreModule,
-  DestinationStoreModule,
-  // EventStoreModule,
-  // PhotoOfTheWeekStoreModule,
-  ReviewStoreModule,
-} from '@dark-rush-photography/website/data';
-
-import { MatCardModule } from '@angular/material/card';
+import { AppStoreModule } from './app-store.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,26 +23,19 @@ import { MatCardModule } from '@angular/material/card';
       clientId: 'itlDBOCejY2AxCCR4qNZRnI1AUwWb9O3',
       audience: 'https://www.darkrushphotography.com',
       httpInterceptor: {
-        allowedList: ['http://localhost:4200/api/admin/*'],
+        allowedList: [
+          'http://localhost:1111/v1/api/admin/*',
+          'http://localhost:1111/v1/api/user/*',
+        ],
       },
     }),
     FontAwesomeModule,
     AppRoutingModule,
-    //AuthStoreModule,
-    DestinationStoreModule,
-    //EventStoreModule,
-    //PhotoOfTheWeekStoreModule,
-    ReviewStoreModule,
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
+    AppStoreModule,
     WebsiteUiUiShellModule,
-    MatCardModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
-    Auth0AuthService,
-    DestinationsService,
-    ReviewsService,
   ],
   bootstrap: [AppComponent],
 })

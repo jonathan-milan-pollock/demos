@@ -4,15 +4,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { EntityType } from '@dark-rush-photography/shared/types';
 import {
   DestinationDto,
   DestinationMinimalDto,
-  EntityType,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  EntityProvider,
+  EntityPublicProvider,
   DestinationProvider,
 } from '@dark-rush-photography/api/data';
 
@@ -21,7 +21,7 @@ export class DestinationsService {
   constructor(
     @InjectModel(Document.name)
     private readonly destinationModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
+    private readonly entityProvider: EntityPublicProvider,
     private readonly destinationProvider: DestinationProvider
   ) {}
 

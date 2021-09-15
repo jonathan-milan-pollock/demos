@@ -4,7 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
+import { Emotion } from '@dark-rush-photography/shared/types';
+import { EmotionAddDto } from '@dark-rush-photography/api/types';
 import {
   Document,
   DocumentModel,

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import {
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';

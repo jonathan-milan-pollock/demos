@@ -4,8 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { Emotion } from '@dark-rush-photography/shared/types';
+import { EmotionAddDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
-import { Emotion, EmotionAddDto } from '@dark-rush-photography/shared/types';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { validateAddEmotion } from '../content/emotion-validation.functions';
 import { loadEmotion } from '../content/emotion.functions';
