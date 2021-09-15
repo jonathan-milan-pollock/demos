@@ -13,11 +13,12 @@ import {
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
-import { EntityType, ReviewDto } from '@dark-rush-photography/shared/types';
 import {
   DEFAULT_ENTITY_GROUP,
+  EntityType,
   GoogleDriveFolder,
 } from '@dark-rush-photography/shared/types';
+import { ReviewDto } from '@dark-rush-photography/api/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -29,7 +30,7 @@ import {
 } from '../entities/entity.functions';
 import {
   validateEntityFound,
-  validateEntityTitle,
+  validateEntityTitleProvided,
 } from '../entities/entity-validation.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { validateOneImage } from '../content/image-validation.functions';
@@ -54,7 +55,7 @@ export class ReviewProvider {
     return {
       slug: documentModel.slug,
       order: documentModel.order,
-      title: validateEntityTitle(documentModel),
+      title: validateEntityTitleProvided(documentModel),
       text: documentModel.text,
       image: loadMinimalPublicImage(validatedImage),
     };
@@ -93,11 +94,15 @@ export class ReviewProvider {
         this.logger.log(`Creating entity ${reviewEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.Review, {
-              group: DEFAULT_ENTITY_GROUP,
-              slug: reviewEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.Review,
+              {
+                group: DEFAULT_ENTITY_GROUP,
+                slug: reviewEntityFolder.name,
+                isPublic: false,
+              },
+              reviewEntityFolder.id
+            ),
           }).save()
         );
       }),

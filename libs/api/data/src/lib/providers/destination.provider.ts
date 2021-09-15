@@ -14,14 +14,14 @@ import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
 import {
-  DestinationDto,
-  DestinationMinimalDto,
-  EntityType,
-} from '@dark-rush-photography/shared/types';
-import {
   DEFAULT_ENTITY_GROUP,
+  EntityType,
   GoogleDriveFolder,
 } from '@dark-rush-photography/shared/types';
+import {
+  DestinationDto,
+  DestinationMinimalDto,
+} from '@dark-rush-photography/api/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -112,11 +112,15 @@ export class DestinationProvider {
         this.logger.log(`Creating entity ${destinationEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.Destination, {
-              group: DEFAULT_ENTITY_GROUP,
-              slug: destinationEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.Destination,
+              {
+                group: DEFAULT_ENTITY_GROUP,
+                slug: destinationEntityFolder.name,
+                isPublic: false,
+              },
+              destinationEntityFolder.id
+            ),
           }).save()
         );
       }),

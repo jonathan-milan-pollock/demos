@@ -35,7 +35,7 @@ export const getOrderFromGoogleDriveImageFileName = (
   return path.parse(orderFileName);
 };
 
-export const watchFolder$ = (
+export const watchGoogleDriveFolder$ = (
   drive: drive_v3.Drive,
   channelId: string,
   channelToken: string,

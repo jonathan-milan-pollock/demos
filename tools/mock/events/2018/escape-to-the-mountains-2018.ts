@@ -26,7 +26,7 @@ export class EscapeToTheMountains2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
   text = [
     `
       On the weekend of October 6, 2018 my longtime friend Donna

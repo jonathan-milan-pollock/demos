@@ -39,4 +39,5 @@ import './commands/api/user/user-comments.commands';
 import './commands/api/user/user-emotions.commands';
 
 // api
-import './commands/api/auth-api.commands';
+import './commands/api/login-admin.commands';
+import './commands/api/login-user.commands';

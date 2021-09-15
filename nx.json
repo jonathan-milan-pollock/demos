@@ -73,6 +73,9 @@
     "shared-types": {
       "tags": ["scope:shared", "type:types"]
     },
+    "shared-util": {
+      "tags": ["scope:shared", "type:util"]
+    },
     "ui-storybook": {
       "tags": ["scope:ui-storybook", "type:ui"]
     },

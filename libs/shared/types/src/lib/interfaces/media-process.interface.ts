@@ -4,7 +4,8 @@ import { Video } from './video.interface';
 
 export interface MediaProcess {
   readonly id?: string;
-  readonly slug: string;
+  readonly title?: string;
+  readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];
   readonly videos: Video[];

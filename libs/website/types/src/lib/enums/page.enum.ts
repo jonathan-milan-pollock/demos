@@ -7,12 +7,5 @@ export enum Page {
   Events,
   Destinations,
   Admin,
-  AdminHomePage,
-  AdminReviews,
-  AdminPhotoOfTheWeek,
-  AdminEvents,
-  AdminDestinations,
-  AdminVideos,
-  AdminSitemap,
-  AdminSettings,
+  AdminImagePost,
 }

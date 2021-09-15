@@ -1,11 +1,7 @@
 import { reviewAdapter, ReviewState } from './review.state';
 
-const {
-  selectAll,
-  selectEntities,
-  selectIds,
-  selectTotal,
-} = reviewAdapter.getSelectors();
+const { selectAll, selectEntities, selectIds, selectTotal } =
+  reviewAdapter.getSelectors();
 export const selectAllReviews = selectAll;
 export const selectReviews = selectEntities;
 export const selectReviewIds = selectIds;

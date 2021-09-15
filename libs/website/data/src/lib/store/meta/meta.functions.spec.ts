@@ -64,59 +64,10 @@ describe('MetaFunctions', () => {
     });
   });
 
-  it('should return Admin Home Page metadata', () => {
-    expect(getMetadata(Page.AdminHomePage)).toEqual({
-      title: 'Admin Home Page',
-      description: 'Administrate Home Page for Dark Rush Photography',
-    });
-  });
-
-  it('should return Admin Reviews metadata', () => {
-    expect(getMetadata(Page.AdminReviews)).toEqual({
-      title: 'Admin Reviews',
-      description: 'Administrate Reviews for Dark Rush Photography',
-    });
-  });
-
-  it('should return Admin Photo of the Week metadata', () => {
-    expect(getMetadata(Page.AdminPhotoOfTheWeek)).toEqual({
-      title: 'Admin Photo of the Week',
-      description: 'Administrate Photo of the Week for Dark Rush Photography',
-    });
-  });
-
-  it('should return Admin Events metadata', () => {
-    expect(getMetadata(Page.AdminEvents)).toEqual({
-      title: 'Admin Events',
-      description: 'Administrate Events for Dark Rush Photography',
-    });
-  });
-
-  it('should return Admin Destinations metadata', () => {
-    expect(getMetadata(Page.AdminDestinations)).toEqual({
-      title: 'Admin Destinations',
-      description: 'Administrate Destinations for Dark Rush Photography',
-    });
-  });
-
-  it('should return Admin Videos metadata', () => {
-    expect(getMetadata(Page.AdminVideos)).toEqual({
-      title: 'Admin Videos',
-      description: 'Administrate Videos for Dark Rush Photography',
-    });
-  });
-
   it('should return Admin Sitemap metadata', () => {
-    expect(getMetadata(Page.AdminSitemap)).toEqual({
+    expect(getMetadata(Page.AdminImagePost)).toEqual({
       title: 'Admin Sitemap',
-      description: 'Administrate Sitemap for Dark Rush Photography',
-    });
-  });
-
-  it('should return Admin Settings metadata', () => {
-    expect(getMetadata(Page.AdminSettings)).toEqual({
-      title: 'Admin Settings',
-      description: 'Administrate Settings for Dark Rush Photography',
+      description: 'Administrate Image Posts for Dark Rush Photography',
     });
   });
 });

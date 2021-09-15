@@ -28,7 +28,7 @@ export class TreeHouseToEverywhere extends PhotoOfTheWeekDto {
     stateOrProvince: 'Alabama',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

@@ -7,6 +7,23 @@ import {
 import { EntityType, Location } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
+export const validateEntityType = (
+  entityType: EntityType,
+  documentModel: DocumentModel
+): DocumentModel => {
+  if (documentModel.type !== entityType)
+    throw new BadRequestException(
+      `Found entity as ${documentModel.type}, expected ${entityType}`
+    );
+  return documentModel;
+};
+
+export const validateEntityNotAlreadyExists = (
+  documentModel: DocumentModel | null
+): void => {
+  if (documentModel) throw new ConflictException('Entity already exists');
+};
+
 export const validateEntityFound = (
   documentModel: DocumentModel | null
 ): DocumentModel => {
@@ -14,18 +31,7 @@ export const validateEntityFound = (
   return documentModel;
 };
 
-export const validateEntityType = (
-  entityType: EntityType,
-  documentModel: DocumentModel
-): DocumentModel => {
-  if (documentModel.type !== entityType)
-    throw new ConflictException(
-      `Found entity with incorrect entity type (expected: ${entityType}) found: ${documentModel.type})`
-    );
-  return documentModel;
-};
-
-export const validateOneEntity = (
+export const validateOneEntityFound = (
   documentModels: DocumentModel[]
 ): DocumentModel => {
   if (documentModels.length === 0) throw new NotFoundException();
@@ -36,7 +42,7 @@ export const validateOneEntity = (
   return documentModels[0];
 };
 
-export const validateNotPublishingEntity = (
+export const validateEntityNotPublishing = (
   documentModel: DocumentModel
 ): DocumentModel => {
   if (documentModel.isPublishing) {
@@ -47,44 +53,67 @@ export const validateNotPublishingEntity = (
   return documentModel;
 };
 
-export const validateEntityNotAlreadyExists = (
-  documentModel: DocumentModel | null
-): void => {
-  if (documentModel) throw new ConflictException('Entity already exists');
-};
-
-export const validateEntityCreate = (
-  documentModel: DocumentModel | null
+export const validateEntityIsPublished = (
+  documentModel: DocumentModel
 ): DocumentModel => {
-  if (!documentModel) throw new BadRequestException('Unable to create entity');
+  if (!documentModel.isPublished) {
+    throw new BadRequestException('Entity is not published');
+  }
   return documentModel;
 };
 
-export const validateEntityIsPosted = (
+export const validateEntityIsPublic = (
   documentModel: DocumentModel
 ): DocumentModel => {
   if (!documentModel.isPublic) throw new NotFoundException();
   return documentModel;
 };
 
-export const validateEntityTitle = (documentModel: DocumentModel): string => {
-  if (!documentModel.title) throw new ConflictException('Title was not found');
+export const validateEntityWatchFolderId = (
+  documentModel: DocumentModel
+): string => {
+  if (!documentModel.googleDriveFolderId) {
+    throw new BadRequestException('Entity cannot be watched');
+  }
+  return documentModel.googleDriveFolderId;
+};
+
+export const validateEntityGroupProvided = (group?: string): string => {
+  if (!group) {
+    throw new ConflictException('A group must be provided');
+  }
+  return group;
+};
+
+export const validateEntityTitleProvided = (
+  documentModel: DocumentModel
+): string => {
+  if (!documentModel.title)
+    throw new ConflictException('Title was not provided');
   return documentModel.title;
 };
 
-export const validateEntityDescription = (
+export const validateEntitySeoDescriptionProvided = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.seoDescription)
-    throw new ConflictException('Description was not found');
+    throw new ConflictException('SEO Description was not provided');
   return documentModel.seoDescription;
 };
 
-export const validateEntityDateCreated = (
+export const validateEntitySeoKeywordsProvided = (
+  documentModel: DocumentModel
+): string[] => {
+  if (documentModel.seoKeywords.length === 0)
+    throw new ConflictException('SEO keywords were not provided');
+  return documentModel.seoKeywords;
+};
+
+export const validateEntityDateCreatedProvided = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.dateCreated)
-    throw new ConflictException('Date created was not found');
+    throw new ConflictException('Date created was not provided');
   return documentModel.dateCreated;
 };
 
@@ -92,14 +121,14 @@ export const validateEntityDatePublished = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.datePublished)
-    throw new ConflictException('Date published was not found');
+    throw new ConflictException('Entity does not have required published date');
   return documentModel.datePublished;
 };
 
-export const validateEntityLocation = (
+export const validateEntityLocationProvided = (
   documentModel: DocumentModel
 ): Location => {
   if (!documentModel.location)
-    throw new ConflictException('Location was not found');
+    throw new ConflictException('Location was not provided');
   return documentModel.location;
 };

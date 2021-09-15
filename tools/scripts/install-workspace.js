@@ -155,6 +155,12 @@ const execGenerateSharedLibs = (isReady) =>
         isReady,
         'npx nx g @nrwl/workspace:lib shared/types --unitTestRunner=none --tags=scope:shared,type:types'
       )
+    )
+    .then(() =>
+      consoleLogOrExec(
+        isReady,
+        'npx nx g @nrwl/workspace:lib shared/util --unitTestRunner=jest --tags=scope:shared,type:util'
+      )
     );
 
 const execGenerateUiStorybook = (isReady) =>

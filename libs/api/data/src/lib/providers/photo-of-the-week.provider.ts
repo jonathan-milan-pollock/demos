@@ -17,11 +17,13 @@ import { drive_v3 } from 'googleapis';
 
 import {
   EntityType,
+  GoogleDriveFolder,
   ImageDimensionType,
+} from '@dark-rush-photography/shared/types';
+import {
   PhotoOfTheWeekDto,
   PhotoOfTheWeekMinimalDto,
-} from '@dark-rush-photography/shared/types';
-import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -31,13 +33,7 @@ import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
-import {
-  validateEntityDatePublished,
-  validateEntityDescription,
-  validateEntityFound,
-  validateEntityLocation,
-  validateEntityTitle,
-} from '../entities/entity-validation.functions';
+
 import { loadPublicContent } from '../content/public-content.functions';
 import {
   validateFindImageDimension,
@@ -47,6 +43,14 @@ import { loadMinimalPublicImage } from '../content/image.functions';
 import { findEntityComments } from '../content/comment.functions';
 import { findEntityEmotions } from '../content/emotion.functions';
 import { ConfigProvider } from './config.provider';
+import {
+  validateEntityDatePublished,
+  validateEntityFound,
+  validateEntityLocationProvided,
+  validateEntitySeoDescriptionProvided,
+  validateEntitySeoKeywordsProvided,
+  validateEntityTitleProvided,
+} from '../entities/entity-validation.functions';
 
 @Injectable()
 export class PhotoOfTheWeekProvider {
@@ -69,9 +73,9 @@ export class PhotoOfTheWeekProvider {
       group: documentModel.group,
       slug: documentModel.slug,
       order: documentModel.order,
-      title: validateEntityTitle(documentModel),
+      title: validateEntityTitleProvided(documentModel),
       datePublished: validateEntityDatePublished(documentModel),
-      tileImageIsCentered: documentModel.tileImageIsCentered,
+      photoAlbumImageIsCentered: documentModel.photoAlbumImageIsCentered,
       starredImage: validateFindStarredImage(publicContent.images),
       starredTileImageDimensions: validateFindImageDimension(
         starredImage.id,
@@ -79,6 +83,13 @@ export class PhotoOfTheWeekProvider {
         publicContent.imageDimensions
       ),
     };
+  }
+
+  validatePublishPhotoOfTheWeek(documentModel: DocumentModel): void {
+    validateEntityTitleProvided(documentModel);
+    validateEntitySeoDescriptionProvided(documentModel);
+    validateEntitySeoKeywordsProvided(documentModel);
+    validateEntityLocationProvided(documentModel);
   }
 
   loadPhotoOfTheWeekPublic(documentModel: DocumentModel): PhotoOfTheWeekDto {
@@ -93,11 +104,11 @@ export class PhotoOfTheWeekProvider {
       group: documentModel.group,
       slug: documentModel.slug,
       order: documentModel.order,
-      title: validateEntityTitle(documentModel),
-      description: validateEntityDescription(documentModel),
-      keywords: documentModel.seoKeywords,
+      title: validateEntityTitleProvided(documentModel),
+      description: validateEntitySeoDescriptionProvided(documentModel),
+      keywords: validateEntitySeoKeywordsProvided(documentModel),
       datePublished: validateEntityDatePublished(documentModel),
-      location: validateEntityLocation(documentModel),
+      location: validateEntityLocationProvided(documentModel),
       text: documentModel.text,
       images: publicContent.images.map(loadMinimalPublicImage),
       comments: entityComments,
@@ -172,11 +183,15 @@ export class PhotoOfTheWeekProvider {
         this.logger.log(`Creating entity ${photoOfTheWeekEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.PhotoOfTheWeek, {
-              group,
-              slug: photoOfTheWeekEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.PhotoOfTheWeek,
+              {
+                group,
+                slug: photoOfTheWeekEntityFolder.name,
+                isPublic: false,
+              },
+              photoOfTheWeekEntityFolder.id
+            ),
           }).save()
         );
       }),

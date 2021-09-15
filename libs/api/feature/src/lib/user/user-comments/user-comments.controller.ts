@@ -9,7 +9,6 @@ import {
   Query,
   Get,
   ParseUUIDPipe,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -21,22 +20,16 @@ import {
 import { Observable } from 'rxjs';
 
 //TODO: HtmlEncode text
+import { Comment } from '@dark-rush-photography/shared/types';
 import {
-  Comment,
   CommentAddDto,
   CommentDto,
   CommentUpdateDto,
-} from '@dark-rush-photography/shared/types';
-import {
-  ParseObjectIdPipe,
-  User,
-  UserGuard,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/api/types';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { UserCommentsService } from './user-comments.service';
 
 @Controller({ path: 'user/comments', version: '1' })
-@UseGuards(UserGuard)
-@User()
 @ApiBearerAuth()
 @ApiTags('User Comments')
 export class UserCommentsController {
@@ -76,8 +69,7 @@ export class UserCommentsController {
   @ApiOkResponse({ type: CommentDto })
   findOne$(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Query('mediaId', ParseObjectIdPipe) mediaId?: string
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<Comment> {
     return this.userCommentsService.findOne$(id, entityId);
   }

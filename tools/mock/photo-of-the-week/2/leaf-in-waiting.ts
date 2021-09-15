@@ -13,7 +13,7 @@ export class LeafInWaiting extends PhotoOfTheWeekDto {
     stateOrProvince: 'Alabama',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

@@ -1,36 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { InjectRepository, Repository } from '@nestjs/azure-database';
 
-import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable, of, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { EntityType } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
   EntityMinimalDto,
-  EntityType,
   EntityUpdateDto,
-} from '@dark-rush-photography/shared/types';
-import {
-  getGoogleDrive,
-  getGoogleDriveFolderParents$,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/api/types';
+import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import {
   DocumentModel,
   Document,
-  EntityProvider,
-  EntityPostProvider,
   ConfigProvider,
   EntityLoadProvider,
   loadEntity,
   loadEntityMinimal,
   validateEntityType,
   validateEntityFound,
-  validateNotPublishingEntity,
-  EntityPushNotificationsTable,
+  validateEntityNotPublishing,
   ImageRemoveProvider,
   VideoRemoveProvider,
+  loadDocumentModelsArray,
+  EntityPublishProvider,
+  validateEntityIsPublished,
+  EntitySocialMediaPostProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -39,130 +35,17 @@ export class AdminEntitiesService {
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    @InjectRepository(EntityPushNotificationsTable)
-    private readonly entityPushNotificationsRepository: Repository<EntityPushNotificationsTable>,
-    private readonly entityProvider: EntityProvider,
     private readonly entityLoadProvider: EntityLoadProvider,
-    private readonly entityPostProvider: EntityPostProvider,
+    private readonly entityPublishProvider: EntityPublishProvider,
+    private readonly entitySocialMediaPostProvider: EntitySocialMediaPostProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider,
     private readonly videoRemoveProvider: VideoRemoveProvider
   ) {}
 
-  update$(
-    entityType: EntityType,
-    id: string,
-    entityUpdate: EntityUpdateDto
-  ): Observable<EntityAdminDto> {
-    return from(this.entityModel.findById(id)).pipe(
-      map(validateEntityFound),
-      map(validateNotPublishingEntity),
-      concatMap(() =>
-        this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })
-      ),
-      concatMap(() => this.findOne$(entityType, id))
-    );
-  }
-
   watch$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
-    const googleDrive = getGoogleDrive(
-      this.configProvider.googleDriveClientEmail,
-      this.configProvider.googleDrivePrivateKey
-    );
-
-    const channel = new EntityPushNotificationsTable();
-    channel.key = uuidv4();
-    channel.token = uuidv4();
-
-    return from(
-      this.entityPushNotificationsRepository.create(channel, channel.key)
-    ).pipe(concatMap(() => this.findOne$(entityType, id)));
-
-    /*.pipe(
-      concatMap(
-        watchFolder$(
-          googleDrive,
-          channelId,
-          channelToken,
-          photoAlbumFolderId,
-          this.configProvider.googleDrivePushNotificationAddress
-        )
-      )
-    );*/
-  }
-
-  publish2$(
-    entityType: EntityType,
-    id: string,
-    entityUpdate: EntityUpdateDto
-  ): Observable<EntityAdminDto> {
-    return from(this.entityModel.findById(id)).pipe(
-      map(validateEntityFound),
-      map(validateNotPublishingEntity),
-      concatMap(() =>
-        this.entityProvider.setIsPublishing$(
-          entityType,
-          id,
-          true,
-          this.entityModel
-        )
-      ),
-      concatMap(() =>
-        this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })
-      ),
-      concatMap(() =>
-        this.entityProvider.setIsPublishing$(
-          entityType,
-          id,
-          false,
-          this.entityModel
-        )
-      ),
-      concatMap(() => this.findOne$(entityType, id))
-    );
-  }
-
-  publish$(photoAlbumFolderId: string): Observable<boolean> {
-    const googleDrive = getGoogleDrive(
-      this.configProvider.googleDriveClientEmail,
-      this.configProvider.googleDrivePrivateKey
-    );
-
-    getGoogleDriveFolderParents$(googleDrive, photoAlbumFolderId);
-    // Dark Rush
-    // Lightroom Export
-    // Shared
-    // Watermarked or Unwatermaked
-    // Shared With Folder
-    // Photo Album
-
-    return of(true);
-  }
-
-  websitePost$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
-    return from(this.entityModel.findById(id)).pipe(
-      map(validateEntityFound),
-      map(validateNotPublishingEntity),
-      concatMap(() =>
-        this.entityProvider.setIsPublishing$(
-          entityType,
-          id,
-          true,
-          this.entityModel
-        )
-      ),
-      concatMap(() =>
-        this.entityPostProvider.post$(entityType, id, this.entityModel)
-      ),
-      concatMap(() =>
-        this.entityProvider.setIsPublishing$(
-          entityType,
-          id,
-          false,
-          this.entityModel
-        )
-      ),
-      concatMap(() => this.findOne$(entityType, id))
-    );
+    return this.entityLoadProvider
+      .watchFolder$(id)
+      .pipe(concatMap(() => this.findOne$(entityType, id)));
   }
 
   socialMediaPost$(
@@ -171,26 +54,46 @@ export class AdminEntitiesService {
   ): Observable<EntityAdminDto> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
-      map(validateNotPublishingEntity),
+      map(validateEntityIsPublished),
+      concatMap(() => this.entitySocialMediaPostProvider.post$(entityType, id)),
+      concatMap(() => this.findOne$(entityType, id))
+    );
+  }
+
+  update$(
+    entityType: EntityType,
+    id: string,
+    entityUpdate: EntityUpdateDto
+  ): Observable<EntityAdminDto> {
+    return from(this.entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map(validateEntityNotPublishing),
       concatMap(() =>
-        this.entityProvider.setIsPublishing$(
-          entityType,
-          id,
-          true,
-          this.entityModel
-        )
+        this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })
       ),
-      concatMap(() =>
-        this.entityPostProvider.post$(entityType, id, this.entityModel)
-      ),
-      concatMap(() =>
-        this.entityProvider.setIsPublishing$(
-          entityType,
-          id,
-          false,
-          this.entityModel
-        )
-      ),
+      concatMap(() => this.findOne$(entityType, id))
+    );
+  }
+
+  publish$(
+    entityType: EntityType,
+    id: string,
+    renameMediaWithEntitySlug: boolean
+  ): Observable<EntityAdminDto> {
+    return from(this.entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map(validateEntityNotPublishing),
+      concatMap(() => {
+        try {
+          return this.entityPublishProvider.publish$(
+            entityType,
+            id,
+            renameMediaWithEntitySlug
+          );
+        } catch {
+          return this.setIsPublishing$(entityType, id, false);
+        }
+      }),
       concatMap(() => this.findOne$(entityType, id))
     );
   }
@@ -212,30 +115,6 @@ export class AdminEntitiesService {
     );
   }
 
-  findAll$(
-    entityType: EntityType,
-    group?: string
-  ): Observable<EntityMinimalDto[]> {
-    const googleDrive = getGoogleDrive(
-      this.configProvider.googleDriveClientEmail,
-      this.configProvider.googleDrivePrivateKey
-    );
-    return this.entityLoadProvider.load(googleDrive, entityType).pipe(
-      concatMap(() =>
-        this.entityProvider.findAll$(entityType, this.entityModel)
-      ),
-      map(loadEntityMinimal),
-      toArray<EntityMinimalDto>()
-    );
-  }
-
-  findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
-    return this.entityProvider.findOne$(id, this.entityModel).pipe(
-      map((documentModel) => validateEntityType(entityType, documentModel)),
-      map(loadEntity)
-    );
-  }
-
   findAllGroups$(entityType: EntityType): Observable<string[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
@@ -244,27 +123,35 @@ export class AdminEntitiesService {
     return this.entityLoadProvider.loadGroups$(googleDrive, entityType);
   }
 
-  findAllInGroup$(
+  findAll$(
     entityType: EntityType,
-    group: string
+    group?: string
   ): Observable<EntityMinimalDto[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
-    return this.entityLoadProvider
-      .loadForGroup$(googleDrive, entityType, group)
-      .pipe(
-        concatMap(() =>
-          this.entityProvider.findAllInGroup$(
-            entityType,
-            group,
-            this.entityModel
-          )
-        ),
-        map(loadEntityMinimal),
-        toArray<EntityMinimalDto>()
-      );
+
+    return this.entityLoadProvider.create$(googleDrive, entityType, group).pipe(
+      concatMap(() =>
+        from(
+          group
+            ? this.entityModel.find({ type: entityType, group: group })
+            : this.entityModel.find({ type: entityType })
+        )
+      ),
+      concatMap(loadDocumentModelsArray),
+      map(loadEntityMinimal),
+      toArray<EntityMinimalDto>()
+    );
+  }
+
+  findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
+    return from(this.entityModel.findById(id)).pipe(
+      map(validateEntityFound),
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      map(loadEntity)
+    );
   }
 
   findIsPublishing$(entityType: EntityType, id: string): Observable<boolean> {
@@ -278,7 +165,7 @@ export class AdminEntitiesService {
   delete$(entityType: EntityType, id: string): Observable<void> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
-      map(validateNotPublishingEntity),
+      map(validateEntityNotPublishing),
       map((documentModel) => validateEntityType(entityType, documentModel)),
       concatMap((documentModel) => {
         if (documentModel.images.length === 0) {

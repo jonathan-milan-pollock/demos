@@ -2,14 +2,13 @@ import * as fs from 'fs-extra';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { concatMap, concatMapTo, from, Observable, tap } from 'rxjs';
-import { Model } from 'mongoose';
 
 import {
   Image,
   ImageDimension,
-  ImageUpdateDto,
+  Media,
 } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared/types';
+import { ImageUpdateDto } from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
@@ -36,8 +35,7 @@ export class ImageUpdateProvider {
   update$(
     image: Image,
     imageUpdate: ImageUpdateDto,
-    documentModel: DocumentModel,
-    entityModel: Model<DocumentModel>
+    documentModel: DocumentModel
   ): Observable<DocumentModel> {
     const media = loadMedia(
       image.id,
@@ -58,12 +56,7 @@ export class ImageUpdateProvider {
     // TODO: validate can only move from new to published, published to archived and archived to published
 
     if (media.fileName === mediaUpdate.fileName) {
-      return this.imageProvider.update$(
-        image.id,
-        image.entityId,
-        imageUpdate,
-        entityModel
-      );
+      return this.imageProvider.update$(image.id, image.entityId, imageUpdate);
     }
 
     return this.updateBlobPath$(
@@ -71,14 +64,8 @@ export class ImageUpdateProvider {
       mediaUpdate,
       documentModel.imageDimensions
     ).pipe(
-      tap(() => this.logger.debug('Update')),
       concatMapTo(
-        this.imageProvider.update$(
-          image.id,
-          image.entityId,
-          imageUpdate,
-          entityModel
-        )
+        this.imageProvider.update$(image.id, image.entityId, imageUpdate)
       )
     );
   }

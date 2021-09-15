@@ -11,7 +11,7 @@ export class SandySpringsFestival2018 extends EventDto {
   location = {
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

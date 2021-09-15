@@ -1,10 +1,10 @@
-import { PublicContent } from '@dark-rush-photography/shared/types';
 import {
   Image,
-  ImageDto,
-  ImageMinimalDto,
   MediaState,
+  PublicContent,
 } from '@dark-rush-photography/shared/types';
+import { ImageDto, ImageMinimalDto } from '@dark-rush-photography/api/types';
+
 import { findMediaComments } from './comment.functions';
 import { findMediaEmotions } from './emotion.functions';
 

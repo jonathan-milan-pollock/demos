@@ -5,14 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  EntityProvider,
+  EntityPublicProvider,
   EventProvider,
   ImageDimensionProvider,
   ImageProvider,
   ImageRemoveProvider,
   ImageUploadProvider,
-  ResizeImageProvider,
-  TinifyImageProvider,
+  ImageResizeProvider,
+  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
@@ -27,14 +27,14 @@ import { EventsController } from './events.controller';
   controllers: [EventsController],
   providers: [
     EventsService,
-    EntityProvider,
+    EntityPublicProvider,
     EventProvider,
     ImageProvider,
     ImageUploadProvider,
     ImageRemoveProvider,
     ImageDimensionProvider,
-    TinifyImageProvider,
-    ResizeImageProvider,
+    ImageTinifyProvider,
+    ImageResizeProvider,
   ],
 })
 export class EventsModule {}

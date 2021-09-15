@@ -98,11 +98,15 @@ export class SocialMediaProvider {
         this.logger.log(`Creating entity ${socialMediaEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.SocialMedia, {
-              group,
-              slug: socialMediaEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.SocialMedia,
+              {
+                group,
+                slug: socialMediaEntityFolder.name,
+                isPublic: false,
+              },
+              socialMediaEntityFolder.id
+            ),
           }).save()
         );
       }),

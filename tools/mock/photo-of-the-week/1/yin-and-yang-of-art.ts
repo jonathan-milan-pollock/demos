@@ -24,7 +24,7 @@ export class YinAndYangOfArt extends PhotoOfTheWeekDto {
     stateOrProvince: 'North Carolina',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

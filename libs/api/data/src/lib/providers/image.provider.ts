@@ -5,21 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import {
-  Image,
-  ImageDto,
-  ImageUpdateDto,
-  MediaState,
-} from '@dark-rush-photography/shared/types';
+import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import { ImageDto, ImageUpdateDto } from '@dark-rush-photography/api/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
-  validateEntityIsPosted,
+  validateEntityIsPublic,
 } from '../entities/entity-validation.functions';
 import {
   validateImageFound,
-  validateImageNotAlreadyExists,
-  validateImagePublic,
+  validateImageNotPublished,
 } from '../content/image-validation.functions';
 import { loadImage, loadPublicImage } from '../content/image.functions';
 import { loadPublicContent } from '../content/public-content.functions';
@@ -30,13 +25,6 @@ export class ImageProvider {
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>
   ) {}
-
-  validateImageNotAlreadyExists(
-    fileName: string,
-    documentModel: DocumentModel
-  ): DocumentModel {
-    return validateImageNotAlreadyExists(fileName, documentModel);
-  }
 
   add$(
     id: string,
@@ -75,15 +63,14 @@ export class ImageProvider {
   update$(
     id: string,
     entityId: string,
-    imageUpdate: ImageUpdateDto,
-    entityModel: Model<DocumentModel>
+    imageUpdate: ImageUpdateDto
   ): Observable<DocumentModel> {
-    return from(entityModel.findById(entityId)).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         const foundImage = validateImageFound(id, documentModel);
         return from(
-          entityModel.findByIdAndUpdate(entityId, {
+          this.entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images.filter((image) => image.id !== id),
               {
@@ -96,7 +83,7 @@ export class ImageProvider {
                 isStarred: imageUpdate.isStarred,
                 isLoved: imageUpdate.isLoved,
                 title: imageUpdate.title,
-                seoDescription: imageUpdate.description,
+                seoDescription: imageUpdate.seoDescription,
                 seoKeywords: imageUpdate.keywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: imageUpdate.datePublished,
@@ -120,20 +107,16 @@ export class ImageProvider {
     );
   }
 
-  findOnePublic$(
-    id: string,
-    entityId: string,
-    entityModel: Model<DocumentModel>
-  ): Observable<ImageDto> {
-    return from(entityModel.findById(entityId)).pipe(
+  findOnePublic$(id: string, entityId: string): Observable<ImageDto> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateEntityIsPosted),
+      map(validateEntityIsPublic),
       map((documentModel) => ({
         image: validateImageFound(id, documentModel),
         documentModel,
       })),
       map(({ image, documentModel }) => ({
-        image: validateImagePublic(image),
+        image: validateImageNotPublished(image),
         documentModel,
       })),
       map(({ image, documentModel }) =>
@@ -146,8 +129,7 @@ export class ImageProvider {
     id: string,
     entityId: string,
     previousState: MediaState,
-    newState: MediaState,
-    entityModel: Model<DocumentModel>
+    newState: MediaState
   ): Observable<DocumentModel> {
     if (
       !(
@@ -163,12 +145,12 @@ export class ImageProvider {
     ) {
       throw new ConflictException('Invalid change in state');
     }
-    return from(entityModel.findById(entityId)).pipe(
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         const foundImage = validateImageFound(id, documentModel);
         return from(
-          entityModel.findByIdAndUpdate(entityId, {
+          this.entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images.filter((image) => image.id !== id),
               {
@@ -196,16 +178,12 @@ export class ImageProvider {
     );
   }
 
-  remove$(
-    id: string,
-    entityId: string,
-    entityModel: Model<DocumentModel>
-  ): Observable<DocumentModel> {
-    return from(entityModel.findById(entityId)).pipe(
+  remove$(id: string, entityId: string): Observable<DocumentModel> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) =>
         from(
-          entityModel.findByIdAndUpdate(entityId, {
+          this.entityModel.findByIdAndUpdate(entityId, {
             images: [
               ...documentModel.images.filter((image) => image.id !== id),
             ],

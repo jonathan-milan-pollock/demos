@@ -15,13 +15,12 @@ import {
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
+import { EventDto, EventMinimalDto } from '@dark-rush-photography/api/types';
 import {
   EntityType,
-  EventDto,
-  EventMinimalDto,
+  GoogleDriveFolder,
   ImageDimensionType,
 } from '@dark-rush-photography/shared/types';
-import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -32,11 +31,11 @@ import {
   loadNewEntity,
 } from '../entities/entity.functions';
 import {
-  validateEntityDateCreated,
-  validateEntityDescription,
+  validateEntityDateCreatedProvided,
+  validateEntitySeoDescriptionProvided,
   validateEntityFound,
-  validateEntityLocation,
-  validateEntityTitle,
+  validateEntityLocationProvided,
+  validateEntityTitleProvided,
 } from '../entities/entity-validation.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import {
@@ -67,8 +66,8 @@ export class EventProvider {
       group: documentModel.group,
       slug: documentModel.slug,
       order: documentModel.order,
-      title: validateEntityTitle(documentModel),
-      tileImageIsCentered: documentModel.tileImageIsCentered,
+      title: validateEntityTitleProvided(documentModel),
+      photoAlbumImageIsCentered: documentModel.photoAlbumImageIsCentered,
       starredImage,
       starredTileImageDimensions: validateFindImageDimension(
         starredImage.id,
@@ -90,11 +89,11 @@ export class EventProvider {
       group: documentModel.group,
       slug: documentModel.slug,
       order: documentModel.order,
-      title: validateEntityTitle(documentModel),
-      description: validateEntityDescription(documentModel),
+      title: validateEntityTitleProvided(documentModel),
+      description: validateEntitySeoDescriptionProvided(documentModel),
       keywords: documentModel.seoKeywords,
-      dateCreated: validateEntityDateCreated(documentModel),
-      location: validateEntityLocation(documentModel),
+      dateCreated: validateEntityDateCreatedProvided(documentModel),
+      location: validateEntityLocationProvided(documentModel),
       text: documentModel.text,
       images: publicContent.images.map(loadMinimalPublicImage),
       comments: entityComments,
@@ -159,11 +158,15 @@ export class EventProvider {
         this.logger.log(`Creating entity ${eventEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.Event, {
-              group,
-              slug: eventEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.Event,
+              {
+                group,
+                slug: eventEntityFolder.name,
+                isPublic: false,
+              },
+              eventEntityFolder.id
+            ),
           }).save()
         );
       }),

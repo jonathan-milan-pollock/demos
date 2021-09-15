@@ -1,21 +1,26 @@
 import {
   Entity,
-  EntityAdminDto,
   EntityCreate,
-  EntityMinimalDto,
   EntityType,
 } from '@dark-rush-photography/shared/types';
+import {
+  EntityAdminDto,
+  EntityMinimalDto,
+} from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadComment } from '../content/comment.functions';
 import { loadEmotion } from '../content/emotion.functions';
 import { loadImage } from '../content/image.functions';
+import { loadImageDimension } from '../content/image-dimension.functions';
 import { loadVideo } from '../content/video.functions';
 
 export const loadNewEntity = (
   entityType: EntityType,
-  entityCreate: EntityCreate
+  entityCreate: EntityCreate,
+  googleDriveFolderId?: string
 ): Entity => ({
   type: entityType,
+  googleDriveFolderId,
   group: entityCreate.group,
   slug: entityCreate.slug,
   order: 0,
@@ -25,20 +30,22 @@ export const loadNewEntity = (
   location: {
     country: 'United States',
   },
-  tileImageIsCentered: false,
+  photoAlbumImageIsCentered: false,
   text: [],
   images: [],
   imageDimensions: [],
   videos: [],
   comments: [],
   emotions: [],
-  isPublic: entityCreate.isPosted,
+  isPublic: entityCreate.isPublic,
   isPublishing: false,
+  isPublished: false,
 });
 
 export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
-  id: documentModel._id,
   type: documentModel.type,
+  id: documentModel._id,
+  googleDriveFolderId: documentModel.googleDriveFolderId,
   group: documentModel.group,
   slug: documentModel.slug,
   order: documentModel.order,
@@ -48,17 +55,16 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
   dateCreated: documentModel.dateCreated,
   datePublished: documentModel.datePublished,
   location: documentModel.location,
-  tileImageIsCentered: documentModel.tileImageIsCentered,
+  photoAlbumImageIsCentered: documentModel.photoAlbumImageIsCentered,
   text: documentModel.text,
+  images: documentModel.images.map(loadImage),
+  imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
+  videos: documentModel.videos.map(loadVideo),
   comments: documentModel.comments.map(loadComment),
   emotions: documentModel.emotions.map(loadEmotion),
-  images: documentModel.images.map(loadImage),
-  video:
-    documentModel.videos.length > 0
-      ? documentModel.videos.map(loadVideo)[0]
-      : undefined,
-  isPublished: documentModel.isPublic,
+  isPublic: documentModel.isPublic,
   isPublishing: documentModel.isPublishing,
+  isPublished: documentModel.isPublished,
 });
 
 export const loadEntityMinimal = (

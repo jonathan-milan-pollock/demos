@@ -110,11 +110,15 @@ export class SharedPhotoAlbumProvider {
         this.logger.log(`Creating entity ${sharedPhotoAlbumEntityFolder.name}`);
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.SharedPhotoAlbum, {
-              group: sharedWith,
-              slug: sharedPhotoAlbumEntityFolder.name,
-              isPosted: false,
-            }),
+            ...loadNewEntity(
+              EntityType.SharedPhotoAlbum,
+              {
+                group: sharedWith,
+                slug: sharedPhotoAlbumEntityFolder.name,
+                isPublic: false,
+              },
+              sharedPhotoAlbumEntityFolder.id
+            ),
           }).save()
         );
       }),

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import {
   DestinationDto,
   DestinationMinimalDto,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import { Public } from '@dark-rush-photography/api/util';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { DestinationsService } from './destinations.service';

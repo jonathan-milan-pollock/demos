@@ -23,7 +23,7 @@ export class IllReadYourPalm extends PhotoOfTheWeekDto {
     stateOrProvince: 'Louisiana',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

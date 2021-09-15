@@ -16,7 +16,7 @@ export class ClassicCars1952Pontiac extends EventDto {
     stateOrProvince: 'Alabama',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
   text = [
     `Over the holiday, my photographer friends and I went
       out to capture photos around Goodwater, Alabama.  On

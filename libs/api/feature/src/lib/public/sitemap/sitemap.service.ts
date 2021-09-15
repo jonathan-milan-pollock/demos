@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import {
   DocumentModel,
   Document,
-  EntityProvider,
+  EntityPublicProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -15,10 +15,10 @@ export class SitemapService {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider
+    private readonly entityPublicProvider: EntityPublicProvider
   ) {}
 
-  findSitemap$(): Observable<string> {
+  loadSitemap$(): Observable<string> {
     return of('');
   }
 }

@@ -13,7 +13,7 @@ export class SSPCAnnualGolfInvitational2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
 
   private constructor() {
     super();

@@ -1,10 +1,24 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { InjectRepository, Repository } from '@nestjs/azure-database';
 
-import { concatMap, Observable, of } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+import { concatMap, from, map, Observable, of } from 'rxjs';
+import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
-import { ImagesProcessProvider } from './images-process.provider';
+import {
+  getGoogleDrive,
+  watchGoogleDriveFolder$,
+} from '@dark-rush-photography/api/util';
+import { Document, DocumentModel } from '../schema/document.schema';
+import { EntityPushNotificationsTable } from '../tables/entity-push-notifications.table';
+import {
+  validateEntityFound,
+  validateEntityWatchFolderId,
+  validateEntityGroupProvided,
+} from '../entities/entity-validation.functions';
 import { AboutProvider } from './about.provider';
 import { BestOfProvider } from './best-of.provider';
 import { DestinationProvider } from './destination.provider';
@@ -15,10 +29,16 @@ import { ReviewMediaProvider } from './review-media.provider';
 import { ReviewProvider } from './review.provider';
 import { SharedPhotoAlbumProvider } from './shared-photo-album.provider';
 import { SocialMediaProvider } from './social-media.provider';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class EntityLoadProvider {
   constructor(
+    private readonly configProvider: ConfigProvider,
+    @InjectModel(Document.name)
+    private readonly entityModel: Model<DocumentModel>,
+    @InjectRepository(EntityPushNotificationsTable)
+    private readonly entityPushNotificationsRepository: Repository<EntityPushNotificationsTable>,
     private readonly aboutProvider: AboutProvider,
     private readonly bestOfProvider: BestOfProvider,
     private readonly destinationProvider: DestinationProvider,
@@ -28,28 +48,8 @@ export class EntityLoadProvider {
     private readonly reviewMediaProvider: ReviewMediaProvider,
     private readonly reviewProvider: ReviewProvider,
     private readonly sharedPhotoAlbumProvider: SharedPhotoAlbumProvider,
-    private readonly socialMediaProvider: SocialMediaProvider,
-    private readonly imagesProcessProvider: ImagesProcessProvider
+    private readonly socialMediaProvider: SocialMediaProvider
   ) {}
-
-  load(googleDrive: drive_v3.Drive, entityType: EntityType): Observable<void> {
-    switch (entityType) {
-      case EntityType.About:
-        return this.aboutProvider.create$(googleDrive);
-      case EntityType.BestOf:
-        return this.bestOfProvider.create$(googleDrive);
-      case EntityType.Destination:
-        return this.destinationProvider.create$(googleDrive);
-      case EntityType.Favorites:
-        return this.favoritesProvider.create$();
-      case EntityType.ReviewMedia:
-        return this.reviewMediaProvider.create$(googleDrive);
-      case EntityType.Review:
-        return this.reviewProvider.create$(googleDrive);
-      default:
-        return of(undefined);
-    }
-  }
 
   loadGroups$(
     googleDrive: drive_v3.Drive,
@@ -66,165 +66,81 @@ export class EntityLoadProvider {
         return this.socialMediaProvider.loadGroups$(googleDrive);
       default:
         throw new BadRequestException(
-          `Invalid entity type ${entityType} to load groups`
+          `Entity ${entityType} does not have groups`
         );
     }
   }
 
-  loadForGroup$(
+  create$(
     googleDrive: drive_v3.Drive,
     entityType: EntityType,
-    group: string
-  ): Observable<void> {
-    switch (entityType) {
-      case EntityType.Event:
-        return this.eventProvider.createForGroup$(googleDrive, group);
-      case EntityType.PhotoOfTheWeek:
-        return this.photoOfTheWeekProvider.createForGroup$(googleDrive, group);
-      case EntityType.SharedPhotoAlbum:
-        return this.sharedPhotoAlbumProvider.createForGroup$(
-          googleDrive,
-          group
-        );
-      case EntityType.SocialMedia:
-        return this.socialMediaProvider.createForGroup$(googleDrive, group);
-      default:
-        throw new BadRequestException(
-          `Invalid entity type ${entityType} to create with group ${group}`
-        );
-    }
-  }
-
-  loadNewImages$(
-    googleDrive: drive_v3.Drive,
-    entityType: EntityType,
-    entityId: string
+    group?: string
   ): Observable<void> {
     switch (entityType) {
       case EntityType.About:
-        return this.aboutProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
+        return this.aboutProvider.create$(googleDrive);
       case EntityType.BestOf:
-        return this.bestOfProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
+        return this.bestOfProvider.create$(googleDrive);
       case EntityType.Destination:
-        return this.destinationProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
+        return this.destinationProvider.create$(googleDrive);
       case EntityType.Event:
-        return this.eventProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      case EntityType.Favorites:
-        return this.favoritesProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      case EntityType.PhotoOfTheWeek:
-        return this.photoOfTheWeekProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      case EntityType.ReviewMedia:
-        return this.reviewMediaProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      case EntityType.Review:
-        return this.reviewProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      case EntityType.SharedPhotoAlbum:
-        return this.sharedPhotoAlbumProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      case EntityType.SocialMedia:
-        return this.socialMediaProvider
-          .findNewImagesFolder$(googleDrive, entityId)
-          .pipe(
-            concatMap((newImagesFolder) =>
-              this.imagesProcessProvider.processNewImages$(
-                googleDrive,
-                newImagesFolder.documentModel,
-                newImagesFolder.imagesFolder
-              )
-            )
-          );
-      default:
-        throw new BadRequestException(
-          `Invalid entity type ${entityType} to load entity`
+        return this.eventProvider.createForGroup$(
+          googleDrive,
+          validateEntityGroupProvided(group)
         );
+      case EntityType.Favorites:
+        return this.favoritesProvider.create$(googleDrive);
+      case EntityType.PhotoOfTheWeek:
+        return this.photoOfTheWeekProvider.createForGroup$(
+          googleDrive,
+          validateEntityGroupProvided(group)
+        );
+      case EntityType.ReviewMedia:
+        return this.reviewMediaProvider.create$(googleDrive);
+      case EntityType.Review:
+        return this.reviewProvider.create$(googleDrive);
+      case EntityType.SharedPhotoAlbum:
+        return this.sharedPhotoAlbumProvider.createForGroup$(
+          googleDrive,
+          validateEntityGroupProvided(group)
+        );
+      case EntityType.SocialMedia:
+        return this.socialMediaProvider.createForGroup$(
+          googleDrive,
+          validateEntityGroupProvided(group)
+        );
+      default:
+        return of(undefined);
     }
+  }
+
+  watchFolder$(entityId: string): Observable<boolean> {
+    const googleDrive = getGoogleDrive(
+      this.configProvider.googleDriveClientEmail,
+      this.configProvider.googleDrivePrivateKey
+    );
+
+    const channel = new EntityPushNotificationsTable();
+    const channelId = uuidv4();
+    const channelToken = uuidv4();
+
+    channel.key = channelId;
+    channel.token = channelToken;
+
+    return from(
+      this.entityPushNotificationsRepository.create(channel, channel.key)
+    ).pipe(
+      concatMap(() => from(this.entityModel.findById(entityId))),
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        watchGoogleDriveFolder$(
+          googleDrive,
+          channelId,
+          channelToken,
+          validateEntityWatchFolderId(documentModel),
+          this.configProvider.entityPushNotificationsAddress
+        )
+      )
+    );
   }
 }

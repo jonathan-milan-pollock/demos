@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { combineLatest, concatMap, from, map, max, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { Comment } from '@dark-rush-photography/shared/types';
 import {
-  Comment,
   CommentAddDto,
   CommentUpdateDto,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { validateAddComment } from '../content/comment-validation.functions';

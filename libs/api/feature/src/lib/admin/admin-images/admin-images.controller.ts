@@ -12,6 +12,7 @@ import {
   Get,
   ParseUUIDPipe,
   ParseEnumPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -26,22 +27,30 @@ import { Observable } from 'rxjs';
 
 import {
   Image,
-  ImageAdminDto,
   ImageDimensionType,
-  ImageUpdateDto,
   MediaState,
-  ThreeSixtySettingsDto,
 } from '@dark-rush-photography/shared/types';
-import { FileUploadDto } from '@dark-rush-photography/shared/types';
-import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
+import {
+  FileUploadDto,
+  ImageAdminDto,
+  ImageUpdateDto,
+  ThreeSixtySettingsDto,
+} from '@dark-rush-photography/api/types';
+import {
+  AdminAuthGuard,
+  AdminRole,
+  ParseObjectIdPipe,
+} from '@dark-rush-photography/api/util';
 import { AdminImagesService } from './admin-images.service';
 
 @Controller({ path: 'admin/images', version: '1' })
+@UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
 @ApiTags('Admin Images')
 export class AdminImagesController {
   constructor(private readonly adminImagesService: AdminImagesService) {}
 
+  @AdminRole()
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -61,6 +70,7 @@ export class AdminImagesController {
     );
   }
 
+  @AdminRole()
   @Post('upload-three-sixty')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -80,6 +90,7 @@ export class AdminImagesController {
     );
   }
 
+  @AdminRole()
   @Put(':id')
   @ApiOkResponse({ type: ImageAdminDto })
   update$(
@@ -90,6 +101,7 @@ export class AdminImagesController {
     return this.adminImagesService.update$(id, entityId, imageUpdate);
   }
 
+  @AdminRole()
   @Put(':id/:imageDimensionType/three-sixty-settings')
   @ApiOkResponse({ type: ImageAdminDto })
   updateThreeSixtySettings$(
@@ -107,6 +119,7 @@ export class AdminImagesController {
     );
   }
 
+  @AdminRole()
   @Get()
   @ApiOkResponse({ type: [ImageAdminDto] })
   findAll$(
@@ -116,6 +129,7 @@ export class AdminImagesController {
     return this.adminImagesService.findAll$(entityId, state);
   }
 
+  @AdminRole()
   @Get(':id')
   @ApiOkResponse({ type: ImageAdminDto })
   findOne$(
@@ -125,6 +139,7 @@ export class AdminImagesController {
     return this.adminImagesService.findOne$(id, entityId);
   }
 
+  @AdminRole()
   @Delete(':id')
   @HttpCode(204)
   remove$(

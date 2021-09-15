@@ -6,7 +6,7 @@ import { MediaState } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ConfigProvider {
-  constructor(private configService: ConfigService<Env>) {}
+  constructor(private readonly configService: ConfigService<Env>) {}
 
   get production(): boolean {
     return this.configService.get('production') === 'true';

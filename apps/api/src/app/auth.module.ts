@@ -5,7 +5,9 @@ import { JWT } from '@dark-rush-photography/shared/types';
 import { JwtAuthGuard, JwtStrategy } from '@dark-rush-photography/api/util';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: JWT })],
+  imports: [
+    PassportModule.register({ defaultStrategy: JWT, property: 'user' }),
+  ],
   providers: [
     JwtStrategy,
     {

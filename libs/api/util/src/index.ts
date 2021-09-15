@@ -1,9 +1,9 @@
 // auth
+export * from './lib/auth/admin-auth.guard';
+export * from './lib/auth/admin-role.decorator';
 export * from './lib/auth/jwt-auth.guard';
 export * from './lib/auth/jwt.strategy';
 export * from './lib/auth/public.decorator';
-export * from './lib/auth/user.decorator';
-export * from './lib/auth/user.guard';
 
 // azure-storage
 export * from './lib/azure-storage/azure-storage-blob-path.functions';
@@ -17,10 +17,6 @@ export * from './lib/config/image-resolutions.config';
 export * from './lib/config/three-sixty-image-resolutions.config';
 export * from './lib/config/video-artist-exif.config';
 export * from './lib/config/video-resolutions.config';
-
-// enums
-export * from './lib/enums/entity-to-media-process-type.functions';
-export * from './lib/enums/media-process-to-entity-type.functions';
 
 // exif
 export * from './lib/exif/date-created-exif.functions';

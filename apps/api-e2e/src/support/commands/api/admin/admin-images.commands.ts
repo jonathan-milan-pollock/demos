@@ -3,7 +3,7 @@
 //import * as fs from 'fs-extra';
 //import * as path from 'path';
 //import { StreamableFile } from '@nestjs/common';
-import { getAuthHeaders } from '../auth.functions';
+import { getAuthHeaders } from '../auth-headers.functions';
 
 Cypress.Commands.add(
   'uploadImageAdmin',

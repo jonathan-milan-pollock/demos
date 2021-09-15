@@ -1,0 +1,19 @@
+<fieldset *ngIf="imagePostFormGroup" [formGroup]="imagePostFormGroup">
+  <legend>Image Post</legend>
+  <mat-form-field class="form-field">
+    <mat-label>Title</mat-label>
+    <input matInput [formControlName]="'title'" />
+  </mat-form-field>
+  <mat-form-field class="form-field">
+    <mat-label>Text</mat-label>
+    <textarea
+      matInput
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="2"
+      cdkAutosizeMaxRows="6"
+      [formControlName]="'text'"
+      data-testid="text-input"
+    ></textarea>
+  </mat-form-field>
+</fieldset>

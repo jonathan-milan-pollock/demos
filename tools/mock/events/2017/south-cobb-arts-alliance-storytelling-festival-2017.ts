@@ -31,7 +31,7 @@ export class SouthCobbArtsAllianceStorytellingFestival2017 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  tileImageIsCentered = false;
+  photoAlbumImageIsCentered = false;
   text = [
     `
         Sandra Miller, president of South Cobb Arts Alliance (SCAA),

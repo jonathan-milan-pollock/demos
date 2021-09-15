@@ -1,8 +1,8 @@
 import {
   EntityAdminDto,
   MediaProcessCreateDto,
-} from '@dark-rush-photography/shared/types';
-import { getAuthHeaders } from '../auth.functions';
+} from '@dark-rush-photography/api/types';
+import { getAuthHeaders } from '../auth-headers.functions';
 
 Cypress.Commands.add(
   'createMediaProcessAdmin',

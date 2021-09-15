@@ -4,13 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { EntityType, FavoritesDto } from '@dark-rush-photography/shared/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
+import { FavoritesDto } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  EntityProvider,
+  EntityPublicProvider,
   FavoritesProvider,
-  validateOneEntity,
+  validateOneEntityFound,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class FavoritesService {
   constructor(
     @InjectModel(Document.name)
     private readonly favoritesModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
+    private readonly entityProvider: EntityPublicProvider,
     private readonly favoritesProvider: FavoritesProvider
   ) {}
 
@@ -27,7 +28,7 @@ export class FavoritesService {
       .findAllPublic$(EntityType.Favorites, this.favoritesModel)
       .pipe(
         toArray<DocumentModel>(),
-        map(validateOneEntity),
+        map(validateOneEntityFound),
         map(this.favoritesProvider.loadFavoritesPublic)
       );
   }

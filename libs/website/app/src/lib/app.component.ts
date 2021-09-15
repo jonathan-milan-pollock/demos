@@ -1,17 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Store } from '@ngrx/store';
 import { EMPTY, map, Observable, pluck, Subscription } from 'rxjs';
 
 import { ADMIN, Auth0User } from '@dark-rush-photography/website/types';
-import {
-  Auth0AuthService,
-  AppState,
-  selectAllReviews,
-  loadReviews,
-} from '@dark-rush-photography/website/data';
+import { loginWithRedirect, logout } from '@dark-rush-photography/website/data';
 import { Destination, Review } from '@dark-rush-photography/shared/types';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'drp-root',
@@ -29,20 +24,14 @@ export class AppComponent implements OnInit, OnDestroy {
   reviews$: Observable<Review[]> = EMPTY;
 
   constructor(
-    private readonly auth0AuthService: Auth0AuthService,
     private readonly router: Router,
-    private readonly store$: Store<AppState>
+    private readonly store: Store<{ isAuthenticated: boolean; user: Auth0User }>
   ) {}
 
   ngOnInit(): void {
-    this.reviews$ = this.store$
-      .select('review')
-      .pipe(map((reviewsState) => selectAllReviews(reviewsState)));
-    this.isAuthenticated$ = this.auth0AuthService.isAuthenticated$;
-    this.auth0UserSubscription = this.auth0AuthService.user$.subscribe(
-      (user) => (this.user = user as Auth0User)
-    );
-    this.store$.dispatch(loadReviews());
+    this.isAuthenticated$ = this.store.select((state) => state.isAuthenticated);
+    this.user = this.store.select((state) => state.user);
+
     this.router.events
       .pipe(
         pluck('url'),
@@ -51,27 +40,21 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe((url) => {
         this.activeUrl = url;
       });
-
-    this.initForm();
-  }
-
-  private initForm() {
-    this;
   }
 
   get isAdmin(): boolean {
-    const rolesUrl = 'https://www.darkrushphotography.com/roles';
+    const rolesUrl = 'https://www.darkrushphotography.com/roles'; //TODO: Move to constant
     if (!this.user || !this.user[rolesUrl]) return false;
 
     return this.user[rolesUrl].includes(ADMIN);
   }
 
   onSignIn(): void {
-    this.auth0AuthService.loginWithRedirect$();
+    this.store.dispatch(loginWithRedirect());
   }
 
   onSignOut(): void {
-    this.auth0AuthService.logout$();
+    this.store.dispatch(logout());
   }
 
   onTabClicked(activeUrl: string): void {

@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
-import { EntityPushNotificationsTable } from '@dark-rush-photography/api/data';
-import { WebSocketMessageProvider } from '@dark-rush-photography/api/data';
+import {
+  EntityPushNotificationsTable,
+  WebSocketMessageProvider,
+} from '@dark-rush-photography/api/data';
 import { EntitiesPushNotificationsService } from './entity-push-notifications.service';
 import { EntityPushNotificationsController } from './entity-push-notifications.controller';
 

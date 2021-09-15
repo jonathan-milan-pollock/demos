@@ -1,4 +1,11 @@
-import { Controller, Param, ParseEnumPipe, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  ParseEnumPipe,
+  Post,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -8,14 +15,16 @@ import {
 
 import { Observable } from 'rxjs';
 
+import { MediaProcessType } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
   MediaProcessCreateDto,
-  MediaProcessType,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/api/types';
+import { AdminAuthGuard, AdminRole } from '@dark-rush-photography/api/util';
 import { AdminMediaProcessesService } from './admin-media-processes.service';
 
 @Controller({ path: 'admin/media-processes', version: '1' })
+@UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
 @ApiTags('Admin Media Processes')
 export class AdminMediaProcessesController {
@@ -23,6 +32,7 @@ export class AdminMediaProcessesController {
     private readonly adminMediaProcessesService: AdminMediaProcessesService
   ) {}
 
+  @AdminRole()
   @Post(':mediaProcessType')
   @ApiParam({
     name: 'mediaProcessType',
