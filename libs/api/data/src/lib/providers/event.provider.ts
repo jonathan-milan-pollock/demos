@@ -20,6 +20,8 @@ import {
   EntityType,
   GoogleDriveFolder,
   ImageDimensionType,
+  Group,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
   getGoogleDriveFolders$,
@@ -101,7 +103,7 @@ export class EventProvider {
     };
   }
 
-  loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
+  loadGroups$(googleDrive: drive_v3.Drive): Observable<Group[]> {
     return from(
       getGoogleDriveFolderWithName$(
         googleDrive,
@@ -114,7 +116,11 @@ export class EventProvider {
       ),
       concatMap((eventGroupFolders) => from(eventGroupFolders)),
       pluck('name'),
-      toArray<string>()
+      map((name) => ({
+        watermarkedType: WatermarkedType.Watermarked,
+        name,
+      })),
+      toArray<Group>()
     );
   }
 
@@ -161,6 +167,7 @@ export class EventProvider {
             ...loadNewEntity(
               EntityType.Event,
               {
+                watermarkedType: WatermarkedType.Watermarked,
                 group,
                 slug: eventEntityFolder.name,
                 isPublic: false,

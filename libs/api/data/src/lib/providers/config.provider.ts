@@ -92,16 +92,16 @@ export class ConfigProvider {
     return value;
   }
 
-  get googleDriveDarkRushPhotographyFolderId(): string {
+  get googleDriveDarkRushPhotographySharedFolderId(): string {
     const value = this.configService.get(
-      'googleDriveDarkRushPhotographyFolderId',
+      'googleDriveDarkRushPhotographySharedFolderId',
       {
         infer: true,
       }
     );
     if (!value) {
       throw new BadRequestException(
-        'googleDriveDarkRushPhotographyFolderId undefined'
+        'googleDriveDarkRushPhotographySharedFolderId undefined'
       );
     }
     return value;

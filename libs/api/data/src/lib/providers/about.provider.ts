@@ -17,6 +17,7 @@ import {
   DEFAULT_ENTITY_GROUP,
   EntityType,
   GoogleDriveFolder,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { AboutDto } from '@dark-rush-photography/api/types';
 import {
@@ -90,6 +91,7 @@ export class AboutProvider {
             ...loadNewEntity(
               EntityType.About,
               {
+                watermarkedType: WatermarkedType.WithoutWatermark,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: aboutEntityFolder.name,
                 isPublic: false,

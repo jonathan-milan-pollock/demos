@@ -14,10 +14,10 @@ import {
 import {
   getAzureStorageBlobPath,
   uploadStreamToBlob$,
-  downloadGoogleDriveFile,
   findImageResolution,
   findImageResolution$,
   getExifDate,
+  downloadGoogleDriveImageFile,
 } from '@dark-rush-photography/api/util';
 import { DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
@@ -84,7 +84,7 @@ export class ImagePublishProvider {
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
     const id = uuidv4();
-    return from(downloadGoogleDriveFile(googleDrive, imageFileId)).pipe(
+    return from(downloadGoogleDriveImageFile(googleDrive, imageFileId)).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),

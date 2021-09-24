@@ -1,17 +1,32 @@
 import * as path from 'path';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
+import {
+  combineLatest,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  pluck,
+  tap,
+} from 'rxjs';
 import { Model } from 'mongoose';
+import { drive_v3, GoogleApis } from 'googleapis';
 
-import { EntityType, MediaState } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  GoogleDriveFolder,
+  MediaState,
+} from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
   validateEntityWatchFolderId,
   validateEntityNotPublishing,
   validateEntityType,
+  validateEntityGoogleDriveFolderId,
 } from '../entities/entity-validation.functions';
 import { AboutProvider } from './about.provider';
 import { BestOfProvider } from './best-of.provider';
@@ -21,13 +36,16 @@ import { FavoritesProvider } from './favorites.provider';
 import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
 import { ReviewMediaProvider } from './review-media.provider';
 import { ReviewProvider } from './review.provider';
-import { SharedPhotoAlbumProvider } from './shared-photo-album.provider';
+import { SharedPhotoAlbumPublishProvider } from './shared-photo-album-publish.provider';
 import { SocialMediaProvider } from './social-media.provider';
 import { ImageUpdateProvider } from './image-update.provider';
 import {
+  createGoogleDriveFolder$,
   getExifDate,
   getGoogleDrive,
   getGoogleDriveFolderParents$,
+  getGoogleDriveFolderWithName$,
+  getGoogleDriveImageFiles$,
 } from '@dark-rush-photography/api/util';
 import { ConfigProvider } from './config.provider';
 
@@ -45,55 +63,50 @@ export class EntityPublishProvider {
     private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
     private readonly reviewMediaProvider: ReviewMediaProvider,
     private readonly reviewProvider: ReviewProvider,
-    private readonly sharedPhotoAlbumProvider: SharedPhotoAlbumProvider,
+    private readonly sharedPhotoAlbumPublishProvider: SharedPhotoAlbumPublishProvider,
     private readonly socialMediaProvider: SocialMediaProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider
   ) {}
 
   publish$(
     entityType: EntityType,
-    entityId: string,
+    documentModel: DocumentModel,
     renameMediaWithEntitySlug: boolean
   ): Observable<void> {
-    /*if (entityType === EntityType.SharedPhotoAlbum) {
-      const googleDrive = getGoogleDrive(
-        this.configProvider.googleDriveClientEmail,
-        this.configProvider.googleDrivePrivateKey
-      );
+    const googleDrive = getGoogleDrive(
+      this.configProvider.googleDriveClientEmail,
+      this.configProvider.googleDrivePrivateKey
+    );
 
-      return from(this.entityModel.findById(entityId)).pipe(
-        map(validateEntityFound),
-        map((documentModel) => validateEntityType(entityType, documentModel)),
-        concatMap((documentModel) =>
-          getGoogleDriveFolderParents$(
-            googleDrive,
-            validateEntityGoogleDriveFolderId(documentModel.googleDriveFolderId)
+    if (entityType === EntityType.SharedPhotoAlbum) {
+      return this.sharedPhotoAlbumPublishProvider
+        .createDarkRushPhotographySharedPhotoAlbumFolder$(
+          googleDrive,
+          documentModel
+        )
+        .pipe(
+          concatMap((darkRushPhotographySharedPhotoAlbumFolder) =>
+            this.sharedPhotoAlbumPublishProvider.publishSharedPhotoAlbumFolder$(
+              googleDrive,
+              documentModel,
+              darkRushPhotographySharedPhotoAlbumFolder
+            )
           )
-        ),
-        map(() => undefined)
-      );
+        );
+    }
 
-      //;
-      // Dark Rush
-      // Lightroom Export
-      // Shared
-      // Watermarked or Unwatermaked
-      // Shared With Folder
-      // Photo Album
-    }*/
-
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
+    return of(documentModel).pipe(
       map(validateEntityNotPublishing),
       concatMap(() =>
         from(
-          this.entityModel.findByIdAndUpdate(entityId, { isPublishing: true })
+          this.entityModel.findByIdAndUpdate(documentModel._id, {
+            isPublishing: true,
+          })
         )
       ),
-      map(validateEntityFound),
       map(() => undefined)
-      /*
+    );
+    /*
 
       // TODO: validate for each entity
 
@@ -122,6 +135,5 @@ export class EntityPublishProvider {
       //    entityModel
       //  )
       //),*/
-    );
   }
 }

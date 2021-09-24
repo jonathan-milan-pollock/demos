@@ -147,18 +147,21 @@ export class AdminImagesService {
     );
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      concatMap((documentModel) =>
-        this.imageLoadNewFolderProvider.loadNewImages$(
-          googleDrive,
-          documentModel.type,
-          entityId
-        )
-      ),
+      concatMap((documentModel) => {
+        if (state === MediaState.New) {
+          return this.imageLoadNewFolderProvider.loadNewImages$(
+            googleDrive,
+            documentModel.type,
+            entityId
+          );
+        }
+        return of(documentModel);
+      }),
       concatMap(() => from(this.entityModel.findById(entityId))),
       map(validateEntityFound),
       map((documentModel) =>
         documentModel.images
-          .filter((image) => image.state === MediaState.New)
+          .filter((image) => image.state === state)
           .map(loadImage)
       )
     );

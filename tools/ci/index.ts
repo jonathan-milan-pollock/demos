@@ -179,8 +179,8 @@ const googleDriveWebsitesWithoutWatermarkFolderIdSecret = createSecret(
   vault
 );
 const googleDriveDarkRushPhotographyFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-DARK-RUSH-PHOTOGRAPHY-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID}`,
+  'NX-GOOGLE-DRIVE-DARK-RUSH-PHOTOGRAPHY-SHARED-FOLDER-ID',
+  interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID}`,
   resourceGroup,
   vault
 );

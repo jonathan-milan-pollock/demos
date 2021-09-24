@@ -7,7 +7,12 @@ import { concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  EntityWithGroupType,
+  Group,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 import {
   getGoogleDrive,
   watchGoogleDriveFolder$,
@@ -27,7 +32,7 @@ import { FavoritesProvider } from './favorites.provider';
 import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
 import { ReviewMediaProvider } from './review-media.provider';
 import { ReviewProvider } from './review.provider';
-import { SharedPhotoAlbumProvider } from './shared-photo-album.provider';
+import { SharedPhotoAlbumLoadProvider } from './shared-photo-album-load.provider';
 import { SocialMediaProvider } from './social-media.provider';
 import { ConfigProvider } from './config.provider';
 
@@ -47,26 +52,26 @@ export class EntityLoadProvider {
     private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
     private readonly reviewMediaProvider: ReviewMediaProvider,
     private readonly reviewProvider: ReviewProvider,
-    private readonly sharedPhotoAlbumProvider: SharedPhotoAlbumProvider,
+    private readonly sharedPhotoAlbumLoadProvider: SharedPhotoAlbumLoadProvider,
     private readonly socialMediaProvider: SocialMediaProvider
   ) {}
 
   loadGroups$(
     googleDrive: drive_v3.Drive,
-    entityType: EntityType
-  ): Observable<string[]> {
-    switch (entityType) {
-      case EntityType.Event:
+    entityWithGroupType: EntityWithGroupType
+  ): Observable<Group[]> {
+    switch (entityWithGroupType) {
+      case EntityWithGroupType.Event:
         return this.eventProvider.loadGroups$(googleDrive);
-      case EntityType.PhotoOfTheWeek:
+      case EntityWithGroupType.PhotoOfTheWeek:
         return this.photoOfTheWeekProvider.loadGroups$(googleDrive);
-      case EntityType.SharedPhotoAlbum:
-        return this.sharedPhotoAlbumProvider.loadGroups$(googleDrive);
-      case EntityType.SocialMedia:
+      case EntityWithGroupType.SharedPhotoAlbum:
+        return this.sharedPhotoAlbumLoadProvider.loadGroups$(googleDrive);
+      case EntityWithGroupType.SocialMedia:
         return this.socialMediaProvider.loadGroups$(googleDrive);
       default:
         throw new BadRequestException(
-          `Entity ${entityType} does not have groups`
+          `Entity ${entityWithGroupType} does not have groups`
         );
     }
   }
@@ -74,6 +79,7 @@ export class EntityLoadProvider {
   create$(
     googleDrive: drive_v3.Drive,
     entityType: EntityType,
+    watermarkedType: WatermarkedType,
     group?: string
   ): Observable<void> {
     switch (entityType) {
@@ -100,8 +106,9 @@ export class EntityLoadProvider {
       case EntityType.Review:
         return this.reviewProvider.create$(googleDrive);
       case EntityType.SharedPhotoAlbum:
-        return this.sharedPhotoAlbumProvider.createForGroup$(
+        return this.sharedPhotoAlbumLoadProvider.createForGroup$(
           googleDrive,
+          watermarkedType,
           validateEntityGroupProvided(group)
         );
       case EntityType.SocialMedia:

@@ -40,9 +40,9 @@ export default (): Env => {
     );
   }
 
-  if (!process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID) {
+  if (!process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID) {
     throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID to environment variables'
+      'Please add NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID to environment variables'
     );
   }
 
@@ -106,8 +106,8 @@ export default (): Env => {
       process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID,
     googleDriveWebsitesWithoutWatermarkFolderId:
       process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID,
-    googleDriveDarkRushPhotographyFolderId:
-      process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID,
+    googleDriveDarkRushPhotographySharedFolderId:
+      process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID,
     entityPushNotificationsAddress:
       process.env.NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS,
     mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,

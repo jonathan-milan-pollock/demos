@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import {
   DEFAULT_ENTITY_GROUP,
   MediaProcessType,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
@@ -48,6 +49,7 @@ export class AdminMediaProcessesService {
               getEntityTypeFromMediaProcessType(mediaProcessType),
               {
                 ...mediaProcessCreate,
+                watermarkedType: WatermarkedType.WithoutWatermark,
                 group: DEFAULT_ENTITY_GROUP,
                 isPublic: false,
               }

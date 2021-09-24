@@ -27,6 +27,9 @@ export * from './lib/exif/exif-video.functions';
 export * from './lib/file/file.functions';
 
 // google-drive
+export * from './lib/google-drive/google-drive-folder.functions';
+export * from './lib/google-drive/google-drive-image-file-name.functions';
+export * from './lib/google-drive/google-drive-image.functions';
 export * from './lib/google-drive/google-drive.functions';
 
 // media-processes

@@ -6,12 +6,14 @@ import {
   EntityCreate,
   EntityType,
   Location,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadEntity, loadNewEntity } from './entity.functions';
 
 describe('entity.functions', () => {
   const mockEntityCreate: EntityCreate = {
+    watermarkedType: faker.random.arrayElement(Object.values(WatermarkedType)),
     group: faker.lorem.word(),
     slug: faker.lorem.word(),
     isPublic: faker.datatype.boolean(),
@@ -28,15 +30,21 @@ describe('entity.functions', () => {
     });
 
     it('should return an entity with values specified in entity create', () => {
-      const mockEntityType = faker.random.arrayElement(
-        Object.values(EntityType)
+      const entityType = faker.random.arrayElement(Object.values(EntityType));
+      const watermarkedType = faker.random.arrayElement(
+        Object.values(WatermarkedType)
       );
 
       const group = faker.lorem.word();
       const slug = faker.lorem.word();
       const isPublic = faker.datatype.boolean();
 
-      const result = loadNewEntity(mockEntityType, { group, slug, isPublic });
+      const result = loadNewEntity(entityType, {
+        watermarkedType,
+        group,
+        slug,
+        isPublic,
+      });
 
       expect(result.group).toBe(group);
       expect(result.slug).toBe(slug);

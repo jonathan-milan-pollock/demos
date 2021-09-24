@@ -1,6 +1,9 @@
 import { IsEnum, IsMongoId, IsString } from 'class-validator';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 
 export class EntityMinimalDto {
   @IsEnum(EntityType)
@@ -8,6 +11,9 @@ export class EntityMinimalDto {
 
   @IsMongoId()
   id!: string;
+
+  @IsEnum(WatermarkedType)
+  watermarkedType!: WatermarkedType;
 
   @IsString()
   group!: string;

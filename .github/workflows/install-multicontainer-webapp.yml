@@ -101,11 +101,11 @@ jobs:
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
           app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER-ID)", "slotSetting": false }]'
-      - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID
+      - name: Azure set NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-DARK-RUSH-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-DARK-RUSH-PHOTOGRAPHY-SHARED-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS
         uses: azure/appservice-settings@v1
         with:

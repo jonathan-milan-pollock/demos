@@ -11,12 +11,14 @@ export * from './lib/enums/best-of-type.enum';
 export * from './lib/enums/emotion-type.enum';
 export * from './lib/enums/entity-push-notification-type.enum';
 export * from './lib/enums/entity-type.enum';
+export * from './lib/enums/entity-with-group-type.enum';
 export * from './lib/enums/image-dimension-type.enum';
 export * from './lib/enums/media-process-type.enum';
 export * from './lib/enums/media-state.enum';
 export * from './lib/enums/media-type.enum';
 export * from './lib/enums/social-media-type.enum';
 export * from './lib/enums/video-dimension-type.enum';
+export * from './lib/enums/watermarked-type.enum';
 export * from './lib/enums/web-socket-message-type.enum';
 
 // interfaces
@@ -59,4 +61,5 @@ export * from './lib/interfaces/video-dimension-config.interface';
 export * from './lib/interfaces/video-dimension.interface';
 export * from './lib/interfaces/video-exif.interface';
 export * from './lib/interfaces/video.interface';
+export * from './lib/interfaces/watermarked-type-group.interface';
 export * from './lib/interfaces/web-socket-client.interface';

@@ -12,6 +12,7 @@ import {
   Video,
   Entity,
   DEFAULT_ENTITY_GROUP,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
@@ -38,6 +39,13 @@ export class Document implements Entity {
 
   @Prop({ type: String, required: false })
   googleDriveFolderId?: string;
+
+  @Prop({
+    type: String,
+    enum: Object.keys(WatermarkedType),
+    required: true,
+  })
+  watermarkedType!: WatermarkedType;
 
   @Prop({ type: String, required: true, default: DEFAULT_ENTITY_GROUP })
   group!: string;

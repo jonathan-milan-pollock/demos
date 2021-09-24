@@ -130,3 +130,8 @@ readonly isStarred: boolean; //TODO: Can star 1 for Social Media
 - [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
 
 ---
+
+## change back nameservers
+
+A @ 20.49.104.33 automatic
+CNAME www darkrushphoto.azurewebsites.net. automatic

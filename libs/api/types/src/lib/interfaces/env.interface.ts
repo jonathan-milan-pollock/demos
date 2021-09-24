@@ -6,7 +6,7 @@ export interface Env {
   readonly googleDriveSharedWithoutWatermarkFolderId: string;
   readonly googleDriveWebsitesWatermarkedFolderId: string;
   readonly googleDriveWebsitesWithoutWatermarkFolderId: string;
-  readonly googleDriveDarkRushPhotographyFolderId: string;
+  readonly googleDriveDarkRushPhotographySharedFolderId: string;
   readonly entityPushNotificationsAddress: string;
   readonly mongoDbConnectionString: string;
   readonly azureStorageConnectionStringPrivate: string;
