@@ -1,5 +1,4 @@
 import {
-  IsArray,
   IsBoolean,
   IsInt,
   IsMongoId,
@@ -7,12 +6,7 @@ import {
   IsString,
   IsUUID,
   Min,
-  ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-
-import { CommentDto } from './comment.dto';
-import { EmotionDto } from './emotion.dto';
 
 export class ImageDto {
   @IsUUID()
@@ -34,22 +28,12 @@ export class ImageDto {
 
   @IsString()
   @IsOptional()
-  description?: string;
+  seoDescription?: string;
 
   @IsString()
   @IsOptional()
-  keywords?: string;
+  seoKeywords?: string;
 
   @IsBoolean()
   isThreeSixty!: boolean;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CommentDto)
-  comments: CommentDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
 }

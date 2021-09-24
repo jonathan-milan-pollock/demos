@@ -7,12 +7,6 @@ import {
   DocumentSchema,
   EntityPublicProvider,
   FavoritesProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { FavoritesService } from './favorites.service';
 import { FavoritesController } from './favorites.controller';
@@ -25,16 +19,6 @@ import { FavoritesController } from './favorites.controller';
     ]),
   ],
   controllers: [FavoritesController],
-  providers: [
-    FavoritesService,
-    EntityPublicProvider,
-    FavoritesProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [FavoritesService, EntityPublicProvider, FavoritesProvider],
 })
 export class FavoritesModule {}

@@ -9,11 +9,10 @@ export interface Image {
   readonly order: number;
   readonly isStarred: boolean;
   readonly isLoved: boolean;
-  readonly title?: string;
-  readonly seoDescription?: string;
-  readonly seoKeywords?: string;
+  readonly title: string;
+  readonly seoDescription: string;
+  readonly seoKeywords: string;
   readonly dateCreated?: string;
   readonly datePublished?: string;
-  readonly skipExif: boolean;
   readonly isThreeSixty: boolean;
 }

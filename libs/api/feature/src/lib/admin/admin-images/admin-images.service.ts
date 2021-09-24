@@ -56,33 +56,9 @@ export class AdminImagesService {
     isThreeSixty: boolean,
     file: Express.Multer.File
   ): Observable<Image> {
-    const id = uuidv4();
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map((documentModel) => {
-        validateImageNotAlreadyExists(fileName, documentModel);
-        return documentModel;
-      }),
-      concatMap((documentModel) =>
-        combineLatest([
-          of(documentModel),
-          this.imageProvider.add$(id, entityId, fileName, 0, isThreeSixty),
-        ])
-      ),
-      concatMap(([documentModel, image]) =>
-        this.imageUploadProvider.upload$(
-          image.state,
-          image.blobPathId,
-          image.fileName,
-          file
-        )
-      ),
-      // concatMap((media) =>
-      //   this.imageUploadProvider.process$(media, isThreeSixty, this.entityModel)
-      // ),
-      tap(() => this.logger.debug('Upload complete')),
-      concatMap(() => this.findOne$(id, entityId))
-    );
+    return this.imageUploadProvider
+      .upload$(entityId, fileName, isThreeSixty, file)
+      .pipe(concatMap((image) => this.findOne$(image.id, image.entityId)));
   }
 
   update$(

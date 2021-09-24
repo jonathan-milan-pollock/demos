@@ -11,15 +11,15 @@ import {
   findImageResolution,
   findImageResolution$,
   getAzureStorageBlobPath,
+  uploadBufferToBlob$,
   uploadStreamToBlob$,
 } from '@dark-rush-photography/api/util';
 import { ImageDimensionProvider } from './image-dimension.provider';
 import { ImageResizeProvider } from './image-resize.provider';
 import { ConfigProvider } from './config.provider';
-import { DocumentModel } from '../..';
 
 @Injectable()
-export class ImageLoadNewImageProvider {
+export class ImageProcessNewProvider {
   private readonly logger: Logger;
 
   constructor(
@@ -27,14 +27,13 @@ export class ImageLoadNewImageProvider {
     private readonly imageDimensionProvider: ImageDimensionProvider,
     private readonly imageResizeProvider: ImageResizeProvider
   ) {
-    this.logger = new Logger(ImageLoadNewImageProvider.name);
+    this.logger = new Logger(ImageProcessNewProvider.name);
   }
 
   loadNewImage$(
     googleDrive: drive_v3.Drive,
     imageFileId: string,
-    media: Media,
-    documentModel: DocumentModel
+    media: Media
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
 
@@ -54,9 +53,34 @@ export class ImageLoadNewImageProvider {
         return this.imageDimensionProvider.add$(
           imageDimensionId,
           media.id,
+          media.entityId,
           smallResolution.type,
-          resolution,
-          documentModel
+          resolution
+        );
+      }),
+      map(() => undefined)
+    );
+  }
+
+  upload$(media: Media, file: Express.Multer.File): Observable<void> {
+    const smallResolution = findImageResolution(ImageDimensionType.Small);
+
+    return uploadBufferToBlob$(
+      this.configProvider.getAzureStorageConnectionString(media.state),
+      this.configProvider.getAzureStorageBlobContainerName(media.state),
+      file.buffer,
+      getAzureStorageBlobPath(media.blobPathId, media.fileName)
+    ).pipe(
+      concatMap(() => this.imageResizeProvider.resize$(media, smallResolution)),
+      concatMap((filePath) => findImageResolution$(filePath)),
+      concatMap((resolution) => {
+        const imageDimensionId = uuidv4();
+        return this.imageDimensionProvider.add$(
+          imageDimensionId,
+          media.id,
+          media.entityId,
+          smallResolution.type,
+          resolution
         );
       }),
       map(() => undefined)

@@ -6,13 +6,7 @@ import {
   Document,
   DocumentSchema,
   EntityPublicProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
   PhotoOfTheWeekProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { PhotoOfTheWeekService } from './photo-of-the-week.service';
 import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
@@ -29,12 +23,6 @@ import { PhotoOfTheWeekController } from './photo-of-the-week.controller';
     PhotoOfTheWeekService,
     EntityPublicProvider,
     PhotoOfTheWeekProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
   ],
 })
 export class PhotoOfTheWeekModule {}

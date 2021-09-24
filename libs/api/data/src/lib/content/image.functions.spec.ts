@@ -23,7 +23,6 @@ describe('image.functions', () => {
       .toLowerCase()}, ${faker.lorem.word().toLowerCase()}`,
     dateCreated: faker.date.recent().toISOString(),
     datePublished: faker.date.recent().toISOString(),
-    skipExif: faker.datatype.boolean(),
     isThreeSixty: faker.datatype.boolean(),
   };
 

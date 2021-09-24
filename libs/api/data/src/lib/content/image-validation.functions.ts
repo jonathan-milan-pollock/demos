@@ -47,15 +47,16 @@ export const validateImageNotNew = (image: Image): Image => {
 };
 
 export const validateImageNotAlreadyExists = (
+  state: MediaState,
   fileName: string,
   documentModel: DocumentModel
 ): DocumentModel => {
   const foundImage = documentModel.images.find(
-    (image) => image.fileName === fileName
+    (image) => image.fileName === fileName && image.state === state
   );
   if (foundImage)
     throw new ConflictException(
-      `Image with file name ${fileName} already exists`
+      `Image with file name ${fileName} already exists for state ${state}`
     );
   return documentModel;
 };

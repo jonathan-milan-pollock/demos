@@ -44,27 +44,34 @@ export class ImageDimensionProvider {
   add$(
     id: string,
     imageId: string,
+    entityId: string,
     type: ImageDimensionType,
-    resolution: MediaResolution,
-    documentModel: DocumentModel
+    resolution: MediaResolution
   ): Observable<ImageDimension> {
-    validateImageDimensionNotAlreadyExists(imageId, type, documentModel);
-    const entityId = documentModel._id;
-    return from(
-      this.entityModel.findByIdAndUpdate(entityId, {
-        imageDimensions: [
-          ...documentModel.imageDimensions,
-          {
-            id,
-            entityId,
-            imageId,
-            type: type,
-            resolution,
-            threeSixtySettings: { pitch: 0, yaw: 0, hfov: 0 },
-          },
-        ],
-      })
-    ).pipe(concatMap(() => this.findOne$(id, entityId, this.entityModel)));
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      map((documentModel) =>
+        validateImageDimensionNotAlreadyExists(imageId, type, documentModel)
+      ),
+      concatMap((documentModel) =>
+        from(
+          this.entityModel.findByIdAndUpdate(entityId, {
+            imageDimensions: [
+              ...documentModel.imageDimensions,
+              {
+                id,
+                entityId,
+                imageId,
+                type: type,
+                resolution,
+                threeSixtySettings: { pitch: 0, yaw: 0, hfov: 0 },
+              },
+            ],
+          })
+        )
+      ),
+      concatMap(() => this.findOne$(id, entityId, this.entityModel))
+    );
   }
 
   updateThreeSixtySettings$(

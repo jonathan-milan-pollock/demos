@@ -7,12 +7,6 @@ import {
   Document,
   DocumentSchema,
   EntityPublicProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { BestOfService } from './best-of.service';
 import { BestOfController } from './best-of.controller';
@@ -25,16 +19,6 @@ import { BestOfController } from './best-of.controller';
     ]),
   ],
   controllers: [BestOfController],
-  providers: [
-    BestOfService,
-    EntityPublicProvider,
-    BestOfProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [BestOfService, EntityPublicProvider, BestOfProvider],
 })
 export class BestOfModule {}

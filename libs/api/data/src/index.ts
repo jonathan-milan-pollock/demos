@@ -30,7 +30,7 @@ export * from './lib/providers/event.provider';
 export * from './lib/providers/favorites.provider';
 export * from './lib/providers/image-dimension.provider';
 export * from './lib/providers/image-load-new.provider';
-export * from './lib/providers/image-load-new-image.provider';
+export * from './lib/providers/image-process-new.provider';
 export * from './lib/providers/image-publish.provider';
 export * from './lib/providers/image-remove.provider';
 export * from './lib/providers/image-resize.provider';
