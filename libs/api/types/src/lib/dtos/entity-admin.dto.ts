@@ -11,7 +11,11 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { Entity, EntityType } from '@dark-rush-photography/shared/types';
+import {
+  Entity,
+  EntityType,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 import { CommentDto } from './comment.dto';
 import { EmotionDto } from './emotion.dto';
@@ -29,6 +33,9 @@ export class EntityAdminDto implements Entity {
   @IsString()
   @IsOptional()
   googleDriveFolderId?: string;
+
+  @IsEnum(WatermarkedType)
+  watermarkedType!: WatermarkedType;
 
   @IsString()
   group!: string;

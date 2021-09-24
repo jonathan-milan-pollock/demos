@@ -21,6 +21,7 @@ export const loadNewEntity = (
 ): Entity => ({
   type: entityType,
   googleDriveFolderId,
+  watermarkedType: entityCreate.watermarkedType,
   group: entityCreate.group,
   slug: entityCreate.slug,
   order: 0,
@@ -46,6 +47,7 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
   type: documentModel.type,
   id: documentModel._id,
   googleDriveFolderId: documentModel.googleDriveFolderId,
+  watermarkedType: documentModel.watermarkedType,
   group: documentModel.group,
   slug: documentModel.slug,
   order: documentModel.order,
@@ -70,8 +72,9 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
 export const loadEntityMinimal = (
   documentModel: DocumentModel
 ): EntityMinimalDto => ({
-  id: documentModel._id,
   type: documentModel.type,
+  id: documentModel._id,
+  watermarkedType: documentModel.watermarkedType,
   group: documentModel.group,
   slug: documentModel.slug,
 });

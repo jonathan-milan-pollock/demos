@@ -4,7 +4,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { EntityType, Location } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  Location,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
+import {
+  getEntityWithGroupTypeFromEntityType,
+  getWatermarkedTypesFromEntityType,
+} from '@dark-rush-photography/shared/util';
 import { DocumentModel } from '../schema/document.schema';
 
 export const validateEntityType = (
@@ -13,9 +21,29 @@ export const validateEntityType = (
 ): DocumentModel => {
   if (documentModel.type !== entityType)
     throw new BadRequestException(
-      `Found entity as ${documentModel.type}, expected ${entityType}`
+      `Entity was found as type ${documentModel.type} not ${entityType}`
     );
   return documentModel;
+};
+
+export const validateEntityWatermarkedType = (
+  entityType: EntityType,
+  watermarkedType: WatermarkedType
+): void => {
+  const watermarkedTypes = getWatermarkedTypesFromEntityType(entityType);
+  if (!watermarkedTypes.includes(watermarkedType))
+    throw new BadRequestException(
+      `Entity does not contain the watermark type ${watermarkedType}`
+    );
+};
+
+export const validateEntityGroup = (
+  entityType: EntityType,
+  group?: string
+): void => {
+  if (group) {
+    getEntityWithGroupTypeFromEntityType(entityType);
+  }
 };
 
 export const validateEntityNotAlreadyExists = (
@@ -74,6 +102,15 @@ export const validateEntityWatchFolderId = (
 ): string => {
   if (!documentModel.googleDriveFolderId) {
     throw new BadRequestException('Entity cannot be watched');
+  }
+  return documentModel.googleDriveFolderId;
+};
+
+export const validateEntityGoogleDriveFolderId = (
+  documentModel: DocumentModel
+): string => {
+  if (!documentModel.googleDriveFolderId) {
+    throw new BadRequestException('Google Drive folder id is undefined');
   }
   return documentModel.googleDriveFolderId;
 };

@@ -1,10 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, map, Observable, of, toArray } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  toArray,
+} from 'rxjs';
 import { Model } from 'mongoose';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  EntityWithGroupType,
+  Group,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
   EntityMinimalDto,
@@ -27,6 +40,8 @@ import {
   EntityPublishProvider,
   validateEntityIsPublished,
   EntitySocialMediaPostProvider,
+  validateEntityWatermarkedType,
+  validateEntityGroup,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -82,17 +97,13 @@ export class AdminEntitiesService {
   ): Observable<EntityAdminDto> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
-      map(validateEntityNotPublishing),
-      concatMap(() => {
-        try {
-          return this.entityPublishProvider.publish$(
-            entityType,
-            id,
-            renameMediaWithEntitySlug
+      map((documentModel) => validateEntityType(entityType, documentModel)),
+      concatMap((documentModel) => {
+        return this.entityPublishProvider
+          .publish$(entityType, documentModel, renameMediaWithEntitySlug)
+          .pipe(
+            catchError(() => of(this.setIsPublishing$(entityType, id, false)))
           );
-        } catch {
-          return this.setIsPublishing$(entityType, id, false);
-        }
       }),
       concatMap(() => this.findOne$(entityType, id))
     );
@@ -115,35 +126,50 @@ export class AdminEntitiesService {
     );
   }
 
-  findAllGroups$(entityType: EntityType): Observable<string[]> {
+  findAllGroups$(
+    entityWithGroupType: EntityWithGroupType
+  ): Observable<Group[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
-    return this.entityLoadProvider.loadGroups$(googleDrive, entityType);
+    return this.entityLoadProvider.loadGroups$(
+      googleDrive,
+      entityWithGroupType
+    );
   }
 
   findAll$(
     entityType: EntityType,
+    watermarkedType: WatermarkedType,
     group?: string
   ): Observable<EntityMinimalDto[]> {
+    validateEntityWatermarkedType(entityType, watermarkedType);
+    validateEntityGroup(entityType, group);
+
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
 
-    return this.entityLoadProvider.create$(googleDrive, entityType, group).pipe(
-      concatMap(() =>
-        from(
-          group
-            ? this.entityModel.find({ type: entityType, group: group })
-            : this.entityModel.find({ type: entityType })
-        )
-      ),
-      concatMap(loadDocumentModelsArray),
-      map(loadEntityMinimal),
-      toArray<EntityMinimalDto>()
-    );
+    return this.entityLoadProvider
+      .create$(googleDrive, entityType, watermarkedType, group)
+      .pipe(
+        concatMap(() =>
+          from(
+            group
+              ? this.entityModel.find({
+                  type: entityType,
+                  watermarkedType,
+                  group: group,
+                })
+              : this.entityModel.find({ type: entityType, watermarkedType })
+          )
+        ),
+        concatMap(loadDocumentModelsArray),
+        map(loadEntityMinimal),
+        toArray<EntityMinimalDto>()
+      );
   }
 
   findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {

@@ -15,7 +15,11 @@ import {
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  Group,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 import {
   getGoogleDriveFolders$,
   getGoogleDriveFolderWithName$,
@@ -41,7 +45,7 @@ export class SocialMediaProvider {
     this.logger = new Logger(SocialMediaProvider.name);
   }
 
-  loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
+  loadGroups$(googleDrive: drive_v3.Drive): Observable<Group[]> {
     return from(
       getGoogleDriveFolderWithName$(
         googleDrive,
@@ -54,7 +58,11 @@ export class SocialMediaProvider {
       ),
       concatMap((socialMediaGroupFolders) => from(socialMediaGroupFolders)),
       pluck('name'),
-      toArray<string>()
+      map((name) => ({
+        watermarkedType: WatermarkedType.WithoutWatermark,
+        name,
+      })),
+      toArray<Group>()
     );
   }
 
@@ -101,6 +109,7 @@ export class SocialMediaProvider {
             ...loadNewEntity(
               EntityType.SocialMedia,
               {
+                watermarkedType: WatermarkedType.WithoutWatermark,
                 group,
                 slug: socialMediaEntityFolder.name,
                 isPublic: false,

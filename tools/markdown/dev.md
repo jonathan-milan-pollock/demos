@@ -35,6 +35,7 @@
 > brew reinstall Imath
 
 - add environment variables to ~/etc/.zshrc
+  - export ENV_VAR=""
 
 ### Chrome Settings
 

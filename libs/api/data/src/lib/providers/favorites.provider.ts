@@ -10,6 +10,7 @@ import {
   EntityType,
   FAVORITES_SLUG,
   GoogleDriveFolder,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { FavoritesDto } from '@dark-rush-photography/api/types';
 import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/api/util';
@@ -81,6 +82,7 @@ export class FavoritesProvider {
             ...loadNewEntity(
               EntityType.Favorites,
               {
+                watermarkedType: WatermarkedType.Watermarked,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: FAVORITES_SLUG,
                 isPublic: false,

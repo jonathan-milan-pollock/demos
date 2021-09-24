@@ -13,7 +13,7 @@ import { FavoritesProvider } from './favorites.provider';
 import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
 import { ReviewMediaProvider } from './review-media.provider';
 import { ReviewProvider } from './review.provider';
-import { SharedPhotoAlbumProvider } from './shared-photo-album.provider';
+import { SharedPhotoAlbumImageProvider } from './shared-photo-album-image.provider';
 import { SocialMediaProvider } from './social-media.provider';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class ImageLoadNewFolderProvider {
     private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
     private readonly reviewMediaProvider: ReviewMediaProvider,
     private readonly reviewProvider: ReviewProvider,
-    private readonly sharedPhotoAlbumProvider: SharedPhotoAlbumProvider,
+    private readonly sharedPhotoAlbumImageProvider: SharedPhotoAlbumImageProvider,
     private readonly socialMediaProvider: SocialMediaProvider,
     private readonly imageLoadNewProvider: ImageLoadNewProvider
   ) {}
@@ -135,7 +135,7 @@ export class ImageLoadNewFolderProvider {
             )
           );
       case EntityType.SharedPhotoAlbum:
-        return this.sharedPhotoAlbumProvider
+        return this.sharedPhotoAlbumImageProvider
           .findNewImagesFolder$(googleDrive, entityId)
           .pipe(
             concatMap((newImagesFolder) =>

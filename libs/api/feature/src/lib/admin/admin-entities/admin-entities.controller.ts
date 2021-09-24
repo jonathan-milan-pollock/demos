@@ -22,7 +22,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
+import {
+  EntityType,
+  EntityWithGroupType,
+  Group,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
   EntityMinimalDto,
@@ -129,17 +134,17 @@ export class AdminEntitiesController {
   }
 
   @AdminRole()
-  @Get(':entityType/groups')
+  @Get(':entityWithGroupType/groups')
   @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
+    name: 'entityWithGroupType',
+    enum: EntityWithGroupType,
   })
   @ApiOkResponse({ type: [String] })
   findAllGroups$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType
-  ): Observable<string[]> {
-    return this.adminEntitiesService.findAllGroups$(entityType);
+    @Param('entityWithGroupType', new ParseEnumPipe(EntityWithGroupType))
+    entityWithGroupType: EntityWithGroupType
+  ): Observable<Group[]> {
+    return this.adminEntitiesService.findAllGroups$(entityWithGroupType);
   }
 
   @AdminRole()
@@ -149,17 +154,27 @@ export class AdminEntitiesController {
     enum: EntityType,
   })
   @ApiQuery({
+    name: 'watermarkedType',
+    enum: WatermarkedType,
+  })
+  @ApiQuery({
     name: 'group',
-    required: false,
     type: String,
+    required: false,
   })
   @ApiOkResponse({ type: [EntityMinimalDto] })
   findAll$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
+    @Query('watermarkedType', new ParseEnumPipe(WatermarkedType))
+    watermarkedType: WatermarkedType,
     @Query('group') group?: string
   ): Observable<EntityMinimalDto[]> {
-    return this.adminEntitiesService.findAll$(entityType, group);
+    return this.adminEntitiesService.findAll$(
+      entityType,
+      watermarkedType,
+      group
+    );
   }
 
   @AdminRole()

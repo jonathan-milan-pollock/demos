@@ -17,6 +17,7 @@ import {
   DEFAULT_ENTITY_GROUP,
   EntityType,
   GoogleDriveFolder,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { ReviewDto } from '@dark-rush-photography/api/types';
 import {
@@ -97,6 +98,7 @@ export class ReviewProvider {
             ...loadNewEntity(
               EntityType.Review,
               {
+                watermarkedType: WatermarkedType.WithoutWatermark,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: reviewEntityFolder.name,
                 isPublic: false,

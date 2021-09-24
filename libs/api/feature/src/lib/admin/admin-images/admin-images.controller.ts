@@ -20,6 +20,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -120,11 +121,15 @@ export class AdminImagesController {
   }
 
   @AdminRole()
+  @ApiQuery({
+    name: 'state',
+    enum: MediaState,
+  })
   @Get()
   @ApiOkResponse({ type: [ImageAdminDto] })
   findAll$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Query('state', ParseObjectIdPipe) state: MediaState
+    @Query('state', new ParseEnumPipe(MediaState)) state: MediaState
   ): Observable<ImageAdminDto[]> {
     return this.adminImagesService.findAll$(entityId, state);
   }

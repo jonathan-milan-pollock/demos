@@ -17,6 +17,7 @@ import {
   DEFAULT_ENTITY_GROUP,
   EntityType,
   GoogleDriveFolder,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
@@ -89,6 +90,7 @@ export class BestOfProvider {
             ...loadNewEntity(
               EntityType.BestOf,
               {
+                watermarkedType: WatermarkedType.Watermarked,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: bestOfEntityFolder.name,
                 isPublic: false,

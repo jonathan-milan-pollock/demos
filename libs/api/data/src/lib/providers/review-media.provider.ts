@@ -18,6 +18,7 @@ import {
   EntityType,
   GoogleDriveFolder,
   REVIEW_MEDIA_SLUG,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import {
@@ -89,6 +90,7 @@ export class ReviewMediaProvider {
             ...loadNewEntity(
               EntityType.ReviewMedia,
               {
+                watermarkedType: WatermarkedType.Watermarked,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: REVIEW_MEDIA_SLUG,
                 isPublic: true,

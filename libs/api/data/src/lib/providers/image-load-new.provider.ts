@@ -23,7 +23,7 @@ import {
   MediaState,
 } from '@dark-rush-photography/shared/types';
 import {
-  downloadGoogleDriveFile,
+  downloadGoogleDriveImageFile,
   findImageResolution,
   findImageResolution$,
   getAzureStorageBlobPath,
@@ -70,7 +70,7 @@ export class ImageLoadNewProvider {
       concatMap((googleDriveImageFiles) => from(googleDriveImageFiles)),
       concatMap((googleDriveImageFile) => {
         const id = uuidv4();
-        const parsedPath = getOrderFromGoogleDriveImageFileName(
+        const order = getOrderFromGoogleDriveImageFileName(
           googleDriveImageFile.name
         );
         const image = {
@@ -78,8 +78,8 @@ export class ImageLoadNewProvider {
           entityId,
           state: MediaState.New,
           blobPathId: uuidv4(),
-          fileName: `${id}${parsedPath.ext}`,
-          order: +parsedPath.name,
+          fileName: googleDriveImageFile.name,
+          order,
           isStarred: false,
           isLoved: false,
           skipExif: false,
@@ -128,7 +128,7 @@ export class ImageLoadNewProvider {
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
     const id = uuidv4();
-    return from(downloadGoogleDriveFile(googleDrive, imageFileId)).pipe(
+    return from(downloadGoogleDriveImageFile(googleDrive, imageFileId)).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
           this.configProvider.getAzureStorageConnectionString(media.state),

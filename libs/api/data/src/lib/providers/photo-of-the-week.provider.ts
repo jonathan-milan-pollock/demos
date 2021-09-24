@@ -19,6 +19,8 @@ import {
   EntityType,
   GoogleDriveFolder,
   ImageDimensionType,
+  Group,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
   PhotoOfTheWeekDto,
@@ -116,7 +118,7 @@ export class PhotoOfTheWeekProvider {
     };
   }
 
-  loadGroups$(googleDrive: drive_v3.Drive): Observable<string[]> {
+  loadGroups$(googleDrive: drive_v3.Drive): Observable<Group[]> {
     return from(
       getGoogleDriveFolderWithName$(
         googleDrive,
@@ -131,7 +133,11 @@ export class PhotoOfTheWeekProvider {
         from(photoOfTheWeekGroupFolders)
       ),
       pluck('name'),
-      toArray<string>()
+      map((name) => ({
+        watermarkedType: WatermarkedType.Watermarked,
+        name,
+      })),
+      toArray<Group>()
     );
   }
 
@@ -186,6 +192,7 @@ export class PhotoOfTheWeekProvider {
             ...loadNewEntity(
               EntityType.PhotoOfTheWeek,
               {
+                watermarkedType: WatermarkedType.Watermarked,
                 group,
                 slug: photoOfTheWeekEntityFolder.name,
                 isPublic: false,
