@@ -35,7 +35,6 @@ import {
 import {
   validateEntityDateCreatedProvided,
   validateEntitySeoDescriptionProvided,
-  validateEntityFound,
   validateEntityLocationProvided,
   validateEntityTitleProvided,
 } from '../entities/entity-validation.functions';
@@ -184,59 +183,12 @@ export class EventProvider {
 
   findNewImagesFolder$(
     googleDrive: drive_v3.Drive,
-    entityId: string
-  ): Observable<{
-    documentModel: DocumentModel;
-    imagesFolder: GoogleDriveFolder;
-  }> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            this.configProvider.googleDriveWebsitesWatermarkedFolderId,
-            'events'
-          ),
-        ])
-      ),
-      concatMap(([documentModel, eventsFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            eventsFolder.id,
-            documentModel.group
-          ),
-        ])
-      ),
-      concatMap(([documentModel, eventGroupFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            eventGroupFolder.id,
-            documentModel.slug
-          ),
-        ])
-      ),
-      concatMap(([documentModel, eventEntityFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            eventEntityFolder.id,
-            'images'
-          ),
-        ])
-      ),
-      map(([documentModel, entityImagesFolder]) => {
-        return {
-          documentModel: documentModel,
-          imagesFolder: entityImagesFolder,
-        };
-      })
+    googleDriveFolderId: string
+  ): Observable<GoogleDriveFolder> {
+    return getGoogleDriveFolderWithName$(
+      googleDrive,
+      googleDriveFolderId,
+      'images'
     );
   }
 }

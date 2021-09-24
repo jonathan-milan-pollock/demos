@@ -29,7 +29,6 @@ import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
-import { validateEntityFound } from '../entities/entity-validation.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
 import { ConfigProvider } from './config.provider';
@@ -108,49 +107,12 @@ export class AboutProvider {
 
   findNewImagesFolder$(
     googleDrive: drive_v3.Drive,
-    entityId: string
-  ): Observable<{
-    documentModel: DocumentModel;
-    imagesFolder: GoogleDriveFolder;
-  }> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
-            'about'
-          ),
-        ])
-      ),
-      concatMap(([documentModel, aboutFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            aboutFolder.id,
-            documentModel.slug
-          ),
-        ])
-      ),
-      concatMap(([documentModel, aboutEntityFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            aboutEntityFolder.id,
-            'images'
-          ),
-        ])
-      ),
-      map(([documentModel, entityImagesFolder]) => {
-        return {
-          documentModel: documentModel,
-          imagesFolder: entityImagesFolder,
-        };
-      })
+    googleDriveFolderId: string
+  ): Observable<GoogleDriveFolder> {
+    return getGoogleDriveFolderWithName$(
+      googleDrive,
+      googleDriveFolderId,
+      'images'
     );
   }
 }

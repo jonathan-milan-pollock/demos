@@ -5,7 +5,7 @@ import { drive_v3 } from 'googleapis';
 import { v4 as uuidv4 } from 'uuid';
 
 import { EntityType, Image} from '@dark-rush-photography/shared/types';
-import { ImageLoadNewProvider } from './image-load-new.provider';
+import { ImageLoadNewProvider } from './image-load-new-image.provider';
 import { AboutProvider } from './about.provider';
 import { BestOfProvider } from './best-of.provider';
 import { DestinationProvider } from './destination.provider';
@@ -14,7 +14,7 @@ import { FavoritesProvider } from './favorites.provider';
 import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
 import { ReviewMediaProvider } from './review-media.provider';
 import { ReviewProvider } from './review.provider';
-import { SharedPhotoAlbumImageProvider } from './shared-photo-album-image.provider';
+import { SharedPhotoAlbumLoadProvider } from './shared-photo-album-load.provider';
 import { SocialMediaProvider } from './social-media.provider';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class ImageFolderProvider {
     private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
     private readonly reviewMediaProvider: ReviewMediaProvider,
     private readonly reviewProvider: ReviewProvider,
-    private readonly sharedPhotoAlbumImageProvider: SharedPhotoAlbumImageProvider,
+    private readonly sharedPhotoAlbumLoadProvider: SharedPhotoAlbumLoadProvider,
     private readonly socialMediaProvider: SocialMediaProvider,
     private readonly imageLoadNewProvider: ImageLoadNewProvider
   ) {}

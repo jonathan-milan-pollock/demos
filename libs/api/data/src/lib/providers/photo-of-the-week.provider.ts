@@ -47,7 +47,6 @@ import { findEntityEmotions } from '../content/emotion.functions';
 import { ConfigProvider } from './config.provider';
 import {
   validateEntityDatePublished,
-  validateEntityFound,
   validateEntityLocationProvided,
   validateEntitySeoDescriptionProvided,
   validateEntitySeoKeywordsProvided,
@@ -209,49 +208,13 @@ export class PhotoOfTheWeekProvider {
 
   findNewImagesFolder$(
     googleDrive: drive_v3.Drive,
-    entityId: string
-  ): Observable<{
-    documentModel: DocumentModel;
-    imagesFolder: GoogleDriveFolder;
-  }> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            this.configProvider.googleDriveWebsitesWatermarkedFolderId,
-            'photo-of-the-week'
-          ),
-        ])
-      ),
-      concatMap(([documentModel, photoOfTheWeekFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            photoOfTheWeekFolder.id,
-            documentModel.group
-          ),
-        ])
-      ),
-      concatMap(([documentModel, photoOfTheWeekGroupFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            photoOfTheWeekGroupFolder.id,
-            documentModel.slug
-          ),
-        ])
-      ),
-      map(([documentModel, entityImagesFolder]) => {
-        return {
-          documentModel: documentModel,
-          imagesFolder: entityImagesFolder,
-        };
-      })
+    googleDriveFolderId: string,
+    slug: string
+  ): Observable<GoogleDriveFolder> {
+    return getGoogleDriveFolderWithName$(
+      googleDrive,
+      googleDriveFolderId,
+      slug
     );
   }
 }

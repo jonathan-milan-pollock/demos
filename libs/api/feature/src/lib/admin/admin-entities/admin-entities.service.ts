@@ -199,7 +199,7 @@ export class AdminEntitiesService {
         }
         return from(documentModel.images).pipe(
           concatMap((image) =>
-            this.imageRemoveProvider.remove$(image, documentModel)
+            this.imageRemoveProvider.remove$(image, documentModel._id)
           ),
           map(() => documentModel)
         );

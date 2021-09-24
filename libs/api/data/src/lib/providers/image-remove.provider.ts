@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { concatMap, filter, from, last, map, Observable, of } from 'rxjs';
@@ -20,66 +20,69 @@ import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ImageRemoveProvider {
+  private readonly logger: Logger;
+
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>
-  ) {}
+  ) {
+    this.logger = new Logger(ImageRemoveProvider.name);
+  }
 
-  removeImages$(
-    state: MediaState,
-    documentModel: DocumentModel
-  ): Observable<DocumentModel> {
-    if (
-      documentModel.images.filter((image) => image.state === state).length === 0
-    ) {
-      return of(documentModel);
-    }
+  removeImages$(state: MediaState, entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) => {
+        const imagesForState = documentModel.images.filter(
+          (image) => image.state === state
+        );
+        if (imagesForState.length === 0) return of(undefined);
 
-    return from(documentModel.images).pipe(
-      filter((image) => image.state === state),
-      concatMap((image) => this.remove$(image, documentModel))
+        return from(imagesForState).pipe(
+          filter((image) => image.state === state),
+          concatMap((image) => this.remove$(image, entityId))
+        );
+      }),
+      last(),
+      map(() => undefined)
     );
   }
 
-  remove$(
-    image: Image,
-    documentModel: DocumentModel
-  ): Observable<DocumentModel> {
-    const imageId = image.id;
-    const entityId = documentModel._id;
-    return this.removeImageBlobs$(
-      image.state,
-      image.blobPathId,
-      image.fileName,
-      documentModel.imageDimensions.filter(
-        (imageDimension) => imageDimension.id === imageId
-      )
-    ).pipe(
-      concatMap(() =>
-        from(this.entityModel.findById(entityId)).pipe(
-          map(validateEntityFound),
-          concatMap((documentModel) => {
+  remove$(image: Image, entityId: string): Observable<DocumentModel> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        this.removeImageBlobs$(
+          image.state,
+          image.blobPathId,
+          image.fileName,
+          documentModel.imageDimensions.filter(
+            (imageDimension) => imageDimension.id === image.id
+          )
+        ).pipe(
+          concatMap(() => {
+            this.logger.log(`Removing image ${image.fileName}`);
             return from(
               this.entityModel.findByIdAndUpdate(entityId, {
                 images: [
                   ...documentModel.images.filter(
-                    (image) => image.id !== imageId
+                    (image) => image.id !== image.id
                   ),
                 ],
                 imageDimensions: [
                   ...documentModel.imageDimensions.filter(
-                    (imageDimension) => imageDimension.imageId !== imageId
+                    (imageDimension) => imageDimension.imageId !== image.id
                   ),
                 ],
                 comments: [
                   ...documentModel.comments.filter(
-                    (comment) => comment.mediaId !== imageId
+                    (comment) => comment.mediaId !== image.id
                   ),
                 ],
                 emotions: [
                   ...documentModel.emotions.filter(
-                    (emotion) => emotion.mediaId !== imageId
+                    (emotion) => emotion.mediaId !== image.id
                   ),
                 ],
               })

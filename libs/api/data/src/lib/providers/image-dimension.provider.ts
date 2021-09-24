@@ -2,7 +2,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { combineLatest, concatMap, from, map, Observable, of, tap } from 'rxjs';
+import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
@@ -12,10 +12,6 @@ import {
   MediaResolution,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
-import {
-  findImageResolution$,
-  resizeImage$,
-} from '@dark-rush-photography/api/util';
 import {
   deleteBlob$,
   downloadBlobAsBuffer$,
@@ -27,7 +23,7 @@ import {
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   validateImageDimensionNotAlreadyExists,
-  validateImageDocumentModelFound,
+  validateDocumentModelForImageFound,
 } from '../content/image-validation.functions';
 import { loadImageDimension } from '../content/image-dimension.functions';
 import { ConfigProvider } from './config.provider';
@@ -48,37 +44,27 @@ export class ImageDimensionProvider {
   add$(
     id: string,
     imageId: string,
-    entityId: string,
     type: ImageDimensionType,
-    resolution: MediaResolution
+    resolution: MediaResolution,
+    documentModel: DocumentModel
   ): Observable<ImageDimension> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map((documentModel) => {
-        return validateImageDocumentModelFound(imageId, documentModel);
-      }),
-      map((documentModel) =>
-        validateImageDimensionNotAlreadyExists(imageId, type, documentModel)
-      ),
-      concatMap((documentModel) => {
-        return from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            imageDimensions: [
-              ...documentModel.imageDimensions,
-              {
-                id,
-                entityId,
-                imageId,
-                type: type,
-                resolution,
-                threeSixtySettings: { pitch: 0, yaw: 0, hfov: 0 },
-              },
-            ],
-          })
-        );
-      }),
-      concatMap(() => this.findOne$(id, entityId, this.entityModel))
-    );
+    validateImageDimensionNotAlreadyExists(imageId, type, documentModel);
+    const entityId = documentModel._id;
+    return from(
+      this.entityModel.findByIdAndUpdate(entityId, {
+        imageDimensions: [
+          ...documentModel.imageDimensions,
+          {
+            id,
+            entityId,
+            imageId,
+            type: type,
+            resolution,
+            threeSixtySettings: { pitch: 0, yaw: 0, hfov: 0 },
+          },
+        ],
+      })
+    ).pipe(concatMap(() => this.findOne$(id, entityId, this.entityModel)));
   }
 
   updateThreeSixtySettings$(

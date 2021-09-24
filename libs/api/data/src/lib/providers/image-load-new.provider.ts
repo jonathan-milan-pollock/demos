@@ -1,154 +1,188 @@
-import * as fs from 'fs-extra';
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
-import {
-  combineLatest,
-  concatMap,
-  from,
-  last,
-  map,
-  Observable,
-  of,
-  toArray,
-} from 'rxjs';
+import { concatMap, from, last, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
 
 import {
+  EntityType,
   GoogleDriveFolder,
-  ImageDimensionType,
-  Media,
   MediaState,
 } from '@dark-rush-photography/shared/types';
 import {
-  downloadGoogleDriveImageFile,
-  findImageResolution,
-  findImageResolution$,
-  getAzureStorageBlobPath,
   getGoogleDriveImageFiles$,
   getOrderFromGoogleDriveImageFileName,
-  uploadStreamToBlob$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { loadMedia } from '../content/media.functions';
-import { ImageDimensionProvider } from './image-dimension.provider';
-import { ImageResizeProvider } from './image-resize.provider';
+import { validateEntityFound } from '../entities/entity-validation.functions';
+import { AboutProvider } from './about.provider';
+import { BestOfProvider } from './best-of.provider';
+import { DestinationProvider } from './destination.provider';
+import { EventProvider } from './event.provider';
+import { FavoritesProvider } from './favorites.provider';
+import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
+import { ReviewMediaProvider } from './review-media.provider';
+import { ReviewProvider } from './review.provider';
+import { SharedPhotoAlbumLoadProvider } from './shared-photo-album-load.provider';
+import { SocialMediaProvider } from './social-media.provider';
 import { ImageRemoveProvider } from './image-remove.provider';
-import { ConfigProvider } from './config.provider';
+import { ImageLoadNewImageProvider } from './image-load-new-image.provider';
 
 @Injectable()
 export class ImageLoadNewProvider {
   private readonly logger: Logger;
 
   constructor(
-    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly imageDimensionProvider: ImageDimensionProvider,
-    private readonly imageResizeProvider: ImageResizeProvider,
-    private readonly imageRemoveProvider: ImageRemoveProvider
+    private readonly aboutProvider: AboutProvider,
+    private readonly bestOfProvider: BestOfProvider,
+    private readonly destinationProvider: DestinationProvider,
+    private readonly eventProvider: EventProvider,
+    private readonly favoritesProvider: FavoritesProvider,
+    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
+    private readonly reviewMediaProvider: ReviewMediaProvider,
+    private readonly reviewProvider: ReviewProvider,
+    private readonly sharedPhotoAlbumLoadProvider: SharedPhotoAlbumLoadProvider,
+    private readonly socialMediaProvider: SocialMediaProvider,
+    private readonly imageRemoveProvider: ImageRemoveProvider,
+    private readonly imageLoadNewImageProvider: ImageLoadNewImageProvider
   ) {
     this.logger = new Logger(ImageLoadNewProvider.name);
   }
 
-  loadNewImages$(
+  findNewImagesFolder$(
     googleDrive: drive_v3.Drive,
-    documentModel: DocumentModel,
-    entityImagesFolder: GoogleDriveFolder
-  ): Observable<void> {
-    const entityId = documentModel._id;
-    return of(documentModel).pipe(
-      concatMap(() =>
-        this.imageRemoveProvider.removeImages$(MediaState.New, documentModel)
-      ),
-      last(),
-      concatMap(() =>
-        getGoogleDriveImageFiles$(googleDrive, entityImagesFolder.id)
-      ),
-      concatMap((googleDriveImageFiles) => from(googleDriveImageFiles)),
-      concatMap((googleDriveImageFile) => {
-        const id = uuidv4();
-        const order = getOrderFromGoogleDriveImageFileName(
-          googleDriveImageFile.name
-        );
-        const image = {
-          id,
-          entityId,
-          state: MediaState.New,
-          blobPathId: uuidv4(),
-          fileName: googleDriveImageFile.name,
-          order,
-          isStarred: false,
-          isLoved: false,
-          skipExif: false,
-          isThreeSixty: false,
-        };
-        return combineLatest([
-          of(googleDriveImageFile.id),
-          of(
-            loadMedia(
-              image.id,
-              entityId,
-              image.state,
-              image.blobPathId,
-              image.fileName
-            )
-          ),
-          from(
-            this.entityModel.findByIdAndUpdate(entityId, {
-              images: [...documentModel.images, { ...image }],
-            })
-          ),
-        ]);
-      }),
-      map(([imageFileId, media]) => {
-        return {
-          imageFileId: imageFileId,
-          media: media,
-        };
-      }),
-      toArray<{ imageFileId: string; media: Media }>(),
-      concatMap((processImages) => from(processImages)),
-      concatMap((processImage) =>
-        this.loadNewImage(
+    entityType: EntityType,
+    googleDriveFolderId: string,
+    slug: string
+  ): Observable<GoogleDriveFolder> {
+    switch (entityType) {
+      case EntityType.About:
+        return this.aboutProvider.findNewImagesFolder$(
           googleDrive,
-          processImage.imageFileId,
-          processImage.media
-        )
-      )
-    );
+          googleDriveFolderId
+        );
+      case EntityType.BestOf:
+        return this.bestOfProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      case EntityType.Destination:
+        return this.destinationProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      case EntityType.Event:
+        return this.eventProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      case EntityType.Favorites:
+        return this.favoritesProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      case EntityType.PhotoOfTheWeek:
+        return this.photoOfTheWeekProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId,
+          slug
+        );
+      case EntityType.ReviewMedia:
+        return this.reviewMediaProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      case EntityType.Review:
+        return this.reviewProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId,
+          slug
+        );
+      case EntityType.SharedPhotoAlbum:
+        return this.sharedPhotoAlbumLoadProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      case EntityType.SocialMedia:
+        return this.socialMediaProvider.findNewImagesFolder$(
+          googleDrive,
+          googleDriveFolderId
+        );
+      default:
+        throw new BadRequestException(
+          `Invalid entity type ${entityType} to load entity`
+        );
+    }
   }
 
-  loadNewImage(
+  loadNewImages$(
     googleDrive: drive_v3.Drive,
-    imageFileId: string,
-    media: Media
+    entityId: string,
+    entityImagesFolder: GoogleDriveFolder
   ): Observable<void> {
-    const smallResolution = findImageResolution(ImageDimensionType.Small);
-    const id = uuidv4();
-    return from(downloadGoogleDriveImageFile(googleDrive, imageFileId)).pipe(
-      concatMap((filePath) =>
-        uploadStreamToBlob$(
-          this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.getAzureStorageBlobContainerName(media.state),
-          fs.createReadStream(filePath),
-          getAzureStorageBlobPath(media.blobPathId, media.fileName)
-        )
-      ),
-      concatMap(() => this.imageResizeProvider.resize$(media, smallResolution)),
-      concatMap(([filePath]) => findImageResolution$(filePath)),
-      concatMap((resolution) =>
-        this.imageDimensionProvider.add$(
-          id,
-          media.id,
-          media.entityId,
-          smallResolution.type,
-          resolution
-        )
-      ),
-      map(() => undefined)
-    );
+    return this.imageRemoveProvider
+      .removeImages$(MediaState.New, entityId)
+      .pipe(
+        concatMap(() =>
+          getGoogleDriveImageFiles$(googleDrive, entityImagesFolder.id)
+        ),
+        concatMap((imageFiles) => {
+          if (imageFiles.length === 0) return of(undefined);
+
+          return from(imageFiles).pipe(
+            concatMap((imageFile) =>
+              from(this.entityModel.findById(entityId)).pipe(
+                map(validateEntityFound),
+                concatMap((documentModel) => {
+                  this.logger.log(`Adding ${imageFile.name}`);
+                  const id = uuidv4();
+                  const order = getOrderFromGoogleDriveImageFileName(
+                    imageFile.name
+                  );
+                  const image = {
+                    id,
+                    entityId,
+                    state: MediaState.New,
+                    blobPathId: uuidv4(),
+                    fileName: imageFile.name,
+                    order,
+                    isStarred: false,
+                    isLoved: false,
+                    skipExif: false,
+                    isThreeSixty: false,
+                  };
+                  return from(
+                    this.entityModel.findByIdAndUpdate(entityId, {
+                      images: [...documentModel.images, { ...image }],
+                    })
+                  ).pipe(
+                    concatMap(() =>
+                      this.imageLoadNewImageProvider.loadNewImage$(
+                        googleDrive,
+                        imageFile.id,
+                        loadMedia(
+                          image.id,
+                          image.entityId,
+                          image.state,
+                          image.blobPathId,
+                          image.fileName
+                        ),
+                        documentModel
+                      )
+                    )
+                  );
+                })
+              )
+            )
+          );
+        }),
+        last(),
+        map(() => undefined)
+      );
   }
 }
