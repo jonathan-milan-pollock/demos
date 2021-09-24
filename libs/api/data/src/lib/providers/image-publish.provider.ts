@@ -80,7 +80,8 @@ export class ImagePublishProvider {
   publishImage(
     googleDrive: drive_v3.Drive,
     imageFileId: string,
-    media: Media
+    media: Media,
+    documentModel: DocumentModel
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
     const id = uuidv4();
@@ -100,9 +101,9 @@ export class ImagePublishProvider {
         this.imageDimensionProvider.add$(
           id,
           media.id,
-          media.entityId,
           smallResolution.type,
-          resolution
+          resolution,
+          documentModel
         )
       ),
       map(() => undefined)

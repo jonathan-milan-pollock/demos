@@ -31,7 +31,6 @@ import {
 } from '../entities/entity.functions';
 import { ConfigProvider } from './config.provider';
 import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
-import { validateEntityFound } from '../entities/entity-validation.functions';
 
 @Injectable()
 export class SocialMediaProvider {
@@ -126,59 +125,12 @@ export class SocialMediaProvider {
 
   findNewImagesFolder$(
     googleDrive: drive_v3.Drive,
-    entityId: string
-  ): Observable<{
-    documentModel: DocumentModel;
-    imagesFolder: GoogleDriveFolder;
-  }> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
-            'social-media'
-          ),
-        ])
-      ),
-      concatMap(([documentModel, socialMediaFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            socialMediaFolder.id,
-            documentModel.group
-          ),
-        ])
-      ),
-      concatMap(([documentModel, socialMediaGroupFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            socialMediaGroupFolder.id,
-            documentModel.slug
-          ),
-        ])
-      ),
-      concatMap(([documentModel, socialMediaEntityFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            socialMediaEntityFolder.id,
-            'images'
-          ),
-        ])
-      ),
-      map(([documentModel, entityImagesFolder]) => {
-        return {
-          documentModel: documentModel,
-          imagesFolder: entityImagesFolder,
-        };
-      })
+    googleDriveFolderId: string
+  ): Observable<GoogleDriveFolder> {
+    return getGoogleDriveFolderWithName$(
+      googleDrive,
+      googleDriveFolderId,
+      'images'
     );
   }
 }

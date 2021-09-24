@@ -17,10 +17,14 @@ import { drive_v3 } from 'googleapis';
 
 import {
   EntityType,
+  GoogleDriveFolder,
   Group,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { getGoogleDriveFolders$ } from '@dark-rush-photography/api/util';
+import {
+  getGoogleDriveFolders$,
+  getGoogleDriveFolderWithName$,
+} from '@dark-rush-photography/api/util';
 
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -146,5 +150,16 @@ export class SharedPhotoAlbumLoadProvider {
         last(),
         map(() => undefined)
       );
+  }
+
+  findNewImagesFolder$(
+    googleDrive: drive_v3.Drive,
+    googleDriveFolderId: string
+  ): Observable<GoogleDriveFolder> {
+    return getGoogleDriveFolderWithName$(
+      googleDrive,
+      googleDriveFolderId,
+      'images'
+    );
   }
 }

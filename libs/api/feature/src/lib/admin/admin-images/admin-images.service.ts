@@ -20,13 +20,14 @@ import {
   Document,
   DocumentModel,
   ImageDimensionProvider,
-  ImageLoadNewFolderProvider,
+  ImageLoadNewProvider,
   ImageProvider,
   ImageRemoveProvider,
   ImageUpdateProvider,
   ImageUploadProvider,
   loadImage,
   validateEntityFound,
+  validateEntityGoogleDriveFolderId,
   validateEntityNotPublishing,
   validateImageNotAlreadyExists,
 } from '@dark-rush-photography/api/data';
@@ -41,7 +42,7 @@ export class AdminImagesService {
     private readonly entityModel: Model<DocumentModel>,
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider,
-    private readonly imageLoadNewFolderProvider: ImageLoadNewFolderProvider,
+    private readonly imageLoadNewProvider: ImageLoadNewProvider,
     private readonly imageUploadProvider: ImageUploadProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider
@@ -141,19 +142,32 @@ export class AdminImagesService {
   }
 
   findAll$(entityId: string, state: MediaState): Observable<Image[]> {
-    const googleDrive = getGoogleDrive(
-      this.configProvider.googleDriveClientEmail,
-      this.configProvider.googleDrivePrivateKey
-    );
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         if (state === MediaState.New) {
-          return this.imageLoadNewFolderProvider.loadNewImages$(
-            googleDrive,
-            documentModel.type,
-            entityId
+          const googleDriveFolderId =
+            validateEntityGoogleDriveFolderId(documentModel);
+          const googleDrive = getGoogleDrive(
+            this.configProvider.googleDriveClientEmail,
+            this.configProvider.googleDrivePrivateKey
           );
+          return this.imageLoadNewProvider
+            .findNewImagesFolder$(
+              googleDrive,
+              documentModel.type,
+              googleDriveFolderId,
+              documentModel.slug
+            )
+            .pipe(
+              concatMap((newImagesFolder) =>
+                this.imageLoadNewProvider.loadNewImages$(
+                  googleDrive,
+                  documentModel._id,
+                  newImagesFolder
+                )
+              )
+            );
         }
         return of(documentModel);
       }),
@@ -192,11 +206,10 @@ export class AdminImagesService {
       })),
       concatMap(({ image, documentModel }) => {
         if (image && image.state === MediaState.Published) {
-          return this.imageRemoveProvider.remove$(image, documentModel);
+          return this.imageRemoveProvider.remove$(image, documentModel._id);
         }
         return of();
       }),
-      tap(() => this.logger.debug('Remove complete')),
       map(() => undefined)
     );
   }

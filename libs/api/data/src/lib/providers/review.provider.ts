@@ -29,10 +29,7 @@ import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
-import {
-  validateEntityFound,
-  validateEntityTitleProvided,
-} from '../entities/entity-validation.functions';
+import { validateEntityTitleProvided } from '../entities/entity-validation.functions';
 import { loadPublicContent } from '../content/public-content.functions';
 import { validateOneImage } from '../content/image-validation.functions';
 import { loadMinimalPublicImage } from '../content/image.functions';
@@ -115,39 +112,13 @@ export class ReviewProvider {
 
   findNewImagesFolder$(
     googleDrive: drive_v3.Drive,
-    entityId: string
-  ): Observable<{
-    documentModel: DocumentModel;
-    imagesFolder: GoogleDriveFolder;
-  }> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
-            'reviews'
-          ),
-        ])
-      ),
-      concatMap(([documentModel, reviewsFolder]) =>
-        combineLatest([
-          of(documentModel),
-          getGoogleDriveFolderWithName$(
-            googleDrive,
-            reviewsFolder.id,
-            documentModel.slug
-          ),
-        ])
-      ),
-      map(([documentModel, entityImagesFolder]) => {
-        return {
-          documentModel: documentModel,
-          imagesFolder: entityImagesFolder,
-        };
-      })
+    googleDriveFolderId: string,
+    slug: string
+  ): Observable<GoogleDriveFolder> {
+    return getGoogleDriveFolderWithName$(
+      googleDrive,
+      googleDriveFolderId,
+      slug
     );
   }
 }

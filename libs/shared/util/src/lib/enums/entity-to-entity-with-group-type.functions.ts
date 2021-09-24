@@ -18,7 +18,7 @@ export const getEntityWithGroupTypeFromEntityType = (
   const entityWithGroupType = entityToEntityWithGroupTypeMap.get(entityType);
   if (!entityWithGroupType)
     throw new RangeError(
-      `Unable to get entity with group type from entity type ${entityType}`
+      `Unable to get entity with group for entity type ${entityType}`
     );
   return entityWithGroupType;
 };

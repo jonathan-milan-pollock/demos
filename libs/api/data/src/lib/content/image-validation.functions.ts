@@ -12,7 +12,7 @@ export const validateImageFound = (
   id: string,
   documentModel: DocumentModel
 ): Image => {
-  const foundImage = documentModel.images.find((image) => image.id == id);
+  const foundImage = documentModel.images.find((image) => image.id === id);
   if (!foundImage) throw new NotFoundException('Image was not found');
   return foundImage;
 };
@@ -26,12 +26,13 @@ export const validateOneImage = (images: Image[]): Image => {
   return images[0];
 };
 
-export const validateImageDocumentModelFound = (
+export const validateDocumentModelForImageFound = (
   id: string,
   documentModel: DocumentModel
 ): DocumentModel => {
-  const foundImage = documentModel.images.find((image) => image.id == id);
-  if (!foundImage) throw new NotFoundException('Image was not found');
+  const foundImage = documentModel.images.find((image) => image.id === id);
+  if (!foundImage)
+    throw new NotFoundException('Document model for image was not found');
   return documentModel;
 };
 
