@@ -6,10 +6,8 @@ export enum EntityType {
   Favorites = 'Favorites',
   ImagePost = 'ImagePost',
   ImageVideo = 'ImageVideo',
-  ThreeSixtyImagePost = 'ThreeSixtyImagePost',
   PhotoOfTheWeek = 'PhotoOfTheWeek',
-  ReviewMedia = 'ReviewMedia',
   Review = 'Review',
-  SharedPhotoAlbum = 'SharedPhotoAlbum',
+  ReviewMedia = 'ReviewMedia',
   SocialMedia = 'SocialMedia',
 }

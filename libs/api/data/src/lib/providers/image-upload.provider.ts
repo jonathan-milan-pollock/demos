@@ -9,7 +9,7 @@ import { Image, MediaState } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { loadMedia } from '../content/media.functions';
-import { validateImageNotAlreadyExists } from '../content/image-validation.functions';
+import { validateImageWithFileNameNotAlreadyExists } from '../content/image-validation.functions';
 import { ImageProvider } from './image.provider';
 import { ImageProcessNewProvider } from './image-process-new.provider';
 
@@ -35,7 +35,7 @@ export class ImageUploadProvider {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        validateImageNotAlreadyExists(
+        validateImageWithFileNameNotAlreadyExists(
           MediaState.Selected,
           fileName,
           documentModel

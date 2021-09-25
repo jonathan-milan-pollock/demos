@@ -46,37 +46,31 @@ export class ImagePublishProvider {
   ): Observable<void> {
     const imagesToPublish = documentModel.images.filter(
       (image) =>
-        image.state === MediaState.Selected ||
-        image.state === MediaState.Published
+        image.state === MediaState.Selected || image.state === MediaState.Public
     );
     if (imagesToPublish.length === 0) return of(undefined);
 
     return from(imagesToPublish).pipe(
       concatMap((imageToPublish) =>
-        this.imageUpdateProvider.update$(
-          imageToPublish,
-          {
-            fileName: renameMediaWithEntitySlug
-              ? `${documentModel.slug}${path.extname(imageToPublish.fileName)}`
-              : imageToPublish.fileName,
-            order: imageToPublish.order,
-            isStarred: imageToPublish.isStarred,
-            isLoved: imageToPublish.isLoved,
-            title: imageToPublish.title,
-            seoDescription: imageToPublish.seoDescription,
-            seoKeywords: imageToPublish.seoKeywords,
-            dateCreated: imageToPublish.dateCreated,
-            datePublished: new Date().toISOString(),
-            isThreeSixty: imageToPublish.isThreeSixty,
-          },
-          documentModel
-        )
+        this.imageUpdateProvider.update$(imageToPublish, {
+          fileName: renameMediaWithEntitySlug
+            ? `${documentModel.slug}${path.extname(imageToPublish.fileName)}`
+            : imageToPublish.fileName,
+          order: imageToPublish.order,
+          isStarred: imageToPublish.isStarred,
+          isLoved: imageToPublish.isLoved,
+          title: imageToPublish.title,
+          seoDescription: imageToPublish.seoDescription,
+          seoKeywords: imageToPublish.seoKeywords,
+          dateCreated: imageToPublish.dateCreated,
+          datePublished: new Date().toISOString(),
+        })
       ),
       map(() => undefined)
     );
   }
 
-  publishImage(
+  publishImage$(
     googleDrive: drive_v3.Drive,
     imageFileId: string,
     media: Media
@@ -86,8 +80,8 @@ export class ImagePublishProvider {
     return from(downloadGoogleDriveImageFile(googleDrive, imageFileId)).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.getAzureStorageBlobContainerName(media.state),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
           getAzureStorageBlobPath(media.blobPathId, media.fileName)
         )

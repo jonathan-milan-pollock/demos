@@ -20,12 +20,11 @@ import {
   EntityType,
   GoogleDriveFolder,
   ImageDimensionType,
-  Group,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -102,43 +101,19 @@ export class EventProvider {
     };
   }
 
-  loadGroups$(googleDrive: drive_v3.Drive): Observable<Group[]> {
+  create$(googleDrive: drive_v3.Drive, group: string): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWatermarkedFolderId,
         'events'
       )
     ).pipe(
       concatMap((eventsFolder) =>
-        getGoogleDriveFolders$(googleDrive, eventsFolder.id)
-      ),
-      concatMap((eventGroupFolders) => from(eventGroupFolders)),
-      pluck('name'),
-      map((name) => ({
-        watermarkedType: WatermarkedType.Watermarked,
-        name,
-      })),
-      toArray<Group>()
-    );
-  }
-
-  createForGroup$(
-    googleDrive: drive_v3.Drive,
-    group: string
-  ): Observable<void> {
-    return from(
-      getGoogleDriveFolderWithName$(
-        googleDrive,
-        this.configProvider.googleDriveWebsitesWatermarkedFolderId,
-        'events'
-      )
-    ).pipe(
-      concatMap((eventsFolder) =>
-        getGoogleDriveFolderWithName$(googleDrive, eventsFolder.id, group)
+        findGoogleDriveFolderByName$(googleDrive, eventsFolder.id, group)
       ),
       concatMap((eventGroupFolder) =>
-        getGoogleDriveFolders$(googleDrive, eventGroupFolder.id)
+        findGoogleDriveFolders$(googleDrive, eventGroupFolder.id)
       ),
       concatMap((eventEntityFolders) => from(eventEntityFolders)),
       concatMap((eventEntityFolder) =>
@@ -156,11 +131,11 @@ export class EventProvider {
       concatMap(([eventEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${eventEntityFolder.name}`);
+          this.logger.log(`Found event entity ${eventEntityFolder.name}`);
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${eventEntityFolder.name}`);
+        this.logger.log(`Creating event entity ${eventEntityFolder.name}`);
         return from(
           new this.entityModel({
             ...loadNewEntity(
@@ -185,7 +160,7 @@ export class EventProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       'images'

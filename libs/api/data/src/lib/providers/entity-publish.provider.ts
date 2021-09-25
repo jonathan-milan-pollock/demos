@@ -23,7 +23,6 @@ import {
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
-  validateEntityWatchFolderId,
   validateEntityNotPublishing,
   validateEntityType,
   validateEntityGoogleDriveFolderId,
@@ -36,15 +35,12 @@ import { FavoritesProvider } from './favorites.provider';
 import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
 import { ReviewMediaProvider } from './review-media.provider';
 import { ReviewProvider } from './review.provider';
-import { SharedPhotoAlbumPublishProvider } from './shared-photo-album-publish.provider';
 import { SocialMediaProvider } from './social-media.provider';
 import { ImageUpdateProvider } from './image-update.provider';
 import {
-  createGoogleDriveFolder$,
   getExifDate,
   getGoogleDrive,
-  getGoogleDriveFolderParents$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolderByName$,
   getGoogleDriveImageFiles$,
 } from '@dark-rush-photography/api/util';
 import { ConfigProvider } from './config.provider';
@@ -63,7 +59,6 @@ export class EntityPublishProvider {
     private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
     private readonly reviewMediaProvider: ReviewMediaProvider,
     private readonly reviewProvider: ReviewProvider,
-    private readonly sharedPhotoAlbumPublishProvider: SharedPhotoAlbumPublishProvider,
     private readonly socialMediaProvider: SocialMediaProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider
   ) {}
@@ -73,28 +68,6 @@ export class EntityPublishProvider {
     documentModel: DocumentModel,
     renameMediaWithEntitySlug: boolean
   ): Observable<void> {
-    const googleDrive = getGoogleDrive(
-      this.configProvider.googleDriveClientEmail,
-      this.configProvider.googleDrivePrivateKey
-    );
-
-    if (entityType === EntityType.SharedPhotoAlbum) {
-      return this.sharedPhotoAlbumPublishProvider
-        .createDarkRushPhotographySharedPhotoAlbumFolder$(
-          googleDrive,
-          documentModel
-        )
-        .pipe(
-          concatMap((darkRushPhotographySharedPhotoAlbumFolder) =>
-            this.sharedPhotoAlbumPublishProvider.publishSharedPhotoAlbumFolder$(
-              googleDrive,
-              documentModel,
-              darkRushPhotographySharedPhotoAlbumFolder
-            )
-          )
-        );
-    }
-
     return of(documentModel).pipe(
       map(validateEntityNotPublishing),
       concatMap(() =>

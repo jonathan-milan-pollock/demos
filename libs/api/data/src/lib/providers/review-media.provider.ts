@@ -22,8 +22,8 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { ReviewMediaDto } from '@dark-rush-photography/api/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -55,14 +55,14 @@ export class ReviewMediaProvider {
 
   create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWatermarkedFolderId,
         'review-media'
       )
     ).pipe(
       concatMap((reviewMediaFolder) =>
-        getGoogleDriveFolders$(googleDrive, reviewMediaFolder.id)
+        findGoogleDriveFolders$(googleDrive, reviewMediaFolder.id)
       ),
       concatMap((reviewMediaEntityFolders) => from(reviewMediaEntityFolders)),
       concatMap((reviewMediaEntityFolder) =>
@@ -79,11 +79,15 @@ export class ReviewMediaProvider {
       concatMap(([socialMediaEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${socialMediaEntityFolder.name}`);
+          this.logger.log(
+            `Found review entity ${socialMediaEntityFolder.name}`
+          );
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${socialMediaEntityFolder.name}`);
+        this.logger.log(
+          `Creating review entity ${socialMediaEntityFolder.name}`
+        );
         return from(
           new this.entityModel({
             ...loadNewEntity(
@@ -108,7 +112,7 @@ export class ReviewMediaProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       REVIEW_MEDIA_SLUG

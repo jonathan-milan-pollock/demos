@@ -1,6 +1,6 @@
 export enum MediaState {
   New = 'New',
   Selected = 'Selected',
-  Published = 'Published',
+  Public = 'Public',
   Archived = 'Archived',
 }

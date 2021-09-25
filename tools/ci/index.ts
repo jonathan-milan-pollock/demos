@@ -18,10 +18,7 @@ import {
   createMongoDb,
   getMongoDbConnectionString,
 } from './services/mongo-db.service';
-import {
-  createPrivateBlobContainer,
-  createPrivateStorageAccount,
-} from './services/storage-account-private.service';
+import { createPrivateStorageAccount } from './services/storage-account-private.service';
 import {
   createPublicStorageAccount,
   createPublicBlobContainer,
@@ -60,12 +57,6 @@ const devPrivateStorageAccount = createPrivateStorageAccount(
   pulumiConfig.devPrivateStorageAccountName,
   resourceGroup
 );
-const devPrivateBlobContainer = createPrivateBlobContainer(
-  pulumiConfig.devPrivateBlobContainerName,
-  resourceGroup,
-  devPrivateStorageAccount
-);
-
 const devPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.devPublicStorageAccountName,
   resourceGroup
@@ -80,12 +71,6 @@ const prodPrivateStorageAccount = createPrivateStorageAccount(
   pulumiConfig.prodPrivateStorageAccountName,
   resourceGroup
 );
-const prodPrivateBlobContainer = createPrivateBlobContainer(
-  pulumiConfig.prodPrivateBlobContainerName,
-  resourceGroup,
-  prodPrivateStorageAccount
-);
-
 const prodPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.prodPublicStorageAccountName,
   resourceGroup
@@ -154,18 +139,6 @@ const googleDrivePrivateKeySecret = createSecret(
   resourceGroup,
   vault
 );
-const googleDriveSharedWatermarkedFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-SHARED-WATERMARKED-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_SHARED_WATERMARKED_FOLDER_ID}`,
-  resourceGroup,
-  vault
-);
-const googleDriveSharedWithoutWatermarFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-SHARED-WITHOUT-WATERMARK-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_SHARED_WITHOUT_WATERMARK_FOLDER_ID}`,
-  resourceGroup,
-  vault
-);
 const googleDriveWebsitesWatermarkedFolderIdSecret = createSecret(
   'NX-GOOGLE-DRIVE-WEBSITES-WATERMARKED-FOLDER-ID',
   interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID}`,
@@ -175,18 +148,6 @@ const googleDriveWebsitesWatermarkedFolderIdSecret = createSecret(
 const googleDriveWebsitesWithoutWatermarkFolderIdSecret = createSecret(
   'NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER-ID',
   interpolate`${process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID}`,
-  resourceGroup,
-  vault
-);
-const googleDriveDarkRushPhotographyFolderIdSecret = createSecret(
-  'NX-GOOGLE-DRIVE-DARK-RUSH-PHOTOGRAPHY-SHARED-FOLDER-ID',
-  interpolate`${process.env.NX_GOOGLE_DRIVE_DARK_RUSH_PHOTOGRAPHY_SHARED_FOLDER_ID}`,
-  resourceGroup,
-  vault
-);
-const entityPushNotificationsAddressSecret = createSecret(
-  'NX-ENTITY-PUSH-NOTIFICATIONS-ADDRESS',
-  interpolate`${process.env.NX_ENTITY_PUSH_NOTIFICATIONS_ADDRESS}`,
   resourceGroup,
   vault
 );
@@ -218,12 +179,6 @@ const azureStorageConnectionStringPublicSecret = createSecret(
   resourceGroup,
   vault
 );
-const azureStorageBlobContainerNamePrivateSecret = createSecret(
-  'AZURE-STORAGE-BLOB-CONTAINER-NAME-PRIVATE',
-  interpolate`${pulumiConfig.prodPrivateBlobContainerName}`,
-  resourceGroup,
-  vault
-);
 const azureStorageBlobContainerNamePublicSecret = createSecret(
   'AZURE-STORAGE-BLOB-CONTAINER-NAME-PUBLIC',
   interpolate`${pulumiConfig.prodPublicBlobContainerName}`,
@@ -252,12 +207,10 @@ export const prodMongoDbAccountUrn = prodMongoDbAccount.urn;
 export const prodMongoDbDatabaseUrn = prodMongoDb.urn;
 
 export const devPrivateStorageAccountUrn = devPrivateStorageAccount.urn;
-export const devPrivateBlobContainerUrn = devPrivateBlobContainer.urn;
 export const devPublicStorageAccountUrn = devPublicStorageAccount.urn;
 export const devPublicBlobContainerUrn = devPublicBlobContainer.urn;
 
 export const prodPrivateStorageAccountUrn = prodPrivateStorageAccount.urn;
-export const prodPrivateBlobContainerUrn = prodPrivateBlobContainer.urn;
 export const prodPublicStorageAccountUrn = prodPublicStorageAccount.urn;
 export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
 
@@ -277,26 +230,16 @@ export const dockerRegistryServerPasswordSecretUrn =
   dockerRegistryServerPasswordSecret.urn;
 export const googleDriveClientEmailSecretUrn = googleDriveClientEmailSecret.urn;
 export const googleDrivePrivateKeySecretUrn = googleDrivePrivateKeySecret.urn;
-export const googleDriveSharedWatermarkedFolderIdSecretUrn =
-  googleDriveSharedWatermarkedFolderIdSecret.urn;
-export const googleDriveSharedWithoutWatermarFolderIdSecretUrn =
-  googleDriveSharedWithoutWatermarFolderIdSecret.urn;
 export const googleDriveWebsitesWatermarkedFolderIdSecretUrn =
   googleDriveWebsitesWatermarkedFolderIdSecret.urn;
 export const googleDriveWebsitesWithoutWatermarkFolderIdSecretUrn =
   googleDriveWebsitesWithoutWatermarkFolderIdSecret.urn;
-export const googleDriveDarkRushPhotographyFolderIdSecretUrn =
-  googleDriveDarkRushPhotographyFolderIdSecret.urn;
-export const entityPushNotificationsAddressSecretUrn =
-  entityPushNotificationsAddressSecret.urn;
 export const mongoDbConnectionStringSecretUrn =
   mongoDbConnectionStringSecret.urn;
 export const azureStorageConnectionStringSecretUrn =
   azureStorageConnectionStringSecret.urn;
 export const azureStorageConnectionStringPublicSecretUrn =
   azureStorageConnectionStringPublicSecret.urn;
-export const azureStorageBlobContainerNamePrivateSecretUrn =
-  azureStorageBlobContainerNamePrivateSecret.urn;
 export const azureStorageBlobContainerNamePublicSecretUrn =
   azureStorageBlobContainerNamePublicSecret.urn;
 export const tinyPngApiKeySecretUrn = tinyPngApiKeySecret.urn;

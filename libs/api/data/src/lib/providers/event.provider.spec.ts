@@ -1,37 +1,20 @@
+import { Test } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
+import { getModelToken } from '@nestjs/mongoose';
+
 import * as faker from 'faker';
+import { of } from 'rxjs';
+import { drive_v3 } from 'googleapis';
 
-import {
-  EventCreate,
-  EventUpdate,
-  Location,
-} from '@dark-rush-photography/shared/types';
+import { Document } from '../schema/document.schema';
+import { ConfigProvider } from './config.provider';
+import { EventProvider } from './event.provider';
 
-const mockLocation = (): Location => ({
-  place: faker.company.companyName(),
-  street: faker.address.streetAddress(),
-  stateOrProvince: faker.address.state(),
-  zipCode: faker.address.zipCode(),
-  country: faker.address.country(),
-  geo: {
-    latitude: faker.address.latitude(),
-    longitude: faker.address.longitude(),
-  },
-});
+jest.mock('@dark-rush-photography/api/util', () => ({
+  ...jest.requireActual('@dark-rush-photography/api/util'),
+}));
+import * as apiUtil from '@dark-rush-photography/api/util';
 
-const mockEventUpdate = (): EventUpdate => ({
-  group: faker.date.soon().getFullYear().toString(),
-  slug: faker.lorem.word().toLowerCase(),
-  title: faker.lorem.sentence(),
-  description: faker.lorem.paragraph(),
-  keywords: [faker.lorem.word(), faker.lorem.word()],
-  dateCreated: faker.date.recent().toISOString(),
-  datePublished: faker.date.recent().toISOString(),
-  location: { ...mockLocation() },
-  tileImageIsCentered: faker.datatype.boolean(),
-  text: [faker.lorem.paragraph(), faker.lorem.paragraph()],
-});
-
-const mockEventCreate = (): EventCreate => ({
-  group: faker.date.soon().getFullYear().toString(),
-  slug: faker.lorem.word().toLowerCase(),
+describe('event.provider', () => {
+  let eventProvider: EventProvider;
 });

@@ -25,8 +25,6 @@ import { Observable } from 'rxjs';
 import {
   EntityType,
   EntityWithGroupType,
-  Group,
-  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
@@ -46,21 +44,6 @@ import { AdminEntitiesService } from './admin-entities.service';
 @ApiTags('Admin Entities')
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
-
-  @AdminRole()
-  @Post(':entityType/:id/watch')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: Boolean })
-  watch$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string
-  ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.watch$(entityType, id);
-  }
 
   @AdminRole()
   @Post(':entityType/:id/social-media-post')
@@ -140,11 +123,11 @@ export class AdminEntitiesController {
     enum: EntityWithGroupType,
   })
   @ApiOkResponse({ type: [String] })
-  findAllGroups$(
+  findGroups$(
     @Param('entityWithGroupType', new ParseEnumPipe(EntityWithGroupType))
     entityWithGroupType: EntityWithGroupType
-  ): Observable<Group[]> {
-    return this.adminEntitiesService.findAllGroups$(entityWithGroupType);
+  ): Observable<string[]> {
+    return this.adminEntitiesService.findGroups$(entityWithGroupType);
   }
 
   @AdminRole()
@@ -152,10 +135,6 @@ export class AdminEntitiesController {
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
-  })
-  @ApiQuery({
-    name: 'watermarkedType',
-    enum: WatermarkedType,
   })
   @ApiQuery({
     name: 'group',
@@ -166,15 +145,9 @@ export class AdminEntitiesController {
   findAll$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType,
-    @Query('watermarkedType', new ParseEnumPipe(WatermarkedType))
-    watermarkedType: WatermarkedType,
     @Query('group') group?: string
   ): Observable<EntityMinimalDto[]> {
-    return this.adminEntitiesService.findAll$(
-      entityType,
-      watermarkedType,
-      group
-    );
+    return this.adminEntitiesService.findAll$(entityType, group);
   }
 
   @AdminRole()

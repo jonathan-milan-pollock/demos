@@ -6,11 +6,9 @@ config:
   deployment:prodMongoDbAccountName: drp-prod-mongo-db-account
   deployment:prodMongoDbDatabaseName: drp-prod-mongo-db-database
   deployment:devPrivateStorageAccountName: devprivatesa
-  deployment:devPrivateBlobContainerName: devprivateimages
   deployment:devPublicStorageAccountName: devpublicsa
   deployment:devPublicBlobContainerName: devimages
   deployment:prodPrivateStorageAccountName: prodprivatesa
-  deployment:prodPrivateBlobContainerName: privateimages
   deployment:prodPublicStorageAccountName: prodpublicsa
   deployment:prodPublicBlobContainerName: images
   deployment:cdnProfileName: drp-cdn

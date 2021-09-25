@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
   AboutProvider,
@@ -8,6 +9,7 @@ import {
   DestinationProvider,
   Document,
   DocumentSchema,
+  EntityPushNotificationsTable,
   EventProvider,
   FavoritesProvider,
   ImageDimensionProvider,
@@ -23,8 +25,6 @@ import {
   PhotoOfTheWeekProvider,
   ReviewMediaProvider,
   ReviewProvider,
-  SharedPhotoAlbumLoadProvider,
-  SharedPhotoAlbumProvider,
   SocialMediaProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminImagesService } from './admin-images.service';
@@ -36,6 +36,10 @@ import { AdminImagesController } from './admin-images.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
+    AzureTableStorageModule.forFeature(EntityPushNotificationsTable, {
+      table: 'EntityPushNotifications',
+      createTableIfNotExists: true,
+    }),
   ],
   controllers: [AdminImagesController],
   providers: [
@@ -48,8 +52,6 @@ import { AdminImagesController } from './admin-images.controller';
     PhotoOfTheWeekProvider,
     ReviewMediaProvider,
     ReviewProvider,
-    SharedPhotoAlbumProvider,
-    SharedPhotoAlbumLoadProvider,
     SocialMediaProvider,
     ImageProvider,
     ImageDimensionProvider,

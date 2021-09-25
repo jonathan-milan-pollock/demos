@@ -1,6 +1,4 @@
-import { EntityAdminDto } from '@dark-rush-photography/api/types';
-
-const IMAGE_POST = 'ImagePost';
+import { Entity, EntityType } from '@dark-rush-photography/shared/types';
 
 describe('deleteEntity', () => {
   beforeEach(() =>
@@ -8,10 +6,10 @@ describe('deleteEntity', () => {
       .loginAdmin()
       .then(() =>
         cy
-          .findAllEntityAdmin(IMAGE_POST)
+          .findAllEntityAdmin(EntityType.ImagePost)
           .then(($body) =>
-            $body.body.forEach((entityAdmin: EntityAdminDto) =>
-              cy.deleteEntityAdmin(entityAdmin.type, entityAdmin.id)
+            $body.body.forEach((entity: Entity) =>
+              cy.deleteEntityAdmin(entity.type, entity.id!)
             )
           )
       )

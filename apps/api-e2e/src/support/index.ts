@@ -19,13 +19,12 @@ import './commands';
 // api admin
 import './commands/api/admin/admin-entities.commands';
 import './commands/api/admin/admin-images.commands';
-import './commands/api/admin/admin-media-processes.commands';
+import './commands/api/admin/admin-image-posts.commands';
 
 // api public
 import './commands/api/public/about.commands';
 import './commands/api/public/best-of.commands';
 import './commands/api/public/destinations.commands';
-import './commands/api/public/entity-push-notifications.commands';
 import './commands/api/public/events.commands';
 import './commands/api/public/favorites.commands';
 import './commands/api/public/images.commands';

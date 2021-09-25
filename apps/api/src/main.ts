@@ -3,13 +3,12 @@ import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WsAdapter } from '@nestjs/platform-ws';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
-
 import {
   AUTH0_AUDIENCE,
   AUTH0_ISSUER,
 } from '@dark-rush-photography/shared/types';
+import { environment } from './environments/environment';
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

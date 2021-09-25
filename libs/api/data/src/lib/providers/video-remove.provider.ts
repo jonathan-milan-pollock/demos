@@ -58,8 +58,8 @@ export class VideoRemoveProvider {
     fileName: string
   ): Observable<boolean> {
     return deleteBlob$(
-      this.configProvider.getAzureStorageConnectionString(state),
-      this.configProvider.getAzureStorageBlobContainerName(state),
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPath(blobPathId, fileName)
     );
   }

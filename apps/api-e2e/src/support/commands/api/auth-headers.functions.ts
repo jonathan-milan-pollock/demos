@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export const getAuthHeaders = () => ({
+export const getAuthHeaders = (): { Authorization: string } => ({
   Authorization: `Bearer ${Cypress.env('ACCESS_TOKEN')}`,
 });
 
-export const getAuthHeadersAdmin = () => ({
+export const getAuthHeadersAdmin = (): { Authorization: string } => ({
   Authorization: `Bearer ${Cypress.env('ACCESS_TOKEN_ADMIN')}`,
 });

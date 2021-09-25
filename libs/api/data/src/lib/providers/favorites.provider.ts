@@ -13,7 +13,7 @@ import {
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { FavoritesDto } from '@dark-rush-photography/api/types';
-import { getGoogleDriveFolderWithName$ } from '@dark-rush-photography/api/util';
+import { findGoogleDriveFolderByName$ } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
@@ -44,14 +44,14 @@ export class FavoritesProvider {
 
   create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWatermarkedFolderId,
         'favorites'
       )
     ).pipe(
       concatMap((favoritesFolder) =>
-        getGoogleDriveFolderWithName$(
+        findGoogleDriveFolderByName$(
           googleDrive,
           favoritesFolder.id,
           FAVORITES_SLUG
@@ -99,7 +99,7 @@ export class FavoritesProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       'best-37'

@@ -27,8 +27,8 @@ export class ImageResizeProvider {
     imageResolution: ImageDimensionConfig
   ): Observable<string> {
     return downloadBlobToFile$(
-      this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.getAzureStorageBlobContainerName(media.state),
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPath(media.blobPathId, media.fileName),
       media.fileName
     ).pipe(
@@ -44,8 +44,8 @@ export class ImageResizeProvider {
         combineLatest([
           of(filePath),
           uploadStreamToBlob$(
-            this.configProvider.getAzureStorageConnectionString(media.state),
-            this.configProvider.getAzureStorageBlobContainerName(media.state),
+            this.configProvider.azureStorageConnectionStringPublic,
+            this.configProvider.azureStorageBlobContainerNamePublic,
             fs.createReadStream(filePath),
             getAzureStorageBlobPathWithDimension(
               media.blobPathId,

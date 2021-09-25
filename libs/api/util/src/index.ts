@@ -18,6 +18,9 @@ export * from './lib/config/three-sixty-image-resolutions.config';
 export * from './lib/config/video-artist-exif.config';
 export * from './lib/config/video-resolutions.config';
 
+// enums
+export * from './lib/enums/entity-to-entity-with-group-type.functions';
+
 // exif
 export * from './lib/exif/date-created-exif.functions';
 export * from './lib/exif/exif-image.functions';

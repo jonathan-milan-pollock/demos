@@ -4,15 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import {
-  EntityType,
-  Location,
-  WatermarkedType,
-} from '@dark-rush-photography/shared/types';
-import {
-  getEntityWithGroupTypeFromEntityType,
-  getWatermarkedTypesFromEntityType,
-} from '@dark-rush-photography/shared/util';
+import { EntityType, Location } from '@dark-rush-photography/shared/types';
+import { getEntityHasGroup } from '@dark-rush-photography/api/util';
 import { DocumentModel } from '../schema/document.schema';
 
 export const validateEntityType = (
@@ -24,26 +17,6 @@ export const validateEntityType = (
       `Entity was found as type ${documentModel.type} not ${entityType}`
     );
   return documentModel;
-};
-
-export const validateEntityWatermarkedType = (
-  entityType: EntityType,
-  watermarkedType: WatermarkedType
-): void => {
-  const watermarkedTypes = getWatermarkedTypesFromEntityType(entityType);
-  if (!watermarkedTypes.includes(watermarkedType))
-    throw new BadRequestException(
-      `Entity does not contain the watermark type ${watermarkedType}`
-    );
-};
-
-export const validateEntityGroup = (
-  entityType: EntityType,
-  group?: string
-): void => {
-  if (group) {
-    getEntityWithGroupTypeFromEntityType(entityType);
-  }
 };
 
 export const validateEntityNotAlreadyExists = (
@@ -97,15 +70,6 @@ export const validateEntityIsPublic = (
   return documentModel;
 };
 
-export const validateEntityWatchFolderId = (
-  documentModel: DocumentModel
-): string => {
-  if (!documentModel.googleDriveFolderId) {
-    throw new BadRequestException('Entity cannot be watched');
-  }
-  return documentModel.googleDriveFolderId;
-};
-
 export const validateEntityGoogleDriveFolderId = (
   documentModel: DocumentModel
 ): string => {
@@ -113,6 +77,22 @@ export const validateEntityGoogleDriveFolderId = (
     throw new BadRequestException('Google Drive folder id is undefined');
   }
   return documentModel.googleDriveFolderId;
+};
+
+export const validateEntityGroupValid = (
+  entityType: EntityType,
+  group?: string
+): void => {
+  if (!getEntityHasGroup(entityType)) {
+    if (group) {
+      throw new BadRequestException(
+        `Entity type ${entityType} does not have groups`
+      );
+    }
+    return;
+  } else if (!group) {
+    throw new BadRequestException(`Entity type ${entityType} requires a group`);
+  }
 };
 
 export const validateEntityGroupProvided = (group?: string): string => {

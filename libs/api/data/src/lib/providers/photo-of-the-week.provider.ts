@@ -19,7 +19,6 @@ import {
   EntityType,
   GoogleDriveFolder,
   ImageDimensionType,
-  Group,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
@@ -27,24 +26,14 @@ import {
   PhotoOfTheWeekMinimalDto,
 } from '@dark-rush-photography/api/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
 } from '../entities/entity.functions';
-
-import { loadPublicContent } from '../content/public-content.functions';
-import {
-  validateFindImageDimension,
-  validateFindStarredImage,
-} from '../content/image-validation.functions';
-import { loadMinimalPublicImage } from '../content/image.functions';
-import { findEntityComments } from '../content/comment.functions';
-import { findEntityEmotions } from '../content/emotion.functions';
-import { ConfigProvider } from './config.provider';
 import {
   validateEntityDatePublished,
   validateEntityLocationProvided,
@@ -52,6 +41,15 @@ import {
   validateEntitySeoKeywordsProvided,
   validateEntityTitleProvided,
 } from '../entities/entity-validation.functions';
+import {
+  validateFindImageDimension,
+  validateFindStarredImage,
+} from '../content/image-validation.functions';
+import { loadPublicContent } from '../content/public-content.functions';
+import { loadMinimalPublicImage } from '../content/image.functions';
+import { findEntityComments } from '../content/comment.functions';
+import { findEntityEmotions } from '../content/emotion.functions';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class PhotoOfTheWeekProvider {
@@ -117,49 +115,23 @@ export class PhotoOfTheWeekProvider {
     };
   }
 
-  loadGroups$(googleDrive: drive_v3.Drive): Observable<Group[]> {
+  create$(googleDrive: drive_v3.Drive, group: string): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWatermarkedFolderId,
         'photo-of-the-week'
       )
     ).pipe(
       concatMap((photoOfTheWeekFolder) =>
-        getGoogleDriveFolders$(googleDrive, photoOfTheWeekFolder.id)
-      ),
-      concatMap((photoOfTheWeekGroupFolders) =>
-        from(photoOfTheWeekGroupFolders)
-      ),
-      pluck('name'),
-      map((name) => ({
-        watermarkedType: WatermarkedType.Watermarked,
-        name,
-      })),
-      toArray<Group>()
-    );
-  }
-
-  createForGroup$(
-    googleDrive: drive_v3.Drive,
-    group: string
-  ): Observable<void> {
-    return from(
-      getGoogleDriveFolderWithName$(
-        googleDrive,
-        this.configProvider.googleDriveWebsitesWatermarkedFolderId,
-        'photo-of-the-week'
-      )
-    ).pipe(
-      concatMap((photoOfTheWeekFolder) =>
-        getGoogleDriveFolderWithName$(
+        findGoogleDriveFolderByName$(
           googleDrive,
           photoOfTheWeekFolder.id,
           group
         )
       ),
       concatMap((photoOfTheWeekGroupFolder) =>
-        getGoogleDriveFolders$(googleDrive, photoOfTheWeekGroupFolder.id)
+        findGoogleDriveFolders$(googleDrive, photoOfTheWeekGroupFolder.id)
       ),
       concatMap((photoOFTheWeekEntityFolders) =>
         from(photoOFTheWeekEntityFolders)
@@ -211,10 +183,6 @@ export class PhotoOfTheWeekProvider {
     googleDriveFolderId: string,
     slug: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
-      googleDrive,
-      googleDriveFolderId,
-      slug
-    );
+    return findGoogleDriveFolderByName$(googleDrive, googleDriveFolderId, slug);
   }
 }

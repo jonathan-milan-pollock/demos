@@ -4,11 +4,11 @@ import { BestOf } from './best-of.interface';
 import { Destination } from './destination.interface';
 import { Event } from './event.interface';
 import { Favorites } from './favorites.interface';
-import { MediaProcess } from './media-process.interface';
+import { ImagePost } from './image-post.interface';
+import { ImageVideo } from './image-video.interface';
 import { PhotoOfTheWeek } from './photo-of-the-week.interface';
 import { ReviewMedia } from './review-media.interface';
 import { Review } from './review.interface';
-import { SharedPhotoAlbum } from './shared-photo-album.interface';
 import { SocialMedia } from './social-media.interface';
 
 export interface Entity
@@ -17,11 +17,11 @@ export interface Entity
     Destination,
     Event,
     Favorites,
-    MediaProcess,
+    ImagePost,
+    ImageVideo,
     PhotoOfTheWeek,
     ReviewMedia,
     Review,
-    SharedPhotoAlbum,
     SocialMedia {
   readonly type: EntityType;
   readonly googleDriveFolderId?: string;

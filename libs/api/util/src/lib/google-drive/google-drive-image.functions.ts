@@ -48,31 +48,3 @@ export const downloadGoogleDriveImageFile = (
       });
     });
 };
-
-export const renameGoogleDriveImageFile$ = (
-  googleDrive: drive_v3.Drive,
-  imageFileId: string,
-  imageFileName: string
-): Observable<GoogleDriveFile> =>
-  from(
-    googleDrive.files.update({
-      fileId: imageFileId,
-      requestBody: {
-        name: imageFileName,
-      },
-    })
-  ).pipe(map((response) => response.data as GoogleDriveFile));
-
-export const moveGoogleDriveImageFile$ = (
-  googleDrive: drive_v3.Drive,
-  fileId: string,
-  fromParentId: string,
-  toParentId: string
-): Observable<GoogleDriveFile> =>
-  from(
-    googleDrive.files.update({
-      fileId,
-      removeParents: fromParentId,
-      addParents: toParentId,
-    })
-  ).pipe(map((response) => response.data as GoogleDriveFile));

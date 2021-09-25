@@ -1,20 +1,14 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BadRequestException } from '@nestjs/common';
 
 import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 
-export const getGoogleDriveFolderWithNameExistsResponse = (
-  response: any
-): boolean =>
-  response &&
-  response.data &&
-  response.data.files &&
-  response.data.files.length > 0;
-
-export const getGoogleDriveFolderWithNameResponse = (
-  response: any,
-  folderName: string
+export const findGoogleDriveFolderByNameResponse = (
+  folderName: string,
+  response?: {
+    data?: {
+      files?: GoogleDriveFolder[];
+    };
+  }
 ): GoogleDriveFolder => {
   if (
     !response ||
@@ -22,10 +16,14 @@ export const getGoogleDriveFolderWithNameResponse = (
     !response.data.files ||
     response.data.files.length === 0
   )
-    throw new BadRequestException(`Could not find folder ${folderName}`);
+    throw new BadRequestException(
+      `Could not find Google Drive folder ${folderName}`
+    );
 
   if (response.data.files.length > 1) {
-    throw new BadRequestException('More that one folder found');
+    throw new BadRequestException(
+      `Found more that one Google Drive folder with name ${folderName}`
+    );
   }
-  return response.data.files[0] as GoogleDriveFolder;
+  return response.data.files[0];
 };

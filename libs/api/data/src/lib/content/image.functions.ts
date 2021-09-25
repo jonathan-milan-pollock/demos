@@ -1,16 +1,9 @@
-import {
-  Image,
-  MediaState,
-  PublicContent,
-} from '@dark-rush-photography/shared/types';
+import { Image, MediaState } from '@dark-rush-photography/shared/types';
 import { ImageDto, ImageMinimalDto } from '@dark-rush-photography/api/types';
-
-import { findMediaComments } from './comment.functions';
-import { findMediaEmotions } from './emotion.functions';
 
 export const findPublicImages = (images: Image[]): Image[] => {
   return images
-    .filter((image) => image.state === MediaState.Published)
+    .filter((image) => image.state === MediaState.Public)
     .map(loadImage);
 };
 

@@ -2,8 +2,9 @@ export const AUTH0_ISSUER = 'https://darkrushphotography.us.auth0.com/';
 export const AUTH0_AUDIENCE = 'https://www.darkrushphotography.com';
 
 Cypress.Commands.add('loginAdmin', async (): Promise<string> => {
-  if (Cypress.env('ACCESS_TOKEN_ADMIN'))
+  if (Cypress.env('ACCESS_TOKEN_ADMIN')) {
     return Promise.resolve(Cypress.env('ACCESS_TOKEN_ADMIN'));
+  }
 
   if (!Cypress.env('AUTH0_CLIENT_ID')) {
     throw new Error(

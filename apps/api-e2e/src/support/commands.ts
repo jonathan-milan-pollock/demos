@@ -15,10 +15,6 @@
 declare namespace Cypress {
   interface Chainable<Subject> {
     // api admin entities
-    watchEntityAdmin(
-      entityType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response<any>>;
     socialMediaPostEntityAdmin(
       entityType: string,
       id: string
@@ -37,7 +33,8 @@ declare namespace Cypress {
       id: string,
       isPublishing: boolean
     ): Cypress.Chainable<Cypress.Response<void>>;
-    findAllGroupsEntityAdmin(
+    findGroupsEntityAdmin(
+      authHeaders: { Authorization: string },
       entityType: string
     ): Cypress.Chainable<Cypress.Response<string[]>>;
     findAllEntityAdmin(
@@ -57,8 +54,13 @@ declare namespace Cypress {
       id: string
     ): Cypress.Chainable<Cypress.Response<boolean>>;
 
+    // api admin image posts
+    createImagePostAdmin(
+      imagePostCreate: any
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    uploadImagePostAdmin(entityId: string): Promise<any>;
+
     // api admin images
-    uploadImageAdmin(entityId: string, filePath: string): Promise<any>;
     uploadThreeSixtyImageAdmin(
       entityId: string,
       filePath: string
@@ -82,12 +84,6 @@ declare namespace Cypress {
       imageDimensionType: string
     ): Promise<any>;
     removeImageAdmin(id: string, entityId: string): Promise<void>;
-
-    // api admin media processes
-    createMediaProcessAdmin(
-      mediaProcessType: any,
-      mediaProcessCreate: any
-    ): Cypress.Chainable<Cypress.Response<any>>;
 
     // api public about
     findAllAboutPublic(): Promise<string[]>;

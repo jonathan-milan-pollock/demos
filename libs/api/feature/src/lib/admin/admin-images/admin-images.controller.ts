@@ -1,3 +1,4 @@
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   Controller,
   Body,
@@ -14,7 +15,6 @@ import {
   ParseEnumPipe,
   UseGuards,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -52,26 +52,6 @@ export class AdminImagesController {
   constructor(private readonly adminImagesService: AdminImagesService) {}
 
   @AdminRole()
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: FileUploadDto,
-  })
-  @ApiOkResponse({ type: ImageAdminDto })
-  upload$(
-    @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @UploadedFile() image: Express.Multer.File
-  ): Observable<Image> {
-    return this.adminImagesService.upload$(
-      entityId,
-      image.originalname,
-      false,
-      image
-    );
-  }
-
-  @AdminRole()
   @Post('upload-three-sixty')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -79,14 +59,13 @@ export class AdminImagesController {
     type: FileUploadDto,
   })
   @ApiOkResponse({ type: ImageAdminDto })
-  uploadThreeSixty$(
+  uploadThreeSixtyImage$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @UploadedFile() threeSixtyImage: Express.Multer.File
   ): Observable<Image> {
-    return this.adminImagesService.upload$(
+    return this.adminImagesService.uploadThreeSixtyImage$(
       entityId,
       threeSixtyImage.originalname,
-      true,
       threeSixtyImage
     );
   }

@@ -2,32 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 //import * as fs from 'fs-extra';
 //import * as path from 'path';
-//import { StreamableFile } from '@nestjs/common';
 import { getAuthHeaders } from '../auth-headers.functions';
-
-Cypress.Commands.add(
-  'uploadImageAdmin',
-  async (entityId: string, filePath: string): Promise<any> => {
-    const FormData = require('form-data');
-    const formData = new FormData();
-    formData.append(
-      'file'
-      //fs.readFileSync(filePath, 'utf8'),
-      //path.basename(filePath)
-    );
-
-    return fetch(`/api/v1/admin/images/upload?entityId=${entityId}`, {
-      method: 'POST',
-      headers: {
-        ...getAuthHeaders(),
-        'Content-Length': formData.getLengthSync(),
-      },
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((json) => json);
-  }
-);
 
 Cypress.Commands.add(
   'uploadThreeSixtyImageAdmin',

@@ -21,8 +21,8 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { BestOfDto } from '@dark-rush-photography/api/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -55,14 +55,14 @@ export class BestOfProvider {
 
   create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWatermarkedFolderId,
         'best-of'
       )
     ).pipe(
       concatMap((bestOfFolder) =>
-        getGoogleDriveFolders$(googleDrive, bestOfFolder.id)
+        findGoogleDriveFolders$(googleDrive, bestOfFolder.id)
       ),
       concatMap((bestOfEntityFolders) => from(bestOfEntityFolders)),
       concatMap((bestOfEntityFolder) =>
@@ -79,11 +79,11 @@ export class BestOfProvider {
       concatMap(([bestOfEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${bestOfEntityFolder.name}`);
+          this.logger.log(`Found best of entity ${bestOfEntityFolder.name}`);
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${bestOfEntityFolder.name}`);
+        this.logger.log(`Creating best of entity ${bestOfEntityFolder.name}`);
         return from(
           new this.entityModel({
             ...loadNewEntity(
@@ -108,7 +108,7 @@ export class BestOfProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       'best-37'

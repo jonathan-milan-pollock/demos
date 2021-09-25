@@ -10,11 +10,9 @@ export interface PulumiConfig {
   readonly prodMongoDbAccountName: string;
   readonly prodMongoDbDatabaseName: string;
   readonly devPrivateStorageAccountName: string;
-  readonly devPrivateBlobContainerName: string;
   readonly devPublicStorageAccountName: string;
   readonly devPublicBlobContainerName: string;
   readonly prodPrivateStorageAccountName: string;
-  readonly prodPrivateBlobContainerName: string;
   readonly prodPublicStorageAccountName: string;
   readonly prodPublicBlobContainerName: string;
   readonly cdnProfileName: string;
@@ -36,13 +34,11 @@ export const getPulumiConfig = (): PulumiConfig => ({
   prodMongoDbAccountName: config.require('prodMongoDbAccountName'),
   prodMongoDbDatabaseName: config.require('prodMongoDbDatabaseName'),
   devPrivateStorageAccountName: config.require('devPrivateStorageAccountName'),
-  devPrivateBlobContainerName: config.require('devPrivateBlobContainerName'),
   devPublicStorageAccountName: config.require('devPublicStorageAccountName'),
   devPublicBlobContainerName: config.require('devPublicBlobContainerName'),
   prodPrivateStorageAccountName: config.require(
     'prodPrivateStorageAccountName'
   ),
-  prodPrivateBlobContainerName: config.require('prodPrivateBlobContainerName'),
   prodPublicStorageAccountName: config.require('prodPublicStorageAccountName'),
   prodPublicBlobContainerName: config.require('prodPublicBlobContainerName'),
   cdnProfileName: config.require('cdnProfileName'),
