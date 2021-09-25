@@ -29,7 +29,8 @@ import { ReviewProvider } from './review.provider';
 import { SharedPhotoAlbumLoadProvider } from './shared-photo-album-load.provider';
 import { SocialMediaProvider } from './social-media.provider';
 import { ImageRemoveProvider } from './image-remove.provider';
-import { ImageLoadNewImageProvider } from './image-load-new-image.provider';
+import { ImageProcessNewProvider } from './image-process-new.provider';
+import { ImageProvider } from './image.provider';
 
 @Injectable()
 export class ImageLoadNewProvider {
@@ -48,8 +49,9 @@ export class ImageLoadNewProvider {
     private readonly reviewProvider: ReviewProvider,
     private readonly sharedPhotoAlbumLoadProvider: SharedPhotoAlbumLoadProvider,
     private readonly socialMediaProvider: SocialMediaProvider,
+    private readonly imageProvider: ImageProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider,
-    private readonly imageLoadNewImageProvider: ImageLoadNewImageProvider
+    private readonly imageProcessNewProvider: ImageProcessNewProvider
   ) {
     this.logger = new Logger(ImageLoadNewProvider.name);
   }
@@ -138,44 +140,34 @@ export class ImageLoadNewProvider {
             concatMap((imageFile) =>
               from(this.entityModel.findById(entityId)).pipe(
                 map(validateEntityFound),
-                concatMap((documentModel) => {
-                  this.logger.log(`Adding ${imageFile.name}`);
-                  const id = uuidv4();
+                concatMap(() => {
                   const order = getOrderFromGoogleDriveImageFileName(
                     imageFile.name
                   );
-                  const image = {
-                    id,
-                    entityId,
-                    state: MediaState.New,
-                    blobPathId: uuidv4(),
-                    fileName: imageFile.name,
-                    order,
-                    isStarred: false,
-                    isLoved: false,
-                    skipExif: false,
-                    isThreeSixty: false,
-                  };
-                  return from(
-                    this.entityModel.findByIdAndUpdate(entityId, {
-                      images: [...documentModel.images, { ...image }],
-                    })
-                  ).pipe(
-                    concatMap(() =>
-                      this.imageLoadNewImageProvider.loadNewImage$(
-                        googleDrive,
-                        imageFile.id,
-                        loadMedia(
-                          image.id,
-                          image.entityId,
-                          image.state,
-                          image.blobPathId,
-                          image.fileName
-                        ),
-                        documentModel
-                      )
+                  return this.imageProvider
+                    .add$(
+                      uuidv4(),
+                      entityId,
+                      MediaState.New,
+                      imageFile.name,
+                      order,
+                      false
                     )
-                  );
+                    .pipe(
+                      concatMap((image) =>
+                        this.imageProcessNewProvider.loadNewImage$(
+                          googleDrive,
+                          imageFile.id,
+                          loadMedia(
+                            image.id,
+                            image.entityId,
+                            image.state,
+                            image.blobPathId,
+                            image.fileName
+                          )
+                        )
+                      )
+                    );
                 })
               )
             )

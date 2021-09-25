@@ -22,16 +22,13 @@ export class ImageUpdateDto {
   isLoved!: boolean;
 
   @IsString()
-  @IsOptional()
-  title?: string;
+  title!: string;
 
   @IsString()
-  @IsOptional()
-  seoDescription?: string;
+  seoDescription!: string;
 
   @IsString()
-  @IsOptional()
-  keywords?: string;
+  seoKeywords!: string;
 
   @IsISO8601()
   @IsOptional()
@@ -40,9 +37,6 @@ export class ImageUpdateDto {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
-
-  @IsBoolean()
-  skipExif!: boolean;
 
   @IsBoolean()
   isThreeSixty!: boolean;

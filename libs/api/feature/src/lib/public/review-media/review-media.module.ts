@@ -6,13 +6,7 @@ import {
   Document,
   DocumentSchema,
   EntityPublicProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
   ReviewMediaProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewMediaService } from './review-media.service';
 import { ReviewMediaController } from './review-media.controller';
@@ -25,16 +19,6 @@ import { ReviewMediaController } from './review-media.controller';
     ]),
   ],
   controllers: [ReviewMediaController],
-  providers: [
-    ReviewMediaService,
-    EntityPublicProvider,
-    ReviewMediaProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [ReviewMediaService, EntityPublicProvider, ReviewMediaProvider],
 })
 export class ReviewMediaModule {}

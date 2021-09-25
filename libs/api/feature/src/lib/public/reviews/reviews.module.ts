@@ -6,13 +6,7 @@ import {
   Document,
   DocumentSchema,
   EntityPublicProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
   ReviewProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { ReviewsService } from './reviews.service';
 import { ReviewsController } from './reviews.controller';
@@ -25,16 +19,6 @@ import { ReviewsController } from './reviews.controller';
     ]),
   ],
   controllers: [ReviewsController],
-  providers: [
-    ReviewsService,
-    EntityPublicProvider,
-    ReviewProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [ReviewsService, EntityPublicProvider, ReviewProvider],
 })
 export class ReviewsModule {}

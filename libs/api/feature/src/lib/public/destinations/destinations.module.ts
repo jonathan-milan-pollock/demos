@@ -7,12 +7,6 @@ import {
   Document,
   DocumentSchema,
   EntityPublicProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { DestinationsService } from './destinations.service';
 import { DestinationsController } from './destinations.controller';
@@ -25,16 +19,6 @@ import { DestinationsController } from './destinations.controller';
     ]),
   ],
   controllers: [DestinationsController],
-  providers: [
-    DestinationsService,
-    EntityPublicProvider,
-    DestinationProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [DestinationsService, EntityPublicProvider, DestinationProvider],
 })
 export class DestinationsModule {}

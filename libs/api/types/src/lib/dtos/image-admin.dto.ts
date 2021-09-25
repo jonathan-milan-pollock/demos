@@ -39,16 +39,13 @@ export class ImageAdminDto implements Image {
   isLoved!: boolean;
 
   @IsString()
-  @IsOptional()
-  title?: string;
+  title!: string;
 
   @IsString()
-  @IsOptional()
-  seoDescription?: string;
+  seoDescription!: string;
 
   @IsString()
-  @IsOptional()
-  seoKeywords?: string;
+  seoKeywords!: string;
 
   @IsISO8601()
   @IsOptional()
@@ -57,9 +54,6 @@ export class ImageAdminDto implements Image {
   @IsISO8601()
   @IsOptional()
   datePublished?: string;
-
-  @IsBoolean()
-  skipExif!: boolean;
 
   @IsBoolean()
   isThreeSixty!: boolean;

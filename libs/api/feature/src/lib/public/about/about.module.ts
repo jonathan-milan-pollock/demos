@@ -7,12 +7,6 @@ import {
   Document,
   DocumentSchema,
   EntityPublicProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { AboutService } from './about.service';
 import { AboutController } from './about.controller';
@@ -25,16 +19,6 @@ import { AboutController } from './about.controller';
     ]),
   ],
   controllers: [AboutController],
-  providers: [
-    AboutService,
-    EntityPublicProvider,
-    AboutProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [AboutService, EntityPublicProvider, AboutProvider],
 })
 export class AboutModule {}

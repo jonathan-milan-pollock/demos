@@ -18,6 +18,5 @@ export const imageSchema = {
   seoKeywords: { type: String, required: false },
   dateCreated: { type: String, required: false },
   datePublished: { type: String, required: false },
-  skipExif: { type: Boolean, required: true },
   isThreeSixty: { type: Boolean, required: true },
 };

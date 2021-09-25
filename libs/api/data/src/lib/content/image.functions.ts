@@ -28,7 +28,6 @@ export const loadImage = (image: Image): Image => ({
   seoKeywords: image.seoKeywords,
   dateCreated: image.dateCreated,
   datePublished: image.datePublished,
-  skipExif: image.skipExif,
   isThreeSixty: image.isThreeSixty,
 });
 
@@ -43,27 +42,15 @@ export const loadMinimalPublicImage = (image: Image): ImageMinimalDto => {
   };
 };
 
-export const loadPublicImage = (
-  image: Image,
-  publicContent: PublicContent
-): ImageDto => {
-  const imageComments = findMediaComments(publicContent.comments, image.id);
-  const imageEmotions = findMediaEmotions(
-    publicContent.emotions,
-    image.id,
-    imageComments
-  );
-
+export const loadPublicImage = (image: Image): ImageDto => {
   return {
     id: image.id,
     entityId: image.entityId,
     fileName: image.fileName,
     order: image.order,
     title: image.title,
-    description: image.seoDescription,
-    keywords: image.seoKeywords,
+    seoDescription: image.seoDescription,
+    seoKeywords: image.seoKeywords,
     isThreeSixty: image.isThreeSixty,
-    comments: imageComments,
-    emotions: imageEmotions,
   };
 };

@@ -5,7 +5,7 @@ import { drive_v3 } from 'googleapis';
 import { v4 as uuidv4 } from 'uuid';
 
 import { EntityType, Image} from '@dark-rush-photography/shared/types';
-import { ImageLoadNewProvider } from './image-load-new-image.provider';
+import { ImageLoadNewProvider } from './image-process-new.provider';
 import { AboutProvider } from './about.provider';
 import { BestOfProvider } from './best-of.provider';
 import { DestinationProvider } from './destination.provider';
@@ -60,7 +60,6 @@ export class ImageFolderProvider {
                 order: image.order,
                 isStarred: image.isStarred,
                 isLoved: false,
-                skipExif: false,
                 isThreeSixty,
               },
             ],
@@ -85,7 +84,6 @@ export class ImageFolderProvider {
       seoKeywords: fromImage.seoKeywords,
       dateCreated: fromImage.dateCreated,
       datePublished: fromImage.datePublished,
-      skipExif: fromImage.skipExif,
       isThreeSixty: fromImage.isThreeSixty,
     }
   } ;

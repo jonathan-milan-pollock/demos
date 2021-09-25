@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -17,22 +17,27 @@ import {
   validateImageNotPublished,
 } from '../content/image-validation.functions';
 import { loadImage, loadPublicImage } from '../content/image.functions';
-import { loadPublicContent } from '../content/public-content.functions';
 
 @Injectable()
 export class ImageProvider {
+  private readonly logger: Logger;
+
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>
-  ) {}
+  ) {
+    this.logger = new Logger(ImageProvider.name);
+  }
 
   add$(
     id: string,
     entityId: string,
+    state: MediaState,
     fileName: string,
     order: number,
     isThreeSixty: boolean
   ): Observable<Image> {
+    this.logger.log(`Adding ${fileName}`);
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) =>
@@ -43,13 +48,15 @@ export class ImageProvider {
               {
                 id,
                 entityId,
-                state: MediaState.New,
+                state,
                 blobPathId: uuidv4(),
                 fileName,
                 order,
                 isStarred: false,
                 isLoved: false,
-                skipExif: false,
+                title: '',
+                seoDescription: '',
+                seoKeywords: '',
                 isThreeSixty,
               },
             ],
@@ -84,10 +91,9 @@ export class ImageProvider {
                 isLoved: imageUpdate.isLoved,
                 title: imageUpdate.title,
                 seoDescription: imageUpdate.seoDescription,
-                seoKeywords: imageUpdate.keywords,
+                seoKeywords: imageUpdate.seoKeywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: imageUpdate.datePublished,
-                skipExif: foundImage.skipExif,
                 isThreeSixty: foundImage.isThreeSixty,
               },
             ],
@@ -111,17 +117,9 @@ export class ImageProvider {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map(validateEntityIsPublic),
-      map((documentModel) => ({
-        image: validateImageFound(id, documentModel),
-        documentModel,
-      })),
-      map(({ image, documentModel }) => ({
-        image: validateImageNotPublished(image),
-        documentModel,
-      })),
-      map(({ image, documentModel }) =>
-        loadPublicImage(image, loadPublicContent(documentModel))
-      )
+      map((documentModel) => validateImageFound(id, documentModel)),
+      map(validateImageNotPublished),
+      map(loadPublicImage)
     );
   }
 
@@ -167,7 +165,6 @@ export class ImageProvider {
                 seoKeywords: foundImage.seoKeywords,
                 dateCreated: foundImage.dateCreated,
                 datePublished: foundImage.datePublished,
-                skipExif: foundImage.skipExif,
                 isThreeSixty: foundImage.isThreeSixty,
               },
             ],

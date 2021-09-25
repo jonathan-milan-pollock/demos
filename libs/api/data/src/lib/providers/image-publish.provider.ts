@@ -64,10 +64,9 @@ export class ImagePublishProvider {
             isLoved: imageToPublish.isLoved,
             title: imageToPublish.title,
             seoDescription: imageToPublish.seoDescription,
-            keywords: imageToPublish.seoKeywords,
+            seoKeywords: imageToPublish.seoKeywords,
             dateCreated: imageToPublish.dateCreated,
-            datePublished: getExifDate(new Date()), // TODO: is this how we want to do this?
-            skipExif: imageToPublish.skipExif,
+            datePublished: new Date().toISOString(),
             isThreeSixty: imageToPublish.isThreeSixty,
           },
           documentModel
@@ -80,8 +79,7 @@ export class ImagePublishProvider {
   publishImage(
     googleDrive: drive_v3.Drive,
     imageFileId: string,
-    media: Media,
-    documentModel: DocumentModel
+    media: Media
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
     const id = uuidv4();
@@ -101,9 +99,9 @@ export class ImagePublishProvider {
         this.imageDimensionProvider.add$(
           id,
           media.id,
+          media.entityId,
           smallResolution.type,
-          resolution,
-          documentModel
+          resolution
         )
       ),
       map(() => undefined)

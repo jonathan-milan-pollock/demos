@@ -1,77 +1,70 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, Logger } from '@nestjs/common';
-import { BlobUploadCommonResponse } from '@azure/storage-blob';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { Observable } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+import { concatMap, from, map, Observable } from 'rxjs';
+import { Model } from 'mongoose';
 
-import {
-  ImageDimensionType,
-  MediaState,
-} from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared/types';
-import { DocumentModel } from '../schema/document.schema';
-import {
-  downloadBlobToFile$,
-  getAzureStorageBlobPath,
-  uploadBufferToBlob$,
-} from '@dark-rush-photography/api/util';
-import { ConfigProvider } from './config.provider';
+import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import { Document, DocumentModel } from '../schema/document.schema';
+import { validateEntityFound } from '../entities/entity-validation.functions';
+import { loadMedia } from '../content/media.functions';
+import { validateImageNotAlreadyExists } from '../content/image-validation.functions';
 import { ImageProvider } from './image.provider';
-import { ImageDimensionProvider } from './image-dimension.provider';
+import { ImageProcessNewProvider } from './image-process-new.provider';
 
 @Injectable()
 export class ImageUploadProvider {
   private readonly logger: Logger;
 
   constructor(
-    private readonly configProvider: ConfigProvider,
+    @InjectModel(Document.name)
+    private readonly entityModel: Model<DocumentModel>,
     private readonly imageProvider: ImageProvider,
-    private readonly imageDimensionProvider: ImageDimensionProvider
+    private readonly imageProcessNewProvider: ImageProcessNewProvider
   ) {
     this.logger = new Logger(ImageUploadProvider.name);
   }
-
   upload$(
-    state: MediaState,
-    blobPathId: string,
+    entityId: string,
     fileName: string,
-    file: Express.Multer.File
-  ): Observable<BlobUploadCommonResponse> {
-    return uploadBufferToBlob$(
-      this.configProvider.getAzureStorageConnectionString(state),
-      this.configProvider.getAzureStorageBlobContainerName(state),
-      file.buffer,
-      getAzureStorageBlobPath(blobPathId, fileName)
-    );
-  }
-
-  /*
-  process$(
-    media: Media,
     isThreeSixty: boolean,
-    entityModel: Model<DocumentModel>
-  ): Observable<DocumentModel> {
-    const tileResolution = isThreeSixty
-      ? this.configProvider.findThreeSixtyImageResolution(
-          ImageDimensionType.ThreeSixtyTile
+    file: Express.Multer.File
+  ): Observable<Image> {
+    const id = uuidv4();
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      map((documentModel) => {
+        validateImageNotAlreadyExists(
+          MediaState.Selected,
+          fileName,
+          documentModel
+        );
+      }),
+      concatMap(() =>
+        this.imageProvider.add$(
+          id,
+          entityId,
+          MediaState.Selected,
+          fileName,
+          0,
+          isThreeSixty
         )
-      : this.configProvider.findImageResolution(ImageDimensionType.Tile);
-    const smallResolution = isThreeSixty
-      ? this.configProvider.findThreeSixtyImageResolution(
-          ImageDimensionType.ThreeSixtySmall
-        )
-      : this.configProvider.findImageResolution(ImageDimensionType.Small);
-
-    return this.updateDateCreated$(media, entityModel).pipe(
-   //   concatMap(this.tinifyImage$(media)),
-   //   concatMap(
-   //     this.imageDimensionProvider.resize$(media, tileResolution, entityModel)
-   //   ),
-   //   concatMap(
-   //     this.imageDimensionProvider.resize$(media, smallResolution, entityModel)
-   //   ),
-      tap(() => this.logger.log(`Publishing ${media.fileName} complete`))
+      ),
+      concatMap((image) =>
+        this.imageProcessNewProvider
+          .upload$(
+            loadMedia(
+              image.id,
+              image.entityId,
+              image.state,
+              image.blobPathId,
+              image.fileName
+            ),
+            file
+          )
+          .pipe(map(() => image))
+      )
     );
   }
-*/
 }

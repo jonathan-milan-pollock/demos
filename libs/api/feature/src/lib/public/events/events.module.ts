@@ -7,12 +7,6 @@ import {
   DocumentSchema,
   EntityPublicProvider,
   EventProvider,
-  ImageDimensionProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUploadProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
 } from '@dark-rush-photography/api/data';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
@@ -25,16 +19,6 @@ import { EventsController } from './events.controller';
     ]),
   ],
   controllers: [EventsController],
-  providers: [
-    EventsService,
-    EntityPublicProvider,
-    EventProvider,
-    ImageProvider,
-    ImageUploadProvider,
-    ImageRemoveProvider,
-    ImageDimensionProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
-  ],
+  providers: [EventsService, EntityPublicProvider, EventProvider],
 })
 export class EventsModule {}
