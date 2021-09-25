@@ -41,7 +41,7 @@ export class ImageRemoveProvider {
 
         return from(imagesForState).pipe(
           filter((image) => image.state === state),
-          concatMap((image) => this.remove$(image, entityId))
+          concatMap((image) => this.removeImage$(image, entityId))
         );
       }),
       last(),
@@ -49,7 +49,7 @@ export class ImageRemoveProvider {
     );
   }
 
-  remove$(image: Image, entityId: string): Observable<DocumentModel> {
+  removeImage$(image: Image, entityId: string): Observable<DocumentModel> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) =>
@@ -102,8 +102,8 @@ export class ImageRemoveProvider {
   ): Observable<boolean> {
     if (imageDimensions.length === 0) {
       return deleteBlob$(
-        this.configProvider.getAzureStorageConnectionString(state),
-        this.configProvider.getAzureStorageBlobContainerName(state),
+        this.configProvider.azureStorageConnectionStringPublic,
+        this.configProvider.azureStorageBlobContainerNamePublic,
         getAzureStorageBlobPath(blobPathId, fileName)
       );
     }
@@ -111,8 +111,8 @@ export class ImageRemoveProvider {
     return from(imageDimensions).pipe(
       concatMap((imageDimension) =>
         deleteBlob$(
-          this.configProvider.getAzureStorageConnectionString(state),
-          this.configProvider.getAzureStorageBlobContainerName(state),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPathWithDimension(
             blobPathId,
             fileName,
@@ -123,8 +123,8 @@ export class ImageRemoveProvider {
       last(),
       concatMap(() =>
         deleteBlob$(
-          this.configProvider.getAzureStorageConnectionString(state),
-          this.configProvider.getAzureStorageBlobContainerName(state),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPath(blobPathId, fileName)
         )
       )

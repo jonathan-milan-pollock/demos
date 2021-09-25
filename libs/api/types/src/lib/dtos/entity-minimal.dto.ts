@@ -1,11 +1,12 @@
 import { IsEnum, IsMongoId, IsString } from 'class-validator';
 
 import {
+  EntityMinimal,
   EntityType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 
-export class EntityMinimalDto {
+export class EntityMinimalDto implements EntityMinimal {
   @IsEnum(EntityType)
   type!: EntityType;
 

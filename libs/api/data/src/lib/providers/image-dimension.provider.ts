@@ -10,24 +10,18 @@ import {
   ImageDimensionType,
   ThreeSixtySettings,
   MediaResolution,
+  Media,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   deleteBlob$,
-  downloadBlobAsBuffer$,
   downloadBlobToFile$,
-  getAzureStorageBlobPath,
   getAzureStorageBlobPathWithDimension,
-  uploadStreamToBlob$,
 } from '@dark-rush-photography/api/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import {
-  validateImageDimensionNotAlreadyExists,
-  validateDocumentModelForImageFound,
-} from '../content/image-validation.functions';
+import { validateImageDimensionNotAlreadyExists } from '../content/image-validation.functions';
 import { loadImageDimension } from '../content/image-dimension.functions';
 import { ConfigProvider } from './config.provider';
-import { Media } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ImageDimensionProvider {
@@ -122,10 +116,10 @@ export class ImageDimensionProvider {
     media: Media,
     updateMedia: Media,
     imageDimension: ImageDimension
-  ): Observable<boolean> {
+  ): Observable<void> {
     return downloadBlobToFile$(
-      this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.getAzureStorageBlobContainerName(media.state),
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPathWithDimension(
         media.blobPathId,
         media.fileName,
@@ -158,8 +152,8 @@ export class ImageDimensionProvider {
       ),*/
       concatMap(() =>
         deleteBlob$(
-          this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.getAzureStorageBlobContainerName(media.state),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPathWithDimension(
             media.blobPathId,
             media.fileName,
@@ -167,7 +161,7 @@ export class ImageDimensionProvider {
           )
         )
       ),
-      map(() => true)
+      map(() => undefined)
     );
   }
 

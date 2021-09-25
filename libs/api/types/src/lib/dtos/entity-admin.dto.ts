@@ -28,7 +28,8 @@ export class EntityAdminDto implements Entity {
   type!: EntityType;
 
   @IsMongoId()
-  id!: string;
+  @IsOptional()
+  id?: string;
 
   @IsString()
   @IsOptional()

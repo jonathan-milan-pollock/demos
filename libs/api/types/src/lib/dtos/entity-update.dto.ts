@@ -9,9 +9,10 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+import { EntityUpdate } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 
-export class EntityUpdateDto {
+export class EntityUpdateDto implements EntityUpdate {
   @IsString()
   group!: string;
 

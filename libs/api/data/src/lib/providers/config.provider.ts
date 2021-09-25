@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { Env } from '@dark-rush-photography/api/types';
-import { MediaState } from '@dark-rush-photography/shared/types';
+import { WatermarkedType } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class ConfigProvider {
@@ -32,34 +32,17 @@ export class ConfigProvider {
     return value;
   }
 
-  get googleDriveSharedWatermarkedFolderId(): string {
-    const value = this.configService.get(
-      'googleDriveSharedWatermarkedFolderId',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'googleDriveSharedWatermarkedFolderId undefined'
-      );
+  getGoogleDriveWebsitesFolderId(watermarkedType: WatermarkedType): string {
+    switch (watermarkedType) {
+      case WatermarkedType.Watermarked:
+        return this.googleDriveWebsitesWatermarkedFolderId;
+      case WatermarkedType.WithoutWatermark:
+        return this.googleDriveWebsitesWithoutWatermarkFolderId;
+      default:
+        throw new BadRequestException(
+          `Google Drive websites folder id not found for watermarked type ${watermarkedType}`
+        );
     }
-    return value;
-  }
-
-  get googleDriveSharedWithoutWatermarkFolderId(): string {
-    const value = this.configService.get(
-      'googleDriveSharedWithoutWatermarkFolderId',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'googleDriveSharedWithoutWatermarkFolderId undefined'
-      );
-    }
-    return value;
   }
 
   get googleDriveWebsitesWatermarkedFolderId(): string {
@@ -92,67 +75,12 @@ export class ConfigProvider {
     return value;
   }
 
-  get googleDriveDarkRushPhotographySharedFolderId(): string {
-    const value = this.configService.get(
-      'googleDriveDarkRushPhotographySharedFolderId',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'googleDriveDarkRushPhotographySharedFolderId undefined'
-      );
-    }
-    return value;
-  }
-
-  get entityPushNotificationsAddress(): string {
-    const value = this.configService.get('entityPushNotificationsAddress', {
-      infer: true,
-    });
-    if (!value) {
-      throw new BadRequestException('entityPushNotificationsAddress undefined');
-    }
-    return value;
-  }
-
   get mongoDbConnectionString(): string {
     const value = this.configService.get('mongoDbConnectionString', {
       infer: true,
     });
     if (!value) {
       throw new BadRequestException('mongoDbConnectionString undefined');
-    }
-    return value;
-  }
-
-  getAzureStorageConnectionString(state: MediaState): string {
-    switch (state) {
-      case MediaState.New:
-      case MediaState.Selected:
-        return this.azureStorageConnectionStringPrivate;
-      case MediaState.Published:
-      case MediaState.Archived:
-        return this.azureStorageConnectionStringPublic;
-      default:
-        throw new BadRequestException(
-          `Azure storage connection string not found for media state ${state}`
-        );
-    }
-  }
-
-  get azureStorageConnectionStringPrivate(): string {
-    const value = this.configService.get(
-      'azureStorageConnectionStringPrivate',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'azureStorageConnectionStringPrivate undefined'
-      );
     }
     return value;
   }
@@ -164,36 +92,6 @@ export class ConfigProvider {
     if (!value) {
       throw new BadRequestException(
         'azureStorageConnectionStringPublic undefined'
-      );
-    }
-    return value;
-  }
-
-  getAzureStorageBlobContainerName(state: MediaState): string {
-    switch (state) {
-      case MediaState.New:
-      case MediaState.Selected:
-        return this.azureStorageBlobContainerNamePrivate;
-      case MediaState.Published:
-      case MediaState.Archived:
-        return this.azureStorageBlobContainerNamePublic;
-      default:
-        throw new BadRequestException(
-          `Azure storage blob container name not found for media state ${state}`
-        );
-    }
-  }
-
-  get azureStorageBlobContainerNamePrivate(): string {
-    const value = this.configService.get(
-      'azureStorageBlobContainerNamePrivate',
-      {
-        infer: true,
-      }
-    );
-    if (!value) {
-      throw new BadRequestException(
-        'azureStorageBlobContainerNamePrivate undefined'
       );
     }
     return value;

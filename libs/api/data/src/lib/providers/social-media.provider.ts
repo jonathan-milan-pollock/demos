@@ -17,12 +17,12 @@ import { drive_v3 } from 'googleapis';
 
 import {
   EntityType,
-  Group,
+  GoogleDriveFolder,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -30,7 +30,6 @@ import {
   loadNewEntity,
 } from '../entities/entity.functions';
 import { ConfigProvider } from './config.provider';
-import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class SocialMediaProvider {
@@ -44,43 +43,19 @@ export class SocialMediaProvider {
     this.logger = new Logger(SocialMediaProvider.name);
   }
 
-  loadGroups$(googleDrive: drive_v3.Drive): Observable<Group[]> {
+  create$(googleDrive: drive_v3.Drive, group: string): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
         'social-media'
       )
     ).pipe(
       concatMap((socialMediaFolder) =>
-        getGoogleDriveFolders$(googleDrive, socialMediaFolder.id)
-      ),
-      concatMap((socialMediaGroupFolders) => from(socialMediaGroupFolders)),
-      pluck('name'),
-      map((name) => ({
-        watermarkedType: WatermarkedType.WithoutWatermark,
-        name,
-      })),
-      toArray<Group>()
-    );
-  }
-
-  createForGroup$(
-    googleDrive: drive_v3.Drive,
-    group: string
-  ): Observable<void> {
-    return from(
-      getGoogleDriveFolderWithName$(
-        googleDrive,
-        this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
-        'social-media'
-      )
-    ).pipe(
-      concatMap((socialMediaFolder) =>
-        getGoogleDriveFolderWithName$(googleDrive, socialMediaFolder.id, group)
+        findGoogleDriveFolderByName$(googleDrive, socialMediaFolder.id, group)
       ),
       concatMap((socialMediaGroupFolder) =>
-        getGoogleDriveFolders$(googleDrive, socialMediaGroupFolder.id)
+        findGoogleDriveFolders$(googleDrive, socialMediaGroupFolder.id)
       ),
       concatMap((socialMediaEntityFolders) => from(socialMediaEntityFolders)),
       concatMap((socialMediaEntityFolder) =>
@@ -98,17 +73,21 @@ export class SocialMediaProvider {
       concatMap(([socialMediaEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${socialMediaEntityFolder.name}`);
+          this.logger.log(
+            `Found social media entity ${socialMediaEntityFolder.name}`
+          );
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${socialMediaEntityFolder.name}`);
+        this.logger.log(
+          `Creating social media entity ${socialMediaEntityFolder.name}`
+        );
         return from(
           new this.entityModel({
             ...loadNewEntity(
               EntityType.SocialMedia,
               {
-                watermarkedType: WatermarkedType.WithoutWatermark,
+                watermarkedType: WatermarkedType.Watermarked,
                 group,
                 slug: socialMediaEntityFolder.name,
                 isPublic: false,
@@ -127,7 +106,7 @@ export class SocialMediaProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       'images'

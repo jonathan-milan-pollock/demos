@@ -1,4 +1,8 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 import {
   Image,
@@ -8,7 +12,12 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
-export const validateImageFound = (
+export const validateImageFound = (image: Image | undefined): Image => {
+  if (!image) throw new NotFoundException('Image was not found');
+  return image;
+};
+
+export const validateImageFoundInEntity = (
   id: string,
   documentModel: DocumentModel
 ): Image => {
@@ -26,27 +35,48 @@ export const validateOneImage = (images: Image[]): Image => {
   return images[0];
 };
 
-export const validateDocumentModelForImageFound = (
-  id: string,
-  documentModel: DocumentModel
-): DocumentModel => {
-  const foundImage = documentModel.images.find((image) => image.id === id);
-  if (!foundImage)
-    throw new NotFoundException('Document model for image was not found');
-  return documentModel;
-};
-
-export const validateImageNotPublished = (image: Image): Image => {
-  if (image.state !== MediaState.Published) throw new NotFoundException();
+export const validateCanSelectImage = (image: Image): Image => {
+  if (image.state !== MediaState.New) {
+    throw new ConflictException('Can only select new images');
+  }
   return image;
 };
 
-export const validateImageNotNew = (image: Image): Image => {
-  if (image.state !== MediaState.New) throw new NotFoundException();
+export const validateCanMakeImagePublic = (image: Image): Image => {
+  if (image.state !== MediaState.Selected) {
+    throw new ConflictException('Can only make selected images public');
+  }
   return image;
 };
 
-export const validateImageNotAlreadyExists = (
+export const validateCanArchiveImage = (image: Image): Image => {
+  if (image.state !== MediaState.Public) {
+    throw new ConflictException('Can only archive public images');
+  }
+  return image;
+};
+
+export const validateCanUnarchiveImage = (image: Image): Image => {
+  if (image.state !== MediaState.Archived) {
+    throw new ConflictException('Can only unarchive archived images');
+  }
+  return image;
+};
+
+export const validateImagePublic = (image: Image): Image => {
+  if (image.state !== MediaState.Public) throw new NotFoundException();
+  return image;
+};
+
+export const validateImageSelectedOrPublic = (image: Image): Image => {
+  if (
+    !(image.state === MediaState.Selected || image.state === MediaState.Public)
+  )
+    throw new BadRequestException('Image must be selected or public');
+  return image;
+};
+
+export const validateImageWithFileNameNotAlreadyExists = (
   state: MediaState,
   fileName: string,
   documentModel: DocumentModel

@@ -40,8 +40,8 @@ export class ImageProcessNewProvider {
     return from(downloadGoogleDriveImageFile(googleDrive, imageFileId)).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
-          this.configProvider.getAzureStorageConnectionString(media.state),
-          this.configProvider.getAzureStorageBlobContainerName(media.state),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
           getAzureStorageBlobPath(media.blobPathId, media.fileName)
         )
@@ -66,8 +66,8 @@ export class ImageProcessNewProvider {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
 
     return uploadBufferToBlob$(
-      this.configProvider.getAzureStorageConnectionString(media.state),
-      this.configProvider.getAzureStorageBlobContainerName(media.state),
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic,
       file.buffer,
       getAzureStorageBlobPath(media.blobPathId, media.fileName)
     ).pipe(

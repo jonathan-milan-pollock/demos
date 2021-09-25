@@ -23,7 +23,6 @@ import {
   validateEntitySeoKeywordsProvided,
   validateEntityTitleProvided,
   validateEntityType,
-  validateEntityWatchFolderId,
   validateOneEntityFound,
 } from './entity-validation.functions';
 
@@ -71,7 +70,7 @@ describe('entity-validation.functions', () => {
       };
       expect(result).toThrow(BadRequestException);
       expect(result).toThrow(
-        `Found entity as ${EntityType.BestOf}, expected ${entityType}`
+        `Found ${EntityType.BestOf} entity, expected ${entityType}`
       );
     });
   });
@@ -188,28 +187,6 @@ describe('entity-validation.functions', () => {
         } as DocumentModel);
       };
       expect(result).toThrow(NotFoundException);
-    });
-  });
-
-  describe('validateEntityWatchFolderId', () => {
-    it('should return google drive folder if entity folder can be watched', () => {
-      const mockGoogleDriveFolderId = faker.datatype.string();
-      const result = validateEntityWatchFolderId({
-        ...mockDocumentModel,
-        googleDriveFolderId: mockGoogleDriveFolderId,
-      } as DocumentModel);
-      expect(result).toBe(mockGoogleDriveFolderId);
-    });
-
-    it('should throw a not found exception when entity is not public', () => {
-      const result = () => {
-        validateEntityWatchFolderId({
-          ...mockDocumentModel,
-          googleDriveFolderId: undefined,
-        } as DocumentModel);
-      };
-      expect(result).toThrow(BadRequestException);
-      expect(result).toThrow('Entity cannot be watched');
     });
   });
 

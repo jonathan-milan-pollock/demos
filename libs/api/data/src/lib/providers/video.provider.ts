@@ -28,7 +28,7 @@ export class VideoProvider {
               {
                 id,
                 entityId,
-                state: MediaState.Published,
+                state: MediaState.Public,
                 blobPathId: uuidv4(),
                 fileName,
               },

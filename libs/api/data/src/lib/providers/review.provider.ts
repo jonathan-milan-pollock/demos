@@ -21,8 +21,8 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { ReviewDto } from '@dark-rush-photography/api/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -59,16 +59,19 @@ export class ReviewProvider {
     };
   }
 
-  create$(googleDrive: drive_v3.Drive): Observable<void> {
+  create$(
+    googleDrive: drive_v3.Drive,
+    watermarkedType: WatermarkedType
+  ): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
-        this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
+        this.configProvider.getGoogleDriveWebsitesFolderId(watermarkedType),
         'reviews'
       )
     ).pipe(
       concatMap((reviewsFolder) =>
-        getGoogleDriveFolders$(googleDrive, reviewsFolder.id)
+        findGoogleDriveFolders$(googleDrive, reviewsFolder.id)
       ),
       concatMap((reviewEntityFolders) => from(reviewEntityFolders)),
       concatMap((reviewEntityFolder) =>
@@ -85,17 +88,17 @@ export class ReviewProvider {
       concatMap(([reviewEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${reviewEntityFolder.name}`);
+          this.logger.log(`Found review entity ${reviewEntityFolder.name}`);
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${reviewEntityFolder.name}`);
+        this.logger.log(`Creating review entity ${reviewEntityFolder.name}`);
         return from(
           new this.entityModel({
             ...loadNewEntity(
               EntityType.Review,
               {
-                watermarkedType: WatermarkedType.WithoutWatermark,
+                watermarkedType,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: reviewEntityFolder.name,
                 isPublic: false,
@@ -115,10 +118,6 @@ export class ReviewProvider {
     googleDriveFolderId: string,
     slug: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
-      googleDrive,
-      googleDriveFolderId,
-      slug
-    );
+    return findGoogleDriveFolderByName$(googleDrive, googleDriveFolderId, slug);
   }
 }

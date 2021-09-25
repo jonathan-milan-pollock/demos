@@ -2,7 +2,7 @@ import { Image } from './image.interface';
 import { ImageDimension } from './image-dimension.interface';
 import { Video } from './video.interface';
 
-export interface MediaProcess {
+export interface ImageVideo {
   readonly id?: string;
   readonly title?: string;
   readonly text: string[];

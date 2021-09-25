@@ -24,8 +24,8 @@ import {
   DestinationMinimalDto,
 } from '@dark-rush-photography/api/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -81,14 +81,14 @@ export class DestinationProvider {
 
   create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWatermarkedFolderId,
         'destinations'
       )
     ).pipe(
       concatMap((destinationsFolder) =>
-        getGoogleDriveFolders$(googleDrive, destinationsFolder.id)
+        findGoogleDriveFolders$(googleDrive, destinationsFolder.id)
       ),
       concatMap((destinationEntityFolders) => from(destinationEntityFolders)),
       concatMap((destinationEntityFolder) =>
@@ -105,11 +105,15 @@ export class DestinationProvider {
       concatMap(([destinationEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${destinationEntityFolder.name}`);
+          this.logger.log(
+            `Found destination entity ${destinationEntityFolder.name}`
+          );
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${destinationEntityFolder.name}`);
+        this.logger.log(
+          `Creating destination entity ${destinationEntityFolder.name}`
+        );
         return from(
           new this.entityModel({
             ...loadNewEntity(
@@ -134,7 +138,7 @@ export class DestinationProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       'images'

@@ -21,8 +21,8 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { AboutDto } from '@dark-rush-photography/api/types';
 import {
-  getGoogleDriveFolders$,
-  getGoogleDriveFolderWithName$,
+  findGoogleDriveFolders$,
+  findGoogleDriveFolderByName$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -56,14 +56,14 @@ export class AboutProvider {
 
   create$(googleDrive: drive_v3.Drive): Observable<void> {
     return from(
-      getGoogleDriveFolderWithName$(
+      findGoogleDriveFolderByName$(
         googleDrive,
         this.configProvider.googleDriveWebsitesWithoutWatermarkFolderId,
         'about'
       )
     ).pipe(
       concatMap((aboutFolder) =>
-        getGoogleDriveFolders$(googleDrive, aboutFolder.id)
+        findGoogleDriveFolders$(googleDrive, aboutFolder.id)
       ),
       concatMap((aboutEntityFolders) => from(aboutEntityFolders)),
       concatMap((aboutEntityFolder) =>
@@ -80,11 +80,11 @@ export class AboutProvider {
       concatMap(([aboutEntityFolder, documentModels]) => {
         const documentModelsArray = loadDocumentModelsArray(documentModels);
         if (documentModelsArray.length > 0) {
-          this.logger.log(`Found entity ${aboutEntityFolder.name}`);
+          this.logger.log(`Found About entity ${aboutEntityFolder.name}`);
           return of(documentModelsArray[0]);
         }
 
-        this.logger.log(`Creating entity ${aboutEntityFolder.name}`);
+        this.logger.log(`Creating About entity ${aboutEntityFolder.name}`);
         return from(
           new this.entityModel({
             ...loadNewEntity(
@@ -93,7 +93,7 @@ export class AboutProvider {
                 watermarkedType: WatermarkedType.WithoutWatermark,
                 group: DEFAULT_ENTITY_GROUP,
                 slug: aboutEntityFolder.name,
-                isPublic: false,
+                isPublic: true,
               },
               aboutEntityFolder.id
             ),
@@ -109,7 +109,7 @@ export class AboutProvider {
     googleDrive: drive_v3.Drive,
     googleDriveFolderId: string
   ): Observable<GoogleDriveFolder> {
-    return getGoogleDriveFolderWithName$(
+    return findGoogleDriveFolderByName$(
       googleDrive,
       googleDriveFolderId,
       'images'

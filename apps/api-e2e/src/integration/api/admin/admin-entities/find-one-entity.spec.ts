@@ -1,4 +1,4 @@
-import { EntityAdminDto } from '@dark-rush-photography/api/types';
+import { Entity } from '@dark-rush-photography/shared/types';
 
 const IMAGE_POST = 'ImagePost';
 const DUMMY_MONGODB_ID = '000000000000000000000000';
@@ -11,34 +11,34 @@ describe('findOneEntity', () => {
         cy
           .findAllEntityAdmin(IMAGE_POST)
           .then(($body) =>
-            $body.body.forEach((entityAdmin: EntityAdminDto) =>
-              cy.deleteEntityAdmin(entityAdmin.type, entityAdmin.id)
+            $body.body.forEach((entity: Entity) =>
+              cy.deleteEntityAdmin(entity.type, entity.id!)
             )
           )
       )
   );
 
   it('return application/json', () => {
-    cy.createMediaProcessAdmin(IMAGE_POST, { slug: 'test-image-post-1' })
-      .then(($body) => $body.body as EntityAdminDto)
-      .then((entity) => cy.findOneEntityAdmin(IMAGE_POST, entity.id))
+    cy.createImagePostAdmin({ slug: 'test-image-post-1' })
+      .then(($body) => $body.body as Entity)
+      .then((entity) => cy.findOneEntityAdmin(IMAGE_POST, entity.id!))
       .its('headers')
       .its('content-type')
       .should('include', 'application/json');
   });
 
   it('find a created entity', () => {
-    cy.createMediaProcessAdmin(IMAGE_POST, { slug: 'test-image-post-1' })
-      .then(($body) => $body.body as EntityAdminDto)
-      .then((entity) => cy.findOneEntityAdmin(IMAGE_POST, entity.id))
+    cy.createImagePostAdmin({ slug: 'test-image-post-1' })
+      .then(($body) => $body.body as Entity)
+      .then((entity) => cy.findOneEntityAdmin(IMAGE_POST, entity.id!))
       .its('body.slug')
       .should('equal', 'test-image-post-1');
   });
 
   it('return a status of 200 when find an entity', () => {
-    cy.createMediaProcessAdmin(IMAGE_POST, { slug: 'test-image-post-1' })
-      .then(($body) => $body.body as EntityAdminDto)
-      .then((entity) => cy.findOneEntityAdmin(IMAGE_POST, entity.id))
+    cy.createImagePostAdmin({ slug: 'test-image-post-1' })
+      .then(($body) => $body.body as Entity)
+      .then((entity) => cy.findOneEntityAdmin(IMAGE_POST, entity.id!))
       .its('status')
       .should('equal', 200);
   });

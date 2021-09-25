@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -13,8 +13,8 @@ import {
   validateEntityIsPublic,
 } from '../entities/entity-validation.functions';
 import {
-  validateImageFound,
-  validateImageNotPublished,
+  validateImageFoundInEntity,
+  validateImagePublic,
 } from '../content/image-validation.functions';
 import { loadImage, loadPublicImage } from '../content/image.functions';
 
@@ -67,15 +67,54 @@ export class ImageProvider {
     );
   }
 
+  clone$(
+    previousImage: Image,
+    newId: string,
+    newState: MediaState,
+    imageUpdate: ImageUpdateDto
+  ): Observable<Image> {
+    this.logger.log(`Cloning ${previousImage.fileName}`);
+    return from(this.entityModel.findById(previousImage.entityId)).pipe(
+      map(validateEntityFound),
+      concatMap((documentModel) =>
+        from(
+          this.entityModel.findByIdAndUpdate(previousImage.entityId, {
+            images: [
+              ...documentModel.images,
+              {
+                id: newId,
+                entityId: previousImage.entityId,
+                state: newState,
+                blobPathId: uuidv4(),
+                fileName: imageUpdate.fileName,
+                order: imageUpdate.order,
+                isStarred: imageUpdate.isStarred,
+                isLoved: imageUpdate.isLoved,
+                title: imageUpdate.title,
+                seoDescription: imageUpdate.seoDescription,
+                seoKeywords: imageUpdate.seoKeywords,
+                dateCreated: imageUpdate.dateCreated,
+                datePublished: imageUpdate.datePublished,
+                isThreeSixty: previousImage.isThreeSixty,
+              },
+            ],
+          })
+        )
+      ),
+      concatMap(() => this.findOne$(newId, previousImage.entityId))
+    );
+  }
+
   update$(
     id: string,
     entityId: string,
     imageUpdate: ImageUpdateDto
   ): Observable<DocumentModel> {
+    this.logger.log(`Updating ${imageUpdate.fileName}`);
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundImage = validateImageFound(id, documentModel);
+        const foundImage = validateImageFoundInEntity(id, documentModel);
         return from(
           this.entityModel.findByIdAndUpdate(entityId, {
             images: [
@@ -92,7 +131,7 @@ export class ImageProvider {
                 title: imageUpdate.title,
                 seoDescription: imageUpdate.seoDescription,
                 seoKeywords: imageUpdate.seoKeywords,
-                dateCreated: foundImage.dateCreated,
+                dateCreated: imageUpdate.dateCreated,
                 datePublished: imageUpdate.datePublished,
                 isThreeSixty: foundImage.isThreeSixty,
               },
@@ -108,7 +147,7 @@ export class ImageProvider {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        return loadImage(validateImageFound(id, documentModel));
+        return loadImage(validateImageFoundInEntity(id, documentModel));
       })
     );
   }
@@ -117,8 +156,8 @@ export class ImageProvider {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map(validateEntityIsPublic),
-      map((documentModel) => validateImageFound(id, documentModel)),
-      map(validateImageNotPublished),
+      map((documentModel) => validateImageFoundInEntity(id, documentModel)),
+      map(validateImagePublic),
       map(loadPublicImage)
     );
   }
@@ -129,24 +168,10 @@ export class ImageProvider {
     previousState: MediaState,
     newState: MediaState
   ): Observable<DocumentModel> {
-    if (
-      !(
-        (previousState === MediaState.New &&
-          newState === MediaState.Selected) ||
-        (previousState === MediaState.Selected &&
-          newState === MediaState.Published) ||
-        (previousState === MediaState.Published &&
-          newState === MediaState.Archived) ||
-        (previousState === MediaState.Archived &&
-          newState === MediaState.Published)
-      )
-    ) {
-      throw new ConflictException('Invalid change in state');
-    }
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const foundImage = validateImageFound(id, documentModel);
+        const foundImage = validateImageFoundInEntity(id, documentModel);
         return from(
           this.entityModel.findByIdAndUpdate(entityId, {
             images: [

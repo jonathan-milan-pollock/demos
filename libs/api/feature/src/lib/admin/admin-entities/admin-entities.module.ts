@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
   AboutProvider,
@@ -8,9 +7,9 @@ import {
   DestinationProvider,
   Document,
   DocumentSchema,
-  EntityLoadProvider,
+  EntityGroupProvider,
+  EntityProvider,
   EntityPublishProvider,
-  EntityPushNotificationsTable,
   EntitySocialMediaPostProvider,
   EventProvider,
   FavoritesProvider,
@@ -24,9 +23,6 @@ import {
   PhotoOfTheWeekProvider,
   ReviewMediaProvider,
   ReviewProvider,
-  SharedPhotoAlbumLoadProvider,
-  SharedPhotoAlbumProvider,
-  SharedPhotoAlbumPublishProvider,
   SocialMediaProvider,
   VideoProvider,
   VideoRemoveProvider,
@@ -39,15 +35,12 @@ import { AdminEntitiesController } from './admin-entities.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(EntityPushNotificationsTable, {
-      table: 'EntityPushNotifications',
-      createTableIfNotExists: true,
-    }),
   ],
   controllers: [AdminEntitiesController],
   providers: [
     AdminEntitiesService,
-    EntityLoadProvider,
+    EntityProvider,
+    EntityGroupProvider,
     EntityPublishProvider,
     EntitySocialMediaPostProvider,
     AboutProvider,
@@ -58,9 +51,6 @@ import { AdminEntitiesController } from './admin-entities.controller';
     PhotoOfTheWeekProvider,
     ReviewMediaProvider,
     ReviewProvider,
-    SharedPhotoAlbumProvider,
-    SharedPhotoAlbumLoadProvider,
-    SharedPhotoAlbumPublishProvider,
     SocialMediaProvider,
     ImageProvider,
     ImageDimensionProvider,
