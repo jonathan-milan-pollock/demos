@@ -4,14 +4,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
-  AboutProvider,
-  BestOfProvider,
-  DestinationProvider,
   Document,
   DocumentSchema,
   EntityPushNotificationsTable,
-  EventProvider,
-  FavoritesProvider,
   ImageDimensionProvider,
   ImageLoadNewProvider,
   ImageProcessNewProvider,
@@ -22,10 +17,6 @@ import {
   ImageTinifyProvider,
   ImageUpdateProvider,
   ImageUploadProvider,
-  PhotoOfTheWeekProvider,
-  ReviewMediaProvider,
-  ReviewProvider,
-  SocialMediaProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminImagesService } from './admin-images.service';
 import { AdminImagesController } from './admin-images.controller';
@@ -44,15 +35,6 @@ import { AdminImagesController } from './admin-images.controller';
   controllers: [AdminImagesController],
   providers: [
     AdminImagesService,
-    AboutProvider,
-    BestOfProvider,
-    DestinationProvider,
-    EventProvider,
-    FavoritesProvider,
-    PhotoOfTheWeekProvider,
-    ReviewMediaProvider,
-    ReviewProvider,
-    SocialMediaProvider,
     ImageProvider,
     ImageDimensionProvider,
     ImageLoadNewProvider,

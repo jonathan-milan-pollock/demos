@@ -11,8 +11,6 @@ import { Type } from 'class-transformer';
 
 import { LocationDto } from './location.dto';
 import { ImageMinimalDto } from './image-minimal.dto';
-import { CommentDto } from './comment.dto';
-import { EmotionDto } from './emotion.dto';
 
 export class EventDto {
   @IsNumberString()
@@ -52,14 +50,4 @@ export class EventDto {
   @ValidateNested({ each: true })
   @Type(() => ImageMinimalDto)
   images: ImageMinimalDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CommentDto)
-  comments: CommentDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
 }

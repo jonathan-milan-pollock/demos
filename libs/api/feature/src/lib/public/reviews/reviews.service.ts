@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { map, Observable, toArray } from 'rxjs';
+import { Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
@@ -9,8 +9,7 @@ import { ReviewDto } from '@dark-rush-photography/api/types';
 import {
   DocumentModel,
   Document,
-  EntityPublicProvider,
-  ReviewProvider,
+  EntityFindAllPublicProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -18,13 +17,12 @@ export class ReviewsService {
   constructor(
     @InjectModel(Document.name)
     private readonly reviewModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityPublicProvider,
-    private readonly reviewProvider: ReviewProvider
+    private readonly entityPublicProvider: EntityFindAllPublicProvider
   ) {}
 
   findAll$(): Observable<ReviewDto[]> {
-    return this.entityProvider
+    return this.entityPublicProvider
       .findAllPublic$(EntityType.Review, this.reviewModel)
-      .pipe(map(this.reviewProvider.loadReviewPublic), toArray<ReviewDto>());
+      .pipe(toArray<ReviewDto>());
   }
 }

@@ -1,7 +1,7 @@
 import {
   Entity,
-  EntityCreate,
   EntityType,
+  WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
@@ -16,14 +16,16 @@ import { loadVideo } from '../content/video.functions';
 
 export const loadNewEntity = (
   entityType: EntityType,
-  entityCreate: EntityCreate,
+  watermarkedType: WatermarkedType,
+  group: string,
+  slug: string,
   googleDriveFolderId?: string
 ): Entity => ({
   type: entityType,
   googleDriveFolderId,
-  watermarkedType: entityCreate.watermarkedType,
-  group: entityCreate.group,
-  slug: entityCreate.slug,
+  watermarkedType,
+  group,
+  slug,
   order: 0,
   title: '',
   seoDescription: '',
@@ -38,7 +40,7 @@ export const loadNewEntity = (
   videos: [],
   comments: [],
   emotions: [],
-  isPublic: entityCreate.isPublic,
+  isPublic: false,
   isPublishing: false,
   isPublished: false,
 });

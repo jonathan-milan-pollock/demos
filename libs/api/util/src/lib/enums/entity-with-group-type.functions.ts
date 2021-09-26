@@ -3,6 +3,9 @@ import { BadRequestException } from '@nestjs/common';
 import {
   EntityType,
   EntityWithGroupType,
+  EVENT_FOLDER_NAME,
+  PHOTO_OF_THE_WEEK_FOLDER_NAME,
+  SOCIAL_MEDIA_FOLDER_NAME,
 } from '@dark-rush-photography/shared/types';
 
 const entityToEntityWithGroupTypeMap = new Map<EntityType, EntityWithGroupType>(
@@ -13,10 +16,18 @@ const entityToEntityWithGroupTypeMap = new Map<EntityType, EntityWithGroupType>(
   ]
 );
 
+const entityWithGroupToEntityTypeMap = new Map<EntityWithGroupType, EntityType>(
+  [
+    [EntityWithGroupType.Event, EntityType.Event],
+    [EntityWithGroupType.PhotoOfTheWeek, EntityType.PhotoOfTheWeek],
+    [EntityWithGroupType.SocialMedia, EntityType.SocialMedia],
+  ]
+);
+
 const entityWithGroupTypeFolderNameMap = new Map<EntityWithGroupType, string>([
-  [EntityWithGroupType.Event, 'events'],
-  [EntityWithGroupType.PhotoOfTheWeek, 'photo-of-the-week'],
-  [EntityWithGroupType.SocialMedia, 'social-media'],
+  [EntityWithGroupType.Event, EVENT_FOLDER_NAME],
+  [EntityWithGroupType.PhotoOfTheWeek, PHOTO_OF_THE_WEEK_FOLDER_NAME],
+  [EntityWithGroupType.SocialMedia, SOCIAL_MEDIA_FOLDER_NAME],
 ]);
 
 export const getEntityHasGroup = (entityType: EntityType): boolean => {
@@ -24,15 +35,15 @@ export const getEntityHasGroup = (entityType: EntityType): boolean => {
   return !!entityWithGroupType;
 };
 
-export const getEntityWithGroupTypeFromEntityType = (
-  entityType: EntityType
-): EntityWithGroupType => {
-  const entityWithGroupType = entityToEntityWithGroupTypeMap.get(entityType);
-  if (!entityWithGroupType)
+export const getEntityTypeFromEntityWithGroupType = (
+  entityWithGroupType: EntityWithGroupType
+): EntityType => {
+  const entityType = entityWithGroupToEntityTypeMap.get(entityWithGroupType);
+  if (!entityType)
     throw new BadRequestException(
-      `Could not get entity with group for entity type ${entityType}`
+      `Could not get entity type for entity with group type ${entityWithGroupType}`
     );
-  return entityWithGroupType;
+  return entityType;
 };
 
 export const getEntityWithGroupTypeFolderName = (

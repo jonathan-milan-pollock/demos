@@ -3,10 +3,10 @@ import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  DestinationProvider,
   Document,
   DocumentSchema,
-  EntityPublicProvider,
+  EntityFindAllPublicProvider,
+  EntityFindOnePublicProvider,
 } from '@dark-rush-photography/api/data';
 import { DestinationsService } from './destinations.service';
 import { DestinationsController } from './destinations.controller';
@@ -19,6 +19,10 @@ import { DestinationsController } from './destinations.controller';
     ]),
   ],
   controllers: [DestinationsController],
-  providers: [DestinationsService, EntityPublicProvider, DestinationProvider],
+  providers: [
+    DestinationsService,
+    EntityFindAllPublicProvider,
+    EntityFindOnePublicProvider,
+  ],
 })
 export class DestinationsModule {}

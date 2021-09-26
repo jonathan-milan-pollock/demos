@@ -1,83 +1,19 @@
-import { BadRequestException } from '@nestjs/common';
-
 import { Env } from '@dark-rush-photography/api/types';
+import { loadEnvironment } from '@dark-rush-photography/api/util';
 import { environment } from '../environments/environment';
 
 export default (): Env => {
-  if (!process.env.NX_GOOGLE_DRIVE_CLIENT_EMAIL) {
-    throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_CLIENT_EMAIL to environment variables'
-    );
-  }
-
-  if (!process.env.NX_GOOGLE_DRIVE_PRIVATE_KEY) {
-    throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_PRIVATE_KEY to environment variables'
-    );
-  }
-
-  if (!process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID) {
-    throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID to environment variables'
-    );
-  }
-
-  if (!process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID) {
-    throw new BadRequestException(
-      'Please add NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID to environment variables'
-    );
-  }
-
-  if (!process.env.NX_MONGO_DB_CONNECTION_STRING) {
-    throw new BadRequestException(
-      'Please add NX_MONGO_DB_CONNECTION_STRING to environment variables'
-    );
-  }
-
-  if (!process.env.AZURE_STORAGE_CONNECTION_STRING) {
-    throw new BadRequestException(
-      'Please add AZURE_STORAGE_CONNECTION_STRING to environment variables'
-    );
-  }
-
-  if (!process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC) {
-    throw new BadRequestException(
-      'Please add AZURE_STORAGE_CONNECTION_STRING_PUBLIC to environment variables'
-    );
-  }
-
-  if (!process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC) {
-    throw new BadRequestException(
-      'Please add AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC to environment variables'
-    );
-  }
-
-  if (!process.env.NX_TINY_PNG_API_KEY) {
-    throw new BadRequestException(
-      'Please add NX_TINY_PNG_API_KEY to environment variables'
-    );
-  }
-
-  if (!process.env.NX_AYRSHARE_API_KEY) {
-    throw new BadRequestException(
-      'Please add NX_AYRSHARE_API_KEY to environment variables'
-    );
-  }
-
-  return {
-    production: environment.production,
-    googleDriveClientEmail: process.env.NX_GOOGLE_DRIVE_CLIENT_EMAIL,
-    googleDrivePrivateKey: process.env.NX_GOOGLE_DRIVE_PRIVATE_KEY,
-    googleDriveWebsitesWatermarkedFolderId:
-      process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID,
-    googleDriveWebsitesWithoutWatermarkFolderId:
-      process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID,
-    mongoDbConnectionString: process.env.NX_MONGO_DB_CONNECTION_STRING,
-    azureStorageConnectionStringPublic:
-      process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC,
-    azureStorageBlobContainerNamePublic:
-      process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC,
-    tinyPngApiKey: process.env.NX_TINY_PNG_API_KEY,
-    ayrshareApiKey: process.env.NX_AYRSHARE_API_KEY,
-  };
+  return loadEnvironment(
+    environment.production,
+    process.env.NX_GOOGLE_DRIVE_CLIENT_EMAIL,
+    process.env.NX_GOOGLE_DRIVE_PRIVATE_KEY,
+    process.env.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID,
+    process.env.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID,
+    process.env.NX_MONGO_DB_CONNECTION_STRING,
+    process.env.AZURE_STORAGE_CONNECTION_STRING,
+    process.env.AZURE_STORAGE_CONNECTION_STRING_PUBLIC,
+    process.env.AZURE_STORAGE_BLOB_CONTAINER_NAME_PUBLIC,
+    process.env.NX_TINY_PNG_API_KEY,
+    process.env.NX_AYRSHARE_API_KEY
+  );
 };

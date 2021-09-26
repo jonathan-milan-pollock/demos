@@ -31,7 +31,7 @@ export const findGoogleDriveFolderByName$ = (
   googleDrive: drive_v3.Drive,
   parentFolderId: string,
   folderName: string
-): Observable<GoogleDriveFolder> =>
+): Observable<GoogleDriveFolder | undefined> =>
   from(
     googleDrive.files.list({
       q: `'${parentFolderId}' in parents and trashed = false and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder'`,

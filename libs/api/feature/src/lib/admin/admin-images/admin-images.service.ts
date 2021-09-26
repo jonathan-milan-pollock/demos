@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { concatMap, from, map, Observable, of } from 'rxjs';
@@ -21,7 +21,6 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUpdateProvider,
-  ImageUploadProvider,
   loadImage,
   validateCanArchiveImage,
   validateCanSelectImage,
@@ -44,21 +43,10 @@ export class AdminImagesService {
     private readonly imageProvider: ImageProvider,
     private readonly imageDimensionProvider: ImageDimensionProvider,
     private readonly imageLoadNewProvider: ImageLoadNewProvider,
-    private readonly imageUploadProvider: ImageUploadProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider
   ) {
     this.logger = new Logger(AdminImagesService.name);
-  }
-
-  uploadThreeSixtyImage$(
-    entityId: string,
-    fileName: string,
-    file: Express.Multer.File
-  ): Observable<Image> {
-    return this.imageUploadProvider
-      .upload$(entityId, fileName, true, file)
-      .pipe(concatMap((image) => this.findOne$(image.id, image.entityId)));
   }
 
   update$(
@@ -147,13 +135,15 @@ export class AdminImagesService {
               documentModel.slug
             )
             .pipe(
-              concatMap((newImagesFolder) =>
-                this.imageLoadNewProvider.loadNewImages$(
+              concatMap((newImagesFolder) => {
+                if (!newImagesFolder) return [];
+
+                return this.imageLoadNewProvider.loadNewImages$(
                   googleDrive,
                   entityId,
                   newImagesFolder
-                )
-              )
+                );
+              })
             );
         }
         return of(documentModel);
