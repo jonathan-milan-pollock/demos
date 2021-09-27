@@ -6,11 +6,12 @@ import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
+  Image,
   ImageDimension,
   ImageDimensionType,
   ThreeSixtySettings,
   MediaResolution,
-  Media,
+  ImageUpdate,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -113,19 +114,19 @@ export class ImageDimensionProvider {
   }
 
   updateBlobPath$(
-    media: Media,
-    updateMedia: Media,
+    image: Image,
+    imageUpdate: ImageUpdate,
     imageDimension: ImageDimension
   ): Observable<void> {
     return downloadBlobToFile$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
       getAzureStorageBlobPathWithDimension(
-        media.blobPathId,
-        media.fileName,
+        image.blobPathId,
+        image.fileName,
         imageDimension.type
       ),
-      media.fileName
+      image.fileName
     ).pipe(
       /*
       tap(() =>
@@ -155,8 +156,8 @@ export class ImageDimensionProvider {
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           getAzureStorageBlobPathWithDimension(
-            media.blobPathId,
-            media.fileName,
+            image.blobPathId,
+            image.fileName,
             imageDimension.type
           )
         )

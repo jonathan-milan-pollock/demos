@@ -4,23 +4,20 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { from, map, Observable, of } from 'rxjs';
 
-import {
-  EntityPushNotification,
-  EntityPushNotificationType,
-} from '@dark-rush-photography/shared/types';
-import { EntityPushNotificationsTable } from '@dark-rush-photography/api/data';
+import { EntityPushNotificationType } from '@dark-rush-photography/shared/types';
+import { ImageProcessTable } from '@dark-rush-photography/api/data';
 import { WebSocketMessageProvider } from '@dark-rush-photography/api/data';
 
 @Injectable()
-export class EntitiesPushNotificationsService {
+export class ImageProcessProvider {
   private readonly logger: Logger;
 
   constructor(
-    @InjectRepository(EntityPushNotificationsTable)
-    private readonly entityPushNotificationsRepository: Repository<EntityPushNotificationsTable>,
+    @InjectRepository(ImageProcessTable)
+    private readonly entityPushNotificationsRepository: Repository<ImageProcessTable>,
     private readonly webSocketMessageProvider: WebSocketMessageProvider
   ) {
-    this.logger = new Logger(EntitiesPushNotificationsService.name);
+    this.logger = new Logger(ImageProcessProvider.name);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_4AM, {
@@ -31,13 +28,13 @@ export class EntitiesPushNotificationsService {
     this.logger.log('remove entries in entity push notifications table');
   }
 
-  create$(entityPushNotification: EntityPushNotification): Observable<void> {
+  create$(): Observable<void> {
     return from(
       this.entityPushNotificationsRepository.findAll(
         this.entityPushNotificationsRepository.where(
-          'key == ? and token == ?',
-          entityPushNotification.channelId,
-          entityPushNotification.channelToken
+          'key == ? and token == ?'
+          //entityPushNotification.channelId,
+          //entityPushNotification.channelToken
         )
       )
     ).pipe(
@@ -46,12 +43,12 @@ export class EntitiesPushNotificationsService {
           return of(undefined);
         }
 
-        if (
-          entityPushNotification.resourceState ===
-          EntityPushNotificationType.Add
-        ) {
-          this.webSocketMessageProvider.sendMessage(`adding image`);
-        }
+        //if (
+        //  entityPushNotification.resourceState ===
+        //  EntityPushNotificationType.Add
+        //) {
+        //  this.webSocketMessageProvider.sendMessage(`adding image`);
+        // }
       }),
       map(() => undefined)
     );

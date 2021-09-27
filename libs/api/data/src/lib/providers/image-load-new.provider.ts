@@ -20,8 +20,7 @@ import {
   getOrderFromGoogleDriveImageFileName,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { EntityPushNotificationsTable } from '../tables/entity-push-notifications.table';
-import { loadMedia } from '../content/media.functions';
+import { ImageProcessTable } from '../tables/image-process.table';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { ImageProvider } from './image.provider';
 import { ImageProcessNewProvider } from './image-process-new.provider';
@@ -35,8 +34,8 @@ export class ImageLoadNewProvider {
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
 
-    @InjectRepository(EntityPushNotificationsTable)
-    private readonly entityPushNotificationsRepository: Repository<EntityPushNotificationsTable>,
+    @InjectRepository(ImageProcessTable)
+    private readonly entityPushNotificationsRepository: Repository<ImageProcessTable>,
     private readonly imageProvider: ImageProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider,
     private readonly imageProcessNewProvider: ImageProcessNewProvider
@@ -154,13 +153,10 @@ export class ImageLoadNewProvider {
                         this.imageProcessNewProvider.loadNewImage$(
                           googleDrive,
                           imageFile.id,
-                          loadMedia(
-                            image.id,
-                            image.entityId,
-                            image.state,
-                            image.blobPathId,
-                            image.fileName
-                          )
+                          image.id,
+                          image.entityId,
+                          image.blobPathId,
+                          image.fileName
                         )
                       )
                     );
@@ -175,7 +171,7 @@ export class ImageLoadNewProvider {
   }
 
   createImageProcess$(entityId: string): Observable<void> {
-    const channel = new EntityPushNotificationsTable();
+    const channel = new ImageProcessTable();
     channel.key = entityId;
 
     return from(

@@ -4,7 +4,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { combineLatest, concatMap, map, Observable, of, tap } from 'rxjs';
 
 import { ImageDimensionConfig } from '@dark-rush-photography/shared/types';
-import { Media } from '@dark-rush-photography/shared/types';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
@@ -23,22 +22,21 @@ export class ImageResizeProvider {
   }
 
   resize$(
-    media: Media,
+    blobPathId: string,
+    fileName: string,
     imageResolution: ImageDimensionConfig
   ): Observable<string> {
     return downloadBlobToFile$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
-      getAzureStorageBlobPath(media.blobPathId, media.fileName),
-      media.fileName
+      getAzureStorageBlobPath(blobPathId, fileName),
+      fileName
     ).pipe(
       tap(() =>
-        this.logger.log(
-          `Resizing ${imageResolution.type} image ${media.fileName}`
-        )
+        this.logger.log(`Resizing ${imageResolution.type} image ${fileName}`)
       ),
       concatMap((filePath) =>
-        resizeImage$(media.fileName, filePath, imageResolution)
+        resizeImage$(fileName, filePath, imageResolution)
       ),
       concatMap((filePath) =>
         combineLatest([
@@ -48,8 +46,8 @@ export class ImageResizeProvider {
             this.configProvider.azureStorageBlobContainerNamePublic,
             fs.createReadStream(filePath),
             getAzureStorageBlobPathWithDimension(
-              media.blobPathId,
-              media.fileName,
+              blobPathId,
+              fileName,
               imageResolution.type
             )
           ),

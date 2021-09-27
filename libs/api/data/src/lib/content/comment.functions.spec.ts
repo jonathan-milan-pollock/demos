@@ -5,10 +5,10 @@ import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { findPublicComments, loadComment } from './comment.functions';
 
 describe('comment.functions', () => {
-  const mockUser: User = {
+  const user: User = {
     email: faker.internet.email(),
     name: faker.name.findName(faker.name.firstName(), faker.name.lastName()),
-    image: faker.image.dataUri(),
+    imageUrl: faker.image.dataUri(),
   };
 
   const comment: Comment = {
@@ -17,7 +17,7 @@ describe('comment.functions', () => {
     mediaId: faker.datatype.uuid(),
     order: faker.datatype.number(),
     user: {
-      ...mockUser,
+      ...user,
     },
     text: faker.lorem.sentence(),
   };
