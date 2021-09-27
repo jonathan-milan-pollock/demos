@@ -50,7 +50,7 @@ export class EntityUpdateDto implements EntityUpdate {
   location?: LocationDto;
 
   @IsBoolean()
-  photoAlbumImageIsCentered!: boolean;
+  starredImageIsCentered!: boolean;
 
   @IsArray()
   @ValidateNested({ each: true })

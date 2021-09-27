@@ -1,5 +1,5 @@
 import { ImageDimensionType } from '@dark-rush-photography/shared/types';
-import { mediaResolutionSchema } from './media-resolution.schema';
+import { resolutionSchema } from './resolution.schema';
 import { threeSixtySettingsSchema } from './three-sixty-settings.schema';
 
 export const imageDimensionSchema = {
@@ -11,7 +11,7 @@ export const imageDimensionSchema = {
     enum: Object.keys(ImageDimensionType),
     required: true,
   },
-  resolution: { type: mediaResolutionSchema, required: true },
+  resolution: { type: resolutionSchema, required: true },
   settings: {
     type: threeSixtySettingsSchema,
     required: false,

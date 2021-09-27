@@ -1,11 +1,11 @@
-import { MediaState } from '../enums/media-state.enum';
+import { ImageState } from '../enums/image-state.enum';
 
 export interface Image {
   readonly id: string;
   readonly entityId: string;
-  readonly state: MediaState;
   readonly blobPathId: string;
   readonly fileName: string;
+  readonly state: ImageState;
   readonly order: number;
   readonly isStarred: boolean;
   readonly isLoved: boolean;

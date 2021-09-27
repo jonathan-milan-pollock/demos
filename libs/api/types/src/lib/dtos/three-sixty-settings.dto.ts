@@ -10,5 +10,8 @@ export class ThreeSixtySettingsDto implements ThreeSixtySettings {
   yaw!: number;
 
   @IsNumber()
+  roll!: number;
+
+  @IsNumber()
   hfov!: number;
 }

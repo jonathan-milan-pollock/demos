@@ -1,9 +1,9 @@
-import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import { Image, ImageState } from '@dark-rush-photography/shared/types';
 import { ImageDto, ImageMinimalDto } from '@dark-rush-photography/api/types';
 
 export const findPublicImages = (images: Image[]): Image[] => {
   return images
-    .filter((image) => image.state === MediaState.Public)
+    .filter((image) => image.state === ImageState.Public)
     .map(loadImage);
 };
 

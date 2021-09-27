@@ -14,7 +14,7 @@ export class AsTheWindBlows extends PhotoOfTheWeekDto {
     stateOrProvince: 'Milan',
     country: 'Italy',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
 
   private constructor() {
     super();

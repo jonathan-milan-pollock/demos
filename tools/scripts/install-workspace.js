@@ -295,6 +295,7 @@ const execAddApiDependencies = (isReady) =>
     .then(() => console.log())
     .then(() => consoleLogOrExec(isReady, 'npm i -D @types/multer'))
     .then(() => consoleLogOrExec(isReady, 'npm i -D @nestjs/testing'))
+    .then(() => consoleLogOrExec(isReady, 'npm i -D mockingoose'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/swagger'))
     .then(() => consoleLogOrExec(isReady, 'npm i swagger-ui-express'))
     .then(() => consoleLogOrExec(isReady, 'npm i @nestjs/mongoose'))

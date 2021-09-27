@@ -4,14 +4,14 @@ import { InjectRepository, Repository } from '@nestjs/azure-database';
 
 import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, last, map, Observable, of } from 'rxjs';
-import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
+import { Model } from 'mongoose';
 
 import {
   EntityType,
   FAVORITES_SLUG,
   GoogleDriveFolder,
-  MediaState,
+  ImageState,
   REVIEW_MEDIA_SLUG,
 } from '@dark-rush-photography/shared/types';
 import {
@@ -124,7 +124,7 @@ export class ImageLoadNewProvider {
     entityImagesFolder: GoogleDriveFolder
   ): Observable<void> {
     return this.imageRemoveProvider
-      .removeImages$(MediaState.New, entityId)
+      .removeImages$(ImageState.New, entityId)
       .pipe(
         concatMap(() =>
           getGoogleDriveImageFiles$(googleDrive, entityImagesFolder.id)
@@ -144,7 +144,7 @@ export class ImageLoadNewProvider {
                     .add$(
                       uuidv4(),
                       entityId,
-                      MediaState.New,
+                      ImageState.New,
                       imageFile.name,
                       order,
                       false

@@ -10,10 +10,3 @@ export const validateEntityDoesNotRequireGroup = (
     throw new BadRequestException(`Entity type ${entityType} requires a group`);
   }
 };
-
-export const validateEntityGroupProvided = (group?: string): string => {
-  if (!group) {
-    throw new BadRequestException('A group must be provided');
-  }
-  return group;
-};

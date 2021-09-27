@@ -9,7 +9,7 @@ import { drive_v3 } from 'googleapis';
 import {
   ImageDimensionType,
   Media,
-  MediaState,
+  ImageState,
 } from '@dark-rush-photography/shared/types';
 import {
   getAzureStorageBlobPath,
@@ -46,7 +46,7 @@ export class ImagePublishProvider {
   ): Observable<void> {
     const imagesToPublish = documentModel.images.filter(
       (image) =>
-        image.state === MediaState.Selected || image.state === MediaState.Public
+        image.state === ImageState.Selected || image.state === ImageState.Public
     );
     if (imagesToPublish.length === 0) return of(undefined);
 

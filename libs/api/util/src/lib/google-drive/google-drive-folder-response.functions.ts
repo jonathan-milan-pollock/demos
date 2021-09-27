@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 
 import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
 
@@ -15,7 +15,7 @@ export const findGoogleDriveFolderByNameResponse = (
       return response.data.files[0];
     }
     if (response.data.files.length > 1) {
-      throw new BadRequestException(
+      throw new ConflictException(
         `Found more that one Google Drive folder with name ${folderName}`
       );
     }

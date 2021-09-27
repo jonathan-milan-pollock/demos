@@ -8,7 +8,7 @@ import {
   Image,
   ImageDimension,
   ImageDimensionType,
-  MediaState,
+  ImageState,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
@@ -36,48 +36,48 @@ export const validateOneImage = (images: Image[]): Image => {
 };
 
 export const validateCanSelectImage = (image: Image): Image => {
-  if (image.state !== MediaState.New) {
+  if (image.state !== ImageState.New) {
     throw new ConflictException('Can only select new images');
   }
   return image;
 };
 
 export const validateCanMakeImagePublic = (image: Image): Image => {
-  if (image.state !== MediaState.Selected) {
+  if (image.state !== ImageState.Selected) {
     throw new ConflictException('Can only make selected images public');
   }
   return image;
 };
 
 export const validateCanArchiveImage = (image: Image): Image => {
-  if (image.state !== MediaState.Public) {
+  if (image.state !== ImageState.Public) {
     throw new ConflictException('Can only archive public images');
   }
   return image;
 };
 
 export const validateCanUnarchiveImage = (image: Image): Image => {
-  if (image.state !== MediaState.Archived) {
+  if (image.state !== ImageState.Archived) {
     throw new ConflictException('Can only unarchive archived images');
   }
   return image;
 };
 
 export const validateImagePublic = (image: Image): Image => {
-  if (image.state !== MediaState.Public) throw new NotFoundException();
+  if (image.state !== ImageState.Public) throw new NotFoundException();
   return image;
 };
 
 export const validateImageSelectedOrPublic = (image: Image): Image => {
   if (
-    !(image.state === MediaState.Selected || image.state === MediaState.Public)
+    !(image.state === ImageState.Selected || image.state === ImageState.Public)
   )
     throw new BadRequestException('Image must be selected or public');
   return image;
 };
 
 export const validateImageWithFileNameNotAlreadyExists = (
-  state: MediaState,
+  state: ImageState,
   fileName: string,
   documentModel: DocumentModel
 ): DocumentModel => {

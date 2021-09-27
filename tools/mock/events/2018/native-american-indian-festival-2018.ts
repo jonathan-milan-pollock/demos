@@ -23,7 +23,7 @@ export class NativeAmericanIndianFestival2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
   text = [
     `
       "For the last several years, I've had the opportunity to "

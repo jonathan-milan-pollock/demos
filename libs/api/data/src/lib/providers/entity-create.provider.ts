@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, Observable, of } from 'rxjs';
-import { Model } from 'mongoose';
+import { concatMap, from, last, map, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
+import { Model } from 'mongoose';
 
 import {
   DEFAULT_ENTITY_GROUP,
@@ -16,7 +16,7 @@ import {
   getEntityTypeFromEntityWithGroupType,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { createWithEntityParentFolderId$ } from '../entities/entity-create.functions';
+import { createEntity$ } from '../entities/entity-create.functions';
 import { ConfigProvider } from './config.provider';
 
 @Injectable()
@@ -24,9 +24,9 @@ export class EntityCreateProvider {
   private readonly logger: Logger;
 
   constructor(
+    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly configProvider: ConfigProvider
+    private readonly entityModel: Model<DocumentModel>
   ) {
     this.logger = new Logger(EntityCreateProvider.name);
   }
@@ -48,14 +48,17 @@ export class EntityCreateProvider {
       concatMap((folder) => {
         if (!folder) return of(undefined);
 
-        return createWithEntityParentFolderId$(
-          this.entityModel,
+        return createEntity$(
           googleDrive,
           folder.id,
+          this.entityModel,
           entityType,
           watermarkedType,
           DEFAULT_ENTITY_GROUP,
           slug
+        ).pipe(
+          last(),
+          map(() => undefined)
         );
       })
     );
@@ -82,13 +85,16 @@ export class EntityCreateProvider {
           concatMap((groupFolder) => {
             if (!groupFolder) return of(undefined);
 
-            return createWithEntityParentFolderId$(
-              this.entityModel,
+            return createEntity$(
               googleDrive,
               groupFolder.id,
+              this.entityModel,
               getEntityTypeFromEntityWithGroupType(entityWithGroupType),
               watermarkedType,
               group
+            ).pipe(
+              last(),
+              map(() => undefined)
             );
           })
         );

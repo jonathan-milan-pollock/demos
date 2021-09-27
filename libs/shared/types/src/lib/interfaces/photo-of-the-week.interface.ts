@@ -14,7 +14,7 @@ export interface PhotoOfTheWeek {
   readonly seoKeywords: string[];
   readonly datePublished?: string;
   readonly location?: Location;
-  readonly photoAlbumImageIsCentered: boolean;
+  readonly starredImageIsCentered: boolean;
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];

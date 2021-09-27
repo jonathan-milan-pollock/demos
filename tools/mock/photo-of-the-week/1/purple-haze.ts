@@ -10,7 +10,7 @@ export class PurpleHaze extends PhotoOfTheWeekDto {
   dateCreated = new Date(2019, 6, 29).toISOString().substring(0, 10);
   datePublished = new Date(2019, 6, 29).toISOString().substring(0, 10);
   location = { stateOrProvince: 'Wisconsin', country: 'United States' };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
 
   private constructor() {
     super();

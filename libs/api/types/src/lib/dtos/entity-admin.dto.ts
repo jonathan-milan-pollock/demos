@@ -75,7 +75,7 @@ export class EntityAdminDto implements Entity {
   location?: LocationDto;
 
   @IsBoolean()
-  photoAlbumImageIsCentered!: boolean;
+  starredImageIsCentered!: boolean;
 
   @IsArray()
   @ValidateNested({ each: true })

@@ -25,7 +25,7 @@ export class ThomasEdisonFuture extends PhotoOfTheWeekDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
 
   private constructor() {
     super();

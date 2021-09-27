@@ -1,7 +1,10 @@
-import { Entity } from '@dark-rush-photography/shared/types';
+import {
+  DUMMY_MONGODB_ID,
+  Entity,
+  EntityType,
+} from '@dark-rush-photography/shared/types';
 
-const IMAGE_POST = 'ImagePost';
-const DUMMY_MONGODB_ID = '000000000000000000000000';
+import { getAuthHeadersAdmin } from '../../../../support/commands/api/auth-headers.functions';
 
 describe('findOneEntity', () => {
   beforeEach(() =>
@@ -9,7 +12,7 @@ describe('findOneEntity', () => {
       .loginAdmin()
       .then(() =>
         cy
-          .findAllEntityAdmin(IMAGE_POST)
+          .findAllEntityAdmin(getAuthHeadersAdmin(), EntityType.ImagePost)
           .then(($body) =>
             $body.body.forEach((entity: Entity) =>
               cy.deleteEntityAdmin(entity.type, entity.id!)

@@ -1,6 +1,6 @@
-import { IsEnum, IsMongoId, IsString, IsUUID } from 'class-validator';
+import { IsMongoId, IsString, IsUUID } from 'class-validator';
 
-import { MediaState, Video } from '@dark-rush-photography/shared/types';
+import { Video } from '@dark-rush-photography/shared/types';
 
 export class VideoDto implements Video {
   @IsUUID()
@@ -8,9 +8,6 @@ export class VideoDto implements Video {
 
   @IsMongoId()
   entityId!: string;
-
-  @IsEnum(MediaState)
-  state!: MediaState;
 
   @IsUUID()
   blobPathId!: string;

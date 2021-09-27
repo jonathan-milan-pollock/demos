@@ -10,7 +10,7 @@ export interface EntityUpdate {
   readonly dateCreated?: string;
   readonly datePublished?: string;
   readonly location?: Location;
-  readonly photoAlbumImageIsCentered: boolean;
+  readonly starredImageIsCentered: boolean;
   readonly text: string[];
   readonly isPublic: boolean;
 }

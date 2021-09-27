@@ -23,7 +23,7 @@ export class AintNoMountainHighEnough extends PhotoOfTheWeekDto {
     stateOrProvince: 'Colorado',
     country: 'United States',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
   text = [
     `I held onto this Coke bottle like it was my wubby
     for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park.

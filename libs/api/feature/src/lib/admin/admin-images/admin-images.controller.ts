@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 import {
   Image,
   ImageDimensionType,
-  MediaState,
+  ImageState,
 } from '@dark-rush-photography/shared/types';
 import {
   ImageAdminDto,
@@ -76,13 +76,13 @@ export class AdminImagesController {
   @AdminRole()
   @ApiQuery({
     name: 'state',
-    enum: MediaState,
+    enum: ImageState,
   })
   @Get()
   @ApiOkResponse({ type: [ImageAdminDto] })
   findAll$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Query('state', new ParseEnumPipe(MediaState)) state: MediaState
+    @Query('state', new ParseEnumPipe(ImageState)) state: ImageState
   ): Observable<ImageAdminDto[]> {
     return this.adminImagesService.findAll$(entityId, state);
   }

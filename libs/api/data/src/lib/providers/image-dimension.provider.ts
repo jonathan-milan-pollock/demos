@@ -58,7 +58,7 @@ export class ImageDimensionProvider {
                 imageId,
                 type: type,
                 resolution,
-                threeSixtySettings: { pitch: 0, yaw: 0, hfov: 0 },
+                threeSixtySettings: { pitch: 0, yaw: 0, roll: 0, hfov: 0 },
               },
             ],
           })

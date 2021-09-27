@@ -40,7 +40,6 @@ import {
   validateEntityNotPublishing,
   validateEntityType,
   VideoRemoveProvider,
-  validateEntityGroupProvided,
   validateEntityDoesNotRequireGroup,
 } from '@dark-rush-photography/api/data';
 
@@ -157,33 +156,16 @@ export class AdminEntitiesService {
     entityWithGroupType: EntityWithGroupType,
     group: string
   ): Observable<EntityMinimal[]> {
-    validateEntityGroupProvided(group);
-
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
 
-    return this.entityGroupProvider
-      .createForGroup$(googleDrive, entityWithGroupType, group)
-      .pipe(
-        concatMap(() =>
-          from(
-            this.entityGroupProvider.findAllForGroup$(
-              entityWithGroupType,
-              group
-            )
-          )
-        ),
-        concatMap((documentModels) => {
-          if (documentModels.length === 0) return of([]);
-
-          return from(documentModels).pipe(
-            map(loadEntityMinimal),
-            toArray<EntityMinimalDto>()
-          );
-        })
-      );
+    return this.entityGroupProvider.findAllForGroup$(
+      googleDrive,
+      entityWithGroupType,
+      group
+    );
   }
 
   findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {

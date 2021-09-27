@@ -1,11 +1,11 @@
-import { MediaState } from '@dark-rush-photography/shared/types';
+import { ImageState } from '@dark-rush-photography/shared/types';
 
 export const imageSchema = {
   id: { type: String, required: true },
   entityId: { type: String, required: true },
   state: {
     type: String,
-    enum: Object.keys(MediaState),
+    enum: Object.keys(ImageState),
     required: true,
   },
   blobPathId: { type: String, required: true },

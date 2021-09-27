@@ -10,5 +10,5 @@ export class UserDto implements User {
   name!: string;
 
   @IsString()
-  image!: string;
+  imageUrl!: string;
 }

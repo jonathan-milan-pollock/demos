@@ -23,6 +23,7 @@ describe('image-dimension.functions', () => {
     threeSixtySettings: {
       pitch: faker.datatype.number(),
       yaw: faker.datatype.number(),
+      roll: faker.datatype.number(),
       hfov: faker.datatype.number(),
     },
   };

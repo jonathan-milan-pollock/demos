@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Model } from 'mongoose';
 import { concatMap, from, map, Observable } from 'rxjs';
 
-import { MediaState, Video } from '@dark-rush-photography/shared/types';
+import { Video } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { loadVideo } from '../content/video.functions';
@@ -28,7 +28,6 @@ export class VideoProvider {
               {
                 id,
                 entityId,
-                state: MediaState.Public,
                 blobPathId: uuidv4(),
                 fileName,
               },

@@ -26,7 +26,7 @@ export class EventMinimalDto {
   title!: string;
 
   @IsBoolean()
-  photoAlbumImageIsCentered!: boolean;
+  starredImageIsCentered!: boolean;
 
   @ValidateNested()
   @Type(() => ImageMinimalDto)

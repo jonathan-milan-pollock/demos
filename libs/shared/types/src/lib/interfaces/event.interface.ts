@@ -15,7 +15,7 @@ export interface Event {
   readonly dateCreated?: string;
   readonly datePublished?: string;
   readonly location?: Location;
-  readonly photoAlbumImageIsCentered: boolean;
+  readonly starredImageIsCentered: boolean;
   readonly text: string[];
   readonly images: Image[];
   readonly imageDimensions: ImageDimension[];

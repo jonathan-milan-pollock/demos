@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import { Image, ImageState } from '@dark-rush-photography/shared/types';
 import { ImageDto, ImageUpdateDto } from '@dark-rush-photography/api/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -32,7 +32,7 @@ export class ImageProvider {
   add$(
     id: string,
     entityId: string,
-    state: MediaState,
+    state: ImageState,
     fileName: string,
     order: number,
     isThreeSixty: boolean
@@ -70,7 +70,7 @@ export class ImageProvider {
   clone$(
     previousImage: Image,
     newId: string,
-    newState: MediaState,
+    newState: ImageState,
     imageUpdate: ImageUpdateDto
   ): Observable<Image> {
     this.logger.log(`Cloning ${previousImage.fileName}`);
@@ -165,8 +165,8 @@ export class ImageProvider {
   changeState$(
     id: string,
     entityId: string,
-    previousState: MediaState,
-    newState: MediaState
+    previousState: ImageState,
+    newState: ImageState
   ): Observable<DocumentModel> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),

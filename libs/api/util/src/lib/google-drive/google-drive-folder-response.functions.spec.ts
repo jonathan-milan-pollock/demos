@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 
 import * as faker from 'faker';
 
@@ -30,11 +30,13 @@ describe('google-drive-folder-response.functions', () => {
 
     it('should return a google drive folder with correct id', () => {
       const id = faker.datatype.uuid();
-      const folderName = faker.lorem.word();
-      const response = { data: { files: [{ id, name: folderName }] } };
+      const response = { data: { files: [{ id, name: faker.lorem.word() }] } };
 
-      const result = findGoogleDriveFolderByNameResponse(folderName, response);
-      expect(result.id).toBe(id);
+      const result = findGoogleDriveFolderByNameResponse(
+        faker.lorem.word(),
+        response
+      );
+      expect(result?.id).toBe(id);
     });
 
     it('should return a google drive folder with correct name', () => {
@@ -44,24 +46,22 @@ describe('google-drive-folder-response.functions', () => {
       };
 
       const result = findGoogleDriveFolderByNameResponse(folderName, response);
-      expect(result.name).toBe(folderName);
+      expect(result?.name).toBe(folderName);
     });
 
     it.each(couldNotFindFolderResponses)(
-      'should throw a bad request for %s',
+      'should be undefined for %s',
       ({ response }) => {
         const folderName = faker.lorem.word();
-        const result = () => {
-          findGoogleDriveFolderByNameResponse(folderName, response);
-        };
-        expect(result).toThrow(BadRequestException);
-        expect(result).toThrow(
-          `Could not find Google Drive folder ${folderName}`
+        const result = findGoogleDriveFolderByNameResponse(
+          folderName,
+          response
         );
+        expect(result).toBeUndefined();
       }
     );
 
-    it('should throw a bad request if more than 1 folder is returned', () => {
+    it('should throw a conflict exception if more than 1 folder is returned', () => {
       const folderName = faker.lorem.word();
       const response = {
         data: {
@@ -75,7 +75,7 @@ describe('google-drive-folder-response.functions', () => {
         findGoogleDriveFolderByNameResponse(folderName, response);
       };
 
-      expect(result).toThrow(BadRequestException);
+      expect(result).toThrow(ConflictException);
       expect(result).toThrow(
         `Found more that one Google Drive folder with name ${folderName}`
       );

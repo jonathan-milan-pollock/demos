@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import {
   Image,
   ImageDimensionType,
-  MediaState,
+  ImageState,
   ThreeSixtySettings,
 } from '@dark-rush-photography/shared/types';
 import { ImageUpdateDto } from '@dark-rush-photography/api/types';
@@ -116,11 +116,11 @@ export class AdminImagesService {
       .pipe(concatMap(() => this.findOne$(id, entityId)));
   }
 
-  findAll$(entityId: string, state: MediaState): Observable<Image[]> {
+  findAll$(entityId: string, state: ImageState): Observable<Image[]> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        if (state === MediaState.New) {
+        if (state === ImageState.New) {
           const googleDriveFolderId =
             validateEntityGoogleDriveFolderId(documentModel);
           const googleDrive = getGoogleDrive(

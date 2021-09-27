@@ -22,7 +22,7 @@ export class YouAlreadyAreHome extends PhotoOfTheWeekDto {
   dateCreated = new Date(2019, 4, 12).toISOString().substring(0, 10);
   datePublished = new Date(2019, 4, 12).toISOString().substring(0, 10);
   location = { place: 'Great Smoky Mountains', country: 'United States' };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
 
   private constructor() {
     super();

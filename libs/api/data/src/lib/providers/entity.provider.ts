@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { combineLatest, concatMap, from, Observable, of, toArray } from 'rxjs';
-import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
+import { Model } from 'mongoose';
 
 import {
   EntityType,
