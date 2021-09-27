@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { from, lastValueFrom, map, Observable, of, tap } from 'rxjs';
+import { from, lastValueFrom, map, tap } from 'rxjs';
 
 import { WebSocketClient } from '@dark-rush-photography/shared/types';
 

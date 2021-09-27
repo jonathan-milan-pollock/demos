@@ -62,7 +62,7 @@ describe('entity-validation.functions', () => {
       };
       expect(result).toThrow(BadRequestException);
       expect(result).toThrow(
-        `Found ${EntityType.BestOf} entity, expected ${entityType}`
+        `Entity was found as type ${EntityType.BestOf} not ${entityType}`
       );
     });
   });

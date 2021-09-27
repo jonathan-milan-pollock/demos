@@ -2,15 +2,15 @@ import * as fs from 'fs-extra';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
+import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
   Image,
   ImageDimension,
-  Media,
+  ImageUpdate,
 } from '@dark-rush-photography/shared/types';
-import { ImageUpdateDto } from '@dark-rush-photography/api/types';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
@@ -18,10 +18,9 @@ import {
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { loadMedia } from '../content/media.functions';
+import { ConfigProvider } from './config.provider';
 import { ImageDimensionProvider } from './image-dimension.provider';
 import { ImageProvider } from './image.provider';
-import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ImageChangeStateProvider {
@@ -39,31 +38,22 @@ export class ImageChangeStateProvider {
 
   changeState$(
     image: Image,
-    imageUpdate: ImageUpdateDto
+    imageUpdate: ImageUpdate
   ): Observable<DocumentModel> {
     if (image.fileName === imageUpdate.fileName) {
       return this.imageProvider.update$(image.id, image.entityId, imageUpdate);
     }
 
-    const media = loadMedia(
-      image.id,
-      image.entityId,
-      image.state,
-      image.blobPathId,
-      image.fileName
-    );
-    const mediaUpdate = loadMedia(
-      image.id,
-      image.entityId,
-      image.state,
-      image.blobPathId,
-      imageUpdate.fileName
-    );
-
+    const imageUpdateBlobPathId = uuidv4();
     return from(this.entityModel.findById(image.entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) =>
-        this.updateBlobPath$(media, mediaUpdate, documentModel.imageDimensions)
+        this.updateBlobPath$(
+          image,
+          imageUpdate,
+          imageUpdateBlobPathId,
+          documentModel.imageDimensions
+        )
       ),
       concatMap(() =>
         this.imageProvider.update$(image.id, image.entityId, imageUpdate)
@@ -72,22 +62,23 @@ export class ImageChangeStateProvider {
   }
 
   updateBlobPath$(
-    media: Media,
-    mediaUpdate: Media,
+    image: Image,
+    imageUpdate: ImageUpdate,
+    imageUpdateBlobPathId: string,
     imageDimensions: ImageDimension[]
   ): Observable<void> {
     return downloadBlobToFile$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
-      getAzureStorageBlobPath(media.blobPathId, media.fileName),
-      media.fileName
+      getAzureStorageBlobPath(image.blobPathId, image.fileName),
+      image.fileName
     ).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
-          getAzureStorageBlobPath(mediaUpdate.blobPathId, mediaUpdate.fileName)
+          getAzureStorageBlobPath(imageUpdateBlobPathId, imageUpdate.fileName)
         )
       ),
       concatMap(() => {
@@ -96,8 +87,8 @@ export class ImageChangeStateProvider {
         return from(imageDimensions).pipe(
           concatMap((imageDimension) =>
             this.imageDimensionProvider.updateBlobPath$(
-              media,
-              mediaUpdate,
+              image,
+              imageUpdate,
               imageDimension
             )
           )

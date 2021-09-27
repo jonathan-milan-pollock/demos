@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 import {
   Image,
   ImageDimension,
-  Media,
+  ImageUpdate,
 } from '@dark-rush-photography/shared/types';
 import { ImageUpdateDto } from '@dark-rush-photography/api/types';
 import {
@@ -19,7 +19,6 @@ import {
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { loadMedia } from '../content/media.functions';
 import { ImageDimensionProvider } from './image-dimension.provider';
 import { ImageProvider } from './image.provider';
 import { ConfigProvider } from './config.provider';
@@ -46,25 +45,10 @@ export class ImageUpdateProvider {
       return this.imageProvider.update$(image.id, image.entityId, imageUpdate);
     }
 
-    const media = loadMedia(
-      image.id,
-      image.entityId,
-      image.state,
-      image.blobPathId,
-      image.fileName
-    );
-    const mediaUpdate = loadMedia(
-      image.id,
-      image.entityId,
-      image.state,
-      image.blobPathId,
-      imageUpdate.fileName
-    );
-
     return from(this.entityModel.findById(image.entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) =>
-        this.updateBlobPath$(media, mediaUpdate, documentModel.imageDimensions)
+        this.updateBlobPath$(image, imageUpdate, documentModel.imageDimensions)
       ),
       concatMap(() =>
         this.imageProvider.update$(image.id, image.entityId, imageUpdate)
@@ -73,29 +57,29 @@ export class ImageUpdateProvider {
   }
 
   updateBlobPath$(
-    media: Media,
-    mediaUpdate: Media,
+    image: Image,
+    imageUpdate: ImageUpdate,
     imageDimensions: ImageDimension[]
   ): Observable<void> {
     return downloadBlobToFile$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
-      getAzureStorageBlobPath(media.blobPathId, media.fileName),
-      media.fileName
+      getAzureStorageBlobPath(image.blobPathId, image.fileName),
+      image.fileName
     ).pipe(
       concatMap((filePath) =>
         uploadStreamToBlob$(
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
-          getAzureStorageBlobPath(media.blobPathId, mediaUpdate.fileName)
+          getAzureStorageBlobPath(image.blobPathId, imageUpdate.fileName)
         )
       ),
       concatMap(() =>
         deleteBlob$(
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
-          getAzureStorageBlobPath(media.blobPathId, media.fileName)
+          getAzureStorageBlobPath(image.blobPathId, image.fileName)
         )
       ),
       concatMap(() => {
@@ -104,8 +88,8 @@ export class ImageUpdateProvider {
         return from(imageDimensions).pipe(
           concatMap((imageDimension) =>
             this.imageDimensionProvider.updateBlobPath$(
-              media,
-              mediaUpdate,
+              image,
+              imageUpdate,
               imageDimension
             )
           )

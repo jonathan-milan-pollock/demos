@@ -4,7 +4,7 @@ import { BlobUploadCommonResponse } from '@azure/storage-blob';
 
 import { concatMap, from, Observable, tap } from 'rxjs';
 
-import { Media } from '@dark-rush-photography/shared/types';
+import { Image } from '@dark-rush-photography/shared/types';
 import {
   downloadBlobToFile$,
   getAzureStorageBlobPath,
@@ -20,25 +20,28 @@ export class ImageTinifyProvider {
     this.logger = new Logger(ImageTinifyProvider.name);
   }
 
-  tinifyImage$(media: Media): Observable<BlobUploadCommonResponse> {
+  tinifyImage$(
+    blobPathId: string,
+    fileName: string
+  ): Observable<BlobUploadCommonResponse> {
     return downloadBlobToFile$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
-      getAzureStorageBlobPath(media.blobPathId, media.fileName),
-      media.fileName
+      getAzureStorageBlobPath(blobPathId, fileName),
+      fileName
     ).pipe(
       concatMap((filePath) => {
         const tinify = require('tinify');
         tinify.default.key = this.configProvider.tinyPngApiKey;
         return from(tinify.fromFile(filePath).toBuffer());
       }),
-      tap(() => this.logger.log(`Tinified image ${media.fileName}`)),
+      tap(() => this.logger.log(`Tinified image ${fileName}`)),
       concatMap((uint8Array) =>
         uploadBufferToBlob$(
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           Buffer.from(uint8Array as Uint8Array),
-          getAzureStorageBlobPath(media.blobPathId, media.fileName)
+          getAzureStorageBlobPath(blobPathId, fileName)
         )
       )
     );

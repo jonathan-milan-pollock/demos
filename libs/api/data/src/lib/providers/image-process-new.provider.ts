@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
-import { ImageDimensionType, Media } from '@dark-rush-photography/shared/types';
+import { ImageDimensionType } from '@dark-rush-photography/shared/types';
 import {
   downloadGoogleDriveImageFile,
   findImageResolution,
@@ -33,7 +33,10 @@ export class ImageProcessNewProvider {
   loadNewImage$(
     googleDrive: drive_v3.Drive,
     imageFileId: string,
-    media: Media
+    imageId: string,
+    entityId: string,
+    blobPathId: string,
+    fileName: string
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
 
@@ -43,17 +46,19 @@ export class ImageProcessNewProvider {
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
-          getAzureStorageBlobPath(media.blobPathId, media.fileName)
+          getAzureStorageBlobPath(blobPathId, fileName)
         )
       ),
-      concatMap(() => this.imageResizeProvider.resize$(media, smallResolution)),
+      concatMap(() =>
+        this.imageResizeProvider.resize$(blobPathId, fileName, smallResolution)
+      ),
       concatMap((filePath) => findImageResolution$(filePath)),
       concatMap((resolution) => {
         const imageDimensionId = uuidv4();
         return this.imageDimensionProvider.add$(
           imageDimensionId,
-          media.id,
-          media.entityId,
+          imageId,
+          entityId,
           smallResolution.type,
           resolution
         );
@@ -62,23 +67,31 @@ export class ImageProcessNewProvider {
     );
   }
 
-  upload$(media: Media, file: Express.Multer.File): Observable<void> {
+  upload$(
+    imageId: string,
+    entityId: string,
+    blobPathId: string,
+    fileName: string,
+    file: Express.Multer.File
+  ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
 
     return uploadBufferToBlob$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
       file.buffer,
-      getAzureStorageBlobPath(media.blobPathId, media.fileName)
+      getAzureStorageBlobPath(blobPathId, fileName)
     ).pipe(
-      concatMap(() => this.imageResizeProvider.resize$(media, smallResolution)),
+      concatMap(() =>
+        this.imageResizeProvider.resize$(blobPathId, fileName, smallResolution)
+      ),
       concatMap((filePath) => findImageResolution$(filePath)),
       concatMap((resolution) => {
         const imageDimensionId = uuidv4();
         return this.imageDimensionProvider.add$(
           imageDimensionId,
-          media.id,
-          media.entityId,
+          imageId,
+          entityId,
           smallResolution.type,
           resolution
         );

@@ -8,7 +8,6 @@ import { drive_v3 } from 'googleapis';
 
 import {
   ImageDimensionType,
-  Media,
   ImageState,
 } from '@dark-rush-photography/shared/types';
 import {
@@ -73,7 +72,10 @@ export class ImagePublishProvider {
   publishImage$(
     googleDrive: drive_v3.Drive,
     imageFileId: string,
-    media: Media
+    imageId: string,
+    entityId: string,
+    blobPathId: string,
+    fileName: string
   ): Observable<void> {
     const smallResolution = findImageResolution(ImageDimensionType.Small);
     const id = uuidv4();
@@ -83,17 +85,21 @@ export class ImagePublishProvider {
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic,
           fs.createReadStream(filePath),
-          getAzureStorageBlobPath(media.blobPathId, media.fileName)
+          getAzureStorageBlobPath(blobPathId, fileName)
         )
       ),
-      concatMap(() => this.tinifyImageProvider.tinifyImage$(media)),
-      concatMap(() => this.resizeImageProvider.resize$(media, smallResolution)),
+      concatMap(() =>
+        this.tinifyImageProvider.tinifyImage$(blobPathId, fileName)
+      ),
+      concatMap(() =>
+        this.resizeImageProvider.resize$(blobPathId, fileName, smallResolution)
+      ),
       concatMap(([filePath]) => findImageResolution$(filePath)),
       concatMap((resolution) =>
         this.imageDimensionProvider.add$(
           id,
-          media.id,
-          media.entityId,
+          imageId,
+          entityId,
           smallResolution.type,
           resolution
         )

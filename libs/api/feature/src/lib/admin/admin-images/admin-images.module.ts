@@ -6,10 +6,10 @@ import { AzureTableStorageModule } from '@nestjs/azure-database';
 import {
   Document,
   DocumentSchema,
-  EntityPushNotificationsTable,
   ImageDimensionProvider,
   ImageLoadNewProvider,
   ImageProcessNewProvider,
+  ImageProcessTable,
   ImageProvider,
   ImagePublishProvider,
   ImageRemoveProvider,
@@ -27,8 +27,8 @@ import { AdminImagesController } from './admin-images.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(EntityPushNotificationsTable, {
-      table: 'EntityPushNotifications',
+    AzureTableStorageModule.forFeature(ImageProcessTable, {
+      table: 'ImageProcess',
       createTableIfNotExists: true,
     }),
   ],

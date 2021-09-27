@@ -9,5 +9,5 @@ import {
 export class UserTable {
   @EntityString() email!: string;
   @EntityString() name!: string;
-  @EntityString() image!: string;
+  @EntityString() imageUrl!: string;
 }

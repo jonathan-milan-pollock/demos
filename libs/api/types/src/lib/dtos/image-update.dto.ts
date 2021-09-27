@@ -7,7 +7,9 @@ import {
   Min,
 } from 'class-validator';
 
-export class ImageUpdateDto {
+import { ImageUpdate } from '@dark-rush-photography/shared/types';
+
+export class ImageUpdateDto implements ImageUpdate {
   @IsString()
   fileName!: string;
 

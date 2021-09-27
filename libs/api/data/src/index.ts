@@ -6,7 +6,6 @@ export * from './lib/content/emotion.functions';
 export * from './lib/content/image-dimension.functions';
 export * from './lib/content/image-validation.functions';
 export * from './lib/content/image.functions';
-export * from './lib/content/media.functions';
 export * from './lib/content/public-content.functions';
 export * from './lib/content/video-validation.functions';
 export * from './lib/content/video.functions';
@@ -47,5 +46,5 @@ export * from './lib/providers/web-socket-message.provider';
 export * from './lib/schema/document.schema';
 
 // tables
-export * from './lib/tables/entity-push-notifications.table';
+export * from './lib/tables/image-process.table';
 export * from './lib/tables/user.table';

@@ -76,7 +76,7 @@ describe('entity-validation.functions', () => {
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('SEO Description was not provided');
+      expect(result).toThrow('SEO description was not provided');
     });
   });
 
