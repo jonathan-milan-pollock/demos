@@ -35,6 +35,8 @@ jobs:
         run: npx nx run api:build:production
       - name: Test All
         run: npm run test:all
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
       - name: Docker Copy Files
         run: npm run dc:copy
       - name: Pulumi Install CLI
