@@ -64,9 +64,9 @@ describe('MetaFunctions', () => {
     });
   });
 
-  it('should return Admin Sitemap metadata', () => {
+  it('should return Admin Image Post metadata', () => {
     expect(getMetadata(Page.AdminImagePost)).toEqual({
-      title: 'Admin Sitemap',
+      title: 'Admin Image Post',
       description: 'Administrate Image Posts for Dark Rush Photography',
     });
   });

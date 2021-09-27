@@ -36,10 +36,12 @@
     "dc:copy:dist": "copyfiles \"./dist/**/*\" \"./tools/ci\"",
     "dc:copy": "npm run dc:copy:node-modules && npm run dc:copy:dist",
     "sb:copy": "copyfiles \"./dist/storybook/**/*\" \"./docs-build\" --up 2",
+    "build:all": "nx run-many --target=build --all",
     "serve:api": "concurrently \"nx serve api\" \"nx run api-e2e:e2e --watch\"",
     "serve:ui": "npm run sb:docs && nx run ui-storybook-e2e:e2e --watch",
     "serve:web": "concurrently \"npm run dev:ssr\" \"nx serve api\" \"nx run website-e2e:e2e --watch\"",
-    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx run best-of-e2e:e2e --watch\""
+    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx run best-of-e2e:e2e --watch\"",
+    "test:all": "nx run-many --target=test --all"
   },
   "private": true,
   "dependencies": {

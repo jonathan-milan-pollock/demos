@@ -33,6 +33,8 @@ jobs:
         run: npx nx run best-of:build:production
       - name: Api Build
         run: npx nx run api:build:production
+      - name: Test All
+        run: npm run test:all
       - name: Docker Copy Files
         run: npm run dc:copy
       - name: Pulumi Install CLI

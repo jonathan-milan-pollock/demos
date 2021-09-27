@@ -142,9 +142,31 @@
 ```js
 module.exports = {
   displayName: 'image-elements',
+  testRunner: 'jasmine2',
   preset: '@stencil/core/testing',
+  globals: {
+    'ts-jest': { tsconfig: '<rootDir>/tsconfig.spec.json' },
+  },
+  transform: {
+    '^.+\\.[tj]sx?$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/image-elements',
 };
+```
+
+- TODO: Fix error in tsconfig.json
+
+- added to tsconfig.json
+
+```json
+"composite": true
+```
+
+- added to tsconfig.spec.json
+
+```json
+ "./src/utils/**/*.ts",
 ```
 
 - in angular.json add test target and remove e2e

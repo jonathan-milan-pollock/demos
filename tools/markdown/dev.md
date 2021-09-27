@@ -73,15 +73,6 @@
 
 ---
 
-## running dev
-
-- npm run serve:api
-- npm run serve:web
-- npm run serve:best
-- npm run serve:ui
-
----
-
 ## when generating new files
 
 ### ui and ui feature components create with NxConsole
