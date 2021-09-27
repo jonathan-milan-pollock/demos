@@ -8,11 +8,11 @@ import {
 } from '@dark-rush-photography/shared/types';
 import {
   getEntityHasGroup,
+  getEntityTypeFromEntityWithGroupType,
   getEntityWithGroupTypeFolderName,
-  getEntityWithGroupTypeFromEntityType,
-} from './entity-to-entity-with-group-type.functions';
+} from './entity-with-group-type.functions';
 
-describe('entity-to-entity-with-group-type.functions', () => {
+describe('entity-with-group-type.functions', () => {
   const entityWithGroupTypes: {
     entityType: EntityType;
   }[] = [
@@ -108,35 +108,28 @@ describe('entity-to-entity-with-group-type.functions', () => {
     );
   });
 
-  describe('getEntityWithGroupTypeFromEntityType', () => {
+  describe('getEntityTypeFromEntityWithGroupType', () => {
     it.each(entityTypesWithGroupType)(
-      'should return entity with group type for %s',
+      'should return entity type for %s',
       ({ entityType, entityWithGroupType }) => {
-        expect(getEntityWithGroupTypeFromEntityType(entityType)).toBe(
-          entityWithGroupType
+        expect(getEntityTypeFromEntityWithGroupType(entityWithGroupType)).toBe(
+          entityType
         );
       }
     );
 
-    it.each(entityWithoutGroupTypes)(
-      'should throw a bad request exception for %s',
-      ({ entityType }) => {
-        expect(() => {
-          getEntityWithGroupTypeFromEntityType(entityType);
-        }).toThrow(BadRequestException);
-      }
-    );
-
-    it.each(entityWithoutGroupTypes)(
-      'should throw correct error message for %s',
-      ({ entityType }) => {
-        expect(() => {
-          getEntityWithGroupTypeFromEntityType(entityType);
-        }).toThrow(
-          `Could not get entity with group for entity type ${entityType}`
+    it('should throw a bad request exception if the entity group type is invalid', () => {
+      const entityWithGroupType = faker.lorem.word();
+      const result = () => {
+        getEntityTypeFromEntityWithGroupType(
+          entityWithGroupType as EntityWithGroupType
         );
-      }
-    );
+      };
+      expect(result).toThrow(BadRequestException);
+      expect(result).toThrow(
+        `Could not get entity type for entity with group type ${entityWithGroupType}`
+      );
+    });
   });
 
   describe('getEntityWithGroupTypeFolderName', () => {
@@ -150,20 +143,13 @@ describe('entity-to-entity-with-group-type.functions', () => {
     );
     it('should throw a bad request exception if the entity group type is invalid', () => {
       const entityWithGroupType = faker.lorem.word();
-      expect(() => {
+      const result = () => {
         getEntityWithGroupTypeFolderName(
           entityWithGroupType as EntityWithGroupType
         );
-      }).toThrow(BadRequestException);
-    });
-
-    it('should throw correct error message if the entity group type is invalid', () => {
-      const entityWithGroupType = faker.lorem.word();
-      expect(() => {
-        getEntityWithGroupTypeFolderName(
-          entityWithGroupType as EntityWithGroupType
-        );
-      }).toThrow(
+      };
+      expect(result).toThrow(BadRequestException);
+      expect(result).toThrow(
         `Could not get folder name for entity with group type ${entityWithGroupType}`
       );
     });

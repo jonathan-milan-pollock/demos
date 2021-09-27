@@ -9,21 +9,16 @@ export const findGoogleDriveFolderByNameResponse = (
       files?: GoogleDriveFolder[];
     };
   }
-): GoogleDriveFolder => {
-  if (
-    !response ||
-    !response.data ||
-    !response.data.files ||
-    response.data.files.length === 0
-  )
-    throw new BadRequestException(
-      `Could not find Google Drive folder ${folderName}`
-    );
-
-  if (response.data.files.length > 1) {
-    throw new BadRequestException(
-      `Found more that one Google Drive folder with name ${folderName}`
-    );
+): GoogleDriveFolder | undefined => {
+  if (response && response.data && response.data.files) {
+    if (response.data.files.length === 1) {
+      return response.data.files[0];
+    }
+    if (response.data.files.length > 1) {
+      throw new BadRequestException(
+        `Found more that one Google Drive folder with name ${folderName}`
+      );
+    }
   }
-  return response.data.files[0];
+  return undefined;
 };

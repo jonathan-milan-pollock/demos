@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { Env } from '@dark-rush-photography/api/types';
@@ -9,7 +9,7 @@ export class ConfigProvider {
   constructor(private readonly configService: ConfigService<Env>) {}
 
   get production(): boolean {
-    return this.configService.get('production') === 'true';
+    return this.configService.get('production') === true;
   }
 
   get googleDriveClientEmail(): string {
@@ -17,7 +17,7 @@ export class ConfigProvider {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('googleDriveClientEmail undefined');
+      throw new ConflictException('googleDriveClientEmail undefined');
     }
     return value;
   }
@@ -27,52 +27,47 @@ export class ConfigProvider {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('googleDrivePrivateKey undefined');
+      throw new ConflictException('googleDrivePrivateKey undefined');
     }
     return value;
   }
 
   getGoogleDriveWebsitesFolderId(watermarkedType: WatermarkedType): string {
-    switch (watermarkedType) {
-      case WatermarkedType.Watermarked:
-        return this.googleDriveWebsitesWatermarkedFolderId;
-      case WatermarkedType.WithoutWatermark:
-        return this.googleDriveWebsitesWithoutWatermarkFolderId;
-      default:
-        throw new BadRequestException(
-          `Google Drive websites folder id not found for watermarked type ${watermarkedType}`
-        );
-    }
-  }
-
-  get googleDriveWebsitesWatermarkedFolderId(): string {
-    const value = this.configService.get(
+    const googleDriveWebsitesWatermarkedFolderId = this.configService.get(
       'googleDriveWebsitesWatermarkedFolderId',
       {
         infer: true,
       }
     );
-    if (!value) {
-      throw new BadRequestException(
-        'googleDriveWebsitesWatermarkedFolderId undefined'
-      );
-    }
-    return value;
-  }
 
-  get googleDriveWebsitesWithoutWatermarkFolderId(): string {
-    const value = this.configService.get(
+    const googleDriveWebsitesWithoutWatermarkFolderId = this.configService.get(
       'googleDriveWebsitesWithoutWatermarkFolderId',
       {
         infer: true,
       }
     );
-    if (!value) {
-      throw new BadRequestException(
+
+    if (!googleDriveWebsitesWatermarkedFolderId) {
+      throw new ConflictException(
+        'googleDriveWebsitesWatermarkedFolderId undefined'
+      );
+    }
+    if (!googleDriveWebsitesWithoutWatermarkFolderId) {
+      throw new ConflictException(
         'googleDriveWebsitesWithoutWatermarkFolderId undefined'
       );
     }
-    return value;
+
+    switch (watermarkedType) {
+      case WatermarkedType.Watermarked:
+        return googleDriveWebsitesWatermarkedFolderId;
+      case WatermarkedType.WithoutWatermark:
+        return googleDriveWebsitesWithoutWatermarkFolderId;
+      default:
+        throw new ConflictException(
+          `Google Drive websites folder id not found for watermarked type ${watermarkedType}`
+        );
+    }
   }
 
   get mongoDbConnectionString(): string {
@@ -80,7 +75,7 @@ export class ConfigProvider {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException('mongoDbConnectionString undefined');
+      throw new ConflictException('mongoDbConnectionString undefined');
     }
     return value;
   }
@@ -90,7 +85,7 @@ export class ConfigProvider {
       infer: true,
     });
     if (!value) {
-      throw new BadRequestException(
+      throw new ConflictException(
         'azureStorageConnectionStringPublic undefined'
       );
     }
@@ -105,7 +100,7 @@ export class ConfigProvider {
       }
     );
     if (!value) {
-      throw new BadRequestException(
+      throw new ConflictException(
         'azureStorageBlobContainerNamePublic undefined'
       );
     }
@@ -115,7 +110,7 @@ export class ConfigProvider {
   get tinyPngApiKey(): string {
     const value = this.configService.get('tinyPngApiKey', { infer: true });
     if (!value) {
-      throw new BadRequestException('tinyPngApiKey undefined');
+      throw new ConflictException('tinyPngApiKey undefined');
     }
     return value;
   }
@@ -123,7 +118,7 @@ export class ConfigProvider {
   get ayrshareApiKey(): string {
     const value = this.configService.get('ayrshareApiKey', { infer: true });
     if (!value) {
-      throw new BadRequestException('ayrshareApiKey undefined');
+      throw new ConflictException('ayrshareApiKey undefined');
     }
     return value;
   }

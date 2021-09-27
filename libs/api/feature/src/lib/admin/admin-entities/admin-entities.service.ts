@@ -14,6 +14,7 @@ import {
 import { Model } from 'mongoose';
 
 import {
+  EntityMinimal,
   EntityType,
   EntityUpdate,
   EntityWithGroupType,
@@ -27,6 +28,7 @@ import {
   DocumentModel,
   Document,
   ConfigProvider,
+  EntityGroupProvider,
   EntityProvider,
   EntityPublishProvider,
   EntitySocialMediaPostProvider,
@@ -38,9 +40,8 @@ import {
   validateEntityNotPublishing,
   validateEntityType,
   VideoRemoveProvider,
-  validateEntityGroupValid,
   validateEntityGroupProvided,
-  EntityGroupProvider,
+  validateEntityDoesNotRequireGroup,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -131,32 +132,16 @@ export class AdminEntitiesService {
     );
   }
 
-  findAll$(
-    entityType: EntityType,
-    group?: string
-  ): Observable<EntityMinimalDto[]> {
-    let validatedGroup: string;
-    validateEntityGroupValid(entityType, group);
-    if (group) {
-      validatedGroup = validateEntityGroupProvided(group);
-    }
+  findAll$(entityType: EntityType): Observable<EntityMinimal[]> {
+    validateEntityDoesNotRequireGroup(entityType);
 
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
 
-    return this.entityProvider.create$(googleDrive, entityType, group).pipe(
-      concatMap(() =>
-        from(
-          group
-            ? this.entityGroupProvider.findAllForGroup$(
-                entityType,
-                validatedGroup
-              )
-            : this.entityProvider.findAll$(entityType)
-        )
-      ),
+    return this.entityProvider.create$(googleDrive, entityType).pipe(
+      concatMap(() => from(this.entityProvider.findAll$(entityType))),
       concatMap((documentModels) => {
         if (documentModels.length === 0) return of([]);
 
@@ -166,6 +151,39 @@ export class AdminEntitiesService {
         );
       })
     );
+  }
+
+  findAllForGroup$(
+    entityWithGroupType: EntityWithGroupType,
+    group: string
+  ): Observable<EntityMinimal[]> {
+    validateEntityGroupProvided(group);
+
+    const googleDrive = getGoogleDrive(
+      this.configProvider.googleDriveClientEmail,
+      this.configProvider.googleDrivePrivateKey
+    );
+
+    return this.entityGroupProvider
+      .createForGroup$(googleDrive, entityWithGroupType, group)
+      .pipe(
+        concatMap(() =>
+          from(
+            this.entityGroupProvider.findAllForGroup$(
+              entityWithGroupType,
+              group
+            )
+          )
+        ),
+        concatMap((documentModels) => {
+          if (documentModels.length === 0) return of([]);
+
+          return from(documentModels).pipe(
+            map(loadEntityMinimal),
+            toArray<EntityMinimalDto>()
+          );
+        })
+      );
   }
 
   findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {

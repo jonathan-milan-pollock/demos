@@ -40,20 +40,20 @@ export class AdminImagePostsService {
         slug: imagePostCreate.title,
       })
     ).pipe(
-      map(validateEntityNotAlreadyExists),
-      concatMap(() => {
+      //map(validateEntityNotAlreadyExists),
+      /*concatMap(() => {
         return from(
           new this.entityModel({
             ...loadNewEntity(EntityType.ImagePost, {
               ...imagePostCreate,
-              watermarkedType: WatermarkedType.WithoutWatermark,
-              group: DEFAULT_ENTITY_GROUP,
-              slug: imagePostCreate.title,
+              WatermarkedType.WithoutWatermark,
+              DEFAULT_ENTITY_GROUP,
+              imagePostCreate.title,
               isPublic: true,
             }),
           }).save()
         );
-      }),
+      }),*/
       map(validateEntityFound),
       map(loadEntity)
     );

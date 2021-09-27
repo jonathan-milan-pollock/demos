@@ -19,7 +19,11 @@ export * from './lib/config/video-artist-exif.config';
 export * from './lib/config/video-resolutions.config';
 
 // enums
-export * from './lib/enums/entity-to-entity-with-group-type.functions';
+export * from './lib/enums/entity-type.functions';
+export * from './lib/enums/entity-with-group-type.functions';
+
+// env
+export * from './lib/env/env.functions';
 
 // exif
 export * from './lib/exif/date-created-exif.functions';

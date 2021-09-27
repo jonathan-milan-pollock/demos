@@ -35,11 +35,16 @@ declare namespace Cypress {
     ): Cypress.Chainable<Cypress.Response<void>>;
     findGroupsEntityAdmin(
       authHeaders: { Authorization: string },
-      entityType: string
+      entityWithGroupType: string
     ): Cypress.Chainable<Cypress.Response<string[]>>;
     findAllEntityAdmin(
-      entityType: string,
-      group?: string
+      authHeaders: { Authorization: string },
+      entityType: string
+    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    findAllForGroupEntityAdmin(
+      authHeaders: { Authorization: string },
+      entityWithGroupType: string,
+      group: string
     ): Cypress.Chainable<Cypress.Response<any[]>>;
     findOneEntityAdmin(
       entityType: string,
@@ -112,11 +117,11 @@ declare namespace Cypress {
     findAllPhotoOfTheWeekPublic(): Promise<string[]>;
     findOnePhotoOfTheWeekPublic(id: string): Promise<string>;
 
-    // api public review-media
-    findOneReviewMediaPublic(): Promise<string>;
-
     // api public reviews
     findAllReviewsPublic(): Promise<string[]>;
+
+    // api public review-media
+    findOneReviewMediaPublic(): Promise<string>;
 
     // api public sitemap
     findSitemapPublic(): Promise<string>;

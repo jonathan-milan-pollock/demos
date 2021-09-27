@@ -51,21 +51,13 @@ describe('google-drive-folder-response.functions', () => {
       'should throw a bad request for %s',
       ({ response }) => {
         const folderName = faker.lorem.word();
-
-        expect(() => {
+        const result = () => {
           findGoogleDriveFolderByNameResponse(folderName, response);
-        }).toThrow(BadRequestException);
-      }
-    );
-
-    it.each(couldNotFindFolderResponses)(
-      'should throw correct error message for %s',
-      ({ response }) => {
-        const folderName = faker.lorem.word();
-
-        expect(() => {
-          findGoogleDriveFolderByNameResponse(folderName, response);
-        }).toThrow(`Could not find Google Drive folder ${folderName}`);
+        };
+        expect(result).toThrow(BadRequestException);
+        expect(result).toThrow(
+          `Could not find Google Drive folder ${folderName}`
+        );
       }
     );
 
@@ -79,26 +71,12 @@ describe('google-drive-folder-response.functions', () => {
           ],
         },
       };
-
-      expect(() => {
+      const result = () => {
         findGoogleDriveFolderByNameResponse(folderName, response);
-      }).toThrow(BadRequestException);
-    });
-
-    it('should throw correct error message if more than 1 folder is returned', () => {
-      const folderName = faker.lorem.word();
-      const response = {
-        data: {
-          files: [
-            { id: faker.datatype.uuid(), name: folderName },
-            { id: faker.datatype.uuid(), name: folderName },
-          ],
-        },
       };
 
-      expect(() => {
-        findGoogleDriveFolderByNameResponse(folderName, response);
-      }).toThrow(
+      expect(result).toThrow(BadRequestException);
+      expect(result).toThrow(
         `Found more that one Google Drive folder with name ${folderName}`
       );
     });

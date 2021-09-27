@@ -24,8 +24,8 @@ import { AdminImagePostsController } from './admin-image-posts.controller';
     AdminImagePostsService,
     ImageProvider,
     ImageDimensionProvider,
-    ImageUploadProvider,
     ImageProcessNewProvider,
+    ImageUploadProvider,
     ImageResizeProvider,
   ],
 })

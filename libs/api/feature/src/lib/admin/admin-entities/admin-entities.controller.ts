@@ -16,7 +16,6 @@ import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiParam,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -136,18 +135,30 @@ export class AdminEntitiesController {
     name: 'entityType',
     enum: EntityType,
   })
-  @ApiQuery({
-    name: 'group',
-    type: String,
-    required: false,
-  })
   @ApiOkResponse({ type: [EntityMinimalDto] })
   findAll$(
     @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Query('group') group?: string
+    entityType: EntityType
   ): Observable<EntityMinimalDto[]> {
-    return this.adminEntitiesService.findAll$(entityType, group);
+    return this.adminEntitiesService.findAll$(entityType);
+  }
+
+  @AdminRole()
+  @Get(':entityWithGroupType/groups/:group')
+  @ApiParam({
+    name: 'entityWithGroupType',
+    enum: EntityWithGroupType,
+  })
+  @ApiOkResponse({ type: [EntityMinimalDto] })
+  findAllForGroup$(
+    @Param('entityWithGroupType', new ParseEnumPipe(EntityWithGroupType))
+    entityWithGroupType: EntityWithGroupType,
+    @Param('group') group: string
+  ): Observable<EntityMinimalDto[]> {
+    return this.adminEntitiesService.findAllForGroup$(
+      entityWithGroupType,
+      group
+    );
   }
 
   @AdminRole()

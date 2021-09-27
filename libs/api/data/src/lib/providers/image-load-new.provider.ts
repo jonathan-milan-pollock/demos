@@ -9,10 +9,13 @@ import { drive_v3 } from 'googleapis';
 
 import {
   EntityType,
+  FAVORITES_SLUG,
   GoogleDriveFolder,
   MediaState,
+  REVIEW_MEDIA_SLUG,
 } from '@dark-rush-photography/shared/types';
 import {
+  findGoogleDriveFolderByName$,
   getGoogleDriveImageFiles$,
   getOrderFromGoogleDriveImageFileName,
 } from '@dark-rush-photography/api/util';
@@ -20,18 +23,9 @@ import { Document, DocumentModel } from '../schema/document.schema';
 import { EntityPushNotificationsTable } from '../tables/entity-push-notifications.table';
 import { loadMedia } from '../content/media.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { AboutProvider } from './about.provider';
-import { BestOfProvider } from './best-of.provider';
-import { DestinationProvider } from './destination.provider';
-import { EventProvider } from './event.provider';
-import { FavoritesProvider } from './favorites.provider';
-import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
-import { ReviewMediaProvider } from './review-media.provider';
-import { ReviewProvider } from './review.provider';
-import { SocialMediaProvider } from './social-media.provider';
-import { ImageRemoveProvider } from './image-remove.provider';
-import { ImageProcessNewProvider } from './image-process-new.provider';
 import { ImageProvider } from './image.provider';
+import { ImageProcessNewProvider } from './image-process-new.provider';
+import { ImageRemoveProvider } from './image-remove.provider';
 
 @Injectable()
 export class ImageLoadNewProvider {
@@ -43,15 +37,6 @@ export class ImageLoadNewProvider {
 
     @InjectRepository(EntityPushNotificationsTable)
     private readonly entityPushNotificationsRepository: Repository<EntityPushNotificationsTable>,
-    private readonly aboutProvider: AboutProvider,
-    private readonly bestOfProvider: BestOfProvider,
-    private readonly destinationProvider: DestinationProvider,
-    private readonly eventProvider: EventProvider,
-    private readonly favoritesProvider: FavoritesProvider,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
-    private readonly reviewMediaProvider: ReviewMediaProvider,
-    private readonly reviewProvider: ReviewProvider,
-    private readonly socialMediaProvider: SocialMediaProvider,
     private readonly imageProvider: ImageProvider,
     private readonly imageRemoveProvider: ImageRemoveProvider,
     private readonly imageProcessNewProvider: ImageProcessNewProvider
@@ -64,54 +49,67 @@ export class ImageLoadNewProvider {
     entityType: EntityType,
     googleDriveFolderId: string,
     slug: string
-  ): Observable<GoogleDriveFolder> {
+  ): Observable<GoogleDriveFolder | undefined> {
     switch (entityType) {
       case EntityType.About:
-        return this.aboutProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          'images'
         );
       case EntityType.BestOf:
-        return this.bestOfProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          'best-37'
         );
       case EntityType.Destination:
-        return this.destinationProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          'images'
         );
       case EntityType.Event:
-        return this.eventProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          'images'
         );
       case EntityType.Favorites:
-        return this.favoritesProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          FAVORITES_SLUG
+        );
+      case EntityType.ImageVideo:
+        return findGoogleDriveFolderByName$(
+          googleDrive,
+          googleDriveFolderId,
+          slug
         );
       case EntityType.PhotoOfTheWeek:
-        return this.photoOfTheWeekProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
           googleDriveFolderId,
           slug
         );
       case EntityType.ReviewMedia:
-        return this.reviewMediaProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          REVIEW_MEDIA_SLUG
         );
       case EntityType.Review:
-        return this.reviewProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
           googleDriveFolderId,
           slug
         );
       case EntityType.SocialMedia:
-        return this.socialMediaProvider.findNewImagesFolder$(
+        return findGoogleDriveFolderByName$(
           googleDrive,
-          googleDriveFolderId
+          googleDriveFolderId,
+          'images'
         );
       default:
         throw new BadRequestException(

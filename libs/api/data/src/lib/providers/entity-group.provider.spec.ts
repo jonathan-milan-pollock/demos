@@ -17,12 +17,18 @@ jest.mock('@dark-rush-photography/api/util', () => ({
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
+jest.mock('../entities/entity-group.functions', () => ({
+  ...jest.requireActual('../entities/entity-group.functions'),
+}));
+import * as entityGroupFunctions from '../entities/entity-group.functions';
+import { EntityCreateProvider } from './entity-create.provider';
+
 describe('entity-group.provider', () => {
   let entityGroupProvider: EntityGroupProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {
-      get googleDriveWebsitesWatermarkedFolderId(): string {
+      getGoogleDriveWebsitesFolderId(): string {
         return '';
       }
     }
@@ -40,6 +46,7 @@ describe('entity-group.provider', () => {
           useValue: new MockDocumentModel(),
         },
         EntityGroupProvider,
+        EntityCreateProvider,
       ],
     }).compile();
 
@@ -64,20 +71,50 @@ describe('entity-group.provider', () => {
 
     beforeEach(() => {
       jest
-        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() => of({ id: '', name: '' }));
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => '');
     });
 
     it.each(entityWithGroupTypes)(
-      'should return multiple groups for %s if they are found in google drive',
+      'should combine groups for %s from google drive',
       ({ entityWithGroupType }, done: any) => {
+        const watermarkedGroups = [faker.lorem.word()];
+        const withoutWatermarkGroups = [faker.lorem.word()];
+
         jest
-          .spyOn(apiUtil, 'findGoogleDriveFolders$')
-          .mockImplementation(() => of([{ id: '', name: '' }]));
+          .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
+          .mockImplementationOnce(() => of(watermarkedGroups))
+          .mockImplementationOnce(() => of(withoutWatermarkGroups));
 
         entityGroupProvider
           .findGroups$({} as drive_v3.Drive, entityWithGroupType)
           .subscribe((groups) => {
+            expect(groups).toEqual([
+              ...watermarkedGroups,
+              ...withoutWatermarkGroups,
+            ]);
+            done();
+          });
+      }
+    );
+
+    it.each(entityWithGroupTypes)(
+      'should not have duplicates for %s from google drive',
+      ({ entityWithGroupType }, done: any) => {
+        const sameGroup = faker.lorem.word();
+
+        const watermarkedGroups = [sameGroup];
+        const withoutWatermarkGroups = [sameGroup];
+
+        jest
+          .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
+          .mockImplementationOnce(() => of(watermarkedGroups))
+          .mockImplementationOnce(() => of(withoutWatermarkGroups));
+
+        entityGroupProvider
+          .findGroups$({} as drive_v3.Drive, entityWithGroupType)
+          .subscribe((groups) => {
+            expect(groups).toEqual([sameGroup]);
             expect(groups).toHaveLength(1);
             done();
           });
@@ -85,32 +122,10 @@ describe('entity-group.provider', () => {
     );
 
     it.each(entityWithGroupTypes)(
-      'should return group name for %s if found in google drive',
-      ({ entityWithGroupType }, done: any) => {
-        const groupName1 = faker.lorem.word();
-        const groupName2 = faker.lorem.word();
-
-        jest.spyOn(apiUtil, 'findGoogleDriveFolders$').mockImplementation(() =>
-          of([
-            { id: '', name: groupName1 },
-            { id: '', name: groupName2 },
-          ])
-        );
-
-        entityGroupProvider
-          .findGroups$({} as drive_v3.Drive, entityWithGroupType)
-          .subscribe((groups) => {
-            expect(groups).toEqual([groupName1, groupName2]);
-            done();
-          });
-      }
-    );
-
-    it.each(entityWithGroupTypes)(
-      'should return an empty array if groups are not found in google drive',
+      'should return an empty array for %s if groups are not found in google drive',
       ({ entityWithGroupType }, done: any) => {
         jest
-          .spyOn(apiUtil, 'findGoogleDriveFolders$')
+          .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
           .mockImplementation(() => of([]));
 
         entityGroupProvider

@@ -3,10 +3,9 @@ import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
-  BestOfProvider,
   Document,
   DocumentSchema,
-  EntityPublicProvider,
+  EntityFindAllPublicProvider,
 } from '@dark-rush-photography/api/data';
 import { BestOfService } from './best-of.service';
 import { BestOfController } from './best-of.controller';
@@ -19,6 +18,6 @@ import { BestOfController } from './best-of.controller';
     ]),
   ],
   controllers: [BestOfController],
-  providers: [BestOfService, EntityPublicProvider, BestOfProvider],
+  providers: [BestOfService, EntityFindAllPublicProvider],
 })
 export class BestOfModule {}

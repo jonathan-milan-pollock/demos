@@ -25,17 +25,7 @@ import {
   validateEntityFound,
   validateEntityNotPublishing,
   validateEntityType,
-  validateEntityGoogleDriveFolderId,
 } from '../entities/entity-validation.functions';
-import { AboutProvider } from './about.provider';
-import { BestOfProvider } from './best-of.provider';
-import { DestinationProvider } from './destination.provider';
-import { EventProvider } from './event.provider';
-import { FavoritesProvider } from './favorites.provider';
-import { PhotoOfTheWeekProvider } from './photo-of-the-week.provider';
-import { ReviewMediaProvider } from './review-media.provider';
-import { ReviewProvider } from './review.provider';
-import { SocialMediaProvider } from './social-media.provider';
 import { ImageUpdateProvider } from './image-update.provider';
 import {
   getExifDate,
@@ -51,15 +41,6 @@ export class EntityPublishProvider {
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly aboutProvider: AboutProvider,
-    private readonly bestOfProvider: BestOfProvider,
-    private readonly destinationProvider: DestinationProvider,
-    private readonly eventProvider: EventProvider,
-    private readonly favoritesProvider: FavoritesProvider,
-    private readonly photoOfTheWeekProvider: PhotoOfTheWeekProvider,
-    private readonly reviewMediaProvider: ReviewMediaProvider,
-    private readonly reviewProvider: ReviewProvider,
-    private readonly socialMediaProvider: SocialMediaProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider
   ) {}
 
