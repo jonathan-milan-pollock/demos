@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import {
   Image,
   ImageDimension,
-  MediaState,
+  ImageState,
 } from '@dark-rush-photography/shared/types';
 import {
   deleteBlob$,
@@ -30,7 +30,7 @@ export class ImageRemoveProvider {
     this.logger = new Logger(ImageRemoveProvider.name);
   }
 
-  removeImages$(state: MediaState, entityId: string): Observable<void> {
+  removeImages$(state: ImageState, entityId: string): Observable<void> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
@@ -95,7 +95,7 @@ export class ImageRemoveProvider {
   }
 
   removeImageBlobs$(
-    state: MediaState,
+    state: ImageState,
     blobPathId: string,
     fileName: string,
     imageDimensions: ImageDimension[]

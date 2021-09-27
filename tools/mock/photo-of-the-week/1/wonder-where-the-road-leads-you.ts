@@ -26,7 +26,7 @@ export class WonderWhereTheRoadLeadsYou extends PhotoOfTheWeekDto {
     stateOrProvince: 'Florida',
     country: 'United States',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
 
   private constructor() {
     super();

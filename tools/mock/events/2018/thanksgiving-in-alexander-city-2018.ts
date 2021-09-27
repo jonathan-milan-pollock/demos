@@ -15,7 +15,7 @@ export class ThanksgivingInAlexanderCity2018 extends EventDto {
     stateOrProvince: 'Alabama',
     country: 'United States',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
   text = [
     `
       It's beginning to look a lot like Christmas

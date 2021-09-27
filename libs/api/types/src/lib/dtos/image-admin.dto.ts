@@ -10,7 +10,7 @@ import {
   Min,
 } from 'class-validator';
 
-import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import { Image, ImageState } from '@dark-rush-photography/shared/types';
 
 export class ImageAdminDto implements Image {
   @IsUUID()
@@ -19,8 +19,8 @@ export class ImageAdminDto implements Image {
   @IsMongoId()
   entityId!: string;
 
-  @IsEnum(MediaState)
-  state!: MediaState;
+  @IsEnum(ImageState)
+  state!: ImageState;
 
   @IsString()
   blobPathId!: string;

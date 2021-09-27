@@ -4,14 +4,14 @@ import * as mongoose from 'mongoose';
 
 import {
   Comment,
-  EntityType,
+  DEFAULT_ENTITY_GROUP,
   Emotion,
+  Entity,
+  EntityType,
   Image,
   ImageDimension,
   Location,
   Video,
-  Entity,
-  DEFAULT_ENTITY_GROUP,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
@@ -78,7 +78,7 @@ export class Document implements Entity {
   location?: Location;
 
   @Prop({ type: Boolean, required: true, default: false })
-  photoAlbumImageIsCentered!: boolean;
+  starredImageIsCentered!: boolean;
 
   @Prop({ type: [String], required: true })
   text!: string[];
@@ -107,7 +107,7 @@ export class Document implements Entity {
   @Prop({ type: [emotionSchema], required: true })
   emotions!: Emotion[];
 
-  @Prop({ type: Boolean, required: true })
+  @Prop({ type: Boolean, required: true, default: false })
   isPublic!: boolean;
 
   @Prop({ type: Boolean, required: true, default: false })

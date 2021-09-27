@@ -12,7 +12,7 @@ describe('emotion.functions', () => {
   const mockUser: User = {
     email: faker.internet.email(),
     name: faker.name.findName(faker.name.firstName(), faker.name.lastName()),
-    image: faker.image.dataUri(),
+    imageUrl: faker.image.imageUrl(),
   };
 
   const emotion: Emotion = {

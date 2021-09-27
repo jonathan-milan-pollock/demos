@@ -70,8 +70,7 @@ export class EntityFindAllPublicProvider {
               slug: documentModel.slug,
               order: documentModel.order,
               title: validateEntityTitleProvided(documentModel),
-              photoAlbumImageIsCentered:
-                documentModel.photoAlbumImageIsCentered,
+              starredImageIsCentered: documentModel.starredImageIsCentered,
               starredImage: validateFindStarredImage(publicContent.images),
               starredTileImageDimensions: validateFindImageDimension(
                 validateFindStarredImage(publicContent.images).id,
@@ -86,8 +85,7 @@ export class EntityFindAllPublicProvider {
               order: documentModel.order,
               title: validateEntityTitleProvided(documentModel),
               datePublished: validateEntityDatePublished(documentModel),
-              photoAlbumImageIsCentered:
-                documentModel.photoAlbumImageIsCentered,
+              starredImageIsCentered: documentModel.starredImageIsCentered,
               starredImage: validateFindStarredImage(publicContent.images),
               starredTileImageDimensions: validateFindImageDimension(
                 validateFindStarredImage(publicContent.images).id,

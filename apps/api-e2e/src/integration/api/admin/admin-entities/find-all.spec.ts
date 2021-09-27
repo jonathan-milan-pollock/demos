@@ -49,20 +49,6 @@ describe('findAll', () => {
     );
   });
 
-  it('should find entities with groups', () => {
-    entityTypesWithGroup.forEach((entityType) =>
-      cy
-        .findGroupsEntityAdmin(getAuthHeadersAdmin(), entityType)
-        .then((response) => {
-          const group = response.body[0];
-          cy.findAllEntityAdmin(getAuthHeadersAdmin(), entityType, group);
-        })
-        .then((response) => response)
-        .its('body.length')
-        .should('be.greaterThan', 0)
-    );
-  });
-
   it('should find image posts', () => {
     cy.createImagePostAdmin({ slug: 'test-image-post-1' })
       .then(() => cy.createImagePostAdmin({ slug: 'test-image-post-2' }))

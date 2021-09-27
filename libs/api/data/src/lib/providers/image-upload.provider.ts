@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { Image, MediaState } from '@dark-rush-photography/shared/types';
+import { Image, ImageState } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { loadMedia } from '../content/media.functions';
@@ -36,7 +36,7 @@ export class ImageUploadProvider {
       map(validateEntityFound),
       map((documentModel) => {
         validateImageWithFileNameNotAlreadyExists(
-          MediaState.Selected,
+          ImageState.Selected,
           fileName,
           documentModel
         );
@@ -45,7 +45,7 @@ export class ImageUploadProvider {
         this.imageProvider.add$(
           id,
           entityId,
-          MediaState.Selected,
+          ImageState.Selected,
           fileName,
           0,
           isThreeSixty

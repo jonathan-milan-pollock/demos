@@ -29,8 +29,8 @@ describe('entity-group.functions', () => {
         {} as drive_v3.Drive,
         faker.lorem.word(),
         faker.datatype.uuid()
-      ).subscribe((groups) => {
-        expect(groups).toEqual(
+      ).subscribe((result) => {
+        expect(result).toEqual(
           groupFolders.map((groupFolder) => groupFolder.name)
         );
         done();
@@ -46,8 +46,8 @@ describe('entity-group.functions', () => {
         {} as drive_v3.Drive,
         faker.lorem.word(),
         faker.datatype.uuid()
-      ).subscribe((groups) => {
-        expect(groups).toHaveLength(0);
+      ).subscribe((result) => {
+        expect(result).toHaveLength(0);
         done();
       });
     });
@@ -64,8 +64,8 @@ describe('entity-group.functions', () => {
         {} as drive_v3.Drive,
         faker.lorem.word(),
         faker.datatype.uuid()
-      ).subscribe((groups) => {
-        expect(groups).toHaveLength(0);
+      ).subscribe((result) => {
+        expect(result).toHaveLength(0);
         done();
       });
     });

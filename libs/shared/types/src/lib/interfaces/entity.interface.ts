@@ -1,4 +1,5 @@
 import { EntityType } from '../enums/entity-type.enum';
+import { WatermarkedType } from '../enums/watermarked-type.enum';
 import { About } from './about.interface';
 import { BestOf } from './best-of.interface';
 import { Destination } from './destination.interface';
@@ -25,6 +26,7 @@ export interface Entity
     SocialMedia {
   readonly type: EntityType;
   readonly googleDriveFolderId?: string;
+  readonly watermarkedType: WatermarkedType;
   readonly isPublishing: boolean;
   readonly isPublished: boolean;
 }

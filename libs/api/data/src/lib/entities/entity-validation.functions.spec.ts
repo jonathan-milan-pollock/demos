@@ -25,7 +25,7 @@ describe('entity-validation.functions', () => {
     slug: faker.lorem.word(),
     order: faker.datatype.number(),
     seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
-    photoAlbumImageIsCentered: faker.datatype.boolean(),
+    starredImageIsCentered: faker.datatype.boolean(),
     text: [
       faker.lorem.sentence(),
       faker.lorem.sentence(),

@@ -96,7 +96,7 @@ readonly datePublished?: string;
 // location
 readonly location?: Location;
 // display
-readonly photoAlbumImageIsCentered: boolean;
+readonly starredImageIsCentered: boolean;
 // content
 readonly text: string[];
 readonly images: Image[];

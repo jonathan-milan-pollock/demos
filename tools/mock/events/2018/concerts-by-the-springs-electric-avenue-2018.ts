@@ -14,7 +14,7 @@ export class ConcertsByTheSpringsElectricAvenue2018 extends EventDto {
     stateOrProvince: 'Georgia',
     country: 'United States',
   };
-  photoAlbumImageIsCentered = false;
+  starredImageIsCenteredIsCentered = false;
 
   private constructor() {
     super();

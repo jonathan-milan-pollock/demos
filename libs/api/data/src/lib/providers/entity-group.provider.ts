@@ -6,23 +6,26 @@ import {
   concatMap,
   distinct,
   from,
+  map,
   Observable,
+  of,
   toArray,
 } from 'rxjs';
-import { Model } from 'mongoose';
 import { drive_v3 } from 'googleapis';
+import { Model } from 'mongoose';
 
 import {
+  EntityMinimal,
   EntityWithGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import {
-  getEntityTypeFromEntityWithGroupType,
-  getEntityWithGroupTypeFolderName,
-} from '@dark-rush-photography/api/util';
+import { getEntityWithGroupTypeFolderName } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { loadDocumentModelsArray } from '../entities/entity.functions';
-import { findGroupsFromGoogleDriveFolderName$ } from '../entities/entity-group.functions';
+import { loadEntityMinimal } from '../entities/entity.functions';
+import {
+  findAllForGroup$,
+  findGroupsFromGoogleDriveFolderName$,
+} from '../entities/entity-group.functions';
 import { ConfigProvider } from './config.provider';
 import { EntityCreateProvider } from './entity-create.provider';
 
@@ -65,12 +68,13 @@ export class EntityGroupProvider {
     );
   }
 
-  createForGroup$(
+  findAllForGroup$(
     googleDrive: drive_v3.Drive,
     entityWithGroupType: EntityWithGroupType,
     group: string
-  ): Observable<void> {
+  ): Observable<EntityMinimal[]> {
     const folderName = getEntityWithGroupTypeFolderName(entityWithGroupType);
+
     return this.entityCreateProvider
       .createForGroup$(
         googleDrive,
@@ -88,33 +92,18 @@ export class EntityGroupProvider {
             WatermarkedType.WithoutWatermark,
             group
           )
-        )
-      );
-  }
+        ),
+        concatMap(() =>
+          from(findAllForGroup$(entityWithGroupType, group, this.entityModel))
+        ),
+        concatMap((documentModels) => {
+          if (documentModels.length === 0) return of([]);
 
-  findAllForGroup$(
-    entityWithGroupType: EntityWithGroupType,
-    group: string
-  ): Observable<DocumentModel[]> {
-    return combineLatest([
-      this.entityModel.find({
-        type: getEntityTypeFromEntityWithGroupType(entityWithGroupType),
-        watermarkedType: WatermarkedType.Watermarked,
-        group,
-      }),
-      this.entityModel.find({
-        type: getEntityTypeFromEntityWithGroupType(entityWithGroupType),
-        watermarkedType: WatermarkedType.WithoutWatermark,
-        group,
-      }),
-    ]).pipe(
-      concatMap(([watermarkedImagePosts, withoutWatermarkImagePosts]) =>
-        from([
-          ...loadDocumentModelsArray(watermarkedImagePosts),
-          ...loadDocumentModelsArray(withoutWatermarkImagePosts),
-        ])
-      ),
-      toArray<DocumentModel>()
-    );
+          return from(documentModels).pipe(
+            map(loadEntityMinimal),
+            toArray<EntityMinimal>()
+          );
+        })
+      );
   }
 }

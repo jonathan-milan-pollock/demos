@@ -18,7 +18,7 @@ import { drive_v3, GoogleApis } from 'googleapis';
 import {
   EntityType,
   GoogleDriveFolder,
-  MediaState,
+  ImageState,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -67,9 +67,6 @@ export class EntityPublishProvider {
       concatMap((documentModel) =>
         combineLatest([
           from(
-            documentModel.videos.filter(
-              (video) => video.state === MediaState.Selected
-            )
           ),
           of(documentModel),
         ])
@@ -83,7 +80,6 @@ export class EntityPublishProvider {
       //    video,
       //    {
       //      fileName: `${documentModel.slug}${path.extname(video.fileName)}`,
-      //      state: MediaState.Posted,
       //    },
       //    documentModel,
       //    entityModel

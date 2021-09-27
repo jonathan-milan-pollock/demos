@@ -1,16 +1,8 @@
 import { Logger } from '@nestjs/common';
 
-import {
-  combineLatest,
-  concatMap,
-  from,
-  last,
-  map,
-  Observable,
-  of,
-} from 'rxjs';
-import { Model } from 'mongoose';
+import { combineLatest, concatMap, from, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
+import { Model } from 'mongoose';
 
 import {
   DEFAULT_ENTITY_GROUP,
@@ -24,16 +16,16 @@ import {
   loadNewEntity,
 } from '../entities/entity.functions';
 
-export const createWithEntityParentFolderId$ = (
-  entityModel: Model<DocumentModel>,
+export const createEntity$ = (
   googleDrive: drive_v3.Drive,
   parentFolderId: string,
+  entityModel: Model<DocumentModel>,
   entityType: EntityType,
   watermarkedType: WatermarkedType,
   group: string,
   slug?: string
-): Observable<void> => {
-  const logger = new Logger(createWithEntityParentFolderId$.name);
+): Observable<DocumentModel | undefined> => {
+  const logger = new Logger(createEntity$.name);
   return findGoogleDriveFolders$(googleDrive, parentFolderId).pipe(
     concatMap((entityFolders) => {
       if (entityFolders.length === 0) return of(undefined);
@@ -45,6 +37,7 @@ export const createWithEntityParentFolderId$ = (
             from(
               entityModel.find({
                 type: entityType,
+                watermarkedType: watermarkedType,
                 group,
                 slug: slug ?? entityFolder.name,
               })
@@ -52,13 +45,13 @@ export const createWithEntityParentFolderId$ = (
           ])
         ),
         concatMap(([entityFolder, documentModels]) => {
-          const entityName = slug ?? entityFolder.name;
+          const entitySlug = slug ?? entityFolder.name;
           const documentModelsArray = loadDocumentModelsArray(documentModels);
           if (documentModelsArray.length > 0) {
             logger.log(
               `Found ${entityType} entity ${
                 group !== DEFAULT_ENTITY_GROUP ? group : ''
-              } ${entityName}`
+              } ${entitySlug}`
             );
             return of(documentModelsArray[0]);
           }
@@ -66,7 +59,7 @@ export const createWithEntityParentFolderId$ = (
           logger.log(
             `Creating ${entityType} entity ${
               group !== DEFAULT_ENTITY_GROUP ? group : ''
-            } ${entityName}`
+            } ${entitySlug}`
           );
           return from(
             new entityModel({
@@ -74,14 +67,12 @@ export const createWithEntityParentFolderId$ = (
                 entityType,
                 watermarkedType,
                 group,
-                entityName,
+                entitySlug,
                 entityFolder.id
               ),
             }).save()
           );
-        }),
-        last(),
-        map(() => undefined)
+        })
       );
     })
   );

@@ -1,12 +1,9 @@
 import {
   Entity,
+  EntityMinimal,
   EntityType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import {
-  EntityAdminDto,
-  EntityMinimalDto,
-} from '@dark-rush-photography/api/types';
 import { DocumentModel } from '../schema/document.schema';
 import { loadComment } from '../content/comment.functions';
 import { loadEmotion } from '../content/emotion.functions';
@@ -30,10 +27,12 @@ export const loadNewEntity = (
   title: '',
   seoDescription: '',
   seoKeywords: [],
+  dateCreated: '',
+  datePublished: '',
   location: {
     country: 'United States',
   },
-  photoAlbumImageIsCentered: false,
+  starredImageIsCentered: false,
   text: [],
   images: [],
   imageDimensions: [],
@@ -45,7 +44,7 @@ export const loadNewEntity = (
   isPublished: false,
 });
 
-export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
+export const loadEntity = (documentModel: DocumentModel): Entity => ({
   type: documentModel.type,
   id: documentModel._id,
   googleDriveFolderId: documentModel.googleDriveFolderId,
@@ -59,7 +58,7 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
   dateCreated: documentModel.dateCreated,
   datePublished: documentModel.datePublished,
   location: documentModel.location,
-  photoAlbumImageIsCentered: documentModel.photoAlbumImageIsCentered,
+  starredImageIsCentered: documentModel.starredImageIsCentered,
   text: documentModel.text,
   images: documentModel.images.map(loadImage),
   imageDimensions: documentModel.imageDimensions.map(loadImageDimension),
@@ -73,7 +72,7 @@ export const loadEntity = (documentModel: DocumentModel): EntityAdminDto => ({
 
 export const loadEntityMinimal = (
   documentModel: DocumentModel
-): EntityMinimalDto => ({
+): EntityMinimal => ({
   type: documentModel.type,
   id: documentModel._id,
   watermarkedType: documentModel.watermarkedType,

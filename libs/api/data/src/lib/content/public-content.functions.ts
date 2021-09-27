@@ -4,6 +4,7 @@ import { findPublicImageDimensions } from './image-dimension.functions';
 import { findPublicImages } from './image.functions';
 import { findPublicComments } from './comment.functions';
 import { findPublicEmotions } from './emotion.functions';
+
 export const loadPublicContent = (
   documentModel: DocumentModel
 ): PublicContent => {

@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { MediaState, Video } from '@dark-rush-photography/shared/types';
+import { Video } from '@dark-rush-photography/shared/types';
 import {
   deleteBlob$,
   getAzureStorageBlobPath,
@@ -27,11 +27,7 @@ export class VideoRemoveProvider {
   ): Observable<DocumentModel> {
     const videoId = video.id;
     const entityId = documentModel._id;
-    return this.removeVideoBlobs$(
-      video.state,
-      video.blobPathId,
-      video.fileName
-    ).pipe(
+    return this.removeVideoBlobs$(video.blobPathId, video.fileName).pipe(
       concatMap(() =>
         from(this.entityModel.findById(entityId)).pipe(
           map(validateEntityFound),
@@ -52,11 +48,7 @@ export class VideoRemoveProvider {
     );
   }
 
-  removeVideoBlobs$(
-    state: MediaState,
-    blobPathId: string,
-    fileName: string
-  ): Observable<boolean> {
+  removeVideoBlobs$(blobPathId: string, fileName: string): Observable<boolean> {
     return deleteBlob$(
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic,
