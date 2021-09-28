@@ -9,7 +9,7 @@ export const resizeExactFitImage$ = (
   filePath: string,
   standardImageResolution: ImageDimensionStandardConfig
 ): Observable<string> => {
-  const { width, height } = standardImageResolution.pixels;
+  const { width, height } = standardImageResolution.resolution;
   return createTempFile$(fileName).pipe(
     concatMap((newFilePath) =>
       combineLatest([

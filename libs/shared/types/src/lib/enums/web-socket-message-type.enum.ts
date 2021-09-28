@@ -3,5 +3,5 @@ export enum WebSocketMessageType {
   EndingComment = 'ending-comment',
   Comment = 'comment',
   Emotion = 'emotion',
-  PushNotification = 'push-notification',
+  ImageProcess = 'image-process',
 }

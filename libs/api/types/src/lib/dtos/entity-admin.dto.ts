@@ -4,7 +4,6 @@ import {
   IsEnum,
   IsInt,
   IsMongoId,
-  IsOptional,
   IsString,
   Min,
   ValidateNested,
@@ -12,28 +11,21 @@ import {
 import { Type } from 'class-transformer';
 
 import {
-  Entity,
+  EntityAdmin,
   EntityType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
-import { CommentDto } from './comment.dto';
-import { EmotionDto } from './emotion.dto';
 import { ImageAdminDto } from './image-admin.dto';
 import { ImageDimensionDto } from './image-dimension.dto';
 import { VideoDto } from './video.dto';
 
-export class EntityAdminDto implements Entity {
+export class EntityAdminDto implements EntityAdmin {
   @IsEnum(EntityType)
   type!: EntityType;
 
   @IsMongoId()
-  @IsOptional()
-  id?: string;
-
-  @IsString()
-  @IsOptional()
-  googleDriveFolderId?: string;
+  id!: string;
 
   @IsEnum(WatermarkedType)
   watermarkedType!: WatermarkedType;
@@ -49,12 +41,10 @@ export class EntityAdminDto implements Entity {
   order!: number;
 
   @IsString()
-  @IsOptional()
-  title?: string;
+  title!: string;
 
   @IsString()
-  @IsOptional()
-  seoDescription?: string;
+  seoDescription!: string;
 
   @IsArray()
   @ValidateNested({ each: true })
@@ -62,17 +52,14 @@ export class EntityAdminDto implements Entity {
   seoKeywords: string[] = [];
 
   @IsString()
-  @IsOptional()
-  dateCreated?: string;
+  dateCreated!: string;
 
   @IsString()
-  @IsOptional()
-  datePublished?: string;
+  datePublished!: string;
 
   @ValidateNested()
   @Type(() => LocationDto)
-  @IsOptional()
-  location?: LocationDto;
+  location!: LocationDto;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;
@@ -96,16 +83,6 @@ export class EntityAdminDto implements Entity {
   @ValidateNested({ each: true })
   @Type(() => VideoDto)
   videos: VideoDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CommentDto)
-  comments: CommentDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => EmotionDto)
-  emotions: EmotionDto[] = [];
 
   @IsBoolean()
   isPublic!: boolean;

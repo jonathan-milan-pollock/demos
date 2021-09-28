@@ -77,12 +77,12 @@ export class ImageRemoveProvider {
                 ],
                 comments: [
                   ...documentModel.comments.filter(
-                    (comment) => comment.mediaId !== image.id
+                    (comment) => comment.imageId !== image.id
                   ),
                 ],
                 emotions: [
                   ...documentModel.emotions.filter(
-                    (emotion) => emotion.mediaId !== image.id
+                    (emotion) => emotion.imageId !== image.id
                   ),
                 ],
               })

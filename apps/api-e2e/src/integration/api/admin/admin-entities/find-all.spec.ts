@@ -1,5 +1,5 @@
 import {
-  Entity,
+  EntityMinimal,
   EntityWithGroupType,
   EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
@@ -34,9 +34,12 @@ describe('findAll', () => {
           EntityWithoutGroupType.ImagePost
         )
         .then(($body) =>
-          $body.body.forEach((entity: Entity) => {
-            if (!entity.id) throw Error('Entity id is undefined');
-            cy.deleteEntityAdmin(getAuthHeadersAdmin(), entity.type, entity.id);
+          $body.body.forEach((entityMinimal: EntityMinimal) => {
+            cy.deleteEntityAdmin(
+              getAuthHeadersAdmin(),
+              entityMinimal.type,
+              entityMinimal.id
+            );
           })
         )
     )

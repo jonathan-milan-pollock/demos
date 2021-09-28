@@ -53,16 +53,16 @@ export class UserCommentsController {
 
   @Get()
   @ApiQuery({
-    name: 'mediaId',
+    name: 'imageId',
     required: false,
     type: String,
   })
   @ApiOkResponse({ type: [CommentDto] })
   findAll$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Query('mediaId', ParseObjectIdPipe) mediaId?: string
+    @Query('imageId', new ParseUUIDPipe({ version: '4' })) imageId?: string
   ): Observable<Comment[]> {
-    return this.userCommentsService.findAll$(entityId, mediaId);
+    return this.userCommentsService.findAll$(entityId, imageId);
   }
 
   @Get(':id')

@@ -1,6 +1,5 @@
 export enum ImageDimensionType {
   Thumbnail = 'Thumbnail',
-  Tile = 'Tile',
   Small = 'Small',
   Medium = 'Medium',
   Large = 'Large',
@@ -9,7 +8,6 @@ export enum ImageDimensionType {
   LinkedIn = 'LinkedIn',
   GoogleBusiness = 'GoogleBusiness',
   ThreeSixtyThumbnail = 'ThreeSixtyThumbnail',
-  ThreeSixtyTile = 'ThreeSixtyTile',
   ThreeSixtySmall = 'ThreeSixtySmall',
   ThreeSixtyMedium = 'ThreeSixtyMedium',
   ThreeSixtyLarge = 'ThreeSixtyLarge',

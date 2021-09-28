@@ -7,6 +7,8 @@ import { Model } from 'mongoose';
 import {
   DEFAULT_ENTITY_GROUP,
   Entity,
+  EntityAdmin,
+  EntityMinimal,
   EntityType,
   Image,
   ImagePostCreate,
@@ -17,10 +19,11 @@ import {
   Document,
   ImageProvider,
   ImageUploadProvider,
-  loadEntity,
+  loadEntityAdmin,
   loadNewEntity,
   validateEntityFound,
   validateEntityNotAlreadyExists,
+  loadEntityMinimal,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -32,7 +35,7 @@ export class AdminImagePostsService {
     private readonly imageUploadProvider: ImageUploadProvider
   ) {}
 
-  create$(imagePostCreate: ImagePostCreate): Observable<Entity> {
+  create$(imagePostCreate: ImagePostCreate): Observable<EntityMinimal> {
     return from(
       this.entityModel.findOne({
         type: EntityType.ImagePost,
@@ -55,7 +58,7 @@ export class AdminImagePostsService {
         );
       }),
       map(validateEntityFound),
-      map(loadEntity)
+      map(loadEntityMinimal)
     );
   }
 

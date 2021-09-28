@@ -3,15 +3,15 @@ import { getAuthHeaders } from '../auth-headers.functions';
 
 const findAllEmotionsUserUrl = (
   entityId: string,
-  mediaId?: string,
+  imageId?: string,
   commentId?: string
 ) => {
   let url = `/api/v1/user/emotions?entityId=${entityId}`;
-  if (mediaId) {
+  if (imageId) {
     if (commentId) {
-      url = `/api/v1/user/emotions?entityId=${entityId}&mediaId=${mediaId}&commentId=${commentId}`;
+      url = `/api/v1/user/emotions?entityId=${entityId}&imageId=${imageId}&commentId=${commentId}`;
     } else {
-      url = `/api/v1/user/emotions?entityId=${entityId}&mediaId=${mediaId}`;
+      url = `/api/v1/user/emotions?entityId=${entityId}&imageId=${imageId}`;
     }
   } else if (commentId) {
     url = `/api/v1/user/emotions?entityId=${entityId}&commentId=${commentId}`;
@@ -38,10 +38,10 @@ Cypress.Commands.add(
   'findAllEmotionsUser',
   async (
     entityId: string,
-    mediaId?: string,
+    imageId?: string,
     commentId?: string
   ): Promise<any[]> => {
-    return fetch(findAllEmotionsUserUrl(entityId, mediaId, commentId), {
+    return fetch(findAllEmotionsUserUrl(entityId, imageId, commentId), {
       method: 'GET',
       headers: {
         ...getAuthHeaders(),

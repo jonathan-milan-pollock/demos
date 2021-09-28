@@ -22,7 +22,7 @@ export * from './lib/dtos/image-post-create.dto';
 export * from './lib/dtos/image-update.dto';
 export * from './lib/dtos/image.dto';
 export * from './lib/dtos/location.dto';
-export * from './lib/dtos/media-resolution.dto';
+export * from './lib/dtos/resolution.dto';
 export * from './lib/dtos/photo-of-the-week-minimal.dto';
 export * from './lib/dtos/photo-of-the-week.dto';
 export * from './lib/dtos/review-media.dto';

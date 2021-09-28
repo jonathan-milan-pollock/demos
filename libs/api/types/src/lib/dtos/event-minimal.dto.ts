@@ -34,5 +34,5 @@ export class EventMinimalDto {
 
   @ValidateNested()
   @Type(() => ImageDimensionDto)
-  starredTileImageDimensions!: ImageDimensionDto;
+  starredSmallImageDimensions!: ImageDimensionDto;
 }

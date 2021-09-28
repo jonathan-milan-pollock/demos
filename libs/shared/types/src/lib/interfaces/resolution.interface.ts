@@ -1,4 +1,4 @@
-export interface MediaResolution {
+export interface Resolution {
   readonly width: number;
   readonly height: number;
 }

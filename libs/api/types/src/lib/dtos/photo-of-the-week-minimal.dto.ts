@@ -40,5 +40,5 @@ export class PhotoOfTheWeekMinimalDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ImageDimensionDto)
-  starredTileImageDimensions!: ImageDimensionDto;
+  starredSmallImageDimensions!: ImageDimensionDto;
 }

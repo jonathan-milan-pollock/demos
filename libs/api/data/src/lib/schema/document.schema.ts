@@ -53,7 +53,7 @@ export class Document implements Entity {
   @Prop({ type: String, required: true })
   slug!: string;
 
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 0 })
   order!: number;
 
   @Prop({ type: String, required: false })
@@ -73,9 +73,9 @@ export class Document implements Entity {
 
   @Prop({
     type: locationSchema,
-    required: false,
+    required: true,
   })
-  location?: Location;
+  location!: Location;
 
   @Prop({ type: Boolean, required: true, default: false })
   starredImageIsCentered!: boolean;

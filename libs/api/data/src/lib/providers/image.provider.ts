@@ -12,11 +12,11 @@ import {
   validateEntityFound,
   validateEntityIsPublic,
 } from '../entities/entity-validation.functions';
+import { loadImage, loadImageAdmin } from '../content/content-load.functions';
 import {
   validateImageFoundInEntity,
   validateImagePublic,
-} from '../content/image-validation.functions';
-import { loadImage, loadPublicImage } from '../content/image.functions';
+} from '../content/content-validation.functions';
 
 @Injectable()
 export class ImageProvider {
@@ -147,7 +147,7 @@ export class ImageProvider {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        return loadImage(validateImageFoundInEntity(id, documentModel));
+        return loadImageAdmin(validateImageFoundInEntity(id, documentModel));
       })
     );
   }
@@ -158,7 +158,7 @@ export class ImageProvider {
       map(validateEntityIsPublic),
       map((documentModel) => validateImageFoundInEntity(id, documentModel)),
       map(validateImagePublic),
-      map(loadPublicImage)
+      map(loadImage)
     );
   }
 
@@ -216,12 +216,12 @@ export class ImageProvider {
             ],
             comments: [
               ...documentModel.comments.filter(
-                (comment) => comment.mediaId !== id
+                (comment) => comment.imageId !== id
               ),
             ],
             emotions: [
               ...documentModel.emotions.filter(
-                (emotion) => emotion.mediaId !== id
+                (emotion) => emotion.imageId !== id
               ),
             ],
           })

@@ -13,13 +13,13 @@ export const validateAddEmotion = (
       throw new NotFoundException('Could not find comment for emotion');
   }
 
-  if (emotionAdd.mediaId) {
+  if (emotionAdd.imageId) {
     const imageIds = documentModel.images.map((image) => image.id);
     const videoIds = documentModel.videos.map((video) => video.id);
     if (
       !(
-        imageIds.includes(emotionAdd.mediaId) ||
-        videoIds.includes(emotionAdd.mediaId)
+        imageIds.includes(emotionAdd.imageId) ||
+        videoIds.includes(emotionAdd.imageId)
       )
     )
       throw new NotFoundException('Could not find media for emotion');

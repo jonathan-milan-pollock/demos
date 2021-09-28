@@ -1,5 +1,5 @@
 import { ImageDimensionType } from '../enums/image-dimension-type.enum';
-import { MediaResolution } from './media-resolution.interface';
+import { Resolution } from './resolution.interface';
 import { ThreeSixtySettings } from './three-sixty-settings.interface';
 
 export interface ImageDimension {
@@ -7,6 +7,6 @@ export interface ImageDimension {
   readonly entityId: string;
   readonly imageId: string;
   readonly type: ImageDimensionType;
-  readonly resolution: MediaResolution;
-  readonly threeSixtySettings?: ThreeSixtySettings;
+  readonly resolution: Resolution;
+  readonly threeSixtySettings: ThreeSixtySettings;
 }

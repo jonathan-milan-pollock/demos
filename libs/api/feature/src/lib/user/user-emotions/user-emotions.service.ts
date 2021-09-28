@@ -26,13 +26,13 @@ export class UserEmotionsService {
 
   findAll$(
     entityId: string,
-    mediaId?: string,
+    imageId?: string,
     commentId?: string
   ): Observable<Emotion[]> {
     return this.emotionProvider.findAll$(
       entityId,
       this.entityModel,
-      mediaId,
+      imageId,
       commentId
     );
   }

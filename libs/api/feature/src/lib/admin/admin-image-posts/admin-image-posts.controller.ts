@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 
 import { Image } from '@dark-rush-photography/shared/types';
 import {
-  EntityAdminDto,
+  EntityMinimalDto,
   FileUploadDto,
   ImageAdminDto,
   ImagePostCreateDto,
@@ -44,10 +44,10 @@ export class AdminImagePostsController {
 
   @AdminRole()
   @Post()
-  @ApiCreatedResponse({ type: EntityAdminDto })
+  @ApiCreatedResponse({ type: EntityMinimalDto })
   create$(
     @Body() imagePostCreate: ImagePostCreateDto
-  ): Observable<EntityAdminDto> {
+  ): Observable<EntityMinimalDto> {
     return this.adminImagePostsService.create$(imagePostCreate);
   }
 

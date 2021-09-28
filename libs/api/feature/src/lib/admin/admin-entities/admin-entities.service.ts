@@ -5,7 +5,7 @@ import { catchError, concatMap, from, last, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  Entity,
+  EntityAdmin,
   EntityMinimal,
   EntityType,
   EntityUpdate,
@@ -22,7 +22,7 @@ import {
   EntityPublishProvider,
   EntitySocialMediaPostProvider,
   ImageRemoveProvider,
-  loadEntity,
+  loadEntityAdmin,
   validateEntityFound,
   validateEntityIsPublished,
   validateEntityNotPublishing,
@@ -44,7 +44,10 @@ export class AdminEntitiesService {
     private readonly videoRemoveProvider: VideoRemoveProvider
   ) {}
 
-  socialMediaPost$(entityType: EntityType, id: string): Observable<Entity> {
+  socialMediaPost$(
+    entityType: EntityType,
+    id: string
+  ): Observable<EntityAdmin> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map(validateEntityIsPublished),
@@ -57,7 +60,7 @@ export class AdminEntitiesService {
     entityType: EntityType,
     id: string,
     entityUpdate: EntityUpdate
-  ): Observable<Entity> {
+  ): Observable<EntityAdmin> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map(validateEntityNotPublishing),
@@ -72,7 +75,7 @@ export class AdminEntitiesService {
     entityType: EntityType,
     id: string,
     renameMediaWithEntitySlug: boolean
-  ): Observable<Entity> {
+  ): Observable<EntityAdmin> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
@@ -141,11 +144,11 @@ export class AdminEntitiesService {
     );
   }
 
-  findOne$(entityType: EntityType, id: string): Observable<Entity> {
+  findOne$(entityType: EntityType, id: string): Observable<EntityAdmin> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
-      map(loadEntity)
+      map(loadEntityAdmin)
     );
   }
 

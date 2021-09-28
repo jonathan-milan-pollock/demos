@@ -47,6 +47,7 @@ declare namespace Cypress {
       group: string
     ): Cypress.Chainable<Cypress.Response<any[]>>;
     findOneEntityAdmin(
+      authHeaders: { Authorization: string },
       entityType: string,
       id: string
     ): Cypress.Chainable<Cypress.Response<any>>;
@@ -138,7 +139,7 @@ declare namespace Cypress {
     findAllCommentsUser(
       id: string,
       entityId: string,
-      mediaId?: string
+      imageId?: string
     ): Promise<string[]>;
     findOneCommentUser(id: string, entityId: string): Promise<string[]>;
     removeCommentUser(id: string, entityId: string): Promise<void>;
@@ -148,7 +149,7 @@ declare namespace Cypress {
     findAllEmotionsUser(
       id: string,
       entityId: string,
-      mediaId?: string
+      imageId?: string
     ): Promise<string[]>;
     findOneEmotionUser(id: string, entityId: string): Promise<string[]>;
     removeEmotionUser(id: string, entityId: string): Promise<void>;

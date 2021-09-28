@@ -33,10 +33,10 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'findAllCommentsUser',
-  async (entityId: string, mediaId?: string): Promise<any[]> => {
+  async (entityId: string, imageId?: string): Promise<any[]> => {
     return fetch(
-      mediaId
-        ? `/api/v1/user/comments?entityId=${entityId}&mediaId=${mediaId}`
+      imageId
+        ? `/api/v1/user/comments?entityId=${entityId}&imageId=${imageId}`
         : `/api/v1/user/comments?entityId=${entityId}`,
       {
         method: 'GET',

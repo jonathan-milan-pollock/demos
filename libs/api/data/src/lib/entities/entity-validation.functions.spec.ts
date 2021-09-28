@@ -29,7 +29,7 @@ describe('entity-validation.functions', () => {
     });
 
     it('should throw a bad request exception when entity is not the same type', () => {
-      const parameterEntityType = faker.random.arrayElement(
+      const providedEntityType = faker.random.arrayElement(
         Object.values(EntityType)
       );
       const documentEntityType = faker.random.arrayElement(
@@ -37,12 +37,12 @@ describe('entity-validation.functions', () => {
       );
 
       const result = () =>
-        validateEntityType(parameterEntityType, {
+        validateEntityType(providedEntityType, {
           type: documentEntityType,
         } as DocumentModel);
       expect(result).toThrow(BadRequestException);
       expect(result).toThrow(
-        `Entity was found as type ${documentEntityType} not ${parameterEntityType}`
+        `Entity was found as type ${documentEntityType} not ${providedEntityType}`
       );
     });
   });

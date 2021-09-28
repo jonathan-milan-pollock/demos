@@ -1,8 +1,5 @@
-import { Entity, EntityType } from '@dark-rush-photography/shared/types';
-import {
-  getAuthHeaders,
-  getAuthHeadersAdmin,
-} from '../../../../support/commands/api/auth-headers.functions';
+import { EntityMinimal, EntityType } from '@dark-rush-photography/shared/types';
+import { getAuthHeadersAdmin } from '../../../../support/commands/api/auth-headers.functions';
 
 describe('deleteEntity', () => {
   beforeEach(() =>
@@ -12,8 +9,12 @@ describe('deleteEntity', () => {
         cy
           .findAllEntityAdmin(getAuthHeadersAdmin(), EntityType.ImagePost)
           .then(($body) =>
-            $body.body.forEach((entity: Entity) =>
-              cy.deleteEntityAdmin(entity.type, entity.id!)
+            $body.body.forEach((entityMinimal: EntityMinimal) =>
+              cy.deleteEntityAdmin(
+                getAuthHeadersAdmin(),
+                entityMinimal.type,
+                entityMinimal.id
+              )
             )
           )
       )

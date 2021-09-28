@@ -44,7 +44,7 @@ export class EmotionProvider {
   findAll$(
     entityId: string,
     entityModel: Model<DocumentModel>,
-    mediaId?: string,
+    imageId?: string,
     commentId?: string
   ): Observable<Emotion[]> {
     return from(entityModel.findById(entityId)).pipe(
@@ -53,7 +53,7 @@ export class EmotionProvider {
         const emotions = documentModel.emotions.filter(
           (emotion) =>
             emotion.entityId === entityId &&
-            emotion.mediaId === mediaId &&
+            emotion.imageId === imageId &&
             emotion.commentId === commentId
         );
         return emotions.map(loadEmotion);

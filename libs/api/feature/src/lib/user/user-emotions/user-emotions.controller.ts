@@ -37,7 +37,7 @@ export class UserEmotionsController {
 
   @Get()
   @ApiQuery({
-    name: 'mediaId',
+    name: 'imageId',
     required: false,
     type: String,
   })
@@ -49,10 +49,10 @@ export class UserEmotionsController {
   @ApiOkResponse({ type: [EmotionDto] })
   findAll$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Query('mediaId', ParseObjectIdPipe) mediaId: string,
-    @Query('mediaId', ParseObjectIdPipe) commentId: string
+    @Query('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
+    @Query('commentId', new ParseUUIDPipe({ version: '4' })) commentId: string
   ): Observable<Emotion[]> {
-    return this.userEmotionsService.findAll$(entityId, mediaId, commentId);
+    return this.userEmotionsService.findAll$(entityId, imageId, commentId);
   }
 
   @Get(':id')

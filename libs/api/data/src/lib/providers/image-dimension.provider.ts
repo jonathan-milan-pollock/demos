@@ -9,9 +9,9 @@ import {
   Image,
   ImageDimension,
   ImageDimensionType,
-  ThreeSixtySettings,
-  MediaResolution,
   ImageUpdate,
+  Resolution,
+  ThreeSixtySettings,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -20,9 +20,9 @@ import {
   getAzureStorageBlobPathWithDimension,
 } from '@dark-rush-photography/api/util';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { validateImageDimensionNotAlreadyExists } from '../content/image-validation.functions';
-import { loadImageDimension } from '../content/image-dimension.functions';
 import { ConfigProvider } from './config.provider';
+import { validateImageDimensionNotAlreadyExists } from '../content/content-validation.functions';
+import { reloadImageDimension } from '../content/content-load.functions';
 
 @Injectable()
 export class ImageDimensionProvider {
@@ -41,7 +41,7 @@ export class ImageDimensionProvider {
     imageId: string,
     entityId: string,
     type: ImageDimensionType,
-    resolution: MediaResolution
+    resolution: Resolution
   ): Observable<ImageDimension> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
@@ -59,7 +59,7 @@ export class ImageDimensionProvider {
                 imageId,
                 type: type,
                 resolution,
-                threeSixtySettings: { pitch: 0, yaw: 0, roll: 0, hfov: 0 },
+                threeSixtySettings: { pitch: 0, roll: 0, yaw: 0, hfov: 0 },
               },
             ],
           })
@@ -180,7 +180,7 @@ export class ImageDimensionProvider {
         if (!foundImageDimension)
           throw new NotFoundException(`Could not find image dimension ${id}`);
 
-        return loadImageDimension(foundImageDimension);
+        return reloadImageDimension(foundImageDimension);
       })
     );
   }

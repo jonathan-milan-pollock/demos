@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 
 import {
   Image,
+  ImageAdmin,
   ImageDimensionType,
   ImageState,
   ThreeSixtySettings,
@@ -21,7 +22,7 @@ import {
   ImageProvider,
   ImageRemoveProvider,
   ImageUpdateProvider,
-  loadImage,
+  loadImageAdmin,
   validateCanArchiveImage,
   validateCanSelectImage,
   validateCanUnarchiveImage,
@@ -116,7 +117,7 @@ export class AdminImagesService {
       .pipe(concatMap(() => this.findOne$(id, entityId)));
   }
 
-  findAll$(entityId: string, state: ImageState): Observable<Image[]> {
+  findAll$(entityId: string, state: ImageState): Observable<ImageAdmin[]> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
@@ -152,7 +153,7 @@ export class AdminImagesService {
       map((documentModel) =>
         documentModel.images
           .filter((image) => image.state === state)
-          .map(loadImage)
+          .map(loadImageAdmin)
       )
     );
   }

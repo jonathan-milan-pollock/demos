@@ -21,7 +21,7 @@ export class CommentDto implements Comment {
 
   @IsUUID()
   @IsOptional()
-  mediaId?: string;
+  imageId?: string;
 
   @IsInt()
   @Min(0)
