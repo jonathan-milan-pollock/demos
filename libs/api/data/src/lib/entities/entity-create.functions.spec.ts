@@ -33,6 +33,10 @@ describe('entity-create.functions', () => {
       mockingoose.resetAll();
     });
 
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('should create an entity', (done: any) => {
       const folderName = faker.lorem.word();
 
@@ -52,6 +56,7 @@ describe('entity-create.functions', () => {
         documentModel,
         faker.random.arrayElement(Object.values(EntityType)),
         faker.random.arrayElement(Object.values(WatermarkedType)),
+        faker.lorem.word(),
         faker.lorem.word()
       )
         .pipe(last())
