@@ -27,7 +27,7 @@ export const validateEntityNotAlreadyExists = (
 export const validateEntityFound = (
   documentModel: DocumentModel | null
 ): DocumentModel => {
-  if (!documentModel) throw new NotFoundException('Entity was not found');
+  if (!documentModel) throw new NotFoundException();
   return documentModel;
 };
 

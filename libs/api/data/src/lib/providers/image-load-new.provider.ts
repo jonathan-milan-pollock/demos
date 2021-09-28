@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { InjectRepository, Repository } from '@nestjs/azure-database';
 
@@ -9,13 +9,13 @@ import { Model } from 'mongoose';
 
 import {
   EntityType,
-  FAVORITES_SLUG,
   GoogleDriveFolder,
   ImageState,
-  REVIEW_MEDIA_SLUG,
 } from '@dark-rush-photography/shared/types';
 import {
+  findGoogleDriveFolderById$,
   findGoogleDriveFolderByName$,
+  getEntityTypeImageFolderName,
   getGoogleDriveImageFiles$,
   getOrderFromGoogleDriveImageFileName,
 } from '@dark-rush-photography/api/util';
@@ -43,91 +43,31 @@ export class ImageLoadNewProvider {
     this.logger = new Logger(ImageLoadNewProvider.name);
   }
 
-  findNewImagesFolder$(
+  findNewImageFolder$(
     googleDrive: drive_v3.Drive,
-    entityType: EntityType,
     googleDriveFolderId: string,
-    slug: string
+    entityType: EntityType
   ): Observable<GoogleDriveFolder | undefined> {
-    switch (entityType) {
-      case EntityType.About:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          'images'
-        );
-      case EntityType.BestOf:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          'best-37'
-        );
-      case EntityType.Destination:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          'images'
-        );
-      case EntityType.Event:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          'images'
-        );
-      case EntityType.Favorites:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          FAVORITES_SLUG
-        );
-      case EntityType.ImageVideo:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          slug
-        );
-      case EntityType.PhotoOfTheWeek:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          slug
-        );
-      case EntityType.ReviewMedia:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          REVIEW_MEDIA_SLUG
-        );
-      case EntityType.Review:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          slug
-        );
-      case EntityType.SocialMedia:
-        return findGoogleDriveFolderByName$(
-          googleDrive,
-          googleDriveFolderId,
-          'images'
-        );
-      default:
-        throw new BadRequestException(
-          `Invalid entity type ${entityType} to load entity`
-        );
+    const imageFolderName = getEntityTypeImageFolderName(entityType);
+    if (!imageFolderName) {
+      return findGoogleDriveFolderById$(googleDrive, googleDriveFolderId);
     }
+    return findGoogleDriveFolderByName$(
+      googleDrive,
+      googleDriveFolderId,
+      imageFolderName
+    );
   }
 
   loadNewImages$(
     googleDrive: drive_v3.Drive,
     entityId: string,
-    entityImagesFolder: GoogleDriveFolder
+    imageFolder: GoogleDriveFolder
   ): Observable<void> {
     return this.imageRemoveProvider
       .removeImages$(ImageState.New, entityId)
       .pipe(
-        concatMap(() =>
-          getGoogleDriveImageFiles$(googleDrive, entityImagesFolder.id)
-        ),
+        concatMap(() => getGoogleDriveImageFiles$(googleDrive, imageFolder.id)),
         concatMap((imageFiles) => {
           if (imageFiles.length === 0) return of(undefined);
 

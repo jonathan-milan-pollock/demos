@@ -7,26 +7,11 @@ import {
   EntityWithGroupType,
 } from '@dark-rush-photography/shared/types';
 import {
-  getEntityHasGroup,
   getEntityTypeFromEntityWithGroupType,
   getEntityWithGroupTypeFolderName,
 } from './entity-with-group-type.functions';
 
 describe('entity-with-group-type.functions', () => {
-  const entityWithGroupTypes: {
-    entityType: EntityType;
-  }[] = [
-    {
-      entityType: EntityType.Event,
-    },
-    {
-      entityType: EntityType.PhotoOfTheWeek,
-    },
-    {
-      entityType: EntityType.SocialMedia,
-    },
-  ];
-
   const entityTypesWithGroupType: {
     entityType: EntityType;
     entityWithGroupType: EntityWithGroupType;
@@ -62,51 +47,6 @@ describe('entity-with-group-type.functions', () => {
       folderName: 'social-media',
     },
   ];
-
-  const entityWithoutGroupTypes: {
-    entityType: EntityType;
-  }[] = [
-    {
-      entityType: EntityType.About,
-    },
-    {
-      entityType: EntityType.BestOf,
-    },
-    {
-      entityType: EntityType.Destination,
-    },
-    {
-      entityType: EntityType.Favorites,
-    },
-    {
-      entityType: EntityType.ImagePost,
-    },
-    {
-      entityType: EntityType.ImageVideo,
-    },
-    {
-      entityType: EntityType.Review,
-    },
-    {
-      entityType: EntityType.ReviewMedia,
-    },
-  ];
-
-  describe('getEntityHasGroup', () => {
-    it.each(entityWithGroupTypes)(
-      'should return true for %s entity',
-      ({ entityType }) => {
-        expect(getEntityHasGroup(entityType)).toBeTruthy();
-      }
-    );
-
-    it.each(entityWithoutGroupTypes)(
-      'should return false for %s entity',
-      ({ entityType }) => {
-        expect(getEntityHasGroup(entityType)).not.toBeTruthy();
-      }
-    );
-  });
 
   describe('getEntityTypeFromEntityWithGroupType', () => {
     it.each(entityTypesWithGroupType)(

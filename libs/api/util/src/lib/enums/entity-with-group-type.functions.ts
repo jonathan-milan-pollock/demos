@@ -3,18 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 import {
   EntityType,
   EntityWithGroupType,
-  EVENT_FOLDER_NAME,
-  PHOTO_OF_THE_WEEK_FOLDER_NAME,
-  SOCIAL_MEDIA_FOLDER_NAME,
 } from '@dark-rush-photography/shared/types';
-
-const entityToEntityWithGroupTypeMap = new Map<EntityType, EntityWithGroupType>(
-  [
-    [EntityType.Event, EntityWithGroupType.Event],
-    [EntityType.PhotoOfTheWeek, EntityWithGroupType.PhotoOfTheWeek],
-    [EntityType.SocialMedia, EntityWithGroupType.SocialMedia],
-  ]
-);
 
 const entityWithGroupToEntityTypeMap = new Map<EntityWithGroupType, EntityType>(
   [
@@ -25,15 +14,10 @@ const entityWithGroupToEntityTypeMap = new Map<EntityWithGroupType, EntityType>(
 );
 
 const entityWithGroupTypeFolderNameMap = new Map<EntityWithGroupType, string>([
-  [EntityWithGroupType.Event, EVENT_FOLDER_NAME],
-  [EntityWithGroupType.PhotoOfTheWeek, PHOTO_OF_THE_WEEK_FOLDER_NAME],
-  [EntityWithGroupType.SocialMedia, SOCIAL_MEDIA_FOLDER_NAME],
+  [EntityWithGroupType.Event, 'events'],
+  [EntityWithGroupType.PhotoOfTheWeek, 'photo-of-the-week'],
+  [EntityWithGroupType.SocialMedia, 'social-media'],
 ]);
-
-export const getEntityHasGroup = (entityType: EntityType): boolean => {
-  const entityWithGroupType = entityToEntityWithGroupTypeMap.get(entityType);
-  return !!entityWithGroupType;
-};
 
 export const getEntityTypeFromEntityWithGroupType = (
   entityWithGroupType: EntityWithGroupType

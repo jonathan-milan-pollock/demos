@@ -4,13 +4,14 @@ import { getAuthHeadersAdmin } from '../auth-headers.functions';
 Cypress.Commands.add(
   'createImagePostAdmin',
   (
+    authHeaders: { Authorization: string },
     imagePostCreate: ImagePostCreate
   ): Cypress.Chainable<Cypress.Response<Entity>> =>
     cy.request({
       method: 'POST',
       url: '/api/v1/admin/image-posts',
       headers: {
-        ...getAuthHeadersAdmin(),
+        ...authHeaders,
       },
       body: {
         ...imagePostCreate,
@@ -18,34 +19,6 @@ Cypress.Commands.add(
       failOnStatusCode: false,
     })
 );
-
-/*
-Cypress.Commands.add(
-  'uploadThreeSixtyImageAdmin',
-  async (entityId: string, filePath: string): Promise<any> => {
-    const FormData = require('form-data');
-    const formData = new FormData();
-    formData.append(
-      'file'
-      //  fs.readFileSync(filePath, 'utf8'),
-      //  path.basename(filePath)
-    );
-
-    return fetch(
-      `/api/v1/admin/images/upload-three-sixty?entityId=${entityId}`,
-      {
-        method: 'POST',
-        headers: {
-          ...getAuthHeaders(),
-          'Content-Length': formData.getLengthSync(),
-        },
-        body: formData,
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => json);
-  }
-);*/
 
 Cypress.Commands.add(
   'uploadImagePostAdmin',

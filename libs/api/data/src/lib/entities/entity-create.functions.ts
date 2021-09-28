@@ -16,7 +16,7 @@ import {
   loadNewEntity,
 } from '../entities/entity.functions';
 
-export const createEntity$ = (
+export const createEntities$ = (
   googleDrive: drive_v3.Drive,
   parentFolderId: string,
   entityModel: Model<DocumentModel>,
@@ -25,7 +25,7 @@ export const createEntity$ = (
   group: string,
   slug?: string
 ): Observable<DocumentModel | undefined> => {
-  const logger = new Logger(createEntity$.name);
+  const logger = new Logger(createEntities$.name);
   return findGoogleDriveFolders$(googleDrive, parentFolderId).pipe(
     concatMap((entityFolders) => {
       if (entityFolders.length === 0) return of(undefined);
@@ -39,19 +39,18 @@ export const createEntity$ = (
                 type: entityType,
                 watermarkedType: watermarkedType,
                 group,
-                slug: slug ?? entityFolder.name,
+                slug: getSlugForCreateEntities(entityFolder.name, slug),
               })
             ),
           ])
         ),
         concatMap(([entityFolder, documentModels]) => {
-          const entitySlug = slug ?? entityFolder.name;
           const documentModelsArray = loadDocumentModelsArray(documentModels);
           if (documentModelsArray.length > 0) {
             logger.log(
               `Found ${entityType} entity ${
                 group !== DEFAULT_ENTITY_GROUP ? group : ''
-              } ${entitySlug}`
+              } ${getSlugForCreateEntities(entityFolder.name, slug)}`
             );
             return of(documentModelsArray[0]);
           }
@@ -59,7 +58,7 @@ export const createEntity$ = (
           logger.log(
             `Creating ${entityType} entity ${
               group !== DEFAULT_ENTITY_GROUP ? group : ''
-            } ${entitySlug}`
+            } ${getSlugForCreateEntities(entityFolder.name, slug)}`
           );
           return from(
             new entityModel({
@@ -67,7 +66,7 @@ export const createEntity$ = (
                 entityType,
                 watermarkedType,
                 group,
-                entitySlug,
+                getSlugForCreateEntities(entityFolder.name, slug),
                 entityFolder.id
               ),
             }).save()
@@ -76,4 +75,11 @@ export const createEntity$ = (
       );
     })
   );
+};
+
+export const getSlugForCreateEntities = (
+  entityFolderName: string,
+  slug?: string
+): string => {
+  return slug ?? entityFolderName;
 };

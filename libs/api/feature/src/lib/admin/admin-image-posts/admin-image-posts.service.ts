@@ -36,24 +36,24 @@ export class AdminImagePostsService {
     return from(
       this.entityModel.findOne({
         type: EntityType.ImagePost,
+        watermarkedType: WatermarkedType.WithoutWatermark,
         group: DEFAULT_ENTITY_GROUP,
         slug: imagePostCreate.title,
       })
     ).pipe(
-      //map(validateEntityNotAlreadyExists),
-      /*concatMap(() => {
+      map(validateEntityNotAlreadyExists),
+      concatMap(() => {
         return from(
           new this.entityModel({
-            ...loadNewEntity(EntityType.ImagePost, {
-              ...imagePostCreate,
+            ...loadNewEntity(
+              EntityType.ImagePost,
               WatermarkedType.WithoutWatermark,
               DEFAULT_ENTITY_GROUP,
-              imagePostCreate.title,
-              isPublic: true,
-            }),
+              imagePostCreate.title
+            ),
           }).save()
         );
-      }),*/
+      }),
       map(validateEntityFound),
       map(loadEntity)
     );

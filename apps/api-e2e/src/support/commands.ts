@@ -55,12 +55,14 @@ declare namespace Cypress {
       id: string
     ): Cypress.Chainable<Cypress.Response<boolean>>;
     deleteEntityAdmin(
+      authHeaders: { Authorization: string },
       entityType: string,
       id: string
     ): Cypress.Chainable<Cypress.Response<boolean>>;
 
     // api admin image posts
     createImagePostAdmin(
+      authHeaders: { Authorization: string },
       imagePostCreate: any
     ): Cypress.Chainable<Cypress.Response<any>>;
     uploadImagePostAdmin(entityId: string): Promise<any>;

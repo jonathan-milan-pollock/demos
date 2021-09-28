@@ -128,20 +128,19 @@ export class AdminImagesService {
             this.configProvider.googleDrivePrivateKey
           );
           return this.imageLoadNewProvider
-            .findNewImagesFolder$(
+            .findNewImageFolder$(
               googleDrive,
-              documentModel.type,
               googleDriveFolderId,
-              documentModel.slug
+              documentModel.type
             )
             .pipe(
-              concatMap((newImagesFolder) => {
-                if (!newImagesFolder) return [];
+              concatMap((imageFolder) => {
+                if (!imageFolder) return [];
 
                 return this.imageLoadNewProvider.loadNewImages$(
                   googleDrive,
                   entityId,
-                  newImagesFolder
+                  imageFolder
                 );
               })
             );

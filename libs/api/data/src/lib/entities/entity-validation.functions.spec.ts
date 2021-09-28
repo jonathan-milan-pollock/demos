@@ -19,50 +19,30 @@ import {
 } from './entity-validation.functions';
 
 describe('entity-validation.functions', () => {
-  const partialDocumentModel: Partial<DocumentModel> = {
-    type: faker.random.arrayElement(Object.values(EntityType)),
-    group: faker.lorem.word(),
-    slug: faker.lorem.word(),
-    order: faker.datatype.number(),
-    seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
-    starredImageIsCentered: faker.datatype.boolean(),
-    text: [
-      faker.lorem.sentence(),
-      faker.lorem.sentence(),
-      faker.lorem.sentence(),
-    ],
-    images: [],
-    imageDimensions: [],
-    videos: [],
-    comments: [],
-    emotions: [],
-    isPublic: faker.datatype.boolean(),
-    isPublishing: faker.datatype.boolean(),
-    isPublished: faker.datatype.boolean(),
-  };
-
   describe('validateEntityType', () => {
-    it('should return entity if entity type is the same as the entity', () => {
-      const documentModel = partialDocumentModel as DocumentModel;
-
-      const result = validateEntityType(
-        documentModel.type,
-        documentModel as DocumentModel
-      );
+    it('should return entity if entity is the correct type', () => {
+      const entityType = faker.random.arrayElement(Object.values(EntityType));
+      const result = validateEntityType(entityType, {
+        type: entityType,
+      } as DocumentModel);
       expect(result).toBeDefined();
     });
 
-    it('should throw a bad request exception when provided entity type is not the same', () => {
-      const entityType = EntityType.About;
-      const result = () => {
-        validateEntityType(entityType, {
-          ...partialDocumentModel,
-          type: EntityType.BestOf,
+    it('should throw a bad request exception when entity is not the same type', () => {
+      const parameterEntityType = faker.random.arrayElement(
+        Object.values(EntityType)
+      );
+      const documentEntityType = faker.random.arrayElement(
+        Object.values(EntityType)
+      );
+
+      const result = () =>
+        validateEntityType(parameterEntityType, {
+          type: documentEntityType,
         } as DocumentModel);
-      };
       expect(result).toThrow(BadRequestException);
       expect(result).toThrow(
-        `Entity was found as type ${EntityType.BestOf} not ${entityType}`
+        `Entity was found as type ${documentEntityType} not ${parameterEntityType}`
       );
     });
   });
@@ -72,9 +52,9 @@ describe('entity-validation.functions', () => {
       expect(() => validateEntityNotAlreadyExists(null)).not.toThrow();
     });
 
-    it('should throw a conflict exception when entity is not null', () => {
+    it('should throw a conflict exception when entity is provided', () => {
       const result = () => {
-        validateEntityNotAlreadyExists(partialDocumentModel as DocumentModel);
+        validateEntityNotAlreadyExists({} as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
       expect(result).toThrow('Entity already exists');
@@ -82,8 +62,8 @@ describe('entity-validation.functions', () => {
   });
 
   describe('validateEntityFound', () => {
-    it('should return entity when entity is not null', () => {
-      const result = validateEntityFound(partialDocumentModel as DocumentModel);
+    it('should return entity when entity is provided ', () => {
+      const result = validateEntityFound({} as DocumentModel);
       expect(result).toBeDefined();
     });
 
@@ -92,24 +72,25 @@ describe('entity-validation.functions', () => {
         validateEntityFound(null);
       };
       expect(result).toThrow(NotFoundException);
-      expect(result).toThrow('Entity was not found');
     });
   });
 
   describe('validateOneEntityFound', () => {
-    it('should return entity when there is only one entity', () => {
-      const result = validateOneEntityFound([
-        partialDocumentModel as DocumentModel,
-      ]);
+    it('should return entity when there is one entity', () => {
+      const result = validateOneEntityFound([{} as DocumentModel]);
       expect(result).toBeDefined();
+    });
+
+    it('should throw a not found exception when there are not any entities', () => {
+      const result = () => {
+        validateOneEntityFound([]);
+      };
+      expect(result).toThrow(NotFoundException);
     });
 
     it('should throw a conflict exception there is more than one entity found', () => {
       const result = () => {
-        validateOneEntityFound([
-          partialDocumentModel as DocumentModel,
-          partialDocumentModel as DocumentModel,
-        ]);
+        validateOneEntityFound([{} as DocumentModel, {} as DocumentModel]);
       };
       expect(result).toThrow(ConflictException);
       expect(result).toThrow('More than one entity was found');
@@ -119,7 +100,6 @@ describe('entity-validation.functions', () => {
   describe('validateEntityNotPublishing', () => {
     it('should return entity when entity is not publishing', () => {
       const result = validateEntityNotPublishing({
-        ...partialDocumentModel,
         isPublishing: false,
       } as DocumentModel);
       expect(result).toBeDefined();
@@ -128,7 +108,6 @@ describe('entity-validation.functions', () => {
     it('should throw a conflict exception when entity is being published', () => {
       const result = () => {
         validateEntityNotPublishing({
-          ...partialDocumentModel,
           isPublishing: true,
         } as DocumentModel);
       };
@@ -142,7 +121,6 @@ describe('entity-validation.functions', () => {
   describe('validateEntityIsPublished', () => {
     it('should return entity when entity is published', () => {
       const result = validateEntityIsPublished({
-        ...partialDocumentModel,
         isPublished: true,
       } as DocumentModel);
       expect(result).toBeDefined();
@@ -151,7 +129,6 @@ describe('entity-validation.functions', () => {
     it('should throw a bad request exception when entity is not published', () => {
       const result = () => {
         validateEntityIsPublished({
-          ...partialDocumentModel,
           isPublished: false,
         } as DocumentModel);
       };
@@ -163,7 +140,6 @@ describe('entity-validation.functions', () => {
   describe('validateEntityIsPublic', () => {
     it('should return entity when entity is public', () => {
       const result = validateEntityIsPublic({
-        ...partialDocumentModel,
         isPublic: true,
       } as DocumentModel);
       expect(result).toBeDefined();
@@ -172,7 +148,6 @@ describe('entity-validation.functions', () => {
     it('should throw a not found exception when entity is not public', () => {
       const result = () => {
         validateEntityIsPublic({
-          ...partialDocumentModel,
           isPublic: false,
         } as DocumentModel);
       };

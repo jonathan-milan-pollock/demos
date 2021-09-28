@@ -12,6 +12,7 @@ export * from './lib/enums/emotion-type.enum';
 export * from './lib/enums/entity-push-notification-type.enum';
 export * from './lib/enums/entity-type.enum';
 export * from './lib/enums/entity-with-group-type.enum';
+export * from './lib/enums/entity-without-group-type.enum';
 export * from './lib/enums/image-dimension-type.enum';
 export * from './lib/enums/image-state.enum';
 export * from './lib/enums/social-media-type.enum';

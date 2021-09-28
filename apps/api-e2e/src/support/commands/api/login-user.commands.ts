@@ -1,5 +1,7 @@
-export const AUTH0_ISSUER = 'https://darkrushphotography.us.auth0.com/';
-export const AUTH0_AUDIENCE = 'https://www.darkrushphotography.com';
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_ISSUER,
+} from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add('loginUser', async (): Promise<string> => {
   if (Cypress.env('ACCESS_TOKEN'))
