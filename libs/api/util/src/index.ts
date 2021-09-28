@@ -20,6 +20,7 @@ export * from './lib/config/video-resolutions.config';
 
 // enums
 export * from './lib/enums/entity-type.functions';
+export * from './lib/enums/entity-without-group-type.functions';
 export * from './lib/enums/entity-with-group-type.functions';
 
 // env

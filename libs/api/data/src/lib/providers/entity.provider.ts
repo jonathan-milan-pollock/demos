@@ -1,20 +1,21 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { combineLatest, concatMap, from, Observable, of, toArray } from 'rxjs';
+import { concatMap, from, map, Observable, of, toArray } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 import { Model } from 'mongoose';
 
 import {
-  EntityType,
+  EntityMinimal,
+  EntityWithoutGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
-  getEntityTypeFolderName,
-  getEntityTypeInitialSlug,
+  getEntityWithoutGroupTypeFolderName,
+  getEntityWithoutGroupTypeInitialSlug,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { loadDocumentModelsArray } from '../entities/entity.functions';
+import { findAll$, loadEntityMinimal } from '../entities/entity.functions';
 import { EntityCreateProvider } from './entity-create.provider';
 
 @Injectable()
@@ -29,18 +30,21 @@ export class EntityProvider {
     this.logger = new Logger(EntityProvider.name);
   }
 
-  create$(
+  findAll$(
     googleDrive: drive_v3.Drive,
-    entityType: EntityType
-  ): Observable<void> {
-    const folderName = getEntityTypeFolderName(entityType);
-    const initialSlug = getEntityTypeInitialSlug(entityType);
-
+    entityWithoutGroupType: EntityWithoutGroupType
+  ): Observable<EntityMinimal[]> {
+    const folderName = getEntityWithoutGroupTypeFolderName(
+      entityWithoutGroupType
+    );
+    const initialSlug = getEntityWithoutGroupTypeInitialSlug(
+      entityWithoutGroupType
+    );
     return this.entityCreateProvider
       .create$(
         googleDrive,
         folderName,
-        entityType,
+        entityWithoutGroupType,
         WatermarkedType.Watermarked,
         initialSlug
       )
@@ -49,35 +53,22 @@ export class EntityProvider {
           this.entityCreateProvider.create$(
             googleDrive,
             folderName,
-            entityType,
+            entityWithoutGroupType,
             WatermarkedType.WithoutWatermark,
             initialSlug
           )
-        )
-      );
-  }
+        ),
+        concatMap(() =>
+          from(findAll$(entityWithoutGroupType, this.entityModel))
+        ),
+        concatMap((documentModels) => {
+          if (documentModels.length === 0) return of([]);
 
-  findAll$(entityType: EntityType): Observable<DocumentModel[]> {
-    return of(entityType).pipe(
-      concatMap(() =>
-        combineLatest([
-          this.entityModel.find({
-            type: entityType,
-            watermarkedType: WatermarkedType.Watermarked,
-          }),
-          this.entityModel.find({
-            type: entityType,
-            watermarkedType: WatermarkedType.WithoutWatermark,
-          }),
-        ])
-      ),
-      concatMap(([watermarkedImagePosts, withoutWatermarkImagePosts]) =>
-        from([
-          ...loadDocumentModelsArray(watermarkedImagePosts),
-          ...loadDocumentModelsArray(withoutWatermarkImagePosts),
-        ])
-      ),
-      toArray<DocumentModel>()
-    );
+          return from(documentModels).pipe(
+            map(loadEntityMinimal),
+            toArray<EntityMinimal>()
+          );
+        })
+      );
   }
 }

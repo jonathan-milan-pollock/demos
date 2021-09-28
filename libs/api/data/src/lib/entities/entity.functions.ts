@@ -1,7 +1,11 @@
+import { combineLatest, concatMap, from, Observable, of, toArray } from 'rxjs';
+import { Model } from 'mongoose';
+
 import {
   Entity,
   EntityMinimal,
   EntityType,
+  EntityWithoutGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -10,6 +14,7 @@ import { loadEmotion } from '../content/emotion.functions';
 import { loadImage } from '../content/image.functions';
 import { loadImageDimension } from '../content/image-dimension.functions';
 import { loadVideo } from '../content/video.functions';
+import { getEntityTypeFromEntityWithoutGroupType } from '@dark-rush-photography/api/util';
 
 export const loadNewEntity = (
   entityType: EntityType,
@@ -84,4 +89,31 @@ export const loadDocumentModelsArray = (
   documentModels: DocumentModel | DocumentModel[]
 ): DocumentModel[] => {
   return Array.isArray(documentModels) ? documentModels : [documentModels];
+};
+
+export const findAll$ = (
+  entityWithoutGroupType: EntityWithoutGroupType,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel[]> => {
+  return of(entityWithoutGroupType).pipe(
+    concatMap(() =>
+      combineLatest([
+        entityModel.find({
+          type: getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
+          watermarkedType: WatermarkedType.Watermarked,
+        }),
+        entityModel.find({
+          type: getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
+          watermarkedType: WatermarkedType.WithoutWatermark,
+        }),
+      ])
+    ),
+    concatMap(([watermarkedImagePosts, withoutWatermarkImagePosts]) =>
+      from([
+        ...loadDocumentModelsArray(watermarkedImagePosts),
+        ...loadDocumentModelsArray(withoutWatermarkImagePosts),
+      ])
+    ),
+    toArray<DocumentModel>()
+  );
 };

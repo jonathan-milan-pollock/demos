@@ -7,16 +7,17 @@ import { Model } from 'mongoose';
 
 import {
   DEFAULT_ENTITY_GROUP,
-  EntityType,
   EntityWithGroupType,
+  EntityWithoutGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
   findGoogleDriveFolderByName$,
   getEntityTypeFromEntityWithGroupType,
+  getEntityTypeFromEntityWithoutGroupType,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { createEntity$ } from '../entities/entity-create.functions';
+import { createEntities$ } from '../entities/entity-create.functions';
 import { ConfigProvider } from './config.provider';
 
 @Injectable()
@@ -34,7 +35,7 @@ export class EntityCreateProvider {
   create$(
     googleDrive: drive_v3.Drive,
     folderName: string,
-    entityType: EntityType,
+    entityWithoutGroupType: EntityWithoutGroupType,
     watermarkedType: WatermarkedType,
     slug?: string
   ): Observable<void> {
@@ -48,11 +49,11 @@ export class EntityCreateProvider {
       concatMap((folder) => {
         if (!folder) return of(undefined);
 
-        return createEntity$(
+        return createEntities$(
           googleDrive,
           folder.id,
           this.entityModel,
-          entityType,
+          getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
           watermarkedType,
           DEFAULT_ENTITY_GROUP,
           slug
@@ -85,7 +86,7 @@ export class EntityCreateProvider {
           concatMap((groupFolder) => {
             if (!groupFolder) return of(undefined);
 
-            return createEntity$(
+            return createEntities$(
               googleDrive,
               groupFolder.id,
               this.entityModel,

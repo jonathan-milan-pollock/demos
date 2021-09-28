@@ -9,6 +9,7 @@ import { drive_v3 } from 'googleapis';
 
 import {
   EntityWithGroupType,
+  EntityWithoutGroupType,
   GoogleDriveFolder,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
@@ -60,6 +61,58 @@ describe('entity-create.provider', () => {
     jest.clearAllMocks();
   });
 
+  describe('create$', () => {
+    it('should create entities', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
+        .mockImplementation(() =>
+          of({ id: faker.datatype.uuid() } as GoogleDriveFolder)
+        );
+
+      const mockCreateEntities$ = jest
+        .spyOn(entityCreateFunctions, 'createEntities$')
+        .mockImplementationOnce(() => of(undefined));
+
+      entityCreateProvider
+        .create$(
+          {} as drive_v3.Drive,
+          faker.lorem.word(),
+          faker.random.arrayElement(Object.values(EntityWithoutGroupType)),
+          faker.random.arrayElement(Object.values(WatermarkedType)),
+          faker.lorem.word()
+        )
+        .subscribe(() => {
+          expect(mockCreateEntities$).toHaveBeenCalled();
+          done();
+        });
+    });
+
+    it('should not create entities when folder is not found by name', (done: any) => {
+      const mockFindGoogleDriveFolderByName$ = jest
+        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
+        .mockImplementation(() => of(undefined));
+
+      const mockCreateEntities$ = jest.spyOn(
+        entityCreateFunctions,
+        'createEntities$'
+      );
+
+      entityCreateProvider
+        .create$(
+          {} as drive_v3.Drive,
+          faker.lorem.word(),
+          faker.random.arrayElement(Object.values(EntityWithoutGroupType)),
+          faker.random.arrayElement(Object.values(WatermarkedType)),
+          faker.lorem.word()
+        )
+        .subscribe(() => {
+          expect(mockFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(1);
+          expect(mockCreateEntities$).not.toHaveBeenCalled();
+          done();
+        });
+    });
+  });
+
   describe('createForGroup$', () => {
     it('should create entities for group', (done: any) => {
       jest
@@ -71,8 +124,8 @@ describe('entity-create.provider', () => {
           of({ id: faker.datatype.uuid() } as GoogleDriveFolder)
         );
 
-      const mockCreateWithEntityParentFolderId$ = jest
-        .spyOn(entityCreateFunctions, 'createEntity$')
+      const mockCreateEntities$ = jest
+        .spyOn(entityCreateFunctions, 'createEntities$')
         .mockImplementationOnce(() => of(undefined));
 
       entityCreateProvider
@@ -84,7 +137,7 @@ describe('entity-create.provider', () => {
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockCreateWithEntityParentFolderId$).toHaveBeenCalled();
+          expect(mockCreateEntities$).toHaveBeenCalled();
           done();
         });
     });
@@ -94,9 +147,9 @@ describe('entity-create.provider', () => {
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
         .mockImplementation(() => of(undefined));
 
-      const mockCreateWithEntityParentFolderId$ = jest.spyOn(
+      const mockCreateEntities$ = jest.spyOn(
         entityCreateFunctions,
-        'createEntity$'
+        'createEntities$'
       );
 
       entityCreateProvider
@@ -109,7 +162,7 @@ describe('entity-create.provider', () => {
         )
         .subscribe(() => {
           expect(mockFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(1);
-          expect(mockCreateWithEntityParentFolderId$).not.toHaveBeenCalled();
+          expect(mockCreateEntities$).not.toHaveBeenCalled();
           done();
         });
     });
@@ -122,9 +175,9 @@ describe('entity-create.provider', () => {
         )
         .mockImplementationOnce(() => of(undefined));
 
-      const mockCreateWithEntityParentFolderId$ = jest.spyOn(
+      const mockCreateEntities$ = jest.spyOn(
         entityCreateFunctions,
-        'createEntity$'
+        'createEntities$'
       );
 
       entityCreateProvider
@@ -137,7 +190,7 @@ describe('entity-create.provider', () => {
         )
         .subscribe(() => {
           expect(mockFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(2);
-          expect(mockCreateWithEntityParentFolderId$).not.toHaveBeenCalled();
+          expect(mockCreateEntities$).not.toHaveBeenCalled();
           done();
         });
     });

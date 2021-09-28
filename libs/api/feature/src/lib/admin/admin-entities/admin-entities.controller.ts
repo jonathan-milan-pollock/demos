@@ -24,6 +24,7 @@ import { Observable } from 'rxjs';
 import {
   EntityType,
   EntityWithGroupType,
+  EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
@@ -130,17 +131,17 @@ export class AdminEntitiesController {
   }
 
   @AdminRole()
-  @Get(':entityType')
+  @Get(':entityWithoutGroupType')
   @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
+    name: 'entityWithoutGroupType',
+    enum: EntityWithoutGroupType,
   })
   @ApiOkResponse({ type: [EntityMinimalDto] })
   findAll$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType
+    @Param('entityWithoutGroupType', new ParseEnumPipe(EntityWithoutGroupType))
+    entityWithoutGroupType: EntityWithoutGroupType
   ): Observable<EntityMinimalDto[]> {
-    return this.adminEntitiesService.findAll$(entityType);
+    return this.adminEntitiesService.findAll$(entityWithoutGroupType);
   }
 
   @AdminRole()

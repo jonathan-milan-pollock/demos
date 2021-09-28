@@ -64,14 +64,14 @@ describe('entity-group.provider', () => {
       moduleRef.get<EntityGroupProvider>(EntityGroupProvider);
     entityCreateProvider =
       moduleRef.get<EntityCreateProvider>(EntityCreateProvider);
-
-    jest
-      .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-      .mockImplementation(() => '');
   });
 
   describe('findGroups$', () => {
     it('should combine groups from google drive', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => '');
+
       const watermarkedGroups = [faker.lorem.word()];
       const withoutWatermarkGroups = [faker.lorem.word()];
 
@@ -95,6 +95,10 @@ describe('entity-group.provider', () => {
     });
 
     it('should not have duplicates from google drive', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => '');
+
       const sameGroup = faker.lorem.word();
 
       const watermarkedGroups = [sameGroup];
@@ -119,6 +123,10 @@ describe('entity-group.provider', () => {
 
     it('should return an empty array if groups are not found in google drive', (done: any) => {
       jest
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => '');
+
+      jest
         .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
         .mockImplementation(() => of([]));
 
@@ -136,6 +144,14 @@ describe('entity-group.provider', () => {
 
   describe('findAllForGroup$', () => {
     it('should find all entities for a provided group', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => '');
+
+      jest
+        .spyOn(entityCreateProvider, 'createForGroup$')
+        .mockImplementation(() => of(undefined));
+
       const entities = [
         {
           slug: faker.lorem.word(),
@@ -144,14 +160,9 @@ describe('entity-group.provider', () => {
           slug: faker.lorem.word(),
         } as DocumentModel,
       ];
-
-      jest
-        .spyOn(entityCreateProvider, 'createForGroup$')
-        .mockImplementation(() => of(undefined));
-
       jest
         .spyOn(entityGroupFunctions, 'findAllForGroup$')
-        .mockImplementationOnce(() => of(entities));
+        .mockImplementation(() => of(entities));
 
       jest
         .spyOn(entityFunctions, 'loadEntityMinimal')
@@ -174,12 +185,16 @@ describe('entity-group.provider', () => {
 
     it('should be empty if entities are not found', (done: any) => {
       jest
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => '');
+
+      jest
         .spyOn(entityCreateProvider, 'createForGroup$')
         .mockImplementation(() => of(undefined));
 
       jest
         .spyOn(entityGroupFunctions, 'findAllForGroup$')
-        .mockImplementationOnce(() => of([]));
+        .mockImplementation(() => of([]));
 
       entityGroupProvider
         .findAllForGroup$(
@@ -193,14 +208,20 @@ describe('entity-group.provider', () => {
         });
     });
 
-    it('should create groups for watermarked and without watermark groups', (done: any) => {
+    it('should create entities for watermarked and without watermark groups', (done: any) => {
+      const folderName = faker.lorem.word();
+
+      jest
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockImplementation(() => folderName);
+
       const mockCreateForGroup$ = jest
         .spyOn(entityCreateProvider, 'createForGroup$')
         .mockImplementation(() => of(undefined));
 
       jest
         .spyOn(entityGroupFunctions, 'findAllForGroup$')
-        .mockImplementationOnce(() => of([]));
+        .mockImplementation(() => of([]));
 
       const googleDrive = {} as drive_v3.Drive;
       const entityWithGroupType = faker.random.arrayElement(
@@ -214,14 +235,14 @@ describe('entity-group.provider', () => {
           expect(mockCreateForGroup$.mock.calls).toEqual([
             [
               googleDrive,
-              '',
+              folderName,
               entityWithGroupType,
               WatermarkedType.Watermarked,
               group,
             ],
             [
               googleDrive,
-              '',
+              folderName,
               entityWithGroupType,
               WatermarkedType.WithoutWatermark,
               group,

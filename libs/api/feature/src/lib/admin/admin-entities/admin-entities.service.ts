@@ -1,28 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import {
-  catchError,
-  concatMap,
-  from,
-  last,
-  map,
-  Observable,
-  of,
-  toArray,
-} from 'rxjs';
+import { catchError, concatMap, from, last, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
+  Entity,
   EntityMinimal,
   EntityType,
   EntityUpdate,
   EntityWithGroupType,
+  EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
-import {
-  EntityAdminDto,
-  EntityMinimalDto,
-} from '@dark-rush-photography/api/types';
 import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import {
   DocumentModel,
@@ -34,13 +23,11 @@ import {
   EntitySocialMediaPostProvider,
   ImageRemoveProvider,
   loadEntity,
-  loadEntityMinimal,
   validateEntityFound,
   validateEntityIsPublished,
   validateEntityNotPublishing,
   validateEntityType,
   VideoRemoveProvider,
-  validateEntityDoesNotRequireGroup,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -57,10 +44,7 @@ export class AdminEntitiesService {
     private readonly videoRemoveProvider: VideoRemoveProvider
   ) {}
 
-  socialMediaPost$(
-    entityType: EntityType,
-    id: string
-  ): Observable<EntityAdminDto> {
+  socialMediaPost$(entityType: EntityType, id: string): Observable<Entity> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map(validateEntityIsPublished),
@@ -73,7 +57,7 @@ export class AdminEntitiesService {
     entityType: EntityType,
     id: string,
     entityUpdate: EntityUpdate
-  ): Observable<EntityAdminDto> {
+  ): Observable<Entity> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map(validateEntityNotPublishing),
@@ -88,7 +72,7 @@ export class AdminEntitiesService {
     entityType: EntityType,
     id: string,
     renameMediaWithEntitySlug: boolean
-  ): Observable<EntityAdminDto> {
+  ): Observable<Entity> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),
@@ -131,25 +115,14 @@ export class AdminEntitiesService {
     );
   }
 
-  findAll$(entityType: EntityType): Observable<EntityMinimal[]> {
-    validateEntityDoesNotRequireGroup(entityType);
-
+  findAll$(
+    entityWithoutGroupType: EntityWithoutGroupType
+  ): Observable<EntityMinimal[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
-
-    return this.entityProvider.create$(googleDrive, entityType).pipe(
-      concatMap(() => from(this.entityProvider.findAll$(entityType))),
-      concatMap((documentModels) => {
-        if (documentModels.length === 0) return of([]);
-
-        return from(documentModels).pipe(
-          map(loadEntityMinimal),
-          toArray<EntityMinimalDto>()
-        );
-      })
-    );
+    return this.entityProvider.findAll$(googleDrive, entityWithoutGroupType);
   }
 
   findAllForGroup$(
@@ -168,7 +141,7 @@ export class AdminEntitiesService {
     );
   }
 
-  findOne$(entityType: EntityType, id: string): Observable<EntityAdminDto> {
+  findOne$(entityType: EntityType, id: string): Observable<Entity> {
     return from(this.entityModel.findById(id)).pipe(
       map(validateEntityFound),
       map((documentModel) => validateEntityType(entityType, documentModel)),

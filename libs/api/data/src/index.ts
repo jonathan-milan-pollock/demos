@@ -13,7 +13,6 @@ export * from './lib/content/video.functions';
 // entities
 export * from './lib/entities/entity-create.functions';
 export * from './lib/entities/entity-field-validation.functions';
-export * from './lib/entities/entity-group-validation.functions';
 export * from './lib/entities/entity-validation.functions';
 export * from './lib/entities/entity.functions';
 
