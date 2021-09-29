@@ -2,12 +2,12 @@ import { Comment, Emotion } from '@dark-rush-photography/shared/types';
 
 export const findPublicEmotions = (
   emotions: Emotion[],
-  publicMediaIds: string[],
+  publicImageIds: string[],
   publicCommentIds: string[]
 ): Emotion[] => {
-  const entityEmotions = emotions.filter((e) => !e.mediaId && !e.commentId);
+  const entityEmotions = emotions.filter((e) => !e.imageId && !e.commentId);
   const mediaEmotions = emotions.filter(
-    (e) => e.mediaId && publicMediaIds.includes(e.mediaId)
+    (e) => e.imageId && publicImageIds.includes(e.imageId)
   );
   const commentEmotions = emotions.filter(
     (e) => e.commentId && publicCommentIds.includes(e.commentId)
@@ -26,20 +26,20 @@ export const findEntityEmotions = (
   const entityCommentIds = entityComments.map((comment) => comment.id);
   return emotions.filter(
     (emotion) =>
-      emotion.mediaId === undefined ||
+      emotion.imageId === undefined ||
       (emotion.commentId && entityCommentIds.includes(emotion.commentId))
   );
 };
 
 export const findMediaEmotions = (
   emotions: Emotion[],
-  mediaId: string,
+  imageId: string,
   mediaComments: Comment[]
 ): Emotion[] => {
   const mediaCommentIds = mediaComments.map((comment) => comment.id);
   return emotions.filter(
     (emotion) =>
-      emotion.mediaId === mediaId ||
+      emotion.imageId === imageId ||
       (emotion.commentId && mediaCommentIds.includes(emotion.commentId))
   );
 };
@@ -48,7 +48,7 @@ export const loadEmotion = (emotion: Emotion): Emotion => {
   return {
     id: emotion.id,
     entityId: emotion.entityId,
-    mediaId: emotion.mediaId,
+    imageId: emotion.imageId,
     commentId: emotion.commentId,
     type: emotion.type,
     user: emotion.user,

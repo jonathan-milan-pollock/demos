@@ -1,7 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, map, Observable, of, toArray } from 'rxjs';
+import {
+  combineLatest,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  toArray,
+} from 'rxjs';
 import { drive_v3 } from 'googleapis';
 import { Model } from 'mongoose';
 
@@ -11,12 +19,14 @@ import {
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
+  getEntityTypeFromEntityWithoutGroupType,
   getEntityWithoutGroupTypeFolderName,
   getEntityWithoutGroupTypeInitialSlug,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { findAll$, loadEntityMinimal } from '../entities/entity.functions';
+import { loadEntityMinimal } from '../entities/entity-load.functions';
 import { EntityCreateProvider } from './entity-create.provider';
+import { findAllEntities$ } from '../entities/entity-find-all.functions';
 
 @Injectable()
 export class EntityProvider {
@@ -59,8 +69,23 @@ export class EntityProvider {
           )
         ),
         concatMap(() =>
-          from(findAll$(entityWithoutGroupType, this.entityModel))
+          combineLatest([
+            findAllEntities$(
+              getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
+              WatermarkedType.Watermarked,
+              this.entityModel
+            ),
+            findAllEntities$(
+              getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
+              WatermarkedType.WithoutWatermark,
+              this.entityModel
+            ),
+          ])
         ),
+        concatMap(([watermarkedEntities, withoutWatermarkEntities]) =>
+          from([...watermarkedEntities, ...withoutWatermarkEntities])
+        ),
+        toArray<DocumentModel>(),
         concatMap((documentModels) => {
           if (documentModels.length === 0) return of([]);
 

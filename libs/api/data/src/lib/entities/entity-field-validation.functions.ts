@@ -1,6 +1,5 @@
 import { BadRequestException, ConflictException } from '@nestjs/common';
 
-import { Location } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
 export const validateEntityGoogleDriveFolderId = (
@@ -50,12 +49,4 @@ export const validateEntityDatePublished = (
   if (!documentModel.datePublished)
     throw new ConflictException('Entity does not have required published date');
   return documentModel.datePublished;
-};
-
-export const validateEntityLocationProvided = (
-  documentModel: DocumentModel
-): Location => {
-  if (!documentModel.location)
-    throw new ConflictException('Location was not provided');
-  return documentModel.location;
 };

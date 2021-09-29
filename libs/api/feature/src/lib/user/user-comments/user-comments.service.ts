@@ -40,8 +40,8 @@ export class UserCommentsService {
     );
   }
 
-  findAll$(entityId: string, mediaId?: string): Observable<Comment[]> {
-    return this.commentProvider.findAll$(entityId, this.entityModel, mediaId);
+  findAll$(entityId: string, imageId?: string): Observable<Comment[]> {
+    return this.commentProvider.findAll$(entityId, this.entityModel, imageId);
   }
 
   findOne$(id: string, entityId: string): Observable<Comment> {

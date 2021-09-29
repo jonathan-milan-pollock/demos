@@ -19,15 +19,16 @@ import {
   EntityWithGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { getEntityWithGroupTypeFolderName } from '@dark-rush-photography/api/util';
-import { Document, DocumentModel } from '../schema/document.schema';
-import { loadEntityMinimal } from '../entities/entity.functions';
 import {
-  findAllForGroup$,
-  findGroupsFromGoogleDriveFolderName$,
-} from '../entities/entity-group.functions';
+  getEntityTypeFromEntityWithGroupType,
+  getEntityWithGroupTypeFolderName,
+} from '@dark-rush-photography/api/util';
+import { Document, DocumentModel } from '../schema/document.schema';
+import { loadEntityMinimal } from '../entities/entity-load.functions';
+import { findGroupsFromGoogleDriveFolderName$ } from '../entities/entity-group.functions';
 import { ConfigProvider } from './config.provider';
 import { EntityCreateProvider } from './entity-create.provider';
+import { findAllEntitiesForGroup$ } from '../entities/entity-find-all.functions';
 
 @Injectable()
 export class EntityGroupProvider {
@@ -94,8 +95,25 @@ export class EntityGroupProvider {
           )
         ),
         concatMap(() =>
-          from(findAllForGroup$(entityWithGroupType, group, this.entityModel))
+          combineLatest([
+            findAllEntitiesForGroup$(
+              getEntityTypeFromEntityWithGroupType(entityWithGroupType),
+              WatermarkedType.Watermarked,
+              group,
+              this.entityModel
+            ),
+            findAllEntitiesForGroup$(
+              getEntityTypeFromEntityWithGroupType(entityWithGroupType),
+              WatermarkedType.WithoutWatermark,
+              group,
+              this.entityModel
+            ),
+          ])
         ),
+        concatMap(([watermarkedEntities, withoutWatermarkEntities]) =>
+          from([...watermarkedEntities, ...withoutWatermarkEntities])
+        ),
+        toArray<DocumentModel>(),
         concatMap((documentModels) => {
           if (documentModels.length === 0) return of([]);
 

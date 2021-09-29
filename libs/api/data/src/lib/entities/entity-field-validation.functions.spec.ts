@@ -2,12 +2,11 @@ import { ConflictException } from '@nestjs/common';
 
 import * as faker from 'faker';
 
-import { EntityType, Location } from '@dark-rush-photography/shared/types';
+import { EntityType } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
   validateEntityDateCreatedProvided,
   validateEntityDatePublished,
-  validateEntityLocationProvided,
   validateEntitySeoDescriptionProvided,
   validateEntitySeoKeywordsProvided,
   validateEntityTitleProvided,
@@ -143,29 +142,6 @@ describe('entity-validation.functions', () => {
       };
       expect(result).toThrow(ConflictException);
       expect(result).toThrow('Entity does not have required published date');
-    });
-  });
-
-  describe('validateEntityLocationProvided', () => {
-    it('should return location if entity location provided', () => {
-      const country = faker.address.country();
-      const location = { country: country } as Location;
-      const result = validateEntityLocationProvided({
-        ...partialDocumentModel,
-        location: location,
-      } as DocumentModel);
-      expect(result.country).toBe(country);
-    });
-
-    it('should throw a conflict exception when location is not provided', () => {
-      const result = () => {
-        validateEntityLocationProvided({
-          ...partialDocumentModel,
-          location: undefined,
-        } as DocumentModel);
-      };
-      expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Location was not provided');
     });
   });
 });

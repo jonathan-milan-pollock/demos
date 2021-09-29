@@ -4,7 +4,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { from, map, Observable, of } from 'rxjs';
 
-import { EntityPushNotificationType } from '@dark-rush-photography/shared/types';
+import { ImageProcessType } from '@dark-rush-photography/shared/types';
 import { ImageProcessTable } from '@dark-rush-photography/api/data';
 import { WebSocketMessageProvider } from '@dark-rush-photography/api/data';
 

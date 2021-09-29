@@ -71,7 +71,7 @@ describe('entity-create.provider', () => {
 
       const mockCreateEntities$ = jest
         .spyOn(entityCreateFunctions, 'createEntities$')
-        .mockImplementationOnce(() => of(undefined));
+        .mockImplementation(() => of(undefined));
 
       entityCreateProvider
         .create$(
@@ -126,7 +126,7 @@ describe('entity-create.provider', () => {
 
       const mockCreateEntities$ = jest
         .spyOn(entityCreateFunctions, 'createEntities$')
-        .mockImplementationOnce(() => of(undefined));
+        .mockImplementation(() => of(undefined));
 
       entityCreateProvider
         .createForGroup$(

@@ -10,7 +10,6 @@ import {
   ImageDimension,
   ImageUpdate,
 } from '@dark-rush-photography/shared/types';
-import { ImageUpdateDto } from '@dark-rush-photography/api/types';
 import {
   deleteBlob$,
   downloadBlobToFile$,
@@ -37,10 +36,7 @@ export class ImageUpdateProvider {
     this.logger = new Logger(ImageUpdateProvider.name);
   }
 
-  update$(
-    image: Image,
-    imageUpdate: ImageUpdateDto
-  ): Observable<DocumentModel> {
+  update$(image: Image, imageUpdate: ImageUpdate): Observable<DocumentModel> {
     if (image.fileName === imageUpdate.fileName) {
       return this.imageProvider.update$(image.id, image.entityId, imageUpdate);
     }

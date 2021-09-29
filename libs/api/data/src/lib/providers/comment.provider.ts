@@ -81,14 +81,14 @@ export class CommentProvider {
   findAll$(
     entityId: string,
     entityModel: Model<DocumentModel>,
-    mediaId?: string
+    imageId?: string
   ): Observable<Comment[]> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
         const comments = documentModel.comments.filter(
           (comment) =>
-            comment.entityId === entityId && comment.mediaId === mediaId
+            comment.entityId === entityId && comment.imageId === imageId
         );
         return comments.map(loadComment);
       })

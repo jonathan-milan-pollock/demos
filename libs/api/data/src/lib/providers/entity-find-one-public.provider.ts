@@ -11,16 +11,15 @@ import {
   validateEntityFound,
   validateEntityIsPublic,
 } from '../entities/entity-validation.functions';
-import { loadMinimalPublicImage } from '../content/image.functions';
 import {
   validateEntityDateCreatedProvided,
   validateEntityDatePublished,
-  validateEntityLocationProvided,
   validateEntitySeoDescriptionProvided,
   validateEntitySeoKeywordsProvided,
   validateEntityTitleProvided,
 } from '../entities/entity-field-validation.functions';
-import { loadPublicContent } from '../content/public-content.functions';
+import { loadImageMinimal } from '../content/content-load.functions';
+import { loadPublicContent } from '../content/content-load-public.functions';
 
 @Injectable()
 export class EntityFindOnePublicProvider {
@@ -43,7 +42,7 @@ export class EntityFindOnePublicProvider {
             return {
               slug: documentModel.slug,
               order: documentModel.order,
-              images: publicContent.images.map(loadMinimalPublicImage),
+              images: publicContent.images.map(loadImageMinimal),
             };
           case EntityType.Event:
             return {
@@ -54,9 +53,9 @@ export class EntityFindOnePublicProvider {
               description: validateEntitySeoDescriptionProvided(documentModel),
               keywords: validateEntitySeoKeywordsProvided(documentModel),
               dateCreated: validateEntityDateCreatedProvided(documentModel),
-              location: validateEntityLocationProvided(documentModel),
+              location: documentModel.location,
               text: documentModel.text,
-              images: publicContent.images.map(loadMinimalPublicImage),
+              images: publicContent.images.map(loadImageMinimal),
             };
           case EntityType.PhotoOfTheWeek:
             return {
@@ -67,9 +66,9 @@ export class EntityFindOnePublicProvider {
               description: validateEntitySeoDescriptionProvided(documentModel),
               keywords: validateEntitySeoKeywordsProvided(documentModel),
               datePublished: validateEntityDatePublished(documentModel),
-              location: validateEntityLocationProvided(documentModel),
+              location: documentModel.location,
               text: documentModel.text,
-              images: publicContent.images.map(loadMinimalPublicImage),
+              images: publicContent.images.map(loadImageMinimal),
             };
           default:
             throw new NotFoundException(

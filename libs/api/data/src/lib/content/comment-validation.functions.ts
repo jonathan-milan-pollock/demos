@@ -7,13 +7,13 @@ export const validateAddComment = (
   commentAdd: CommentAddDto,
   documentModel: DocumentModel
 ): DocumentModel => {
-  if (commentAdd.mediaId) {
+  if (commentAdd.imageId) {
     const imageIds = documentModel.images.map((image) => image.id);
     const videoIds = documentModel.videos.map((video) => video.id);
     if (
       !(
-        imageIds.includes(commentAdd.mediaId) ||
-        videoIds.includes(commentAdd.mediaId)
+        imageIds.includes(commentAdd.imageId) ||
+        videoIds.includes(commentAdd.imageId)
       )
     )
       throw new NotFoundException('Could not find media for comment');

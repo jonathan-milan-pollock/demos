@@ -1,7 +1,7 @@
 import { VideoDimensionType } from '../enums/video-dimension-type.enum';
-import { MediaResolution } from './media-resolution.interface';
+import { Resolution } from './resolution.interface';
 
 export interface VideoResolution {
   readonly type: VideoDimensionType;
-  readonly resolution: MediaResolution;
+  readonly resolution: Resolution;
 }

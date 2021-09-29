@@ -10,8 +10,8 @@ export const resizeLongestEdgeImage$ = (
   longestEdge: number
 ): Observable<string> =>
   findImageResolution$(filePath).pipe(
-    concatMap((pixels) => {
-      return pixels.width > pixels.height
+    concatMap((resolution) => {
+      return resolution.width > resolution.height
         ? createTempFile$(fileName).pipe(
             concatMap((newFilePath) =>
               resizeLongestEdgeImageWidth$(filePath, newFilePath, longestEdge)

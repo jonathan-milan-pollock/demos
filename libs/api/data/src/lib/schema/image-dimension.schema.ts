@@ -11,9 +11,14 @@ export const imageDimensionSchema = {
     enum: Object.keys(ImageDimensionType),
     required: true,
   },
-  resolution: { type: resolutionSchema, required: true },
+  resolution: {
+    type: resolutionSchema,
+    required: true,
+    default: { width: 0, height: 0 },
+  },
   settings: {
     type: threeSixtySettingsSchema,
-    required: false,
+    required: true,
+    default: { pitch: 0, roll: 0, yaw: 0, hfov: 0 },
   },
 };

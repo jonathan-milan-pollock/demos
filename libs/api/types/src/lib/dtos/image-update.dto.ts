@@ -24,13 +24,16 @@ export class ImageUpdateDto implements ImageUpdate {
   isLoved!: boolean;
 
   @IsString()
-  title!: string;
+  @IsOptional()
+  title?: string;
 
   @IsString()
-  seoDescription!: string;
+  @IsOptional()
+  seoDescription?: string;
 
   @IsString()
-  seoKeywords!: string;
+  @IsOptional()
+  seoKeywords?: string;
 
   @IsISO8601()
   @IsOptional()

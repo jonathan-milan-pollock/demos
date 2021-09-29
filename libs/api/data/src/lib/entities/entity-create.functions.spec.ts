@@ -20,10 +20,10 @@ jest.mock('@dark-rush-photography/api/util', () => ({
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-jest.mock('../entities/entity.functions', () => ({
-  ...jest.requireActual('../entities/entity.functions'),
+jest.mock('./entity-load.functions', () => ({
+  ...jest.requireActual('./entity-load.functions'),
 }));
-import * as entityFunctions from '../entities/entity.functions';
+import * as entityLoadFunctions from './entity-load.functions';
 
 const mockingoose = require('mockingoose');
 
@@ -48,7 +48,10 @@ describe('entity-create.functions', () => {
       mockingoose(documentModel).toReturn([], 'find');
       mockingoose(documentModel).toReturn({ slug: folderName }, 'save');
 
-      const mockLoadNewEntity = jest.spyOn(entityFunctions, 'loadNewEntity');
+      const mockLoadNewEntity = jest.spyOn(
+        entityLoadFunctions,
+        'loadNewEntity'
+      );
 
       createEntities$(
         {} as drive_v3.Drive,
@@ -67,7 +70,7 @@ describe('entity-create.functions', () => {
         });
     });
 
-    it('should return entity if it already exists', (done: any) => {
+    it('should return entity when it already exists', (done: any) => {
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
         .mockImplementation(() => of([{ id: '', name: '' }]));
@@ -76,7 +79,10 @@ describe('entity-create.functions', () => {
       const documentModel = model(Document.name, DocumentSchema);
       mockingoose(documentModel).toReturn([{ slug }], 'find');
 
-      const mockLoadNewEntity = jest.spyOn(entityFunctions, 'loadNewEntity');
+      const mockLoadNewEntity = jest.spyOn(
+        entityLoadFunctions,
+        'loadNewEntity'
+      );
 
       createEntities$(
         {} as drive_v3.Drive,
@@ -95,7 +101,7 @@ describe('entity-create.functions', () => {
         });
     });
 
-    it('should return undefined if google drive folders are not found', (done: any) => {
+    it('should return undefined when google drive folders are not found', (done: any) => {
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
         .mockImplementation(() => of([]));
@@ -120,7 +126,7 @@ describe('entity-create.functions', () => {
   });
 
   describe('getSlugForCreateEntities$', () => {
-    it('should return slug if provided', () => {
+    it('should return slug when provided', () => {
       const slug = faker.lorem.word();
       const result = getSlugForCreateEntities(faker.lorem.word(), slug);
       expect(result).toBe(slug);

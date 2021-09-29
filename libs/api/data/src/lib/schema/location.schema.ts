@@ -4,5 +4,5 @@ export const locationSchema = {
   city: { type: String, required: false },
   stateOrProvince: { type: String, required: false },
   zipCode: { type: String, required: false },
-  country: { type: String, required: true },
+  country: { type: String, required: true, default: 'United States' },
 };

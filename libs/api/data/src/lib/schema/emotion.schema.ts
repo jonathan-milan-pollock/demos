@@ -4,7 +4,7 @@ import { userSchema } from './user.schema';
 export const emotionSchema = {
   id: { type: String, required: true },
   entityId: { type: String, required: true },
-  mediaId: { type: String, required: false },
+  imageId: { type: String, required: false },
   commentId: { type: String, required: false },
   type: {
     type: String,

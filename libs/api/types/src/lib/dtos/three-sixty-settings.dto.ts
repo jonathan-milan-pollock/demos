@@ -7,10 +7,10 @@ export class ThreeSixtySettingsDto implements ThreeSixtySettings {
   pitch!: number;
 
   @IsNumber()
-  yaw!: number;
+  roll!: number;
 
   @IsNumber()
-  roll!: number;
+  yaw!: number;
 
   @IsNumber()
   hfov!: number;

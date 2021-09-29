@@ -1,27 +1,22 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 import { Location } from '@dark-rush-photography/shared/types';
 
 export class LocationDto implements Location {
   @IsString()
-  @IsOptional()
-  place?: string;
+  place!: string;
 
   @IsString()
-  @IsOptional()
-  street?: string;
+  street!: string;
 
   @IsString()
-  @IsOptional()
-  city?: string;
+  city!: string;
 
   @IsString()
-  @IsOptional()
-  stateOrProvince?: string;
+  stateOrProvince!: string;
 
   @IsString()
-  @IsOptional()
-  zipCode?: string;
+  zipCode!: string;
 
   @IsString()
   country!: string;

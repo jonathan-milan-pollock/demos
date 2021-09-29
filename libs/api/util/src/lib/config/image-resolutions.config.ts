@@ -5,7 +5,6 @@ import {
   ImageDimensionConfig,
   ImageDimensionLongestEdgeConfig,
   ImageDimensionStandardConfig,
-  ImageDimensionTileConfig,
 } from '@dark-rush-photography/shared/types';
 
 export const findImageResolution = (
@@ -24,13 +23,7 @@ export const findImageResolution = (
 export const IMAGE_RESOLUTIONS: (
   | ImageDimensionStandardConfig
   | ImageDimensionLongestEdgeConfig
-  | ImageDimensionTileConfig
 )[] = [
-  {
-    type: ImageDimensionType.Tile,
-    minPixels: { width: 260, height: 186 },
-    longestEdge: 260,
-  },
   {
     type: ImageDimensionType.Thumbnail,
     longestEdge: 16,
@@ -49,22 +42,22 @@ export const IMAGE_RESOLUTIONS: (
   },
   {
     type: ImageDimensionType.Facebook,
-    pixels: { width: 1200, height: 630 },
+    resolution: { width: 1200, height: 630 },
     exactFit: false,
   },
   {
     type: ImageDimensionType.Instagram,
-    pixels: { width: 1080, height: 1080 },
+    resolution: { width: 1080, height: 1080 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.LinkedIn,
-    pixels: { width: 1200, height: 627 },
+    resolution: { width: 1200, height: 627 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.GoogleBusiness,
-    pixels: { width: 1080, height: 608 },
+    resolution: { width: 1080, height: 608 },
     exactFit: true,
   },
 ];

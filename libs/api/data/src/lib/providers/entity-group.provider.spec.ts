@@ -22,15 +22,20 @@ jest.mock('@dark-rush-photography/api/util', () => ({
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-jest.mock('../entities/entity.functions', () => ({
-  ...jest.requireActual('../entities/entity.functions'),
+jest.mock('../entities/entity-load.functions', () => ({
+  ...jest.requireActual('../entities/entity-load.functions'),
 }));
-import * as entityFunctions from '../entities/entity.functions';
+import * as entityLoadFunctions from '../entities/entity-load.functions';
 
 jest.mock('../entities/entity-group.functions', () => ({
   ...jest.requireActual('../entities/entity-group.functions'),
 }));
 import * as entityGroupFunctions from '../entities/entity-group.functions';
+
+jest.mock('../entities/entity-find-all.functions', () => ({
+  ...jest.requireActual('../entities/entity-find-all.functions'),
+}));
+import * as entityFindAllFunctions from '../entities/entity-find-all.functions';
 
 describe('entity-group.provider', () => {
   let entityGroupProvider: EntityGroupProvider;
@@ -143,7 +148,7 @@ describe('entity-group.provider', () => {
   });
 
   describe('findAllForGroup$', () => {
-    it('should find all entities for a provided group', (done: any) => {
+    it('should find watermarked and without watermark entities for group', (done: any) => {
       jest
         .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
         .mockImplementation(() => '');
@@ -152,20 +157,20 @@ describe('entity-group.provider', () => {
         .spyOn(entityCreateProvider, 'createForGroup$')
         .mockImplementation(() => of(undefined));
 
-      const entities = [
-        {
-          slug: faker.lorem.word(),
-        } as DocumentModel,
-        {
-          slug: faker.lorem.word(),
-        } as DocumentModel,
-      ];
-      jest
-        .spyOn(entityGroupFunctions, 'findAllForGroup$')
-        .mockImplementation(() => of(entities));
+      const watermarkedEntity = {
+        slug: faker.lorem.word(),
+      } as DocumentModel;
+      const withoutWatermarkEntity = {
+        slug: faker.lorem.word(),
+      } as DocumentModel;
 
       jest
-        .spyOn(entityFunctions, 'loadEntityMinimal')
+        .spyOn(entityFindAllFunctions, 'findAllEntitiesForGroup$')
+        .mockImplementationOnce(() => of([watermarkedEntity]))
+        .mockImplementationOnce(() => of([withoutWatermarkEntity]));
+
+      jest
+        .spyOn(entityLoadFunctions, 'loadEntityMinimal')
         .mockImplementation(
           (documentModel: DocumentModel) =>
             ({ slug: documentModel.slug } as EntityMinimal)
@@ -178,7 +183,10 @@ describe('entity-group.provider', () => {
           faker.lorem.word()
         )
         .subscribe((result) => {
-          expect(result).toEqual(entities);
+          expect(result).toEqual([
+            { ...watermarkedEntity },
+            { ...withoutWatermarkEntity },
+          ]);
           done();
         });
     });
@@ -193,7 +201,7 @@ describe('entity-group.provider', () => {
         .mockImplementation(() => of(undefined));
 
       jest
-        .spyOn(entityGroupFunctions, 'findAllForGroup$')
+        .spyOn(entityFindAllFunctions, 'findAllEntitiesForGroup$')
         .mockImplementation(() => of([]));
 
       entityGroupProvider
@@ -220,7 +228,7 @@ describe('entity-group.provider', () => {
         .mockImplementation(() => of(undefined));
 
       jest
-        .spyOn(entityGroupFunctions, 'findAllForGroup$')
+        .spyOn(entityFindAllFunctions, 'findAllEntitiesForGroup$')
         .mockImplementation(() => of([]));
 
       const googleDrive = {} as drive_v3.Drive;

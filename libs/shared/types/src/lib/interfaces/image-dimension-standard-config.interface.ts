@@ -1,7 +1,7 @@
 import { ImageDimensionConfig } from './image-dimension-config.interface';
-import { MediaResolution } from './media-resolution.interface';
+import { Resolution } from './resolution.interface';
 
 export interface ImageDimensionStandardConfig extends ImageDimensionConfig {
-  readonly pixels: MediaResolution;
+  readonly resolution: Resolution;
   readonly exactFit: boolean;
 }

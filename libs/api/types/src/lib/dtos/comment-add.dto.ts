@@ -15,7 +15,7 @@ export class CommentAddDto {
 
   @IsUUID()
   @IsOptional()
-  mediaId?: string;
+  imageId?: string;
 
   @ValidateNested()
   @Type(() => UserDto)

@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 import { Image, ImageState } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { validateImageWithFileNameNotAlreadyExists } from '../content/image-validation.functions';
+import { validateImageWithFileNameNotAlreadyExists } from '../content/content-validation.functions';
 import { ImageProvider } from './image.provider';
 import { ImageProcessNewProvider } from './image-process-new.provider';
 

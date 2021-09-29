@@ -2,31 +2,29 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
-  IsISO8601,
   IsMongoId,
-  IsOptional,
   IsString,
   IsUUID,
   Min,
 } from 'class-validator';
 
-import { Image, ImageState } from '@dark-rush-photography/shared/types';
+import { ImageAdmin, ImageState } from '@dark-rush-photography/shared/types';
 
-export class ImageAdminDto implements Image {
+export class ImageAdminDto implements ImageAdmin {
   @IsUUID()
   id!: string;
 
   @IsMongoId()
   entityId!: string;
 
-  @IsEnum(ImageState)
-  state!: ImageState;
-
   @IsString()
   blobPathId!: string;
 
   @IsString()
   fileName!: string;
+
+  @IsEnum(ImageState)
+  state!: ImageState;
 
   @IsInt()
   @Min(0)
@@ -47,13 +45,11 @@ export class ImageAdminDto implements Image {
   @IsString()
   seoKeywords!: string;
 
-  @IsISO8601()
-  @IsOptional()
-  dateCreated?: string;
+  @IsString()
+  dateCreated!: string;
 
-  @IsISO8601()
-  @IsOptional()
-  datePublished?: string;
+  @IsString()
+  datePublished!: string;
 
   @IsBoolean()
   isThreeSixty!: boolean;

@@ -5,7 +5,6 @@ import {
   ImageDimensionConfig,
   ImageDimensionLongestEdgeConfig,
   ImageDimensionStandardConfig,
-  ImageDimensionTileConfig,
 } from '@dark-rush-photography/shared/types';
 
 export const findThreeSixtyImageResolution = (
@@ -24,13 +23,7 @@ export const findThreeSixtyImageResolution = (
 export const THREE_SIXTY_IMAGE_RESOLUTIONS: (
   | ImageDimensionStandardConfig
   | ImageDimensionLongestEdgeConfig
-  | ImageDimensionTileConfig
 )[] = [
-  {
-    type: ImageDimensionType.ThreeSixtyTile,
-    minPixels: { width: 260, height: 186 },
-    longestEdge: 260,
-  },
   {
     type: ImageDimensionType.ThreeSixtyThumbnail,
     longestEdge: 52,
@@ -49,22 +42,22 @@ export const THREE_SIXTY_IMAGE_RESOLUTIONS: (
   },
   {
     type: ImageDimensionType.ThreeSixtyFacebook,
-    pixels: { width: 5120, height: 2560 },
+    resolution: { width: 5120, height: 2560 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.ThreeSixtyInstagram,
-    pixels: { width: 1080, height: 1080 },
+    resolution: { width: 1080, height: 1080 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.ThreeSixtyLinkedIn,
-    pixels: { width: 1280, height: 720 },
+    resolution: { width: 1280, height: 720 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.ThreeSixtyGoogleBusiness,
-    pixels: { width: 4096, height: 2048 },
+    resolution: { width: 4096, height: 2048 },
     exactFit: true,
   },
 ];

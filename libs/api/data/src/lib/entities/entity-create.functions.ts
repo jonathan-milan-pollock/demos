@@ -14,7 +14,7 @@ import { DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
   loadNewEntity,
-} from '../entities/entity.functions';
+} from './entity-load.functions';
 
 export const createEntities$ = (
   googleDrive: drive_v3.Drive,
@@ -48,17 +48,17 @@ export const createEntities$ = (
           const documentModelsArray = loadDocumentModelsArray(documentModels);
           if (documentModelsArray.length > 0) {
             logger.log(
-              `Found ${entityType} entity ${
-                group !== DEFAULT_ENTITY_GROUP ? group : ''
+              `Found ${entityType} entity${
+                group !== DEFAULT_ENTITY_GROUP ? ` ${group}` : ''
               } ${getSlugForCreateEntities(entityFolder.name, slug)}`
             );
             return of(documentModelsArray[0]);
           }
 
           logger.log(
-            `Creating ${entityType} entity ${
-              group !== DEFAULT_ENTITY_GROUP ? group : ''
-            } ${getSlugForCreateEntities(entityFolder.name, slug)}`
+            `Creating ${entityType} entity${
+              group !== DEFAULT_ENTITY_GROUP ? ` ${group}` : ''
+            }${getSlugForCreateEntities(entityFolder.name, slug)}`
           );
           return from(
             new entityModel({

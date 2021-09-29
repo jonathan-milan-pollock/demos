@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { Image, MediaResolution } from '@dark-rush-photography/shared/types';
+import { Image, Resolution } from '@dark-rush-photography/shared/types';
 
 // TODO: exif the video
 // TODO: resize the video for social media
@@ -15,7 +15,7 @@ export const createImageVideo = (): boolean => {
 export const meltVideo = (
   images: Image[],
   videoFilePath: string,
-  pixels: MediaResolution
+  resolution: Resolution
 ): string => {
   const firstImageDisplayFrames = 50;
   const imageDisplayFrames = 75;
@@ -31,7 +31,7 @@ export const meltVideo = (
     }
     imageProperties += ` "${image.fileName}" out=${imageDisplayFrames} -mix ${fadeFrames} -mixer luma`;
   }
-  const command = `-verbose -profile ${profile} ${imageProperties} -consumer avformat:${videoFilePath} width=${pixels.width} height=${pixels.height} vcodec=libx264"`;
+  const command = `-verbose -profile ${profile} ${imageProperties} -consumer avformat:${videoFilePath} width=${resolution.width} height=${resolution.height} vcodec=libx264"`;
   Logger.log(command, meltVideo.name);
   return command;
 };

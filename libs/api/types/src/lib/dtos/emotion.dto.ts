@@ -19,7 +19,7 @@ export class EmotionDto implements Emotion {
 
   @IsUUID()
   @IsOptional()
-  mediaId?: string;
+  imageId?: string;
 
   @IsUUID()
   @IsOptional()
