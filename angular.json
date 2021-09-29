@@ -101,7 +101,8 @@
           "options": {
             "jestConfig": "libs/api/data/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }
@@ -172,7 +173,8 @@
           "options": {
             "jestConfig": "libs/api/util/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }
@@ -237,7 +239,8 @@
           "options": {
             "jestConfig": "libs/best-of/data/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }
@@ -324,7 +327,8 @@
           "options": {
             "jestConfig": "libs/best-of/util/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }
@@ -662,7 +666,8 @@
           "options": {
             "jestConfig": "libs/website/data/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }
@@ -832,7 +837,8 @@
           "options": {
             "jestConfig": "libs/website/ui/ui-directives/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }
@@ -892,7 +898,8 @@
           "options": {
             "jestConfig": "libs/website/util/jest.config.js",
             "passWithNoTests": true,
-            "codeCoverage": true
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }

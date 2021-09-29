@@ -40,8 +40,7 @@
     "serve:api": "concurrently \"nx serve api\" \"nx run api-e2e:e2e --watch\"",
     "serve:ui": "npm run sb:docs && nx run ui-storybook-e2e:e2e --watch",
     "serve:web": "concurrently \"npm run dev:ssr\" \"nx serve api\" \"nx run website-e2e:e2e --watch\"",
-    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx run best-of-e2e:e2e --watch\"",
-    "test:all": "nx run-many --target=test --all"
+    "serve:best": "concurrently \"nx serve best-of\" \"nx serve api\" \"nx run best-of-e2e:e2e --watch\""
   },
   "private": true,
   "dependencies": {

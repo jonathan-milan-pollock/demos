@@ -113,10 +113,14 @@
 /ci/dist
 ```
 
-### in angular.json add codeCoverage to test tasks options
+### in angular.json add codeCoverage to test task options
+
+- text displays the code coverage in the console
+- with image-elements only needed codeCoverage true
 
 ```json
-"codeCoverage": true
+"codeCoverage": true,
+"coverageReporters": ["text", "json", "lcov"]
 ```
 
 ### reorder apps and libs
