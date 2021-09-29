@@ -88,6 +88,10 @@
 
 ---
 
+[![codecov](https://codecov.io/gh/milanpollock/dark-rush-photography/branch/master/graph/badge.svg?token=ZRB6I3XJII)](https://codecov.io/gh/milanpollock/dark-rush-photography)
+
+<a href="https://github.com/facebook/jest"><img src="https://img.shields.io/badge/tested_with-jest-99424f.svg" alt="Tested with Jest"></a>
+
 [![Cypress.io](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)](https://www.cypress.io/)
 
 ---
