@@ -85,12 +85,12 @@ jobs:
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-WEBSITES-WATERMARKED-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-WEBSITES-WATERMARKED-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID
         uses: azure/appservice-settings@v1
         with:
           app-name: ${{ env.AZ_WEB_APP_NAME }}
-          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName==NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER-ID)", "slotSetting": false }]'
+          app-settings-json: '[{ "name": "NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID", "value": "@Microsoft.KeyVault(VaultName=drpkeyvault;SecretName=NX-GOOGLE-DRIVE-WEBSITES-WITHOUT-WATERMARK-FOLDER-ID)", "slotSetting": false }]'
       - name: Azure set NX_MONGO_DB_CONNECTION_STRING
         uses: azure/appservice-settings@v1
         with:
