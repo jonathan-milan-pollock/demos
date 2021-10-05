@@ -1,18 +1,20 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ConflictException } from '@nestjs/common';
+
 import * as faker from 'faker';
-import { last, of } from 'rxjs';
+import { of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
-import { model } from 'mongoose';
+import { Model } from 'mongoose';
 
 import {
+  Entity,
   EntityType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { Document, DocumentSchema } from '../schema/document.schema';
+import { DocumentModel } from '../schema/document.schema';
 import {
-  createEntities$,
-  getSlugForCreateEntities,
+  createEntityForFolder$,
+  createEntity$,
 } from './entity-create.functions';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
@@ -20,122 +22,278 @@ jest.mock('@dark-rush-photography/api/util', () => ({
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-jest.mock('./entity-load.functions', () => ({
-  ...jest.requireActual('./entity-load.functions'),
+jest.mock('./entity-repository.functions', () => ({
+  ...jest.requireActual('./entity-repository.functions'),
 }));
-import * as entityLoadFunctions from './entity-load.functions';
+import * as entityRepositoryFunctions from './entity-repository.functions';
 
-const mockingoose = require('mockingoose');
+jest.mock('./entity-load-document-model.functions', () => ({
+  ...jest.requireActual('./entity-load-document-model.functions'),
+}));
+import * as entityLoadDocumentModelFunctions from './entity-load-document-model.functions';
+
+jest.mock('./entity-validation.functions', () => ({
+  ...jest.requireActual('./entity-validation.functions'),
+}));
+import * as entityValidationFunctions from './entity-validation.functions';
 
 describe('entity-create.functions', () => {
-  describe('createEntities$', () => {
-    beforeEach(() => {
-      mockingoose.resetAll();
-    });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it('should create an entity', (done: any) => {
-      const folderName = faker.lorem.word();
+  describe('createEntity$', () => {
+    it('should create an entity if it does not exist', (done: any) => {
+      jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of(null));
 
       jest
-        .spyOn(apiUtil, 'findGoogleDriveFolders$')
-        .mockImplementation(() => of([{ id: '', name: '' }]));
+        .spyOn(entityValidationFunctions, 'validateEntityNotAlreadyExists')
+        .mockReturnValue(undefined);
 
-      const documentModel = model(Document.name, DocumentSchema);
-      mockingoose(documentModel).toReturn([], 'find');
-      mockingoose(documentModel).toReturn({ slug: folderName }, 'save');
+      jest
+        .spyOn(entityLoadDocumentModelFunctions, 'loadNewEntity')
+        .mockReturnValue({} as Entity);
 
-      const mockLoadNewEntity = jest.spyOn(
-        entityLoadFunctions,
-        'loadNewEntity'
+      const mockedCreateNewEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'createNewEntity$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      createEntity$(
+        faker.random.arrayElement(Object.values(EntityType)),
+        faker.random.arrayElement(Object.values(WatermarkedType)),
+        faker.lorem.word(),
+        faker.lorem.word(),
+        {} as Model<DocumentModel>
+      ).subscribe(() => {
+        expect(mockedCreateNewEntity$).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('should not create an entity if it already exists', (done: any) => {
+      jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of(null));
+
+      jest
+        .spyOn(entityValidationFunctions, 'validateEntityNotAlreadyExists')
+        .mockImplementation(() => {
+          throw new ConflictException();
+        });
+
+      jest
+        .spyOn(entityLoadDocumentModelFunctions, 'loadNewEntity')
+        .mockReturnValue({} as Entity);
+
+      const mockedCreateNewEntity$ = jest.spyOn(
+        entityRepositoryFunctions,
+        'createNewEntity$'
       );
 
-      createEntities$(
+      createEntity$(
+        faker.random.arrayElement(Object.values(EntityType)),
+        faker.random.arrayElement(Object.values(WatermarkedType)),
+        faker.lorem.word(),
+        faker.lorem.word(),
+        {} as Model<DocumentModel>
+      ).subscribe({
+        next: () => {
+          done();
+        },
+        error: () => {
+          expect(mockedCreateNewEntity$).not.toHaveBeenCalled();
+          done();
+        },
+        complete: () => {
+          done();
+        },
+      });
+    });
+  });
+
+  describe('createEntities$', () => {
+    it('should create an entity', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'findGoogleDriveFolders$')
+        .mockReturnValue(of([{ id: '', name: '' }]));
+
+      jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of(null));
+
+      jest
+        .spyOn(entityLoadDocumentModelFunctions, 'loadNewEntity')
+        .mockReturnValue({} as Entity);
+
+      const mockedCreateNewEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'createNewEntity$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      createEntityForFolder$(
         {} as drive_v3.Drive,
         faker.datatype.uuid(),
-        documentModel,
+        {} as Model<DocumentModel>,
         faker.random.arrayElement(Object.values(EntityType)),
         faker.random.arrayElement(Object.values(WatermarkedType)),
         faker.lorem.word(),
         faker.lorem.word()
-      )
-        .pipe(last())
-        .subscribe((result) => {
-          expect(result?.slug).toBe(folderName);
-          expect(mockLoadNewEntity).toHaveBeenCalled();
-          done();
-        });
+      ).subscribe(() => {
+        expect(mockedCreateNewEntity$).toHaveBeenCalled();
+        done();
+      });
     });
 
     it('should return entity when it already exists', (done: any) => {
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
-        .mockImplementation(() => of([{ id: '', name: '' }]));
+        .mockReturnValue(of([{ id: '', name: '' }]));
 
-      const slug = faker.lorem.word();
-      const documentModel = model(Document.name, DocumentSchema);
-      mockingoose(documentModel).toReturn([{ slug }], 'find');
+      jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of({} as DocumentModel));
 
-      const mockLoadNewEntity = jest.spyOn(
-        entityLoadFunctions,
-        'loadNewEntity'
+      const mockedCreateNewEntity$ = jest.spyOn(
+        entityRepositoryFunctions,
+        'createNewEntity$'
       );
 
-      createEntities$(
+      createEntityForFolder$(
         {} as drive_v3.Drive,
         faker.datatype.uuid(),
-        documentModel,
+        {} as Model<DocumentModel>,
         faker.random.arrayElement(Object.values(EntityType)),
         faker.random.arrayElement(Object.values(WatermarkedType)),
         faker.lorem.word(),
         faker.lorem.word()
-      )
-        .pipe(last())
-        .subscribe((result) => {
-          expect(result?.slug).toBe(slug);
-          expect(mockLoadNewEntity).not.toHaveBeenCalled();
-          done();
-        });
+      ).subscribe(() => {
+        expect(mockedCreateNewEntity$).not.toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('should create an entity with slug when provided', (done: any) => {
+      const entityFolderId = faker.datatype.uuid();
+      jest
+        .spyOn(apiUtil, 'findGoogleDriveFolders$')
+        .mockReturnValue(
+          of([{ id: entityFolderId, name: faker.lorem.word() }])
+        );
+
+      const mockedFindOneEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of(null));
+
+      const mockedLoadNewEntity = jest
+        .spyOn(entityLoadDocumentModelFunctions, 'loadNewEntity')
+        .mockReturnValue({} as Entity);
+
+      jest
+        .spyOn(entityRepositoryFunctions, 'createNewEntity$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const entityType = faker.random.arrayElement(Object.values(EntityType));
+      const watermarkedType = faker.random.arrayElement(
+        Object.values(WatermarkedType)
+      );
+      const group = faker.lorem.word();
+      const slug = faker.lorem.word();
+
+      createEntityForFolder$(
+        {} as drive_v3.Drive,
+        faker.datatype.uuid(),
+        {} as Model<DocumentModel>,
+        entityType,
+        watermarkedType,
+        group,
+        slug
+      ).subscribe(() => {
+        expect(mockedFindOneEntity$.mock.calls).toEqual([
+          [
+            entityType,
+            watermarkedType,
+            group,
+            slug,
+            {} as Model<DocumentModel>,
+          ],
+        ]);
+        expect(mockedLoadNewEntity.mock.calls).toEqual([
+          [entityType, watermarkedType, group, slug, entityFolderId],
+        ]);
+        done();
+      });
+    });
+
+    it('should create an entity with folder name when slug is not provided', (done: any) => {
+      const entityFolderId = faker.datatype.uuid();
+      const entityFolderName = faker.lorem.word();
+      jest
+        .spyOn(apiUtil, 'findGoogleDriveFolders$')
+        .mockReturnValue(of([{ id: entityFolderId, name: entityFolderName }]));
+
+      const mockedFindOneEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of(null));
+
+      const mockedLoadNewEntity = jest
+        .spyOn(entityLoadDocumentModelFunctions, 'loadNewEntity')
+        .mockReturnValue({} as Entity);
+
+      jest
+        .spyOn(entityRepositoryFunctions, 'createNewEntity$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const entityType = faker.random.arrayElement(Object.values(EntityType));
+      const watermarkedType = faker.random.arrayElement(
+        Object.values(WatermarkedType)
+      );
+      const group = faker.lorem.word();
+
+      createEntityForFolder$(
+        {} as drive_v3.Drive,
+        faker.datatype.uuid(),
+        {} as Model<DocumentModel>,
+        entityType,
+        watermarkedType,
+        group
+      ).subscribe(() => {
+        expect(mockedFindOneEntity$.mock.calls).toEqual([
+          [
+            entityType,
+            watermarkedType,
+            group,
+            entityFolderName,
+            {} as Model<DocumentModel>,
+          ],
+        ]);
+        expect(mockedLoadNewEntity.mock.calls).toEqual([
+          [
+            entityType,
+            watermarkedType,
+            group,
+            entityFolderName,
+            entityFolderId,
+          ],
+        ]);
+        done();
+      });
     });
 
     it('should return undefined when google drive folders are not found', (done: any) => {
-      jest
-        .spyOn(apiUtil, 'findGoogleDriveFolders$')
-        .mockImplementation(() => of([]));
+      jest.spyOn(apiUtil, 'findGoogleDriveFolders$').mockReturnValue(of([]));
 
-      const documentModel = model(Document.name, DocumentSchema);
-      mockingoose(documentModel);
-
-      createEntities$(
+      createEntityForFolder$(
         {} as drive_v3.Drive,
         faker.datatype.uuid(),
-        documentModel,
+        {} as Model<DocumentModel>,
         faker.random.arrayElement(Object.values(EntityType)),
         faker.random.arrayElement(Object.values(WatermarkedType)),
         faker.lorem.word()
-      )
-        .pipe(last())
-        .subscribe((result) => {
-          expect(result).toBe(undefined);
-          done();
-        });
-    });
-  });
-
-  describe('getSlugForCreateEntities$', () => {
-    it('should return slug when provided', () => {
-      const slug = faker.lorem.word();
-      const result = getSlugForCreateEntities(faker.lorem.word(), slug);
-      expect(result).toBe(slug);
-    });
-
-    it('should return entity folder name when slug is undefined', () => {
-      const entityFolderName = faker.lorem.word();
-      const result = getSlugForCreateEntities(entityFolderName, undefined);
-      expect(result).toBe(entityFolderName);
+      ).subscribe((result) => {
+        expect(result).toBe(undefined);
+        done();
+      });
     });
   });
 });

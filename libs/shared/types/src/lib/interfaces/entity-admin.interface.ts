@@ -1,8 +1,7 @@
 import { EntityType } from '../enums/entity-type.enum';
 import { WatermarkedType } from '../enums/watermarked-type.enum';
-import { LocationPublic } from './location-public.interface';
+import { LocationDefined } from './location-defined.interface';
 import { ImageAdmin } from './image-admin.interface';
-import { ImageDimension } from './image-dimension.interface';
 import { Video } from './video.interface';
 
 export interface EntityAdmin {
@@ -17,13 +16,12 @@ export interface EntityAdmin {
   readonly seoKeywords: string[];
   readonly dateCreated: string;
   readonly datePublished: string;
-  readonly location: LocationPublic;
+  readonly location: LocationDefined;
   readonly starredImageIsCentered: boolean;
   readonly text: string[];
   readonly images: ImageAdmin[];
-  readonly imageDimensions: ImageDimension[];
   readonly videos: Video[];
   readonly isPublic: boolean;
-  readonly isPublishing: boolean;
   readonly isPublished: boolean;
+  readonly isProcessing: boolean;
 }

@@ -1,26 +1,20 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { BlobDownloadResponseParsed } from '@azure/storage-blob';
-import { concatMap, from, map, Observable } from 'rxjs';
-
-import { getAzureStorageBlockBlobClient$ } from './azure-storage-block-blob-client.functions';
+import { from, map, Observable } from 'rxjs';
+import {
+  BlobDownloadResponseParsed,
+  BlockBlobClient,
+} from '@azure/storage-blob';
 
 export const downloadBlobAsStream$ = (
-  connectionString: string,
-  containerName: string,
-  blobPath: string
+  blockBlobClient: BlockBlobClient
 ): Observable<NodeJS.ReadableStream> => {
-  return getAzureStorageBlockBlobClient$(
-    connectionString,
-    containerName,
-    blobPath
-  ).pipe(
-    concatMap((blockBlobClient) => from(blockBlobClient.download())),
-    map((blobDownloadResponseParsed: BlobDownloadResponseParsed) => {
-      if (!blobDownloadResponseParsed.readableStreamBody) {
+  return from(blockBlobClient.download()).pipe(
+    map((response: BlobDownloadResponseParsed) => {
+      if (!response.readableStreamBody) {
         throw new BadRequestException('Readable stream body was undefined');
       }
-      return blobDownloadResponseParsed.readableStreamBody;
+      return response.readableStreamBody;
     })
   );
 };

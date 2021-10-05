@@ -4,19 +4,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
+  ContentDeleteBlobsProvider,
+  ContentRemoveOneProvider,
+  ContentRemoveProvider,
   Document,
   DocumentSchema,
-  ImageDimensionProvider,
-  ImageLoadNewProvider,
-  ImageProcessNewProvider,
-  ImageProcessTable,
-  ImageProvider,
-  ImagePublishProvider,
-  ImageRemoveProvider,
-  ImageResizeProvider,
-  ImageTinifyProvider,
+  ImageFindProvider,
+  ImageStateChangeProvider,
   ImageUpdateProvider,
-  ImageUploadProvider,
+  MediaProcessTable,
 } from '@dark-rush-photography/api/data';
 import { AdminImagesService } from './admin-images.service';
 import { AdminImagesController } from './admin-images.controller';
@@ -27,24 +23,20 @@ import { AdminImagesController } from './admin-images.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(ImageProcessTable, {
-      table: 'ImageProcess',
+    AzureTableStorageModule.forFeature(MediaProcessTable, {
+      table: 'MediaProcess',
       createTableIfNotExists: true,
     }),
   ],
   controllers: [AdminImagesController],
   providers: [
     AdminImagesService,
-    ImageProvider,
-    ImageDimensionProvider,
-    ImageLoadNewProvider,
-    ImageProcessNewProvider,
-    ImageUploadProvider,
+    ImageFindProvider,
     ImageUpdateProvider,
-    ImagePublishProvider,
-    ImageRemoveProvider,
-    ImageTinifyProvider,
-    ImageResizeProvider,
+    ImageStateChangeProvider,
+    ContentRemoveProvider,
+    ContentRemoveOneProvider,
+    ContentDeleteBlobsProvider,
   ],
 })
 export class AdminImagesModule {}

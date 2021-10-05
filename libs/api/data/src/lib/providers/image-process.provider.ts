@@ -1,56 +1,70 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository, Repository } from '@nestjs/azure-database';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { from, map, Observable, of } from 'rxjs';
+import { concatMap, map, Observable } from 'rxjs';
+import { Model } from 'mongoose';
 
-import { ImageProcessType } from '@dark-rush-photography/shared/types';
-import { ImageProcessTable } from '@dark-rush-photography/api/data';
-import { WebSocketMessageProvider } from '@dark-rush-photography/api/data';
+import { Image, ImageDimensionType } from '@dark-rush-photography/shared/types';
+import {
+  getImageDimension,
+  findImageResolution$,
+} from '@dark-rush-photography/api/util';
+import { Document, DocumentModel } from '../schema/document.schema';
+import { imageResize$ } from '../content/image-resize.functions';
+import { updateSmallImageDimension$ } from '../content/image-update.functions';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ImageProcessProvider {
-  private readonly logger: Logger;
-
   constructor(
-    @InjectRepository(ImageProcessTable)
-    private readonly entityPushNotificationsRepository: Repository<ImageProcessTable>,
-    private readonly webSocketMessageProvider: WebSocketMessageProvider
-  ) {
-    this.logger = new Logger(ImageProcessProvider.name);
-  }
+    private readonly configProvider: ConfigProvider,
+    @InjectModel(Document.name)
+    private readonly entityModel: Model<DocumentModel>
+  ) {}
 
-  @Cron(CronExpression.EVERY_DAY_AT_4AM, {
-    timeZone: 'US/Eastern',
-  })
-  handleUpdates(): void {
-    this.logger.log('remove temp files'); // TODO: Where to put this?
-    this.logger.log('remove entries in entity push notifications table');
-  }
+  processNewImage$(image: Image): Observable<Image> {
+    const smallResolution = getImageDimension(ImageDimensionType.Small);
 
-  create$(): Observable<void> {
-    return from(
-      this.entityPushNotificationsRepository.findAll(
-        this.entityPushNotificationsRepository.where(
-          'key == ? and token == ?'
-          //entityPushNotification.channelId,
-          //entityPushNotification.channelToken
-        )
-      )
+    return imageResize$(
+      image.storageId,
+      image.fileName,
+      smallResolution,
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
-      map((response) => {
-        if (response.entries.length === 0) {
-          return of(undefined);
-        }
+      concatMap((filePath) => findImageResolution$(filePath)),
+      concatMap((resolution) =>
+        updateSmallImageDimension$(
+          image.id,
+          image.entityId,
+          resolution,
+          this.entityModel
+        )
+      ),
+      map(() => image)
+    );
+  }
 
-        //if (
-        //  entityPushNotification.resourceState ===
-        //  EntityPushNotificationType.Add
-        //) {
-        //  this.webSocketMessageProvider.sendMessage(`adding image`);
-        // }
-      }),
-      map(() => undefined)
+  processImage$(image: Image): Observable<Image> {
+    const smallResolution = getImageDimension(ImageDimensionType.Small);
+
+    return imageResize$(
+      image.storageId,
+      image.fileName,
+      smallResolution,
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic
+    ).pipe(
+      concatMap((filePath) => findImageResolution$(filePath)),
+      concatMap((smallResolution) =>
+        updateSmallImageDimension$(
+          image.id,
+          image.entityId,
+          smallResolution,
+          this.entityModel
+        )
+      ),
+      map(() => image)
     );
   }
 }

@@ -74,7 +74,6 @@ cy.get('drp-button').click().should('have.class', 'active');
 });
 
 });
-\*/
 
 it('displays Dark Rush Photography information', () => {
 cy.contains('type').click();
@@ -85,13 +84,3 @@ cy.url().should('include', '/commands/actions');
       .should('have.value', 'face@email.com');
 
 });
-
-In package.json:
-
-"jest": {
-...
-"setupFiles": ["./jest-setup-file.ts"]
-}
-In jest-setup-file.ts:
-
-import 'reflect-metadata';

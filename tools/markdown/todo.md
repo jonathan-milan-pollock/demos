@@ -100,10 +100,7 @@ readonly starredImageIsCentered: boolean;
 // content
 readonly text: string[];
 readonly images: Image[];
-readonly imageDimensions: ImageDimension[];
 readonly videos: Video[];
-readonly comments: Comment[];
-readonly emotions: Emotion[];
 readonly isPosted: boolean;
 }
 

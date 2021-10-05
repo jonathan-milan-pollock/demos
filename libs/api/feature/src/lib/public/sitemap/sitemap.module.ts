@@ -1,11 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import {
-  Document,
-  DocumentSchema,
-  EntityFindAllPublicProvider,
-} from '@dark-rush-photography/api/data';
+import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
 import { SitemapService } from './sitemap.service';
 import { SitemapController } from './sitemap.controller';
 
@@ -16,6 +12,6 @@ import { SitemapController } from './sitemap.controller';
     ]),
   ],
   controllers: [SitemapController],
-  providers: [SitemapService, EntityFindAllPublicProvider],
+  providers: [SitemapService],
 })
 export class SitemapModule {}

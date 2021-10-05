@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Test } from '@nestjs/testing';
+import { ConflictException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import * as faker from 'faker';
 
 import { ConfigProvider } from './config.provider';
 import { WatermarkedType } from '@dark-rush-photography/shared/types';
-import { ConflictException } from '@nestjs/common';
 
 describe('config.provider', () => {
   const PRODUCTION = faker.datatype.boolean();

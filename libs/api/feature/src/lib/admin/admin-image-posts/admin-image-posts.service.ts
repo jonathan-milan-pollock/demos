@@ -6,24 +6,19 @@ import { Model } from 'mongoose';
 
 import {
   DEFAULT_ENTITY_GROUP,
-  Entity,
-  EntityAdmin,
-  EntityMinimal,
+  EntityMinimalAdmin,
   EntityType,
-  Image,
+  ImageAdmin,
   ImagePostCreate,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import {
-  DocumentModel,
-  Document,
-  ImageProvider,
   ImageUploadProvider,
-  loadEntityAdmin,
-  loadNewEntity,
+  createEntity$,
+  Document,
+  DocumentModel,
   validateEntityFound,
-  validateEntityNotAlreadyExists,
-  loadEntityMinimal,
+  loadEntityMinimalAdmin,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -31,47 +26,40 @@ export class AdminImagePostsService {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly imageProvider: ImageProvider,
-    private readonly imageUploadProvider: ImageUploadProvider
+    private readonly contentUploadProvider: ImageUploadProvider
   ) {}
 
-  create$(imagePostCreate: ImagePostCreate): Observable<EntityMinimal> {
-    return from(
-      this.entityModel.findOne({
-        type: EntityType.ImagePost,
-        watermarkedType: WatermarkedType.WithoutWatermark,
-        group: DEFAULT_ENTITY_GROUP,
-        slug: imagePostCreate.title,
-      })
+  create$(imagePostCreate: ImagePostCreate): Observable<EntityMinimalAdmin> {
+    return createEntity$(
+      EntityType.ImagePost,
+      WatermarkedType.WithoutWatermark,
+      DEFAULT_ENTITY_GROUP,
+      imagePostCreate.slug,
+      this.entityModel
     ).pipe(
-      map(validateEntityNotAlreadyExists),
-      concatMap(() => {
-        return from(
-          new this.entityModel({
-            ...loadNewEntity(
-              EntityType.ImagePost,
-              WatermarkedType.WithoutWatermark,
-              DEFAULT_ENTITY_GROUP,
-              imagePostCreate.title
-            ),
-          }).save()
-        );
-      }),
       map(validateEntityFound),
-      map(loadEntityMinimal)
+      concatMap((documentModel) =>
+        from(
+          this.entityModel.findByIdAndUpdate(documentModel._id, {
+            text: imagePostCreate.text,
+          })
+        )
+      ),
+      map(validateEntityFound),
+      map(loadEntityMinimalAdmin)
     );
   }
 
   upload$(
     entityId: string,
     fileName: string,
-    isThreeSixty: boolean,
     file: Express.Multer.File
-  ): Observable<Image> {
-    return this.imageUploadProvider
-      .upload$(entityId, fileName, isThreeSixty, file)
-      .pipe(
-        concatMap((image) => this.imageProvider.findOne$(image.id, entityId))
-      );
+  ): Observable<ImageAdmin> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap(() =>
+        this.contentUploadProvider.uploadImage$(entityId, fileName, file)
+      )
+    );
   }
 }

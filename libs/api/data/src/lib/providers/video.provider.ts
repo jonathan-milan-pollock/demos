@@ -6,14 +6,14 @@ import { concatMap, from, map, Observable } from 'rxjs';
 
 import { Video } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { reloadVideo } from '../content/content-load.functions';
+import { loadVideo } from '../content/content-load.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { validateVideoFound } from '../content/content-validation.functions';
 
 @Injectable()
 export class VideoProvider {
   add$(
-    id: string,
+    videoId: string,
     entityId: string,
     fileName: string,
     entityModel: Model<DocumentModel>
@@ -26,29 +26,45 @@ export class VideoProvider {
             videos: [
               ...documentModel.videos,
               {
-                id,
+                id: videoId,
                 entityId,
-                blobPathId: uuidv4(),
+                storageId: uuidv4(),
                 fileName,
               },
             ],
           })
         )
       ),
-      concatMap(() => this.findOne$(id, entityId, entityModel))
+      concatMap(() => this.findOne$(videoId, entityId, entityModel))
     );
   }
 
   findOne$(
-    id: string,
+    videoId: string,
     entityId: string,
     entityModel: Model<DocumentModel>
   ): Observable<Video> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        return reloadVideo(validateVideoFound(id, documentModel));
+        return loadVideo(validateVideoFound(videoId, documentModel));
       })
     );
   }
+
+  /*
+
+
+
+      map(() => undefined)
+      //concatMap(([video, documentModel]) =>
+      //  this.videoProvider.update$(
+      //    video,
+      //    {
+      //      fileName: `${documentModel.slug}${path.extname(video.fileName)}`,
+      //    },
+      //    documentModel,
+      //    entityModel
+      //  )
+      //),*/
 }

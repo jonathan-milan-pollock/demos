@@ -1,36 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, map, Observable, of } from 'rxjs';
+import { concatMap, from, map, Observable, of, pluck } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { ImageAdmin, ImageUpdate } from '@dark-rush-photography/shared/types';
 import {
-  Image,
-  ImageAdmin,
-  ImageDimensionType,
-  ImageState,
-  ThreeSixtySettings,
-} from '@dark-rush-photography/shared/types';
-import { ImageUpdateDto } from '@dark-rush-photography/api/types';
-import { getGoogleDrive } from '@dark-rush-photography/api/util';
-import {
-  ConfigProvider,
+  ImageUpdateProvider,
   Document,
   DocumentModel,
-  ImageDimensionProvider,
-  ImageLoadNewProvider,
-  ImageProvider,
-  ImageRemoveProvider,
-  ImageUpdateProvider,
-  loadImageAdmin,
-  validateCanArchiveImage,
-  validateCanSelectImage,
-  validateCanUnarchiveImage,
   validateEntityFound,
-  validateEntityGoogleDriveFolderId,
-  validateEntityNotPublishing,
   validateImageFound,
   validateImageSelectedOrPublic,
+  ImageStateChangeProvider,
+  ContentRemoveProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -38,140 +21,48 @@ export class AdminImagesService {
   private readonly logger: Logger;
 
   constructor(
-    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly imageProvider: ImageProvider,
-    private readonly imageDimensionProvider: ImageDimensionProvider,
-    private readonly imageLoadNewProvider: ImageLoadNewProvider,
     private readonly imageUpdateProvider: ImageUpdateProvider,
-    private readonly imageRemoveProvider: ImageRemoveProvider
+    private readonly imageStateChangeProvider: ImageStateChangeProvider,
+    private readonly contentRemoveProvider: ContentRemoveProvider
   ) {
     this.logger = new Logger(AdminImagesService.name);
   }
 
   update$(
-    id: string,
+    imageId: string,
     entityId: string,
-    imageUpdate: ImageUpdateDto
-  ): Observable<Image> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map(validateEntityNotPublishing),
-      concatMap(() => this.findOne$(id, entityId)),
-      map(validateImageSelectedOrPublic),
-      concatMap((image) => {
-        return this.imageUpdateProvider.update$(image, imageUpdate);
-      }),
-      concatMap(() => this.findOne$(id, entityId))
-    );
+    imageUpdate: ImageUpdate
+  ): Observable<ImageAdmin> {
+    return this.imageUpdateProvider.update$(imageId, entityId, imageUpdate);
   }
 
-  select$(id: string, entityId: string): Observable<Image> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map(validateEntityNotPublishing),
-      concatMap(() => this.findOne$(id, entityId)),
-      map(validateCanSelectImage),
-      // concatMap((image) => this.imageUpdateProvider.changeState$(image)),
-      concatMap(() => this.findOne$(id, entityId))
-    );
+  select$(imageId: string, entityId: string): Observable<ImageAdmin> {
+    return this.imageStateChangeProvider.select$(imageId, entityId);
   }
 
-  archive$(id: string, entityId: string): Observable<Image> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map(validateEntityNotPublishing),
-      concatMap(() => this.findOne$(id, entityId)),
-      map(validateCanArchiveImage),
-      //   concatMap((image) => this.imageUpdateProvider.changeState$(image)),
-      concatMap(() => this.findOne$(id, entityId))
-    );
+  archive$(imageId: string, entityId: string): Observable<ImageAdmin> {
+    return this.imageStateChangeProvider.archive$(imageId, entityId);
   }
 
-  unarchive$(id: string, entityId: string): Observable<Image> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      map(validateEntityNotPublishing),
-      concatMap(() => this.findOne$(id, entityId)),
-      map(validateCanUnarchiveImage),
-      //  concatMap((image) => this.imageUpdateProvider.changeState$(image)),
-      concatMap(() => this.findOne$(id, entityId))
-    );
+  unarchive$(imageId: string, entityId: string): Observable<ImageAdmin> {
+    return this.imageStateChangeProvider.unarchive$(imageId, entityId);
   }
 
-  updateThreeSixtySettings$(
-    id: string,
-    entityId: string,
-    imageDimensionType: ImageDimensionType,
-    threeSixtySettings: ThreeSixtySettings
-  ): Observable<Image> {
-    return this.imageDimensionProvider
-      .updateThreeSixtySettings$(
-        id,
-        entityId,
-        imageDimensionType,
-        threeSixtySettings,
-        this.entityModel
-      )
-      .pipe(concatMap(() => this.findOne$(id, entityId)));
-  }
-
-  findAll$(entityId: string, state: ImageState): Observable<ImageAdmin[]> {
+  remove$(imageId: string, entityId: string): Observable<void> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        if (state === ImageState.New) {
-          const googleDriveFolderId =
-            validateEntityGoogleDriveFolderId(documentModel);
-          const googleDrive = getGoogleDrive(
-            this.configProvider.googleDriveClientEmail,
-            this.configProvider.googleDrivePrivateKey
-          );
-          return this.imageLoadNewProvider
-            .findNewImageFolder$(
-              googleDrive,
-              googleDriveFolderId,
-              documentModel.type
-            )
-            .pipe(
-              concatMap((imageFolder) => {
-                if (!imageFolder) return [];
-
-                return this.imageLoadNewProvider.loadNewImages$(
-                  googleDrive,
-                  entityId,
-                  imageFolder
-                );
-              })
-            );
-        }
-        return of(documentModel);
-      }),
-      concatMap(() => from(this.entityModel.findById(entityId))),
-      map(validateEntityFound),
-      map((documentModel) =>
-        documentModel.images
-          .filter((image) => image.state === state)
-          .map(loadImageAdmin)
-      )
-    );
-  }
-
-  findOne$(id: string, entityId: string): Observable<Image> {
-    return this.imageProvider.findOne$(id, entityId);
-  }
-
-  remove$(id: string, entityId: string): Observable<void> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) => {
-        return of(documentModel.images.find((image) => image.id === id)).pipe(
+        return of(
+          documentModel.images.find((image) => image.id === imageId)
+        ).pipe(
           map(validateImageFound),
           map(validateImageSelectedOrPublic),
-          concatMap((image) =>
-            this.imageRemoveProvider
-              .removeImage$(image, entityId)
+          pluck('id'),
+          concatMap((imageId) =>
+            this.contentRemoveProvider
+              .removeImage$(imageId, entityId)
               .pipe(map(() => undefined))
           )
         );

@@ -1,16 +1,13 @@
 import {
+  Body,
   Controller,
+  Delete,
+  Get,
   HttpCode,
   Param,
-  Get,
-  Put,
-  ParseEnumPipe,
   ParseBoolPipe,
-  Post,
-  Body,
-  Delete,
-  Query,
-  UseGuards,
+  ParseEnumPipe,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -22,102 +19,66 @@ import {
 import { Observable } from 'rxjs';
 
 import {
-  EntityType,
   EntityWithGroupType,
   EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
-  EntityMinimalDto,
+  EntityMinimalAdminDto,
   EntityUpdateDto,
 } from '@dark-rush-photography/api/types';
-import {
-  AdminAuthGuard,
-  AdminRole,
-  ParseObjectIdPipe,
-} from '@dark-rush-photography/api/util';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminEntitiesService } from './admin-entities.service';
 
 @Controller({ path: 'admin/entities', version: '1' })
-@UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
 @ApiTags('Admin Entities')
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
 
-  @AdminRole()
-  @Post(':entityType/:id/social-media-post')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: EntityAdminDto })
-  socialMediaPost$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string
-  ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.socialMediaPost$(entityType, id);
-  }
-
-  @AdminRole()
-  @Put(':entityType/:id')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: EntityAdminDto })
-  update$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() entityUpdate: EntityUpdateDto
-  ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.update$(entityType, id, entityUpdate);
-  }
-
-  @AdminRole()
-  @Put(':entityType/:id/publish')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: EntityAdminDto })
-  publish$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Query('renameMediaWithEntitySlug') renameMediaWithEntitySlug: boolean
-  ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.publish$(
-      entityType,
-      id,
-      renameMediaWithEntitySlug
-    );
-  }
-
-  @AdminRole()
-  @Put(':entityType/:id/publishing/:isPublishing')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
+  @Put(':entityId')
   @HttpCode(204)
-  setIsPublishing$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Param('isPublishing', ParseBoolPipe) isPublishing: boolean
+  update$(
+    @Param('entityId', ParseObjectIdPipe) entityId: string,
+    @Body() entityUpdate: EntityUpdateDto
   ): Observable<void> {
-    return this.adminEntitiesService.setIsPublishing$(
-      entityType,
-      id,
-      isPublishing
-    );
+    return this.adminEntitiesService.update$(entityId, entityUpdate);
   }
 
-  @AdminRole()
-  @Get(':entityWithGroupType/groups')
+  @Put(':entityId/load-new-images')
+  @HttpCode(204)
+  loadNewImages$(
+    @Param('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<void> {
+    return this.adminEntitiesService.loadNewImages$(entityId);
+  }
+
+  @Put(':entityId/publish')
+  @HttpCode(204)
+  publish$(
+    @Param('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<void> {
+    return this.adminEntitiesService.publish$(entityId);
+  }
+
+  @Put(':entityId/social-media-post')
+  @HttpCode(204)
+  socialMediaPost$(
+    @Param('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<void> {
+    return this.adminEntitiesService.socialMediaPost$(entityId);
+  }
+
+  @Put(':entityId/processing/:isProcessing')
+  @HttpCode(204)
+  setIsProcessing$(
+    @Param('entityId', ParseObjectIdPipe) entityId: string,
+    @Param('isProcessing', ParseBoolPipe) isProcessing: boolean
+  ): Observable<void> {
+    return this.adminEntitiesService.setIsProcessing$(entityId, isProcessing);
+  }
+
+  @Get('entity-type/:entityWithGroupType/groups')
   @ApiParam({
     name: 'entityWithGroupType',
     enum: EntityWithGroupType,
@@ -130,80 +91,57 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.findGroups$(entityWithGroupType);
   }
 
-  @AdminRole()
-  @Get(':entityWithoutGroupType')
+  @Get('entity-type/:entityWithoutGroupType')
   @ApiParam({
     name: 'entityWithoutGroupType',
     enum: EntityWithoutGroupType,
   })
-  @ApiOkResponse({ type: [EntityMinimalDto] })
+  @ApiOkResponse({ type: [EntityMinimalAdminDto] })
   findAll$(
     @Param('entityWithoutGroupType', new ParseEnumPipe(EntityWithoutGroupType))
     entityWithoutGroupType: EntityWithoutGroupType
-  ): Observable<EntityMinimalDto[]> {
+  ): Observable<EntityMinimalAdminDto[]> {
     return this.adminEntitiesService.findAll$(entityWithoutGroupType);
   }
 
-  @AdminRole()
-  @Get(':entityWithGroupType/groups/:group')
+  @Get('entity-type/:entityWithGroupType/groups/:group')
   @ApiParam({
     name: 'entityWithGroupType',
     enum: EntityWithGroupType,
   })
-  @ApiOkResponse({ type: [EntityMinimalDto] })
+  @ApiOkResponse({ type: [EntityMinimalAdminDto] })
   findAllForGroup$(
     @Param('entityWithGroupType', new ParseEnumPipe(EntityWithGroupType))
     entityWithGroupType: EntityWithGroupType,
     @Param('group') group: string
-  ): Observable<EntityMinimalDto[]> {
+  ): Observable<EntityMinimalAdminDto[]> {
     return this.adminEntitiesService.findAllForGroup$(
       entityWithGroupType,
       group
     );
   }
 
-  @AdminRole()
-  @Get(':entityType/:id')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
+  @Get(':entityId')
   @ApiOkResponse({ type: EntityAdminDto })
   findOne$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string
+    @Param('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<EntityAdminDto> {
-    return this.adminEntitiesService.findOne$(entityType, id);
+    return this.adminEntitiesService.findOne$(entityId);
   }
 
-  @AdminRole()
-  @Get(':entityType/:id/publishing')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
+  @Get(':entityId/processing')
   @ApiOkResponse({ type: Boolean })
-  findIsPublishing$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string
+  findIsProcessing$(
+    @Param('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<boolean> {
-    return this.adminEntitiesService.findIsPublishing$(entityType, id);
+    return this.adminEntitiesService.findIsProcessing$(entityId);
   }
 
-  @AdminRole()
-  @Delete(':entityType/:id')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
+  @Delete(':entityId')
   @HttpCode(204)
   delete$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
-    @Param('id', ParseObjectIdPipe) id: string
+    @Param('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
-    return this.adminEntitiesService.delete$(entityType, id);
+    return this.adminEntitiesService.delete$(entityId);
   }
 }

@@ -1,9 +1,10 @@
 import { ImageState } from '../enums/image-state.enum';
+import { Resolution } from './resolution.interface';
 
 export interface ImageAdmin {
   readonly id: string;
   readonly entityId: string;
-  readonly blobPathId: string;
+  readonly storageId: string;
   readonly fileName: string;
   readonly state: ImageState;
   readonly order: number;
@@ -11,8 +12,9 @@ export interface ImageAdmin {
   readonly isLoved: boolean;
   readonly title: string;
   readonly seoDescription: string;
-  readonly seoKeywords: string;
+  readonly seoKeywords: string[];
   readonly dateCreated: string;
   readonly datePublished: string;
+  readonly smallResolution: Resolution;
   readonly isThreeSixty: boolean;
 }

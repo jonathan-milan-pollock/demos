@@ -14,24 +14,34 @@
 // Import commands.js using ES2015 syntax:
 declare namespace Cypress {
   interface Chainable<Subject> {
+    // api
+    login(): Promise<string>;
+    deleteTestData(authHeaders: {
+      Authorization: string;
+    }): Cypress.Chainable<Cypress.Response<any[]>>;
+
     // api admin entities
-    socialMediaPostEntityAdmin(
-      entityType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response<any>>;
     updateEntityAdmin(
-      entityType: string,
-      id: string,
+      authHeaders: { Authorization: string },
+      entityId: string,
       entityUpdate: any
-    ): Cypress.Chainable<Cypress.Response<any>>;
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    loadNewImagesEntityAdmin(
+      authHeaders: { Authorization: string },
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<void>>;
     publishEntityAdmin(
-      entityType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response<any>>;
-    setIsPublishingEntityAdmin(
-      entityType: string,
-      id: string,
-      isPublishing: boolean
+      authHeaders: { Authorization: string },
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    socialMediaPostEntityAdmin(
+      authHeaders: { Authorization: string },
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    setIsProcessingEntityAdmin(
+      authHeaders: { Authorization: string },
+      entityId: string,
+      isProcessing: boolean
     ): Cypress.Chainable<Cypress.Response<void>>;
     findGroupsEntityAdmin(
       authHeaders: { Authorization: string },
@@ -48,114 +58,55 @@ declare namespace Cypress {
     ): Cypress.Chainable<Cypress.Response<any[]>>;
     findOneEntityAdmin(
       authHeaders: { Authorization: string },
-      entityType: string,
-      id: string
+      entityId: string
     ): Cypress.Chainable<Cypress.Response<any>>;
-    findIsPublishingEntityAdmin(
-      entityType: string,
-      id: string
+    findIsProcessingEntityAdmin(
+      authHeaders: { Authorization: string },
+      entityId: string
     ): Cypress.Chainable<Cypress.Response<boolean>>;
     deleteEntityAdmin(
       authHeaders: { Authorization: string },
-      entityType: string,
-      id: string
-    ): Cypress.Chainable<Cypress.Response<boolean>>;
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<void>>;
 
     // api admin image posts
     createImagePostAdmin(
       authHeaders: { Authorization: string },
       imagePostCreate: any
     ): Cypress.Chainable<Cypress.Response<any>>;
-    uploadImagePostAdmin(entityId: string): Promise<any>;
+    uploadImagePostAdmin(
+      authHeaders: { Authorization: string },
+      entityId: string
+    ): Promise<any>;
 
     // api admin images
-    uploadThreeSixtyImageAdmin(
-      entityId: string,
-      filePath: string
-    ): Promise<any>;
     updateImageAdmin(
-      id: string,
+      authHeaders: { Authorization: string },
+      imageId: string,
       entityId: string,
       imageUpdate: any
     ): Promise<any>;
-    updateThreeSixtySettingsImageAdmin(
-      id: string,
+    findAllImagesAdmin(
+      authHeaders: { Authorization: string },
       entityId: string,
-      imageDimensionType: string,
-      threeSixtySettings: any
+      state: string
+    ): Promise<any[]>;
+    findOneImageAdmin(
+      authHeaders: { Authorization: string },
+      imageId: string,
+      entityId: string
     ): Promise<any>;
-    findAllImagesAdmin(entityId: string, state: string): Promise<any[]>;
-    findOneImageAdmin(id: string, entityId: string): Promise<any>;
-    streamImageAdmin(
-      id: string,
-      entityId: string,
-      imageDimensionType: string
-    ): Promise<any>;
-    removeImageAdmin(id: string, entityId: string): Promise<void>;
+    removeImageAdmin(
+      authHeaders: { Authorization: string },
+      imageId: string,
+      entityId: string
+    ): Promise<void>;
 
     // api public about
-    findAllAboutPublic(): Promise<string[]>;
-    findOneAboutPublic(): Promise<string[]>;
-
-    // api public best-of
-    findAllBestOfPublic(): Promise<string[]>;
-    findOneBestOfPublic(): Promise<string>;
-
-    // api public destinations
-    findAllDestinationsPublic(): Promise<string[]>;
-    findOneDestinationPublic(id: string): Promise<string>;
-
-    // api public entity-push-notifications
-    // api public events
-    findAllEventsPublic(): Promise<string[]>;
-    findOneEventPublic(id: string): Promise<string>;
-
-    // api public favorites
-    findOneFavoritesPublic(): Promise<string>;
-
-    // api public images
-    findOneImagePublic(): Promise<string>;
-
-    // api public photo-of-the-week
-    findAllPhotoOfTheWeekPublic(): Promise<string[]>;
-    findOnePhotoOfTheWeekPublic(id: string): Promise<string>;
-
-    // api public reviews
-    findAllReviewsPublic(): Promise<string[]>;
-
-    // api public review-media
-    findOneReviewMediaPublic(): Promise<string>;
+    findAllEntitiesPublic(): Promise<string[]>;
+    findOneEntityPublic(): Promise<string[]>;
 
     // api public sitemap
     findSitemapPublic(): Promise<string>;
-
-    // api user comments
-    addCommentUser(): Promise<string[]>;
-    updateCommentUser(
-      id: string,
-      entityId: string,
-      commentUpdate: string
-    ): Promise<string>;
-    findAllCommentsUser(
-      id: string,
-      entityId: string,
-      imageId?: string
-    ): Promise<string[]>;
-    findOneCommentUser(id: string, entityId: string): Promise<string[]>;
-    removeCommentUser(id: string, entityId: string): Promise<void>;
-
-    // api user emotions
-    addEmotionUser(): Promise<string[]>;
-    findAllEmotionsUser(
-      id: string,
-      entityId: string,
-      imageId?: string
-    ): Promise<string[]>;
-    findOneEmotionUser(id: string, entityId: string): Promise<string[]>;
-    removeEmotionUser(id: string, entityId: string): Promise<void>;
-
-    // api auth
-    loginAdmin(): Promise<string>;
-    loginUser(): Promise<string>;
   }
 }

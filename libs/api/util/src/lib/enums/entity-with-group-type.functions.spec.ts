@@ -24,10 +24,6 @@ describe('entity-with-group-type.functions', () => {
       entityType: EntityType.PhotoOfTheWeek,
       entityWithGroupType: EntityWithGroupType.PhotoOfTheWeek,
     },
-    {
-      entityType: EntityType.SocialMedia,
-      entityWithGroupType: EntityWithGroupType.SocialMedia,
-    },
   ];
 
   const entityWithGroupTypeFolderNames: {
@@ -41,10 +37,6 @@ describe('entity-with-group-type.functions', () => {
     {
       entityWithGroupType: EntityWithGroupType.PhotoOfTheWeek,
       folderName: 'photo-of-the-week',
-    },
-    {
-      entityWithGroupType: EntityWithGroupType.SocialMedia,
-      folderName: 'social-media',
     },
   ];
 
@@ -81,6 +73,7 @@ describe('entity-with-group-type.functions', () => {
         );
       }
     );
+
     it('should throw a bad request exception if the entity group type is invalid', () => {
       const entityWithGroupType = faker.lorem.word();
       const result = () => {

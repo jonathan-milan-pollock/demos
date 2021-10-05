@@ -7,12 +7,4 @@ export enum ImageDimensionType {
   Instagram = 'Instagram',
   LinkedIn = 'LinkedIn',
   GoogleBusiness = 'GoogleBusiness',
-  ThreeSixtyThumbnail = 'ThreeSixtyThumbnail',
-  ThreeSixtySmall = 'ThreeSixtySmall',
-  ThreeSixtyMedium = 'ThreeSixtyMedium',
-  ThreeSixtyLarge = 'ThreeSixtyLarge',
-  ThreeSixtyFacebook = 'ThreeSixtyFacebook',
-  ThreeSixtyInstagram = 'ThreeSixtyInstagram',
-  ThreeSixtyLinkedIn = 'ThreeSixtyLinkedIn',
-  ThreeSixtyGoogleBusiness = 'ThreeSixtyGoogleBusiness',
 }

@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
+  IsISO8601,
   IsMongoId,
   IsString,
   Min,
@@ -15,9 +16,8 @@ import {
   EntityType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { LocationDto } from './location.dto';
+import { LocationDefinedDto } from './location-defined.dto';
 import { ImageAdminDto } from './image-admin.dto';
-import { ImageDimensionDto } from './image-dimension.dto';
 import { VideoDto } from './video.dto';
 
 export class EntityAdminDto implements EntityAdmin {
@@ -47,25 +47,23 @@ export class EntityAdminDto implements EntityAdmin {
   seoDescription!: string;
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => String)
   seoKeywords: string[] = [];
 
-  @IsString()
+  @IsISO8601()
   dateCreated!: string;
 
-  @IsString()
+  @IsISO8601()
   datePublished!: string;
 
   @ValidateNested()
-  @Type(() => LocationDto)
-  location!: LocationDto;
+  @Type(() => LocationDefinedDto)
+  location!: LocationDefinedDto;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => String)
   text: string[] = [];
 
@@ -76,11 +74,6 @@ export class EntityAdminDto implements EntityAdmin {
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ImageDimensionDto)
-  imageDimensions: ImageDimensionDto[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => VideoDto)
   videos: VideoDto[] = [];
 
@@ -88,8 +81,8 @@ export class EntityAdminDto implements EntityAdmin {
   isPublic!: boolean;
 
   @IsBoolean()
-  isPublishing!: boolean;
+  isPublished!: boolean;
 
   @IsBoolean()
-  isPublished!: boolean;
+  isProcessing!: boolean;
 }

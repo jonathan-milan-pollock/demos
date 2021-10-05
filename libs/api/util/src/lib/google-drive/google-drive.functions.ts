@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { drive_v3, google } from 'googleapis';
 
 export const getGoogleDrive = (

@@ -10,7 +10,7 @@ export class VideoDto implements Video {
   entityId!: string;
 
   @IsUUID()
-  blobPathId!: string;
+  storageId!: string;
 
   @IsString()
   fileName!: string;

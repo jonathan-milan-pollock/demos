@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsBoolean,
   IsInt,
   IsISO8601,
@@ -6,13 +7,11 @@ import {
   IsString,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { ImageUpdate } from '@dark-rush-photography/shared/types';
 
 export class ImageUpdateDto implements ImageUpdate {
-  @IsString()
-  fileName!: string;
-
   @IsInt()
   @Min(0)
   order!: number;
@@ -31,9 +30,9 @@ export class ImageUpdateDto implements ImageUpdate {
   @IsOptional()
   seoDescription?: string;
 
-  @IsString()
-  @IsOptional()
-  seoKeywords?: string;
+  @IsArray()
+  @Type(() => String)
+  seoKeywords: string[] = [];
 
   @IsISO8601()
   @IsOptional()

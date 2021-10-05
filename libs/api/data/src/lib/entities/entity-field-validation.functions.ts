@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 
 import { DocumentModel } from '../schema/document.schema';
 
@@ -6,7 +6,7 @@ export const validateEntityGoogleDriveFolderId = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.googleDriveFolderId) {
-    throw new BadRequestException('Google Drive folder id is undefined');
+    throw new ConflictException('Google Drive folder id is undefined');
   }
   return documentModel.googleDriveFolderId;
 };

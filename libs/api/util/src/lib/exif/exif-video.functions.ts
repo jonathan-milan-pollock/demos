@@ -6,7 +6,6 @@ import {
 } from '@dark-rush-photography/shared/types';
 
 export const exifVideo$ = (
-  filePath: string,
   videoArtistExif: VideoArtistExif,
   videoExif: VideoExif
 ): Observable<string> => {

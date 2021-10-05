@@ -3,7 +3,6 @@ import {
   Controller,
   Post,
   Body,
-  UseGuards,
   UseInterceptors,
   Query,
   UploadedFile,
@@ -19,22 +18,16 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { Image } from '@dark-rush-photography/shared/types';
 import {
-  EntityMinimalDto,
+  EntityMinimalAdminDto,
   FileUploadDto,
   ImageAdminDto,
   ImagePostCreateDto,
 } from '@dark-rush-photography/api/types';
-import {
-  AdminAuthGuard,
-  AdminRole,
-  ParseObjectIdPipe,
-} from '@dark-rush-photography/api/util';
+import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { AdminImagePostsService } from './admin-image-posts.service';
 
 @Controller({ path: 'admin/image-posts', version: '1' })
-@UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
 @ApiTags('Admin Image Posts')
 export class AdminImagePostsController {
@@ -42,16 +35,14 @@ export class AdminImagePostsController {
     private readonly adminImagePostsService: AdminImagePostsService
   ) {}
 
-  @AdminRole()
   @Post()
-  @ApiCreatedResponse({ type: EntityMinimalDto })
+  @ApiCreatedResponse({ type: EntityMinimalAdminDto })
   create$(
     @Body() imagePostCreate: ImagePostCreateDto
-  ): Observable<EntityMinimalDto> {
+  ): Observable<EntityMinimalAdminDto> {
     return this.adminImagePostsService.create$(imagePostCreate);
   }
 
-  @AdminRole()
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -62,11 +53,10 @@ export class AdminImagePostsController {
   upload$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @UploadedFile() image: Express.Multer.File
-  ): Observable<Image> {
+  ): Observable<ImageAdminDto> {
     return this.adminImagePostsService.upload$(
       entityId,
       image.originalname,
-      false,
       image
     );
   }

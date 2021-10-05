@@ -20,10 +20,10 @@ describe('entity-group.functions', () => {
 
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() => of({ id: '', name: '' }));
+        .mockReturnValue(of({ id: '', name: '' }));
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
-        .mockImplementation(() => of(groupFolders));
+        .mockReturnValue(of(groupFolders));
 
       findGroupsFromGoogleDriveFolderName$(
         {} as drive_v3.Drive,
@@ -40,7 +40,7 @@ describe('entity-group.functions', () => {
     it('should return empty array if entity folder is not found', (done: any) => {
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() => of(undefined));
+        .mockReturnValue(of(undefined));
 
       findGroupsFromGoogleDriveFolderName$(
         {} as drive_v3.Drive,
@@ -55,10 +55,8 @@ describe('entity-group.functions', () => {
     it('should return empty array if folders are not found', (done: any) => {
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() => of({ id: '', name: '' }));
-      jest
-        .spyOn(apiUtil, 'findGoogleDriveFolders$')
-        .mockImplementation(() => of([]));
+        .mockReturnValue(of({ id: '', name: '' }));
+      jest.spyOn(apiUtil, 'findGoogleDriveFolders$').mockReturnValue(of([]));
 
       findGroupsFromGoogleDriveFolderName$(
         {} as drive_v3.Drive,

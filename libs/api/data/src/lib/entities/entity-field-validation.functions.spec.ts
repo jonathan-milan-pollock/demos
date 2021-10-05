@@ -26,13 +26,10 @@ describe('entity-validation.functions', () => {
       faker.lorem.sentence(),
     ],
     images: [],
-    imageDimensions: [],
     videos: [],
-    comments: [],
-    emotions: [],
     isPublic: faker.datatype.boolean(),
-    isPublishing: faker.datatype.boolean(),
     isPublished: faker.datatype.boolean(),
+    isProcessing: faker.datatype.boolean(),
   };
 
   describe('validateEntityTitleProvided', () => {

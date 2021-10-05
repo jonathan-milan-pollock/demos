@@ -29,6 +29,7 @@
 
 - [HTML5: The Missing Manual, 2nd Edition](https://www.oreilly.com/library/view/html5-the-missing/9781449373412/)
 - [HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
+- [Structured Data Testing Tool](https://chrome.google.com/webstore/detail/structured-data-testing-t/kfdjeigpgagildmolfanniafmplnplpl?hl=en)
 
 ---
 
@@ -139,6 +140,22 @@
 
 ---
 
+## SEO
+
+- blue_book: [SEO 2021](https://www.amazon.com/SEO-2019-optimization-marketing-strategies-ebook/dp/B00NH0XZR0)
+- [Chrome Lighthouse](https://developers.google.com/web/tools/lighthouse)
+
+- [ScreamingFrog](https://www.screamingfrog.co.uk/seo-spider/)
+- [KWFinder](https://app.kwfinder.com/)
+- [ahrefs](https://ahrefs.com/)
+- [JSON-LD](https://github.com/json-ld/json-ld.org)
+- [TinyPNG](https://tinypng.com/)
+- [TinyPNG Analyzer](https://tinypng.com/analyzer)
+- [Bing Webmaster Tools](https://www.bing.com/webmasters/help/home-05a5a164)
+- [Rich Search Results](https://search.google.com/test/rich-results)
+
+---
+
 ## xr
 
 - [big screen vr](https://www.bigscreenvr.com/)
@@ -148,5 +165,9 @@
 
 ## Image Processing
 
-https://docs.ayrshare.com/rest-api/endpoints/post
-https://facebook360.fb.com/editing-360-photos-injecting-metadata/
+- [Social Media Image Cheat Sheet](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
+  https://docs.ayrshare.com/rest-api/endpoints/post
+  https://facebook360.fb.com/editing-360-photos-injecting-metadata/
+  https://blog.kuula.co/embed-360-photos
+
+---

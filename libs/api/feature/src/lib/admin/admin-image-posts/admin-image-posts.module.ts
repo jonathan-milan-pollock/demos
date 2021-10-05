@@ -4,10 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  ImageDimensionProvider,
-  ImageProcessNewProvider,
-  ImageProvider,
-  ImageResizeProvider,
+  ImageProcessProvider,
   ImageUploadProvider,
 } from '@dark-rush-photography/api/data';
 import { AdminImagePostsService } from './admin-image-posts.service';
@@ -22,11 +19,8 @@ import { AdminImagePostsController } from './admin-image-posts.controller';
   controllers: [AdminImagePostsController],
   providers: [
     AdminImagePostsService,
-    ImageProvider,
-    ImageDimensionProvider,
-    ImageProcessNewProvider,
     ImageUploadProvider,
-    ImageResizeProvider,
+    ImageProcessProvider,
   ],
 })
 export class AdminImagePostsModule {}

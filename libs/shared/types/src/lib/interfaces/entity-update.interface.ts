@@ -1,7 +1,6 @@
 import { Location } from './location.interface';
 
 export interface EntityUpdate {
-  readonly group: string;
   readonly slug: string;
   readonly order: number;
   readonly title?: string;

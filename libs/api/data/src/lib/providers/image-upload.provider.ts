@@ -1,65 +1,76 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { v4 as uuidv4 } from 'uuid';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { Image, ImageState } from '@dark-rush-photography/shared/types';
+import { ImageAdmin, ImageState } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { validateImageWithFileNameNotAlreadyExists } from '../content/content-validation.functions';
-import { ImageProvider } from './image.provider';
-import { ImageProcessNewProvider } from './image-process-new.provider';
+import { addImage$ } from '../content/image-add.functions';
+import { uploadImageBlob$ } from '../content/image-add-blob.functions';
+import { loadImageAdmin } from '../content/content-load.functions';
+import {
+  validateImageFound,
+  validateImageWithFileNameNotAlreadyExists,
+} from '../content/content-validation.functions';
+import { ConfigProvider } from './config.provider';
+import { ImageProcessProvider } from './image-process.provider';
 
 @Injectable()
 export class ImageUploadProvider {
-  private readonly logger: Logger;
-
   constructor(
+    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly imageProvider: ImageProvider,
-    private readonly imageProcessNewProvider: ImageProcessNewProvider
-  ) {
-    this.logger = new Logger(ImageUploadProvider.name);
-  }
-  upload$(
+    private readonly contentProcessProvider: ImageProcessProvider
+  ) {}
+
+  uploadImage$(
     entityId: string,
     fileName: string,
-    isThreeSixty: boolean,
     file: Express.Multer.File
-  ): Observable<Image> {
-    const id = uuidv4();
+  ): Observable<ImageAdmin> {
     return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map((documentModel) => {
+      concatMap((documentModel) => {
         validateImageWithFileNameNotAlreadyExists(
           ImageState.Selected,
           fileName,
           documentModel
         );
-      }),
-      concatMap(() =>
-        this.imageProvider.add$(
-          id,
+
+        return addImage$(
+          this.entityModel,
           entityId,
           ImageState.Selected,
           fileName,
           0,
-          isThreeSixty
+          false
+        );
+      }),
+      concatMap((uploadImage) =>
+        uploadImageBlob$(
+          uploadImage,
+          file,
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic
         )
       ),
-      concatMap((image) =>
-        this.imageProcessNewProvider
-          .upload$(
-            image.id,
-            image.entityId,
-            image.blobPathId,
-            image.fileName,
-            file
-          )
-          .pipe(map(() => image))
+      concatMap((uploadImage) =>
+        this.contentProcessProvider.processNewImage$(uploadImage)
+      ),
+      concatMap((uploadImage) =>
+        from(this.entityModel.findById(entityId)).pipe(
+          map(validateEntityFound),
+          map((documentModel) => {
+            const image = documentModel.images.find(
+              (image) => image.id === uploadImage.id
+            );
+            const validatedImage = validateImageFound(image);
+            return loadImageAdmin(validatedImage);
+          })
+        )
       )
     );
   }

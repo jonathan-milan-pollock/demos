@@ -1,6 +1,9 @@
 import { EntityType } from '@dark-rush-photography/shared/types';
 
-const entityTypeImageFolderNameMap = new Map<EntityType, string | undefined>([
+const entityTypeNewImagesFolderNameMap = new Map<
+  EntityType,
+  string | undefined
+>([
   [EntityType.About, 'images'],
   [EntityType.BestOf, 'best-37'],
   [EntityType.Destination, 'images'],
@@ -10,11 +13,10 @@ const entityTypeImageFolderNameMap = new Map<EntityType, string | undefined>([
   [EntityType.PhotoOfTheWeek, undefined],
   [EntityType.Review, undefined],
   [EntityType.ReviewMedia, undefined],
-  [EntityType.SocialMedia, 'images'],
 ]);
 
-export const getEntityTypeImageFolderName = (
+export const getEntityTypeNewImagesFolderName = (
   entityType: EntityType
 ): string | undefined => {
-  return entityTypeImageFolderNameMap.get(entityType);
+  return entityTypeNewImagesFolderNameMap.get(entityType);
 };
