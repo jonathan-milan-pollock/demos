@@ -1,42 +1,40 @@
 import {
-  Entity,
-  EntityMinimal,
+  EntityAdmin,
+  EntityMinimalAdmin,
   EntityUpdate,
 } from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add(
-  'socialMediaPostEntityAdmin',
+  'updateEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string
-  ): Cypress.Chainable<Cypress.Response<Entity>> =>
+    entityId: string,
+    entityUpdate: EntityUpdate
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
-      method: 'POST',
-      url: `/api/v1/admin/entities/${entityType}/${id}/social-media-post`,
+      method: 'PUT',
+      url: `/api/v1/admin/entities/${entityId}`,
       headers: {
         ...authHeaders,
+      },
+      body: {
+        ...entityUpdate,
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'updateEntityAdmin',
+  'loadNewImagesEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string,
-    entityUpdate: EntityUpdate
-  ): Cypress.Chainable<Cypress.Response<Entity>> =>
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/entities/${entityType}/${id}`,
+      url: `/api/v1/admin/entities/${entityId}/load-new-images`,
       headers: {
         ...authHeaders,
-      },
-      body: {
-        entityUpdate,
       },
       failOnStatusCode: false,
     })
@@ -46,12 +44,11 @@ Cypress.Commands.add(
   'publishEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string
-  ): Cypress.Chainable<Cypress.Response<Entity>> =>
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/entities/${entityType}/${id}/publish`,
+      url: `/api/v1/admin/entities/${entityId}/publish`,
       headers: {
         ...authHeaders,
       },
@@ -60,16 +57,31 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'setIsPublishingEntityAdmin',
+  'socialMediaPostEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string,
-    isPublishing: boolean
+    entityId: string
   ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/entities/${entityType}/${id}/publishing/${isPublishing}`,
+      url: `/api/v1/admin/entities/${entityId}/social-media-post`,
+      headers: {
+        ...authHeaders,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'setIsProcessingEntityAdmin',
+  (
+    authHeaders: { Authorization: string },
+    entityId: string,
+    isProcessing: boolean
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'PUT',
+      url: `/api/v1/admin/entities/${entityId}/processing/${isProcessing}`,
       headers: {
         ...authHeaders,
       },
@@ -85,7 +97,7 @@ Cypress.Commands.add(
   ): Cypress.Chainable<Cypress.Response<string[]>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/admin/entities/${entityWithGroupType}/groups`,
+      url: `/api/v1/admin/entities/entity-type/${entityWithGroupType}/groups`,
       headers: {
         ...authHeaders,
       },
@@ -97,11 +109,11 @@ Cypress.Commands.add(
   'findAllEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string
-  ): Cypress.Chainable<Cypress.Response<EntityMinimal[]>> =>
+    entityWithoutGroupType: string
+  ): Cypress.Chainable<Cypress.Response<EntityMinimalAdmin[]>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/admin/entities/${entityType}`,
+      url: `/api/v1/admin/entities/entity-type/${entityWithoutGroupType}`,
       headers: {
         ...authHeaders,
       },
@@ -115,10 +127,10 @@ Cypress.Commands.add(
     authHeaders: { Authorization: string },
     entityWithGroupType: string,
     group: string
-  ): Cypress.Chainable<Cypress.Response<EntityMinimal[]>> =>
+  ): Cypress.Chainable<Cypress.Response<EntityMinimalAdmin[]>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/admin/entities/${entityWithGroupType}/groups/${group}`,
+      url: `/api/v1/admin/entities/entity-type/${entityWithGroupType}/groups/${group}`,
       headers: {
         ...authHeaders,
       },
@@ -130,12 +142,11 @@ Cypress.Commands.add(
   'findOneEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string
-  ): Cypress.Chainable<Cypress.Response<Entity>> =>
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<EntityAdmin>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/admin/entities/${entityType}/${id}`,
+      url: `/api/v1/admin/entities/${entityId}`,
       headers: {
         ...authHeaders,
       },
@@ -144,15 +155,14 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'findIsPublishingEntityAdmin',
+  'findIsProcessingEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string
+    entityId: string
   ): Cypress.Chainable<Cypress.Response<boolean>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/admin/entities/${entityType}/${id}/publishing`,
+      url: `/api/v1/admin/entities/${entityId}/processing`,
       headers: {
         ...authHeaders,
       },
@@ -164,12 +174,11 @@ Cypress.Commands.add(
   'deleteEntityAdmin',
   (
     authHeaders: { Authorization: string },
-    entityType: string,
-    id: string
+    entityId: string
   ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'DELETE',
-      url: `/api/v1/admin/entities/${entityType}/${id}`,
+      url: `/api/v1/admin/entities/${entityId}`,
       headers: {
         ...authHeaders,
       },

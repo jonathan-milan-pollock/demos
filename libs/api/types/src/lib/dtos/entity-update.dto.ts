@@ -2,6 +2,7 @@ import {
   IsArray,
   IsBoolean,
   IsInt,
+  IsISO8601,
   IsOptional,
   IsString,
   Min,
@@ -10,12 +11,9 @@ import {
 import { Type } from 'class-transformer';
 
 import { EntityUpdate } from '@dark-rush-photography/shared/types';
-import { LocationDto } from './location.dto';
+import { LocationDefinedDto } from './location-defined.dto';
 
 export class EntityUpdateDto implements EntityUpdate {
-  @IsString()
-  group!: string;
-
   @IsString()
   slug!: string;
 
@@ -32,28 +30,26 @@ export class EntityUpdateDto implements EntityUpdate {
   seoDescription?: string;
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => String)
   seoKeywords: string[] = [];
 
-  @IsString()
+  @IsISO8601()
   @IsOptional()
   dateCreated?: string;
 
-  @IsString()
+  @IsISO8601()
   @IsOptional()
   datePublished?: string;
 
   @ValidateNested()
-  @Type(() => LocationDto)
+  @Type(() => LocationDefinedDto)
   @IsOptional()
-  location?: LocationDto;
+  location?: LocationDefinedDto;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;
 
   @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => String)
   text: string[] = [];
 

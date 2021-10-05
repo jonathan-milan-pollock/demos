@@ -30,12 +30,12 @@ describe('/admin/reviews', () => {
   });
 
   /*
-  it('greets with Reviews Admin', () => {
+  it('greets with Reviews Admin', () => {d
     cy.contains('h2', 'Reviews Admin');
   });
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  it('redirects to login page if not logged in', () => {});
+  it('redirects to login page when not logged in', () => {});
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   it('allows adding a Review', () => {});

@@ -1,5 +1,7 @@
-import { Location } from '@dark-rush-photography/shared/types';
-import { ImageExif } from '@dark-rush-photography/shared/types';
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { ImageArtistExif } from '@dark-rush-photography/shared/types';
+import { ImageExif, Location } from '@dark-rush-photography/shared/types';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 export const getImageExif = (
   datePublished: string,
@@ -18,3 +20,36 @@ export const getImageExif = (
   State: location?.stateOrProvince ?? '',
   Country: location?.country ?? '',
 });
+
+export const exifImage$ = (
+  filePath: string,
+  imageArtistExif: ImageArtistExif,
+  imageExif: ImageExif
+): Observable<string> => {
+  const exiftool = require('node-exiftool');
+  const exiftoolBin = require('dist-exiftool');
+  const ep = new exiftool.ExiftoolProcess(exiftoolBin);
+
+  const keywordsSet = new Set<string>([
+    ...imageExif['Keywords+'],
+    ...imageArtistExif['Keywords+'],
+  ]);
+
+  return from(ep.open()).pipe(
+    concatMap(() =>
+      from(
+        ep.writeMetadata(
+          filePath,
+          {
+            ...imageArtistExif,
+            ...imageExif,
+            'Keywords+': [...keywordsSet],
+          },
+          ['overwrite_original', 'codedcharacterset=utf8']
+        )
+      )
+    ),
+    concatMap(() => from(ep.close())),
+    map(() => filePath)
+  );
+};

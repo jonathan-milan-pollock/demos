@@ -1,103 +1,117 @@
+import * as faker from 'faker';
+
 import {
   DUMMY_MONGODB_ID,
-  EntityMinimal,
-  EntityType,
+  EntityMinimalAdmin,
+  EntityUpdate,
 } from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
-import { getAuthHeadersAdmin } from '../../../../support/commands/api/auth-headers.functions';
+describe('Update Admin Entities', () => {
+  const entityUpdate: EntityUpdate = {
+    slug: `test-${faker.lorem.word()}`,
+    order: faker.datatype.number({ min: 0 }),
+    title: faker.lorem.sentence(),
+    seoDescription: faker.lorem.sentences(),
+    seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
+    dateCreated: faker.date.recent().toISOString(),
+    datePublished: faker.date.recent().toISOString(),
+    location: {
+      place: faker.company.companyName(),
+      street: faker.address.streetAddress(),
+      city: faker.address.city(),
+      stateOrProvince: faker.address.state(),
+      zipCode: faker.address.zipCode(),
+      country: faker.address.country(),
+    },
+    starredImageIsCentered: faker.datatype.boolean(),
+    text: [
+      faker.lorem.paragraph(),
+      faker.lorem.paragraph(),
+      faker.lorem.paragraph(),
+    ],
+    isPublic: faker.datatype.boolean(),
+  };
 
-describe('update', () => {
-  beforeEach(() =>
+  beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
+
+  it('should update values', () =>
     cy
-      .loginAdmin()
-      .then(() =>
+      .createImagePostAdmin(getAuthHeaders(), {
+        slug: 'test-image-post-1',
+      })
+      .then((response) => response.body as EntityMinimalAdmin)
+      .then((entityMinimalAdmin) =>
         cy
-          .findAllEntityAdmin(getAuthHeadersAdmin(), EntityType.ImagePost)
-          .then(($body) =>
-            $body.body.forEach((entityMinimal: EntityMinimal) =>
-              cy.deleteEntityAdmin(
-                getAuthHeadersAdmin(),
-                entityMinimal.type,
-                entityMinimal.id
-              )
-            )
-          )
+          .updateEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id, {
+            ...entityUpdate,
+          })
+          .then(() => entityMinimalAdmin)
       )
-  );
-
-  it('return application/json', () => {
-    cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-      title: 'test-image-post-1',
-    })
-      .then(($body) => $body.body as EntityMinimal)
-      .then((entity) =>
-        cy.findOneEntityAdmin(
-          getAuthHeadersAdmin(),
-          EntityType.ImagePost,
-          entity.id
-        )
+      .then((entityMinimalAdmin) =>
+        cy.findOneEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id)
       )
-      .its('headers')
-      .its('content-type')
-      .should('include', 'application/json');
-  });
+      .then((response) => {
+        const {
+          slug,
+          order,
+          title,
+          seoDescription,
+          seoKeywords,
+          dateCreated,
+          datePublished,
+          location,
+          starredImageIsCentered,
+          text,
+          isPublic,
+        } = response.body;
+        return {
+          slug,
+          order,
+          title,
+          seoDescription,
+          seoKeywords,
+          dateCreated,
+          datePublished,
+          location,
+          starredImageIsCentered,
+          text,
+          isPublic,
+        };
+      })
+      .should('deep.equal', entityUpdate));
 
-  it('find a created entity', () => {
-    cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-      title: 'test-image-post-1',
-    })
-      .then(($body) => $body.body as EntityMinimal)
-      .then((entity) =>
-        cy.findOneEntityAdmin(
-          getAuthHeadersAdmin(),
-          EntityType.ImagePost,
-          entity.id
-        )
-      )
-      .its('body.slug')
-      .should('equal', 'test-image-post-1');
-  });
-
-  it('return a status of 200 when find an entity', () => {
-    cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-      title: 'test-image-post-1',
-    })
-      .then(($body) => $body.body as EntityMinimal)
-      .then((entity) =>
-        cy.findOneEntityAdmin(
-          getAuthHeadersAdmin(),
-          EntityType.ImagePost,
-          entity.id
-        )
+  it('should return a status of 204 when update an entity', () =>
+    cy
+      .createImagePostAdmin(getAuthHeaders(), {
+        slug: 'test-image-post-1',
+      })
+      .then((response) => response.body as EntityMinimalAdmin)
+      .then((entityMinimalAdmin) =>
+        cy.updateEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id, {
+          ...entityUpdate,
+        })
       )
       .its('status')
-      .should('equal', 200);
-  });
+      .should('equal', 204));
 
-  it('return a not found request status when cannot find an entity', () => {
-    cy.findOneEntityAdmin(
-      getAuthHeadersAdmin(),
-      EntityType.ImagePost,
-      DUMMY_MONGODB_ID
-    )
-      .then((response) => response)
+  it('should return a not found request status when cannot find an entity', () =>
+    cy
+      .updateEntityAdmin(getAuthHeaders(), DUMMY_MONGODB_ID, {
+        ...entityUpdate,
+      })
       .its('status')
-      .should('equal', 404);
-  });
+      .should('equal', 404));
 
-  it('return a bad request status when provide the wrong type for the entity', () => {
-    cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-      title: 'test-image-post-1',
-    })
-      .then(($body) => $body.body as EntityMinimal)
-      .then((entity) =>
-        cy.findOneEntityAdmin(
-          getAuthHeadersAdmin(),
-          EntityType.About,
-          entity.id
-        )
-      )
+  it('should return an unauthorized status when not logged in', () =>
+    cy
+      .updateEntityAdmin({ Authorization: '' }, DUMMY_MONGODB_ID, {})
       .its('status')
-      .should('equal', 400);
-  });
+      .should('equal', 401));
+
+  it('should return an unauthorized message when not logged in', () =>
+    cy
+      .updateEntityAdmin({ Authorization: '' }, DUMMY_MONGODB_ID, {})
+      .its('body.message')
+      .should('equal', 'Unauthorized'));
 });

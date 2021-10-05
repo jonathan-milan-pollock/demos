@@ -1,14 +1,13 @@
-import { ImageDto, ImageMinimalDto } from '@dark-rush-photography/api/types';
 import {
   Image,
   ImageAdmin,
-  ImageDimension,
+  ImagePublic,
   Location,
-  LocationPublic,
+  LocationDefined,
   Video,
 } from '@dark-rush-photography/shared/types';
 
-export const loadLocation = (location: Location): LocationPublic => ({
+export const loadLocation = (location: Location): LocationDefined => ({
   place: location.place ?? '',
   street: location.street ?? '',
   city: location.city ?? '',
@@ -20,7 +19,7 @@ export const loadLocation = (location: Location): LocationPublic => ({
 export const loadImageAdmin = (image: Image): ImageAdmin => ({
   id: image.id,
   entityId: image.entityId,
-  blobPathId: image.blobPathId,
+  storageId: image.storageId,
   fileName: image.fileName,
   state: image.state,
   order: image.order,
@@ -28,54 +27,33 @@ export const loadImageAdmin = (image: Image): ImageAdmin => ({
   isLoved: image.isLoved,
   title: image.title ?? '',
   seoDescription: image.seoDescription ?? '',
-  seoKeywords: image.seoKeywords ?? '',
+  seoKeywords: image.seoKeywords ? image.seoKeywords.split(',') : [],
   dateCreated: image.dateCreated ?? '',
   datePublished: image.datePublished ?? '',
+  smallResolution: image.smallResolution,
   isThreeSixty: image.isThreeSixty,
 });
 
-export const loadImageMinimal = (image: Image): ImageMinimalDto => {
+export const loadImagePublic = (image: Image): ImagePublic => {
   return {
-    id: image.id,
-    entityId: image.entityId,
     fileName: image.fileName,
+    storageId: image.storageId,
     order: image.order,
-    title: image.title,
+    title: image.title ?? '',
+    seoDescription: image.seoDescription ?? '',
+    seoKeywords: image.seoKeywords ? image.seoKeywords.split(',') : [],
+    dateCreated: image.dateCreated ?? '',
+    datePublished: image.datePublished ?? '',
+    smallResolution: image.smallResolution,
     isThreeSixty: image.isThreeSixty,
   };
 };
 
-export const loadImage = (image: Image): ImageDto => {
-  return {
-    id: image.id,
-    entityId: image.entityId,
-    fileName: image.fileName,
-    order: image.order,
-    title: image.title,
-    seoDescription: image.seoDescription,
-    seoKeywords: image.seoKeywords,
-    isThreeSixty: image.isThreeSixty,
-  };
-};
-
-export const reloadImageDimension = (
-  imageDimension: ImageDimension
-): ImageDimension => {
-  return {
-    id: imageDimension.id,
-    entityId: imageDimension.entityId,
-    imageId: imageDimension.imageId,
-    type: imageDimension.type,
-    resolution: imageDimension.resolution,
-    threeSixtySettings: imageDimension.threeSixtySettings,
-  };
-};
-
-export const reloadVideo = (video: Video): Video => {
+export const loadVideo = (video: Video): Video => {
   return {
     id: video.id,
     entityId: video.entityId,
-    blobPathId: video.blobPathId,
+    storageId: video.storageId,
     fileName: video.fileName,
   };
 };

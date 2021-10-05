@@ -1,5 +1,5 @@
 import { EntityType } from '@dark-rush-photography/shared/types';
-import { getEntityTypeImageFolderName } from './entity-type.functions';
+import { getEntityTypeNewImagesFolderName } from './entity-type.functions';
 
 describe('entity-type.functions', () => {
   const entityTypeImageFolderNames: {
@@ -34,10 +34,6 @@ describe('entity-type.functions', () => {
       entityType: EntityType.ReviewMedia,
       imageFolderName: undefined,
     },
-    {
-      entityType: EntityType.SocialMedia,
-      imageFolderName: 'images',
-    },
   ];
 
   describe('getEntityTypeImageFolderName', () => {
@@ -45,7 +41,7 @@ describe('entity-type.functions', () => {
       'should return image folder name for %s',
       ({ entityType, imageFolderName }) => {
         expect(
-          getEntityTypeImageFolderName(entityType) === imageFolderName
+          getEntityTypeNewImagesFolderName(entityType) === imageFolderName
         ).toBeTruthy();
       }
     );

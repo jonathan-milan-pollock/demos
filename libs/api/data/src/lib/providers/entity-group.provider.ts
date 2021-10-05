@@ -1,43 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 
 import {
   combineLatest,
   concatMap,
   distinct,
   from,
-  map,
   Observable,
-  of,
   toArray,
 } from 'rxjs';
 import { drive_v3 } from 'googleapis';
-import { Model } from 'mongoose';
 
 import {
-  EntityMinimal,
   EntityWithGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import {
-  getEntityTypeFromEntityWithGroupType,
-  getEntityWithGroupTypeFolderName,
-} from '@dark-rush-photography/api/util';
-import { Document, DocumentModel } from '../schema/document.schema';
-import { loadEntityMinimal } from '../entities/entity-load.functions';
+import { getEntityWithGroupTypeFolderName } from '@dark-rush-photography/api/util';
 import { findGroupsFromGoogleDriveFolderName$ } from '../entities/entity-group.functions';
 import { ConfigProvider } from './config.provider';
-import { EntityCreateProvider } from './entity-create.provider';
-import { findAllEntitiesForGroup$ } from '../entities/entity-find-all.functions';
 
 @Injectable()
 export class EntityGroupProvider {
-  constructor(
-    private readonly configProvider: ConfigProvider,
-    @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly entityCreateProvider: EntityCreateProvider
-  ) {}
+  constructor(private readonly configProvider: ConfigProvider) {}
 
   findGroups$(
     googleDrive: drive_v3.Drive,
@@ -67,61 +50,5 @@ export class EntityGroupProvider {
       distinct(),
       toArray<string>()
     );
-  }
-
-  findAllForGroup$(
-    googleDrive: drive_v3.Drive,
-    entityWithGroupType: EntityWithGroupType,
-    group: string
-  ): Observable<EntityMinimal[]> {
-    const folderName = getEntityWithGroupTypeFolderName(entityWithGroupType);
-
-    return this.entityCreateProvider
-      .createForGroup$(
-        googleDrive,
-        folderName,
-        entityWithGroupType,
-        WatermarkedType.Watermarked,
-        group
-      )
-      .pipe(
-        concatMap(() =>
-          this.entityCreateProvider.createForGroup$(
-            googleDrive,
-            folderName,
-            entityWithGroupType,
-            WatermarkedType.WithoutWatermark,
-            group
-          )
-        ),
-        concatMap(() =>
-          combineLatest([
-            findAllEntitiesForGroup$(
-              getEntityTypeFromEntityWithGroupType(entityWithGroupType),
-              WatermarkedType.Watermarked,
-              group,
-              this.entityModel
-            ),
-            findAllEntitiesForGroup$(
-              getEntityTypeFromEntityWithGroupType(entityWithGroupType),
-              WatermarkedType.WithoutWatermark,
-              group,
-              this.entityModel
-            ),
-          ])
-        ),
-        concatMap(([watermarkedEntities, withoutWatermarkEntities]) =>
-          from([...watermarkedEntities, ...withoutWatermarkEntities])
-        ),
-        toArray<DocumentModel>(),
-        concatMap((documentModels) => {
-          if (documentModels.length === 0) return of([]);
-
-          return from(documentModels).pipe(
-            map(loadEntityMinimal),
-            toArray<EntityMinimal>()
-          );
-        })
-      );
   }
 }

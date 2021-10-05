@@ -10,7 +10,6 @@ import { ImageVideo } from './image-video.interface';
 import { PhotoOfTheWeek } from './photo-of-the-week.interface';
 import { ReviewMedia } from './review-media.interface';
 import { Review } from './review.interface';
-import { SocialMedia } from './social-media.interface';
 
 export interface Entity
   extends About,
@@ -22,11 +21,10 @@ export interface Entity
     ImageVideo,
     PhotoOfTheWeek,
     ReviewMedia,
-    Review,
-    SocialMedia {
+    Review {
   readonly type: EntityType;
   readonly googleDriveFolderId?: string;
   readonly watermarkedType: WatermarkedType;
-  readonly isPublishing: boolean;
   readonly isPublished: boolean;
+  readonly isProcessing: boolean;
 }

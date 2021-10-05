@@ -1,33 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { catchError, concatMap, from, last, map, Observable, of } from 'rxjs';
+import { concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
   EntityAdmin,
-  EntityMinimal,
-  EntityType,
+  EntityMinimalAdmin,
   EntityUpdate,
   EntityWithGroupType,
   EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
 import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import {
-  DocumentModel,
-  Document,
   ConfigProvider,
+  Document,
+  DocumentModel,
+  EntityCreateProvider,
+  EntityDeleteProvider,
+  EntityFindProvider,
   EntityGroupProvider,
-  EntityProvider,
   EntityPublishProvider,
   EntitySocialMediaPostProvider,
-  ImageRemoveProvider,
+  ImageLoadNewProvider,
   loadEntityAdmin,
+  loadUpdateEntity,
   validateEntityFound,
-  validateEntityIsPublished,
-  validateEntityNotPublishing,
-  validateEntityType,
-  VideoRemoveProvider,
 } from '@dark-rush-photography/api/data';
 
 @Injectable()
@@ -36,72 +34,58 @@ export class AdminEntitiesService {
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly entityProvider: EntityProvider,
     private readonly entityGroupProvider: EntityGroupProvider,
+    private readonly entityCreateProvider: EntityCreateProvider,
+    private readonly entityFindProvider: EntityFindProvider,
     private readonly entityPublishProvider: EntityPublishProvider,
     private readonly entitySocialMediaPostProvider: EntitySocialMediaPostProvider,
-    private readonly imageRemoveProvider: ImageRemoveProvider,
-    private readonly videoRemoveProvider: VideoRemoveProvider
+    private readonly entityDeleteProvider: EntityDeleteProvider,
+    private readonly imageLoadNewProvider: ImageLoadNewProvider
   ) {}
 
-  socialMediaPost$(
-    entityType: EntityType,
-    id: string
-  ): Observable<EntityAdmin> {
-    return from(this.entityModel.findById(id)).pipe(
+  loadNewImages$(entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateEntityIsPublished),
-      concatMap(() => this.entitySocialMediaPostProvider.post$(entityType, id)),
-      concatMap(() => this.findOne$(entityType, id))
+      concatMap(() => this.imageLoadNewProvider.loadNewImages$(entityId)),
+      map(() => undefined)
     );
   }
 
-  update$(
-    entityType: EntityType,
-    id: string,
-    entityUpdate: EntityUpdate
-  ): Observable<EntityAdmin> {
-    return from(this.entityModel.findById(id)).pipe(
+  update$(entityId: string, entityUpdate: EntityUpdate): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map(validateEntityNotPublishing),
       concatMap(() =>
-        this.entityModel.findByIdAndUpdate(id, { ...entityUpdate })
+        this.entityModel.findByIdAndUpdate(entityId, {
+          ...loadUpdateEntity(entityUpdate),
+        })
       ),
-      concatMap(() => this.findOne$(entityType, id))
+      map(() => undefined)
     );
   }
 
-  publish$(
-    entityType: EntityType,
-    id: string,
-    renameMediaWithEntitySlug: boolean
-  ): Observable<EntityAdmin> {
-    return from(this.entityModel.findById(id)).pipe(
+  publish$(entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
-      concatMap((documentModel) => {
-        return this.entityPublishProvider
-          .publish$(entityType, documentModel, renameMediaWithEntitySlug)
-          .pipe(
-            catchError(() => of(this.setIsPublishing$(entityType, id, false)))
-          );
-      }),
-      concatMap(() => this.findOne$(entityType, id))
+      concatMap(() => this.entityPublishProvider.publish$(entityId)),
+      map(() => undefined)
     );
   }
 
-  setIsPublishing$(
-    entityType: EntityType,
-    id: string,
-    isPublishing: boolean
-  ): Observable<void> {
-    return from(this.entityModel.findById(id)).pipe(
+  socialMediaPost$(entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
       concatMap(() =>
-        from(
-          this.entityModel.findByIdAndUpdate(id, { isPublishing: isPublishing })
-        )
+        this.entitySocialMediaPostProvider.postSocialMedia$(entityId)
+      ),
+      map(() => undefined)
+    );
+  }
+
+  setIsProcessing$(entityId: string, isProcessing: boolean): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
+      map(validateEntityFound),
+      concatMap(() =>
+        from(this.entityModel.findByIdAndUpdate(entityId, { isProcessing }))
       ),
       map(() => undefined)
     );
@@ -120,76 +104,60 @@ export class AdminEntitiesService {
 
   findAll$(
     entityWithoutGroupType: EntityWithoutGroupType
-  ): Observable<EntityMinimal[]> {
+  ): Observable<EntityMinimalAdmin[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
-    return this.entityProvider.findAll$(googleDrive, entityWithoutGroupType);
+
+    return this.entityCreateProvider
+      .create$(googleDrive, entityWithoutGroupType)
+      .pipe(
+        concatMap(() =>
+          this.entityFindProvider.findAll$(entityWithoutGroupType)
+        )
+      );
   }
 
   findAllForGroup$(
     entityWithGroupType: EntityWithGroupType,
     group: string
-  ): Observable<EntityMinimal[]> {
+  ): Observable<EntityMinimalAdmin[]> {
     const googleDrive = getGoogleDrive(
       this.configProvider.googleDriveClientEmail,
       this.configProvider.googleDrivePrivateKey
     );
 
-    return this.entityGroupProvider.findAllForGroup$(
-      googleDrive,
-      entityWithGroupType,
-      group
-    );
+    return this.entityCreateProvider
+      .createForGroup$(googleDrive, entityWithGroupType, group)
+      .pipe(
+        concatMap(() =>
+          this.entityFindProvider.findAllForGroup$(entityWithGroupType, group)
+        )
+      );
   }
 
-  findOne$(entityType: EntityType, id: string): Observable<EntityAdmin> {
-    return from(this.entityModel.findById(id)).pipe(
+  findOne$(entityId: string): Observable<EntityAdmin> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
       map(loadEntityAdmin)
     );
   }
 
-  findIsPublishing$(entityType: EntityType, id: string): Observable<boolean> {
-    return from(this.entityModel.findById(id)).pipe(
+  findIsProcessing$(entityId: string): Observable<boolean> {
+    return from(this.entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
-      map((documentModel) => documentModel.isPublishing)
+      map((documentModel) => documentModel.isProcessing)
     );
   }
 
-  delete$(entityType: EntityType, id: string): Observable<void> {
-    return from(this.entityModel.findById(id)).pipe(
-      map(validateEntityFound),
-      map(validateEntityNotPublishing),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
+  delete$(entityId: string): Observable<void> {
+    return from(this.entityModel.findById(entityId)).pipe(
       concatMap((documentModel) => {
-        if (documentModel.images.length === 0) {
-          return of(documentModel);
-        }
-        return from(documentModel.images).pipe(
-          concatMap((image) =>
-            this.imageRemoveProvider.removeImage$(image, documentModel._id)
-          ),
-          last(),
-          map(() => documentModel)
-        );
+        if (!documentModel) return of(undefined);
+
+        return this.entityDeleteProvider.delete$(entityId);
       }),
-      concatMap((documentModel) => {
-        if (documentModel.videos.length === 0) {
-          return of(documentModel);
-        }
-        return from(documentModel.videos).pipe(
-          concatMap((video) =>
-            this.videoRemoveProvider.remove$(video, documentModel)
-          ),
-          last(),
-          map(() => documentModel)
-        );
-      }),
-      concatMap(() => from(this.entityModel.findByIdAndDelete(id))),
       map(() => undefined)
     );
   }

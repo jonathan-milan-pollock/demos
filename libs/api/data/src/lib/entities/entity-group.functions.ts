@@ -13,8 +13,8 @@ export const findGroupsFromGoogleDriveFolderName$ = (
 ): Observable<string[]> => {
   return findGoogleDriveFolderByName$(
     googleDrive,
-    googleDriveWebsitesFolderId,
-    entityFolderName
+    entityFolderName,
+    googleDriveWebsitesFolderId
   ).pipe(
     concatMap((entityFolder) => {
       if (!entityFolder) return of([]);

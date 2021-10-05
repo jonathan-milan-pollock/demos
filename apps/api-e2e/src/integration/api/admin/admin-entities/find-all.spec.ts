@@ -1,143 +1,84 @@
 import {
-  EntityMinimal,
   EntityWithGroupType,
   EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
-import {
-  getAuthHeaders,
-  getAuthHeadersAdmin,
-} from '../../../../support/commands/api/auth-headers.functions';
+import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
-describe('findAll', () => {
-  const entityWithoutGroupTypes = [
-    EntityWithoutGroupType.About,
-    EntityWithoutGroupType.BestOf,
-    EntityWithoutGroupType.Destination,
-    EntityWithoutGroupType.Favorites,
-    EntityWithoutGroupType.ImagePost,
-    EntityWithoutGroupType.ImageVideo,
-    EntityWithoutGroupType.Review,
-    EntityWithoutGroupType.ReviewMedia,
-  ];
+describe('Find all Admin Entities', () => {
+  const entityWithoutGroupTypes = Object.values(EntityWithoutGroupType);
+  const entityWithGroupTypes = Object.values(EntityWithGroupType);
 
-  const entityWithGroupTypes = [
-    EntityWithGroupType.Event,
-    EntityWithGroupType.PhotoOfTheWeek,
-    EntityWithGroupType.SocialMedia,
-  ];
+  beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
 
-  beforeEach(() =>
-    cy.loginAdmin().then(() =>
-      cy
-        .findAllEntityAdmin(
-          getAuthHeadersAdmin(),
-          EntityWithoutGroupType.ImagePost
-        )
-        .then(($body) =>
-          $body.body.forEach((entityMinimal: EntityMinimal) => {
-            cy.deleteEntityAdmin(
-              getAuthHeadersAdmin(),
-              entityMinimal.type,
-              entityMinimal.id
-            );
-          })
-        )
-    )
-  );
-
-  it('should return application/json', () => {
-    cy.findAllEntityAdmin(getAuthHeadersAdmin(), EntityWithoutGroupType.About)
-      .then((response) => response)
+  it('should return application/json', () =>
+    cy
+      .findAllEntityAdmin(getAuthHeaders(), EntityWithoutGroupType.About)
       .its('headers')
       .its('content-type')
-      .should('include', 'application/json');
-  });
+      .should('include', 'application/json'));
 
-  it('should find entities', () => {
-    cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-      title: 'test-image-post-1',
-    }).then(() =>
-      entityWithoutGroupTypes.forEach((entityWithoutGroupType) =>
-        cy
-          .findAllEntityAdmin(getAuthHeadersAdmin(), entityWithoutGroupType)
-          .then((response) => response)
-          .its('body.length')
-          .should('be.greaterThan', 0)
-      )
-    );
-  });
-
-  it('should find image posts', () => {
-    cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-      title: 'test-image-post-1',
-    })
+  it('should find entities', () =>
+    cy
+      .createImagePostAdmin(getAuthHeaders(), {
+        slug: 'test-image-post-1',
+      })
       .then(() =>
-        cy.createImagePostAdmin(getAuthHeadersAdmin(), {
-          title: 'test-image-post-2',
+        entityWithoutGroupTypes.forEach((entityWithoutGroupType) =>
+          cy
+            .findAllEntityAdmin(getAuthHeaders(), entityWithoutGroupType)
+            .its('body.length')
+            .should('be.greaterThan', 0)
+        )
+      ));
+
+  it('should find image posts', () =>
+    cy
+      .createImagePostAdmin(getAuthHeaders(), {
+        slug: 'test-image-post-1',
+      })
+      .then(() =>
+        cy.createImagePostAdmin(getAuthHeaders(), {
+          slug: 'test-image-post-2',
         })
       )
       .then(() =>
         cy.findAllEntityAdmin(
-          getAuthHeadersAdmin(),
+          getAuthHeaders(),
           EntityWithoutGroupType.ImagePost
         )
       )
-      .then((response) => response)
       .its('body.length')
-      .should('equal', 2);
-  });
+      .should('equal', 2));
 
-  it('should have a count of 0 when no entities for type are created', () => {
-    cy.findAllEntityAdmin(
-      getAuthHeadersAdmin(),
-      EntityWithoutGroupType.ImagePost
-    )
+  it('should have a count of 0 when no entities are created', () =>
+    cy
+      .findAllEntityAdmin(getAuthHeaders(), EntityWithoutGroupType.ImagePost)
       .its('body.length')
-      .should('equal', 0);
-  });
+      .should('equal', 0));
 
-  it('should return a status of 200 when finding entities', () => {
-    cy.findAllEntityAdmin(getAuthHeadersAdmin(), EntityWithoutGroupType.About)
-      .then((response) => response)
+  it('should return a status of 200 when finding entities', () =>
+    cy
+      .findAllEntityAdmin(getAuthHeaders(), EntityWithoutGroupType.About)
       .its('status')
-      .should('equal', 200);
-  });
+      .should('equal', 200));
 
-  it('should return a bad request status when called for an entity that requires a group', () => {
+  it('should return a bad request status when called for an entity that requires a group', () =>
     entityWithGroupTypes.forEach((entityWithGroupType) =>
       cy
-        .findAllEntityAdmin(getAuthHeadersAdmin(), entityWithGroupType)
-        .then((response) => response)
+        .findAllEntityAdmin(getAuthHeaders(), entityWithGroupType)
         .its('status')
         .should('equal', 400)
-    );
-  });
+    ));
 
-  it('should return an unauthorized status if not logged in', () => {
-    cy.findAllEntityAdmin({ Authorization: '' }, EntityWithoutGroupType.About)
-      .then((response) => response)
+  it('should return an unauthorized status when not logged in', () =>
+    cy
+      .findAllEntityAdmin({ Authorization: '' }, EntityWithoutGroupType.About)
       .its('status')
-      .should('equal', 401);
-  });
+      .should('equal', 401));
 
-  it('should return an unauthorized message not logged in', () => {
-    cy.findAllEntityAdmin({ Authorization: '' }, EntityWithoutGroupType.About)
-      .then((response) => response)
+  it('should return an unauthorized message when not logged in', () =>
+    cy
+      .findAllEntityAdmin({ Authorization: '' }, EntityWithoutGroupType.About)
       .its('body.message')
-      .should('equal', 'Unauthorized');
-  });
-
-  it('should return an unauthorized status if not an admin', () => {
-    cy.findAllEntityAdmin(getAuthHeaders(), EntityWithoutGroupType.About)
-      .then((response) => response)
-      .its('status')
-      .should('equal', 401);
-  });
-
-  it('should return an unauthorized message if not an admin', () => {
-    cy.findAllEntityAdmin(getAuthHeaders(), EntityWithoutGroupType.About)
-      .then((response) => response)
-      .its('body.message')
-      .should('equal', 'Unauthorized');
-  });
+      .should('equal', 'Unauthorized'));
 });

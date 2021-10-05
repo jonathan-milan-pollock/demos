@@ -1,61 +1,76 @@
-import { EntityMinimal, EntityType } from '@dark-rush-photography/shared/types';
-import { getAuthHeadersAdmin } from '../../../../support/commands/api/auth-headers.functions';
+import {
+  DUMMY_MONGODB_ID,
+  EntityMinimalAdmin,
+  EntityType,
+} from '@dark-rush-photography/shared/types';
+import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
-describe('deleteEntity', () => {
-  beforeEach(() =>
-    cy
-      .loginAdmin()
-      .then(() =>
-        cy
-          .findAllEntityAdmin(getAuthHeadersAdmin(), EntityType.ImagePost)
-          .then(($body) =>
-            $body.body.forEach((entityMinimal: EntityMinimal) =>
-              cy.deleteEntityAdmin(
-                getAuthHeadersAdmin(),
-                entityMinimal.type,
-                entityMinimal.id
-              )
-            )
-          )
-      )
-  );
+describe('Delete Admin Entities', () => {
+  beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
 
-  /*
-  it('should delete a created about', () => {
-    const randomNumber = Cypress._.random(0, 100).toString();
-    cy.createAboutAdmin(`test-about-${randomNumber}`)
+  it('should delete a created image post', () => {
+    cy.createImagePostAdmin(getAuthHeaders(), {
+      slug: 'test-image-post-1',
+    })
       .its('body.id')
-      .then((id) => cy.deleteAboutAdmin(id))
-      .then(() => cy.findAllAboutAdmin())
+      .then((id) => cy.deleteEntityAdmin(getAuthHeaders(), id))
+      .then(() => cy.findAllEntityAdmin(getAuthHeaders(), EntityType.ImagePost))
       .its('body.length')
       .should('equal', 0);
   });
 
   it('should return a status of 204 when delete', () => {
-    const randomNumber = Cypress._.random(0, 100).toString();
-    cy.aboutCreateAdmin(`test-about-${randomNumber}`)
+    cy.createImagePostAdmin(getAuthHeaders(), {
+      slug: 'test-image-post-1',
+    })
       .its('body.id')
-      .then((id) => cy.aboutDeleteAdmin(id))
+      .then((id) => cy.deleteEntityAdmin(getAuthHeaders(), id))
       .its('status')
       .should('equal', 204);
-  });
-
-  it('should return an empty body when delete', () => {
-    const randomNumber = Cypress._.random(0, 100).toString();
-    cy.aboutCreateAdmin(`test-about-${randomNumber}`)
-      .its('body.id')
-      .then((id) => cy.aboutDeleteAdmin(id))
-      .its('body')
-      .should('equal', '');
   });
 
   it('should not fail when deleting multiple times', () => {
-    const randomNumber = Cypress._.random(0, 100).toString();
-    cy.aboutCreateAdmin(`test-about-${randomNumber}`)
+    cy.createImagePostAdmin(getAuthHeaders(), {
+      slug: 'test-image-post-1',
+    })
       .its('body.id')
-      .then((id) => cy.aboutDeleteAdmin(id))
-      .then(() => cy.aboutDeleteAdmin(DUMMY_MONGODB_ID))
+      .then((id) => {
+        return cy
+          .deleteEntityAdmin(getAuthHeaders(), id)
+          .then(() => id as string);
+      })
+      .then((id) => cy.deleteEntityAdmin(getAuthHeaders(), id))
       .its('status')
       .should('equal', 204);
-  });*/
+  });
+
+  it('should not fail if deleting id that does not exist', () => {
+    cy.deleteEntityAdmin(getAuthHeaders(), DUMMY_MONGODB_ID)
+      .its('status')
+      .should('equal', 204);
+  });
+
+  it('should return an unauthorized status when not logged in', () =>
+    cy
+      .createImagePostAdmin(getAuthHeaders(), {
+        slug: 'test-image-post-1',
+      })
+      .then((response) => response.body as EntityMinimalAdmin)
+      .then((entityMinimalAdmin) =>
+        cy.deleteEntityAdmin({ Authorization: '' }, entityMinimalAdmin.id)
+      )
+      .its('status')
+      .should('equal', 401));
+
+  it('should return an unauthorized message when not logged in', () =>
+    cy
+      .createImagePostAdmin(getAuthHeaders(), {
+        slug: 'test-image-post-1',
+      })
+      .then((response) => response.body as EntityMinimalAdmin)
+      .then((entityMinimalAdmin) =>
+        cy.deleteEntityAdmin({ Authorization: '' }, entityMinimalAdmin.id)
+      )
+      .its('body.message')
+      .should('equal', 'Unauthorized'));
 });

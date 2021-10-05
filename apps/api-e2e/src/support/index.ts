@@ -22,21 +22,9 @@ import './commands/api/admin/admin-images.commands';
 import './commands/api/admin/admin-image-posts.commands';
 
 // api public
-import './commands/api/public/about.commands';
-import './commands/api/public/best-of.commands';
-import './commands/api/public/destinations.commands';
-import './commands/api/public/events.commands';
-import './commands/api/public/favorites.commands';
-import './commands/api/public/images.commands';
-import './commands/api/public/photo-of-the-week.commands';
-import './commands/api/public/review-media.commands';
-import './commands/api/public/reviews.commands';
+import './commands/api/public/entities.commands';
 import './commands/api/public/sitemap.commands';
 
-// api user
-import './commands/api/user/user-comments.commands';
-import './commands/api/user/user-emotions.commands';
-
 // api
-import './commands/api/login-admin.commands';
-import './commands/api/login-user.commands';
+import './commands/api/delete-test-data.commands';
+import './commands/api/login.commands';

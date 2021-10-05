@@ -1,4 +1,4 @@
 export interface ImagePostCreate {
-  readonly title: string;
+  readonly slug: string;
   readonly text: string[];
 }

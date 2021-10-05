@@ -3,23 +3,17 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 import {
-  Comment,
   DEFAULT_ENTITY_GROUP,
-  Emotion,
   Entity,
   EntityType,
   Image,
-  ImageDimension,
   Location,
   Video,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
-import { imageDimensionSchema } from './image-dimension.schema';
 import { videoSchema } from './video.schema';
-import { commentSchema } from './comment.schema';
-import { emotionSchema } from './emotion.schema';
 
 export type DocumentModel = Document & mongoose.Document;
 
@@ -90,31 +84,19 @@ export class Document implements Entity {
   images!: Image[];
 
   @Prop({
-    type: [imageDimensionSchema],
-    required: true,
-  })
-  imageDimensions!: ImageDimension[];
-
-  @Prop({
     type: [videoSchema],
     required: true,
   })
   videos!: Video[];
 
-  @Prop({ type: [commentSchema], required: true })
-  comments!: Comment[];
-
-  @Prop({ type: [emotionSchema], required: true })
-  emotions!: Emotion[];
-
   @Prop({ type: Boolean, required: true, default: false })
   isPublic!: boolean;
 
   @Prop({ type: Boolean, required: true, default: false })
-  isPublishing!: boolean;
+  isPublished!: boolean;
 
   @Prop({ type: Boolean, required: true, default: false })
-  isPublished!: boolean;
+  isProcessing!: boolean;
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);

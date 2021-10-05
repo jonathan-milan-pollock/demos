@@ -3,17 +3,15 @@ import * as faker from 'faker';
 import {
   DUMMY_MONGODB_ID,
   Image,
-  ImageDimension,
-  ImageDimensionType,
   ImageState,
   Location,
   Video,
 } from '@dark-rush-photography/shared/types';
 import {
   loadImageAdmin,
+  loadImagePublic,
   loadLocation,
-  reloadImageDimension,
-  reloadVideo,
+  loadVideo,
 } from './content-load.functions';
 
 describe('content-load.functions', () => {
@@ -27,15 +25,6 @@ describe('content-load.functions', () => {
       country: faker.address.country(),
     };
 
-    it('should not contain an _id value', () => {
-      const locationWithMongoDbId = {
-        ...location,
-        _id: faker.datatype.uuid(),
-      };
-      const result = loadLocation(locationWithMongoDbId);
-      expect('_id' in result).toBe(false);
-    });
-
     it('should load a location with all values', () => {
       const result = loadLocation(location);
 
@@ -48,18 +37,18 @@ describe('content-load.functions', () => {
     });
 
     it('should load a location with empty string values when they are not provided', () => {
-      const locationWithUndefinedValues: Location = {
-        country: faker.address.country(),
-      };
+      const country = faker.address.country();
 
-      const result = loadLocation(locationWithUndefinedValues);
+      const result = loadLocation({
+        country,
+      });
 
       expect(result.place).toBe('');
       expect(result.street).toBe('');
       expect(result.city).toBe('');
       expect(result.stateOrProvince).toBe('');
       expect(result.zipCode).toBe('');
-      expect(result.country).toBe(locationWithUndefinedValues.country);
+      expect(result.country).toBe(country);
     });
   });
 
@@ -67,7 +56,7 @@ describe('content-load.functions', () => {
     const image: Image = {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
-      blobPathId: faker.datatype.uuid(),
+      storageId: faker.datatype.uuid(),
       fileName: faker.system.fileName(),
       state: faker.random.arrayElement(Object.values(ImageState)),
       order: faker.datatype.number(),
@@ -82,6 +71,10 @@ describe('content-load.functions', () => {
       ].join(','),
       dateCreated: faker.date.recent().toISOString(),
       datePublished: faker.date.recent().toISOString(),
+      smallResolution: {
+        width: faker.datatype.number(),
+        height: faker.datatype.number(),
+      },
       isThreeSixty: faker.datatype.boolean(),
     };
 
@@ -99,7 +92,7 @@ describe('content-load.functions', () => {
 
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
-      expect(result.blobPathId).toBe(image.blobPathId);
+      expect(result.storageId).toBe(image.storageId);
       expect(result.fileName).toBe(image.fileName);
       expect(result.state).toBe(image.state);
       expect(result.order).toBe(image.order);
@@ -107,87 +100,115 @@ describe('content-load.functions', () => {
       expect(result.isLoved).toBe(image.isLoved);
       expect(result.title).toBe(image.title);
       expect(result.seoDescription).toBe(image.seoDescription);
-      expect(result.seoKeywords).toBe(image.seoKeywords);
+      expect(result.seoKeywords).toEqual(image.seoKeywords?.split(','));
       expect(result.dateCreated).toBe(image.dateCreated);
       expect(result.datePublished).toBe(image.datePublished);
+      expect(result.smallResolution).toEqual(image.smallResolution);
       expect(result.isThreeSixty).toBe(image.isThreeSixty);
     });
 
-    it('should load an admin image with empty string values when they are not provided', () => {
-      const imageWithUndefinedValues: Image = {
+    it('should load an admin image with values when they are not provided', () => {
+      const result = loadImageAdmin({
         id: faker.datatype.uuid(),
         entityId: DUMMY_MONGODB_ID,
-        blobPathId: faker.datatype.uuid(),
+        storageId: faker.datatype.uuid(),
         fileName: faker.system.fileName(),
         state: faker.random.arrayElement(Object.values(ImageState)),
         order: faker.datatype.number(),
         isStarred: faker.datatype.boolean(),
         isLoved: faker.datatype.boolean(),
+        smallResolution: {
+          width: faker.datatype.number(),
+          height: faker.datatype.number(),
+        },
         isThreeSixty: faker.datatype.boolean(),
-      };
-
-      const result = loadImageAdmin(imageWithUndefinedValues);
-
-      expect(result.id).toBe(imageWithUndefinedValues.id);
-      expect(result.entityId).toBe(imageWithUndefinedValues.entityId);
-      expect(result.blobPathId).toBe(imageWithUndefinedValues.blobPathId);
-      expect(result.fileName).toBe(imageWithUndefinedValues.fileName);
-      expect(result.state).toBe(imageWithUndefinedValues.state);
-      expect(result.order).toBe(imageWithUndefinedValues.order);
-      expect(result.isStarred).toBe(imageWithUndefinedValues.isStarred);
-      expect(result.isLoved).toBe(imageWithUndefinedValues.isLoved);
+      });
       expect(result.title).toBe('');
       expect(result.seoDescription).toBe('');
-      expect(result.seoKeywords).toBe('');
+      expect(result.seoKeywords).toEqual([]);
       expect(result.dateCreated).toBe('');
       expect(result.datePublished).toBe('');
-      expect(result.isThreeSixty).toBe(imageWithUndefinedValues.isThreeSixty);
     });
   });
-  describe('reloadImageDimension', () => {
-    const imageDimension: ImageDimension = {
+
+  describe('loadImagePublic', () => {
+    const image: Image = {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
-      imageId: faker.datatype.uuid(),
-      type: faker.random.arrayElement(Object.values(ImageDimensionType)),
-      resolution: {
+      storageId: faker.datatype.uuid(),
+      fileName: faker.system.fileName(),
+      state: faker.random.arrayElement(Object.values(ImageState)),
+      order: faker.datatype.number(),
+      isStarred: faker.datatype.boolean(),
+      isLoved: faker.datatype.boolean(),
+      title: faker.lorem.sentence(),
+      seoDescription: faker.lorem.paragraph(),
+      seoKeywords: [
+        faker.lorem.word().toLowerCase(),
+        faker.lorem.word().toLowerCase(),
+        faker.lorem.word().toLowerCase(),
+      ].join(','),
+      dateCreated: faker.date.recent().toISOString(),
+      datePublished: faker.date.recent().toISOString(),
+      smallResolution: {
         width: faker.datatype.number(),
         height: faker.datatype.number(),
       },
-      threeSixtySettings: {
-        pitch: faker.datatype.number(),
-        roll: faker.datatype.number(),
-        yaw: faker.datatype.number(),
-        hfov: faker.datatype.number(),
-      },
+      isThreeSixty: faker.datatype.boolean(),
     };
 
     it('should not contain an _id value', () => {
-      const imageDimensionWithMongoDbId = {
-        ...imageDimension,
+      const imageWithMongoDbId = {
+        ...image,
         _id: faker.datatype.uuid(),
       };
-      const result = reloadImageDimension(imageDimensionWithMongoDbId);
+      const result = loadImagePublic(imageWithMongoDbId);
       expect('_id' in result).toBe(false);
     });
 
-    it('should reload an image dimension with all values', () => {
-      const result = reloadImageDimension(imageDimension);
+    it('should load a public image with all values', () => {
+      const result = loadImagePublic(image);
 
-      expect(result.id).toBe(imageDimension.id);
-      expect(result.entityId).toBe(imageDimension.entityId);
-      expect(result.imageId).toBe(imageDimension.imageId);
-      expect(result.type).toBe(imageDimension.type);
-      expect(result.resolution).toBe(imageDimension.resolution);
-      expect(result.threeSixtySettings).toBe(imageDimension.threeSixtySettings);
+      expect(result.fileName).toBe(image.fileName);
+      expect(result.order).toBe(image.order);
+      expect(result.title).toBe(image.title);
+      expect(result.seoDescription).toBe(image.seoDescription);
+      expect(result.seoKeywords).toEqual(image.seoKeywords?.split(','));
+      expect(result.dateCreated).toBe(image.dateCreated);
+      expect(result.datePublished).toBe(image.datePublished);
+      expect(result.smallResolution).toEqual(image.smallResolution);
+      expect(result.isThreeSixty).toBe(image.isThreeSixty);
+    });
+
+    it('should load a public image with values when they are not provided', () => {
+      const result = loadImagePublic({
+        id: faker.datatype.uuid(),
+        entityId: DUMMY_MONGODB_ID,
+        storageId: faker.datatype.uuid(),
+        fileName: faker.system.fileName(),
+        state: faker.random.arrayElement(Object.values(ImageState)),
+        order: faker.datatype.number(),
+        isStarred: faker.datatype.boolean(),
+        isLoved: faker.datatype.boolean(),
+        smallResolution: {
+          width: faker.datatype.number(),
+          height: faker.datatype.number(),
+        },
+        isThreeSixty: faker.datatype.boolean(),
+      });
+      expect(result.title).toBe('');
+      expect(result.seoDescription).toBe('');
+      expect(result.seoKeywords).toEqual([]);
+      expect(result.dateCreated).toBe('');
+      expect(result.datePublished).toBe('');
     });
   });
 
-  describe('reloadVideo', () => {
+  describe('loadVideo', () => {
     const video: Video = {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
-      blobPathId: faker.datatype.uuid(),
+      storageId: faker.datatype.uuid(),
       fileName: faker.system.fileName(),
     };
 
@@ -196,16 +217,16 @@ describe('content-load.functions', () => {
         ...video,
         _id: faker.datatype.uuid(),
       };
-      const result = reloadVideo(videoWithMongoDbId);
+      const result = loadVideo(videoWithMongoDbId);
       expect('_id' in result).toBe(false);
     });
 
     it('should reload a video with all values', () => {
-      const result = reloadVideo(video);
+      const result = loadVideo(video);
 
       expect(result.id).toBe(video.id);
       expect(result.entityId).toBe(video.entityId);
-      expect(result.blobPathId).toBe(video.blobPathId);
+      expect(result.storageId).toBe(video.storageId);
       expect(result.fileName).toBe(video.fileName);
     });
   });

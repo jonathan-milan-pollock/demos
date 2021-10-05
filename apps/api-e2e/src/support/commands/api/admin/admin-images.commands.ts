@@ -1,43 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-var-requires */
-//import * as fs from 'fs-extra';
-//import * as path from 'path';
-import { getAuthHeaders } from '../auth-headers.functions';
-
-Cypress.Commands.add(
-  'uploadThreeSixtyImageAdmin',
-  async (entityId: string, filePath: string): Promise<any> => {
-    const FormData = require('form-data');
-    const formData = new FormData();
-    formData.append(
-      'file'
-      //  fs.readFileSync(filePath, 'utf8'),
-      //  path.basename(filePath)
-    );
-
-    return fetch(
-      `/api/v1/admin/images/upload-three-sixty?entityId=${entityId}`,
-      {
-        method: 'POST',
-        headers: {
-          ...getAuthHeaders(),
-          'Content-Length': formData.getLengthSync(),
-        },
-        body: formData,
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => json);
-  }
-);
+import { ImageAdmin, ImageUpdate } from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add(
   'updateImageAdmin',
-  async (id: string, entityId: string, imageUpdate: any): Promise<any> => {
-    return fetch(`/api/v1/admin/images/${id}?entityId=${entityId}`, {
+  async (
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string,
+    imageUpdate: ImageUpdate
+  ): Promise<ImageAdmin> => {
+    return fetch(`/api/v1/admin/images/${imageId}?entityId=${entityId}`, {
       method: 'PUT',
       headers: {
-        ...getAuthHeaders(),
+        ...authHeaders,
       },
       body: JSON.stringify({
         ...imageUpdate,
@@ -49,23 +23,19 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'updateThreeSixtySettingsImageAdmin',
+  'selectImageAdmin',
   async (
-    id: string,
-    entityId: string,
-    imageDimensionType: string,
-    threeSixtySettings: any
-  ): Promise<any> => {
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string
+  ): Promise<ImageAdmin> => {
     return fetch(
-      `/api/v1/admin/images/${id}/${imageDimensionType}/three-sixty-settings?entityId=${entityId}`,
+      `/api/v1/admin/images/${imageId}/select?entityId=${entityId}`,
       {
         method: 'PUT',
         headers: {
-          ...getAuthHeaders(),
+          ...authHeaders,
         },
-        body: JSON.stringify({
-          ...threeSixtySettings,
-        }),
       }
     )
       .then((response) => response.json())
@@ -74,46 +44,39 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'findAllImageAdmin',
-  async (entityId: string, state: string): Promise<any> => {
-    return fetch(`/api/v1/admin/images?entityId=${entityId}&state=${state}`, {
-      method: 'GET',
-      headers: {
-        ...getAuthHeaders(),
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
-);
-
-Cypress.Commands.add(
-  'findOneImageAdmin',
-  async (id: string, entityId: string): Promise<any> => {
-    return fetch(`/api/v1/admin/images/${id}?entityId=${entityId}`, {
-      method: 'GET',
-      headers: {
-        ...getAuthHeaders(),
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
-);
-
-Cypress.Commands.add(
-  'streamImageAdmin',
+  'archiveImageAdmin',
   async (
-    id: string,
-    entityId: string,
-    imageDimensionType: string
-  ): Promise<any> => {
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string
+  ): Promise<ImageAdmin> => {
     return fetch(
-      `/api/v1/admin/images/${id}/${imageDimensionType}/string?entityId=${entityId}`,
+      `/api/v1/admin/images/${imageId}/archive?entityId=${entityId}`,
       {
-        method: 'GET',
+        method: 'PUT',
         headers: {
-          ...getAuthHeaders(),
+          ...authHeaders,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => JSON.parse(json));
+  }
+);
+
+Cypress.Commands.add(
+  'unarchiveImageAdmin',
+  async (
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string
+  ): Promise<ImageAdmin> => {
+    return fetch(
+      `/api/v1/admin/images/${imageId}/unarchive?entityId=${entityId}`,
+      {
+        method: 'PUT',
+        headers: {
+          ...authHeaders,
         },
       }
     )
@@ -124,11 +87,15 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'removeImageAdmin',
-  async (id: string, entityId: string): Promise<void> => {
-    return fetch(`/api/v1/admin/images/${id}?entityId=${entityId}`, {
+  async (
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string
+  ): Promise<void> => {
+    return fetch(`/api/v1/admin/images/${imageId}?entityId=${entityId}`, {
       method: 'DELETE',
       headers: {
-        ...getAuthHeaders(),
+        ...authHeaders,
       },
     }).then(() => undefined);
   }

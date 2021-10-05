@@ -1,5 +1,4 @@
 import { Entity, ImagePostCreate } from '@dark-rush-photography/shared/types';
-import { getAuthHeadersAdmin } from '../auth-headers.functions';
 
 Cypress.Commands.add(
   'createImagePostAdmin',
@@ -22,14 +21,17 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'uploadImagePostAdmin',
-  async (entityId: string): Promise<string> => {
+  async (
+    authHeaders: { Authorization: string },
+    entityId: string
+  ): Promise<string> => {
     const imageUrl =
       'https://images.unsplash.com/photo-1554137454-8369250f411d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2182&q=80';
     const formData = new FormData();
     formData.append(
       'file',
       await Cypress.Blob.imgSrcToBlob(imageUrl),
-      'image.jpg'
+      'test-image.jpg'
     );
 
     return fetch(
@@ -38,7 +40,7 @@ Cypress.Commands.add(
         method: 'POST',
         body: formData,
         headers: {
-          ...getAuthHeadersAdmin(),
+          ...authHeaders,
         },
       }
     ).then((response) => response.json());

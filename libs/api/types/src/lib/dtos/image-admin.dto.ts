@@ -1,14 +1,19 @@
 import {
+  IsArray,
   IsBoolean,
   IsEnum,
   IsInt,
+  IsISO8601,
   IsMongoId,
   IsString,
   IsUUID,
   Min,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { ImageAdmin, ImageState } from '@dark-rush-photography/shared/types';
+import { ResolutionDto } from './resolution.dto';
 
 export class ImageAdminDto implements ImageAdmin {
   @IsUUID()
@@ -17,8 +22,8 @@ export class ImageAdminDto implements ImageAdmin {
   @IsMongoId()
   entityId!: string;
 
-  @IsString()
-  blobPathId!: string;
+  @IsUUID()
+  storageId!: string;
 
   @IsString()
   fileName!: string;
@@ -42,14 +47,19 @@ export class ImageAdminDto implements ImageAdmin {
   @IsString()
   seoDescription!: string;
 
-  @IsString()
-  seoKeywords!: string;
+  @IsArray()
+  @Type(() => String)
+  seoKeywords: string[] = [];
 
-  @IsString()
+  @IsISO8601()
   dateCreated!: string;
 
-  @IsString()
+  @IsISO8601()
   datePublished!: string;
+
+  @ValidateNested()
+  @Type(() => ResolutionDto)
+  smallResolution!: ResolutionDto;
 
   @IsBoolean()
   isThreeSixty!: boolean;

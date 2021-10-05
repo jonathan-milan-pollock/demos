@@ -1,45 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Test } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { getModelToken } from '@nestjs/mongoose';
 
 import * as faker from 'faker';
 import { of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
-import {
-  EntityMinimal,
-  EntityWithGroupType,
-  WatermarkedType,
-} from '@dark-rush-photography/shared/types';
-import { Document, DocumentModel } from '../schema/document.schema';
+import { EntityWithGroupType } from '@dark-rush-photography/shared/types';
 import { ConfigProvider } from './config.provider';
 import { EntityGroupProvider } from './entity-group.provider';
-import { EntityCreateProvider } from './entity-create.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-jest.mock('../entities/entity-load.functions', () => ({
-  ...jest.requireActual('../entities/entity-load.functions'),
-}));
-import * as entityLoadFunctions from '../entities/entity-load.functions';
-
 jest.mock('../entities/entity-group.functions', () => ({
   ...jest.requireActual('../entities/entity-group.functions'),
 }));
 import * as entityGroupFunctions from '../entities/entity-group.functions';
 
-jest.mock('../entities/entity-find-all.functions', () => ({
-  ...jest.requireActual('../entities/entity-find-all.functions'),
-}));
-import * as entityFindAllFunctions from '../entities/entity-find-all.functions';
-
 describe('entity-group.provider', () => {
   let entityGroupProvider: EntityGroupProvider;
-  let entityCreateProvider: EntityCreateProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {
@@ -47,7 +29,6 @@ describe('entity-group.provider', () => {
         return '';
       }
     }
-    class MockDocumentModel {}
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -56,34 +37,27 @@ describe('entity-group.provider', () => {
           provide: ConfigProvider,
           useClass: MockConfigProvider,
         },
-        {
-          provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
-        },
-        EntityCreateProvider,
         EntityGroupProvider,
       ],
     }).compile();
 
     entityGroupProvider =
       moduleRef.get<EntityGroupProvider>(EntityGroupProvider);
-    entityCreateProvider =
-      moduleRef.get<EntityCreateProvider>(EntityCreateProvider);
   });
 
   describe('findGroups$', () => {
     it('should combine groups from google drive', (done: any) => {
       jest
         .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-        .mockImplementation(() => '');
+        .mockReturnValue('');
 
       const watermarkedGroups = [faker.lorem.word()];
       const withoutWatermarkGroups = [faker.lorem.word()];
 
       jest
         .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
-        .mockImplementationOnce(() => of(watermarkedGroups))
-        .mockImplementationOnce(() => of(withoutWatermarkGroups));
+        .mockReturnValueOnce(of(watermarkedGroups))
+        .mockReturnValueOnce(of(withoutWatermarkGroups));
 
       entityGroupProvider
         .findGroups$(
@@ -102,7 +76,7 @@ describe('entity-group.provider', () => {
     it('should not have duplicates from google drive', (done: any) => {
       jest
         .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-        .mockImplementation(() => '');
+        .mockReturnValue('');
 
       const sameGroup = faker.lorem.word();
 
@@ -111,8 +85,8 @@ describe('entity-group.provider', () => {
 
       jest
         .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
-        .mockImplementationOnce(() => of(watermarkedGroups))
-        .mockImplementationOnce(() => of(withoutWatermarkGroups));
+        .mockReturnValueOnce(of(watermarkedGroups))
+        .mockReturnValueOnce(of(withoutWatermarkGroups));
 
       entityGroupProvider
         .findGroups$(
@@ -129,11 +103,11 @@ describe('entity-group.provider', () => {
     it('should return an empty array if groups are not found in google drive', (done: any) => {
       jest
         .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-        .mockImplementation(() => '');
+        .mockReturnValue('');
 
       jest
         .spyOn(entityGroupFunctions, 'findGroupsFromGoogleDriveFolderName$')
-        .mockImplementation(() => of([]));
+        .mockReturnValue(of([]));
 
       entityGroupProvider
         .findGroups$(
@@ -142,120 +116,6 @@ describe('entity-group.provider', () => {
         )
         .subscribe((result) => {
           expect(result).toHaveLength(0);
-          done();
-        });
-    });
-  });
-
-  describe('findAllForGroup$', () => {
-    it('should find watermarked and without watermark entities for group', (done: any) => {
-      jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-        .mockImplementation(() => '');
-
-      jest
-        .spyOn(entityCreateProvider, 'createForGroup$')
-        .mockImplementation(() => of(undefined));
-
-      const watermarkedEntity = {
-        slug: faker.lorem.word(),
-      } as DocumentModel;
-      const withoutWatermarkEntity = {
-        slug: faker.lorem.word(),
-      } as DocumentModel;
-
-      jest
-        .spyOn(entityFindAllFunctions, 'findAllEntitiesForGroup$')
-        .mockImplementationOnce(() => of([watermarkedEntity]))
-        .mockImplementationOnce(() => of([withoutWatermarkEntity]));
-
-      jest
-        .spyOn(entityLoadFunctions, 'loadEntityMinimal')
-        .mockImplementation(
-          (documentModel: DocumentModel) =>
-            ({ slug: documentModel.slug } as EntityMinimal)
-        );
-
-      entityGroupProvider
-        .findAllForGroup$(
-          {} as drive_v3.Drive,
-          faker.random.arrayElement(Object.values(EntityWithGroupType)),
-          faker.lorem.word()
-        )
-        .subscribe((result) => {
-          expect(result).toEqual([
-            { ...watermarkedEntity },
-            { ...withoutWatermarkEntity },
-          ]);
-          done();
-        });
-    });
-
-    it('should be empty if entities are not found', (done: any) => {
-      jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-        .mockImplementation(() => '');
-
-      jest
-        .spyOn(entityCreateProvider, 'createForGroup$')
-        .mockImplementation(() => of(undefined));
-
-      jest
-        .spyOn(entityFindAllFunctions, 'findAllEntitiesForGroup$')
-        .mockImplementation(() => of([]));
-
-      entityGroupProvider
-        .findAllForGroup$(
-          {} as drive_v3.Drive,
-          faker.random.arrayElement(Object.values(EntityWithGroupType)),
-          faker.lorem.word()
-        )
-        .subscribe((result) => {
-          expect(result).toHaveLength(0);
-          done();
-        });
-    });
-
-    it('should create entities for watermarked and without watermark groups', (done: any) => {
-      const folderName = faker.lorem.word();
-
-      jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
-        .mockImplementation(() => folderName);
-
-      const mockCreateForGroup$ = jest
-        .spyOn(entityCreateProvider, 'createForGroup$')
-        .mockImplementation(() => of(undefined));
-
-      jest
-        .spyOn(entityFindAllFunctions, 'findAllEntitiesForGroup$')
-        .mockImplementation(() => of([]));
-
-      const googleDrive = {} as drive_v3.Drive;
-      const entityWithGroupType = faker.random.arrayElement(
-        Object.values(EntityWithGroupType)
-      );
-      const group = faker.lorem.word();
-
-      entityGroupProvider
-        .findAllForGroup$(googleDrive, entityWithGroupType, group)
-        .subscribe(() => {
-          expect(mockCreateForGroup$.mock.calls).toEqual([
-            [
-              googleDrive,
-              folderName,
-              entityWithGroupType,
-              WatermarkedType.Watermarked,
-              group,
-            ],
-            [
-              googleDrive,
-              folderName,
-              entityWithGroupType,
-              WatermarkedType.WithoutWatermark,
-              group,
-            ],
-          ]);
           done();
         });
     });

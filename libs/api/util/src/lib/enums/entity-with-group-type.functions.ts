@@ -9,14 +9,12 @@ const entityWithGroupToEntityTypeMap = new Map<EntityWithGroupType, EntityType>(
   [
     [EntityWithGroupType.Event, EntityType.Event],
     [EntityWithGroupType.PhotoOfTheWeek, EntityType.PhotoOfTheWeek],
-    [EntityWithGroupType.SocialMedia, EntityType.SocialMedia],
   ]
 );
 
 const entityWithGroupTypeFolderNameMap = new Map<EntityWithGroupType, string>([
   [EntityWithGroupType.Event, 'events'],
   [EntityWithGroupType.PhotoOfTheWeek, 'photo-of-the-week'],
-  [EntityWithGroupType.SocialMedia, 'social-media'],
 ]);
 
 export const getEntityTypeFromEntityWithGroupType = (

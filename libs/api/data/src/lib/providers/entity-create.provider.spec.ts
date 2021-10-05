@@ -10,32 +10,24 @@ import { drive_v3 } from 'googleapis';
 import {
   EntityWithGroupType,
   EntityWithoutGroupType,
-  GoogleDriveFolder,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { Document } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { EntityCreateProvider } from './entity-create.provider';
+import { EntityCreateWatermarkedTypeProvider } from './entity-create-watermarked-type.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-jest.mock('../entities/entity-create.functions', () => ({
-  ...jest.requireActual('../entities/entity-create.functions'),
-}));
-import * as entityCreateFunctions from '../entities/entity-create.functions';
-
 describe('entity-create.provider', () => {
   let entityCreateProvider: EntityCreateProvider;
+  let entityCreateWatermarkedTypeProvider: EntityCreateWatermarkedTypeProvider;
 
   beforeEach(async () => {
-    class MockConfigProvider {
-      getGoogleDriveWebsitesFolderId(): string {
-        return '';
-      }
-    }
+    class MockConfigProvider {}
     class MockDocumentModel {}
 
     const moduleRef = await Test.createTestingModule({
@@ -49,12 +41,17 @@ describe('entity-create.provider', () => {
           provide: getModelToken(Document.name),
           useValue: new MockDocumentModel(),
         },
+        EntityCreateWatermarkedTypeProvider,
         EntityCreateProvider,
       ],
     }).compile();
 
     entityCreateProvider =
       moduleRef.get<EntityCreateProvider>(EntityCreateProvider);
+    entityCreateWatermarkedTypeProvider =
+      moduleRef.get<EntityCreateWatermarkedTypeProvider>(
+        EntityCreateWatermarkedTypeProvider
+      );
   });
 
   afterEach(() => {
@@ -62,135 +59,85 @@ describe('entity-create.provider', () => {
   });
 
   describe('create$', () => {
-    it('should create entities', (done: any) => {
+    it('should create watermarked and without watermark entities for a group', (done: any) => {
+      const folderName = faker.lorem.word();
       jest
-        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() =>
-          of({ id: faker.datatype.uuid() } as GoogleDriveFolder)
-        );
+        .spyOn(apiUtil, 'getEntityWithoutGroupTypeFolderName')
+        .mockReturnValue(folderName);
 
-      const mockCreateEntities$ = jest
-        .spyOn(entityCreateFunctions, 'createEntities$')
-        .mockImplementation(() => of(undefined));
+      const initialSlug = faker.lorem.word();
+      jest
+        .spyOn(apiUtil, 'getEntityWithoutGroupTypeInitialSlug')
+        .mockReturnValue(initialSlug);
 
-      entityCreateProvider
-        .create$(
-          {} as drive_v3.Drive,
-          faker.lorem.word(),
-          faker.random.arrayElement(Object.values(EntityWithoutGroupType)),
-          faker.random.arrayElement(Object.values(WatermarkedType)),
-          faker.lorem.word()
-        )
-        .subscribe(() => {
-          expect(mockCreateEntities$).toHaveBeenCalled();
-          done();
-        });
-    });
+      const mockedCreateWatermarkedType$ = jest
+        .spyOn(entityCreateWatermarkedTypeProvider, 'createWatermarkedType$')
+        .mockReturnValue(of(undefined));
 
-    it('should not create entities when folder is not found by name', (done: any) => {
-      const mockFindGoogleDriveFolderByName$ = jest
-        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() => of(undefined));
-
-      const mockCreateEntities$ = jest.spyOn(
-        entityCreateFunctions,
-        'createEntities$'
+      const entityWithoutGroupType = faker.random.arrayElement(
+        Object.values(EntityWithoutGroupType)
       );
-
       entityCreateProvider
-        .create$(
-          {} as drive_v3.Drive,
-          faker.lorem.word(),
-          faker.random.arrayElement(Object.values(EntityWithoutGroupType)),
-          faker.random.arrayElement(Object.values(WatermarkedType)),
-          faker.lorem.word()
-        )
+        .create$({} as drive_v3.Drive, entityWithoutGroupType)
         .subscribe(() => {
-          expect(mockFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(1);
-          expect(mockCreateEntities$).not.toHaveBeenCalled();
+          expect(mockedCreateWatermarkedType$.mock.calls).toEqual([
+            [
+              {},
+              folderName,
+              entityWithoutGroupType,
+              WatermarkedType.Watermarked,
+              initialSlug,
+            ],
+            [
+              {},
+              folderName,
+              entityWithoutGroupType,
+              WatermarkedType.WithoutWatermark,
+              initialSlug,
+            ],
+          ]);
           done();
         });
     });
   });
 
   describe('createForGroup$', () => {
-    it('should create entities for group', (done: any) => {
+    it('should create watermarked and without watermark entities for a group', (done: any) => {
+      const folderName = faker.lorem.word();
       jest
-        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementationOnce(() =>
-          of({ id: faker.datatype.uuid() } as GoogleDriveFolder)
+        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .mockReturnValue(folderName);
+
+      const mockedCreateWatermarkedTypeForGroup$ = jest
+        .spyOn(
+          entityCreateWatermarkedTypeProvider,
+          'createWatermarkedTypeForGroup$'
         )
-        .mockImplementationOnce(() =>
-          of({ id: faker.datatype.uuid() } as GoogleDriveFolder)
-        );
+        .mockReturnValue(of(undefined));
 
-      const mockCreateEntities$ = jest
-        .spyOn(entityCreateFunctions, 'createEntities$')
-        .mockImplementation(() => of(undefined));
-
-      entityCreateProvider
-        .createForGroup$(
-          {} as drive_v3.Drive,
-          faker.lorem.word(),
-          faker.random.arrayElement(Object.values(EntityWithGroupType)),
-          faker.random.arrayElement(Object.values(WatermarkedType)),
-          faker.lorem.word()
-        )
-        .subscribe(() => {
-          expect(mockCreateEntities$).toHaveBeenCalled();
-          done();
-        });
-    });
-
-    it('should not create entities when folder is not found by name', (done: any) => {
-      const mockFindGoogleDriveFolderByName$ = jest
-        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementation(() => of(undefined));
-
-      const mockCreateEntities$ = jest.spyOn(
-        entityCreateFunctions,
-        'createEntities$'
+      const entityWithGroupType = faker.random.arrayElement(
+        Object.values(EntityWithGroupType)
       );
-
+      const group = faker.lorem.word();
       entityCreateProvider
-        .createForGroup$(
-          {} as drive_v3.Drive,
-          faker.lorem.word(),
-          faker.random.arrayElement(Object.values(EntityWithGroupType)),
-          faker.random.arrayElement(Object.values(WatermarkedType)),
-          faker.lorem.word()
-        )
+        .createForGroup$({} as drive_v3.Drive, entityWithGroupType, group)
         .subscribe(() => {
-          expect(mockFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(1);
-          expect(mockCreateEntities$).not.toHaveBeenCalled();
-          done();
-        });
-    });
-
-    it('should not create entities when group folder is not found by name', (done: any) => {
-      const mockFindGoogleDriveFolderByName$ = jest
-        .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
-        .mockImplementationOnce(() =>
-          of({ id: faker.datatype.uuid() } as GoogleDriveFolder)
-        )
-        .mockImplementationOnce(() => of(undefined));
-
-      const mockCreateEntities$ = jest.spyOn(
-        entityCreateFunctions,
-        'createEntities$'
-      );
-
-      entityCreateProvider
-        .createForGroup$(
-          {} as drive_v3.Drive,
-          faker.lorem.word(),
-          faker.random.arrayElement(Object.values(EntityWithGroupType)),
-          faker.random.arrayElement(Object.values(WatermarkedType)),
-          faker.lorem.word()
-        )
-        .subscribe(() => {
-          expect(mockFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(2);
-          expect(mockCreateEntities$).not.toHaveBeenCalled();
+          expect(mockedCreateWatermarkedTypeForGroup$.mock.calls).toEqual([
+            [
+              {},
+              folderName,
+              entityWithGroupType,
+              WatermarkedType.Watermarked,
+              group,
+            ],
+            [
+              {},
+              folderName,
+              entityWithGroupType,
+              WatermarkedType.WithoutWatermark,
+              group,
+            ],
+          ]);
           done();
         });
     });

@@ -4,13 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import {
-  Image,
-  ImageDimension,
-  ImageDimensionType,
-  ImageState,
-  Video,
-} from '@dark-rush-photography/shared/types';
+import { Image, ImageState, Video } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
 export const validateImageFound = (image: Image | undefined): Image => {
@@ -19,10 +13,10 @@ export const validateImageFound = (image: Image | undefined): Image => {
 };
 
 export const validateImageFoundInEntity = (
-  id: string,
+  imageId: string,
   documentModel: DocumentModel
 ): Image => {
-  const foundImage = documentModel.images.find((image) => image.id === id);
+  const foundImage = documentModel.images.find((image) => image.id === imageId);
   if (!foundImage) throw new NotFoundException('Image was not found');
   return foundImage;
 };
@@ -92,7 +86,7 @@ export const validateImageWithFileNameNotAlreadyExists = (
   return documentModel;
 };
 
-export const validateFindStarredImage = (images: Image[]): Image => {
+export const findStarredImage = (images: Image[]): Image => {
   const starredImage = images.find((image) => image.isStarred);
   if (!starredImage) {
     throw new ConflictException('Starred image was not found');
@@ -106,47 +100,11 @@ export const validateImageDateCreated = (image: Image): string => {
   return image.dateCreated;
 };
 
-export const validateFindImageDimension = (
-  imageId: string,
-  imageDimensionType: ImageDimensionType,
-  imageDimensions: ImageDimension[]
-): ImageDimension => {
-  const imageDimension = imageDimensions.find(
-    (imageDimension) =>
-      imageDimension.imageId === imageId &&
-      imageDimension.type === imageDimensionType
-  );
-  if (!imageDimension) {
-    throw new ConflictException(
-      `Image dimension type ${imageDimensionType} was not found`
-    );
-  }
-  return imageDimension;
-};
-
-export const validateImageDimensionNotAlreadyExists = (
-  imageId: string,
-  imageDimensionType: ImageDimensionType,
-  documentModel: DocumentModel
-): DocumentModel => {
-  const imageDimension = documentModel.imageDimensions.find(
-    (imageDimension) =>
-      imageDimension.imageId === imageId &&
-      imageDimension.type === imageDimensionType
-  );
-  if (imageDimension) {
-    throw new ConflictException(
-      `Image dimension type ${imageDimensionType} already exists`
-    );
-  }
-  return documentModel;
-};
-
 export const validateVideoFound = (
-  id: string,
+  videoId: string,
   documentModel: DocumentModel
 ): Video => {
-  const foundVideo = documentModel.videos.find((video) => video.id === id);
+  const foundVideo = documentModel.videos.find((video) => video.id === videoId);
   if (!foundVideo) throw new NotFoundException('Video was not found');
   return foundVideo;
 };
