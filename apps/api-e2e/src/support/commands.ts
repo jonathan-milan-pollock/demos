@@ -34,10 +34,6 @@ declare namespace Cypress {
       authHeaders: { Authorization: string },
       entityId: string
     ): Cypress.Chainable<Cypress.Response<void>>;
-    socialMediaPostEntityAdmin(
-      authHeaders: { Authorization: string },
-      entityId: string
-    ): Cypress.Chainable<Cypress.Response<void>>;
     setIsProcessingEntityAdmin(
       authHeaders: { Authorization: string },
       entityId: string,
@@ -70,13 +66,10 @@ declare namespace Cypress {
     ): Cypress.Chainable<Cypress.Response<void>>;
 
     // api admin image posts
-    createImagePostAdmin(
-      authHeaders: { Authorization: string },
-      imagePostCreate: any
-    ): Cypress.Chainable<Cypress.Response<any>>;
     uploadImagePostAdmin(
       authHeaders: { Authorization: string },
-      entityId: string
+      entityId: string,
+      text: string
     ): Promise<any>;
 
     // api admin images

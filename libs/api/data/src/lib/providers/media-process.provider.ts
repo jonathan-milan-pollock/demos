@@ -12,6 +12,7 @@ import { Model } from 'mongoose';
 import { MediaProcessType } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { MediaProcessTable } from '../tables/media-process.table';
+import { findEntityById$ } from '../entities/entity-repository.functions';
 import { WebSocketMessageProvider } from './web-socket-message.provider';
 
 @Injectable()
@@ -57,7 +58,7 @@ export class MediaProcessProvider {
           this.logger.log('number of entries', response.entries.length);
 
           const mediaProcess = response.entries[0];
-          return from(this.entityModel.findById(mediaProcess.entityId)).pipe(
+          return findEntityById$(mediaProcess.entityId, this.entityModel).pipe(
             concatMap((documentModel) => {
               if (!documentModel) {
                 this.logger.error(`Entity not found ${mediaProcess.entityId}`);
@@ -83,12 +84,9 @@ export class MediaProcessProvider {
             }),
             catchError(() =>
               from(
-                this.entityModel.findOneAndUpdate(
-                  { id: mediaProcess.entityId },
-                  {
-                    isProcessing: false,
-                  }
-                )
+                this.entityModel.findByIdAndUpdate(mediaProcess.entityId, {
+                  isProcessing: false,
+                })
               )
             ),
             map(() => this.webSocketMessageProvider.sendMessage(`adding image`))

@@ -8,7 +8,7 @@ import {
 import { DocumentModel } from '../schema/document.schema';
 import {
   loadDocumentModelsArray,
-  loadNewEntity,
+  loadCreateEntity,
   loadUpdateEntity,
 } from './entity-load-document-model.functions';
 
@@ -20,21 +20,10 @@ describe('entity-load-document-model.functions', () => {
     );
     const group = faker.lorem.word();
     const slug = faker.lorem.word();
+    const googleDriveFolderId = faker.datatype.uuid();
 
     it('should load input values', () => {
-      const result = loadNewEntity(entityType, watermarkedType, group, slug);
-
-      expect(result.type).toBe(entityType);
-      expect(result.googleDriveFolderId).toBeUndefined();
-      expect(result.watermarkedType).toBe(watermarkedType);
-      expect(result.group).toBe(group);
-      expect(result.slug).toBe(slug);
-    });
-
-    it('should load google drive folder id when provided', () => {
-      const googleDriveFolderId = faker.datatype.uuid();
-
-      const result = loadNewEntity(
+      const result = loadCreateEntity(
         entityType,
         watermarkedType,
         group,
@@ -42,7 +31,11 @@ describe('entity-load-document-model.functions', () => {
         googleDriveFolderId
       );
 
+      expect(result.type).toBe(entityType);
       expect(result.googleDriveFolderId).toBe(googleDriveFolderId);
+      expect(result.watermarkedType).toBe(watermarkedType);
+      expect(result.group).toBe(group);
+      expect(result.slug).toBe(slug);
     });
   });
 

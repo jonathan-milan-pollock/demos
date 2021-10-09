@@ -20,7 +20,7 @@ describe('Find all Admin Entities', () => {
   it('should find entities', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then(() =>
         entityWithoutGroupTypes.forEach((entityWithoutGroupType) =>
@@ -34,11 +34,11 @@ describe('Find all Admin Entities', () => {
   it('should find image posts', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then(() =>
         cy.createImagePostAdmin(getAuthHeaders(), {
-          slug: 'test-image-post-2',
+          text: 'test-image-post-2',
         })
       )
       .then(() =>

@@ -1,8 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 
-import * as faker from 'faker';
-
 import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { ParseObjectIdPipe } from './parse-object-id.pipe';
 
@@ -24,7 +22,7 @@ describe('parse-object-id.pipe', () => {
     });
 
     it('should throw a bad request exception if the mongo db id is invalid', () => {
-      const mongoDbId = faker.lorem.word();
+      const mongoDbId = 'invalid';
       const result = () => {
         parseObjectIdPipe.transform(mongoDbId);
       };

@@ -14,10 +14,10 @@ import { ResolutionDto } from './resolution.dto';
 
 export class ImagePublicDto implements ImagePublic {
   @IsString()
-  fileName!: string;
+  storageId!: string;
 
   @IsString()
-  storageId!: string;
+  fileName!: string;
 
   @IsInt()
   @Min(0)

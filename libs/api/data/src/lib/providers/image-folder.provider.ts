@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { concatMap, from, map, Observable } from 'rxjs';
+import { concatMap, map, Observable } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
@@ -12,6 +12,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Document, DocumentModel } from '../schema/document.schema';
+import { findEntityById$ } from '../entities/entity-repository.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { validateEntityGoogleDriveFolderId } from '../entities/entity-field-validation.functions';
 
@@ -26,7 +27,7 @@ export class ImageFolderProvider {
     googleDrive: drive_v3.Drive,
     entityId: string
   ): Observable<GoogleDriveFolder | undefined> {
-    return from(this.entityModel.findById(entityId)).pipe(
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         const googleDriveFolderId =

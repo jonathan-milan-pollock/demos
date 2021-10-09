@@ -4,17 +4,20 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
+  ContentAddBlobProvider,
   ContentDeleteBlobsProvider,
   ContentRemoveOneProvider,
   ContentRemoveProvider,
   Document,
   DocumentSchema,
+  ImageAddProvider,
   ImageFindProvider,
+  ImageRemoveProvider,
+  ImagesService,
   ImageStateChangeProvider,
   ImageUpdateProvider,
   MediaProcessTable,
 } from '@dark-rush-photography/api/data';
-import { AdminImagesService } from './admin-images.service';
 import { AdminImagesController } from './admin-images.controller';
 
 @Module({
@@ -30,10 +33,13 @@ import { AdminImagesController } from './admin-images.controller';
   ],
   controllers: [AdminImagesController],
   providers: [
-    AdminImagesService,
-    ImageFindProvider,
+    ImagesService,
+    ImageAddProvider,
     ImageUpdateProvider,
     ImageStateChangeProvider,
+    ImageRemoveProvider,
+    ImageFindProvider,
+    ContentAddBlobProvider,
     ContentRemoveProvider,
     ContentRemoveOneProvider,
     ContentDeleteBlobsProvider,

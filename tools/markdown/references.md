@@ -167,7 +167,6 @@
 
 - [Social Media Image Cheat Sheet](https://www.mainstreethost.com/blog/social-media-image-size-cheat-sheet/)
   https://docs.ayrshare.com/rest-api/endpoints/post
-  https://facebook360.fb.com/editing-360-photos-injecting-metadata/
   https://blog.kuula.co/embed-360-photos
 
 ---

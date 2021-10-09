@@ -23,10 +23,10 @@ describe('content-delete-blobs.provider', () => {
   beforeEach(async () => {
     class MockConfigProvider {
       get azureStorageConnectionStringPublic(): string {
-        return '';
+        return faker.lorem.word();
       }
       get azureStorageBlobContainerNamePublic(): string {
-        return '';
+        return faker.lorem.word();
       }
     }
 
@@ -44,10 +44,6 @@ describe('content-delete-blobs.provider', () => {
     contentDeleteBlobsProvider = moduleRef.get<ContentDeleteBlobsProvider>(
       ContentDeleteBlobsProvider
     );
-
-    jest
-      .spyOn(apiUtils, 'getAzureStorageBlobPath')
-      .mockReturnValue(faker.lorem.word());
   });
 
   afterEach(() => {
@@ -55,13 +51,7 @@ describe('content-delete-blobs.provider', () => {
   });
 
   describe('deleteImageBlobs$', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(apiUtils, 'getAzureStorageBlobPathWithImageDimension')
-        .mockReturnValue(faker.lorem.word());
-    });
-
-    it('should delete image blob and image dimension blobs for an entity', (done: any) => {
+    it('should delete image dimension and image blobs for an entity', (done: any) => {
       const imageDimensionType = faker.random.arrayElement(
         Object.values(ImageDimensionType)
       );
@@ -71,14 +61,26 @@ describe('content-delete-blobs.provider', () => {
           { type: imageDimensionType } as ImageDimensionStandard,
         ]);
 
-      const mockedDeleteAzureStorageBlockBlobIfExists$ = jest
-        .spyOn(apiUtils, 'deleteAzureStorageBlockBlobIfExists$')
+      const mockedDeleteAzureStorageBlobIfExists$ = jest
+        .spyOn(apiUtils, 'deleteAzureStorageBlobIfExists$')
         .mockReturnValue(of(undefined));
 
+      const storageId = faker.datatype.uuid();
+      const fileName = faker.system.fileName();
       contentDeleteBlobsProvider
-        .deleteImageBlobs$(faker.datatype.uuid(), faker.system.fileName())
+        .deleteImageBlobs$(storageId, fileName)
         .subscribe(() => {
-          expect(mockedDeleteAzureStorageBlockBlobIfExists$).toBeCalledTimes(2);
+          expect(mockedDeleteAzureStorageBlobIfExists$).toBeCalledTimes(2);
+
+          const [imageDimensionBlobPath] =
+            mockedDeleteAzureStorageBlobIfExists$.mock.calls[0];
+          expect(imageDimensionBlobPath).toBe(
+            `${storageId}/${imageDimensionType.toLowerCase()}/${fileName}`
+          );
+
+          const [imageBlobPath] =
+            mockedDeleteAzureStorageBlobIfExists$.mock.calls[1];
+          expect(imageBlobPath).toBe(`${storageId}/${fileName}`);
           done();
         });
     });
@@ -86,14 +88,18 @@ describe('content-delete-blobs.provider', () => {
 
   describe('deleteVideoBlob$', () => {
     it('should delete video blob for an entity', (done: any) => {
-      const mockedDeleteAzureStorageBlockBlobIfExists$ = jest
-        .spyOn(apiUtils, 'deleteAzureStorageBlockBlobIfExists$')
+      jest
+        .spyOn(apiUtils, 'getAzureStorageBlobPath')
+        .mockReturnValue(faker.lorem.word());
+
+      const mockedDeleteAzureStorageBlobIfExists$ = jest
+        .spyOn(apiUtils, 'deleteAzureStorageBlobIfExists$')
         .mockReturnValue(of(undefined));
 
       contentDeleteBlobsProvider
         .deleteVideoBlob$(faker.datatype.uuid(), faker.system.fileName())
         .subscribe(() => {
-          expect(mockedDeleteAzureStorageBlockBlobIfExists$).toBeCalled();
+          expect(mockedDeleteAzureStorageBlobIfExists$).toBeCalled();
           done();
         });
     });

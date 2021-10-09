@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import {
+  ContentAddBlobProvider,
   Document,
   DocumentSchema,
-  ImageProcessProvider,
-  ImageUploadProvider,
+  ImageAddProvider,
+  ImagePostsService,
 } from '@dark-rush-photography/api/data';
-import { AdminImagePostsService } from './admin-image-posts.service';
 import { AdminImagePostsController } from './admin-image-posts.controller';
 
 @Module({
@@ -17,10 +17,6 @@ import { AdminImagePostsController } from './admin-image-posts.controller';
     ]),
   ],
   controllers: [AdminImagePostsController],
-  providers: [
-    AdminImagePostsService,
-    ImageUploadProvider,
-    ImageProcessProvider,
-  ],
+  providers: [ImagePostsService, ImageAddProvider, ContentAddBlobProvider],
 })
 export class AdminImagePostsModule {}

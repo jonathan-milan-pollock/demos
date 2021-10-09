@@ -38,7 +38,7 @@ describe('entity-type.functions', () => {
 
   describe('getEntityTypeImageFolderName', () => {
     it.each(entityTypeImageFolderNames)(
-      'should return image folder name for %s',
+      'should return image folder name or undefined for %s',
       ({ entityType, imageFolderName }) => {
         expect(
           getEntityTypeNewImagesFolderName(entityType) === imageFolderName

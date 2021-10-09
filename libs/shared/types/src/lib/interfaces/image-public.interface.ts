@@ -1,8 +1,8 @@
 import { Resolution } from './resolution.interface';
 
 export interface ImagePublic {
-  readonly fileName: string;
   readonly storageId: string;
+  readonly fileName: string;
   readonly order: number;
   readonly title: string;
   readonly seoDescription: string;

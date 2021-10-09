@@ -8,7 +8,7 @@ export interface EntityUpdate {
   readonly seoKeywords: string[];
   readonly dateCreated?: string;
   readonly datePublished?: string;
-  readonly location?: Location;
+  readonly location: Location;
   readonly starredImageIsCentered: boolean;
   readonly text: string[];
   readonly isPublic: boolean;

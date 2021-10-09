@@ -393,7 +393,7 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i googleapis'))
-    .then(() => consoleLogOrExec(isReady, 'npm i datauri'));
+    .then(() => consoleLogOrExec(isReady, 'npm i xmlbuilder'));
 
 const execAddFontAwesome = (isReady) =>
   Promise.resolve(console.log('### add fontawesome'))

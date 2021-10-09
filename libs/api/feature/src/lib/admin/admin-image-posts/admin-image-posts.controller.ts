@@ -1,17 +1,15 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   Controller,
+  Headers,
   Post,
-  Body,
-  UseInterceptors,
-  Query,
   UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -21,43 +19,26 @@ import { Observable } from 'rxjs';
 import {
   EntityMinimalAdminDto,
   FileUploadDto,
-  ImageAdminDto,
-  ImagePostCreateDto,
 } from '@dark-rush-photography/api/types';
-import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
-import { AdminImagePostsService } from './admin-image-posts.service';
+import { ImagePostsService } from '@dark-rush-photography/api/data';
 
 @Controller({ path: 'admin/image-posts', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Image Posts')
 export class AdminImagePostsController {
-  constructor(
-    private readonly adminImagePostsService: AdminImagePostsService
-  ) {}
+  constructor(private readonly imagePostsService: ImagePostsService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: EntityMinimalAdminDto })
-  create$(
-    @Body() imagePostCreate: ImagePostCreateDto
-  ): Observable<EntityMinimalAdminDto> {
-    return this.adminImagePostsService.create$(imagePostCreate);
-  }
-
-  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     type: FileUploadDto,
   })
-  @ApiOkResponse({ type: ImageAdminDto })
-  upload$(
-    @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @UploadedFile() image: Express.Multer.File
-  ): Observable<ImageAdminDto> {
-    return this.adminImagePostsService.upload$(
-      entityId,
-      image.originalname,
-      image
-    );
+  @ApiOkResponse({ type: EntityMinimalAdminDto })
+  create$(
+    @Headers('DARK-RUSH-PHOTOGRAPHY-IMAGE-POST-TEXT') text: string,
+    @UploadedFile() file: Express.Multer.File
+  ): Observable<EntityMinimalAdminDto> {
+    return this.imagePostsService.create$(file.originalname, text, file);
   }
 }

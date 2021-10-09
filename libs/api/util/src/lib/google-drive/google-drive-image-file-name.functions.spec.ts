@@ -1,48 +1,20 @@
+import * as path from 'path';
+
 import * as faker from 'faker';
 
-import {
-  getOrderFromGoogleDriveImageFileName,
-  getSlugWithOrderFromGoogleDriveImageFileName,
-} from './google-drive-image-file-name.functions';
+import { getOrderFromGoogleDriveImageFile } from './google-drive-image-file-name.functions';
 
-describe('google-drive-file.functions', () => {
-  describe('getOrderFromGoogleDriveImageFileName', () => {
-    xit('should return extension from the google drive image file name', () => {
+describe('google-drive-image-file-name.functions', () => {
+  describe('getOrderFromGoogleDriveImageFile', () => {
+    it('should return order from the google drive image file', () => {
       const order = faker.datatype.number();
       const extension = '.jpg';
-      const googleDriveImageFileName = `${faker.datatype.string()}-${order}${extension}`;
+      const googleDriveImageFileName = `${
+        path.parse(faker.system.fileName()).name
+      }-${order}${extension}`;
 
-      const result = getOrderFromGoogleDriveImageFileName(
-        googleDriveImageFileName
-      );
-      // expect(result.ext).toBe(extension);
-    });
-
-    xit('should return the order from the google drive image file name', () => {
-      const order = faker.datatype.number();
-      const extension = '.jpg';
-      const googleDriveImageFileName = `${faker.datatype.string()}-${order}${extension}`;
-
-      const result = getOrderFromGoogleDriveImageFileName(
-        googleDriveImageFileName
-      );
-      //expect(+result.name).toBe(order);
-    });
-  });
-
-  describe('getSlugWithOrderFromGoogleDriveImageFileName', () => {
-    it('should return slug with order file name', () => {
-      const slug = faker.lorem.word();
-      const order = faker.datatype.number();
-      const extension = '.jpg';
-
-      const googleDriveImageFileName = `${faker.datatype.string()}-${order}${extension}`;
-      const slugWithOrderFileName = `${slug}-${order}${extension}`;
-      const result = getSlugWithOrderFromGoogleDriveImageFileName(
-        slug,
-        googleDriveImageFileName
-      );
-      expect(result).toBe(slugWithOrderFileName);
+      const result = getOrderFromGoogleDriveImageFile(googleDriveImageFileName);
+      expect(result).toBe(order);
     });
   });
 });

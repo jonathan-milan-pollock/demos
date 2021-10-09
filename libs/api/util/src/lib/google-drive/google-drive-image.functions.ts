@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
@@ -34,17 +35,21 @@ export const downloadGoogleDriveImageFile = (
         logger.log(
           `Downloading Google Drive file ${imageFileId} to ${filePath}`
         );
-        const dest = fs.createWriteStream(filePath);
+        const writeStream = fs.createWriteStream(filePath);
         response.data
           .on('end', () => {
-            logger.log(`Downloaded Google Drive file ${imageFileId}`);
+            logger.log(
+              `Downloaded Google Drive file ${imageFileId} to ${filePath}`
+            );
             resolve(filePath);
           })
           .on('error', (err) => {
-            logger.error(`Error downloading Google Drive file ${imageFileId}`);
+            logger.error(
+              `Error downloading Google Drive file ${imageFileId} to ${filePath}`
+            );
             reject(err);
           })
-          .pipe(dest);
+          .pipe(writeStream);
       });
     });
 };

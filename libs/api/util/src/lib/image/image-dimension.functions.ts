@@ -28,6 +28,30 @@ export const getImageDimensions = (): (
     longestEdge: 2048,
   },
   {
+    type: ImageDimensionType.DestinationThumbnail,
+    longestEdge: 2048,
+  },
+  {
+    type: ImageDimensionType.DestinationSmall,
+    longestEdge: 2048,
+  },
+  {
+    type: ImageDimensionType.DestinationMedium,
+    longestEdge: 2048,
+  },
+  {
+    type: ImageDimensionType.DestinationLarge,
+    longestEdge: 2048,
+  },
+  {
+    type: ImageDimensionType.ReviewThumbnail,
+    longestEdge: 2048,
+  },
+  {
+    type: ImageDimensionType.ReviewSmall,
+    longestEdge: 2048,
+  },
+  {
     type: ImageDimensionType.Facebook,
     resolution: { width: 1200, height: 630 },
     exactFit: false,
@@ -45,6 +69,16 @@ export const getImageDimensions = (): (
   {
     type: ImageDimensionType.GoogleBusiness,
     resolution: { width: 1200, height: 900 },
+    exactFit: true,
+  },
+  {
+    type: ImageDimensionType.YouTubeThumbnail,
+    resolution: { width: 1920, height: 1080 },
+    exactFit: true,
+  },
+  {
+    type: ImageDimensionType.YouTube,
+    resolution: { width: 1920, height: 1080 },
     exactFit: true,
   },
 ];

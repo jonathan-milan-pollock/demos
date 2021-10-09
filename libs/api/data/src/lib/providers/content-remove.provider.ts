@@ -19,18 +19,14 @@ export class ContentRemoveProvider {
   ) {}
 
   removeAllImages$(entityId: string): Observable<void> {
-    return from(findEntityById$(entityId, this.entityModel)).pipe(
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         if (documentModel.images.length === 0) return of(undefined);
 
-        return from(documentModel.images).pipe(
+        return from([...documentModel.images]).pipe(
           concatMap((image) =>
-            this.contentRemoveOneProvider.removeImage$(
-              entityId,
-              image,
-              documentModel
-            )
+            this.contentRemoveOneProvider.removeImage$(image)
           ),
           last(),
           map(() => undefined)
@@ -43,7 +39,7 @@ export class ContentRemoveProvider {
     state: ImageState,
     entityId: string
   ): Observable<void> {
-    return from(findEntityById$(entityId, this.entityModel)).pipe(
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         const imagesForState = documentModel.images.filter(
@@ -51,13 +47,9 @@ export class ContentRemoveProvider {
         );
         if (imagesForState.length === 0) return of(undefined);
 
-        return from(imagesForState).pipe(
+        return from([...imagesForState]).pipe(
           concatMap((imageForState) =>
-            this.contentRemoveOneProvider.removeImage$(
-              entityId,
-              imageForState,
-              documentModel
-            )
+            this.contentRemoveOneProvider.removeImage$(imageForState)
           ),
           last(),
           map(() => undefined)
@@ -67,7 +59,7 @@ export class ContentRemoveProvider {
   }
 
   removeImage$(imageId: string, entityId: string): Observable<void> {
-    return from(findEntityById$(entityId, this.entityModel)).pipe(
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         const image = documentModel.images.find(
@@ -76,25 +68,21 @@ export class ContentRemoveProvider {
         if (!image) return of(undefined);
 
         return this.contentRemoveOneProvider
-          .removeImage$(entityId, image, documentModel)
+          .removeImage$(image)
           .pipe(map(() => undefined));
       })
     );
   }
 
   removeAllVideos$(entityId: string): Observable<void> {
-    return from(findEntityById$(entityId, this.entityModel)).pipe(
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
         if (documentModel.videos.length === 0) return of(undefined);
 
         return from(documentModel.videos).pipe(
           concatMap((video) =>
-            this.contentRemoveOneProvider.removeVideo$(
-              entityId,
-              video,
-              documentModel
-            )
+            this.contentRemoveOneProvider.removeVideo$(video)
           ),
           last(),
           map(() => undefined)

@@ -16,7 +16,7 @@ import {
   EntityType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { LocationDefinedDto } from './location-defined.dto';
+import { LocationDto } from './location.dto';
 import { ImageAdminDto } from './image-admin.dto';
 import { VideoDto } from './video.dto';
 
@@ -57,8 +57,8 @@ export class EntityAdminDto implements EntityAdmin {
   datePublished!: string;
 
   @ValidateNested()
-  @Type(() => LocationDefinedDto)
-  location!: LocationDefinedDto;
+  @Type(() => LocationDto)
+  location!: LocationDto;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;

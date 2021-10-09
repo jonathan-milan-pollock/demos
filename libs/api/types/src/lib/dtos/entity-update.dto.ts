@@ -11,7 +11,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { EntityUpdate } from '@dark-rush-photography/shared/types';
-import { LocationDefinedDto } from './location-defined.dto';
+import { LocationDto } from './location.dto';
 
 export class EntityUpdateDto implements EntityUpdate {
   @IsString()
@@ -42,9 +42,9 @@ export class EntityUpdateDto implements EntityUpdate {
   datePublished?: string;
 
   @ValidateNested()
-  @Type(() => LocationDefinedDto)
+  @Type(() => LocationDto)
   @IsOptional()
-  location?: LocationDefinedDto;
+  location!: LocationDto;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;

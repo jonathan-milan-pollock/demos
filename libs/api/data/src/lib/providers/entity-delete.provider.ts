@@ -19,7 +19,7 @@ export class EntityDeleteProvider {
     private readonly contentRemoveProvider: ContentRemoveProvider
   ) {}
 
-  delete$(entityId: string): Observable<void> {
+  deleteEntity$(entityId: string): Observable<void> {
     return findEntityById$(entityId, this.entityModel).pipe(
       concatMap((documentModel) => {
         if (!documentModel) return of(undefined);

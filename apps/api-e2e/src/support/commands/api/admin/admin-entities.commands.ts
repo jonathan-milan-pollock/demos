@@ -57,22 +57,6 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'socialMediaPostEntityAdmin',
-  (
-    authHeaders: { Authorization: string },
-    entityId: string
-  ): Cypress.Chainable<Cypress.Response<void>> =>
-    cy.request({
-      method: 'PUT',
-      url: `/api/v1/admin/entities/${entityId}/social-media-post`,
-      headers: {
-        ...authHeaders,
-      },
-      failOnStatusCode: false,
-    })
-);
-
-Cypress.Commands.add(
   'setIsProcessingEntityAdmin',
   (
     authHeaders: { Authorization: string },

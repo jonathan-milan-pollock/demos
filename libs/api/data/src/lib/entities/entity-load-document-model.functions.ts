@@ -6,12 +6,12 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
-export const loadNewEntity = (
+export const loadCreateEntity = (
   entityType: EntityType,
   watermarkedType: WatermarkedType,
   group: string,
   slug: string,
-  googleDriveFolderId?: string
+  googleDriveFolderId: string
 ): Entity => ({
   type: entityType,
   googleDriveFolderId,
@@ -25,6 +25,31 @@ export const loadNewEntity = (
   },
   starredImageIsCentered: false,
   text: [],
+  images: [],
+  videos: [],
+  isPublic: false,
+  isPublished: false,
+  isProcessing: false,
+});
+
+export const loadCreateImagePostEntity = (
+  entityType: EntityType,
+  watermarkedType: WatermarkedType,
+  group: string,
+  slug: string,
+  text: string
+): Entity => ({
+  type: entityType,
+  watermarkedType,
+  group,
+  slug,
+  order: 0,
+  seoKeywords: [],
+  location: {
+    country: 'United States',
+  },
+  starredImageIsCentered: false,
+  text: [text],
   images: [],
   videos: [],
   isPublic: false,

@@ -26,6 +26,7 @@ describe('Update Admin Entities', () => {
     },
     starredImageIsCentered: faker.datatype.boolean(),
     text: [
+      'test',
       faker.lorem.paragraph(),
       faker.lorem.paragraph(),
       faker.lorem.paragraph(),
@@ -38,7 +39,7 @@ describe('Update Admin Entities', () => {
   it('should update values', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
@@ -84,7 +85,7 @@ describe('Update Admin Entities', () => {
   it('should return a status of 204 when update an entity', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
