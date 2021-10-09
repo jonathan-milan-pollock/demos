@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { from, map, Observable } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 

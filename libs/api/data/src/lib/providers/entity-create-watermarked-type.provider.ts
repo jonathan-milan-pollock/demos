@@ -17,8 +17,8 @@ import {
   getEntityTypeFromEntityWithoutGroupType,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { createEntityForFolder$ } from '../entities/entity-create.functions';
 import { ConfigProvider } from './config.provider';
+import { EntityCreateForFolderProvider } from './entity-create-for-folder.provider';
 
 @Injectable()
 export class EntityCreateWatermarkedTypeProvider {
@@ -27,7 +27,8 @@ export class EntityCreateWatermarkedTypeProvider {
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>
+    private readonly entityModel: Model<DocumentModel>,
+    private readonly entityCreateForFolderProvider: EntityCreateForFolderProvider
   ) {
     this.logger = new Logger(EntityCreateWatermarkedTypeProvider.name);
   }
@@ -49,7 +50,7 @@ export class EntityCreateWatermarkedTypeProvider {
       concatMap((folder) => {
         if (!folder) return of(undefined);
 
-        return createEntityForFolder$(
+        return this.entityCreateForFolderProvider.createEntityForFolder$(
           googleDrive,
           folder.id,
           this.entityModel,
@@ -84,7 +85,7 @@ export class EntityCreateWatermarkedTypeProvider {
           concatMap((groupFolder) => {
             if (!groupFolder) return of(undefined);
 
-            return createEntityForFolder$(
+            return this.entityCreateForFolderProvider.createEntityForFolder$(
               googleDrive,
               groupFolder.id,
               this.entityModel,

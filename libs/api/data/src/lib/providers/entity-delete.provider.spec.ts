@@ -73,7 +73,7 @@ describe('entity-delete.provider', () => {
         .spyOn(entityRepositoryFunctions, 'findEntityByIdAndDelete$')
         .mockReturnValue(of({} as DocumentModel));
 
-      entityDeleteProvider.delete$(DUMMY_MONGODB_ID).subscribe(() => {
+      entityDeleteProvider.deleteEntity$(DUMMY_MONGODB_ID).subscribe(() => {
         expect(mockedRemoveAllImages$).toHaveBeenCalled();
         expect(mockedRemoveAllVideos$).toHaveBeenCalled();
         expect(mockedFindEntityByIdAndDelete).toHaveBeenCalled();
@@ -101,7 +101,7 @@ describe('entity-delete.provider', () => {
         'findEntityByIdAndDelete$'
       );
 
-      entityDeleteProvider.delete$(DUMMY_MONGODB_ID).subscribe(() => {
+      entityDeleteProvider.deleteEntity$(DUMMY_MONGODB_ID).subscribe(() => {
         expect(mockedRemoveAllImages$).not.toHaveBeenCalled();
         expect(mockedRemoveAllVideos$).not.toHaveBeenCalled();
         expect(mockedFindEntityByIdAndDelete).not.toHaveBeenCalled();

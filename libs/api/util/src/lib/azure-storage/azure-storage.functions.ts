@@ -1,85 +1,43 @@
 import * as fs from 'fs-extra';
 import { Readable } from 'node:stream';
-import { Logger } from '@nestjs/common';
+import { ConflictException, Logger } from '@nestjs/common';
 
+import { combineLatest, concatMap, from, map, Observable, of } from 'rxjs';
 import {
-  buffer,
-  combineLatest,
-  concatMap,
-  from,
-  fromEvent,
-  map,
-  mergeMap,
-  Observable,
-  of,
-} from 'rxjs';
-import { BlobServiceClient } from '@azure/storage-blob';
+  BlobDownloadResponseParsed,
+  BlobServiceClient,
+} from '@azure/storage-blob';
 
 import { createTempFile$, writeStreamToFile } from '../file/file.functions';
-import { downloadBlobAsStream$ } from './azure-storage-blob-stream.functions';
 
-export const uploadBufferToBlob$ = (
-  connectionString: string,
-  containerName: string,
-  buffer: Buffer,
-  blobPath: string
-): Observable<void> => {
-  const logger = new Logger(uploadBufferToBlob$.name);
-  logger.log(`Uploading buffer to ${blobPath}`);
-
-  const blobServiceClient =
-    BlobServiceClient.fromConnectionString(connectionString);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
-  return from(blockBlobClient.uploadData(buffer)).pipe(map(() => undefined));
-};
-
-export const uploadStreamToBlob$ = (
-  connectionString: string,
-  containerName: string,
+export const uploadAzureStorageStreamToBlob$ = (
   stream: Readable,
-  blobPath: string
+  mimeType: string,
+  blobPath: string,
+  connectionString: string,
+  containerName: string
 ): Observable<void> => {
-  const logger = new Logger(uploadStreamToBlob$.name);
+  const logger = new Logger(uploadAzureStorageStreamToBlob$.name);
   logger.log(`Uploading stream to blob path ${blobPath}`);
 
   const blobServiceClient =
     BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
-  return from(blockBlobClient.uploadStream(stream)).pipe(map(() => undefined));
+  return from(
+    blockBlobClient.uploadStream(stream, undefined, undefined, {
+      blobHTTPHeaders: { blobContentType: mimeType },
+    })
+  ).pipe(map(() => undefined));
 };
 
-export const downloadBlobAsBuffer$ = (
-  connectionString: string,
-  containerName: string,
-  blobPath: string
-): Observable<Buffer> => {
-  const logger = new Logger(downloadBlobAsBuffer$.name);
-  logger.log(`Downloading blob ${blobPath} as buffer`);
-
-  const blobServiceClient =
-    BlobServiceClient.fromConnectionString(connectionString);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
-
-  return downloadBlobAsStream$(blockBlobClient).pipe(
-    mergeMap((readableStreamBody: NodeJS.ReadableStream) =>
-      fromEvent<Buffer>(readableStreamBody, 'data').pipe(
-        buffer<Buffer>(fromEvent(readableStreamBody, 'end')),
-        map((chunks: Buffer[]) => Buffer.concat(chunks))
-      )
-    )
-  );
-};
-
-export const downloadBlobToFile$ = (
-  connectionString: string,
-  containerName: string,
+export const downloadAzureStorageBlobToFile$ = (
   blobPath: string,
-  fileName: string
+  fileName: string,
+  connectionString: string,
+  containerName: string
 ): Observable<string> => {
-  const logger = new Logger(downloadBlobToFile$.name);
+  const logger = new Logger(downloadAzureStorageBlobToFile$.name);
   logger.log(`Downloading blob ${blobPath} to file`);
 
   const blobServiceClient =
@@ -87,7 +45,13 @@ export const downloadBlobToFile$ = (
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
 
-  return downloadBlobAsStream$(blockBlobClient).pipe(
+  return from(blockBlobClient.download()).pipe(
+    map((response: BlobDownloadResponseParsed) => {
+      if (!response.readableStreamBody) {
+        throw new ConflictException('Readable stream body was undefined');
+      }
+      return response.readableStreamBody;
+    }),
     concatMap((stream) =>
       combineLatest([of(stream), createTempFile$(fileName)])
     ),
@@ -99,14 +63,11 @@ export const downloadBlobToFile$ = (
   );
 };
 
-export const deleteAzureStorageBlockBlobIfExists$ = (
+export const deleteAzureStorageBlobIfExists$ = (
+  blobPath: string,
   connectionString: string,
-  containerName: string,
-  blobPath: string
+  containerName: string
 ): Observable<void> => {
-  const logger = new Logger(deleteAzureStorageBlockBlobIfExists$.name);
-  logger.log(`Deleting blob ${blobPath}`);
-
   const blobServiceClient =
     BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(containerName);

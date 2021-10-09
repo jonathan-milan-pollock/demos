@@ -5,6 +5,4 @@ export interface ImageUpdate {
   readonly title?: string;
   readonly seoDescription?: string;
   readonly seoKeywords: string[];
-  readonly dateCreated?: string;
-  readonly datePublished?: string;
 }

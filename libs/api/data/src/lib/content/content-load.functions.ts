@@ -36,8 +36,8 @@ export const loadImageAdmin = (image: Image): ImageAdmin => ({
 
 export const loadImagePublic = (image: Image): ImagePublic => {
   return {
-    fileName: image.fileName,
     storageId: image.storageId,
+    fileName: image.fileName,
     order: image.order,
     title: image.title ?? '',
     seoDescription: image.seoDescription ?? '',

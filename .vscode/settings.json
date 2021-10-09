@@ -16,6 +16,7 @@
     "blobstorage",
     "Buildable",
     "Chainable",
+    "changefreq",
     "CNAME",
     "codedcharacterset",
     "codeql",
@@ -52,9 +53,11 @@
     "Iptc",
     "jwks",
     "keyvault",
+    "lastmod",
     "lcov",
     "libx",
     "Lightroom",
+    "linkedin",
     "logz",
     "markdownlint",
     "mediasvc",
@@ -97,10 +100,12 @@
     "tinify",
     "Unprocessable",
     "untrash",
+    "urlset",
     "uuidv",
     "vcodec",
     "Vercel",
     "websockets",
+    "xmlbuilder",
     "youtube"
   ]
 }

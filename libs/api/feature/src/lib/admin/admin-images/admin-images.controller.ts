@@ -7,23 +7,39 @@ import {
   Delete,
   Query,
   ParseUUIDPipe,
+  Post,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
 import {
   ImageAdminDto,
   ImageUpdateDto,
+  ThreeSixtyImageAddDto,
 } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
-import { AdminImagesService } from './admin-images.service';
+import { ImagesService } from '@dark-rush-photography/api/data';
 
 @Controller({ path: 'admin/images', version: '1' })
 @ApiBearerAuth()
 @ApiTags('Admin Images')
 export class AdminImagesController {
-  constructor(private readonly adminImagesService: AdminImagesService) {}
+  constructor(private readonly imagesService: ImagesService) {}
+
+  @Post('three-sixty-image')
+  @ApiCreatedResponse({ type: ImageAdminDto })
+  addThreeSixtyImage$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Body() threeSixtyImageAdd: ThreeSixtyImageAddDto
+  ): Observable<ImageAdminDto> {
+    return this.imagesService.addThreeSixtyImage$(entityId, threeSixtyImageAdd);
+  }
 
   @Put(':imageId')
   @ApiOkResponse({ type: ImageAdminDto })
@@ -32,7 +48,7 @@ export class AdminImagesController {
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() imageUpdate: ImageUpdateDto
   ): Observable<ImageAdminDto> {
-    return this.adminImagesService.update$(imageId, entityId, imageUpdate);
+    return this.imagesService.update$(imageId, entityId, imageUpdate);
   }
 
   @Put(':imageId/select')
@@ -41,7 +57,7 @@ export class AdminImagesController {
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<ImageAdminDto> {
-    return this.adminImagesService.select$(imageId, entityId);
+    return this.imagesService.select$(imageId, entityId);
   }
 
   @Put(':imageId/archive')
@@ -50,7 +66,7 @@ export class AdminImagesController {
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<ImageAdminDto> {
-    return this.adminImagesService.archive$(imageId, entityId);
+    return this.imagesService.archive$(imageId, entityId);
   }
 
   @Put(':imageId/unarchive')
@@ -59,7 +75,7 @@ export class AdminImagesController {
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<ImageAdminDto> {
-    return this.adminImagesService.unarchive$(imageId, entityId);
+    return this.imagesService.unarchive$(imageId, entityId);
   }
 
   @Delete(':imageId')
@@ -68,6 +84,6 @@ export class AdminImagesController {
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
-    return this.adminImagesService.remove$(imageId, entityId);
+    return this.imagesService.remove$(imageId, entityId);
   }
 }

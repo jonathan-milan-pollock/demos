@@ -18,12 +18,6 @@ export const validateEntityType = (
   return documentModel;
 };
 
-export const validateEntityNotAlreadyExists = (
-  documentModel: DocumentModel | null
-): void => {
-  if (documentModel) throw new ConflictException('Entity already exists');
-};
-
 export const validateEntityFound = (
   documentModel: DocumentModel | null
 ): DocumentModel => {
@@ -35,5 +29,13 @@ export const validateEntityIsPublic = (
   documentModel: DocumentModel
 ): DocumentModel => {
   if (!documentModel.isPublic) throw new NotFoundException();
+  return documentModel;
+};
+
+export const validateEntityIsPublished = (
+  documentModel: DocumentModel
+): DocumentModel => {
+  if (!documentModel.isPublished)
+    throw new ConflictException('Entity is not published');
   return documentModel;
 };

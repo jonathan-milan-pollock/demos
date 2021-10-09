@@ -49,8 +49,8 @@ describe('entity-load-public.functions', () => {
   };
 
   const imagePublic: ImagePublic = {
-    fileName: faker.system.fileName(),
     storageId: faker.datatype.uuid(),
+    fileName: faker.system.fileName(),
     order: faker.datatype.number(),
     title: faker.lorem.sentence(),
     seoDescription: faker.lorem.paragraph(),

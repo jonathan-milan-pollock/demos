@@ -8,6 +8,7 @@ import {
   ParseBoolPipe,
   ParseEnumPipe,
   Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -28,7 +29,7 @@ import {
   EntityUpdateDto,
 } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
-import { AdminEntitiesService } from './admin-entities.service';
+import { AdminEntitiesService } from '@dark-rush-photography/api/data';
 
 @Controller({ path: 'admin/entities', version: '1' })
 @ApiBearerAuth()
@@ -56,17 +57,10 @@ export class AdminEntitiesController {
   @Put(':entityId/publish')
   @HttpCode(204)
   publish$(
-    @Param('entityId', ParseObjectIdPipe) entityId: string
+    @Param('entityId', ParseObjectIdPipe) entityId: string,
+    @Query('post-social-media', ParseBoolPipe) postSocialMedia: boolean
   ): Observable<void> {
-    return this.adminEntitiesService.publish$(entityId);
-  }
-
-  @Put(':entityId/social-media-post')
-  @HttpCode(204)
-  socialMediaPost$(
-    @Param('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<void> {
-    return this.adminEntitiesService.socialMediaPost$(entityId);
+    return this.adminEntitiesService.publish$(entityId, postSocialMedia);
   }
 
   @Put(':entityId/processing/:isProcessing')
@@ -127,14 +121,6 @@ export class AdminEntitiesController {
     @Param('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<EntityAdminDto> {
     return this.adminEntitiesService.findOne$(entityId);
-  }
-
-  @Get(':entityId/processing')
-  @ApiOkResponse({ type: Boolean })
-  findIsProcessing$(
-    @Param('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<boolean> {
-    return this.adminEntitiesService.findIsProcessing$(entityId);
   }
 
   @Delete(':entityId')

@@ -6,9 +6,9 @@ import { concatMap, from, map, Observable } from 'rxjs';
 
 import { Video } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { loadVideo } from '../content/content-load.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { validateVideoFound } from '../content/content-validation.functions';
+import { loadVideo } from '../content/content-load.functions';
+import { validateVideo } from '../content/content-validation.functions';
 
 @Injectable()
 export class VideoProvider {
@@ -35,19 +35,18 @@ export class VideoProvider {
           })
         )
       ),
-      concatMap(() => this.findOne$(videoId, entityId, entityModel))
+      concatMap(() => this.findOne$(entityId, entityModel))
     );
   }
 
   findOne$(
-    videoId: string,
     entityId: string,
     entityModel: Model<DocumentModel>
   ): Observable<Video> {
     return from(entityModel.findById(entityId)).pipe(
       map(validateEntityFound),
       map((documentModel) => {
-        return loadVideo(validateVideoFound(videoId, documentModel));
+        return loadVideo(validateVideo(documentModel.videos));
       })
     );
   }

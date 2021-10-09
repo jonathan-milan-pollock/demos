@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { concatMap, from, last, map, Observable } from 'rxjs';
 
 import {
-  deleteAzureStorageBlockBlobIfExists$,
+  deleteAzureStorageBlobIfExists$,
   getAzureStorageBlobPath,
   getAzureStorageBlobPathWithImageDimension,
   getImageDimensions,
@@ -12,38 +12,44 @@ import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ContentDeleteBlobsProvider {
-  constructor(private readonly configProvider: ConfigProvider) {}
+  private readonly logger;
+
+  constructor(private readonly configProvider: ConfigProvider) {
+    this.logger = new Logger(deleteAzureStorageBlobIfExists$.name);
+  }
 
   deleteImageBlobs$(storageId: string, fileName: string): Observable<void> {
     return from(getImageDimensions()).pipe(
       concatMap((imageDimension) =>
-        deleteAzureStorageBlockBlobIfExists$(
-          this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
+        deleteAzureStorageBlobIfExists$(
           getAzureStorageBlobPathWithImageDimension(
             storageId,
             fileName,
             imageDimension.type
-          )
+          ),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic
         )
       ),
       last(),
-      concatMap(() =>
-        deleteAzureStorageBlockBlobIfExists$(
+      concatMap(() => {
+        const blobPath = getAzureStorageBlobPath(storageId, fileName);
+        this.logger.log(`Deleting blob ${blobPath}`);
+        return deleteAzureStorageBlobIfExists$(
+          blobPath,
           this.configProvider.azureStorageConnectionStringPublic,
-          this.configProvider.azureStorageBlobContainerNamePublic,
-          getAzureStorageBlobPath(storageId, fileName)
-        )
-      ),
+          this.configProvider.azureStorageBlobContainerNamePublic
+        );
+      }),
       map(() => undefined)
     );
   }
 
   deleteVideoBlob$(storageId: string, fileName: string): Observable<void> {
-    return deleteAzureStorageBlockBlobIfExists$(
+    return deleteAzureStorageBlobIfExists$(
+      getAzureStorageBlobPath(storageId, fileName),
       this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic,
-      getAzureStorageBlobPath(storageId, fileName)
+      this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(map(() => undefined));
   }
 }

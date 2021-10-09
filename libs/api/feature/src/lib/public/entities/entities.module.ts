@@ -2,8 +2,12 @@ import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Document, DocumentSchema } from '@dark-rush-photography/api/data';
-import { EntitiesService } from './entities.service';
+import {
+  Document,
+  DocumentSchema,
+  EntityFindPublicProvider,
+  PublicEntitiesService,
+} from '@dark-rush-photography/api/data';
 import { EntitiesController } from './entities.controller';
 
 @Module({
@@ -14,6 +18,6 @@ import { EntitiesController } from './entities.controller';
     ]),
   ],
   controllers: [EntitiesController],
-  providers: [EntitiesService],
+  providers: [PublicEntitiesService, EntityFindPublicProvider],
 })
 export class EntitiesModule {}

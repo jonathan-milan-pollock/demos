@@ -10,16 +10,7 @@ import {
   loadImagePublic,
   loadLocation,
 } from '../content/content-load.functions';
-import { validateStarredImageFound } from '../content/content-field-validation.functions';
-
-// TODO:
-// event
-// validateEntityTitleProvided(documentModel)
-// photo of the week
-// validateEntityTitleProvided
-// validateEntityDatePublished
-// review
-// validateEntityTitleProvided
+import { validateStarredImage } from '../content/content-validation.functions';
 
 export const loadEntityMinimalPublic = (
   documentModel: DocumentModel
@@ -35,7 +26,7 @@ export const loadEntityMinimalPublic = (
   );
 
   const starredImage = hasStarredImage
-    ? loadImagePublic(validateStarredImageFound(publicImages))
+    ? loadImagePublic(validateStarredImage(publicImages))
     : ({} as ImagePublic);
 
   return {
@@ -51,20 +42,6 @@ export const loadEntityMinimalPublic = (
     starredImage,
   };
 };
-
-// TODO:
-// Event
-// validateEntityTitleProvided(documentModel),
-// validateEntitySeoDescriptionProvided(documentModel)
-// validateEntitySeoKeywordsProvided(documentModel)
-// validateEntityDateCreatedProvided(documentModel)
-// Photo of the Week
-// validateEntityTitleProvided(documentModel),
-// validateEntitySeoDescriptionProvided(documentModel)
-// validateEntitySeoKeywordsProvided(documentModel)
-// validateEntityDatePublished(documentModel)
-// Review
-// must have text
 
 export const loadEntityPublic = (
   documentModel: DocumentModel

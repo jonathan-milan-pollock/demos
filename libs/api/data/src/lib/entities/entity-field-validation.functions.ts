@@ -11,35 +11,32 @@ export const validateEntityGoogleDriveFolderId = (
   return documentModel.googleDriveFolderId;
 };
 
-export const validateEntityTitleProvided = (
-  documentModel: DocumentModel
-): string => {
-  if (!documentModel.title)
-    throw new ConflictException('Title was not provided');
+export const validateEntityTitle = (documentModel: DocumentModel): string => {
+  if (!documentModel.title) throw new ConflictException('Title is undefined');
   return documentModel.title;
 };
 
-export const validateEntitySeoDescriptionProvided = (
+export const validateEntitySeoDescription = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.seoDescription)
-    throw new ConflictException('SEO description was not provided');
+    throw new ConflictException('SEO description is undefined');
   return documentModel.seoDescription;
 };
 
-export const validateEntitySeoKeywordsProvided = (
+export const validateEntitySeoKeywords = (
   documentModel: DocumentModel
 ): string[] => {
   if (documentModel.seoKeywords.length === 0)
-    throw new ConflictException('SEO keywords were not provided');
+    throw new ConflictException('SEO keywords are empty');
   return documentModel.seoKeywords;
 };
 
-export const validateEntityDateCreatedProvided = (
+export const validateEntityDateCreated = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.dateCreated)
-    throw new ConflictException('Date created was not provided');
+    throw new ConflictException('Date created is undefined');
   return documentModel.dateCreated;
 };
 
@@ -47,6 +44,12 @@ export const validateEntityDatePublished = (
   documentModel: DocumentModel
 ): string => {
   if (!documentModel.datePublished)
-    throw new ConflictException('Entity does not have required published date');
+    throw new ConflictException('Date published is undefined');
   return documentModel.datePublished;
+};
+
+export const validateEntityText = (documentModel: DocumentModel): string[] => {
+  if (documentModel.text.length === 0)
+    throw new ConflictException('Text is empty');
+  return documentModel.text;
 };

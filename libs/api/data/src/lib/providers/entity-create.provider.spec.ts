@@ -16,6 +16,7 @@ import { Document } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { EntityCreateProvider } from './entity-create.provider';
 import { EntityCreateWatermarkedTypeProvider } from './entity-create-watermarked-type.provider';
+import { EntityCreateForFolderProvider } from './entity-create-for-folder.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
@@ -41,8 +42,9 @@ describe('entity-create.provider', () => {
           provide: getModelToken(Document.name),
           useValue: new MockDocumentModel(),
         },
-        EntityCreateWatermarkedTypeProvider,
         EntityCreateProvider,
+        EntityCreateWatermarkedTypeProvider,
+        EntityCreateForFolderProvider,
       ],
     }).compile();
 
@@ -59,7 +61,7 @@ describe('entity-create.provider', () => {
   });
 
   describe('create$', () => {
-    it('should create watermarked and without watermark entities for a group', (done: any) => {
+    it('should create watermarked and without watermark', (done: any) => {
       const folderName = faker.lorem.word();
       jest
         .spyOn(apiUtil, 'getEntityWithoutGroupTypeFolderName')
@@ -80,6 +82,7 @@ describe('entity-create.provider', () => {
       entityCreateProvider
         .create$({} as drive_v3.Drive, entityWithoutGroupType)
         .subscribe(() => {
+          expect(mockedCreateWatermarkedType$).toBeCalledTimes(2);
           expect(mockedCreateWatermarkedType$.mock.calls).toEqual([
             [
               {},
@@ -122,6 +125,7 @@ describe('entity-create.provider', () => {
       entityCreateProvider
         .createForGroup$({} as drive_v3.Drive, entityWithGroupType, group)
         .subscribe(() => {
+          expect(mockedCreateWatermarkedTypeForGroup$).toBeCalledTimes(2);
           expect(mockedCreateWatermarkedTypeForGroup$.mock.calls).toEqual([
             [
               {},

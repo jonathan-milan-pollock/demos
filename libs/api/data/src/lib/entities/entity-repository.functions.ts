@@ -5,12 +5,17 @@ import { Model } from 'mongoose';
 import {
   Entity,
   EntityType,
+  EntityUpdate,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import { loadDocumentModelsArray } from './entity-load-document-model.functions';
+import {
+  loadCreateImagePostEntity,
+  loadDocumentModelsArray,
+  loadUpdateEntity,
+} from './entity-load-document-model.functions';
 
-export const createNewEntity$ = (
+export const createEntity$ = (
   entity: Entity,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel> => {
@@ -20,6 +25,52 @@ export const createNewEntity$ = (
     }).save()
   );
 };
+
+export const createImagePostEntity$ = (
+  entityType: EntityType,
+  watermarkedType: WatermarkedType,
+  group: string,
+  slug: string,
+  text: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel> => {
+  return from(
+    new entityModel({
+      ...loadCreateImagePostEntity(
+        entityType,
+        watermarkedType,
+        group,
+        slug,
+        text
+      ),
+    }).save()
+  );
+};
+
+export const updateEntity$ = (
+  entityId: string,
+  entityUpdate: EntityUpdate,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> => {
+  return from(
+    entityModel.findByIdAndUpdate(entityId, {
+      ...loadUpdateEntity(entityUpdate),
+    })
+  );
+};
+
+export const findByIdAndUpdateIsProcessing$ = (
+  entityId: string,
+  isProcessing: boolean,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> => {
+  return from(entityModel.findByIdAndUpdate(entityId, { isProcessing }));
+};
+
+export const findEntityById$ = (
+  entityId: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> => from(entityModel.findById(entityId));
 
 export const findOneEntity$ = (
   entityType: EntityType,
@@ -66,34 +117,17 @@ export const findAllEntitiesForGroup$ = (
   ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
 };
 
-export const findEntityById$ = (
-  entityId: string,
+export const findAllPublicEntities$ = (
+  entityType: EntityType,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => from(entityModel.findById(entityId));
-
-export const removeImageFromEntity$ = (
-  imageId: string,
-  entityId: string,
-  documentModel: DocumentModel,
-  entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> =>
-  from(
-    entityModel.findByIdAndUpdate(entityId, {
-      images: [...documentModel.images.filter((image) => image.id !== imageId)],
+): Observable<DocumentModel[]> => {
+  return from(
+    entityModel.find({
+      type: entityType,
+      isPublic: true,
     })
-  );
-
-export const removeVideoFromEntity$ = (
-  videoId: string,
-  entityId: string,
-  documentModel: DocumentModel,
-  entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> =>
-  from(
-    entityModel.findByIdAndUpdate(entityId, {
-      videos: [...documentModel.videos.filter((video) => video.id !== videoId)],
-    })
-  );
+  ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
+};
 
 export const findEntityByIdAndDelete$ = (
   entityId: string,

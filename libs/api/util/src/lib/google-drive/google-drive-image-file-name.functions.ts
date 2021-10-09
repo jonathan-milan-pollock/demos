@@ -1,29 +1,11 @@
 import * as path from 'path';
-import { ParsedPath } from 'path/posix';
 
-export const getParsedPathOfGoogleDriveImageFileName = (
-  googleDriveImageFileName: string
-): ParsedPath => {
-  const fileName = googleDriveImageFileName;
-  const orderFileName = fileName.substring(fileName.lastIndexOf('-') + 1);
-  return path.parse(orderFileName);
-};
-
-export const getOrderFromGoogleDriveImageFileName = (
-  googleDriveImageFileName: string
+export const getOrderFromGoogleDriveImageFile = (
+  imageFileName: string
 ): number => {
-  const orderFileName = getParsedPathOfGoogleDriveImageFileName(
-    googleDriveImageFileName
+  const parsedImageFileName = path.parse(imageFileName);
+  const order = parsedImageFileName.name.substring(
+    parsedImageFileName.name.lastIndexOf('-') + 1
   );
-  return +orderFileName.name;
-};
-
-export const getSlugWithOrderFromGoogleDriveImageFileName = (
-  slug: string,
-  googleDriveImageFileName: string
-): string => {
-  const orderFileName = getParsedPathOfGoogleDriveImageFileName(
-    googleDriveImageFileName
-  );
-  return `${slug}-${orderFileName.name}${orderFileName.ext}`;
+  return +order;
 };

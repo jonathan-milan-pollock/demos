@@ -2,143 +2,136 @@ import { ConflictException } from '@nestjs/common';
 
 import * as faker from 'faker';
 
-import { EntityType } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
-  validateEntityDateCreatedProvided,
+  validateEntityDateCreated,
   validateEntityDatePublished,
-  validateEntitySeoDescriptionProvided,
-  validateEntitySeoKeywordsProvided,
-  validateEntityTitleProvided,
+  validateEntityGoogleDriveFolderId,
+  validateEntitySeoDescription,
+  validateEntitySeoKeywords,
+  validateEntityTitle,
 } from './entity-field-validation.functions';
 
 describe('entity-validation.functions', () => {
-  const partialDocumentModel: Partial<DocumentModel> = {
-    type: faker.random.arrayElement(Object.values(EntityType)),
-    group: faker.lorem.word(),
-    slug: faker.lorem.word(),
-    order: faker.datatype.number(),
-    seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
-    starredImageIsCentered: faker.datatype.boolean(),
-    text: [
-      faker.lorem.sentence(),
-      faker.lorem.sentence(),
-      faker.lorem.sentence(),
-    ],
-    images: [],
-    videos: [],
-    isPublic: faker.datatype.boolean(),
-    isPublished: faker.datatype.boolean(),
-    isProcessing: faker.datatype.boolean(),
-  };
-
-  describe('validateEntityTitleProvided', () => {
-    it('should return title if entity title is provided', () => {
-      const mockTitle = faker.lorem.sentence();
-      const result = validateEntityTitleProvided({
-        ...partialDocumentModel,
-        title: mockTitle,
+  describe('validateEntityGoogleDriveFolderId', () => {
+    it('should return the google drive folder id from the document', () => {
+      const googleDriveFolderId = faker.datatype.uuid();
+      const result = validateEntityGoogleDriveFolderId({
+        googleDriveFolderId,
       } as DocumentModel);
-      expect(result).toBe(mockTitle);
+      expect(result).toBe(googleDriveFolderId);
     });
 
-    it('should throw a conflict exception when title is undefined', () => {
+    it('should throw a conflict exception when the google drive folder id is undefined', () => {
+      const result = () =>
+        validateEntityGoogleDriveFolderId({
+          googleDriveFolderId: undefined,
+        } as DocumentModel);
+      expect(result).toThrow(ConflictException);
+      expect(result).toThrow('Google Drive folder id is undefined');
+    });
+  });
+
+  describe('validateEntityTitle', () => {
+    it('should return the title from the document', () => {
+      const title = faker.lorem.sentence();
+      const result = validateEntityTitle({ title } as DocumentModel);
+      expect(result).toBe(title);
+    });
+
+    it('should throw a conflict exception when the title is undefined', () => {
       const result = () => {
-        validateEntityTitleProvided({
-          ...partialDocumentModel,
+        validateEntityTitle({
           title: undefined,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Title was not provided');
+      expect(result).toThrow('Title is undefined');
     });
   });
 
-  describe('validateEntitySeoDescriptionProvided', () => {
-    it('should return SEO description if entity seo description is provided', () => {
-      const mockSeoDescription = faker.lorem.sentences();
-      const result = validateEntitySeoDescriptionProvided({
-        ...partialDocumentModel,
-        seoDescription: mockSeoDescription,
+  describe('validateEntitySeoDescription', () => {
+    it('should return the SEO description from the document', () => {
+      const seoDescription = faker.lorem.sentences();
+      const result = validateEntitySeoDescription({
+        seoDescription,
       } as DocumentModel);
-      expect(result).toBe(mockSeoDescription);
+      expect(result).toBe(seoDescription);
     });
 
-    it('should throw a conflict exception when SEO description is undefined', () => {
+    it('should throw a conflict exception when the SEO description is undefined', () => {
       const result = () => {
-        validateEntitySeoDescriptionProvided({
-          ...partialDocumentModel,
+        validateEntitySeoDescription({
           seoDescription: undefined,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('SEO description was not provided');
+      expect(result).toThrow('SEO description is undefined');
     });
   });
 
-  describe('validateEntitySeoKeywordsProvided', () => {
-    it('should return SEO keywords if entity seo keywords are provided', () => {
-      const mockSeoKeywords = [faker.lorem.word()];
-      const result = validateEntitySeoKeywordsProvided({
-        ...partialDocumentModel,
-        seoKeywords: mockSeoKeywords,
+  describe('validateEntitySeoKeywords', () => {
+    it('should return SEO keywords from the document', () => {
+      const seoKeywords = [
+        faker.lorem.word(),
+        faker.lorem.word(),
+        faker.lorem.word(),
+      ];
+      const result = validateEntitySeoKeywords({
+        seoKeywords,
       } as DocumentModel);
-      expect(result).toBe(mockSeoKeywords);
+      expect(result).toEqual(seoKeywords);
     });
 
-    it('should throw a conflict exception when SEO keywords are not provided', () => {
+    it('should throw a conflict exception when the SEO keywords are empty', () => {
+      const emptySeoKeywords: string[] = [];
       const result = () => {
-        validateEntitySeoKeywordsProvided({
-          ...partialDocumentModel,
-          seoKeywords: [],
+        validateEntitySeoKeywords({
+          seoKeywords: emptySeoKeywords,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('SEO keywords were not provided');
+      expect(result).toThrow('SEO keywords are empty');
     });
   });
 
-  describe('validateEntityDateCreatedProvided', () => {
-    it('should return date created if entity date created is provided', () => {
+  describe('validateEntityDateCreated', () => {
+    it('should return the date created from the document', () => {
       const dateCreated = new Date().toISOString();
-      const result = validateEntityDateCreatedProvided({
-        ...partialDocumentModel,
-        dateCreated: dateCreated,
+      const result = validateEntityDateCreated({
+        dateCreated,
       } as DocumentModel);
       expect(result).toBe(dateCreated);
     });
 
-    it('should throw a conflict exception when date created is not provided', () => {
+    it('should throw a conflict exception when the date created is undefined', () => {
       const result = () => {
-        validateEntityDateCreatedProvided({
-          ...partialDocumentModel,
+        validateEntityDateCreated({
           dateCreated: undefined,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Date created was not provided');
+      expect(result).toThrow('Date created is undefined');
     });
   });
 
   describe('validateEntityDatePublished', () => {
-    it('should return date published if entity date published available', () => {
+    it('should return the date published from the document', () => {
       const datePublished = new Date().toISOString();
       const result = validateEntityDatePublished({
-        ...partialDocumentModel,
-        datePublished: datePublished,
+        datePublished,
       } as DocumentModel);
       expect(result).toBe(datePublished);
     });
 
-    it('should throw a conflict exception when date published is not available', () => {
+    it('should throw a conflict exception when date published is undefined', () => {
       const result = () => {
         validateEntityDatePublished({
-          ...partialDocumentModel,
           datePublished: undefined,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Entity does not have required published date');
+      expect(result).toThrow('Date published is undefined');
     });
   });
 });

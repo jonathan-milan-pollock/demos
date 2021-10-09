@@ -8,7 +8,7 @@ import {
   MediaProcess,
   MediaProcessType,
 } from '@dark-rush-photography/shared/types';
-import { setMediaProcessReady } from '../content/media-process.functions';
+import { setMediaProcessReady } from '../content/media-process-state.functions';
 import { MediaProcessTable } from '../tables/media-process.table';
 
 @Injectable()

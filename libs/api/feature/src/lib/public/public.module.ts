@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
 import { EntitiesModule } from './entities/entities.module';
-import { SitemapModule } from './sitemap/sitemap.module';
+import { SitemapsModule } from './sitemaps/sitemaps.module';
 
 @Module({
-  imports: [EntitiesModule, SitemapModule],
+  imports: [EntitiesModule, SitemapsModule],
 })
 export class PublicModule {}

@@ -9,8 +9,8 @@ describe('Delete Admin Entities', () => {
   beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
 
   it('should delete a created image post', () => {
-    cy.createImagePostAdmin(getAuthHeaders(), {
-      slug: 'test-image-post-1',
+    cy.uploadImagePostAdmin(getAuthHeaders(), {
+      text: 'test-image-post-1',
     })
       .its('body.id')
       .then((id) => cy.deleteEntityAdmin(getAuthHeaders(), id))
@@ -21,7 +21,7 @@ describe('Delete Admin Entities', () => {
 
   it('should return a status of 204 when delete', () => {
     cy.createImagePostAdmin(getAuthHeaders(), {
-      slug: 'test-image-post-1',
+      text: 'test-image-post-1',
     })
       .its('body.id')
       .then((id) => cy.deleteEntityAdmin(getAuthHeaders(), id))
@@ -31,7 +31,7 @@ describe('Delete Admin Entities', () => {
 
   it('should not fail when deleting multiple times', () => {
     cy.createImagePostAdmin(getAuthHeaders(), {
-      slug: 'test-image-post-1',
+      text: 'test-image-post-1',
     })
       .its('body.id')
       .then((id) => {
@@ -53,7 +53,7 @@ describe('Delete Admin Entities', () => {
   it('should return an unauthorized status when not logged in', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
@@ -65,7 +65,7 @@ describe('Delete Admin Entities', () => {
   it('should return an unauthorized message when not logged in', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>

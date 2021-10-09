@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { EntityPublic, EntityType } from '@dark-rush-photography/shared/types';
-import { LocationDefinedDto } from './location-defined.dto';
+import { LocationDto } from './location.dto';
 import { ImagePublicDto } from './image-public.dto';
 
 export class EntityPublicDto implements EntityPublic {
@@ -44,8 +44,8 @@ export class EntityPublicDto implements EntityPublic {
   datePublished!: string;
 
   @ValidateNested()
-  @Type(() => LocationDefinedDto)
-  location!: LocationDefinedDto;
+  @Type(() => LocationDto)
+  location!: LocationDto;
 
   @IsArray()
   @Type(() => String)

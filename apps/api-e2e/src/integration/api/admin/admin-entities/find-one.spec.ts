@@ -11,7 +11,7 @@ describe('Find one Admin Entity', () => {
   it('should return application/json', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
@@ -24,19 +24,20 @@ describe('Find one Admin Entity', () => {
   it('should find a created entity', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
         cy.findOneEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id)
       )
-      .its('body.slug')
-      .should('equal', 'test-image-post-1'));
+      .its('body')
+      .then((body) => body.text[0])
+      .should('include', 'test-image-post-1'));
 
   it('should return a status of 200 when find an entity', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
@@ -54,7 +55,7 @@ describe('Find one Admin Entity', () => {
   it('should return an unauthorized status when not logged in', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>
@@ -66,7 +67,7 @@ describe('Find one Admin Entity', () => {
   it('should return an unauthorized message when not logged in', () =>
     cy
       .createImagePostAdmin(getAuthHeaders(), {
-        slug: 'test-image-post-1',
+        text: 'test-image-post-1',
       })
       .then((response) => response.body as EntityMinimalAdmin)
       .then((entityMinimalAdmin) =>

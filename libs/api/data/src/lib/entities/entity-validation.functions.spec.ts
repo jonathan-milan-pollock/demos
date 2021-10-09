@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 import * as faker from 'faker';
 
@@ -11,7 +7,6 @@ import { DocumentModel } from '../schema/document.schema';
 import {
   validateEntityFound,
   validateEntityIsPublic,
-  validateEntityNotAlreadyExists,
   validateEntityType,
 } from './entity-validation.functions';
 
@@ -44,20 +39,6 @@ describe('entity-validation.functions', () => {
       expect(result).toThrow(
         `Found entity as ${documentEntityType} was called with ${providedEntityType}`
       );
-    });
-  });
-
-  describe('validateEntityNotAlreadyExists', () => {
-    it('should not throw when document model is null', () => {
-      expect(() => validateEntityNotAlreadyExists(null)).not.toThrow();
-    });
-
-    it('should throw a conflict exception when document model is provided', () => {
-      const result = () => {
-        validateEntityNotAlreadyExists({} as DocumentModel);
-      };
-      expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Entity already exists');
     });
   });
 

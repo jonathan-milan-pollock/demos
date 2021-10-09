@@ -16,24 +16,21 @@ import {
 import { Document } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { EntityCreateWatermarkedTypeProvider } from './entity-create-watermarked-type.provider';
+import { EntityCreateForFolderProvider } from './entity-create-for-folder.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-jest.mock('../entities/entity-create.functions', () => ({
-  ...jest.requireActual('../entities/entity-create.functions'),
-}));
-import * as entityCreateFunctions from '../entities/entity-create.functions';
-
 describe('entity-create-watermarked-type.provider', () => {
   let entityCreateWatermarkedTypeProvider: EntityCreateWatermarkedTypeProvider;
+  let entityCreateForFolderProvider: EntityCreateForFolderProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {
       getGoogleDriveWebsitesFolderId(): string {
-        return '';
+        return faker.lorem.word();
       }
     }
     class MockDocumentModel {}
@@ -50,12 +47,18 @@ describe('entity-create-watermarked-type.provider', () => {
           useValue: new MockDocumentModel(),
         },
         EntityCreateWatermarkedTypeProvider,
+        EntityCreateForFolderProvider,
       ],
     }).compile();
 
     entityCreateWatermarkedTypeProvider =
       moduleRef.get<EntityCreateWatermarkedTypeProvider>(
         EntityCreateWatermarkedTypeProvider
+      );
+
+    entityCreateForFolderProvider =
+      moduleRef.get<EntityCreateForFolderProvider>(
+        EntityCreateForFolderProvider
       );
   });
 
@@ -72,7 +75,7 @@ describe('entity-create-watermarked-type.provider', () => {
         );
 
       const mockedCreateEntityFoFolder$ = jest
-        .spyOn(entityCreateFunctions, 'createEntityForFolder$')
+        .spyOn(entityCreateForFolderProvider, 'createEntityForFolder$')
         .mockReturnValue(of(undefined));
 
       entityCreateWatermarkedTypeProvider
@@ -95,7 +98,7 @@ describe('entity-create-watermarked-type.provider', () => {
         .mockReturnValue(of(undefined));
 
       const mockedCreateEntityForFolder$ = jest.spyOn(
-        entityCreateFunctions,
+        entityCreateForFolderProvider,
         'createEntityForFolder$'
       );
 
@@ -108,14 +111,14 @@ describe('entity-create-watermarked-type.provider', () => {
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockedFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(1);
+          expect(mockedFindGoogleDriveFolderByName$).toHaveBeenCalled();
           expect(mockedCreateEntityForFolder$).not.toHaveBeenCalled();
           done();
         });
     });
   });
 
-  describe('createForGroup$', () => {
+  describe('createWatermarkedTypeForGroup$', () => {
     it('should create watermarked type entity for a group', (done: any) => {
       jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
@@ -127,7 +130,7 @@ describe('entity-create-watermarked-type.provider', () => {
         );
 
       const mockedCreateEntityForFolder$ = jest
-        .spyOn(entityCreateFunctions, 'createEntityForFolder$')
+        .spyOn(entityCreateForFolderProvider, 'createEntityForFolder$')
         .mockReturnValue(of(undefined));
 
       entityCreateWatermarkedTypeProvider
@@ -150,7 +153,7 @@ describe('entity-create-watermarked-type.provider', () => {
         .mockReturnValue(of(undefined));
 
       const mockedCreateEntityForFolder$ = jest.spyOn(
-        entityCreateFunctions,
+        entityCreateForFolderProvider,
         'createEntityForFolder$'
       );
 
@@ -178,7 +181,7 @@ describe('entity-create-watermarked-type.provider', () => {
         .mockReturnValueOnce(of(undefined));
 
       const mockedCreateEntityForFolder$ = jest.spyOn(
-        entityCreateFunctions,
+        entityCreateForFolderProvider,
         'createEntityForFolder$'
       );
 

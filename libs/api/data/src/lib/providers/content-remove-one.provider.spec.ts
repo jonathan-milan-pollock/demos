@@ -5,11 +5,7 @@ import { getModelToken } from '@nestjs/mongoose';
 
 import { of } from 'rxjs';
 
-import {
-  DUMMY_MONGODB_ID,
-  Image,
-  Video,
-} from '@dark-rush-photography/shared/types';
+import { Image, Video } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { ContentRemoveOneProvider } from './content-remove-one.provider';
@@ -19,6 +15,11 @@ jest.mock('../entities/entity-repository.functions', () => ({
   ...jest.requireActual('../entities/entity-repository.functions'),
 }));
 import * as entityRepositoryFunctions from '../entities/entity-repository.functions';
+
+jest.mock('../content/content-repository.functions', () => ({
+  ...jest.requireActual('../content/content-repository.functions'),
+}));
+import * as contentRepositoryFunctions from '../content/content-repository.functions';
 
 describe('content-remove-one.provider', () => {
   let contentRemoveOneProvider: ContentRemoveOneProvider;
@@ -62,17 +63,19 @@ describe('content-remove-one.provider', () => {
         .spyOn(contentDeleteBlobsProvider, 'deleteImageBlobs$')
         .mockReturnValue(of(undefined));
 
-      const mockedRemoveImageFromEntity$ = jest
-        .spyOn(entityRepositoryFunctions, 'removeImageFromEntity$')
+      jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
-      contentRemoveOneProvider
-        .removeImage$(DUMMY_MONGODB_ID, {} as Image, {} as DocumentModel)
-        .subscribe(() => {
-          expect(mockedDeleteImageBlobs$).toHaveBeenCalled();
-          expect(mockedRemoveImageFromEntity$).toHaveBeenCalled();
-          done();
-        });
+      const mockedRemoveImage$ = jest
+        .spyOn(contentRepositoryFunctions, 'removeImage$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      contentRemoveOneProvider.removeImage$({} as Image).subscribe(() => {
+        expect(mockedDeleteImageBlobs$).toHaveBeenCalled();
+        expect(mockedRemoveImage$).toHaveBeenCalled();
+        done();
+      });
     });
   });
 
@@ -82,17 +85,19 @@ describe('content-remove-one.provider', () => {
         .spyOn(contentDeleteBlobsProvider, 'deleteVideoBlob$')
         .mockReturnValue(of(undefined));
 
-      const mockedRemoveVideoFromEntity$ = jest
-        .spyOn(entityRepositoryFunctions, 'removeVideoFromEntity$')
+      jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
-      contentRemoveOneProvider
-        .removeVideo$(DUMMY_MONGODB_ID, {} as Video, {} as DocumentModel)
-        .subscribe(() => {
-          expect(mockedDeleteVideoBlobs$).toHaveBeenCalled();
-          expect(mockedRemoveVideoFromEntity$).toHaveBeenCalled();
-          done();
-        });
+      const mockedRemoveVideo$ = jest
+        .spyOn(contentRepositoryFunctions, 'removeVideo$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      contentRemoveOneProvider.removeVideo$({} as Video).subscribe(() => {
+        expect(mockedDeleteVideoBlobs$).toHaveBeenCalled();
+        expect(mockedRemoveVideo$).toHaveBeenCalled();
+        done();
+      });
     });
   });
 });
