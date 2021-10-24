@@ -5,23 +5,23 @@ import { map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  DatePublishedSitemapEntityType,
+  PublishedDateSitemapEntityType,
   SitemapEntityType,
 } from '@dark-rush-photography/shared/types';
+import { getEntityTypeFromSitemapEntityType } from '@dark-rush-photography/shared/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findAllPublicEntities$ } from '../entities/entity-repository.functions';
-import { getEntityTypeFromSitemapEntityType } from '@dark-rush-photography/api/util';
 
 @Injectable()
-export class SitemapLoadMaxDatePublishedProvider {
+export class SitemapLoadMaxPublishedDateProvider {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>
   ) {}
 
-  loadMaxDatePublishedEntityType(
+  loadMaxPublishedDateEntityType(
     sitemapEntityType: SitemapEntityType
-  ): Observable<DatePublishedSitemapEntityType> {
+  ): Observable<PublishedDateSitemapEntityType> {
     return findAllPublicEntities$(
       getEntityTypeFromSitemapEntityType(sitemapEntityType),
       this.entityModel
@@ -31,16 +31,16 @@ export class SitemapLoadMaxDatePublishedProvider {
 
         const minDate = new Date(-8640000000000000).toISOString();
         const datesPublished = entities.map(
-          (entity) => entity.datePublished ?? minDate
+          (entity) => entity.publishedDate ?? minDate
         );
 
-        const maxDatePublished = datesPublished.reduce(function (a, b) {
+        const maxPublishedDate = datesPublished.reduce(function (a, b) {
           return a > b ? a : b;
         });
-        return maxDatePublished;
+        return maxPublishedDate;
       }),
-      map((maxDatePublished) => ({
-        datePublished: maxDatePublished,
+      map((maxPublishedDate) => ({
+        publishedDate: maxPublishedDate,
         sitemapEntityType,
       }))
     );

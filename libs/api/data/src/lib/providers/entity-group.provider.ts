@@ -14,7 +14,7 @@ import {
   EntityWithGroupType,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { getEntityWithGroupTypeFolderName } from '@dark-rush-photography/api/util';
+import { getEntityWithGroupTypeFolderName } from '@dark-rush-photography/shared/util';
 import { ConfigProvider } from './config.provider';
 import { EntityGroupFindProvider } from './entity-group-find.provider';
 

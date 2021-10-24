@@ -15,8 +15,8 @@ export class IllReadYourPalm extends PhotoOfTheWeekDto {
     'Manicured Lawn',
     'Landscaping',
   ];
-  dateCreated = new Date(2019, 4, 4).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 4, 4).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 4, 4).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 4, 4).toISOString().substring(0, 10);
   location = {
     place: 'Jackson Square',
     city: 'New Orleans',

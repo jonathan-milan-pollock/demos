@@ -16,8 +16,8 @@ export class SandySpringsFestival2017 extends EventDto {
     'Chalk Art',
     'Local Friends',
   ];
-  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
-  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  createdDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  publishedDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     city: 'Sandy Springs',
     stateOrProvince: 'Georgia',

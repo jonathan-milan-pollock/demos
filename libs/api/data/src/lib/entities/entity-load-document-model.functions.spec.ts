@@ -41,13 +41,11 @@ describe('entity-load-document-model.functions', () => {
 
   describe('loadUpdateEntity', () => {
     const entityUpdate: EntityUpdate = {
-      slug: faker.lorem.word(),
-      order: faker.datatype.number(),
       title: faker.lorem.sentence(),
       seoDescription: faker.lorem.sentences(),
       seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
-      dateCreated: faker.date.recent().toISOString(),
-      datePublished: faker.date.recent().toISOString(),
+      createdDate: faker.date.recent().toISOString(),
+      publishedDate: faker.date.recent().toISOString(),
       location: {
         place: faker.company.companyName(),
         street: faker.address.streetAddress(),
@@ -73,8 +71,8 @@ describe('entity-load-document-model.functions', () => {
       expect(result.title).toBe(entityUpdate.title);
       expect(result.seoDescription).toBe(entityUpdate.seoDescription);
       expect(result.seoKeywords).toBe(entityUpdate.seoKeywords);
-      expect(result.dateCreated).toBe(entityUpdate.dateCreated);
-      expect(result.datePublished).toBe(entityUpdate.datePublished);
+      expect(result.createdDate).toBe(entityUpdate.createdDate);
+      expect(result.publishedDate).toBe(entityUpdate.publishedDate);
       expect(result.location).toBe(entityUpdate.location);
       expect(result.starredImageIsCentered).toBe(
         entityUpdate.starredImageIsCentered

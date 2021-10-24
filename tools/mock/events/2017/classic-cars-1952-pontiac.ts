@@ -9,8 +9,8 @@ export class ClassicCars1952Pontiac extends EventDto {
     out to capture photos around Goodwater, Alabama.
   `;
   keywords = ['Goodwater', 'Alabama', 'Classic', '1952 Pontiac', 'Car'];
-  dateCreated = new Date(1, 7, 2018).toISOString().substring(0, 10);
-  datePublished = new Date(1, 7, 2018).toISOString().substring(0, 10);
+  createdDate = new Date(1, 7, 2018).toISOString().substring(0, 10);
+  publishedDate = new Date(1, 7, 2018).toISOString().substring(0, 10);
   location = {
     city: 'Goodwater',
     stateOrProvince: 'Alabama',

@@ -389,7 +389,6 @@ const execAddImageProcessing = (isReady) =>
     .then(() => consoleLogOrExec(isReady, 'npm i tinify'))
     .then(() => consoleLogOrExec(isReady, 'npm i sharp'))
     .then(() => consoleLogOrExec(isReady, 'npm i social-post-api'))
-    .then(() => consoleLogOrExec(isReady, 'npm i exif-date-to-iso'))
     .then(() => consoleLogOrExec(isReady, 'npm i dist-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i node-exiftool'))
     .then(() => consoleLogOrExec(isReady, 'npm i googleapis'))

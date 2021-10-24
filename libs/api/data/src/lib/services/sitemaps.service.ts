@@ -8,11 +8,11 @@ import { SitemapLoadProvider } from '../providers/sitemap-load.provider';
 export class SitemapsService {
   constructor(private readonly sitemapLoadProvider: SitemapLoadProvider) {}
 
-  darkRushPhotographySitemap$(): Observable<string> {
+  loadDarkRushPhotographySitemap$(): Observable<string> {
     return this.sitemapLoadProvider.loadDarkRushPhotographySitemap$();
   }
 
-  thirtySevenPhotosSitemap$(): Observable<string> {
+  loadThirtySevenPhotosSitemap$(): Observable<string> {
     return this.sitemapLoadProvider.loadThirtySevenPhotosSitemap$();
   }
 }

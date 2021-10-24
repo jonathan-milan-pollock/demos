@@ -1,29 +1,36 @@
 import {
   IsArray,
   IsBoolean,
-  IsInt,
   IsISO8601,
   IsOptional,
   IsString,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { EntityUpdate } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
+import { ResolutionDto } from './resolution.dto';
 
 export class EntityUpdateDto implements EntityUpdate {
-  @IsString()
-  slug!: string;
-
-  @IsInt()
-  @Min(0)
-  order!: number;
+  @IsBoolean()
+  isPublic!: boolean;
 
   @IsString()
   @IsOptional()
   title?: string;
+
+  @IsString()
+  @IsOptional()
+  text?: string;
+
+  @IsISO8601()
+  @IsOptional()
+  createdDate?: string;
+
+  @IsISO8601()
+  @IsOptional()
+  publishedDate?: string;
 
   @IsString()
   @IsOptional()
@@ -33,26 +40,16 @@ export class EntityUpdateDto implements EntityUpdate {
   @Type(() => String)
   seoKeywords: string[] = [];
 
-  @IsISO8601()
-  @IsOptional()
-  dateCreated?: string;
-
-  @IsISO8601()
-  @IsOptional()
-  datePublished?: string;
-
   @ValidateNested()
   @Type(() => LocationDto)
   @IsOptional()
-  location!: LocationDto;
+  location?: LocationDto;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;
 
-  @IsArray()
-  @Type(() => String)
-  text: string[] = [];
-
-  @IsBoolean()
-  isPublic!: boolean;
+  @ValidateNested()
+  @Type(() => ResolutionDto)
+  @IsOptional()
+  tileDimension?: ResolutionDto;
 }

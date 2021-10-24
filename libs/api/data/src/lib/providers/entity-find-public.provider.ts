@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, last, map, Observable, of, toArray } from 'rxjs';
+import { concatMap, from, map, Observable, of, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
@@ -22,7 +22,7 @@ import {
   validateEntityFound,
   validateEntityIsPublic,
   validateEntityType,
-} from '../entities/entity-validation.functions';
+} from '../entities/entity-validate-document-model.functions';
 
 @Injectable()
 export class EntityFindPublicProvider {
@@ -40,7 +40,6 @@ export class EntityFindPublicProvider {
 
         return from(documentModels).pipe(
           map((documentModel) => loadEntityMinimalPublic(documentModel)),
-          last(),
           toArray<EntityMinimalPublic>()
         );
       })

@@ -14,8 +14,8 @@ export class RoverRoverPleaseComeOver extends PhotoOfTheWeekDto {
     'Happy',
     'Memories',
   ];
-  dateCreated = new Date(2020, 1, 27).toISOString().substring(0, 10);
-  datePublished = new Date(2020, 1, 27).toISOString().substring(0, 10);
+  createdDate = new Date(2020, 1, 27).toISOString().substring(0, 10);
+  publishedDate = new Date(2020, 1, 27).toISOString().substring(0, 10);
   location = {
     city: 'Englewood',
     stateOrProvince: 'Florida',

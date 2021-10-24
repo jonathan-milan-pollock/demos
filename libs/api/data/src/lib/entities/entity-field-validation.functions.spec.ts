@@ -4,8 +4,8 @@ import * as faker from 'faker';
 
 import { DocumentModel } from '../schema/document.schema';
 import {
-  validateEntityDateCreated,
-  validateEntityDatePublished,
+  validateEntityCreatedDate,
+  validateEntityPublishedDate,
   validateEntityGoogleDriveFolderId,
   validateEntitySeoDescription,
   validateEntitySeoKeywords,
@@ -28,7 +28,7 @@ describe('entity-validation.functions', () => {
           googleDriveFolderId: undefined,
         } as DocumentModel);
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Google Drive folder id is undefined');
+      expect(result).toThrow('Google Drive folder id is required');
     });
   });
 
@@ -46,7 +46,7 @@ describe('entity-validation.functions', () => {
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Title is undefined');
+      expect(result).toThrow('Title is required');
     });
   });
 
@@ -66,7 +66,7 @@ describe('entity-validation.functions', () => {
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('SEO description is undefined');
+      expect(result).toThrow('SEO description is required');
     });
   });
 
@@ -91,47 +91,47 @@ describe('entity-validation.functions', () => {
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('SEO keywords are empty');
+      expect(result).toThrow('SEO keywords are required');
     });
   });
 
-  describe('validateEntityDateCreated', () => {
+  describe('validateEntityCreatedDate', () => {
     it('should return the date created from the document', () => {
-      const dateCreated = new Date().toISOString();
-      const result = validateEntityDateCreated({
-        dateCreated,
+      const createdDate = new Date().toISOString();
+      const result = validateEntityCreatedDate({
+        createdDate,
       } as DocumentModel);
-      expect(result).toBe(dateCreated);
+      expect(result).toBe(createdDate);
     });
 
     it('should throw a conflict exception when the date created is undefined', () => {
       const result = () => {
-        validateEntityDateCreated({
-          dateCreated: undefined,
+        validateEntityCreatedDate({
+          createdDate: undefined,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Date created is undefined');
+      expect(result).toThrow('Date created is required');
     });
   });
 
-  describe('validateEntityDatePublished', () => {
+  describe('validateEntityPublishedDate', () => {
     it('should return the date published from the document', () => {
-      const datePublished = new Date().toISOString();
-      const result = validateEntityDatePublished({
-        datePublished,
+      const publishedDate = new Date().toISOString();
+      const result = validateEntityPublishedDate({
+        publishedDate,
       } as DocumentModel);
-      expect(result).toBe(datePublished);
+      expect(result).toBe(publishedDate);
     });
 
     it('should throw a conflict exception when date published is undefined', () => {
       const result = () => {
-        validateEntityDatePublished({
-          datePublished: undefined,
+        validateEntityPublishedDate({
+          publishedDate: undefined,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Date published is undefined');
+      expect(result).toThrow('Date published is required');
     });
   });
 });

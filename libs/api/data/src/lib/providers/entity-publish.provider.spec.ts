@@ -21,7 +21,7 @@ jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
-import { EntityCreateForFolderProvider } from './entity-create-for-folder.provider';
+import { EntityCreateOneForFolderProvider } from './entity-create-one-for-folder.provider';
 
 describe('entity-publish.provider', () => {
   let entityCreateProvider: EntityCreateProvider;
@@ -44,7 +44,7 @@ describe('entity-publish.provider', () => {
         },
         EntityCreateProvider,
         EntityCreateWatermarkedTypeProvider,
-        EntityCreateForFolderProvider,
+        EntityCreateOneForFolderProvider,
       ],
     }).compile();
 

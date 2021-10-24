@@ -6,19 +6,19 @@ describe('Publish Admin Entity', () => {
 
   it('should return a not found status when called for an invalid entity id', () =>
     cy
-      .publishEntityAdmin(getAuthHeaders(), DUMMY_MONGODB_ID)
+      .publishAdminEntities(getAuthHeaders(), DUMMY_MONGODB_ID, false)
       .its('status')
       .should('equal', 404));
 
-  it('should return an unauthorized status when not logged in', () =>
+  it('should return an unauthorized status when not authenticated', () =>
     cy
-      .publishEntityAdmin({ Authorization: '' }, DUMMY_MONGODB_ID)
+      .publishAdminEntities({ Authorization: '' }, DUMMY_MONGODB_ID, false)
       .its('status')
       .should('equal', 401));
 
-  it('should return an unauthorized message when not logged in', () =>
+  it('should return an unauthorized message when not authenticated', () =>
     cy
-      .publishEntityAdmin({ Authorization: '' }, DUMMY_MONGODB_ID)
+      .publishAdminEntities({ Authorization: '' }, DUMMY_MONGODB_ID, false)
       .its('body.message')
       .should('equal', 'Unauthorized'));
 });

@@ -1,71 +1,78 @@
-/* istanbul ignore file */
 import { from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  Entity,
   EntityType,
   EntityUpdate,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
+  loadCreateEntityForFolder,
   loadCreateImagePostEntity,
+  loadCreateTestEntity,
   loadDocumentModelsArray,
   loadUpdateEntity,
 } from './entity-load-document-model.functions';
 
-export const createEntity$ = (
-  entity: Entity,
+export const createTestEntity$ = (
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel> => {
-  return from(
+): Observable<DocumentModel> =>
+  from(
     new entityModel({
-      ...entity,
+      ...loadCreateTestEntity(),
     }).save()
   );
-};
 
-export const createImagePostEntity$ = (
+export const createEntityForFolder$ = (
   entityType: EntityType,
+  googleDriveFolderId: string,
   watermarkedType: WatermarkedType,
   group: string,
   slug: string,
-  text: string,
+  order: number,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel> => {
-  return from(
+): Observable<DocumentModel> =>
+  from(
     new entityModel({
-      ...loadCreateImagePostEntity(
+      ...loadCreateEntityForFolder(
         entityType,
+        googleDriveFolderId,
         watermarkedType,
         group,
         slug,
-        text
+        order
       ),
     }).save()
   );
-};
+
+export const createImagePostEntity$ = (
+  text: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel> =>
+  from(
+    new entityModel({
+      ...loadCreateImagePostEntity(text),
+    }).save()
+  );
 
 export const updateEntity$ = (
   entityId: string,
   entityUpdate: EntityUpdate,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(
+): Observable<DocumentModel | null> =>
+  from(
     entityModel.findByIdAndUpdate(entityId, {
       ...loadUpdateEntity(entityUpdate),
     })
   );
-};
 
-export const findByIdAndUpdateIsProcessing$ = (
+export const findByIdAndUpdateOrder$ = (
   entityId: string,
-  isProcessing: boolean,
+  order: number,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(entityModel.findByIdAndUpdate(entityId, { isProcessing }));
-};
+): Observable<DocumentModel | null> =>
+  from(entityModel.findByIdAndUpdate(entityId, { order }));
 
 export const findEntityById$ = (
   entityId: string,
@@ -78,8 +85,8 @@ export const findOneEntity$ = (
   group: string,
   slug: string,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(
+): Observable<DocumentModel | null> =>
+  from(
     entityModel.findOne({
       type: entityType,
       watermarkedType,
@@ -87,47 +94,65 @@ export const findOneEntity$ = (
       slug,
     })
   );
-};
 
 export const findAllEntities$ = (
   entityType: EntityType,
   watermarkedType: WatermarkedType,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel[]> => {
-  return from(
+): Observable<DocumentModel[]> =>
+  from(
     entityModel.find({
       type: entityType,
       watermarkedType,
+      isDeleted: false,
     })
   ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
-};
+
+export const findAllEntitiesForType$ = (
+  entityType: EntityType,
+  group: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel[]> =>
+  from(
+    entityModel.find({
+      type: entityType,
+      group,
+      isDeleted: false,
+    })
+  ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
 
 export const findAllEntitiesForGroup$ = (
   entityType: EntityType,
   watermarkedType: WatermarkedType,
   group: string,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel[]> => {
-  return from(
+): Observable<DocumentModel[]> =>
+  from(
     entityModel.find({
       type: entityType,
       watermarkedType,
       group,
+      isDeleted: false,
     })
   ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
-};
 
 export const findAllPublicEntities$ = (
   entityType: EntityType,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel[]> => {
-  return from(
+): Observable<DocumentModel[]> =>
+  from(
     entityModel.find({
       type: entityType,
       isPublic: true,
+      isDeleted: false,
     })
   ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
-};
+
+export const findByIdAndSoftDelete$ = (
+  entityId: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> =>
+  from(entityModel.findByIdAndUpdate(entityId, { isDeleted: true }));
 
 export const findEntityByIdAndDelete$ = (
   entityId: string,

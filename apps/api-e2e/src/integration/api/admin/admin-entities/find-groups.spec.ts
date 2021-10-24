@@ -4,7 +4,7 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
-describe('Find Admin Entities groups', () => {
+describe('Find Admin Entity groups', () => {
   const entityWithGroupTypes = Object.values(EntityWithGroupType);
   const entityWithoutGroupTypes = Object.values(EntityWithoutGroupType);
 
@@ -12,7 +12,7 @@ describe('Find Admin Entities groups', () => {
 
   it('should return application/json', () =>
     cy
-      .findGroupsEntityAdmin(getAuthHeaders(), EntityWithGroupType.Event)
+      .findGroupsAdminEntities(getAuthHeaders(), EntityWithGroupType.Event)
       .its('headers')
       .its('content-type')
       .should('include', 'application/json'));
@@ -20,34 +20,34 @@ describe('Find Admin Entities groups', () => {
   it('should find groups', () =>
     entityWithGroupTypes.forEach((entityWithGroupType) =>
       cy
-        .findGroupsEntityAdmin(getAuthHeaders(), entityWithGroupType)
+        .findGroupsAdminEntities(getAuthHeaders(), entityWithGroupType)
         .its('body.length')
         .should('be.greaterThan', 0)
     ));
 
   it('should return a status of 200 when returning groups', () =>
     cy
-      .findGroupsEntityAdmin(getAuthHeaders(), EntityWithGroupType.Event)
+      .findGroupsAdminEntities(getAuthHeaders(), EntityWithGroupType.Event)
       .its('status')
       .should('equal', 200));
 
-  it('should return a bad request status if called with invalid entity with group type', () =>
+  it('should return a 400 response if called with invalid entity with group type', () =>
     entityWithoutGroupTypes.forEach((entityWithoutGroupType) =>
       cy
-        .findGroupsEntityAdmin(getAuthHeaders(), entityWithoutGroupType)
+        .findGroupsAdminEntities(getAuthHeaders(), entityWithoutGroupType)
         .its('status')
         .should('equal', 400)
     ));
 
-  it('should return an unauthorized status when not logged in', () =>
+  it('should return an unauthorized status when not authenticated', () =>
     cy
-      .findGroupsEntityAdmin({ Authorization: '' }, EntityWithGroupType.Event)
+      .findGroupsAdminEntities({ Authorization: '' }, EntityWithGroupType.Event)
       .its('status')
       .should('equal', 401));
 
-  it('should return an unauthorized message when not logged in', () =>
+  it('should return an unauthorized message when not authenticated', () =>
     cy
-      .findGroupsEntityAdmin({ Authorization: '' }, EntityWithGroupType.Event)
+      .findGroupsAdminEntities({ Authorization: '' }, EntityWithGroupType.Event)
       .its('body.message')
       .should('equal', 'Unauthorized'));
 });

@@ -8,7 +8,7 @@ import {
   ImageState,
   Location,
   LocationDefined,
-  Video,
+  ImageVideo,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -17,10 +17,10 @@ import {
   loadEntityPublic,
 } from './entity-load-public.functions';
 
-jest.mock('../content/content-load.functions', () => ({
-  ...jest.requireActual('../content/content-load.functions'),
+jest.mock('../images/image-load.functions', () => ({
+  ...jest.requireActual('../images/image-load.functions'),
 }));
-import * as contentLoadFunctions from '../content/content-load.functions';
+import * as imageLoadFunctions from '../images/image-load.functions';
 
 describe('entity-load-public.functions', () => {
   const image: Image = {
@@ -39,8 +39,8 @@ describe('entity-load-public.functions', () => {
       faker.lorem.word().toLowerCase(),
       faker.lorem.word().toLowerCase(),
     ].join(','),
-    dateCreated: faker.date.recent().toISOString(),
-    datePublished: faker.date.recent().toISOString(),
+    createdDate: faker.date.recent().toISOString(),
+    publishedDate: faker.date.recent().toISOString(),
     smallResolution: {
       width: faker.datatype.number(),
       height: faker.datatype.number(),
@@ -59,8 +59,8 @@ describe('entity-load-public.functions', () => {
       faker.lorem.word().toLowerCase(),
       faker.lorem.word().toLowerCase(),
     ],
-    dateCreated: faker.date.recent().toISOString(),
-    datePublished: faker.date.recent().toISOString(),
+    createdDate: faker.date.recent().toISOString(),
+    publishedDate: faker.date.recent().toISOString(),
     smallResolution: {
       width: faker.datatype.number(),
       height: faker.datatype.number(),
@@ -68,7 +68,7 @@ describe('entity-load-public.functions', () => {
     isThreeSixty: faker.datatype.boolean(),
   };
 
-  const video: Video = {
+  const video: ImageVideo = {
     id: faker.datatype.uuid(),
     entityId: DUMMY_MONGODB_ID,
     storageId: faker.datatype.uuid(),
@@ -94,8 +94,8 @@ describe('entity-load-public.functions', () => {
     title: faker.lorem.sentence(),
     seoDescription: faker.lorem.sentences(),
     seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
-    dateCreated: faker.date.recent().toISOString(),
-    datePublished: faker.date.recent().toISOString(),
+    createdDate: faker.date.recent().toISOString(),
+    publishedDate: faker.date.recent().toISOString(),
     location,
     starredImageIsCentered: faker.datatype.boolean(),
     text: [
@@ -104,10 +104,8 @@ describe('entity-load-public.functions', () => {
       faker.lorem.paragraph(),
     ],
     images: [{ ...image }, { ...image }],
-    videos: [{ ...video }],
+    imageVideo: [{ ...video }],
     isPublic: faker.datatype.boolean(),
-    isPublished: faker.datatype.boolean(),
-    isProcessing: faker.datatype.boolean(),
   } as DocumentModel;
 
   describe('loadEntityMinimalPublic', () => {
@@ -122,7 +120,7 @@ describe('entity-load-public.functions', () => {
       //expect(result.group).toBe(documentModel.group);
       //expect(result.order).toBe(documentModel.order);
       //expect(result.title).toBe(documentModel.title);
-      //expect(result.dateCreated).toBe(documentModel.dateCreated);
+      //expect(result.createdDate).toBe(documentModel.createdDate);
       //expect(result.hasStarredImage).toBe(true);
       //expect(result.starredImageIsCentered).toBe(
       //  documentModel.starredImageIsCentered
@@ -134,11 +132,11 @@ describe('entity-load-public.functions', () => {
   describe('loadEntityPublic', () => {
     beforeEach(() => {
       jest
-        .spyOn(contentLoadFunctions, 'loadLocation')
+        .spyOn(imageLoadFunctions, 'loadLocation')
         .mockReturnValue({ ...location } as LocationDefined);
 
       jest
-        .spyOn(contentLoadFunctions, 'loadImagePublic')
+        .spyOn(imageLoadFunctions, 'loadImagePublic')
         .mockReturnValue({ ...imagePublic } as ImagePublic);
     });
 
@@ -157,8 +155,8 @@ describe('entity-load-public.functions', () => {
       expect(result.title).toBe(documentModel.title);
       expect(result.seoDescription).toBe(documentModel.seoDescription);
       expect(result.seoKeywords).toEqual(documentModel.seoKeywords);
-      expect(result.dateCreated).toBe(documentModel.dateCreated);
-      expect(result.datePublished).toBe(documentModel.datePublished);
+      expect(result.createdDate).toBe(documentModel.createdDate);
+      expect(result.publishedDate).toBe(documentModel.publishedDate);
       expect(result.location).toEqual(documentModel.location);
       expect(result.text).toEqual(documentModel.text);
       //expect(result.images).toEqual(documentModel.images);
@@ -169,14 +167,14 @@ describe('entity-load-public.functions', () => {
         ...documentModel,
         title: undefined,
         seoDescription: undefined,
-        dateCreated: undefined,
-        datePublished: undefined,
+        createdDate: undefined,
+        publishedDate: undefined,
       } as DocumentModel);
 
       expect(result.title).toBe('');
       expect(result.seoDescription).toBe('');
-      expect(result.dateCreated).toBe('');
-      expect(result.datePublished).toBe('');
+      expect(result.createdDate).toBe('');
+      expect(result.publishedDate).toBe('');
     });
   });
 });

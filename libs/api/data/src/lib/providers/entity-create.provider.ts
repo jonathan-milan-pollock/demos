@@ -12,7 +12,7 @@ import {
   getEntityWithGroupTypeFolderName,
   getEntityWithoutGroupTypeFolderName,
   getEntityWithoutGroupTypeInitialSlug,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared/util';
 import { EntityCreateWatermarkedTypeProvider } from './entity-create-watermarked-type.provider';
 
 @Injectable()

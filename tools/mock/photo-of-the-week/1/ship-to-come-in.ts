@@ -19,8 +19,8 @@ export class ShipToComeIn extends PhotoOfTheWeekDto {
     'Flowers',
     'Summer',
   ];
-  dateCreated = new Date(2019, 5, 12).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 5, 12).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 5, 12).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 5, 12).toISOString().substring(0, 10);
   location = {
     city: 'Northport',
     stateOrProvince: 'Michigan',

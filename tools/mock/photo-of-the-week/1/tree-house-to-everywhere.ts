@@ -21,8 +21,8 @@ export class TreeHouseToEverywhere extends PhotoOfTheWeekDto {
     'Nature',
     'Natural',
   ];
-  dateCreated = new Date(2019, 6, 2).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 6, 2).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 6, 2).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 6, 2).toISOString().substring(0, 10);
   location = {
     city: 'Alexander City',
     stateOrProvince: 'Alabama',

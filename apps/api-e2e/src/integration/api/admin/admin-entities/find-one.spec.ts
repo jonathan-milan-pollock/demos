@@ -1,8 +1,7 @@
 import {
   DUMMY_MONGODB_ID,
-  EntityMinimalAdmin,
+  EntityAdmin,
 } from '@dark-rush-photography/shared/types';
-
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
 describe('Find one Admin Entity', () => {
@@ -10,68 +9,59 @@ describe('Find one Admin Entity', () => {
 
   it('should return application/json', () =>
     cy
-      .createImagePostAdmin(getAuthHeaders(), {
-        text: 'test-image-post-1',
-      })
-      .then((response) => response.body as EntityMinimalAdmin)
-      .then((entityMinimalAdmin) =>
-        cy.findOneEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id)
+      .createTestAdminEntities(getAuthHeaders())
+      .then((response) => response.body as EntityAdmin)
+      .then((entityAdmin) =>
+        cy.findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
       )
       .its('headers')
       .its('content-type')
       .should('include', 'application/json'));
 
-  it('should find a created entity', () =>
-    cy
-      .createImagePostAdmin(getAuthHeaders(), {
-        text: 'test-image-post-1',
-      })
-      .then((response) => response.body as EntityMinimalAdmin)
-      .then((entityMinimalAdmin) =>
-        cy.findOneEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id)
-      )
-      .its('body')
-      .then((body) => body.text[0])
-      .should('include', 'test-image-post-1'));
+  it('should find a created entity', () => {
+    cy.createTestAdminEntities(getAuthHeaders())
+      .then((response) => response.body as EntityAdmin)
+      .then((entityAdmin) => {
+        return cy
+          .findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
+          .its('body')
+          .then((body) => body.id)
+          .should('equal', entityAdmin.id);
+      });
+  });
 
   it('should return a status of 200 when find an entity', () =>
     cy
-      .createImagePostAdmin(getAuthHeaders(), {
-        text: 'test-image-post-1',
-      })
-      .then((response) => response.body as EntityMinimalAdmin)
-      .then((entityMinimalAdmin) =>
-        cy.findOneEntityAdmin(getAuthHeaders(), entityMinimalAdmin.id)
+      .createTestAdminEntities(getAuthHeaders())
+      .then((response) => response.body as EntityAdmin)
+      .then((entityAdmin) =>
+        cy.findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
       )
       .its('status')
       .should('equal', 200));
 
   it('should return a not found request status when cannot find an entity', () =>
     cy
-      .findOneEntityAdmin(getAuthHeaders(), DUMMY_MONGODB_ID)
+      .findOneAdminEntities(getAuthHeaders(), DUMMY_MONGODB_ID)
       .its('status')
       .should('equal', 404));
 
-  it('should return an unauthorized status when not logged in', () =>
+  it('should return an unauthorized status when not authenticated', () =>
     cy
-      .createImagePostAdmin(getAuthHeaders(), {
-        text: 'test-image-post-1',
-      })
-      .then((response) => response.body as EntityMinimalAdmin)
-      .then((entityMinimalAdmin) =>
-        cy.findOneEntityAdmin({ Authorization: '' }, entityMinimalAdmin.id)
+      .createTestAdminEntities(getAuthHeaders())
+      .then((response) => response.body as EntityAdmin)
+      .then((entityAdmin) =>
+        cy.findOneAdminEntities({ Authorization: '' }, entityAdmin.id)
       )
       .its('status')
       .should('equal', 401));
 
-  it('should return an unauthorized message when not logged in', () =>
+  it('should return an unauthorized message when not authenticated', () =>
     cy
-      .createImagePostAdmin(getAuthHeaders(), {
-        text: 'test-image-post-1',
-      })
-      .then((response) => response.body as EntityMinimalAdmin)
-      .then((entityMinimalAdmin) =>
-        cy.findOneEntityAdmin({ Authorization: '' }, entityMinimalAdmin.id)
+      .createTestAdminEntities(getAuthHeaders())
+      .then((response) => response.body as EntityAdmin)
+      .then((entityAdmin) =>
+        cy.findOneAdminEntities({ Authorization: '' }, entityAdmin.id)
       )
       .its('body.message')
       .should('equal', 'Unauthorized'));

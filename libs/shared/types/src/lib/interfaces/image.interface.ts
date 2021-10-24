@@ -7,14 +7,13 @@ export interface Image {
   readonly storageId: string;
   readonly fileName: string;
   readonly state: ImageState;
+  readonly isThreeSixty: boolean;
   readonly order: number;
   readonly isStarred: boolean;
   readonly isLoved: boolean;
   readonly title?: string;
+  readonly createdDate?: string;
   readonly seoDescription?: string;
   readonly seoKeywords?: string;
-  readonly dateCreated?: string;
-  readonly datePublished?: string;
-  readonly smallResolution: Resolution;
-  readonly isThreeSixty: boolean;
+  readonly smallResolution?: Resolution;
 }

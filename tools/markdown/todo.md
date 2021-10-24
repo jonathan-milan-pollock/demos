@@ -37,11 +37,6 @@ https://iptc.org/standards/photo-metadata/quick-guide-to-iptc-photo-metadata-and
 // ReactGA.initialize('UA-111745461-1');
 // TODO: Accessiblity
 
-//a:link { color: blue; } /_ Unvisited links _/
-//a:visited { color: purple; } /_ Visited links _/
-//a:hover { background: yellow; } /_ Hovered links _/
-//a:active { color: red; } /_ Active links _/
-
         <a
           href="https://github.com/nrwl/nx"
           target="_blank"
@@ -83,33 +78,9 @@ TODO: Make note about Auth0 roles and how added to the user
 
 ## source map explorer
 
-export interface Destination {
-readonly id?: string;
-// TODO identifier
-readonly slug: string;
-readonly order: number;
-// metadata
-readonly title?: string;
-readonly description?: string;
-readonly keywords: string[];
-readonly datePublished?: string;
-// location
-readonly location?: Location;
-// display
-readonly starredImageIsCentered: boolean;
-// content
-readonly text: string[];
-readonly images: Image[];
-readonly videos: Video[];
-readonly isPosted: boolean;
-}
-
 Image
 readonly isStarred: boolean; //TODO: Can star 1 for Social Media
 readonly isLoved: boolean; //TODO: Can love 10? for Social Media
-
-Video
-readonly isStarred: boolean; //TODO: Can star 1 for Social Media
 
 ## references
 

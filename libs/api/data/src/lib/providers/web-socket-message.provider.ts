@@ -32,7 +32,7 @@ export class WebSocketMessageProvider {
     this.logger.log('sending message');
     const webSocketClients = [...this.webSocketClients];
     if (webSocketClients.length === 0) {
-      this.logger.log('no clients found');
+      this.logger.log('no web socket clients found');
       return Promise.resolve(undefined);
     }
 

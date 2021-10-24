@@ -12,15 +12,15 @@ describe('Find all Admin Entities for a group', () => {
 
   it('should return application/json', () =>
     cy
-      .findGroupsEntityAdmin(getAuthHeaders(), EntityWithGroupType.Event)
-      .then((response) => {
-        const group = response.body[0];
-        return cy.findAllForGroupEntityAdmin(
+      .findGroupsAdminEntities(getAuthHeaders(), EntityWithGroupType.Event)
+      .then((response) => response.body[0])
+      .then((group) =>
+        cy.findAllForGroupAdminEntities(
           getAuthHeaders(),
           EntityWithGroupType.Event,
           group
-        );
-      })
+        )
+      )
       .its('headers')
       .its('content-type')
       .should('include', 'application/json'));
@@ -28,74 +28,74 @@ describe('Find all Admin Entities for a group', () => {
   it('should find entities with groups', () =>
     entityWithGroupTypes.forEach((entityWithGroupType) =>
       cy
-        .findGroupsEntityAdmin(getAuthHeaders(), entityWithGroupType)
-        .then((response) => {
-          const group = response.body[0];
-          return cy.findAllForGroupEntityAdmin(
+        .findGroupsAdminEntities(getAuthHeaders(), entityWithGroupType)
+        .then((response) => response.body[0])
+        .then((group) =>
+          cy.findAllForGroupAdminEntities(
             getAuthHeaders(),
             entityWithGroupType,
             group
-          );
-        })
+          )
+        )
         .its('body.length')
         .should('be.greaterThan', 0)
     ));
 
   it('should return a status of 200 when finding entities', () =>
     cy
-      .findGroupsEntityAdmin(getAuthHeaders(), EntityWithGroupType.Event)
-      .then((response) => {
-        const group = response.body[0];
-        return cy.findAllForGroupEntityAdmin(
+      .findGroupsAdminEntities(getAuthHeaders(), EntityWithGroupType.Event)
+      .then((response) => response.body[0])
+      .then((group) =>
+        cy.findAllForGroupAdminEntities(
           getAuthHeaders(),
           EntityWithGroupType.Event,
           group
-        );
-      })
+        )
+      )
       .its('status')
       .should('equal', 200));
 
-  it('should return a bad request status if called with invalid entity with group type', () =>
+  it('should return a 400 response if called for an entity without a group', () =>
     entityWithoutGroupTypes.forEach((entityWithoutGroupType) =>
       cy
-        .findGroupsEntityAdmin(getAuthHeaders(), entityWithoutGroupType)
-        .then((response) => {
-          const group = response.body[0];
-          return cy.findAllForGroupEntityAdmin(
+        .findGroupsAdminEntities(getAuthHeaders(), entityWithoutGroupType)
+        .then((response) => response.body[0])
+        .then((group) =>
+          cy.findAllForGroupAdminEntities(
             getAuthHeaders(),
             entityWithoutGroupType,
             group
-          );
-        })
+          )
+        )
         .its('status')
         .should('equal', 400)
     ));
 
-  it('should return an unauthorized status when not logged in', () =>
+  it('should return an unauthorized status when not authenticated', () =>
     cy
-      .findGroupsEntityAdmin(getAuthHeaders(), EntityWithGroupType.Event)
-      .then((response) => {
-        const group = response.body[0];
-        return cy.findAllForGroupEntityAdmin(
+      .findGroupsAdminEntities(getAuthHeaders(), EntityWithGroupType.Event)
+      .then((response) => response.body[0])
+      .then((group) =>
+        cy.findAllForGroupAdminEntities(
           { Authorization: '' },
           EntityWithGroupType.Event,
           group
-        );
-      })
+        )
+      )
       .its('status')
       .should('equal', 401));
 
-  it('should return an unauthorized message when not logged in', () =>
+  it('should return an unauthorized message when not authenticated', () =>
     cy
-      .findGroupsEntityAdmin(getAuthHeaders(), EntityWithGroupType.Event)
-      .then((response) => {
-        const group = response.body[0];
-        return cy.findAllForGroupEntityAdmin(
+      .findGroupsAdminEntities(getAuthHeaders(), EntityWithGroupType.Event)
+      .then((response) => response.body[0])
+      .then((group) =>
+        cy.findAllForGroupAdminEntities(
           { Authorization: '' },
           EntityWithGroupType.Event,
           group
-        );
-      })
+        )
+      )
       .its('body.message')
       .should('equal', 'Unauthorized'));
 });

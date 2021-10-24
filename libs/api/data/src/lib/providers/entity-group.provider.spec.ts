@@ -11,10 +11,10 @@ import { ConfigProvider } from './config.provider';
 import { EntityGroupProvider } from './entity-group.provider';
 import { EntityGroupFindProvider } from './entity-group-find.provider';
 
-jest.mock('@dark-rush-photography/api/util', () => ({
-  ...jest.requireActual('@dark-rush-photography/api/util'),
+jest.mock('@dark-rush-photography/shared/util', () => ({
+  ...jest.requireActual('@dark-rush-photography/shared/util'),
 }));
-import * as apiUtil from '@dark-rush-photography/api/util';
+import * as sharedUtil from '@dark-rush-photography/shared/util';
 
 describe('entity-group.provider', () => {
   let entityGroupProvider: EntityGroupProvider;
@@ -49,7 +49,7 @@ describe('entity-group.provider', () => {
   describe('findGroups$', () => {
     it('should find watermarked and without watermark groups', (done: any) => {
       jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(faker.lorem.word());
 
       const watermarkedGroups = [faker.lorem.word()];
@@ -76,7 +76,7 @@ describe('entity-group.provider', () => {
 
     it('should not have duplicates from google drive', (done: any) => {
       jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(faker.lorem.word());
 
       const sameGroup = faker.lorem.word();
@@ -103,7 +103,7 @@ describe('entity-group.provider', () => {
 
     it('should return an empty array if groups are not found in google drive', (done: any) => {
       jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(faker.lorem.word());
 
       jest

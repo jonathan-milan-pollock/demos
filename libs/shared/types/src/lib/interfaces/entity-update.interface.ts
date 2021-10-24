@@ -1,15 +1,15 @@
 import { Location } from './location.interface';
+import { Resolution } from './resolution.interface';
 
 export interface EntityUpdate {
-  readonly slug: string;
-  readonly order: number;
+  readonly isPublic: boolean;
   readonly title?: string;
+  readonly text?: string;
+  readonly createdDate?: string;
+  readonly publishedDate?: string;
   readonly seoDescription?: string;
   readonly seoKeywords: string[];
-  readonly dateCreated?: string;
-  readonly datePublished?: string;
-  readonly location: Location;
+  readonly location?: Location;
   readonly starredImageIsCentered: boolean;
-  readonly text: string[];
-  readonly isPublic: boolean;
+  readonly tileDimension?: Resolution;
 }

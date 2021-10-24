@@ -9,7 +9,7 @@ import { Document } from '../schema/document.schema';
 import { SitemapLoadProvider } from '../providers/sitemap-load.provider';
 import { SitemapsService } from './sitemaps.service';
 import { SitemapLoadXmlProvider } from '../providers/sitemap-load-xml.provider';
-import { SitemapLoadMaxDatePublishedProvider } from '../providers/sitemap-load-max-date-published.provider';
+import { SitemapLoadMaxPublishedDateProvider } from '../providers/sitemap-load-max-date-published.provider';
 
 describe('sitemaps.service', () => {
   let sitemapsService: SitemapsService;
@@ -26,7 +26,7 @@ describe('sitemaps.service', () => {
         },
         SitemapsService,
         SitemapLoadProvider,
-        SitemapLoadMaxDatePublishedProvider,
+        SitemapLoadMaxPublishedDateProvider,
         SitemapLoadXmlProvider,
       ],
     }).compile();
@@ -46,7 +46,7 @@ describe('sitemaps.service', () => {
         .spyOn(sitemapLoadProvider, 'loadDarkRushPhotographySitemap$')
         .mockReturnValue(of(faker.lorem.lines()));
 
-      sitemapsService.darkRushPhotographySitemap$().subscribe(() => {
+      sitemapsService.loadDarkRushPhotographySitemap$().subscribe(() => {
         expect(mockedLoadDarkRushPhotographySitemap$).toBeCalled();
         done();
       });
@@ -59,7 +59,7 @@ describe('sitemaps.service', () => {
         .spyOn(sitemapLoadProvider, 'loadThirtySevenPhotosSitemap$')
         .mockReturnValue(of(faker.lorem.lines()));
 
-      sitemapsService.thirtySevenPhotosSitemap$().subscribe(() => {
+      sitemapsService.loadThirtySevenPhotosSitemap$().subscribe(() => {
         expect(mockedLoadThirtySevenPhotosSitemap$).toBeCalled();
         done();
       });

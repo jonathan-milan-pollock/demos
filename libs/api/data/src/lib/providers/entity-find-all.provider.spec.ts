@@ -6,7 +6,6 @@ import * as faker from 'faker';
 import { of } from 'rxjs';
 
 import {
-  EntityMinimalAdmin,
   EntityType,
   EntityWithGroupType,
   EntityWithoutGroupType,
@@ -14,10 +13,10 @@ import {
 import { Document, DocumentModel } from '../schema/document.schema';
 import { EntityFindAllProvider } from './entity-find-all.provider';
 
-jest.mock('@dark-rush-photography/api/util', () => ({
-  ...jest.requireActual('@dark-rush-photography/api/util'),
+jest.mock('@dark-rush-photography/shared/util', () => ({
+  ...jest.requireActual('@dark-rush-photography/shared/util'),
 }));
-import * as apiUtil from '@dark-rush-photography/api/util';
+import * as sharedUtil from '@dark-rush-photography/shared/util';
 
 jest.mock('../entities/entity-repository.functions', () => ({
   ...jest.requireActual('../entities/entity-repository.functions'),
@@ -30,7 +29,7 @@ jest.mock('../entities/entity-load-admin.functions', () => ({
 import * as entityLoadAdminFunctions from '../entities/entity-load-admin.functions';
 
 describe('entity-find-all.provider', () => {
-  let entityFindProvider: EntityFindAllProvider;
+  let entityFindAllProvider: EntityFindAllProvider;
 
   beforeEach(async () => {
     class MockDocumentModel {}
@@ -45,7 +44,7 @@ describe('entity-find-all.provider', () => {
       ],
     }).compile();
 
-    entityFindProvider = moduleRef.get<EntityFindAllProvider>(
+    entityFindAllProvider = moduleRef.get<EntityFindAllProvider>(
       EntityFindAllProvider
     );
   });
@@ -54,10 +53,10 @@ describe('entity-find-all.provider', () => {
     jest.clearAllMocks();
   });
 
-  describe('findAll$', () => {
+  describe('findAllEntities$', () => {
     beforeEach(() => {
       jest
-        .spyOn(apiUtil, 'getEntityTypeFromEntityWithoutGroupType')
+        .spyOn(sharedUtil, 'getEntityTypeFromEntityWithoutGroupType')
         .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
     });
 
@@ -81,7 +80,7 @@ describe('entity-find-all.provider', () => {
             ({ slug: documentModel.slug } as EntityMinimalAdmin)
         );
 
-      entityFindProvider
+      entityFindAllProvider
         .findAllEntities$(
           faker.random.arrayElement(Object.values(EntityWithoutGroupType))
         )
@@ -104,7 +103,7 @@ describe('entity-find-all.provider', () => {
         'loadEntityMinimalAdmin'
       );
 
-      entityFindProvider
+      entityFindAllProvider
         .findAllEntities$(
           faker.random.arrayElement(Object.values(EntityWithoutGroupType))
         )
@@ -116,10 +115,10 @@ describe('entity-find-all.provider', () => {
     });
   });
 
-  describe('findAllForGroup$', () => {
+  describe('findAllEntitiesForGroup$', () => {
     beforeEach(() => {
       jest
-        .spyOn(apiUtil, 'getEntityTypeFromEntityWithGroupType')
+        .spyOn(sharedUtil, 'getEntityTypeFromEntityWithGroupType')
         .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
     });
 
@@ -143,7 +142,7 @@ describe('entity-find-all.provider', () => {
             ({ slug: documentModel.slug } as EntityMinimalAdmin)
         );
 
-      entityFindProvider
+      entityFindAllProvider
         .findAllEntitiesForGroup$(
           faker.random.arrayElement(Object.values(EntityWithGroupType)),
           faker.lorem.word()
@@ -157,7 +156,7 @@ describe('entity-find-all.provider', () => {
         });
     });
 
-    it('should be empty if entities are not found for a group', (done: any) => {
+    it('should return an empty array if entities are not found for a group', (done: any) => {
       jest
         .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
         .mockReturnValue(of([]));
@@ -167,7 +166,7 @@ describe('entity-find-all.provider', () => {
         'loadEntityMinimalAdmin'
       );
 
-      entityFindProvider
+      entityFindAllProvider
         .findAllEntitiesForGroup$(
           faker.random.arrayElement(Object.values(EntityWithGroupType)),
           faker.lorem.word()

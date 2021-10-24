@@ -14,13 +14,13 @@ export class SitemapsController {
 
   @Get('dark-rush-photography')
   @ApiOkResponse({ type: String })
-  findDarkRushPhotographySitemap$(): Observable<string> {
-    return this.sitemapsService.darkRushPhotographySitemap$();
+  loadDarkRushPhotographySitemap$(): Observable<string> {
+    return this.sitemapsService.loadDarkRushPhotographySitemap$();
   }
 
-  @Get('37-photos')
+  @Get('thirty-seven-photos')
   @ApiOkResponse({ type: String })
-  findSitemap$(): Observable<string> {
-    return this.sitemapsService.thirtySevenPhotosSitemap$();
+  loadThirtySevenPhotosSitemap$(): Observable<string> {
+    return this.sitemapsService.loadThirtySevenPhotosSitemap$();
   }
 }

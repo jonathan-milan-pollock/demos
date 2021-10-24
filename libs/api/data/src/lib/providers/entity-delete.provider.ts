@@ -9,14 +9,16 @@ import {
   findEntityById$,
   findEntityByIdAndDelete$,
 } from '../entities/entity-repository.functions';
-import { ContentRemoveProvider } from './content-remove.provider';
+import { ImageRemoveAllProvider } from './image-remove-all.provider';
+import { ImageRemoveOneProvider } from './image-remove-one.provider';
 
 @Injectable()
 export class EntityDeleteProvider {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly contentRemoveProvider: ContentRemoveProvider
+    private readonly imageRemoveAllProvider: ImageRemoveAllProvider,
+    private readonly imageRemoveOneProvider: ImageRemoveOneProvider
   ) {}
 
   deleteEntity$(entityId: string): Observable<void> {
@@ -24,9 +26,9 @@ export class EntityDeleteProvider {
       concatMap((documentModel) => {
         if (!documentModel) return of(undefined);
 
-        return this.contentRemoveProvider.removeAllImages$(entityId).pipe(
+        return this.imageRemoveAllProvider.removeAllImages$(entityId).pipe(
           concatMap(() =>
-            this.contentRemoveProvider.removeAllVideos$(entityId)
+            this.imageRemoveOneProvider.removeImageVideo$(entityId)
           ),
           concatMap(() => findEntityByIdAndDelete$(entityId, this.entityModel)),
           map(() => undefined)

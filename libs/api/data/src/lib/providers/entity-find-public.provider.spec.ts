@@ -1,6 +1,6 @@
 import { Image, ImageState } from '@dark-rush-photography/shared/types';
 
-describe('content-load-public.functions', () => {
+describe('image-load-public.functions', () => {
   describe('findPublicImages', () => {
     it('should include images that are public', () => {
       const images: Image[] = [

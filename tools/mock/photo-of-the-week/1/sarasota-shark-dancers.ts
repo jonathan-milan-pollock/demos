@@ -19,8 +19,8 @@ export class SarasotaSharkDancers extends PhotoOfTheWeekDto {
     'Vacation',
     'Jaws',
   ];
-  dateCreated = new Date(2019, 7, 12).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 7, 12).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 7, 12).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 7, 12).toISOString().substring(0, 10);
   location = {
     place: 'Sarasota Ski A Rees Ski Show',
     city: 'Sarasota',

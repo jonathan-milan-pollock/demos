@@ -14,8 +14,8 @@ export class DancingInTheWind extends PhotoOfTheWeekDto {
     'Blue Sky',
     'Puffy Clouds',
   ];
-  dateCreated = new Date(2019, 5, 26).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 5, 26).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 5, 26).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 5, 26).toISOString().substring(0, 10);
   location = { country: 'United States' };
   starredImageIsCenteredIsCentered = false;
 

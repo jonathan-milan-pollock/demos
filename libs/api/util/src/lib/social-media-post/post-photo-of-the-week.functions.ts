@@ -1,24 +1,22 @@
-import { PhotoOfTheWeek } from '@dark-rush-photography/shared/types';
+import { Entity } from '@dark-rush-photography/shared/types';
 
-export const getPhotoOfTheWeekFacebookPost = (
-  photoOfTheWeek: PhotoOfTheWeek
-): string =>
+export const getPhotoOfTheWeekFacebookPost = (photoOfTheWeek: Entity): string =>
   `
     Photo of the Week
     ${photoOfTheWeek.title}
     ${photoOfTheWeek.location}
     https://www.darkrushphotography.com/photo-of-the-week/${photoOfTheWeek.slug}
-    ${photoOfTheWeek.description}
+    ${photoOfTheWeek.seoDescription}
     ${photoOfTheWeek.seoKeywords.join(', ').trimEnd()}
 `;
 
 export const getPhotoOfTheWeekInstagramPost = (
-  photoOfTheWeek: PhotoOfTheWeek
+  photoOfTheWeek: Entity
 ): string =>
   `
     Photo of the Week
     ${photoOfTheWeek.title}
-    ${photoOfTheWeek.description}
+    ${photoOfTheWeek.seoDescription}
     ${photoOfTheWeek.location}
     https://www.darkrushphotography.com/${photoOfTheWeek.slug}
 
@@ -27,13 +25,11 @@ export const getPhotoOfTheWeekInstagramPost = (
     ${photoOfTheWeek.seoKeywords.join('#').trimEnd()}
 `;
 
-export const getPhotoOfTheWeekLinkedInPost = (
-  photoOfTheWeek: PhotoOfTheWeek
-): string =>
+export const getPhotoOfTheWeekLinkedInPost = (photoOfTheWeek: Entity): string =>
   `
     ${photoOfTheWeek.title}
 
-    ${photoOfTheWeek.description}
+    ${photoOfTheWeek.seoDescription}
     More images at: https://www.darkrushphotography.com/events/${
       photoOfTheWeek.slug
     }

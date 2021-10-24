@@ -1,4 +1,5 @@
 import {
+  Entity,
   EntityMinimalPublic,
   EntityPublic,
   EntityType,
@@ -6,39 +7,38 @@ import {
   ImageState,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import {
-  loadImagePublic,
-  loadLocation,
-} from '../content/content-load.functions';
-import { validateStarredImage } from '../content/content-validation.functions';
+import { loadImagePublic } from '../images/image-load.functions';
+import { validateEntityStarredImage } from './entity-field-validation.functions';
 
 export const loadEntityMinimalPublic = (
-  documentModel: DocumentModel
+  entity: Entity
 ): EntityMinimalPublic => {
-  const entityType = documentModel.type;
+  const entityType = entity.type;
+  //TODO:
   const hasStarredImage =
     entityType === EntityType.Destination ||
     entityType === EntityType.Event ||
     entityType === EntityType.PhotoOfTheWeek;
 
-  const publicImages = documentModel.images.filter(
+  const starredImage = hasStarredImage
+    ? loadImagePublic(validateEntityStarredImage(entity))
+    : ({} as ImagePublic);
+
+  //TODO:
+  const publicImages = entity.images.filter(
     (image) => image.state === ImageState.Public
   );
 
-  const starredImage = hasStarredImage
-    ? loadImagePublic(validateStarredImage(publicImages))
-    : ({} as ImagePublic);
-
   return {
     type: entityType,
-    group: documentModel.group,
-    slug: documentModel.slug,
-    order: documentModel.order,
-    title: documentModel.title ?? '',
-    dateCreated: documentModel.dateCreated ?? '',
-    datePublished: documentModel.datePublished ?? '',
+    group: entity.group,
+    slug: entity.slug,
+    order: entity.order,
+    title: entity.title ?? '',
+    createdDate: entity.createdDate ?? '',
+    publishedDate: entity.publishedDate ?? '',
     hasStarredImage,
-    starredImageIsCentered: documentModel.starredImageIsCentered,
+    starredImageIsCentered: entity.starredImageIsCentered,
     starredImage,
   };
 };
@@ -57,9 +57,9 @@ export const loadEntityPublic = (
     title: documentModel.title ?? '',
     seoDescription: documentModel.seoDescription ?? '',
     seoKeywords: documentModel.seoKeywords,
-    dateCreated: documentModel.dateCreated ?? '',
-    datePublished: documentModel.datePublished ?? '',
-    location: loadLocation(documentModel.location),
+    createdDate: documentModel.createdDate ?? '',
+    publishedDate: documentModel.publishedDate ?? '',
+    location: documentModel.location,
     text: documentModel.text,
     images: publicImages.map(loadImagePublic),
   };

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import {
@@ -13,7 +13,7 @@ import {
 import { Model } from 'mongoose';
 
 import {
-  EntityMinimalAdmin,
+  EntityAdmin,
   EntityWithGroupType,
   EntityWithoutGroupType,
   WatermarkedType,
@@ -21,13 +21,13 @@ import {
 import {
   getEntityTypeFromEntityWithGroupType,
   getEntityTypeFromEntityWithoutGroupType,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   findAllEntities$,
   findAllEntitiesForGroup$,
 } from '../entities/entity-repository.functions';
-import { loadEntityMinimalAdmin } from '../entities/entity-load-admin.functions';
+import { loadEntityAdmin } from '../entities/entity-load-admin.functions';
 
 @Injectable()
 export class EntityFindAllProvider {
@@ -38,7 +38,7 @@ export class EntityFindAllProvider {
 
   findAllEntities$(
     entityWithoutGroupType: EntityWithoutGroupType
-  ): Observable<EntityMinimalAdmin[]> {
+  ): Observable<EntityAdmin[]> {
     return combineLatest([
       findAllEntities$(
         getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
@@ -59,8 +59,8 @@ export class EntityFindAllProvider {
         if (documentModels.length === 0) return of([]);
 
         return from(documentModels).pipe(
-          map(loadEntityMinimalAdmin),
-          toArray<EntityMinimalAdmin>()
+          map(loadEntityAdmin),
+          toArray<EntityAdmin>()
         );
       })
     );
@@ -69,7 +69,7 @@ export class EntityFindAllProvider {
   findAllEntitiesForGroup$(
     entityWithGroupType: EntityWithGroupType,
     group: string
-  ): Observable<EntityMinimalAdmin[]> {
+  ): Observable<EntityAdmin[]> {
     return combineLatest([
       findAllEntitiesForGroup$(
         getEntityTypeFromEntityWithGroupType(entityWithGroupType),
@@ -92,8 +92,8 @@ export class EntityFindAllProvider {
         if (documentModels.length === 0) return of([]);
 
         return from(documentModels).pipe(
-          map(loadEntityMinimalAdmin),
-          toArray<EntityMinimalAdmin>()
+          map(loadEntityAdmin),
+          toArray<EntityAdmin>()
         );
       })
     );

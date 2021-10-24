@@ -1,57 +1,57 @@
 import * as fs from 'fs-extra';
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 
-import { Observable, tap, concatMap, map } from 'rxjs';
-import { Model } from 'mongoose';
+import { Observable, tap, concatMap, of, map } from 'rxjs';
 
-import { Image, IMAGE_MIME_TYPE } from '@dark-rush-photography/shared/types';
+import {
+  Entity,
+  Image,
+  IMAGE_MIME_TYPE,
+  WatermarkedType,
+} from '@dark-rush-photography/shared/types';
 import {
   downloadAzureStorageBlobToFile$,
   exifImage$,
+  findExifCreatedDate$,
   getAzureStorageBlobPath,
-  loadImageExif,
+  getExifDateFromIsoDate,
   uploadAzureStorageStreamToBlob$,
 } from '@dark-rush-photography/api/util';
-import { Document, DocumentModel } from '../schema/document.schema';
-import {
-  validateEntitySeoDescription,
-  validateEntitySeoKeywords,
-  validateEntityTitle,
-} from '../entities/entity-field-validation.functions';
-import {
-  validateImageDateCreated,
-  validateImageDatePublished,
-} from '../content/content-field-validation.functions';
+import { loadImageExif } from '../images/image-exif.functions';
 import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ImageExifProvider {
   private readonly logger: Logger;
 
-  constructor(
-    private readonly configProvider: ConfigProvider,
-    @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>
-  ) {
+  constructor(private readonly configProvider: ConfigProvider) {
     this.logger = new Logger(ImageExifProvider.name);
   }
 
-  findExifDate$(): string {
-    return '';
+  findExifCreatedDate$(image: Image): Observable<string> {
+    return downloadAzureStorageBlobToFile$(
+      getAzureStorageBlobPath(image.storageId, image.fileName),
+      image.fileName,
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic
+    ).pipe(
+      concatMap((filePath) => findExifCreatedDate$(filePath)),
+      map(
+        (createdDate) =>
+          createdDate ?? getExifDateFromIsoDate(new Date().toISOString())
+      ),
+      tap((createdDate) =>
+        this.logger.log(
+          `Exif image ${image.fileName} created date is ${createdDate}`
+        )
+      )
+    );
   }
 
-  exifImage$(entity: DocumentModel, image: Image): Observable<string> {
-    validateEntitySeoKeywords(entity);
-    const imageExif = loadImageExif(
-      entity.location,
-      validateImageDateCreated(image),
-      validateImageDatePublished(image),
-      validateEntityTitle(entity),
-      validateEntitySeoDescription(entity),
-      validateEntitySeoKeywords(entity),
-      new Date().getFullYear()
-    );
+  exifImage$(image: Image, entity: Entity): Observable<void> {
+    if (entity.watermarkedType === WatermarkedType.WithoutWatermark)
+      return of(undefined);
+
     return downloadAzureStorageBlobToFile$(
       getAzureStorageBlobPath(image.storageId, image.fileName),
       image.fileName,
@@ -60,7 +60,10 @@ export class ImageExifProvider {
     ).pipe(
       tap(() => this.logger.log(`Exif image ${image.fileName}`)),
       concatMap((filePath) =>
-        exifImage$(filePath, imageExif).pipe(
+        exifImage$(
+          filePath,
+          loadImageExif(image, entity, new Date().getFullYear())
+        ).pipe(
           concatMap(() =>
             uploadAzureStorageStreamToBlob$(
               fs.createReadStream(filePath),
@@ -69,8 +72,7 @@ export class ImageExifProvider {
               this.configProvider.azureStorageConnectionStringPublic,
               this.configProvider.azureStorageBlobContainerNamePublic
             )
-          ),
-          map(() => filePath)
+          )
         )
       )
     );

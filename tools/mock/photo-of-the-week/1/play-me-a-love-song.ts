@@ -14,8 +14,8 @@ export class PlayMeALoveSong extends PhotoOfTheWeekDto {
     'Enjoyment',
     'Mountains',
   ];
-  dateCreated = new Date(2019, 9, 9).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 9, 9).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 9, 9).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 9, 9).toISOString().substring(0, 10);
   location = {
     city: 'Nederland',
     stateOrProvince: 'Colorado',

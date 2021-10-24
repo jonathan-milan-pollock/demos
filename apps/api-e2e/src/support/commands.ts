@@ -19,87 +19,128 @@ declare namespace Cypress {
     deleteTestData(authHeaders: {
       Authorization: string;
     }): Cypress.Chainable<Cypress.Response<any[]>>;
+    deleteTestEntities(authHeaders: {
+      Authorization: string;
+    }): Cypress.Chainable<Cypress.Response<any[]>>;
+    deleteTestCronProcesses(authHeaders: {
+      Authorization: string;
+    }): Cypress.Chainable<Cypress.Response<any[]>>;
+
+    // api admin cron processes
+    findAllAdminCronProcesses(authHeaders: {
+      Authorization: string;
+    }): Cypress.Chainable<Cypress.Response<any[]>>;
+    findOneAdminCronProcesses(
+      authHeaders: {
+        Authorization: string;
+      },
+      key: string
+    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    deleteAdminCronProcesses(
+      authHeaders: {
+        Authorization: string;
+      },
+      key: string
+    ): Cypress.Chainable<Cypress.Response<void>>;
 
     // api admin entities
-    updateEntityAdmin(
+    createTestAdminEntities(authHeaders: {
+      Authorization: string;
+    }): Cypress.Chainable<Cypress.Response<any>>;
+    orderAdminEntities(
+      authHeaders: { Authorization: string },
+      entityWithoutGroupType: string,
+      entityOrders: any
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    orderForGroupAdminEntities(
+      authHeaders: { Authorization: string },
+      entityWithGroupType: string,
+      group: string,
+      entityOrders: any
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    updateAdminEntities(
       authHeaders: { Authorization: string },
       entityId: string,
       entityUpdate: any
     ): Cypress.Chainable<Cypress.Response<void>>;
-    loadNewImagesEntityAdmin(
-      authHeaders: { Authorization: string },
-      entityId: string
-    ): Cypress.Chainable<Cypress.Response<void>>;
-    publishEntityAdmin(
-      authHeaders: { Authorization: string },
-      entityId: string
-    ): Cypress.Chainable<Cypress.Response<void>>;
-    setIsProcessingEntityAdmin(
+    publishAdminEntities(
       authHeaders: { Authorization: string },
       entityId: string,
-      isProcessing: boolean
+      postSocialMedia: boolean
     ): Cypress.Chainable<Cypress.Response<void>>;
-    findGroupsEntityAdmin(
+    findGroupsAdminEntities(
       authHeaders: { Authorization: string },
       entityWithGroupType: string
     ): Cypress.Chainable<Cypress.Response<string[]>>;
-    findAllEntityAdmin(
+    findAllAdminEntities(
       authHeaders: { Authorization: string },
-      entityType: string
+      entityWithoutGroupType: string
     ): Cypress.Chainable<Cypress.Response<any[]>>;
-    findAllForGroupEntityAdmin(
+    findAllForGroupAdminEntities(
       authHeaders: { Authorization: string },
       entityWithGroupType: string,
       group: string
     ): Cypress.Chainable<Cypress.Response<any[]>>;
-    findOneEntityAdmin(
+    findOneAdminEntities(
       authHeaders: { Authorization: string },
       entityId: string
     ): Cypress.Chainable<Cypress.Response<any>>;
-    findIsProcessingEntityAdmin(
-      authHeaders: { Authorization: string },
-      entityId: string
-    ): Cypress.Chainable<Cypress.Response<boolean>>;
-    deleteEntityAdmin(
+    deleteAdminEntities(
       authHeaders: { Authorization: string },
       entityId: string
     ): Cypress.Chainable<Cypress.Response<void>>;
 
-    // api admin image posts
-    uploadImagePostAdmin(
+    // api admin images
+    loadNewImagesAdminEntities(
+      authHeaders: { Authorization: string },
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<void>>;
+
+    addThreeSixtyImageAdmin(
       authHeaders: { Authorization: string },
       entityId: string,
-      text: string
-    ): Promise<any>;
-
-    // api admin images
+      threeSixtyImageAdd: any
+    ): Cypress.Chainable<Cypress.Response<any>>;
     updateImageAdmin(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string,
       imageUpdate: any
-    ): Promise<any>;
-    findAllImagesAdmin(
-      authHeaders: { Authorization: string },
-      entityId: string,
-      state: string
-    ): Promise<any[]>;
-    findOneImageAdmin(
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    selectImageAdmin(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string
-    ): Promise<any>;
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    archiveImageAdmin(
+      authHeaders: { Authorization: string },
+      imageId: string,
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    unarchiveImageAdmin(
+      authHeaders: { Authorization: string },
+      imageId: string,
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
     removeImageAdmin(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string
-    ): Promise<void>;
+    ): Cypress.Chainable<Cypress.Response<void>>;
 
-    // api public about
-    findAllEntitiesPublic(): Promise<string[]>;
-    findOneEntityPublic(): Promise<string[]>;
+    // api public entities
+    findAllPublicEntities(
+      entityType: string
+    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    findOnePublicEntities(
+      entityType: string,
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
 
     // api public sitemap
-    findSitemapPublic(): Promise<string>;
+    loadDarkRushPhotographySitemap(): Cypress.Chainable<
+      Cypress.Response<string>
+    >;
+    loadThirtySevenPhotosSitemap(): Cypress.Chainable<Cypress.Response<string>>;
   }
 }

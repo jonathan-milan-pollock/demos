@@ -17,9 +17,9 @@
 import './commands';
 
 // api admin
+import './commands/api/admin/admin-cron-processes.commands';
 import './commands/api/admin/admin-entities.commands';
 import './commands/api/admin/admin-images.commands';
-import './commands/api/admin/admin-image-posts.commands';
 
 // api public
 import './commands/api/public/entities.commands';

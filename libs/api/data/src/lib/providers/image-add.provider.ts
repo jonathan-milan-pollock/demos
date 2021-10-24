@@ -1,8 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { v4 as uuidv4 } from 'uuid';
-import { concatMap, map, Observable } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 import { Model } from 'mongoose';
 
@@ -15,14 +14,14 @@ import {
 import { getOrderFromGoogleDriveImageFile } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validation.functions';
+import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
 import {
-  loadAddImage,
+  loadNewImage,
   loadAddThreeSixtyImage,
-} from '../content/content-load-document-model.functions';
-import { addImage$ } from '../content/content-repository.functions';
-import { ContentAddBlobProvider } from './content-add-blob.provider';
-import { validateImageWithFileNameNotAlreadyExists } from '../content/content-validation.functions';
+  loadAddImagePostImage,
+} from '../images/image-load-document-model.functions';
+import { addImage$ } from '../images/image-repository.functions';
+import { ImageAddBlobProvider } from './image-add-blob.provider';
 
 @Injectable()
 export class ImageAddProvider {
@@ -31,7 +30,7 @@ export class ImageAddProvider {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly contentAddBlobProvider: ContentAddBlobProvider
+    private readonly imageAddBlobProvider: ImageAddBlobProvider
   ) {
     this.logger = new Logger(ImageAddProvider.name);
   }
@@ -40,62 +39,56 @@ export class ImageAddProvider {
     googleDrive: drive_v3.Drive,
     newImageFile: GoogleDriveFile,
     entityId: string
-  ): Observable<Image> {
+  ): Observable<Image | undefined> {
     this.logger.log(`Adding new image ${newImageFile.name}`);
 
-    const newImage = loadAddImage(
+    const newImage = loadNewImage(
       entityId,
-      uuidv4(),
       newImageFile.name,
-      ImageState.New,
       getOrderFromGoogleDriveImageFile(newImageFile.name)
     );
 
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
-      concatMap((documentModel) =>
-        addImage$(newImage, entityId, documentModel, this.entityModel)
-      ),
-      concatMap(() =>
-        this.contentAddBlobProvider.addNewImageBlob$(
-          googleDrive,
-          newImageFile,
-          newImage
-        )
-      ),
-      map(() => newImage)
+      concatMap((documentModel) => {
+        const existingNewImage = documentModel.images.find(
+          (image) =>
+            image.state === ImageState.New &&
+            image.fileName === newImage.fileName
+        );
+        if (existingNewImage) return of(undefined);
+
+        return addImage$(
+          newImage,
+          entityId,
+          documentModel,
+          this.entityModel
+        ).pipe(
+          concatMap(() =>
+            this.imageAddBlobProvider.addNewImageBlob$(
+              googleDrive,
+              newImageFile,
+              newImage
+            )
+          ),
+          map(() => newImage)
+        );
+      })
     );
   }
 
-  addUploadImage$(
+  addImagePostImage$(
     entityId: string,
-    fileName: string,
     file: Express.Multer.File
   ): Observable<void> {
-    this.logger.log(`Adding upload image ${fileName}`);
-
-    const uploadImage = loadAddImage(
-      entityId,
-      uuidv4(),
-      fileName,
-      ImageState.Selected,
-      0
-    );
-
+    const uploadImage = loadAddImagePostImage(entityId);
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
-      map((documentModel) =>
-        validateImageWithFileNameNotAlreadyExists(
-          fileName,
-          ImageState.Selected,
-          documentModel
-        )
-      ),
       concatMap((documentModel) =>
         addImage$(uploadImage, entityId, documentModel, this.entityModel)
       ),
       concatMap(() =>
-        this.contentAddBlobProvider.addUploadImageBlob$(uploadImage, file)
+        this.imageAddBlobProvider.addUploadImageBlob$(uploadImage, file)
       )
     );
   }

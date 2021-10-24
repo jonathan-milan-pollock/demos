@@ -10,7 +10,7 @@ import { EntityMinimalAdmin } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from '../providers/config.provider';
 import { ImageAddProvider } from '../providers/image-add.provider';
-import { ContentAddBlobProvider } from '../providers/content-add-blob.provider';
+import { ImageAddBlobProvider } from '../providers/image-add-blob.provider';
 import { ImagePostsService } from './image-posts.service';
 
 jest.mock('../entities/entity-repository.functions', () => ({
@@ -44,7 +44,7 @@ describe('image-posts.service', () => {
         },
         ImagePostsService,
         ImageAddProvider,
-        ContentAddBlobProvider,
+        ImageAddBlobProvider,
       ],
     }).compile();
 
@@ -63,7 +63,7 @@ describe('image-posts.service', () => {
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedAddUploadImage$ = jest
-        .spyOn(imageAddProvider, 'addUploadImage$')
+        .spyOn(imageAddProvider, 'addImagePostImage$')
         .mockReturnValue(of(undefined));
 
       jest
@@ -75,11 +75,7 @@ describe('image-posts.service', () => {
         .mockReturnValue({} as EntityMinimalAdmin);
 
       imagePostsService
-        .create$(
-          faker.system.fileName(),
-          faker.lorem.sentence(),
-          {} as Express.Multer.File
-        )
+        .create$(faker.lorem.sentence(), {} as Express.Multer.File)
         .subscribe(() => {
           expect(mockedCreateImagePostEntity$).toBeCalled();
           expect(mockedAddUploadImage$).toBeCalled();
@@ -93,7 +89,7 @@ describe('image-posts.service', () => {
         .mockReturnValue(of({} as DocumentModel));
 
       jest
-        .spyOn(imageAddProvider, 'addUploadImage$')
+        .spyOn(imageAddProvider, 'addImagePostImage$')
         .mockReturnValue(of(undefined));
 
       jest
@@ -106,11 +102,7 @@ describe('image-posts.service', () => {
       );
 
       imagePostsService
-        .create$(
-          faker.system.fileName(),
-          faker.lorem.sentence(),
-          {} as Express.Multer.File
-        )
+        .create$(faker.lorem.sentence(), {} as Express.Multer.File)
         .subscribe({
           next: () => {
             done();

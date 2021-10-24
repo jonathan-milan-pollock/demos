@@ -8,8 +8,8 @@ export class ThanksgivingInAlexanderCity2018 extends EventDto {
     It's beginning to look a lot like Christmas
   `;
   keywords = ['Alexander City', 'Georgia', 'Hometown', 'Christmas'];
-  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
-  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  createdDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  publishedDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     city: 'Alexander City',
     stateOrProvince: 'Alabama',

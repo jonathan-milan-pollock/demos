@@ -9,7 +9,7 @@ import {
   resizeImage$,
 } from '@dark-rush-photography/api/util';
 import { ConfigProvider } from './config.provider';
-import { ContentAddBlobProvider } from './content-add-blob.provider';
+import { ImageAddBlobProvider } from './image-add-blob.provider';
 
 @Injectable()
 export class ImageResizeProvider {
@@ -17,7 +17,7 @@ export class ImageResizeProvider {
 
   constructor(
     private readonly configProvider: ConfigProvider,
-    private readonly contentAddBlobProvider: ContentAddBlobProvider
+    private readonly imageAddBlobProvider: ImageAddBlobProvider
   ) {
     this.logger = new Logger(ImageResizeProvider.name);
   }
@@ -39,7 +39,7 @@ export class ImageResizeProvider {
       concatMap((filePath) =>
         resizeImage$(fileName, filePath, imageDimension).pipe(
           concatMap((resizedImageFilePath) =>
-            this.contentAddBlobProvider
+            this.imageAddBlobProvider
               .addImageDimensionBlob$(
                 storageId,
                 fileName,

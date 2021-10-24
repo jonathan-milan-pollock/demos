@@ -19,8 +19,8 @@ export class YouAlreadyAreHome extends PhotoOfTheWeekDto {
     'Almost Famous',
     'Outdoors',
   ];
-  dateCreated = new Date(2019, 4, 12).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 4, 12).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 4, 12).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 4, 12).toISOString().substring(0, 10);
   location = { place: 'Great Smoky Mountains', country: 'United States' };
   starredImageIsCenteredIsCentered = false;
 

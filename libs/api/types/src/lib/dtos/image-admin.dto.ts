@@ -3,17 +3,15 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
-  IsISO8601,
   IsMongoId,
+  IsOptional,
   IsString,
   IsUUID,
   Min,
-  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { ImageAdmin, ImageState } from '@dark-rush-photography/shared/types';
-import { ResolutionDto } from './resolution.dto';
 
 export class ImageAdminDto implements ImageAdmin {
   @IsUUID()
@@ -31,6 +29,9 @@ export class ImageAdminDto implements ImageAdmin {
   @IsEnum(ImageState)
   state!: ImageState;
 
+  @IsBoolean()
+  isThreeSixty!: boolean;
+
   @IsInt()
   @Min(0)
   order!: number;
@@ -42,25 +43,14 @@ export class ImageAdminDto implements ImageAdmin {
   isLoved!: boolean;
 
   @IsString()
-  title!: string;
+  @IsOptional()
+  title?: string;
 
   @IsString()
-  seoDescription!: string;
+  @IsOptional()
+  seoDescription?: string;
 
   @IsArray()
   @Type(() => String)
   seoKeywords: string[] = [];
-
-  @IsISO8601()
-  dateCreated!: string;
-
-  @IsISO8601()
-  datePublished!: string;
-
-  @ValidateNested()
-  @Type(() => ResolutionDto)
-  smallResolution!: ResolutionDto;
-
-  @IsBoolean()
-  isThreeSixty!: boolean;
 }

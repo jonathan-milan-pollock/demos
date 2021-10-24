@@ -9,9 +9,9 @@ import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { EntityDeleteProvider } from './entity-delete.provider';
-import { ContentRemoveProvider } from './content-remove.provider';
-import { ContentRemoveOneProvider } from './content-remove-one.provider';
-import { ContentDeleteBlobsProvider } from './content-delete-blobs.provider';
+import { ImageRemoveAllProvider } from './image-remove.provider';
+import { ImageRemoveOneProvider } from './image-remove-one.provider';
+import { ImageDeleteBlobsProvider } from './image-delete-blobs.provider';
 
 jest.mock('../entities/entity-repository.functions', () => ({
   ...jest.requireActual('../entities/entity-repository.functions'),
@@ -20,7 +20,8 @@ import * as entityRepositoryFunctions from '../entities/entity-repository.functi
 
 describe('entity-delete.provider', () => {
   let entityDeleteProvider: EntityDeleteProvider;
-  let contentRemoveProvider: ContentRemoveProvider;
+  let imageRemoveProvider: ImageRemoveAllProvider;
+  let imageRemoveOneProvider: ImageRemoveOneProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {}
@@ -38,16 +39,19 @@ describe('entity-delete.provider', () => {
           useValue: new MockDocumentModel(),
         },
         EntityDeleteProvider,
-        ContentRemoveProvider,
-        ContentRemoveOneProvider,
-        ContentDeleteBlobsProvider,
+        ImageRemoveAllProvider,
+        ImageRemoveOneProvider,
+        ImageDeleteBlobsProvider,
       ],
     }).compile();
 
     entityDeleteProvider =
       moduleRef.get<EntityDeleteProvider>(EntityDeleteProvider);
-    contentRemoveProvider = moduleRef.get<ContentRemoveProvider>(
-      ContentRemoveProvider
+    imageRemoveProvider = moduleRef.get<ImageRemoveAllProvider>(
+      ImageRemoveAllProvider
+    );
+    imageRemoveOneProvider = moduleRef.get<ImageRemoveOneProvider>(
+      ImageRemoveOneProvider
     );
   });
 
@@ -62,11 +66,11 @@ describe('entity-delete.provider', () => {
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedRemoveAllImages$ = jest
-        .spyOn(contentRemoveProvider, 'removeAllImages$')
+        .spyOn(imageRemoveProvider, 'removeAllImages$')
         .mockReturnValue(of(undefined));
 
-      const mockedRemoveAllVideos$ = jest
-        .spyOn(contentRemoveProvider, 'removeAllVideos$')
+      const mockedRemoveImageVideo$ = jest
+        .spyOn(imageRemoveOneProvider, 'removeImageVideo$')
         .mockReturnValue(of(undefined));
 
       const mockedFindEntityByIdAndDelete = jest
@@ -75,7 +79,7 @@ describe('entity-delete.provider', () => {
 
       entityDeleteProvider.deleteEntity$(DUMMY_MONGODB_ID).subscribe(() => {
         expect(mockedRemoveAllImages$).toHaveBeenCalled();
-        expect(mockedRemoveAllVideos$).toHaveBeenCalled();
+        expect(mockedRemoveImageVideo$).toHaveBeenCalled();
         expect(mockedFindEntityByIdAndDelete).toHaveBeenCalled();
         done();
       });
@@ -87,14 +91,13 @@ describe('entity-delete.provider', () => {
         .mockReturnValue(of(null));
 
       const mockedRemoveAllImages$ = jest.spyOn(
-        contentRemoveProvider,
+        imageRemoveProvider,
         'removeAllImages$'
       );
 
-      const mockedRemoveAllVideos$ = jest.spyOn(
-        contentRemoveProvider,
-        'removeAllVideos$'
-      );
+      const mockedRemoveImageVideo$ = jest
+        .spyOn(imageRemoveOneProvider, 'removeImageVideo$')
+        .mockReturnValue(of(undefined));
 
       const mockedFindEntityByIdAndDelete = jest.spyOn(
         entityRepositoryFunctions,
@@ -103,7 +106,7 @@ describe('entity-delete.provider', () => {
 
       entityDeleteProvider.deleteEntity$(DUMMY_MONGODB_ID).subscribe(() => {
         expect(mockedRemoveAllImages$).not.toHaveBeenCalled();
-        expect(mockedRemoveAllVideos$).not.toHaveBeenCalled();
+        expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
         expect(mockedFindEntityByIdAndDelete).not.toHaveBeenCalled();
         done();
       });

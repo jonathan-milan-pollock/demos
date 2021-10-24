@@ -16,8 +16,8 @@ export class YinAndYangOfArt extends PhotoOfTheWeekDto {
     'Pathway',
     'Beauty',
   ];
-  dateCreated = new Date(2019, 3, 28).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 3, 28).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 3, 28).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 3, 28).toISOString().substring(0, 10);
   location = {
     place: 'The Tunnel to Nowhere',
     city: 'Bryson City',

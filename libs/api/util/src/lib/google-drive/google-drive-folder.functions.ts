@@ -1,9 +1,9 @@
-/* istanbul ignore file */
+import { ConflictException } from '@nestjs/common';
+
 import { from, map, Observable } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import { GoogleDriveFolder } from '@dark-rush-photography/shared/types';
-import { findGoogleDriveFolderByNameResponse } from './google-drive-folder-response.functions';
 
 export const findGoogleDriveFolders$ = (
   googleDrive: drive_v3.Drive,
@@ -11,7 +11,7 @@ export const findGoogleDriveFolders$ = (
 ): Observable<GoogleDriveFolder[]> =>
   from(
     googleDrive.files.list({
-      q: `'${parentFolderId}' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'`,
+      q: `'${parentFolderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
       fields: 'files(id, name)',
       pageSize: 1_000,
     })
@@ -35,18 +35,21 @@ export const findGoogleDriveFolderByName$ = (
 ): Observable<GoogleDriveFolder | undefined> =>
   from(
     googleDrive.files.list({
-      q: `'${parentFolderId}' in parents and trashed = false and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder'`,
+      q: `name = '${folderName}' and '${parentFolderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
       fields: 'files(id, name)',
     })
   ).pipe(
-    map((response) =>
-      findGoogleDriveFolderByNameResponse(
-        folderName,
-        response as {
-          data?: {
-            files?: GoogleDriveFolder[];
-          };
-        }
-      )
-    )
+    map((response) => {
+      const folders = response.data.files as GoogleDriveFolder[];
+      if (folders.length === 1) {
+        return folders[0];
+      }
+
+      if (folders.length > 1) {
+        throw new ConflictException(
+          `Found more that one Google Drive folder with name ${folderName}`
+        );
+      }
+      return undefined;
+    })
   );

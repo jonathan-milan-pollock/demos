@@ -5,20 +5,18 @@ import {
   IsInt,
   IsISO8601,
   IsMongoId,
+  IsOptional,
   IsString,
   Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import {
-  EntityAdmin,
-  EntityType,
-  WatermarkedType,
-} from '@dark-rush-photography/shared/types';
+import { EntityAdmin, EntityType } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 import { ImageAdminDto } from './image-admin.dto';
-import { VideoDto } from './video.dto';
+import { ImageVideoDto } from './image-video.dto';
+import { ResolutionDto } from './resolution.dto';
 
 export class EntityAdminDto implements EntityAdmin {
   @IsEnum(EntityType)
@@ -26,9 +24,6 @@ export class EntityAdminDto implements EntityAdmin {
 
   @IsMongoId()
   id!: string;
-
-  @IsEnum(WatermarkedType)
-  watermarkedType!: WatermarkedType;
 
   @IsString()
   group!: string;
@@ -40,49 +35,56 @@ export class EntityAdminDto implements EntityAdmin {
   @Min(0)
   order!: number;
 
-  @IsString()
-  title!: string;
+  @IsBoolean()
+  isPublic!: boolean;
 
   @IsString()
-  seoDescription!: string;
+  @IsOptional()
+  title?: string;
+
+  @IsString()
+  @IsOptional()
+  text?: string;
+
+  @IsISO8601()
+  @IsOptional()
+  createdDate?: string;
+
+  @IsISO8601()
+  @IsOptional()
+  publishedDate?: string;
+
+  @IsString()
+  @IsOptional()
+  seoDescription?: string;
 
   @IsArray()
   @Type(() => String)
   seoKeywords: string[] = [];
 
-  @IsISO8601()
-  dateCreated!: string;
-
-  @IsISO8601()
-  datePublished!: string;
-
   @ValidateNested()
   @Type(() => LocationDto)
-  location!: LocationDto;
+  @IsOptional()
+  location?: LocationDto;
+
+  @IsBoolean()
+  hasStarredImage!: boolean;
 
   @IsBoolean()
   starredImageIsCentered!: boolean;
 
-  @IsArray()
-  @Type(() => String)
-  text: string[] = [];
-
-  @IsArray()
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => ImageAdminDto)
-  images: ImageAdminDto[] = [];
+  @IsOptional()
+  starredImage?: ImageAdminDto;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => VideoDto)
-  videos: VideoDto[] = [];
+  @ValidateNested()
+  @Type(() => ImageVideoDto)
+  @IsOptional()
+  imageVideo?: ImageVideoDto;
 
-  @IsBoolean()
-  isPublic!: boolean;
-
-  @IsBoolean()
-  isPublished!: boolean;
-
-  @IsBoolean()
-  isProcessing!: boolean;
+  @ValidateNested()
+  @Type(() => ResolutionDto)
+  @IsOptional()
+  tileDimension?: ResolutionDto;
 }

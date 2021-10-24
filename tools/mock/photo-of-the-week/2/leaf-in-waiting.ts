@@ -6,8 +6,8 @@ export class LeafInWaiting extends PhotoOfTheWeekDto {
   title = 'Leaf in Waiting';
   description = `I'm a leaf waiting for you`;
   keywords = ['Alexander City', 'Alabama', 'Maple Leaf', 'Colorful'];
-  dateCreated = new Date(2020, 3, 21).toISOString().substring(0, 10);
-  datePublished = new Date(2020, 3, 21).toISOString().substring(0, 10);
+  createdDate = new Date(2020, 3, 21).toISOString().substring(0, 10);
+  publishedDate = new Date(2020, 3, 21).toISOString().substring(0, 10);
   location = {
     city: 'Alexander City',
     stateOrProvince: 'Alabama',

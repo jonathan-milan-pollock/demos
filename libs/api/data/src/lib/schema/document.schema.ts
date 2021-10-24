@@ -8,12 +8,14 @@ import {
   EntityType,
   Image,
   Location,
-  Video,
+  ImageVideo,
   WatermarkedType,
+  Resolution,
 } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
-import { videoSchema } from './video.schema';
+import { imageVideoSchema } from './image-video.schema';
+import { resolutionSchema } from './resolution.schema';
 
 export type DocumentModel = Document & mongoose.Document;
 
@@ -50,8 +52,20 @@ export class Document implements Entity {
   @Prop({ type: Number, required: true, default: 0 })
   order!: number;
 
+  @Prop({ type: Boolean, required: true, default: false })
+  isPublic!: boolean;
+
   @Prop({ type: String, required: false })
   title?: string;
+
+  @Prop({ type: String, required: false })
+  text?: string;
+
+  @Prop({ type: String, required: false })
+  createdDate?: string;
+
+  @Prop({ type: String, required: false })
+  publishedDate?: string;
 
   @Prop({ type: String, required: false })
   seoDescription?: string;
@@ -59,23 +73,14 @@ export class Document implements Entity {
   @Prop({ type: [String], required: true })
   seoKeywords!: string[];
 
-  @Prop({ type: String, required: false })
-  dateCreated?: string;
-
-  @Prop({ type: String, required: false })
-  datePublished?: string;
-
   @Prop({
     type: locationSchema,
-    required: true,
+    required: false,
   })
-  location!: Location;
+  location?: Location;
 
   @Prop({ type: Boolean, required: true, default: false })
   starredImageIsCentered!: boolean;
-
-  @Prop({ type: [String], required: true })
-  text!: string[];
 
   @Prop({
     type: [imageSchema],
@@ -84,19 +89,19 @@ export class Document implements Entity {
   images!: Image[];
 
   @Prop({
-    type: [videoSchema],
-    required: true,
+    type: imageVideoSchema,
+    required: false,
   })
-  videos!: Video[];
+  imageVideo?: ImageVideo;
+
+  @Prop({
+    type: resolutionSchema,
+    required: false,
+  })
+  tileDimension?: Resolution;
 
   @Prop({ type: Boolean, required: true, default: false })
-  isPublic!: boolean;
-
-  @Prop({ type: Boolean, required: true, default: false })
-  isPublished!: boolean;
-
-  @Prop({ type: Boolean, required: true, default: false })
-  isProcessing!: boolean;
+  isDeleted!: boolean;
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);

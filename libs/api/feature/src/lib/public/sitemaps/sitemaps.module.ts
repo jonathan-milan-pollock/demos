@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  SitemapLoadMaxDatePublishedProvider,
+  SitemapLoadMaxPublishedDateProvider,
   SitemapLoadProvider,
   SitemapLoadXmlProvider,
   SitemapsService,
@@ -21,7 +21,7 @@ import { SitemapsController } from './sitemaps.controller';
   providers: [
     SitemapsService,
     SitemapLoadProvider,
-    SitemapLoadMaxDatePublishedProvider,
+    SitemapLoadMaxPublishedDateProvider,
     SitemapLoadXmlProvider,
   ],
 })

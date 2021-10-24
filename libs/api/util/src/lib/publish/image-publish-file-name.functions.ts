@@ -1,13 +1,12 @@
 import * as path from 'path';
 
-export const getPublishFileName = (
+export const getPublishImageFileName = (
   slug: string,
-  order: number,
-  imageFileName: string,
-  renameWithSlug: boolean
+  currentImageFileName: string
 ): string => {
-  if (!renameWithSlug) return imageFileName;
-
-  const parsedImageFileName = path.parse(imageFileName);
-  return `${slug}-${order}${parsedImageFileName.ext}`;
+  const parsedImageFileName = path.parse(currentImageFileName);
+  return `${slug}${parsedImageFileName.ext}`;
 };
+
+export const getPublishImageVideoFileName = (slug: string): string =>
+  `${slug}.mp4`;

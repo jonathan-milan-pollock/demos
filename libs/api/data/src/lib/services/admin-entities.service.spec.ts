@@ -10,7 +10,6 @@ import { drive_v3 } from 'googleapis';
 import {
   DUMMY_MONGODB_ID,
   EntityAdmin,
-  EntityMinimalAdmin,
   EntityUpdate,
   EntityWithGroupType,
   EntityWithoutGroupType,
@@ -21,21 +20,26 @@ import { EntityGroupProvider } from '../providers/entity-group.provider';
 import { EntityGroupFindProvider } from '../providers/entity-group-find.provider';
 import { EntityCreateProvider } from '../providers/entity-create.provider';
 import { EntityCreateWatermarkedTypeProvider } from '../providers/entity-create-watermarked-type.provider';
-import { EntityCreateForFolderProvider } from '../providers/entity-create-for-folder.provider';
+import { EntityCreateAllForFolderProvider } from '../providers/entity-create-all-for-folder.provider';
+import { EntityCreateOneForFolderProvider } from '../providers/entity-create-one-for-folder.provider';
 import { EntityFindAllProvider } from '../providers/entity-find-all.provider';
-import { EntityLoadNewImagesProvider } from '../providers/entity-load-new-images.provider';
-import { EntityPublishProvider } from '../providers/entity-publish.provider';
-import { EntityDeleteProvider } from '../providers/entity-delete.provider';
-import { ImageFolderProvider } from '../providers/image-folder.provider';
+import { ImageFindFolderProvider } from '../providers/image-find-folder.provider';
 import { ImageAddProvider } from '../providers/image-add.provider';
-import { ImageProcessProvider } from '../providers/image-process.provider';
-import { ImageTinifyProvider } from '../providers/image-tinify.provider';
+import { ImageAddBlobProvider } from '../providers/image-add-blob.provider';
+import { ImageProcessOneProvider } from '../providers/image-process-one.provider';
 import { ImageExifProvider } from '../providers/image-exif.provider';
+import { ImageTinifyProvider } from '../providers/image-tinify.provider';
 import { ImageResizeProvider } from '../providers/image-resize.provider';
-import { ContentAddBlobProvider } from '../providers/content-add-blob.provider';
-import { ContentRemoveProvider } from '../providers/content-remove.provider';
-import { ContentRemoveOneProvider } from '../providers/content-remove-one.provider';
-import { ContentDeleteBlobsProvider } from '../providers/content-delete-blobs.provider';
+import { ImageRemoveOneProvider } from '../providers/image-remove-one.provider';
+import { ImageDeleteBlobsProvider } from '../providers/image-delete-blobs.provider';
+import { EntityPublishProvider } from '../providers/entity-publish.provider';
+import { ImagePublishProvider } from '../providers/image-publish.provider';
+import { SocialMediaPostProvider } from '../providers/social-media-post.provider';
+import { ImageVideoEmailProvider } from '../providers/image-video-email.provider';
+import { ImageProcessAllProvider } from '../providers/image-process-all.provider';
+import { EntityOrderProvider } from '../providers/entity-order.provider';
+import { CronProcessStartProvider } from '../providers/cron-process-start.provider';
+
 import { AdminEntitiesService } from './admin-entities.service';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
@@ -58,9 +62,8 @@ describe('admin-entities.service', () => {
   let entityGroupProvider: EntityGroupProvider;
   let entityCreateProvider: EntityCreateProvider;
   let entityFindAllProvider: EntityFindAllProvider;
-  let entityLoadNewImagesProvider: EntityLoadNewImagesProvider;
-  let entityPublishProvider: EntityPublishProvider;
-  let entityDeleteProvider: EntityDeleteProvider;
+  let entityOrderProvider: EntityOrderProvider;
+  let cronProcessStartProvider: CronProcessStartProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {
@@ -89,21 +92,23 @@ describe('admin-entities.service', () => {
         EntityGroupFindProvider,
         EntityCreateProvider,
         EntityCreateWatermarkedTypeProvider,
-        EntityCreateForFolderProvider,
+        EntityCreateAllForFolderProvider,
+        EntityCreateOneForFolderProvider,
         EntityFindAllProvider,
-        EntityLoadNewImagesProvider,
         EntityPublishProvider,
-        EntityDeleteProvider,
-        ImageFolderProvider,
+        ImageFindFolderProvider,
         ImageAddProvider,
-        ImageProcessProvider,
+        ImageAddBlobProvider,
+        ImageProcessAllProvider,
+        ImageProcessOneProvider,
         ImageTinifyProvider,
         ImageExifProvider,
         ImageResizeProvider,
-        ContentAddBlobProvider,
-        ContentRemoveProvider,
-        ContentRemoveOneProvider,
-        ContentDeleteBlobsProvider,
+        ImageRemoveOneProvider,
+        ImageDeleteBlobsProvider,
+        ImagePublishProvider,
+        ImageVideoEmailProvider,
+        SocialMediaPostProvider,
       ],
     }).compile();
 
@@ -116,12 +121,8 @@ describe('admin-entities.service', () => {
     entityFindAllProvider = moduleRef.get<EntityFindAllProvider>(
       EntityFindAllProvider
     );
-    entityLoadNewImagesProvider = moduleRef.get<EntityLoadNewImagesProvider>(
-      EntityLoadNewImagesProvider
-    );
-    entityPublishProvider = moduleRef.get<EntityPublishProvider>(
-      EntityPublishProvider
-    );
+    entityOrderProvider =
+      moduleRef.get<EntityOrderProvider>(EntityOrderProvider);
     entityDeleteProvider =
       moduleRef.get<EntityDeleteProvider>(EntityDeleteProvider);
   });
@@ -328,7 +329,7 @@ describe('admin-entities.service', () => {
   });
 
   describe('findAll$', () => {
-    it('should create and find all', (done: any) => {
+    it('should find all entities', (done: any) => {
       jest
         .spyOn(apiUtils, 'getGoogleDrive')
         .mockReturnValue({} as drive_v3.Drive);
@@ -354,7 +355,7 @@ describe('admin-entities.service', () => {
   });
 
   describe('findAllForGroup$', () => {
-    it('should create and find all for a group', (done: any) => {
+    it('should find all entities for a group', (done: any) => {
       jest
         .spyOn(apiUtils, 'getGoogleDrive')
         .mockReturnValue({} as drive_v3.Drive);

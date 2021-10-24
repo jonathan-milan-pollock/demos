@@ -16,7 +16,7 @@ import {
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { ImageAddProvider } from './image-add.provider';
-import { ContentAddBlobProvider } from './content-add-blob.provider';
+import { ImageAddBlobProvider } from './image-add-blob.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
@@ -31,21 +31,21 @@ import * as entityRepositoryFunctions from '../entities/entity-repository.functi
 jest.mock('../entities/entity-validation.functions', () => ({
   ...jest.requireActual('../entities/entity-validation.functions'),
 }));
-import * as entityValidationFunctions from '../entities/entity-validation.functions';
+import * as entityValidationFunctions from '../entities/entity-validate-document-model.functions';
 
-jest.mock('../content/content-load-document-model.functions', () => ({
-  ...jest.requireActual('../content/content-load-document-model.functions'),
+jest.mock('../images/image-load-document-model.functions', () => ({
+  ...jest.requireActual('../images/image-load-document-model.functions'),
 }));
-import * as contentLoadDocumentModelFunctions from '../content/content-load-document-model.functions';
+import * as imageLoadDocumentModelFunctions from '../images/image-load-document-model.functions';
 
-jest.mock('../content/content-repository.functions', () => ({
-  ...jest.requireActual('../content/content-repository.functions'),
+jest.mock('../images/image-repository.functions', () => ({
+  ...jest.requireActual('../images/image-repository.functions'),
 }));
-import * as contentRepositoryFunctions from '../content/content-repository.functions';
+import * as imageRepositoryFunctions from '../images/image-repository.functions';
 
 describe('image-add.provider', () => {
   let imageAddProvider: ImageAddProvider;
-  let contentAddBlobProvider: ContentAddBlobProvider;
+  let imageAddBlobProvider: ImageAddBlobProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {
@@ -70,14 +70,13 @@ describe('image-add.provider', () => {
           useValue: new MockDocumentModel(),
         },
         ImageAddProvider,
-        ContentAddBlobProvider,
+        ImageAddBlobProvider,
       ],
     }).compile();
 
     imageAddProvider = moduleRef.get<ImageAddProvider>(ImageAddProvider);
-    contentAddBlobProvider = moduleRef.get<ContentAddBlobProvider>(
-      ContentAddBlobProvider
-    );
+    imageAddBlobProvider =
+      moduleRef.get<ImageAddBlobProvider>(ImageAddBlobProvider);
   });
 
   afterEach(() => {
@@ -91,7 +90,7 @@ describe('image-add.provider', () => {
         .mockReturnValue(faker.datatype.number());
 
       jest
-        .spyOn(contentLoadDocumentModelFunctions, 'loadAddImage')
+        .spyOn(imageLoadDocumentModelFunctions, 'loadAddImage')
         .mockReturnValue({} as Image);
 
       jest
@@ -103,11 +102,11 @@ describe('image-add.provider', () => {
         .mockReturnValue({} as DocumentModel);
 
       const mockedAddImage$ = jest
-        .spyOn(contentRepositoryFunctions, 'addImage$')
+        .spyOn(imageRepositoryFunctions, 'addImage$')
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedAddNewImageBlob$ = jest
-        .spyOn(contentAddBlobProvider, 'addNewImageBlob$')
+        .spyOn(imageAddBlobProvider, 'addNewImageBlob$')
         .mockReturnValue(of(undefined));
 
       imageAddProvider
@@ -131,7 +130,7 @@ describe('image-add.provider', () => {
         .mockReturnValue(faker.datatype.number());
 
       jest
-        .spyOn(contentLoadDocumentModelFunctions, 'loadAddImage')
+        .spyOn(imageLoadDocumentModelFunctions, 'loadAddImage')
         .mockReturnValue({} as Image);
 
       jest
@@ -145,12 +144,12 @@ describe('image-add.provider', () => {
         });
 
       const mockedAddImageToEntity$ = jest.spyOn(
-        contentRepositoryFunctions,
+        imageRepositoryFunctions,
         'addImage$'
       );
 
       const mockedAddNewImageBlob$ = jest.spyOn(
-        contentAddBlobProvider,
+        imageAddBlobProvider,
         'addNewImageBlob$'
       );
 

@@ -1,17 +1,11 @@
 import { Observable, of } from 'rxjs';
 
-import {
-  VideoArtistExif,
-  VideoExif,
-} from '@dark-rush-photography/shared/types';
+import { VideoExif } from '@dark-rush-photography/shared/types';
 
-export const exifVideo$ = (
-  videoArtistExif: VideoArtistExif,
-  videoExif: VideoExif
-): Observable<string> => {
-  let videoExifCommand = `-metadata author="${videoArtistExif.author}"`;
-  videoExifCommand += ` -metadata year="${videoArtistExif.year}"`;
-  videoExifCommand += ` -metadata copyright="${videoArtistExif.copyright}"`;
+export const exifVideo$ = (videoExif: VideoExif): Observable<string> => {
+  let videoExifCommand = `-metadata author="${videoExif.author}"`;
+  videoExifCommand += ` -metadata year="${videoExif.year}"`;
+  videoExifCommand += ` -metadata copyright="${videoExif.copyright}"`;
 
   if (videoExif.title)
     videoExifCommand += ` -metadata title="${videoExif.title}"`;

@@ -2,31 +2,32 @@ import * as path from 'path';
 
 import * as faker from 'faker';
 
-import { getPublishFileName } from './image-publish-file-name.functions';
+import {
+  getPublishImageFileName,
+  getPublishImageVideoFileName,
+} from './image-publish-file-name.functions';
 
 describe('image-publish-file-name.functions', () => {
-  describe('getPublishFileName', () => {
-    it('should return a file name with slug and order when renaming', () => {
+  describe('getPublishImageFileName', () => {
+    it('should return publish image file name with slug', () => {
       const slug = faker.lorem.word();
-      const order = faker.datatype.number();
       const extension = '.jpg';
-
-      const imageFileName = `${
+      const currentImageFileName = `${
         path.parse(faker.system.fileName()).name
-      }-${order}${extension}`;
-      const result = getPublishFileName(slug, order, imageFileName, true);
-      expect(result).toBe(`${slug}-${order}${extension}`);
-    });
+      }${extension}`;
 
-    it('should return the file name when not renaming', () => {
-      const imageFileName = faker.system.fileName();
-      const result = getPublishFileName(
-        faker.lorem.word(),
-        faker.datatype.number(),
-        imageFileName,
-        false
-      );
-      expect(result).toBe(imageFileName);
+      const result = getPublishImageFileName(slug, currentImageFileName);
+      expect(result).toBe(`${slug}${extension}`);
+    });
+  });
+
+  describe('getPublishImageVideoFileName', () => {
+    it('should return public image video file name with slug', () => {
+      const slug = faker.lorem.word();
+      const extension = '.mp4';
+
+      const result = getPublishImageVideoFileName(slug);
+      expect(result).toBe(`${slug}${extension}`);
     });
   });
 });

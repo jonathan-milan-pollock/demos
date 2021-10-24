@@ -7,4 +7,5 @@ export enum EntityWithoutGroupType {
   ImageVideo = 'ImageVideo',
   Review = 'Review',
   ReviewMedia = 'ReviewMedia',
+  Test = 'Test',
 }

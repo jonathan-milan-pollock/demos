@@ -1,42 +1,53 @@
 import {
   EntityAdmin,
-  EntityMinimalAdmin,
+  EntityType,
+  Image,
+  ImageState,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
-import {
-  loadImageAdmin,
-  loadLocation,
-  loadVideo,
-} from '../content/content-load.functions';
+import { loadImageAdmin } from '../images/image-load.functions';
 
-export const loadEntityMinimalAdmin = (
-  documentModel: DocumentModel
-): EntityMinimalAdmin => ({
-  type: documentModel.type,
-  id: documentModel._id,
-  watermarkedType: documentModel.watermarkedType,
-  group: documentModel.group,
-  slug: documentModel.slug,
-});
+export const loadEntityAdmin = (documentModel: DocumentModel): EntityAdmin => {
+  let starredImage: Image | undefined = undefined;
 
-export const loadEntityAdmin = (documentModel: DocumentModel): EntityAdmin => ({
-  type: documentModel.type,
-  id: documentModel._id,
-  watermarkedType: documentModel.watermarkedType,
-  group: documentModel.group,
-  slug: documentModel.slug,
-  order: documentModel.order,
-  title: documentModel.title ?? '',
-  seoDescription: documentModel.seoDescription ?? '',
-  seoKeywords: documentModel.seoKeywords,
-  dateCreated: documentModel.dateCreated ?? '',
-  datePublished: documentModel.datePublished ?? '',
-  location: loadLocation(documentModel.location),
-  starredImageIsCentered: documentModel.starredImageIsCentered,
-  text: documentModel.text,
-  images: documentModel.images.map(loadImageAdmin),
-  videos: documentModel.videos.map(loadVideo),
-  isPublic: documentModel.isPublic,
-  isPublished: documentModel.isPublished,
-  isProcessing: documentModel.isProcessing,
-});
+  const hasStarredImage =
+    documentModel.type === EntityType.Destination ||
+    documentModel.type === EntityType.Event ||
+    documentModel.type === EntityType.PhotoOfTheWeek;
+
+  if (hasStarredImage) {
+    const foundStarredImage = documentModel.images.find(
+      (image) =>
+        image.isStarred === true &&
+        (image.state == ImageState.Selected || image.state == ImageState.Public)
+    );
+    if (foundStarredImage) {
+      starredImage = foundStarredImage;
+    }
+  }
+
+  if (!starredImage && documentModel.images.length > 0) {
+    starredImage = documentModel.images[0];
+  }
+
+  return {
+    type: documentModel.type,
+    id: documentModel._id,
+    group: documentModel.group,
+    slug: documentModel.slug,
+    order: documentModel.order,
+    isPublic: documentModel.isPublic,
+    title: documentModel.title ?? '',
+    text: documentModel.text,
+    createdDate: documentModel.createdDate ?? '',
+    publishedDate: documentModel.publishedDate ?? '',
+    seoDescription: documentModel.seoDescription ?? '',
+    seoKeywords: documentModel.seoKeywords,
+    location: documentModel.location,
+    hasStarredImage: !!starredImage,
+    starredImageIsCentered: documentModel.starredImageIsCentered,
+    starredImage: starredImage ? loadImageAdmin(starredImage) : undefined,
+    imageVideo: documentModel.imageVideo,
+    tileDimension: documentModel.tileDimension,
+  };
+};

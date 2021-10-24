@@ -1,13 +1,13 @@
-import { IsInt, Min } from 'class-validator';
+import { IsNumber, Min } from 'class-validator';
 
 import { Resolution } from '@dark-rush-photography/shared/types';
 
 export class ResolutionDto implements Resolution {
-  @IsInt()
+  @IsNumber()
   @Min(0)
   width!: number;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
   height!: number;
 }

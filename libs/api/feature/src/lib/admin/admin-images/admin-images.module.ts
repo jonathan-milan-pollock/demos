@@ -4,19 +4,19 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
-  ContentAddBlobProvider,
-  ContentDeleteBlobsProvider,
-  ContentRemoveOneProvider,
-  ContentRemoveProvider,
+  CronProcessStartProvider,
+  CronProcessStartTypeProvider,
+  CronProcessStateProvider,
+  CronProcessStateUpdateProvider,
+  CronProcessTable,
   Document,
   DocumentSchema,
+  ImageAddBlobProvider,
   ImageAddProvider,
-  ImageFindProvider,
-  ImageRemoveProvider,
+  ImageDeleteBlobsProvider,
+  ImageRemoveOneProvider,
   ImagesService,
   ImageStateChangeProvider,
-  ImageUpdateProvider,
-  MediaProcessTable,
 } from '@dark-rush-photography/api/data';
 import { AdminImagesController } from './admin-images.controller';
 
@@ -26,8 +26,8 @@ import { AdminImagesController } from './admin-images.controller';
     MongooseModule.forFeature([
       { name: Document.name, schema: DocumentSchema },
     ]),
-    AzureTableStorageModule.forFeature(MediaProcessTable, {
-      table: 'MediaProcess',
+    AzureTableStorageModule.forFeature(CronProcessTable, {
+      table: 'CronProcess',
       createTableIfNotExists: true,
     }),
   ],
@@ -35,14 +35,14 @@ import { AdminImagesController } from './admin-images.controller';
   providers: [
     ImagesService,
     ImageAddProvider,
-    ImageUpdateProvider,
+    ImageAddBlobProvider,
     ImageStateChangeProvider,
-    ImageRemoveProvider,
-    ImageFindProvider,
-    ContentAddBlobProvider,
-    ContentRemoveProvider,
-    ContentRemoveOneProvider,
-    ContentDeleteBlobsProvider,
+    ImageRemoveOneProvider,
+    ImageDeleteBlobsProvider,
+    CronProcessStartProvider,
+    CronProcessStartTypeProvider,
+    CronProcessStateProvider,
+    CronProcessStateUpdateProvider,
   ],
 })
 export class AdminImagesModule {}

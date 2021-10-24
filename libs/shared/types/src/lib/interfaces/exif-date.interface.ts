@@ -1,3 +1,3 @@
-export interface ExifDateCreated {
-  data: [{ CreatedDate: string }];
+export interface ExifCreatedDate {
+  data: [{ CreateDate: string }];
 }

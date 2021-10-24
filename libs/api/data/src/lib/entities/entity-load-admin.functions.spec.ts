@@ -8,7 +8,7 @@ import {
   ImageAdmin,
   Location,
   LocationDefined,
-  Video,
+  ImageVideo,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -17,10 +17,10 @@ import {
   loadEntityMinimalAdmin,
 } from './entity-load-admin.functions';
 
-jest.mock('../content/content-load.functions', () => ({
-  ...jest.requireActual('../content/content-load.functions'),
+jest.mock('../images/image-load.functions', () => ({
+  ...jest.requireActual('../images/image-load.functions'),
 }));
-import * as contentLoadFunctions from '../content/content-load.functions';
+import * as imageLoadFunctions from '../images/image-load.functions';
 
 describe('entity-load-admin.functions', () => {
   afterEach(() => {
@@ -37,8 +37,8 @@ describe('entity-load-admin.functions', () => {
     title: faker.lorem.sentence(),
     seoDescription: faker.lorem.sentences(),
     seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
-    dateCreated: faker.date.recent().toISOString(),
-    datePublished: faker.date.recent().toISOString(),
+    createdDate: faker.date.recent().toISOString(),
+    publishedDate: faker.date.recent().toISOString(),
     location: {} as Location,
     starredImageIsCentered: faker.datatype.boolean(),
     text: [
@@ -47,10 +47,8 @@ describe('entity-load-admin.functions', () => {
       faker.lorem.paragraph(),
     ],
     images: [{} as Image],
-    videos: [{} as Video],
+    videos: [{} as ImageVideo],
     isPublic: faker.datatype.boolean(),
-    isPublished: faker.datatype.boolean(),
-    isProcessing: faker.datatype.boolean(),
   } as unknown as DocumentModel;
 
   describe('loadEntityMinimalAdmin', () => {
@@ -77,16 +75,16 @@ describe('entity-load-admin.functions', () => {
 
     beforeEach(() => {
       mockedLoadLocation = jest
-        .spyOn(contentLoadFunctions, 'loadLocation')
+        .spyOn(imageLoadFunctions, 'loadLocation')
         .mockReturnValue({} as LocationDefined);
 
       mockedLoadImageAdmin = jest
-        .spyOn(contentLoadFunctions, 'loadImageAdmin')
+        .spyOn(imageLoadFunctions, 'loadImageAdmin')
         .mockReturnValue({} as ImageAdmin);
 
       mockedLoadVideo = jest
-        .spyOn(contentLoadFunctions, 'loadVideo')
-        .mockReturnValue({} as Video);
+        .spyOn(imageLoadFunctions, 'loadVideo')
+        .mockReturnValue({} as ImageVideo);
     });
 
     it('should not contain an _id value', () => {
@@ -110,15 +108,13 @@ describe('entity-load-admin.functions', () => {
       expect(result.title).toBe(documentModel.title);
       expect(result.seoDescription).toBe(documentModel.seoDescription);
       expect(result.seoKeywords).toEqual(documentModel.seoKeywords);
-      expect(result.dateCreated).toBe(documentModel.dateCreated);
-      expect(result.datePublished).toBe(documentModel.datePublished);
+      expect(result.createdDate).toBe(documentModel.createdDate);
+      expect(result.publishedDate).toBe(documentModel.publishedDate);
       expect(result.starredImageIsCentered).toBe(
         documentModel.starredImageIsCentered
       );
       expect(result.text).toEqual(documentModel.text);
       expect(result.isPublic).toBe(documentModel.isPublic);
-      expect(result.isPublished).toBe(documentModel.isPublished);
-      expect(result.isProcessing).toBe(documentModel.isProcessing);
     });
 
     it('should load empty string values when they are not provided', () => {
@@ -126,14 +122,14 @@ describe('entity-load-admin.functions', () => {
         ...documentModel,
         title: undefined,
         seoDescription: undefined,
-        dateCreated: undefined,
-        datePublished: undefined,
+        createdDate: undefined,
+        publishedDate: undefined,
       } as DocumentModel);
 
       expect(result.title).toBe('');
       expect(result.seoDescription).toBe('');
-      expect(result.dateCreated).toBe('');
-      expect(result.datePublished).toBe('');
+      expect(result.createdDate).toBe('');
+      expect(result.publishedDate).toBe('');
     });
   });
 });
