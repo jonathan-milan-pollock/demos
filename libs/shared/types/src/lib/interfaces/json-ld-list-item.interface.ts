@@ -1,5 +1,5 @@
 export interface JsonLdListItem {
-  readonly '@type': 'ListItem';
+  readonly '@type': string;
   readonly position: number;
   readonly url: string;
 }

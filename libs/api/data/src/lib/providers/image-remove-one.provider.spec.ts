@@ -3,9 +3,10 @@ import { Test } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
 
+import * as faker from 'faker';
 import { of } from 'rxjs';
 
-import { Image, ImageVideo } from '@dark-rush-photography/shared/types';
+import { DUMMY_MONGODB_ID, Image } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { ImageRemoveOneProvider } from './image-remove-one.provider';
@@ -38,7 +39,7 @@ describe('image-remove-one.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         ImageRemoveOneProvider,
         ImageDeleteBlobsProvider,
@@ -63,7 +64,7 @@ describe('image-remove-one.provider', () => {
         .spyOn(imageDeleteBlobsProvider, 'deleteImageBlobs$')
         .mockReturnValue(of(undefined));
 
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
@@ -72,32 +73,209 @@ describe('image-remove-one.provider', () => {
         .mockReturnValue(of({} as DocumentModel));
 
       imageRemoveOneProvider.removeImage$({} as Image).subscribe(() => {
-        expect(mockedDeleteImageBlobs$).toHaveBeenCalled();
-        expect(mockedRemoveImage$).toHaveBeenCalled();
+        expect(mockedDeleteImageBlobs$).toHaveBeenCalledTimes(1);
+        expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+        expect(mockedRemoveImage$).toHaveBeenCalledTimes(1);
+        done();
+      });
+    });
+
+    it('should should not delete an image if entity is not found', (done: any) => {
+      const mockedDeleteImageBlobs$ = jest
+        .spyOn(imageDeleteBlobsProvider, 'deleteImageBlobs$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of(null));
+
+      const mockedRemoveImage$ = jest.spyOn(
+        imageRepositoryFunctions,
+        'removeImage$'
+      );
+
+      imageRemoveOneProvider.removeImage$({} as Image).subscribe(() => {
+        expect(mockedDeleteImageBlobs$).toHaveBeenCalledTimes(1);
+        expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+        expect(mockedRemoveImage$).not.toHaveBeenCalled();
         done();
       });
     });
   });
 
-  describe('removeVideo$', () => {
-    it('should delete video blobs and remove a video for an entity', (done: any) => {
-      const mockedDeleteVideoBlobs$ = jest
-        .spyOn(imageDeleteBlobsProvider, 'deleteVideoBlob$')
+  describe('removeImageVideo$', () => {
+    it('should delete image video blobs and remove an image video for an entity', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(
+          of({
+            imageVideo: {
+              storageId: faker.datatype.uuid(),
+              slug: faker.lorem.word(),
+            },
+          } as DocumentModel)
+        );
+
+      const mockedDeleteImageVideoBlob$ = jest
+        .spyOn(imageDeleteBlobsProvider, 'deleteImageVideoBlob$')
         .mockReturnValue(of(undefined));
 
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      const mockedRemoveVideo$ = jest
-        .spyOn(imageRepositoryFunctions, 'removeVideo$')
+      const mockedRemoveImageVideo$ = jest
+        .spyOn(imageRepositoryFunctions, 'removeImageVideo$')
         .mockReturnValue(of({} as DocumentModel));
 
       imageRemoveOneProvider
-        .removeImageVideo$({} as ImageVideo)
+        .removeImageVideo$(DUMMY_MONGODB_ID)
         .subscribe(() => {
-          expect(mockedDeleteVideoBlobs$).toHaveBeenCalled();
-          expect(mockedRemoveVideo$).toHaveBeenCalled();
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedDeleteImageVideoBlob$).toHaveBeenCalledTimes(1);
+          expect(mockedRemoveImageVideo$).toHaveBeenCalledTimes(1);
+          done();
+        });
+    });
+
+    it('should not delete image video blobs and remove an image video when entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of(null));
+
+      const mockedDeleteImageVideoBlob$ = jest.spyOn(
+        imageDeleteBlobsProvider,
+        'deleteImageVideoBlob$'
+      );
+
+      const mockedRemoveImageVideo$ = jest.spyOn(
+        imageRepositoryFunctions,
+        'removeImageVideo$'
+      );
+
+      imageRemoveOneProvider
+        .removeImageVideo$(DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedDeleteImageVideoBlob$).not.toHaveBeenCalled();
+          expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
+          done();
+        });
+    });
+
+    it('should not delete image video blobs and remove an image video when entity does not have an image video', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedDeleteImageVideoBlob$ = jest.spyOn(
+        imageDeleteBlobsProvider,
+        'deleteImageVideoBlob$'
+      );
+
+      const mockedRemoveImageVideo$ = jest.spyOn(
+        imageRepositoryFunctions,
+        'removeImageVideo$'
+      );
+
+      imageRemoveOneProvider
+        .removeImageVideo$(DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedDeleteImageVideoBlob$).not.toHaveBeenCalled();
+          expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
+          done();
+        });
+    });
+
+    it('should not delete image video blobs and remove an image video when image video does not have a storage id', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(
+          of({
+            imageVideo: {
+              storageId: '',
+              slug: faker.lorem.word(),
+            },
+          } as DocumentModel)
+        );
+
+      const mockedDeleteImageVideoBlob$ = jest.spyOn(
+        imageDeleteBlobsProvider,
+        'deleteImageVideoBlob$'
+      );
+
+      const mockedRemoveImageVideo$ = jest.spyOn(
+        imageRepositoryFunctions,
+        'removeImageVideo$'
+      );
+
+      imageRemoveOneProvider
+        .removeImageVideo$(DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedDeleteImageVideoBlob$).not.toHaveBeenCalled();
+          expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
+          done();
+        });
+    });
+
+    it('should not delete image video blobs and remove an image video when image video does not have a slug', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(
+          of({
+            imageVideo: {
+              storageId: faker.lorem.word(),
+              slug: '',
+            },
+          } as DocumentModel)
+        );
+
+      const mockedDeleteImageVideoBlob$ = jest.spyOn(
+        imageDeleteBlobsProvider,
+        'deleteImageVideoBlob$'
+      );
+
+      const mockedRemoveImageVideo$ = jest.spyOn(
+        imageRepositoryFunctions,
+        'removeImageVideo$'
+      );
+
+      imageRemoveOneProvider
+        .removeImageVideo$(DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedDeleteImageVideoBlob$).not.toHaveBeenCalled();
+          expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
+          done();
+        });
+    });
+
+    it('should not delete image video blobs and remove an image video when image video does not have a storage id or slug', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(
+          of({
+            imageVideo: {
+              storageId: '',
+              slug: '',
+            },
+          } as DocumentModel)
+        );
+
+      const mockedDeleteImageVideoBlob$ = jest.spyOn(
+        imageDeleteBlobsProvider,
+        'deleteImageVideoBlob$'
+      );
+
+      const mockedRemoveImageVideo$ = jest.spyOn(
+        imageRepositoryFunctions,
+        'removeImageVideo$'
+      );
+
+      imageRemoveOneProvider
+        .removeImageVideo$(DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedDeleteImageVideoBlob$).not.toHaveBeenCalled();
+          expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
           done();
         });
     });

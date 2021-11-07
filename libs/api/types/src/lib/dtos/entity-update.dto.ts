@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 
 import { EntityUpdate } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
-import { ResolutionDto } from './resolution.dto';
+import { DimensionDto } from './dimension.dto';
 
 export class EntityUpdateDto implements EntityUpdate {
   @IsBoolean()
@@ -49,7 +49,7 @@ export class EntityUpdateDto implements EntityUpdate {
   starredImageIsCentered!: boolean;
 
   @ValidateNested()
-  @Type(() => ResolutionDto)
+  @Type(() => DimensionDto)
   @IsOptional()
-  tileDimension?: ResolutionDto;
+  tileDimension?: DimensionDto;
 }

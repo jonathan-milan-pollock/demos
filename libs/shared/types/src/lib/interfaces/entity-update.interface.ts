@@ -1,5 +1,5 @@
 import { Location } from './location.interface';
-import { Resolution } from './resolution.interface';
+import { Dimension } from './dimension.interface';
 
 export interface EntityUpdate {
   readonly isPublic: boolean;
@@ -11,5 +11,5 @@ export interface EntityUpdate {
   readonly seoKeywords: string[];
   readonly location?: Location;
   readonly starredImageIsCentered: boolean;
-  readonly tileDimension?: Resolution;
+  readonly tileDimension?: Dimension;
 }

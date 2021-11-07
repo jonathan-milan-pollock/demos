@@ -8,10 +8,10 @@ import { of } from 'rxjs';
 import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
-import { EntityDeleteProvider } from './entity-delete.provider';
-import { ImageRemoveAllProvider } from './image-remove.provider';
+import { ImageRemoveAllProvider } from './image-remove-all.provider';
 import { ImageRemoveOneProvider } from './image-remove-one.provider';
 import { ImageDeleteBlobsProvider } from './image-delete-blobs.provider';
+import { EntityDeleteProvider } from './entity-delete.provider';
 
 jest.mock('../entities/entity-repository.functions', () => ({
   ...jest.requireActual('../entities/entity-repository.functions'),
@@ -20,7 +20,7 @@ import * as entityRepositoryFunctions from '../entities/entity-repository.functi
 
 describe('entity-delete.provider', () => {
   let entityDeleteProvider: EntityDeleteProvider;
-  let imageRemoveProvider: ImageRemoveAllProvider;
+  let imageRemoveAllProvider: ImageRemoveAllProvider;
   let imageRemoveOneProvider: ImageRemoveOneProvider;
 
   beforeEach(async () => {
@@ -36,7 +36,7 @@ describe('entity-delete.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         EntityDeleteProvider,
         ImageRemoveAllProvider,
@@ -47,7 +47,7 @@ describe('entity-delete.provider', () => {
 
     entityDeleteProvider =
       moduleRef.get<EntityDeleteProvider>(EntityDeleteProvider);
-    imageRemoveProvider = moduleRef.get<ImageRemoveAllProvider>(
+    imageRemoveAllProvider = moduleRef.get<ImageRemoveAllProvider>(
       ImageRemoveAllProvider
     );
     imageRemoveOneProvider = moduleRef.get<ImageRemoveOneProvider>(
@@ -60,13 +60,13 @@ describe('entity-delete.provider', () => {
   });
 
   describe('delete$', () => {
-    it('should delete an entity and its content', (done: any) => {
-      jest
+    it('should delete an entity and blobs', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedRemoveAllImages$ = jest
-        .spyOn(imageRemoveProvider, 'removeAllImages$')
+        .spyOn(imageRemoveAllProvider, 'removeAllImages$')
         .mockReturnValue(of(undefined));
 
       const mockedRemoveImageVideo$ = jest
@@ -78,26 +78,28 @@ describe('entity-delete.provider', () => {
         .mockReturnValue(of({} as DocumentModel));
 
       entityDeleteProvider.deleteEntity$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveAllImages$).toHaveBeenCalled();
-        expect(mockedRemoveImageVideo$).toHaveBeenCalled();
-        expect(mockedFindEntityByIdAndDelete).toHaveBeenCalled();
+        expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+        expect(mockedRemoveAllImages$).toHaveBeenCalledTimes(1);
+        expect(mockedRemoveImageVideo$).toHaveBeenCalledTimes(1);
+        expect(mockedFindEntityByIdAndDelete).toHaveBeenCalledTimes(1);
         done();
       });
     });
 
-    it('should not delete an entity and its content if it is not found', (done: any) => {
-      jest
+    it('should not delete an entity and blobs if entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of(null));
 
       const mockedRemoveAllImages$ = jest.spyOn(
-        imageRemoveProvider,
+        imageRemoveAllProvider,
         'removeAllImages$'
       );
 
-      const mockedRemoveImageVideo$ = jest
-        .spyOn(imageRemoveOneProvider, 'removeImageVideo$')
-        .mockReturnValue(of(undefined));
+      const mockedRemoveImageVideo$ = jest.spyOn(
+        imageRemoveOneProvider,
+        'removeImageVideo$'
+      );
 
       const mockedFindEntityByIdAndDelete = jest.spyOn(
         entityRepositoryFunctions,
@@ -105,6 +107,7 @@ describe('entity-delete.provider', () => {
       );
 
       entityDeleteProvider.deleteEntity$(DUMMY_MONGODB_ID).subscribe(() => {
+        expect(mockedFindEntityById$).toBeCalledTimes(1);
         expect(mockedRemoveAllImages$).not.toHaveBeenCalled();
         expect(mockedRemoveImageVideo$).not.toHaveBeenCalled();
         expect(mockedFindEntityByIdAndDelete).not.toHaveBeenCalled();

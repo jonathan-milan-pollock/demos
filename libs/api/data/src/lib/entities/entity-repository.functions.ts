@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { from, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
@@ -106,22 +107,9 @@ export const findAllEntities$ = (
       watermarkedType,
       isDeleted: false,
     })
-  ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
+  ).pipe(map(loadDocumentModelsArray));
 
-export const findAllEntitiesForType$ = (
-  entityType: EntityType,
-  group: string,
-  entityModel: Model<DocumentModel>
-): Observable<DocumentModel[]> =>
-  from(
-    entityModel.find({
-      type: entityType,
-      group,
-      isDeleted: false,
-    })
-  ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
-
-export const findAllEntitiesForGroup$ = (
+export const findAllEntitiesForWatermarkedGroup$ = (
   entityType: EntityType,
   watermarkedType: WatermarkedType,
   group: string,
@@ -134,7 +122,20 @@ export const findAllEntitiesForGroup$ = (
       group,
       isDeleted: false,
     })
-  ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
+  ).pipe(map(loadDocumentModelsArray));
+
+export const findAllEntitiesForGroup$ = (
+  entityType: EntityType,
+  group: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel[]> =>
+  from(
+    entityModel.find({
+      type: entityType,
+      group,
+      isDeleted: false,
+    })
+  ).pipe(map(loadDocumentModelsArray));
 
 export const findAllPublicEntities$ = (
   entityType: EntityType,
@@ -146,7 +147,7 @@ export const findAllPublicEntities$ = (
       isPublic: true,
       isDeleted: false,
     })
-  ).pipe(map((documentModels) => loadDocumentModelsArray(documentModels)));
+  ).pipe(map(loadDocumentModelsArray));
 
 export const findByIdAndSoftDelete$ = (
   entityId: string,

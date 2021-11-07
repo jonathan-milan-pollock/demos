@@ -21,18 +21,18 @@ describe('entity-group.provider', () => {
   let entityGroupFindProvider: EntityGroupFindProvider;
 
   beforeEach(async () => {
-    class MockConfigProvider {
-      getGoogleDriveWebsitesFolderId(): string {
-        return faker.lorem.word();
-      }
-    }
+    const mockedConfigProvider = {
+      getGoogleDriveWebsitesFolderId: jest
+        .fn()
+        .mockReturnValue(faker.lorem.word()),
+    };
 
     const moduleRef = await Test.createTestingModule({
       providers: [
         ConfigService,
         {
           provide: ConfigProvider,
-          useClass: MockConfigProvider,
+          useValue: mockedConfigProvider,
         },
         EntityGroupProvider,
         EntityGroupFindProvider,
@@ -46,16 +46,20 @@ describe('entity-group.provider', () => {
     );
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('findGroups$', () => {
     it('should find watermarked and without watermark groups', (done: any) => {
-      jest
+      const mockedGetEntityWithGroupTypeFolderName = jest
         .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(faker.lorem.word());
 
       const watermarkedGroups = [faker.lorem.word()];
       const withoutWatermarkGroups = [faker.lorem.word()];
 
-      jest
+      const mockedFindGroupsFromGoogleDriveFolderName$ = jest
         .spyOn(entityGroupFindProvider, 'findGroupsFromGoogleDriveFolderName$')
         .mockReturnValueOnce(of(watermarkedGroups))
         .mockReturnValueOnce(of(withoutWatermarkGroups));
@@ -66,6 +70,8 @@ describe('entity-group.provider', () => {
           faker.random.arrayElement(Object.values(EntityWithGroupType))
         )
         .subscribe((result) => {
+          expect(mockedGetEntityWithGroupTypeFolderName).toBeCalledTimes(1);
+          expect(mockedFindGroupsFromGoogleDriveFolderName$).toBeCalledTimes(2);
           expect(result).toEqual([
             ...watermarkedGroups,
             ...withoutWatermarkGroups,
@@ -75,7 +81,7 @@ describe('entity-group.provider', () => {
     });
 
     it('should not have duplicates from google drive', (done: any) => {
-      jest
+      const mockedGetEntityWithGroupTypeFolderName = jest
         .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(faker.lorem.word());
 
@@ -84,7 +90,7 @@ describe('entity-group.provider', () => {
       const watermarkedGroups = [sameGroup];
       const withoutWatermarkGroups = [sameGroup];
 
-      jest
+      const mockedFindGroupsFromGoogleDriveFolderName$ = jest
         .spyOn(entityGroupFindProvider, 'findGroupsFromGoogleDriveFolderName$')
         .mockReturnValueOnce(of(watermarkedGroups))
         .mockReturnValueOnce(of(withoutWatermarkGroups));
@@ -95,6 +101,8 @@ describe('entity-group.provider', () => {
           faker.random.arrayElement(Object.values(EntityWithGroupType))
         )
         .subscribe((result) => {
+          expect(mockedGetEntityWithGroupTypeFolderName).toBeCalledTimes(1);
+          expect(mockedFindGroupsFromGoogleDriveFolderName$).toBeCalledTimes(2);
           expect(result).toEqual([sameGroup]);
           expect(result).toHaveLength(1);
           done();
@@ -102,11 +110,11 @@ describe('entity-group.provider', () => {
     });
 
     it('should return an empty array if groups are not found in google drive', (done: any) => {
-      jest
+      const mockedGetEntityWithGroupTypeFolderName = jest
         .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(faker.lorem.word());
 
-      jest
+      const mockedFindGroupsFromGoogleDriveFolderName$ = jest
         .spyOn(entityGroupFindProvider, 'findGroupsFromGoogleDriveFolderName$')
         .mockReturnValue(of([]));
 
@@ -116,6 +124,8 @@ describe('entity-group.provider', () => {
           faker.random.arrayElement(Object.values(EntityWithGroupType))
         )
         .subscribe((result) => {
+          expect(mockedGetEntityWithGroupTypeFolderName).toBeCalledTimes(1);
+          expect(mockedFindGroupsFromGoogleDriveFolderName$).toBeCalledTimes(2);
           expect(result).toHaveLength(0);
           done();
         });

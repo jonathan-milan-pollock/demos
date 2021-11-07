@@ -59,18 +59,7 @@ export const loadCreateImagePostEntity = (text: string): Entity => ({
 
 export const loadUpdateEntity = (
   entityUpdate: EntityUpdate
-): Partial<DocumentModel> => ({
-  title: entityUpdate.title,
-  seoDescription: entityUpdate.seoDescription,
-  seoKeywords: entityUpdate.seoKeywords,
-  createdDate: entityUpdate.createdDate,
-  publishedDate: entityUpdate.publishedDate,
-  location: entityUpdate.location,
-  starredImageIsCentered: entityUpdate.starredImageIsCentered,
-  text: entityUpdate.text,
-  isPublic: entityUpdate.isPublic,
-  tileDimension: entityUpdate.tileDimension,
-});
+): Partial<DocumentModel> => ({ ...entityUpdate });
 
 export const loadDocumentModelsArray = (
   documentModels: DocumentModel | DocumentModel[]

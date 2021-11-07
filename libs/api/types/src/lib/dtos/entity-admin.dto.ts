@@ -16,7 +16,7 @@ import { EntityAdmin, EntityType } from '@dark-rush-photography/shared/types';
 import { LocationDto } from './location.dto';
 import { ImageAdminDto } from './image-admin.dto';
 import { ImageVideoDto } from './image-video.dto';
-import { ResolutionDto } from './resolution.dto';
+import { DimensionDto } from './dimension.dto';
 
 export class EntityAdminDto implements EntityAdmin {
   @IsEnum(EntityType)
@@ -68,15 +68,12 @@ export class EntityAdminDto implements EntityAdmin {
   location?: LocationDto;
 
   @IsBoolean()
-  hasStarredImage!: boolean;
-
-  @IsBoolean()
   starredImageIsCentered!: boolean;
 
   @ValidateNested()
   @Type(() => ImageAdminDto)
   @IsOptional()
-  starredImage?: ImageAdminDto;
+  starredPublishOrFirstImage?: ImageAdminDto;
 
   @ValidateNested()
   @Type(() => ImageVideoDto)
@@ -84,7 +81,7 @@ export class EntityAdminDto implements EntityAdmin {
   imageVideo?: ImageVideoDto;
 
   @ValidateNested()
-  @Type(() => ResolutionDto)
+  @Type(() => DimensionDto)
   @IsOptional()
-  tileDimension?: ResolutionDto;
+  tileDimension?: DimensionDto;
 }

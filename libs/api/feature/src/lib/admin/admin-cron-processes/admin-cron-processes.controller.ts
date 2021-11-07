@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { Observable } from 'rxjs';
 
-import { CronProcessResponseDto } from '@dark-rush-photography/api/types';
+import { CronProcessDto } from '@dark-rush-photography/api/types';
 import { AdminCronProcessesService } from '@dark-rush-photography/api/data';
 
 @Controller({ path: 'admin/cron-processes', version: '1' })
@@ -15,14 +15,14 @@ export class AdminCronProcessesController {
   ) {}
 
   @Get()
-  @ApiOkResponse({ type: [CronProcessResponseDto] })
-  findAll$(): Observable<CronProcessResponseDto[]> {
+  @ApiOkResponse({ type: [CronProcessDto] })
+  findAll$(): Observable<CronProcessDto[]> {
     return this.adminCronProcessesService.findAll$();
   }
 
   @Get(':key')
-  @ApiOkResponse({ type: CronProcessResponseDto })
-  findOne$(@Param('key') key: string): Observable<CronProcessResponseDto> {
+  @ApiOkResponse({ type: CronProcessDto })
+  findOne$(@Param('key') key: string): Observable<CronProcessDto> {
     return this.adminCronProcessesService.findOne$(key);
   }
 

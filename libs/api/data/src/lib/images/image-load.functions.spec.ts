@@ -4,77 +4,34 @@ import {
   DUMMY_MONGODB_ID,
   Image,
   ImageState,
-  Location,
-  ImageVideo,
 } from '@dark-rush-photography/shared/types';
 import {
+  findFirstImage,
+  findStarredPublishImage,
   loadImageAdmin,
   loadImagePublic,
-  loadLocation,
 } from './image-load.functions';
 
 describe('image-load.functions', () => {
-  describe('loadLocation', () => {
-    const location: Location = {
-      place: faker.company.companyName(),
-      street: faker.address.streetAddress(),
-      city: faker.address.city(),
-      stateOrProvince: faker.address.state(),
-      zipCode: faker.address.zipCode(),
-      country: faker.address.country(),
-    };
-
-    it('should load a location with all values', () => {
-      const result = loadLocation(location);
-
-      expect(result.place).toBe(location.place);
-      expect(result.street).toBe(location.street);
-      expect(result.city).toBe(location.city);
-      expect(result.stateOrProvince).toBe(location.stateOrProvince);
-      expect(result.zipCode).toBe(location.zipCode);
-      expect(result.country).toBe(location.country);
-    });
-
-    it('should load a location with empty string values when they are not provided', () => {
-      const country = faker.address.country();
-
-      const result = loadLocation({
-        country,
-      });
-
-      expect(result.place).toBe('');
-      expect(result.street).toBe('');
-      expect(result.city).toBe('');
-      expect(result.stateOrProvince).toBe('');
-      expect(result.zipCode).toBe('');
-      expect(result.country).toBe(country);
-    });
-  });
-
   describe('loadImageAdmin', () => {
     const image: Image = {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
       storageId: faker.datatype.uuid(),
-      fileName: faker.system.fileName(),
-      state: faker.random.arrayElement(Object.values(ImageState)),
+      slug: faker.lorem.word(),
       order: faker.datatype.number(),
+      state: faker.random.arrayElement(Object.values(ImageState)),
+      isThreeSixtyImage: faker.datatype.boolean(),
+      threeSixtyImageStorageId: faker.datatype.uuid(),
       isStarred: faker.datatype.boolean(),
       isLoved: faker.datatype.boolean(),
       title: faker.lorem.sentence(),
-      seoDescription: faker.lorem.paragraph(),
+      seoDescription: faker.lorem.sentences(),
       seoKeywords: [
-        faker.lorem.word().toLowerCase(),
-        faker.lorem.word().toLowerCase(),
-        faker.lorem.word().toLowerCase(),
+        faker.lorem.word(),
+        faker.lorem.word(),
+        faker.lorem.word(),
       ].join(','),
-      createdDate: faker.date.recent().toISOString(),
-      publishedDate: faker.date.recent().toISOString(),
-      smallResolution: {
-        width: faker.datatype.number(),
-        height: faker.datatype.number(),
-      },
-      isThreeSixty: faker.datatype.boolean(),
     };
 
     it('should not contain an _id value', () => {
@@ -84,6 +41,7 @@ describe('image-load.functions', () => {
       };
       const result = loadImageAdmin(imageWithMongoDbId);
       expect('_id' in result).toBe(false);
+      expect(result.id).toBe(image.id);
     });
 
     it('should load an admin image with all values', () => {
@@ -92,69 +50,45 @@ describe('image-load.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.fileName).toBe(image.fileName);
-      expect(result.state).toBe(image.state);
+      expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
+      expect(result.state).toBe(image.state);
+      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
+      expect(result.threeSixtyImageStorageId).toBe(
+        image.threeSixtyImageStorageId
+      );
       expect(result.isStarred).toBe(image.isStarred);
       expect(result.isLoved).toBe(image.isLoved);
       expect(result.title).toBe(image.title);
       expect(result.seoDescription).toBe(image.seoDescription);
       expect(result.seoKeywords).toEqual(image.seoKeywords?.split(','));
-      expect(result.createdDate).toBe(image.createdDate);
-      expect(result.publishedDate).toBe(image.publishedDate);
-      expect(result.smallResolution).toEqual(image.smallResolution);
-      expect(result.isThreeSixty).toBe(image.isThreeSixty);
     });
 
     it('should load an admin image with values when they are not provided', () => {
       const result = loadImageAdmin({
-        id: faker.datatype.uuid(),
-        entityId: DUMMY_MONGODB_ID,
-        storageId: faker.datatype.uuid(),
-        fileName: faker.system.fileName(),
-        state: faker.random.arrayElement(Object.values(ImageState)),
-        order: faker.datatype.number(),
-        isStarred: faker.datatype.boolean(),
-        isLoved: faker.datatype.boolean(),
-        smallResolution: {
-          width: faker.datatype.number(),
-          height: faker.datatype.number(),
-        },
-        isThreeSixty: faker.datatype.boolean(),
+        ...image,
+        title: undefined,
+        seoDescription: undefined,
+        seoKeywords: undefined,
       });
       expect(result.title).toBe('');
       expect(result.seoDescription).toBe('');
       expect(result.seoKeywords).toEqual([]);
-      expect(result.createdDate).toBe('');
-      expect(result.publishedDate).toBe('');
     });
   });
 
   describe('loadImagePublic', () => {
-    const image: Image = {
-      id: faker.datatype.uuid(),
-      entityId: DUMMY_MONGODB_ID,
+    const image = {
       storageId: faker.datatype.uuid(),
-      fileName: faker.system.fileName(),
-      state: faker.random.arrayElement(Object.values(ImageState)),
+      slug: faker.lorem.word(),
       order: faker.datatype.number(),
-      isStarred: faker.datatype.boolean(),
-      isLoved: faker.datatype.boolean(),
-      title: faker.lorem.sentence(),
-      seoDescription: faker.lorem.paragraph(),
-      seoKeywords: [
-        faker.lorem.word().toLowerCase(),
-        faker.lorem.word().toLowerCase(),
-        faker.lorem.word().toLowerCase(),
-      ].join(','),
-      createdDate: faker.date.recent().toISOString(),
-      publishedDate: faker.date.recent().toISOString(),
-      smallResolution: {
+      isThreeSixtyImage: faker.datatype.boolean(),
+      threeSixtyImageStorageId: faker.datatype.uuid(),
+      smallDimension: {
         width: faker.datatype.number(),
         height: faker.datatype.number(),
       },
-      isThreeSixty: faker.datatype.boolean(),
-    };
+    } as Image;
 
     it('should not contain an _id value', () => {
       const imageWithMongoDbId = {
@@ -168,65 +102,78 @@ describe('image-load.functions', () => {
     it('should load a public image with all values', () => {
       const result = loadImagePublic(image);
 
-      expect(result.fileName).toBe(image.fileName);
+      expect(result.storageId).toBe(image.storageId);
+      expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
-      expect(result.title).toBe(image.title);
-      expect(result.seoDescription).toBe(image.seoDescription);
-      expect(result.seoKeywords).toEqual(image.seoKeywords?.split(','));
-      expect(result.createdDate).toBe(image.createdDate);
-      expect(result.publishedDate).toBe(image.publishedDate);
-      expect(result.smallResolution).toEqual(image.smallResolution);
-      expect(result.isThreeSixty).toBe(image.isThreeSixty);
+      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
+      expect(result.threeSixtyImageStorageId).toBe(
+        image.threeSixtyImageStorageId
+      );
+      expect(result.smallDimension).toEqual(image.smallDimension);
     });
 
     it('should load a public image with values when they are not provided', () => {
       const result = loadImagePublic({
-        id: faker.datatype.uuid(),
-        entityId: DUMMY_MONGODB_ID,
-        storageId: faker.datatype.uuid(),
-        fileName: faker.system.fileName(),
-        state: faker.random.arrayElement(Object.values(ImageState)),
-        order: faker.datatype.number(),
-        isStarred: faker.datatype.boolean(),
-        isLoved: faker.datatype.boolean(),
-        smallResolution: {
-          width: faker.datatype.number(),
-          height: faker.datatype.number(),
-        },
-        isThreeSixty: faker.datatype.boolean(),
+        ...image,
+        smallDimension: undefined,
       });
-      expect(result.title).toBe('');
-      expect(result.seoDescription).toBe('');
-      expect(result.seoKeywords).toEqual([]);
-      expect(result.createdDate).toBe('');
-      expect(result.publishedDate).toBe('');
+      expect(result.smallDimension).toEqual({ width: 0, height: 0 });
     });
   });
 
-  describe('loadVideo', () => {
-    const video: ImageVideo = {
-      id: faker.datatype.uuid(),
-      entityId: DUMMY_MONGODB_ID,
-      storageId: faker.datatype.uuid(),
-      fileName: faker.system.fileName(),
-    };
+  describe('findStarredPublishImage', () => {
+    it('should find a starred publish image with state of selected', () => {
+      const images = [
+        { isStarred: true, state: ImageState.Selected } as Image,
+        {} as Image,
+      ];
 
-    it('should not contain an _id value', () => {
-      const videoWithMongoDbId = {
-        ...video,
-        _id: faker.datatype.uuid(),
-      };
-      const result = loadVideo(videoWithMongoDbId);
-      expect('_id' in result).toBe(false);
+      const result = findStarredPublishImage(images);
+      expect(result).toBeDefined();
     });
 
-    it('should reload a video with all values', () => {
-      const result = loadVideo(video);
+    it('should find a starred publish image with state of public', () => {
+      const images = [
+        { isStarred: true, state: ImageState.Public } as Image,
+        {} as Image,
+      ];
 
-      expect(result.id).toBe(video.id);
-      expect(result.entityId).toBe(video.entityId);
-      expect(result.storageId).toBe(video.storageId);
-      expect(result.fileName).toBe(video.fileName);
+      const result = findStarredPublishImage(images);
+      expect(result).toBeDefined();
+    });
+
+    it('should not find a starred publish image when non are available', () => {
+      const images = [{} as Image];
+
+      const result = findStarredPublishImage(images);
+      expect(result).toBeUndefined();
+    });
+
+    it('should not find a starred publish image when images empty', () => {
+      const images: Image[] = [];
+
+      const result = findStarredPublishImage(images);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('findFirstImage', () => {
+    it('should find the first image', () => {
+      const firstImageId = faker.datatype.uuid();
+      const images = [
+        { id: firstImageId } as Image,
+        { id: faker.datatype.uuid() } as Image,
+      ];
+
+      const result = findFirstImage(images);
+      expect(result?.id).toBe(firstImageId);
+    });
+
+    it('should return undefined if there are not any images', () => {
+      const images: Image[] = [];
+
+      const result = findStarredPublishImage(images);
+      expect(result).toBeUndefined();
     });
   });
 });

@@ -28,4 +28,5 @@ export enum ImageDimensionType {
   IPadSmall = 'IPadSmall',
   IPadMedium = 'IPadMedium',
   IPadLarge = 'IPadLarge',
+  JsonLd = 'JsonLd',
 }

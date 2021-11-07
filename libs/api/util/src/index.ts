@@ -29,15 +29,10 @@ export * from './lib/image-video/image-video.functions';
 
 // image
 export * from './lib/resize/image-dimension.functions';
-export * from './lib/resize/image-resolution.functions';
 export * from './lib/resize/resize-exact-fit-image.functions';
 export * from './lib/resize/resize-image.functions';
 export * from './lib/resize/resize-longest-edge-image.functions';
 export * from './lib/resize/resize-standard-image.functions';
-
-// json-ld
-export * from './lib/json-ld/json-ld-event.functions';
-export * from './lib/json-ld/json-ld-events.functions';
 
 // log
 export * from './lib/log/log-messages.functions';
@@ -46,7 +41,7 @@ export * from './lib/log/log-messages.functions';
 export * from './lib/pipes/parse-object-id.pipe';
 
 // publish
-export * from './lib/publish/image-publish-file-name.functions';
+export * from './lib/images/image-file-name.functions';
 
 // sitemap
 export * from './lib/sitemap/sitemap.functions';

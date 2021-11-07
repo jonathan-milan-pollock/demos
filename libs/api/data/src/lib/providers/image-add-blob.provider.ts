@@ -9,6 +9,7 @@ import {
   GoogleDriveFile,
   Image,
   ImageDimensionType,
+  IMAGE_FILE_EXTENSION,
   IMAGE_MIME_TYPE,
 } from '@dark-rush-photography/shared/types';
 import {
@@ -33,7 +34,11 @@ export class ImageAddBlobProvider {
         uploadAzureStorageStreamToBlob$(
           fs.createReadStream(filePath),
           IMAGE_MIME_TYPE,
-          getAzureStorageBlobPath(image.storageId, image.fileName),
+          getAzureStorageBlobPath(
+            image.storageId,
+            image.slug,
+            IMAGE_FILE_EXTENSION
+          ),
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic
         )
@@ -41,14 +46,18 @@ export class ImageAddBlobProvider {
     );
   }
 
-  addUploadImageBlob$(
+  addImagePostImageBlob$(
     image: Image,
     file: Express.Multer.File
   ): Observable<void> {
     return uploadAzureStorageStreamToBlob$(
       Readable.from(file.buffer),
       IMAGE_MIME_TYPE,
-      getAzureStorageBlobPath(image.storageId, image.fileName),
+      getAzureStorageBlobPath(
+        image.storageId,
+        image.slug,
+        IMAGE_FILE_EXTENSION
+      ),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     );
@@ -56,7 +65,8 @@ export class ImageAddBlobProvider {
 
   addImageDimensionBlob$(
     storageId: string,
-    fileName: string,
+    slug: string,
+    fileExtension: string,
     imageDimensionType: ImageDimensionType,
     imageFilePath: string
   ): Observable<void> {
@@ -65,7 +75,8 @@ export class ImageAddBlobProvider {
       IMAGE_MIME_TYPE,
       getAzureStorageBlobPathWithImageDimension(
         storageId,
-        fileName,
+        slug,
+        fileExtension,
         imageDimensionType
       ),
       this.configProvider.azureStorageConnectionStringPublic,

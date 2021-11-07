@@ -18,7 +18,7 @@ describe('Find one Public Entities', () => {
             seoKeywords: [],
             starredImageIsCentered: false,
           })
-          .then(() => cy.findOnePublicEntities(EntityType.Test, entityId))
+          .then(() => cy.findOnePublicEntities(entityId))
           .its('headers')
           .its('content-type')
           .should('include', 'application/json')
@@ -35,7 +35,7 @@ describe('Find one Public Entities', () => {
             seoKeywords: [],
             starredImageIsCentered: false,
           })
-          .then(() => cy.findOnePublicEntities(EntityType.Test, entityId))
+          .then(() => cy.findOnePublicEntities(entityId))
           .its('body.type')
           .should('equal', EntityType.Test)
       ));
@@ -51,14 +51,22 @@ describe('Find one Public Entities', () => {
             seoKeywords: [],
             starredImageIsCentered: false,
           })
-          .then(() => cy.findOnePublicEntities(EntityType.Test, entityId))
+          .then(() => cy.findOnePublicEntities(entityId))
           .its('status')
           .should('equal', 200)
       ));
 
   it('should return a not found request status when cannot find an entity', () =>
     cy
-      .findOnePublicEntities(EntityType.Test, DUMMY_MONGODB_ID)
+      .findOnePublicEntities(DUMMY_MONGODB_ID)
+      .its('status')
+      .should('equal', 404));
+
+  it('should return a not found request status when entity is not public', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
+      .its('body.id')
+      .then((entityId) => cy.findOnePublicEntities(entityId))
       .its('status')
       .should('equal', 404));
 });

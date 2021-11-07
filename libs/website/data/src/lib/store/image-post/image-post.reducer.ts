@@ -5,14 +5,9 @@ import {
   createImagePostFailure,
   createImagePostSuccess,
 } from './image-post.actions';
+import { ImagePostState } from './image-post.state';
 
 export const imagePostFeatureKey = 'imagePost';
-
-interface ImagePostState {
-  imagePosted: boolean;
-  isLoading: boolean;
-  error?: string;
-}
 
 const initialState: ImagePostState = {
   imagePosted: false,

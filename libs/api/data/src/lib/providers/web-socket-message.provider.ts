@@ -1,46 +1,31 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
-import { from, lastValueFrom, map, tap } from 'rxjs';
+import { from, map, Observable, of } from 'rxjs';
 
 import { WebSocketClient } from '@dark-rush-photography/shared/types';
 
 @Injectable()
 export class WebSocketMessageProvider {
-  private readonly logger: Logger;
-  private readonly webSocketClients: WebSocketClient[] = [];
-
-  constructor() {
-    this.logger = new Logger(WebSocketMessageProvider.name);
-  }
+  private webSocketClients: WebSocketClient[] = [];
 
   handleConnection(webSocketClient: WebSocketClient): void {
-    this.logger.log('connect client');
-    this.webSocketClients.push(webSocketClient);
+    this.webSocketClients = [...this.webSocketClients, webSocketClient];
   }
 
   handleDisconnect(webSocketClient: WebSocketClient): void {
-    this.logger.log('disconnect client');
-    for (let i = 0; i < this.webSocketClients.length; i++) {
-      if (this.webSocketClients[i] === webSocketClient) {
-        this.webSocketClients.splice(i, 1);
-        break;
-      }
-    }
+    this.webSocketClients = this.webSocketClients.filter(
+      (client) => client != webSocketClient
+    );
   }
 
-  sendMessage(message: string): Promise<void> {
-    this.logger.log('sending message');
+  sendMessage$(message: string): Observable<void> {
     const webSocketClients = [...this.webSocketClients];
     if (webSocketClients.length === 0) {
-      this.logger.log('no web socket clients found');
-      return Promise.resolve(undefined);
+      return of(undefined);
     }
 
-    return lastValueFrom(
-      from(webSocketClients).pipe(
-        tap(() => this.logger.log(message)),
-        map((webSocketClient) => webSocketClient.send(message))
-      )
+    return from(webSocketClients).pipe(
+      map((webSocketClient) => webSocketClient.send(message))
     );
   }
 }

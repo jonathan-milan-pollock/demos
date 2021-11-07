@@ -36,7 +36,7 @@ describe('google-drive-folder.functions', () => {
         mockedGoogleDrive as unknown as drive_v3.Drive,
         faker.datatype.uuid()
       ).subscribe(() => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.q).toContain(
           `mimeType = 'application/vnd.google-apps.folder'`
@@ -50,7 +50,7 @@ describe('google-drive-folder.functions', () => {
         mockedGoogleDrive as unknown as drive_v3.Drive,
         faker.datatype.uuid()
       ).subscribe(() => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.q).toContain('trashed = false');
         done();
@@ -62,7 +62,7 @@ describe('google-drive-folder.functions', () => {
         mockedGoogleDrive as unknown as drive_v3.Drive,
         faker.datatype.uuid()
       ).subscribe(() => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.pageSize).toBe(1_000);
         done();
@@ -90,7 +90,7 @@ describe('google-drive-folder.functions', () => {
         mockedGoogleDrive as unknown as drive_v3.Drive,
         folderId
       ).subscribe(() => {
-        expect(mockedGoogleDriveGetFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveGetFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveGetFn.mock.calls[0];
         expect(params.fileId).toBe(folderId);
         done();
@@ -120,7 +120,7 @@ describe('google-drive-folder.functions', () => {
         folderName,
         faker.datatype.uuid()
       ).subscribe((result) => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.q).toContain(`name = '${folderName}'`);
         expect(result).toBeDefined();
@@ -149,7 +149,7 @@ describe('google-drive-folder.functions', () => {
         faker.lorem.word(),
         parentFolderId
       ).subscribe((result) => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.q).toContain(`'${parentFolderId}' in parents`);
         expect(result).toBeDefined();
@@ -177,7 +177,7 @@ describe('google-drive-folder.functions', () => {
         faker.lorem.word(),
         faker.datatype.uuid()
       ).subscribe((result) => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.q).toContain(
           `mimeType = 'application/vnd.google-apps.folder'`
@@ -207,7 +207,7 @@ describe('google-drive-folder.functions', () => {
         faker.lorem.word(),
         faker.datatype.uuid()
       ).subscribe(() => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         const [params] = mockedGoogleDriveListFn.mock.calls[0];
         expect(params.q).toContain('trashed = false');
         done();
@@ -271,7 +271,7 @@ describe('google-drive-folder.functions', () => {
         faker.lorem.word(),
         faker.datatype.uuid()
       ).subscribe((result) => {
-        expect(mockedGoogleDriveListFn).toHaveBeenCalled();
+        expect(mockedGoogleDriveListFn).toHaveBeenCalledTimes(1);
         expect(result).toBeUndefined();
         done();
       });

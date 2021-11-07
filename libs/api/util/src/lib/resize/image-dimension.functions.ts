@@ -1,6 +1,11 @@
-import { ConflictException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
+
+import { from, map, Observable } from 'rxjs';
+
+import sharp = require('sharp');
 
 import {
+  Dimension,
   ImageDimension,
   ImageDimensionLongestEdge,
   ImageDimensionStandard,
@@ -93,48 +98,52 @@ export const getImageDimensions = (): (
   },
   {
     type: ImageDimensionType.Facebook,
-    resolution: { width: 1200, height: 630 },
+    dimension: { width: 1200, height: 630 },
     exactFit: false,
   },
   {
     type: ImageDimensionType.Instagram,
-    resolution: { width: 1080, height: 1080 },
+    dimension: { width: 1080, height: 1080 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.LinkedIn,
-    resolution: { width: 1200, height: 627 },
+    dimension: { width: 1200, height: 627 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.GoogleBusiness,
-    resolution: { width: 1200, height: 900 },
+    dimension: { width: 1200, height: 900 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.YouTubeThumbnail,
-    resolution: { width: 1920, height: 1080 },
+    dimension: { width: 1920, height: 1080 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.YouTube,
-    resolution: { width: 1920, height: 1080 },
+    dimension: { width: 1920, height: 1080 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.IPadSmall,
-    resolution: { width: 80, height: 80 },
+    dimension: { width: 80, height: 80 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.IPadMedium,
-    resolution: { width: 200, height: 200 },
+    dimension: { width: 200, height: 200 },
     exactFit: true,
   },
   {
     type: ImageDimensionType.IPadLarge,
-    resolution: { width: 400, height: 200 },
+    dimension: { width: 400, height: 200 },
     exactFit: true,
+  },
+  {
+    type: ImageDimensionType.JsonLd,
+    longestEdge: 2048 / 2,
   },
 ];
 
@@ -151,3 +160,14 @@ export const getImageDimension = (
     );
   return imageDimension;
 };
+
+export const findDimension$ = (filePath: string): Observable<Dimension> =>
+  from(sharp(filePath).metadata()).pipe(
+    map(({ width, height }) => {
+      if (!width)
+        throw new BadRequestException(`Width was not found on ${filePath}`);
+      if (!height)
+        throw new BadRequestException(`Height was not found on ${filePath}`);
+      return { width, height };
+    })
+  );

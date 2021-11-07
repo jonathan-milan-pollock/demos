@@ -14,7 +14,6 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { Document } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
-import { EntityLoadNewImagesProvider } from './entity-load-new-images.provider';
 import { ImageFindFolderProvider } from './image-find-folder.provider';
 import { ImageAddProvider } from './image-add.provider';
 import { ImageAddBlobProvider } from './image-add-blob.provider';
@@ -25,18 +24,19 @@ import { ImageResizeProvider } from './image-resize.provider';
 import { ImageRemoveAllProvider } from './image-remove-all.provider';
 import { ImageRemoveOneProvider } from './image-remove-one.provider';
 import { ImageDeleteBlobsProvider } from './image-delete-blobs.provider';
+import { ImageUpdateNewProvider } from './image-update-new.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
 import * as apiUtil from '@dark-rush-photography/api/util';
 
-describe('entity-load-new-images.provider', () => {
-  let entityLoadNewImagesProvider: EntityLoadNewImagesProvider;
-  let imageFolderProvider: ImageFindFolderProvider;
+describe('image-update-new.provider', () => {
+  let imageUpdateNewProvider: ImageUpdateNewProvider;
+  let imageRemoveAllProvider: ImageRemoveAllProvider;
+  let imageFindFolderProvider: ImageFindFolderProvider;
   let imageAddProvider: ImageAddProvider;
   let imageProcessOneProvider: ImageProcessOneProvider;
-  let imageRemoveProvider: ImageRemoveAllProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {}
@@ -51,9 +51,9 @@ describe('entity-load-new-images.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
-        EntityLoadNewImagesProvider,
+        ImageUpdateNewProvider,
         ImageFindFolderProvider,
         ImageAddProvider,
         ImageProcessOneProvider,
@@ -66,22 +66,18 @@ describe('entity-load-new-images.provider', () => {
         ImageDeleteBlobsProvider,
       ],
     }).compile();
-
-    entityLoadNewImagesProvider = moduleRef.get<EntityLoadNewImagesProvider>(
-      EntityLoadNewImagesProvider
+    imageUpdateNewProvider = moduleRef.get<ImageUpdateNewProvider>(
+      ImageUpdateNewProvider
     );
-    imageRemoveProvider = moduleRef.get<ImageRemoveAllProvider>(
+    imageRemoveAllProvider = moduleRef.get<ImageRemoveAllProvider>(
       ImageRemoveAllProvider
     );
-    imageFolderProvider = moduleRef.get<ImageFindFolderProvider>(
+    imageFindFolderProvider = moduleRef.get<ImageFindFolderProvider>(
       ImageFindFolderProvider
     );
     imageAddProvider = moduleRef.get<ImageAddProvider>(ImageAddProvider);
     imageProcessOneProvider = moduleRef.get<ImageProcessOneProvider>(
       ImageProcessOneProvider
-    );
-    imageRemoveProvider = moduleRef.get<ImageRemoveAllProvider>(
-      ImageRemoveAllProvider
     );
   });
 
@@ -89,109 +85,23 @@ describe('entity-load-new-images.provider', () => {
     jest.clearAllMocks();
   });
 
-  describe('loadNewImages$', () => {
+  describe('updateNewImages$', () => {
     beforeEach(() => {
       jest
         .spyOn(apiUtil, 'getGoogleDrive')
         .mockReturnValue({} as drive_v3.Drive);
     });
 
-    it('should remove, add, and process new images', (done: any) => {
-      const mockedRemoveAllImagesForState$ = jest
-        .spyOn(imageRemoveProvider, 'removeAllImagesForState$')
+    it('should update new images', (done: any) => {
+      const mockedRemoveAllImages$ = jest
+        .spyOn(imageRemoveAllProvider, 'removeAllNewImages$')
         .mockReturnValue(of(undefined));
 
-      jest
-        .spyOn(imageFolderProvider, 'findNewImagesFolder$')
+      const mockedFindNewImagesFolder$ = jest
+        .spyOn(imageFindFolderProvider, 'findNewImagesFolder$')
         .mockReturnValue(of({} as GoogleDriveFolder));
 
-      jest
-        .spyOn(apiUtil, 'getGoogleDriveImageFiles$')
-        .mockReturnValue(of([{} as GoogleDriveFile] as GoogleDriveFile[]));
-
-      const mockedAddNewImage$ = jest
-        .spyOn(imageAddProvider, 'addNewImage$')
-        .mockReturnValue(of({} as Image));
-
-      const mockedProcessNewImage$ = jest
-        .spyOn(imageProcessOneProvider, 'processNewImage$')
-        .mockReturnValue(of(undefined));
-
-      entityLoadNewImagesProvider
-        .loadNewImages$(DUMMY_MONGODB_ID)
-        .subscribe(() => {
-          expect(mockedRemoveAllImagesForState$).toBeCalled();
-          expect(mockedAddNewImage$).toBeCalled();
-          expect(mockedProcessNewImage$).toBeCalled();
-          done();
-        });
-    });
-
-    it('should not add or process new images when google drive image folder is not found', (done: any) => {
-      jest
-        .spyOn(imageRemoveProvider, 'removeAllImagesForState$')
-        .mockReturnValue(of(undefined));
-
-      jest
-        .spyOn(imageFolderProvider, 'findNewImagesFolder$')
-        .mockReturnValue(of(undefined));
-
-      jest.spyOn(apiUtil, 'getGoogleDriveImageFiles$');
-
-      const mockedAddNewImage = jest.spyOn(imageAddProvider, 'addNewImage$');
-      const mockedProcessNewImage$ = jest.spyOn(
-        imageProcessOneProvider,
-        'processNewImage$'
-      );
-
-      entityLoadNewImagesProvider
-        .loadNewImages$(DUMMY_MONGODB_ID)
-        .subscribe(() => {
-          expect(mockedAddNewImage).not.toBeCalled();
-          expect(mockedProcessNewImage$).not.toBeCalled();
-          done();
-        });
-    });
-
-    it('should not add or process new images when google drive files are empty', (done: any) => {
-      jest
-        .spyOn(imageRemoveProvider, 'removeAllImagesForState$')
-        .mockReturnValue(of(undefined));
-
-      jest
-        .spyOn(imageFolderProvider, 'findNewImagesFolder$')
-        .mockReturnValue(of({} as GoogleDriveFolder));
-
-      jest
-        .spyOn(apiUtil, 'getGoogleDriveImageFiles$')
-        .mockReturnValue(of([] as GoogleDriveFile[]));
-
-      const mockedAddNewImage$ = jest.spyOn(imageAddProvider, 'addNewImage$');
-
-      const mockedProcessNewImage$ = jest.spyOn(
-        imageProcessOneProvider,
-        'processNewImage$'
-      );
-
-      entityLoadNewImagesProvider
-        .loadNewImages$(DUMMY_MONGODB_ID)
-        .subscribe(() => {
-          expect(mockedAddNewImage$).not.toBeCalled();
-          expect(mockedProcessNewImage$).not.toBeCalled();
-          done();
-        });
-    });
-
-    it('should add and process multiple new images', (done: any) => {
-      jest
-        .spyOn(imageRemoveProvider, 'removeAllImagesForState$')
-        .mockReturnValue(of(undefined));
-
-      jest
-        .spyOn(imageFolderProvider, 'findNewImagesFolder$')
-        .mockReturnValue(of({} as GoogleDriveFolder));
-
-      jest
+      const mockedGetGoogleDriveImageFiles$ = jest
         .spyOn(apiUtil, 'getGoogleDriveImageFiles$')
         .mockReturnValue(
           of([
@@ -208,11 +118,118 @@ describe('entity-load-new-images.provider', () => {
         .spyOn(imageProcessOneProvider, 'processNewImage$')
         .mockReturnValue(of(undefined));
 
-      entityLoadNewImagesProvider
-        .loadNewImages$(DUMMY_MONGODB_ID)
+      imageUpdateNewProvider
+        .updateNewImages$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
         .subscribe(() => {
+          expect(mockedRemoveAllImages$).toBeCalledTimes(1);
+          expect(mockedFindNewImagesFolder$).toBeCalledTimes(1);
+          expect(mockedGetGoogleDriveImageFiles$).toBeCalledTimes(1);
           expect(mockedAddNewImage$).toBeCalledTimes(2);
           expect(mockedProcessNewImage$).toBeCalledTimes(2);
+          done();
+        });
+    });
+
+    it('should not update new images when new images folder is not found', (done: any) => {
+      const mockedRemoveAllImages$ = jest
+        .spyOn(imageRemoveAllProvider, 'removeAllNewImages$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindNewImagesFolder$ = jest
+        .spyOn(imageFindFolderProvider, 'findNewImagesFolder$')
+        .mockReturnValue(of(undefined));
+
+      const mockedGetGoogleDriveImageFiles$ = jest.spyOn(
+        apiUtil,
+        'getGoogleDriveImageFiles$'
+      );
+
+      const mockedAddNewImage$ = jest.spyOn(imageAddProvider, 'addNewImage$');
+
+      const mockedProcessNewImage$ = jest.spyOn(
+        imageProcessOneProvider,
+        'processNewImage$'
+      );
+
+      imageUpdateNewProvider
+        .updateNewImages$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedRemoveAllImages$).toBeCalledTimes(1);
+          expect(mockedFindNewImagesFolder$).toBeCalledTimes(1);
+          expect(mockedGetGoogleDriveImageFiles$).not.toBeCalled();
+          expect(mockedAddNewImage$).not.toBeCalled();
+          expect(mockedProcessNewImage$).not.toBeCalled();
+          done();
+        });
+    });
+
+    it('should not update new images when there are not any google drive image files', (done: any) => {
+      const mockedRemoveAllImages$ = jest
+        .spyOn(imageRemoveAllProvider, 'removeAllNewImages$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindNewImagesFolder$ = jest
+        .spyOn(imageFindFolderProvider, 'findNewImagesFolder$')
+        .mockReturnValue(of({} as GoogleDriveFolder));
+
+      const mockedGetGoogleDriveImageFiles$ = jest
+        .spyOn(apiUtil, 'getGoogleDriveImageFiles$')
+        .mockReturnValue(of([] as GoogleDriveFile[]));
+
+      const mockedAddNewImage$ = jest.spyOn(imageAddProvider, 'addNewImage$');
+
+      const mockedProcessNewImage$ = jest.spyOn(
+        imageProcessOneProvider,
+        'processNewImage$'
+      );
+
+      imageUpdateNewProvider
+        .updateNewImages$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedRemoveAllImages$).toBeCalledTimes(1);
+          expect(mockedFindNewImagesFolder$).toBeCalledTimes(1);
+          expect(mockedGetGoogleDriveImageFiles$).toBeCalledTimes(1);
+          expect(mockedAddNewImage$).not.toBeCalled();
+          expect(mockedProcessNewImage$).not.toBeCalled();
+          done();
+        });
+    });
+
+    it('should not process a new image when a new image cannot be added', (done: any) => {
+      const mockedRemoveAllImages$ = jest
+        .spyOn(imageRemoveAllProvider, 'removeAllNewImages$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindNewImagesFolder$ = jest
+        .spyOn(imageFindFolderProvider, 'findNewImagesFolder$')
+        .mockReturnValue(of({} as GoogleDriveFolder));
+
+      const mockedGetGoogleDriveImageFiles$ = jest
+        .spyOn(apiUtil, 'getGoogleDriveImageFiles$')
+        .mockReturnValue(
+          of([
+            {} as GoogleDriveFile,
+            {} as GoogleDriveFile,
+          ] as GoogleDriveFile[])
+        );
+
+      const mockedAddNewImage$ = jest
+        .spyOn(imageAddProvider, 'addNewImage$')
+        .mockReturnValue(of(undefined));
+
+      const mockedProcessNewImage$ = jest.spyOn(
+        imageProcessOneProvider,
+        'processNewImage$'
+      );
+
+      imageUpdateNewProvider
+        .updateNewImages$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedRemoveAllImages$).toBeCalledTimes(1);
+          expect(mockedFindNewImagesFolder$).toBeCalledTimes(1);
+          expect(mockedGetGoogleDriveImageFiles$).toBeCalledTimes(1);
+          expect(mockedAddNewImage$).toBeCalledTimes(2);
+          expect(mockedProcessNewImage$).not.toBeCalled();
           done();
         });
     });

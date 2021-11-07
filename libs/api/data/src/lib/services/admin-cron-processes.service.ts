@@ -1,65 +1,56 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository, Repository } from '@nestjs/azure-database';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
-import { concatMap, from, map, Observable, of, toArray } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 
-import { CronProcessResponse } from '@dark-rush-photography/shared/types';
-import { CronProcessTable } from '../tables/cron-process.table';
-import { CronProcessResponseProvider } from '../providers/cron-process-response.provider';
+import { CronProcess } from '@dark-rush-photography/shared/types';
+import { loadCronProcess } from '../cron-processes/cron-process-load.functions';
+import { CronProcessRepositoryProvider } from '../providers/cron-process-repository.provider';
 
 @Injectable()
 export class AdminCronProcessesService {
   constructor(
-    @InjectRepository(CronProcessTable)
-    private readonly cronProcessRepository: Repository<CronProcessTable>,
-    private readonly cronProcessResponseProvider: CronProcessResponseProvider
+    @Inject(CronProcessRepositoryProvider.name)
+    private readonly cronProcessRepositoryProvider: CronProcessRepositoryProvider
   ) {}
 
-  findAll$(): Observable<CronProcessResponse[]> {
-    return from(this.cronProcessRepository.findAll()).pipe(
-      concatMap((response) => {
-        if (response.entries.length == 0) {
-          return of([]);
+  findAll$(): Observable<CronProcess[]> {
+    return this.cronProcessRepositoryProvider
+      .findAll$()
+      .pipe(
+        map((cronProcesses) =>
+          cronProcesses.length == 0 ? [] : cronProcesses.map(loadCronProcess)
+        )
+      );
+  }
+
+  findOne$(rowKey: string): Observable<CronProcess> {
+    return this.cronProcessRepositoryProvider.findAllForRowKey$(rowKey).pipe(
+      map((entries) => {
+        if (entries.length === 0) throw new NotFoundException();
+
+        if (entries.length > 1) {
+          throw new ConflictException(
+            'More than one cron process found for row key'
+          );
         }
 
-        return from(response.entries).pipe(
-          map(this.cronProcessResponseProvider.loadCronProcessResponse),
-          toArray<CronProcessResponse>()
-        );
+        return loadCronProcess(entries[0]);
       })
     );
   }
 
-  findOne$(key: string): Observable<CronProcessResponse> {
-    return from(
-      this.cronProcessRepository.findAll(
-        this.cronProcessRepository.where(`RowKey == '${key}'`)
-      )
-    ).pipe(
-      map((response) => {
-        if (response.entries.length === 0) throw new NotFoundException();
+  delete$(rowKey: string): Observable<void> {
+    return this.cronProcessRepositoryProvider.findAllForRowKey$(rowKey).pipe(
+      concatMap((entries) => {
+        if (entries.length === 0) return of(undefined);
 
-        return this.cronProcessResponseProvider.loadCronProcessResponse(
-          response.entries[0]
-        );
+        return this.cronProcessRepositoryProvider.delete$(rowKey);
       })
-    );
-  }
-
-  delete$(key: string): Observable<void> {
-    return from(
-      this.cronProcessRepository.findAll(
-        this.cronProcessRepository.where(`RowKey == '${key}'`)
-      )
-    ).pipe(
-      concatMap((response) => {
-        if (response.entries.length === 0) return of(undefined);
-
-        return from(
-          this.cronProcessRepository.delete(key, new CronProcessTable())
-        );
-      }),
-      map(() => undefined)
     );
   }
 }

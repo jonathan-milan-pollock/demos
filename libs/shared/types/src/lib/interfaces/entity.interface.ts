@@ -3,7 +3,7 @@ import { WatermarkedType } from '../enums/watermarked-type.enum';
 import { Location } from './location.interface';
 import { Image } from './image.interface';
 import { ImageVideo } from './image-video.interface';
-import { Resolution } from './resolution.interface';
+import { Dimension } from './dimension.interface';
 
 export interface Entity {
   readonly type: EntityType;
@@ -24,6 +24,6 @@ export interface Entity {
   readonly starredImageIsCentered: boolean;
   readonly images: Image[];
   readonly imageVideo?: ImageVideo;
-  readonly tileDimension?: Resolution;
+  readonly tileDimension?: Dimension;
   readonly isDeleted: boolean;
 }

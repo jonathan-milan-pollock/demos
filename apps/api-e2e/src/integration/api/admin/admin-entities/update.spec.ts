@@ -18,10 +18,8 @@ describe('Update Admin Entities', () => {
     seoKeywords: [faker.lorem.word(), faker.lorem.word(), faker.lorem.word()],
     location: {
       place: faker.company.companyName(),
-      street: faker.address.streetAddress(),
       city: faker.address.city(),
       stateOrProvince: faker.address.state(),
-      zipCode: faker.address.zipCode(),
       country: faker.address.country(),
     },
     starredImageIsCentered: faker.datatype.boolean(),
@@ -37,13 +35,13 @@ describe('Update Admin Entities', () => {
     cy
       .createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) =>
+      .then((adminEntity) =>
         cy
-          .updateAdminEntities(getAuthHeaders(), entityAdmin.id, entityUpdate)
-          .then(() => entityAdmin)
+          .updateAdminEntities(getAuthHeaders(), adminEntity.id, entityUpdate)
+          .then(() => adminEntity)
       )
-      .then((entityAdmin) =>
-        cy.findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
+      .then((adminEntity) =>
+        cy.findOneAdminEntities(getAuthHeaders(), adminEntity.id)
       )
       .then((response) => {
         const {
@@ -77,8 +75,8 @@ describe('Update Admin Entities', () => {
     cy
       .createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) =>
-        cy.updateAdminEntities(getAuthHeaders(), entityAdmin.id, entityUpdate)
+      .then((adminEntity) =>
+        cy.updateAdminEntities(getAuthHeaders(), adminEntity.id, entityUpdate)
       )
       .its('status')
       .should('equal', 204));

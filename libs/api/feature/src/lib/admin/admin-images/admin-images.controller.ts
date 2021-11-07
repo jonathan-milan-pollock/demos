@@ -24,7 +24,6 @@ import {
   ImageSelectionsDto,
   ImageStatesDto,
   ImageUpdateDto,
-  ThreeSixtyImageAddDto,
 } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { ImagesService } from '@dark-rush-photography/api/data';
@@ -35,23 +34,22 @@ import { ImagesService } from '@dark-rush-photography/api/data';
 export class AdminImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
-  @Post('three-sixty-image')
+  @Post('test-image')
   @ApiCreatedResponse({ type: ImageAdminDto })
-  addThreeSixtyImage$(
-    @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Body() threeSixtyImageAdd: ThreeSixtyImageAddDto
+  addTestImage$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<ImageAdminDto> {
-    return this.imagesService.addThreeSixtyImage$(entityId, threeSixtyImageAdd);
+    return this.imagesService.addTestImage$(entityId);
   }
 
-  @Post()
+  @Post('load')
   @HttpCode(200)
   @ApiOkResponse({ type: [ImageAdminDto] })
-  load$(
+  loadImages$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() imageStates: ImageStatesDto
   ): Observable<ImageAdminDto[]> {
-    return this.imagesService.load$(entityId, imageStates);
+    return this.imagesService.loadImages$(entityId, imageStates);
   }
 
   @Put('update-new-images')
@@ -62,13 +60,13 @@ export class AdminImagesController {
     return this.imagesService.updateNewImages$(entityId);
   }
 
-  @Put('order-publish-images')
+  @Put('order-images')
   @HttpCode(204)
-  orderPublishImages$(
+  orderImages$(
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() imageOrders: ImageOrdersDto
   ): Observable<void> {
-    return this.imagesService.orderPublishImages$(entityId, imageOrders);
+    return this.imagesService.orderImages$(entityId, imageOrders);
   }
 
   @Put('select-new-images')
@@ -80,32 +78,36 @@ export class AdminImagesController {
     return this.imagesService.selectNewImages$(entityId, imageSelections);
   }
 
-  @Put(':imageId')
+  @Put(':imageId/update-publish-image')
   @HttpCode(204)
-  update$(
+  updatePublishImage$(
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() imageUpdate: ImageUpdateDto
   ): Observable<void> {
-    return this.imagesService.update$(imageId, entityId, imageUpdate);
+    return this.imagesService.updatePublishImage$(
+      imageId,
+      entityId,
+      imageUpdate
+    );
   }
 
   @Put(':imageId/archive')
   @HttpCode(204)
-  archive$(
+  archiveImage$(
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
-    return this.imagesService.archive$(imageId, entityId);
+    return this.imagesService.archiveImage$(imageId, entityId);
   }
 
   @Put(':imageId/unarchive')
   @HttpCode(204)
-  unarchive$(
+  unarchiveImage$(
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
-    return this.imagesService.unarchive$(imageId, entityId);
+    return this.imagesService.unarchiveImage$(imageId, entityId);
   }
 
   @Delete(':imageId/publish-image')

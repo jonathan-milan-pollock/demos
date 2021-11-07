@@ -1,40 +1,37 @@
 import {
   ImageAdmin,
+  ImageOrders,
+  ImageSelections,
   ImageStates,
   ImageUpdate,
-  ThreeSixtyImageAdd,
 } from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add(
-  'addThreeSixtyImageAdminImages',
+  'addTestImageAdminImages',
   (
     authHeaders: { Authorization: string },
-    entityId: string,
-    threeSixtyImageAdd: ThreeSixtyImageAdd
+    entityId: string
   ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
     cy.request({
       method: 'POST',
-      url: `/api/v1/admin/images/three-sixty-image?entityId=${entityId}`,
+      url: `/api/v1/admin/images/test-image?entityId=${entityId}`,
       headers: {
         ...authHeaders,
-      },
-      body: {
-        ...threeSixtyImageAdd,
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'loadAdminImages',
+  'loadImagesAdminImages',
   (
     authHeaders: { Authorization: string },
     entityId: string,
     imageStates: ImageStates
-  ): Cypress.Chainable<Cypress.Response<void>> =>
+  ): Cypress.Chainable<Cypress.Response<ImageAdmin[]>> =>
     cy.request({
       method: 'POST',
-      url: `/api/v1/admin/entities/${entityId}/load-new-images`,
+      url: `/api/v1/admin/images/load?entityId=${entityId}`,
       headers: {
         ...authHeaders,
       },
@@ -53,7 +50,7 @@ Cypress.Commands.add(
   ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/entities/${entityId}/update-new-images`,
+      url: `/api/v1/admin/images/update-new-images?entityId=${entityId}`,
       headers: {
         ...authHeaders,
       },
@@ -62,21 +59,20 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'orderPublishImagesAdminImages',
+  'orderImagesAdminImages',
   (
     authHeaders: { Authorization: string },
-    imageId: string,
     entityId: string,
-    imageUpdate: ImageUpdate
-  ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
+    imageOrders: ImageOrders
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/images/${imageId}?entityId=${entityId}`,
+      url: `/api/v1/admin/images/order-images?entityId=${entityId}`,
       headers: {
         ...authHeaders,
       },
       body: {
-        ...imageUpdate,
+        ...imageOrders,
       },
       failOnStatusCode: false,
     })
@@ -86,30 +82,33 @@ Cypress.Commands.add(
   'selectNewImagesAdminImages',
   (
     authHeaders: { Authorization: string },
-    imageId: string,
-    entityId: string
-  ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
+    entityId: string,
+    imageSelections: ImageSelections
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/images/${imageId}/select-new-images?entityId=${entityId}`,
+      url: `/api/v1/admin/images/select-new-images?entityId=${entityId}`,
       headers: {
         ...authHeaders,
+      },
+      body: {
+        ...imageSelections,
       },
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
-  'updateAdminImages',
+  'updatePublishImageAdminImages',
   (
     authHeaders: { Authorization: string },
     imageId: string,
     entityId: string,
     imageUpdate: ImageUpdate
-  ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/images/${imageId}?entityId=${entityId}`,
+      url: `/api/v1/admin/images/${imageId}/update-publish-image?entityId=${entityId}`,
       headers: {
         ...authHeaders,
       },
@@ -121,12 +120,12 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'archiveAdminImages',
+  'archiveImageAdminImages',
   (
     authHeaders: { Authorization: string },
     imageId: string,
     entityId: string
-  ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
       url: `/api/v1/admin/images/${imageId}/archive?entityId=${entityId}`,
@@ -138,12 +137,12 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
-  'unarchiveAdminImages',
+  'unarchiveImageAdminImages',
   (
     authHeaders: { Authorization: string },
     imageId: string,
     entityId: string
-  ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
+  ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
       url: `/api/v1/admin/images/${imageId}/unarchive?entityId=${entityId}`,

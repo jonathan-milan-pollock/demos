@@ -45,40 +45,10 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.createTest$();
   }
 
-  @Put('entity-type/:entityWithoutGroupType/order')
+  @Put('order')
   @HttpCode(204)
-  @ApiParam({
-    name: 'entityWithoutGroupType',
-    enum: EntityWithoutGroupType,
-  })
-  order$(
-    @Param('entityWithoutGroupType', new ParseEnumPipe(EntityWithoutGroupType))
-    entityWithoutGroupType: EntityWithoutGroupType,
-    @Body() entityOrders: EntityOrdersDto
-  ): Observable<void> {
-    return this.adminEntitiesService.order$(
-      entityWithoutGroupType,
-      entityOrders
-    );
-  }
-
-  @Put('entity-type/:entityWithGroupType/groups/:group/order')
-  @HttpCode(204)
-  @ApiParam({
-    name: 'entityWithGroupType',
-    enum: EntityWithGroupType,
-  })
-  orderForGroup$(
-    @Param('entityWithGroupType', new ParseEnumPipe(EntityWithGroupType))
-    entityWithGroupType: EntityWithGroupType,
-    @Param('group') group: string,
-    @Body() entityOrders: EntityOrdersDto
-  ): Observable<void> {
-    return this.adminEntitiesService.orderForGroup$(
-      entityWithGroupType,
-      group,
-      entityOrders
-    );
+  order$(@Body() entityOrders: EntityOrdersDto): Observable<void> {
+    return this.adminEntitiesService.order$(entityOrders);
   }
 
   @Put(':entityId')

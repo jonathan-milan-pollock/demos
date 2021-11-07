@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Test } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 
 import * as faker from 'faker';
@@ -12,7 +12,12 @@ import {
   GoogleDriveFolder,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { ImageFolderProvider } from './image-find-folder.provider';
+import { ImageFindFolderProvider } from './image-find-folder.provider';
+
+jest.mock('@dark-rush-photography/shared/util', () => ({
+  ...jest.requireActual('@dark-rush-photography/shared/util'),
+}));
+import * as sharedUtil from '@dark-rush-photography/shared/util';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
@@ -27,7 +32,7 @@ import * as entityRepositoryFunctions from '../entities/entity-repository.functi
 jest.mock('../entities/entity-validation.functions', () => ({
   ...jest.requireActual('../entities/entity-validation.functions'),
 }));
-import * as entityValidationFunctions from '../entities/entity-validate-document-model.functions';
+import * as entityValidationFunctions from '../entities/entity-validation.functions';
 
 jest.mock('../entities/entity-field-validation.functions', () => ({
   ...jest.requireActual('../entities/entity-field-validation.functions'),
@@ -35,7 +40,7 @@ jest.mock('../entities/entity-field-validation.functions', () => ({
 import * as entityFieldValidationFunctions from '../entities/entity-field-validation.functions';
 
 describe('image-find-folder.provider', () => {
-  let imageFolderProvider: ImageFolderProvider;
+  let imageFindFolderProvider: ImageFindFolderProvider;
 
   beforeEach(async () => {
     class MockDocumentModel {}
@@ -44,18 +49,15 @@ describe('image-find-folder.provider', () => {
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
-        ImageFolderProvider,
+        ImageFindFolderProvider,
       ],
     }).compile();
 
-    imageFolderProvider =
-      moduleRef.get<ImageFolderProvider>(ImageFolderProvider);
-
-    jest
-      .spyOn(entityRepositoryFunctions, 'findEntityById$')
-      .mockReturnValue(of({} as DocumentModel));
+    imageFindFolderProvider = moduleRef.get<ImageFindFolderProvider>(
+      ImageFindFolderProvider
+    );
   });
 
   afterEach(() => {
@@ -64,67 +66,109 @@ describe('image-find-folder.provider', () => {
 
   describe('findNewImagesFolder$', () => {
     it('should find the new images folder by name', (done: any) => {
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({} as DocumentModel);
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({} as DocumentModel));
 
-      jest
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedValidateEntityGoogleDriveFolderId = jest
         .spyOn(
           entityFieldValidationFunctions,
           'validateEntityGoogleDriveFolderId'
         )
         .mockReturnValue(faker.datatype.uuid());
 
-      jest
-        .spyOn(apiUtil, 'getEntityTypeNewImagesFolderName')
+      const mockedGetEntityTypeNewImagesFolderName = jest
+        .spyOn(sharedUtil, 'getEntityTypeNewImagesFolderName')
         .mockReturnValue(faker.lorem.word());
 
       const mockedFindGoogleDriveFolderByName$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
         .mockReturnValue(of({} as GoogleDriveFolder));
 
-      imageFolderProvider
+      const mockedFindGoogleDriveFolderById$ = jest.spyOn(
+        apiUtil,
+        'findGoogleDriveFolderById$'
+      );
+
+      imageFindFolderProvider
         .findNewImagesFolder$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
         .subscribe(() => {
-          expect(mockedFindGoogleDriveFolderByName$).toBeCalled();
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedValidateEntityGoogleDriveFolderId).toBeCalledTimes(1);
+          expect(mockedGetEntityTypeNewImagesFolderName).toBeCalledTimes(1);
+          expect(mockedFindGoogleDriveFolderByName$).toBeCalledTimes(1);
+          expect(mockedFindGoogleDriveFolderById$).not.toBeCalled();
           done();
         });
     });
 
-    it('should find the new images folder as the google drive entity folder', (done: any) => {
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({} as DocumentModel);
+    it('should find the new images folder by id when it does not have a name', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({} as DocumentModel));
 
-      jest
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedValidateEntityGoogleDriveFolderId = jest
         .spyOn(
           entityFieldValidationFunctions,
           'validateEntityGoogleDriveFolderId'
         )
         .mockReturnValue(faker.datatype.uuid());
 
-      jest
-        .spyOn(apiUtil, 'getEntityTypeNewImagesFolderName')
+      const mockedGetEntityTypeNewImagesFolderName = jest
+        .spyOn(sharedUtil, 'getEntityTypeNewImagesFolderName')
         .mockReturnValue(undefined);
+
+      const mockedFindGoogleDriveFolderByName$ = jest.spyOn(
+        apiUtil,
+        'findGoogleDriveFolderByName$'
+      );
 
       const mockedFindGoogleDriveFolderById$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolderById$')
         .mockReturnValue(of({} as GoogleDriveFolder));
 
-      imageFolderProvider
+      imageFindFolderProvider
         .findNewImagesFolder$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
         .subscribe(() => {
-          expect(mockedFindGoogleDriveFolderById$).toBeCalled();
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedValidateEntityGoogleDriveFolderId).toBeCalledTimes(1);
+          expect(mockedGetEntityTypeNewImagesFolderName).toBeCalledTimes(1);
+          expect(mockedFindGoogleDriveFolderByName$).not.toBeCalled();
+          expect(mockedFindGoogleDriveFolderById$).toBeCalledTimes(1);
           done();
         });
     });
 
-    it('should not find the new images folder when the entity is not found', (done: any) => {
-      jest
+    it('should not find the new images folder by name or id when entity does not exist', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of(null));
+
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
         .mockImplementation(() => {
           throw new NotFoundException();
         });
+
+      const mockedValidateEntityGoogleDriveFolderId = jest.spyOn(
+        entityFieldValidationFunctions,
+        'validateEntityGoogleDriveFolderId'
+      );
+
+      const mockedGetEntityTypeNewImagesFolderName = jest.spyOn(
+        sharedUtil,
+        'getEntityTypeNewImagesFolderName'
+      );
 
       const mockedFindGoogleDriveFolderByName$ = jest.spyOn(
         apiUtil,
@@ -136,15 +180,75 @@ describe('image-find-folder.provider', () => {
         'findGoogleDriveFolderById$'
       );
 
-      imageFolderProvider
+      imageFindFolderProvider
         .findNewImagesFolder$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
         .subscribe({
           next: () => {
             done();
           },
-          error: () => {
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toBeCalledTimes(1);
+            expect(mockedValidateEntityGoogleDriveFolderId).not.toBeCalled();
+            expect(mockedGetEntityTypeNewImagesFolderName).not.toBeCalled();
             expect(mockedFindGoogleDriveFolderByName$).not.toBeCalled();
             expect(mockedFindGoogleDriveFolderById$).not.toBeCalled();
+            expect(error).toBeInstanceOf(NotFoundException);
+            done();
+          },
+          complete: () => {
+            done();
+          },
+        });
+    });
+
+    it('should not find the new images folder by name or id when google drive folder id is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedValidateEntityGoogleDriveFolderId = jest
+        .spyOn(
+          entityFieldValidationFunctions,
+          'validateEntityGoogleDriveFolderId'
+        )
+        .mockImplementation(() => {
+          throw new ConflictException();
+        });
+
+      const mockedGetEntityTypeNewImagesFolderName = jest.spyOn(
+        sharedUtil,
+        'getEntityTypeNewImagesFolderName'
+      );
+
+      const mockedFindGoogleDriveFolderByName$ = jest.spyOn(
+        apiUtil,
+        'findGoogleDriveFolderByName$'
+      );
+
+      const mockedFindGoogleDriveFolderById$ = jest.spyOn(
+        apiUtil,
+        'findGoogleDriveFolderById$'
+      );
+
+      imageFindFolderProvider
+        .findNewImagesFolder$({} as drive_v3.Drive, DUMMY_MONGODB_ID)
+        .subscribe({
+          next: () => {
+            done();
+          },
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toBeCalledTimes(1);
+            expect(mockedValidateEntityGoogleDriveFolderId).toBeCalledTimes(1);
+            expect(mockedGetEntityTypeNewImagesFolderName).not.toBeCalled();
+            expect(mockedFindGoogleDriveFolderByName$).not.toBeCalled();
+            expect(mockedFindGoogleDriveFolderById$).not.toBeCalled();
+            expect(error).toBeInstanceOf(ConflictException);
             done();
           },
           complete: () => {

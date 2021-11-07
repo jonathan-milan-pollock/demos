@@ -6,16 +6,12 @@ import { Model } from 'mongoose';
 
 import { ImageState } from '@dark-rush-photography/shared/types';
 import { getEntityTypeHasImageVideo } from '@dark-rush-photography/shared/util';
-import {
-  getPublishImageFileName,
-  getPublishImageVideoFileName,
-} from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
-  publishImage$,
-  publishImageVideo$,
+  addImageVideo$,
+  updateImageState$,
 } from '../images/image-repository.functions';
 
 @Injectable()
@@ -36,16 +32,12 @@ export class ImagePublishProvider {
         );
         return from(imagesToPublish).pipe(
           concatMap((imageToPublish) => {
-            const publishImageFileName = getPublishImageFileName(
-              documentModel.slug,
-              imageToPublish.fileName
-            );
             return findEntityById$(entityId, this.entityModel).pipe(
               map(validateEntityFound),
               concatMap((documentModel) =>
-                publishImage$(
+                updateImageState$(
                   imageToPublish,
-                  publishImageFileName,
+                  ImageState.Public,
                   documentModel,
                   this.entityModel
                 )
@@ -68,19 +60,14 @@ export class ImagePublishProvider {
         }
         if (!documentModel.imageVideo) return of(undefined);
 
-        const publishImageVideoFileName = getPublishImageVideoFileName(
-          documentModel.slug
-        );
-
         return findEntityById$(entityId, this.entityModel).pipe(
           map(validateEntityFound),
           concatMap((documentModel) => {
             if (!documentModel.imageVideo) return of(undefined);
 
-            return publishImageVideo$(
+            return addImageVideo$(
               documentModel.imageVideo,
               entityId,
-              publishImageVideoFileName,
               this.entityModel
             );
           })

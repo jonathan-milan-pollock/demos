@@ -1,3 +1,5 @@
+import { ImageIdOrder } from './image-id-order.interface';
+
 export interface ImageOrders {
-  readonly imageIds: string[];
+  readonly imageIdOrders: ImageIdOrder[];
 }

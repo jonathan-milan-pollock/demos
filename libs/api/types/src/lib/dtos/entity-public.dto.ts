@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsInt,
   IsISO8601,
+  IsMongoId,
   IsOptional,
   IsString,
   Min,
@@ -17,6 +18,9 @@ import { ImagePublicDto } from './image-public.dto';
 export class EntityPublicDto implements EntityPublic {
   @IsEnum(EntityType)
   type!: EntityType;
+
+  @IsMongoId()
+  id!: string;
 
   @IsString()
   group!: string;

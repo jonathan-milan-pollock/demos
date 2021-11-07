@@ -1,10 +1,10 @@
-import { CronProcessResponse } from '@dark-rush-photography/shared/types';
+import { CronProcess } from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add(
   'findAllAdminCronProcesses',
   (authHeaders: {
     Authorization: string;
-  }): Cypress.Chainable<Cypress.Response<CronProcessResponse[]>> =>
+  }): Cypress.Chainable<Cypress.Response<CronProcess[]>> =>
     cy.request({
       method: 'GET',
       url: '/api/v1/admin/cron-processes',
@@ -22,7 +22,7 @@ Cypress.Commands.add(
       Authorization: string;
     },
     key: string
-  ): Cypress.Chainable<Cypress.Response<CronProcessResponse>> =>
+  ): Cypress.Chainable<Cypress.Response<CronProcess>> =>
     cy.request({
       method: 'GET',
       url: `/api/v1/admin/cron-processes/${key}`,

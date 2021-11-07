@@ -1,5 +1,5 @@
 import {
-  CronProcessResponse,
+  CronProcess,
   EntityAdmin,
   EntityType,
 } from '@dark-rush-photography/shared/types';
@@ -32,11 +32,11 @@ Cypress.Commands.add(
   'deleteTestCronProcesses',
   (authHeaders: {
     Authorization: string;
-  }): Cypress.Chainable<Cypress.Response<CronProcessResponse[]>> =>
+  }): Cypress.Chainable<Cypress.Response<CronProcess[]>> =>
     cy.findAllAdminCronProcesses(authHeaders).then((response) =>
-      response.body.forEach((cronProcessResponse: CronProcessResponse) => {
-        if (cronProcessResponse.entityType === EntityType.Test) {
-          cy.deleteAdminCronProcesses(authHeaders, cronProcessResponse.key);
+      response.body.forEach((cronProcess: CronProcess) => {
+        if (cronProcess.entityType === EntityType.Test) {
+          cy.deleteAdminCronProcesses(authHeaders, cronProcess.key);
         }
       })
     )

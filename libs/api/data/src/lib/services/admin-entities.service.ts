@@ -1,21 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { concatMap, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  DEFAULT_ENTITY_GROUP,
+  CronProcessType,
   EntityAdmin,
   EntityOrders,
   EntityUpdate,
   EntityWithGroupType,
   EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
-import {
-  getEntityTypeFromEntityWithGroupType,
-  getEntityTypeFromEntityWithoutGroupType,
-} from '@dark-rush-photography/shared/util';
 import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
@@ -25,13 +21,15 @@ import {
   updateEntity$,
 } from '../entities/entity-repository.functions';
 import { loadEntityAdmin } from '../entities/entity-load-admin.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { startCronProcessType } from '../cron-processes/cron-process-start.functions';
+import { validatePublishEntity } from '../entities/entity-publish-validation.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { ConfigProvider } from '../providers/config.provider';
 import { EntityGroupProvider } from '../providers/entity-group.provider';
 import { EntityCreateProvider } from '../providers/entity-create.provider';
 import { EntityFindAllProvider } from '../providers/entity-find-all.provider';
 import { EntityOrderProvider } from '../providers/entity-order.provider';
-import { CronProcessStartProvider } from '../providers/cron-process-start.provider';
+import { CronProcessRepositoryProvider } from '../providers/cron-process-repository.provider';
 
 @Injectable()
 export class AdminEntitiesService {
@@ -43,37 +41,16 @@ export class AdminEntitiesService {
     private readonly entityCreateProvider: EntityCreateProvider,
     private readonly entityFindAllProvider: EntityFindAllProvider,
     private readonly entityOrderProvider: EntityOrderProvider,
-    private readonly cronProcessStartProvider: CronProcessStartProvider
+    @Inject(CronProcessRepositoryProvider.name)
+    private readonly cronProcessRepositoryProvider: CronProcessRepositoryProvider
   ) {}
 
   createTest$(): Observable<EntityAdmin> {
-    return createTestEntity$(this.entityModel).pipe(
-      map(validateEntityFound),
-      map(loadEntityAdmin)
-    );
+    return createTestEntity$(this.entityModel).pipe(map(loadEntityAdmin));
   }
 
-  order$(
-    entityWithoutGroupType: EntityWithoutGroupType,
-    entityOrders: EntityOrders
-  ): Observable<void> {
-    return this.entityOrderProvider.order$(
-      getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
-      DEFAULT_ENTITY_GROUP,
-      entityOrders
-    );
-  }
-
-  orderForGroup$(
-    entityWithGroupType: EntityWithGroupType,
-    group: string,
-    entityOrders: EntityOrders
-  ): Observable<void> {
-    return this.entityOrderProvider.order$(
-      getEntityTypeFromEntityWithGroupType(entityWithGroupType),
-      group,
-      entityOrders
-    );
+  order$(entityOrders: EntityOrders): Observable<void> {
+    return this.entityOrderProvider.order$(entityOrders);
   }
 
   update$(entityId: string, entityUpdate: EntityUpdate): Observable<void> {
@@ -87,16 +64,19 @@ export class AdminEntitiesService {
   publish$(entityId: string, postSocialMedia: boolean): Observable<void> {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
+      map(validatePublishEntity),
       concatMap((documentModel) =>
-        this.cronProcessStartProvider.startPublishEntity$(
-          documentModel.type,
-          documentModel._id,
-          documentModel.group,
-          documentModel.slug,
-          postSocialMedia
+        this.cronProcessRepositoryProvider.create$(
+          startCronProcessType(
+            CronProcessType.PublishEntity,
+            documentModel.type,
+            documentModel._id,
+            documentModel.group,
+            documentModel.slug,
+            postSocialMedia
+          )
         )
-      ),
-      map(() => undefined)
+      )
     );
   }
 
@@ -163,18 +143,17 @@ export class AdminEntitiesService {
   }
 
   delete$(entityId: string): Observable<void> {
-    return findEntityById$(entityId, this.entityModel).pipe(
+    return findByIdAndSoftDelete$(entityId, this.entityModel).pipe(
       concatMap((documentModel) => {
         if (!documentModel) return of(undefined);
 
-        return findByIdAndSoftDelete$(entityId, this.entityModel).pipe(
-          concatMap(() =>
-            this.cronProcessStartProvider.startDeleteEntity$(
-              documentModel.type,
-              documentModel._id,
-              documentModel.group,
-              documentModel.slug
-            )
+        return this.cronProcessRepositoryProvider.create$(
+          startCronProcessType(
+            CronProcessType.DeleteEntity,
+            documentModel.type,
+            documentModel._id,
+            documentModel.group,
+            documentModel.slug
           )
         );
       })

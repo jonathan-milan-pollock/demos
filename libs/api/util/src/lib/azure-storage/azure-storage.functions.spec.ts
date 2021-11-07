@@ -52,7 +52,7 @@ describe('azure-storage.functions', () => {
         faker.internet.url(),
         faker.lorem.word()
       ).subscribe(() => {
-        expect(mockedDeleteIfExists).toBeCalled();
+        expect(mockedDeleteIfExists).toBeCalledTimes(1);
         done();
       });
     });
@@ -65,7 +65,7 @@ describe('azure-storage.functions', () => {
         faker.internet.url(),
         faker.lorem.word()
       ).subscribe(() => {
-        expect(mockedDeleteIfExists).toBeCalled();
+        expect(mockedDeleteIfExists).toBeCalledTimes(1);
         done();
       });
     });

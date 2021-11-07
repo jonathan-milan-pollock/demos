@@ -11,7 +11,7 @@ import {
   GoogleDriveFolder,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
-import { Document } from '../schema/document.schema';
+import { Document, DocumentModel } from '../schema/document.schema';
 import { EntityCreateOneForFolderProvider } from './entity-create-one-for-folder.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
@@ -23,7 +23,6 @@ jest.mock('../entities/entity-repository.functions', () => ({
   ...jest.requireActual('../entities/entity-repository.functions'),
 }));
 import * as entityRepositoryFunctions from '../entities/entity-repository.functions';
-import { DocumentModel } from '../schema/document.schema';
 
 describe('entity-create-one-for-folder.provider', () => {
   let entityCreateOneForFolderProvider: EntityCreateOneForFolderProvider;
@@ -35,7 +34,7 @@ describe('entity-create-one-for-folder.provider', () => {
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         EntityCreateOneForFolderProvider,
       ],
@@ -52,18 +51,23 @@ describe('entity-create-one-for-folder.provider', () => {
   });
 
   describe('createOneEntityForFolder$', () => {
-    it('should create an entity for a folder', (done: any) => {
-      jest
+    it('should create one entity for a folder', (done: any) => {
+      const mockedFindOneEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'findOneEntity$')
         .mockReturnValue(of(null));
 
-      const mockedFoundEntityLogMessage = jest
-        .spyOn(apiUtil, 'foundEntityLogMessage')
-        .mockReturnValue(faker.lorem.sentence());
+      const mockedLogFoundEntityMessage = jest.spyOn(
+        apiUtil,
+        'logFoundEntityMessage'
+      );
 
-      const creatingEntityLogMessage = jest
-        .spyOn(apiUtil, 'creatingEntityLogMessage')
-        .mockReturnValue(faker.lorem.sentence());
+      const mockedLogCreatingEntityMessage = jest
+        .spyOn(apiUtil, 'logCreatingEntityMessage')
+        .mockReturnValue(undefined);
+
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+        .mockReturnValue(of([] as DocumentModel[]));
 
       const mockedCreateEntityForFolder$ = jest
         .spyOn(entityRepositoryFunctions, 'createEntityForFolder$')
@@ -77,21 +81,32 @@ describe('entity-create-one-for-folder.provider', () => {
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockedFoundEntityLogMessage).not.toHaveBeenCalled();
-          expect(creatingEntityLogMessage).toHaveBeenCalled();
-          expect(mockedCreateEntityForFolder$).toHaveBeenCalled();
+          expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
+          expect(mockedLogFoundEntityMessage).not.toHaveBeenCalled();
+          expect(mockedLogCreatingEntityMessage).toHaveBeenCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateEntityForFolder$).toHaveBeenCalledTimes(1);
           done();
         });
     });
 
-    it('should not create an entity for a folder if it already exists', (done: any) => {
-      jest
+    it('should create one entity with order of 1 when no documents are found for group', (done: any) => {
+      const mockedFindOneEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'findOneEntity$')
-        .mockReturnValue(of({} as DocumentModel));
+        .mockReturnValue(of(null));
 
-      const mockedFoundEntityLogMessage = jest
-        .spyOn(apiUtil, 'foundEntityLogMessage')
-        .mockReturnValue(faker.lorem.sentence());
+      const mockedLogFoundEntityMessage = jest.spyOn(
+        apiUtil,
+        'logFoundEntityMessage'
+      );
+
+      const mockedLogCreatingEntityMessage = jest
+        .spyOn(apiUtil, 'logCreatingEntityMessage')
+        .mockReturnValue(undefined);
+
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+        .mockReturnValue(of([] as DocumentModel[]));
 
       const mockedCreateEntityForFolder$ = jest
         .spyOn(entityRepositoryFunctions, 'createEntityForFolder$')
@@ -105,61 +120,185 @@ describe('entity-create-one-for-folder.provider', () => {
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockedFoundEntityLogMessage).toHaveBeenCalled();
+          expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
+          expect(mockedLogFoundEntityMessage).not.toHaveBeenCalled();
+          expect(mockedLogCreatingEntityMessage).toHaveBeenCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateEntityForFolder$).toHaveBeenCalledTimes(1);
+          const [
+            _entityType,
+            _googleDriveFolderId,
+            _watermarkedType,
+            _group,
+            _slug,
+            order,
+          ] = mockedCreateEntityForFolder$.mock.calls[0];
+          expect(order).toBe(1);
+          done();
+        });
+    });
+
+    it('should create one entity with max order plus 1 when documents are found for group', (done: any) => {
+      const mockedFindOneEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of(null));
+
+      const mockedLogFoundEntityMessage = jest.spyOn(
+        apiUtil,
+        'logFoundEntityMessage'
+      );
+
+      const mockedLogCreatingEntityMessage = jest
+        .spyOn(apiUtil, 'logCreatingEntityMessage')
+        .mockReturnValue(undefined);
+
+      const documentModelOrder = faker.datatype.number({ min: 1 });
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+        .mockReturnValue(
+          of([
+            {
+              order: documentModelOrder,
+            },
+          ] as DocumentModel[])
+        );
+
+      const mockedCreateEntityForFolder$ = jest
+        .spyOn(entityRepositoryFunctions, 'createEntityForFolder$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      entityCreateOneForFolderProvider
+        .createOneEntityForFolder$(
+          {} as GoogleDriveFolder,
+          faker.random.arrayElement(Object.values(EntityType)),
+          faker.random.arrayElement(Object.values(WatermarkedType)),
+          faker.lorem.word()
+        )
+        .subscribe(() => {
+          expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
+          expect(mockedLogFoundEntityMessage).not.toHaveBeenCalled();
+          expect(mockedLogCreatingEntityMessage).toHaveBeenCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateEntityForFolder$).toHaveBeenCalledTimes(1);
+          const [
+            _entityType,
+            _googleDriveFolderId,
+            _watermarkedType,
+            _group,
+            _slug,
+            order,
+          ] = mockedCreateEntityForFolder$.mock.calls[0];
+          expect(order).toBe(documentModelOrder + 1);
+          done();
+        });
+    });
+
+    it('should not create one entity for a folder if it already exists', (done: any) => {
+      const mockedFindOneEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'findOneEntity$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedFoundEntityLogMessage = jest
+        .spyOn(apiUtil, 'logFoundEntityMessage')
+        .mockReturnValue(undefined);
+
+      const mockedLogCreatingEntityMessage = jest.spyOn(
+        apiUtil,
+        'logCreatingEntityMessage'
+      );
+
+      const mockedFindAllEntitiesForGroup$ = jest.spyOn(
+        entityRepositoryFunctions,
+        'findAllEntitiesForGroup$'
+      );
+
+      const mockedCreateEntityForFolder$ = jest.spyOn(
+        entityRepositoryFunctions,
+        'createEntityForFolder$'
+      );
+
+      entityCreateOneForFolderProvider
+        .createOneEntityForFolder$(
+          {} as GoogleDriveFolder,
+          faker.random.arrayElement(Object.values(EntityType)),
+          faker.random.arrayElement(Object.values(WatermarkedType)),
+          faker.lorem.word()
+        )
+        .subscribe(() => {
+          expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
+          expect(mockedFoundEntityLogMessage).toHaveBeenCalledTimes(1);
+          expect(mockedLogCreatingEntityMessage).not.toHaveBeenCalled();
+          expect(mockedFindAllEntitiesForGroup$).not.toHaveBeenCalled();
           expect(mockedCreateEntityForFolder$).not.toHaveBeenCalled();
           done();
         });
     });
 
-    it('should create an entity with the folder name if the initial slug is not provided', (done: any) => {
+    it('should create an entity with the folder name when the initial slug is not provided', (done: any) => {
       const mockedFindOneEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'findOneEntity$')
         .mockReturnValue(of(null));
 
-      jest
-        .spyOn(apiUtil, 'creatingEntityLogMessage')
-        .mockReturnValue(faker.lorem.sentence());
+      const mockedLogFoundEntityMessage = jest.spyOn(
+        apiUtil,
+        'logFoundEntityMessage'
+      );
+
+      const mockedLogCreatingEntityMessage = jest
+        .spyOn(apiUtil, 'logCreatingEntityMessage')
+        .mockReturnValue(undefined);
+
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+        .mockReturnValue(of([] as DocumentModel[]));
 
       const mockedCreateEntityForFolder$ = jest
         .spyOn(entityRepositoryFunctions, 'createEntityForFolder$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const entityFolderName = faker.lorem.word();
+      const folderName = faker.lorem.word();
       entityCreateOneForFolderProvider
         .createOneEntityForFolder$(
-          { name: entityFolderName } as GoogleDriveFolder,
+          { id: faker.datatype.uuid(), name: folderName } as GoogleDriveFolder,
           faker.random.arrayElement(Object.values(EntityType)),
           faker.random.arrayElement(Object.values(WatermarkedType)),
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockedFindOneEntity$).toHaveBeenCalled();
+          expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
+          expect(mockedLogFoundEntityMessage).not.toHaveBeenCalled();
+          expect(mockedLogCreatingEntityMessage).toHaveBeenCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateEntityForFolder$).toHaveBeenCalledTimes(1);
           const [
-            _findWithEntityType,
-            _findWithWatermarkedType,
-            _findWithGroup,
-            findWithSlug,
-          ] = mockedFindOneEntity$.mock.calls[0];
-          expect(findWithSlug).toBe(entityFolderName);
-          const [
-            _createWithEntityType,
-            _createWithWatermarkedType,
-            _createWithGroup,
-            createWithSlug,
+            _entityType,
+            _googleDriveFolderId,
+            _watermarkedType,
+            _group,
+            slug,
           ] = mockedCreateEntityForFolder$.mock.calls[0];
-          expect(createWithSlug).toBe(entityFolderName);
+          expect(slug).toBe(folderName);
           done();
         });
     });
 
-    it('should create an entity with an initial slug when provided', (done: any) => {
+    it('should create an entity with the initial slug when the initial slug is provided', (done: any) => {
       const mockedFindOneEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'findOneEntity$')
         .mockReturnValue(of(null));
 
-      jest
-        .spyOn(apiUtil, 'creatingEntityLogMessage')
-        .mockReturnValue(faker.lorem.sentence());
+      const mockedLogFoundEntityMessage = jest.spyOn(
+        apiUtil,
+        'logFoundEntityMessage'
+      );
+
+      const mockedLogCreatingEntityMessage = jest
+        .spyOn(apiUtil, 'logCreatingEntityMessage')
+        .mockReturnValue(undefined);
+
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+        .mockReturnValue(of([] as DocumentModel[]));
 
       const mockedCreateEntityForFolder$ = jest
         .spyOn(entityRepositoryFunctions, 'createEntityForFolder$')
@@ -168,28 +307,29 @@ describe('entity-create-one-for-folder.provider', () => {
       const initialSlug = faker.lorem.word();
       entityCreateOneForFolderProvider
         .createOneEntityForFolder$(
-          { name: faker.lorem.word() } as GoogleDriveFolder,
+          {
+            id: faker.datatype.uuid(),
+            name: faker.lorem.word(),
+          } as GoogleDriveFolder,
           faker.random.arrayElement(Object.values(EntityType)),
           faker.random.arrayElement(Object.values(WatermarkedType)),
           faker.lorem.word(),
           initialSlug
         )
         .subscribe(() => {
-          expect(mockedFindOneEntity$).toHaveBeenCalled();
+          expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
+          expect(mockedLogFoundEntityMessage).not.toHaveBeenCalled();
+          expect(mockedLogCreatingEntityMessage).toHaveBeenCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateEntityForFolder$).toHaveBeenCalledTimes(1);
           const [
-            _findWithEntityType,
-            _findWithWatermarkedType,
-            _findWithGroup,
-            findWithSlug,
-          ] = mockedFindOneEntity$.mock.calls[0];
-          expect(findWithSlug).toBe(initialSlug);
-          const [
-            _createWithEntityType,
-            _createWithWatermarkedType,
-            _createWithGroup,
-            createWithSlug,
+            _entityType,
+            _googleDriveFolderId,
+            _watermarkedType,
+            _group,
+            slug,
           ] = mockedCreateEntityForFolder$.mock.calls[0];
-          expect(createWithSlug).toBe(initialSlug);
+          expect(slug).toBe(initialSlug);
           done();
         });
     });

@@ -6,6 +6,7 @@ import { Observable, tap, concatMap, of, map } from 'rxjs';
 import {
   Entity,
   Image,
+  IMAGE_FILE_EXTENSION,
   IMAGE_MIME_TYPE,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
@@ -15,6 +16,7 @@ import {
   findExifCreatedDate$,
   getAzureStorageBlobPath,
   getExifDateFromIsoDate,
+  getImageFileName,
   uploadAzureStorageStreamToBlob$,
 } from '@dark-rush-photography/api/util';
 import { loadImageExif } from '../images/image-exif.functions';
@@ -30,8 +32,12 @@ export class ImageExifProvider {
 
   findExifCreatedDate$(image: Image): Observable<string> {
     return downloadAzureStorageBlobToFile$(
-      getAzureStorageBlobPath(image.storageId, image.fileName),
-      image.fileName,
+      getAzureStorageBlobPath(
+        image.storageId,
+        image.slug,
+        IMAGE_FILE_EXTENSION
+      ),
+      getImageFileName(image.slug),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
@@ -42,7 +48,9 @@ export class ImageExifProvider {
       ),
       tap((createdDate) =>
         this.logger.log(
-          `Exif image ${image.fileName} created date is ${createdDate}`
+          `Exif image ${getImageFileName(
+            image.slug
+          )} created date is ${createdDate}`
         )
       )
     );
@@ -53,12 +61,15 @@ export class ImageExifProvider {
       return of(undefined);
 
     return downloadAzureStorageBlobToFile$(
-      getAzureStorageBlobPath(image.storageId, image.fileName),
-      image.fileName,
+      getAzureStorageBlobPath(
+        image.storageId,
+        image.slug,
+        IMAGE_FILE_EXTENSION
+      ),
+      getImageFileName(image.slug),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
-      tap(() => this.logger.log(`Exif image ${image.fileName}`)),
       concatMap((filePath) =>
         exifImage$(
           filePath,
@@ -68,7 +79,11 @@ export class ImageExifProvider {
             uploadAzureStorageStreamToBlob$(
               fs.createReadStream(filePath),
               IMAGE_MIME_TYPE,
-              getAzureStorageBlobPath(image.storageId, image.fileName),
+              getAzureStorageBlobPath(
+                image.storageId,
+                image.slug,
+                IMAGE_FILE_EXTENSION
+              ),
               this.configProvider.azureStorageConnectionStringPublic,
               this.configProvider.azureStorageBlobContainerNamePublic
             )

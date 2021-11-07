@@ -10,12 +10,12 @@ import {
   Location,
   ImageVideo,
   WatermarkedType,
-  Resolution,
+  Dimension,
 } from '@dark-rush-photography/shared/types';
 import { locationSchema } from './location.schema';
 import { imageSchema } from './image.schema';
 import { imageVideoSchema } from './image-video.schema';
-import { resolutionSchema } from './resolution.schema';
+import { dimensionSchema } from './dimension.schema';
 
 export type DocumentModel = Document & mongoose.Document;
 
@@ -95,10 +95,10 @@ export class Document implements Entity {
   imageVideo?: ImageVideo;
 
   @Prop({
-    type: resolutionSchema,
+    type: dimensionSchema,
     required: false,
   })
-  tileDimension?: Resolution;
+  tileDimension?: Dimension;
 
   @Prop({ type: Boolean, required: true, default: false })
   isDeleted!: boolean;

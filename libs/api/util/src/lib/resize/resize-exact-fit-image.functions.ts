@@ -8,14 +8,15 @@ import {
   RESIZE_EXACT_FIT_RED_BACKGROUND_COLOR,
 } from '@dark-rush-photography/shared/types';
 import { createTempFile$ } from '../file/file.functions';
+import { getImageFileName } from '../images/image-file-name.functions';
 
 export const resizeExactFitImage$ = (
-  fileName: string,
+  slug: string,
   filePath: string,
   imageDimensionStandard: ImageDimensionStandard
 ): Observable<string> => {
-  const { width, height } = imageDimensionStandard.resolution;
-  return createTempFile$(fileName).pipe(
+  const { width, height } = imageDimensionStandard.dimension;
+  return createTempFile$(getImageFileName(slug)).pipe(
     concatMap((newFilePath) =>
       combineLatest([
         of(newFilePath),

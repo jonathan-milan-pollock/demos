@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import { SocialMediaType } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 
 @Injectable()
 export class ImageVideoEmailProvider {

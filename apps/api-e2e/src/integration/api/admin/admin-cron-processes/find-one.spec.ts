@@ -1,5 +1,5 @@
 import {
-  CronProcessResponse,
+  CronProcess,
   DUMMY_CRON_PROCESS_ROW_KEY,
 } from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
@@ -24,10 +24,9 @@ describe('Find One Admin Cron Processes', () => {
           .then(() => cy.findAllAdminCronProcesses(getAuthHeaders()))
           .its('body')
           .then(
-            (cronProcessResponses: CronProcessResponse[]) =>
-              cronProcessResponses.filter(
-                (cronProcessResponse) =>
-                  cronProcessResponse.entityId === entityId
+            (cronProcesses: CronProcess[]) =>
+              cronProcesses.filter(
+                (cronProcess) => cronProcess.entityId === entityId
               )[0]
           )
           .then((entityCronProcess) =>
@@ -50,10 +49,9 @@ describe('Find One Admin Cron Processes', () => {
           .then(() => cy.findAllAdminCronProcesses(getAuthHeaders()))
           .its('body')
           .then(
-            (cronProcessResponses: CronProcessResponse[]) =>
-              cronProcessResponses.filter(
-                (cronProcessResponse) =>
-                  cronProcessResponse.entityId === entityId
+            (cronProcesses: CronProcess[]) =>
+              cronProcesses.filter(
+                (cronProcess) => cronProcess.entityId === entityId
               )[0]
           )
           .then((entityCronProcess) =>

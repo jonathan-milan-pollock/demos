@@ -4,16 +4,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AzureTableStorageModule } from '@nestjs/azure-database';
 
 import {
-  CronProcessStartProvider,
-  CronProcessStartTypeProvider,
-  CronProcessStateProvider,
-  CronProcessStateUpdateProvider,
+  CronProcessRepositoryProvider,
   CronProcessTable,
   Document,
   DocumentSchema,
   ImageAddBlobProvider,
   ImageAddProvider,
   ImageDeleteBlobsProvider,
+  ImageOrderProvider,
   ImageRemoveOneProvider,
   ImagesService,
   ImageStateChangeProvider,
@@ -33,16 +31,17 @@ import { AdminImagesController } from './admin-images.controller';
   ],
   controllers: [AdminImagesController],
   providers: [
+    {
+      provide: CronProcessRepositoryProvider.name,
+      useClass: CronProcessRepositoryProvider,
+    },
     ImagesService,
     ImageAddProvider,
     ImageAddBlobProvider,
+    ImageOrderProvider,
     ImageStateChangeProvider,
     ImageRemoveOneProvider,
     ImageDeleteBlobsProvider,
-    CronProcessStartProvider,
-    CronProcessStartTypeProvider,
-    CronProcessStateProvider,
-    CronProcessStateUpdateProvider,
   ],
 })
 export class AdminImagesModule {}

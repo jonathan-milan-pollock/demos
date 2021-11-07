@@ -4,5 +4,5 @@ import { ImageState, ImageStates } from '@dark-rush-photography/shared/types';
 
 export class ImageStatesDto implements ImageStates {
   @IsArray()
-  states: ImageState[] = [];
+  imageStates: ImageState[] = [];
 }

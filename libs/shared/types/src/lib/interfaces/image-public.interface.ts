@@ -1,9 +1,10 @@
-import { Resolution } from './resolution.interface';
+import { Dimension } from './dimension.interface';
 
 export interface ImagePublic {
   readonly storageId: string;
-  readonly fileName: string;
-  readonly isThreeSixty: boolean;
+  readonly slug: string;
   readonly order: number;
-  readonly smallResolution: Resolution;
+  readonly isThreeSixtyImage: boolean;
+  readonly threeSixtyImageStorageId?: string;
+  readonly smallDimension: Dimension;
 }

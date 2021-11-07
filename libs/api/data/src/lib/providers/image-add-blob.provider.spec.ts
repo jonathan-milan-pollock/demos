@@ -24,27 +24,27 @@ import * as fsExtra from 'fs-extra';
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
-import * as apiUtils from '@dark-rush-photography/api/util';
+import * as apiUtil from '@dark-rush-photography/api/util';
 
 describe('image-add-blob.provider', () => {
   let imageAddBlobProvider: ImageAddBlobProvider;
 
   beforeEach(async () => {
-    class MockConfigProvider {
-      get azureStorageConnectionStringPublic(): string {
-        return faker.lorem.word();
-      }
-      get azureStorageBlobContainerNamePublic(): string {
-        return faker.lorem.word();
-      }
-    }
+    const mockedConfigProvider = {
+      azureStorageConnectionStringPublic: jest
+        .fn()
+        .mockReturnValue(faker.lorem.word()),
+      azureStorageBlobContainerNamePublic: jest
+        .fn()
+        .mockReturnValue(faker.lorem.word()),
+    };
 
     const moduleRef = await Test.createTestingModule({
       providers: [
         ConfigService,
         {
           provide: ConfigProvider,
-          useClass: MockConfigProvider,
+          useValue: mockedConfigProvider,
         },
         ImageAddBlobProvider,
       ],
@@ -61,17 +61,19 @@ describe('image-add-blob.provider', () => {
   describe('addNewImageBlob$', () => {
     it('should download an image file from google drive and upload to azure', (done: any) => {
       const mockedDownloadGoogleDriveImageFile = jest
-        .spyOn(apiUtils, 'downloadGoogleDriveImageFile')
+        .spyOn(apiUtil, 'downloadGoogleDriveImageFile')
         .mockReturnValue(Promise.resolve(faker.system.filePath()));
 
-      jest.spyOn(fsExtra, 'createReadStream').mockReturnValue({} as ReadStream);
+      const mockedCreateReadStream = jest
+        .spyOn(fsExtra, 'createReadStream')
+        .mockReturnValue({} as ReadStream);
 
-      jest
-        .spyOn(apiUtils, 'getAzureStorageBlobPath')
+      const mockedGetAzureStorageBlobPath = jest
+        .spyOn(apiUtil, 'getAzureStorageBlobPath')
         .mockReturnValue(faker.lorem.word());
 
       const mockedUploadAzureStorageStreamToBlob$ = jest
-        .spyOn(apiUtils, 'uploadAzureStorageStreamToBlob$')
+        .spyOn(apiUtil, 'uploadAzureStorageStreamToBlob$')
         .mockReturnValue(of(undefined));
 
       imageAddBlobProvider
@@ -81,8 +83,10 @@ describe('image-add-blob.provider', () => {
           {} as Image
         )
         .subscribe(() => {
-          expect(mockedDownloadGoogleDriveImageFile).toBeCalled();
-          expect(mockedUploadAzureStorageStreamToBlob$).toBeCalled();
+          expect(mockedDownloadGoogleDriveImageFile).toBeCalledTimes(1);
+          expect(mockedCreateReadStream).toBeCalledTimes(1);
+          expect(mockedGetAzureStorageBlobPath).toBeCalledTimes(1);
+          expect(mockedUploadAzureStorageStreamToBlob$).toBeCalledTimes(1);
           done();
         });
     });
@@ -90,20 +94,24 @@ describe('image-add-blob.provider', () => {
 
   describe('addUploadImageBlob$', () => {
     it('should upload an image to azure', (done: any) => {
-      jest.spyOn(Readable, 'from').mockReturnValue({} as Readable);
+      const mockedReadableFrom = jest
+        .spyOn(Readable, 'from')
+        .mockReturnValue({} as Readable);
 
-      jest
-        .spyOn(apiUtils, 'getAzureStorageBlobPath')
+      const mockedGetAzureStorageBlobPath = jest
+        .spyOn(apiUtil, 'getAzureStorageBlobPath')
         .mockReturnValue(faker.lorem.word());
 
       const mockedUploadAzureStorageStreamToBlob$ = jest
-        .spyOn(apiUtils, 'uploadAzureStorageStreamToBlob$')
+        .spyOn(apiUtil, 'uploadAzureStorageStreamToBlob$')
         .mockReturnValue(of(undefined));
 
       imageAddBlobProvider
-        .addUploadImageBlob$({} as Image, {} as Express.Multer.File)
+        .addImagePostImageBlob$({} as Image, {} as Express.Multer.File)
         .subscribe(() => {
-          expect(mockedUploadAzureStorageStreamToBlob$).toBeCalled();
+          expect(mockedReadableFrom).toBeCalledTimes(1);
+          expect(mockedGetAzureStorageBlobPath).toBeCalledTimes(1);
+          expect(mockedUploadAzureStorageStreamToBlob$).toBeCalledTimes(1);
           done();
         });
     });
@@ -111,25 +119,32 @@ describe('image-add-blob.provider', () => {
 
   describe('addImageDimensionBlob$', () => {
     it('should upload an image dimension to azure', (done: any) => {
-      jest.spyOn(fsExtra, 'createReadStream').mockReturnValue({} as ReadStream);
+      const mockedCreateReadStream = jest
+        .spyOn(fsExtra, 'createReadStream')
+        .mockReturnValue({} as ReadStream);
 
-      jest
-        .spyOn(apiUtils, 'getAzureStorageBlobPathWithImageDimension')
+      const mockedGetAzureStorageBlobPathWithImageDimension = jest
+        .spyOn(apiUtil, 'getAzureStorageBlobPathWithImageDimension')
         .mockReturnValue(faker.lorem.word());
 
       const mockedUploadAzureStorageStreamToBlob$ = jest
-        .spyOn(apiUtils, 'uploadAzureStorageStreamToBlob$')
+        .spyOn(apiUtil, 'uploadAzureStorageStreamToBlob$')
         .mockReturnValue(of(undefined));
 
       imageAddBlobProvider
         .addImageDimensionBlob$(
           faker.datatype.uuid(),
-          faker.system.fileName(),
+          faker.lorem.word(),
+          faker.system.fileExt(),
           faker.random.arrayElement(Object.values(ImageDimensionType)),
           faker.system.filePath()
         )
         .subscribe(() => {
-          expect(mockedUploadAzureStorageStreamToBlob$).toBeCalled();
+          expect(mockedCreateReadStream).toBeCalledTimes(1);
+          expect(
+            mockedGetAzureStorageBlobPathWithImageDimension
+          ).toBeCalledTimes(1);
+          expect(mockedUploadAzureStorageStreamToBlob$).toBeCalledTimes(1);
           done();
         });
     });

@@ -9,7 +9,7 @@ import {
   ImageState,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { updateImageState$ } from '../images/image-repository.functions';
 import {
   validateCanArchiveImage,
@@ -36,14 +36,15 @@ export class ImageStateChangeProvider {
         findEntityById$(entityId, this.entityModel).pipe(
           map(validateEntityFound),
           concatMap((documentModel) => {
-            const previousImage = documentModel.images.find(
+            const newImage = documentModel.images.find(
               (image) => image.id === imageId
             );
-            if (!previousImage || previousImage.state !== ImageState.New)
+
+            if (!newImage || newImage.state !== ImageState.New)
               return of(undefined);
 
             return updateImageState$(
-              previousImage,
+              newImage,
               ImageState.Selected,
               documentModel,
               this.entityModel
@@ -59,7 +60,7 @@ export class ImageStateChangeProvider {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const previousImage = validateImageFound(imageId, documentModel);
+        const previousImage = validateImageFound(imageId, documentModel.images);
         validateCanArchiveImage(previousImage);
         return updateImageState$(
           previousImage,
@@ -76,7 +77,7 @@ export class ImageStateChangeProvider {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const previousImage = validateImageFound(imageId, documentModel);
+        const previousImage = validateImageFound(imageId, documentModel.images);
         validateCanUnarchiveImage(previousImage);
         return updateImageState$(
           previousImage,

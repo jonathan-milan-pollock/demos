@@ -13,7 +13,7 @@ import { Document, DocumentModel } from '../schema/document.schema';
 import { getEntityTypeImageDimensionTypes } from '@dark-rush-photography/shared/util';
 import { getImageDimension } from '@dark-rush-photography/api/util';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { ImageProcessOneProvider } from './image-process-one.provider';
 
 @Injectable()

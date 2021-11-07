@@ -1,9 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 
 import {
+  Dimension,
   Entity,
-  Image,
-  ImageVideo,
   Location,
 } from '@dark-rush-photography/shared/types';
 
@@ -15,14 +14,22 @@ export const validateEntityGoogleDriveFolderId = (entity: Entity): string => {
 };
 
 export const validateEntityGroup = (entity: Entity): string => {
-  if (entity.group === '')
-    throw new ConflictException('Group cannot be an empty string');
+  if (entity.group === '') throw new ConflictException('Group is required');
   return entity.group;
 };
 
 export const validateEntitySlug = (entity: Entity): string => {
-  if (entity.slug === '')
-    throw new ConflictException('Slug cannot be an empty string');
+  if (entity.slug === '') throw new ConflictException('Slug is required');
+
+  if (entity.slug.includes(' '))
+    throw new ConflictException('Slug cannot contain spaces');
+
+  if (entity.slug.toLowerCase() !== entity.slug)
+    throw new ConflictException('Slug must be lowercase');
+
+  if (encodeURIComponent(entity.slug) !== entity.slug)
+    throw new ConflictException('Slug cannot require URI encoding');
+
   return entity.slug;
 };
 
@@ -37,6 +44,23 @@ export const validateEntityTitle = (entity: Entity): string => {
   return entity.title;
 };
 
+export const validateEntityText = (entity: Entity): string => {
+  if (!entity.text) throw new ConflictException('Text is required');
+  return entity.text;
+};
+
+export const validateEntityCreatedDate = (entity: Entity): string => {
+  if (!entity.createdDate)
+    throw new ConflictException('Created date is required');
+  return entity.createdDate;
+};
+
+export const validateEntityPublishedDate = (entity: Entity): string => {
+  if (!entity.publishedDate)
+    throw new ConflictException('Published date is required');
+  return entity.publishedDate;
+};
+
 export const validateEntitySeoDescription = (entity: Entity): string => {
   if (!entity.seoDescription)
     throw new ConflictException('SEO description is required');
@@ -49,42 +73,22 @@ export const validateEntitySeoKeywords = (entity: Entity): string[] => {
   return entity.seoKeywords;
 };
 
-export const validateEntityCreatedDate = (entity: Entity): string => {
-  if (!entity.createdDate)
-    throw new ConflictException('Date created is required');
-  return entity.createdDate;
-};
-
-export const validateEntityPublishedDate = (entity: Entity): string => {
-  if (!entity.publishedDate)
-    throw new ConflictException('Date published is required');
-  return entity.publishedDate;
-};
-
 export const validateEntityLocation = (entity: Entity): Location => {
-  if (!entity.location) throw new ConflictException('A location is required');
+  if (!entity.location) throw new ConflictException('Location is required');
   return entity.location;
 };
 
-export const validateEntityText = (entity: Entity): string => {
-  if (!entity.text) throw new ConflictException('Text is empty');
-  return entity.text;
-};
+export const validateEntityTileDimension = (entity: Entity): Dimension => {
+  if (!entity.tileDimension)
+    throw new ConflictException('Tile dimension is required');
 
-export const validateEntityImageVideo = (entity: Entity): ImageVideo => {
-  if (!entity.imageVideo)
-    throw new ConflictException('An image video is required');
-
-  return entity.imageVideo;
-};
-
-export const validateEntityStarredImage = (entity: Entity): Image => {
-  const starredImages = entity.images.filter((image) => image.isStarred);
-  if (starredImages.length === 0) {
-    throw new ConflictException('An image was not starred');
+  if (entity.tileDimension.width <= 0) {
+    throw new ConflictException('Tile dimension width must be greater than 0');
   }
-  if (starredImages.length > 1) {
-    throw new ConflictException('More than one image was starred');
+
+  if (entity.tileDimension.height <= 0) {
+    throw new ConflictException('Tile dimension height must be greater than 0');
   }
-  return starredImages[0];
+
+  return entity.tileDimension;
 };

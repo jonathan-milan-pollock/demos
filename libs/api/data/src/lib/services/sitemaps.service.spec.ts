@@ -7,9 +7,9 @@ import { of } from 'rxjs';
 
 import { Document } from '../schema/document.schema';
 import { SitemapLoadProvider } from '../providers/sitemap-load.provider';
-import { SitemapsService } from './sitemaps.service';
-import { SitemapLoadXmlProvider } from '../providers/sitemap-load-xml.provider';
 import { SitemapLoadMaxPublishedDateProvider } from '../providers/sitemap-load-max-date-published.provider';
+import { SitemapLoadXmlProvider } from '../providers/sitemap-load-xml.provider';
+import { SitemapsService } from './sitemaps.service';
 
 describe('sitemaps.service', () => {
   let sitemapsService: SitemapsService;
@@ -22,7 +22,7 @@ describe('sitemaps.service', () => {
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         SitemapsService,
         SitemapLoadProvider,
@@ -47,7 +47,7 @@ describe('sitemaps.service', () => {
         .mockReturnValue(of(faker.lorem.lines()));
 
       sitemapsService.loadDarkRushPhotographySitemap$().subscribe(() => {
-        expect(mockedLoadDarkRushPhotographySitemap$).toBeCalled();
+        expect(mockedLoadDarkRushPhotographySitemap$).toBeCalledTimes(1);
         done();
       });
     });
@@ -60,7 +60,7 @@ describe('sitemaps.service', () => {
         .mockReturnValue(of(faker.lorem.lines()));
 
       sitemapsService.loadThirtySevenPhotosSitemap$().subscribe(() => {
-        expect(mockedLoadThirtySevenPhotosSitemap$).toBeCalled();
+        expect(mockedLoadThirtySevenPhotosSitemap$).toBeCalledTimes(1);
         done();
       });
     });

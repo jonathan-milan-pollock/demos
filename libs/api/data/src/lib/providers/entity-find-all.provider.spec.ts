@@ -6,6 +6,7 @@ import * as faker from 'faker';
 import { of } from 'rxjs';
 
 import {
+  EntityAdmin,
   EntityType,
   EntityWithGroupType,
   EntityWithoutGroupType,
@@ -32,13 +33,15 @@ describe('entity-find-all.provider', () => {
   let entityFindAllProvider: EntityFindAllProvider;
 
   beforeEach(async () => {
-    class MockDocumentModel {}
+    const mockedDocumentModel = {
+      find: jest.fn().mockReturnValue(Promise.resolve({} as DocumentModel)),
+    };
 
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useValue: mockedDocumentModel,
         },
         EntityFindAllProvider,
       ],
@@ -54,13 +57,11 @@ describe('entity-find-all.provider', () => {
   });
 
   describe('findAllEntities$', () => {
-    beforeEach(() => {
-      jest
+    it('should find watermarked and without watermark entities', (done: any) => {
+      const mockedGetEntityTypeFromEntityWithoutGroupType = jest
         .spyOn(sharedUtil, 'getEntityTypeFromEntityWithoutGroupType')
         .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
-    });
 
-    it('should find watermarked and without watermark entities', (done: any) => {
       const watermarkedEntity = {
         slug: faker.lorem.word(),
       } as DocumentModel;
@@ -68,16 +69,15 @@ describe('entity-find-all.provider', () => {
         slug: faker.lorem.word(),
       } as DocumentModel;
 
-      jest
+      const mockedFindAllEntities$ = jest
         .spyOn(entityRepositoryFunctions, 'findAllEntities$')
         .mockReturnValueOnce(of([watermarkedEntity]))
         .mockReturnValueOnce(of([withoutWatermarkEntity]));
 
-      jest
-        .spyOn(entityLoadAdminFunctions, 'loadEntityMinimalAdmin')
+      const mockedLoadEntityAdmin = jest
+        .spyOn(entityLoadAdminFunctions, 'loadEntityAdmin')
         .mockImplementation(
-          (documentModel: DocumentModel) =>
-            ({ slug: documentModel.slug } as EntityMinimalAdmin)
+          (documentModel: DocumentModel) => documentModel as EntityAdmin
         );
 
       entityFindAllProvider
@@ -85,6 +85,11 @@ describe('entity-find-all.provider', () => {
           faker.random.arrayElement(Object.values(EntityWithoutGroupType))
         )
         .subscribe((result) => {
+          expect(mockedGetEntityTypeFromEntityWithoutGroupType).toBeCalledTimes(
+            2
+          );
+          expect(mockedFindAllEntities$).toBeCalledTimes(2);
+          expect(mockedLoadEntityAdmin).toBeCalledTimes(2);
           expect(result).toEqual([
             { ...watermarkedEntity },
             { ...withoutWatermarkEntity },
@@ -94,13 +99,17 @@ describe('entity-find-all.provider', () => {
     });
 
     it('should return an empty array if entities are not found', (done: any) => {
-      jest
+      const mockedGetEntityTypeFromEntityWithoutGroupType = jest
+        .spyOn(sharedUtil, 'getEntityTypeFromEntityWithoutGroupType')
+        .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
+
+      const mockedFindAllEntities$ = jest
         .spyOn(entityRepositoryFunctions, 'findAllEntities$')
         .mockReturnValue(of([]));
 
-      const mockedLoadEntityMinimalAdmin = jest.spyOn(
+      const mockedLoadEntityAdmin = jest.spyOn(
         entityLoadAdminFunctions,
-        'loadEntityMinimalAdmin'
+        'loadEntityAdmin'
       );
 
       entityFindAllProvider
@@ -108,21 +117,23 @@ describe('entity-find-all.provider', () => {
           faker.random.arrayElement(Object.values(EntityWithoutGroupType))
         )
         .subscribe((result) => {
+          expect(mockedGetEntityTypeFromEntityWithoutGroupType).toBeCalledTimes(
+            2
+          );
+          expect(mockedFindAllEntities$).toBeCalledTimes(2);
+          expect(mockedLoadEntityAdmin).not.toBeCalled();
           expect(result).toHaveLength(0);
-          expect(mockedLoadEntityMinimalAdmin).not.toBeCalled();
           done();
         });
     });
   });
 
   describe('findAllEntitiesForGroup$', () => {
-    beforeEach(() => {
-      jest
+    it('should find watermarked and without watermark entities for a group', (done: any) => {
+      const mockedGetEntityTypeFromEntityWithGroupType = jest
         .spyOn(sharedUtil, 'getEntityTypeFromEntityWithGroupType')
         .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
-    });
 
-    it('should find watermarked and without watermark entities for a group', (done: any) => {
       const watermarkedEntity = {
         slug: faker.lorem.word(),
       } as DocumentModel;
@@ -130,16 +141,15 @@ describe('entity-find-all.provider', () => {
         slug: faker.lorem.word(),
       } as DocumentModel;
 
-      jest
-        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+      const mockedFindAllEntitiesForWatermarkedGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForWatermarkedGroup$')
         .mockReturnValueOnce(of([watermarkedEntity]))
         .mockReturnValueOnce(of([withoutWatermarkEntity]));
 
-      jest
-        .spyOn(entityLoadAdminFunctions, 'loadEntityMinimalAdmin')
+      const mockedLoadEntityAdmin = jest
+        .spyOn(entityLoadAdminFunctions, 'loadEntityAdmin')
         .mockImplementation(
-          (documentModel: DocumentModel) =>
-            ({ slug: documentModel.slug } as EntityMinimalAdmin)
+          (documentModel: DocumentModel) => documentModel as EntityAdmin
         );
 
       entityFindAllProvider
@@ -148,6 +158,9 @@ describe('entity-find-all.provider', () => {
           faker.lorem.word()
         )
         .subscribe((result) => {
+          expect(mockedGetEntityTypeFromEntityWithGroupType).toBeCalledTimes(2);
+          expect(mockedFindAllEntitiesForWatermarkedGroup$).toBeCalledTimes(2);
+          expect(mockedLoadEntityAdmin).toBeCalledTimes(2);
           expect(result).toEqual([
             { ...watermarkedEntity },
             { ...withoutWatermarkEntity },
@@ -157,13 +170,17 @@ describe('entity-find-all.provider', () => {
     });
 
     it('should return an empty array if entities are not found for a group', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForGroup$')
+      const mockedGetEntityTypeFromEntityWithGroupType = jest
+        .spyOn(sharedUtil, 'getEntityTypeFromEntityWithGroupType')
+        .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
+
+      const mockedFindAllEntitiesForWatermarkedGroup$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllEntitiesForWatermarkedGroup$')
         .mockReturnValue(of([]));
 
-      const mockedLoadEntityMinimalAdmin = jest.spyOn(
+      const mockedLoadEntityAdmin = jest.spyOn(
         entityLoadAdminFunctions,
-        'loadEntityMinimalAdmin'
+        'loadEntityAdmin'
       );
 
       entityFindAllProvider
@@ -172,8 +189,10 @@ describe('entity-find-all.provider', () => {
           faker.lorem.word()
         )
         .subscribe((result) => {
+          expect(mockedGetEntityTypeFromEntityWithGroupType).toBeCalledTimes(2);
+          expect(mockedFindAllEntitiesForWatermarkedGroup$).toBeCalledTimes(2);
+          expect(mockedLoadEntityAdmin).not.toBeCalled();
           expect(result).toHaveLength(0);
-          expect(mockedLoadEntityMinimalAdmin).not.toBeCalled();
           done();
         });
     });

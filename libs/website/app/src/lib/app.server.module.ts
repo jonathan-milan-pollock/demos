@@ -5,10 +5,6 @@ import { AppModule } from './app.module';
 import {
   AuthenticationService,
   AuthenticationMockService,
-  DestinationsService,
-  DestinationsServiceMock,
-  ReviewsService,
-  ReviewsServiceMock,
 } from '@dark-rush-photography/website/data';
 import { AppComponent } from './app.component';
 
@@ -19,14 +15,6 @@ import { AppComponent } from './app.component';
     {
       provide: AuthenticationService,
       useClass: AuthenticationMockService,
-    },
-    {
-      provide: DestinationsService,
-      useClass: DestinationsServiceMock,
-    },
-    {
-      provide: ReviewsService,
-      useClass: ReviewsServiceMock,
     },
   ],
 })

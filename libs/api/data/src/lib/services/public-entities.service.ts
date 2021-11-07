@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 import {
-  EntityMinimalPublic,
-  EntityPublic,
+  EntityFindAllPublicResponse,
+  EntityFindOnePublicResponse,
   EntityType,
 } from '@dark-rush-photography/shared/types';
 import { EntityFindPublicProvider } from '../providers/entity-find-public.provider';
@@ -15,17 +15,13 @@ export class PublicEntitiesService {
     private readonly entityFindPublicProvider: EntityFindPublicProvider
   ) {}
 
-  findAllPublic$(entityType: EntityType): Observable<EntityMinimalPublic[]> {
+  findAllPublic$(
+    entityType: EntityType
+  ): Observable<EntityFindAllPublicResponse> {
     return this.entityFindPublicProvider.findAllPublicEntities$(entityType);
   }
 
-  findOnePublic$(
-    entityType: EntityType,
-    entityId: string
-  ): Observable<EntityPublic> {
-    return this.entityFindPublicProvider.findOnePublicEntity$(
-      entityType,
-      entityId
-    );
+  findOnePublic$(entityId: string): Observable<EntityFindOnePublicResponse> {
+    return this.entityFindPublicProvider.findOnePublicEntity$(entityId);
   }
 }

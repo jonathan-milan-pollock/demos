@@ -5,11 +5,9 @@ import {
   EntityString,
 } from '@nestjs/azure-database';
 
-import { CronProcess } from '@dark-rush-photography/shared/types';
-
 @EntityPartitionKey('CronProcessID')
 @EntityRowKey('CronProcessKey')
-export class CronProcessTable implements CronProcess {
+export class CronProcessTable {
   @EntityString() key!: string;
   @EntityString() type!: string;
   @EntityString() entityType!: string;

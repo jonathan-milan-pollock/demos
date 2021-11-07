@@ -12,6 +12,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.About,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.Thumbnail,
       ImageDimensionType.Small,
       ImageDimensionType.Medium,
@@ -21,6 +24,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.BestOf,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.Thumbnail,
       ImageDimensionType.Small,
       ImageDimensionType.Medium,
@@ -30,6 +36,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.Destination,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.DestinationThumbnail,
       ImageDimensionType.DestinationSmall,
       ImageDimensionType.DestinationMedium,
@@ -39,6 +48,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.Event,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.Thumbnail,
       ImageDimensionType.Small,
       ImageDimensionType.Medium,
@@ -48,6 +60,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.Favorites,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.Thumbnail,
       ImageDimensionType.Small,
       ImageDimensionType.Medium,
@@ -63,10 +78,20 @@ const entityTypeImageDimensionTypesMap = new Map<
       ImageDimensionType.GoogleBusiness,
     ],
   ],
-  [EntityType.ImageVideo, []],
+  [
+    EntityType.ImageVideo,
+    [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
+    ],
+  ],
   [
     EntityType.PhotoOfTheWeek,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.Thumbnail,
       ImageDimensionType.Small,
       ImageDimensionType.Medium,
@@ -84,6 +109,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.Review,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.ReviewThumbnail,
       ImageDimensionType.ReviewSmall,
       ImageDimensionType.ReviewMedium,
@@ -93,6 +121,9 @@ const entityTypeImageDimensionTypesMap = new Map<
   [
     EntityType.ReviewMedia,
     [
+      ImageDimensionType.IPadSmall,
+      ImageDimensionType.IPadMedium,
+      ImageDimensionType.IPadLarge,
       ImageDimensionType.Thumbnail,
       ImageDimensionType.Small,
       ImageDimensionType.Medium,

@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, map, Observable } from 'rxjs';
+import { concatMap, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
+import { CronProcessType } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { createImagePostEntity$ } from '../entities/entity-repository.functions';
+import { startCronProcessType } from '../cron-processes/cron-process-start.functions';
 import { ImageAddProvider } from '../providers/image-add.provider';
-import { CronProcessStartProvider } from '../providers/cron-process-start.provider';
+import { CronProcessRepositoryProvider } from '../providers/cron-process-repository.provider';
 
 @Injectable()
 export class ImagePostsService {
@@ -15,7 +17,8 @@ export class ImagePostsService {
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly imageAddProvider: ImageAddProvider,
-    private readonly cronProcessStartProvider: CronProcessStartProvider
+    @Inject(CronProcessRepositoryProvider.name)
+    private readonly cronProcessRepositoryProvider: CronProcessRepositoryProvider
   ) {}
 
   create$(text: string, file: Express.Multer.File): Observable<void> {
@@ -25,17 +28,19 @@ export class ImagePostsService {
           .addImagePostImage$(documentModel._id, file)
           .pipe(
             concatMap(() =>
-              this.cronProcessStartProvider.startPublishEntity$(
-                documentModel.type,
-                documentModel._id,
-                documentModel.group,
-                documentModel.slug,
-                true
+              this.cronProcessRepositoryProvider.create$(
+                startCronProcessType(
+                  CronProcessType.PublishEntity,
+                  documentModel.type,
+                  documentModel._id,
+                  documentModel.group,
+                  documentModel.slug,
+                  true
+                )
               )
             )
           )
-      ),
-      map(() => undefined)
+      )
     );
   }
 }

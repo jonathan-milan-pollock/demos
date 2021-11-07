@@ -11,8 +11,8 @@ describe('Find one Admin Entity', () => {
     cy
       .createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) =>
-        cy.findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
+      .then((adminEntity) =>
+        cy.findOneAdminEntities(getAuthHeaders(), adminEntity.id)
       )
       .its('headers')
       .its('content-type')
@@ -21,12 +21,12 @@ describe('Find one Admin Entity', () => {
   it('should find a created entity', () => {
     cy.createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) => {
+      .then((adminEntity) => {
         return cy
-          .findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
+          .findOneAdminEntities(getAuthHeaders(), adminEntity.id)
           .its('body')
           .then((body) => body.id)
-          .should('equal', entityAdmin.id);
+          .should('equal', adminEntity.id);
       });
   });
 
@@ -34,8 +34,8 @@ describe('Find one Admin Entity', () => {
     cy
       .createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) =>
-        cy.findOneAdminEntities(getAuthHeaders(), entityAdmin.id)
+      .then((adminEntity) =>
+        cy.findOneAdminEntities(getAuthHeaders(), adminEntity.id)
       )
       .its('status')
       .should('equal', 200));
@@ -50,8 +50,8 @@ describe('Find one Admin Entity', () => {
     cy
       .createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) =>
-        cy.findOneAdminEntities({ Authorization: '' }, entityAdmin.id)
+      .then((adminEntity) =>
+        cy.findOneAdminEntities({ Authorization: '' }, adminEntity.id)
       )
       .its('status')
       .should('equal', 401));
@@ -60,8 +60,8 @@ describe('Find one Admin Entity', () => {
     cy
       .createTestAdminEntities(getAuthHeaders())
       .then((response) => response.body as EntityAdmin)
-      .then((entityAdmin) =>
-        cy.findOneAdminEntities({ Authorization: '' }, entityAdmin.id)
+      .then((adminEntity) =>
+        cy.findOneAdminEntities({ Authorization: '' }, adminEntity.id)
       )
       .its('body.message')
       .should('equal', 'Unauthorized'));

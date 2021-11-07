@@ -11,12 +11,10 @@ import {
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
+import { validatePublishStarredImage } from '../images/image-field-validation.functions';
+import { validateImageVideo } from '../images/image-validation.functions';
 import { ConfigProvider } from './config.provider';
-import {
-  validateEntityImageVideo,
-  validateEntityStarredImage,
-} from '../entities/entity-field-validation.functions';
 
 @Injectable()
 export class SocialMediaPostPlatformProvider {
@@ -32,7 +30,7 @@ export class SocialMediaPostPlatformProvider {
   ): Observable<void> {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
-      map((documentModel) => validateEntityStarredImage(documentModel)),
+      map((documentModel) => validatePublishStarredImage(documentModel.images)),
       concatMap((starredImage) => {
         switch (socialMediaType) {
           case SocialMediaType.Facebook:
@@ -63,8 +61,8 @@ export class SocialMediaPostPlatformProvider {
       map(validateEntityFound),
       map(
         (documentModel) => ({
-          starredImage: validateEntityStarredImage(documentModel),
-          video: validateEntityImageVideo(documentModel),
+          starredImage: validatePublishStarredImage(documentModel.images),
+          video: validateImageVideo(documentModel.imageVideo),
         }),
         concatMap(({ starredImage, video }) => {
           switch (socialMediaType) {

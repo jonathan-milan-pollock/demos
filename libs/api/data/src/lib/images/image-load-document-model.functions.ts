@@ -1,53 +1,52 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  Dimension,
   Image,
   ImageState,
   ImageUpdate,
-  Resolution,
-  ThreeSixtyImageAdd,
 } from '@dark-rush-photography/shared/types';
 
 export const loadNewImage = (
   entityId: string,
-  fileName: string,
+  slug: string,
   order: number
 ): Image => ({
   id: uuidv4(),
   entityId,
   storageId: uuidv4(),
-  fileName,
-  state: ImageState.New,
-  isThreeSixty: false,
+  slug,
   order,
+  state: ImageState.New,
+  isThreeSixtyImage: false,
   isStarred: false,
   isLoved: false,
 });
 
-export const loadAddThreeSixtyImage = (
+export const loadAddImagePostImage = (
   entityId: string,
-  threeSixtyImageCreate: ThreeSixtyImageAdd
+  slug: string
 ): Image => ({
   id: uuidv4(),
   entityId,
-  storageId: threeSixtyImageCreate.storageId,
-  fileName: threeSixtyImageCreate.fileName,
-  state: ImageState.Selected,
-  isThreeSixty: true,
+  storageId: uuidv4(),
+  slug,
   order: 0,
+  state: ImageState.Selected,
+  isThreeSixtyImage: false,
   isStarred: false,
   isLoved: false,
 });
 
-export const loadAddImagePostImage = (entityId: string): Image => ({
+export const loadAddTestImage = (entityId: string, slug: string): Image => ({
   id: uuidv4(),
   entityId,
   storageId: uuidv4(),
-  fileName: `${uuidv4()}.jpg`,
-  state: ImageState.Selected,
-  isThreeSixty: false,
+  slug,
   order: 0,
-  isStarred: true,
+  state: ImageState.New,
+  isThreeSixtyImage: false,
+  isStarred: false,
   isLoved: false,
 });
 
@@ -58,34 +57,57 @@ export const loadUpdateImage = (
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  fileName: image.fileName,
-  state: image.state,
-  isThreeSixty: image.isThreeSixty,
+  slug: image.slug,
   order: image.order,
+  state: imageUpdate.state,
+  isThreeSixtyImage: imageUpdate.isThreeSixtyImage,
+  threeSixtyImageStorageId: imageUpdate.threeSixtyImageStorageId,
   isStarred: imageUpdate.isStarred,
   isLoved: imageUpdate.isLoved,
   title: imageUpdate.title,
   createdDate: image.createdDate,
   seoDescription: imageUpdate.seoDescription,
   seoKeywords: imageUpdate.seoKeywords.join(','),
-  smallResolution: image.smallResolution,
+  smallDimension: image.smallDimension,
 });
 
 export const loadUpdateImageOrder = (image: Image, order: number): Image => ({
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  fileName: image.fileName,
-  state: image.state,
-  isThreeSixty: image.isThreeSixty,
+  slug: image.slug,
   order,
+  state: image.state,
+  isThreeSixtyImage: image.isThreeSixtyImage,
+  threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
   title: image.title,
   createdDate: image.createdDate,
   seoDescription: image.seoDescription,
   seoKeywords: image.seoKeywords,
-  smallResolution: image.smallResolution,
+  smallDimension: image.smallDimension,
+});
+
+export const loadUpdateImageState = (
+  image: Image,
+  state: ImageState
+): Image => ({
+  id: image.id,
+  entityId: image.entityId,
+  storageId: image.storageId,
+  slug: image.slug,
+  order: image.order,
+  state,
+  isThreeSixtyImage: image.isThreeSixtyImage,
+  threeSixtyImageStorageId: image.threeSixtyImageStorageId,
+  isStarred: image.isStarred,
+  isLoved: image.isLoved,
+  title: image.title,
+  createdDate: image.createdDate,
+  seoDescription: image.seoDescription,
+  seoKeywords: image.seoKeywords,
+  smallDimension: image.smallDimension,
 });
 
 export const loadUpdateImageCreatedDate = (
@@ -95,75 +117,37 @@ export const loadUpdateImageCreatedDate = (
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  fileName: image.fileName,
-  state: image.state,
-  isThreeSixty: image.isThreeSixty,
+  slug: image.slug,
   order: image.order,
+  state: image.state,
+  isThreeSixtyImage: image.isThreeSixtyImage,
+  threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
   title: image.title,
-  createdDate: createdDate,
+  createdDate,
   seoDescription: image.seoDescription,
   seoKeywords: image.seoKeywords,
-  smallResolution: image.smallResolution,
+  smallDimension: image.smallDimension,
 });
 
-export const loadUpdateImageSmallResolution = (
+export const loadUpdateImageSmallDimension = (
   image: Image,
-  smallResolution: Resolution
+  smallDimension: Dimension
 ): Image => ({
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  fileName: image.fileName,
+  slug: image.slug,
+  order: image.order,
   state: image.state,
-  isThreeSixty: image.isThreeSixty,
-  order: image.order,
+  isThreeSixtyImage: image.isThreeSixtyImage,
+  threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
   title: image.title,
   createdDate: image.createdDate,
   seoDescription: image.seoDescription,
   seoKeywords: image.seoKeywords,
-  smallResolution,
-});
-
-export const loadUpdateImageState = (
-  previousImage: Image,
-  newState: ImageState
-): Image => ({
-  id: uuidv4(),
-  entityId: previousImage.entityId,
-  storageId: previousImage.storageId,
-  fileName: previousImage.fileName,
-  state: newState,
-  isThreeSixty: previousImage.isThreeSixty,
-  order: previousImage.order,
-  isStarred: previousImage.isStarred,
-  isLoved: previousImage.isLoved,
-  title: previousImage.title,
-  createdDate: previousImage.createdDate,
-  seoDescription: previousImage.seoDescription,
-  seoKeywords: previousImage.seoKeywords,
-  smallResolution: previousImage.smallResolution,
-});
-
-export const loadPublishImage = (
-  image: Image,
-  publishFileName: string
-): Image => ({
-  id: uuidv4(),
-  entityId: image.entityId,
-  storageId: image.storageId,
-  fileName: publishFileName,
-  state: ImageState.Public,
-  isThreeSixty: image.isThreeSixty,
-  order: image.order,
-  isStarred: image.isStarred,
-  isLoved: image.isLoved,
-  title: image.title,
-  createdDate: image.createdDate,
-  seoDescription: image.seoDescription,
-  seoKeywords: image.seoKeywords,
-  smallResolution: image.smallResolution,
+  smallDimension,
 });

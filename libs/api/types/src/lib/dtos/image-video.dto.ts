@@ -7,5 +7,5 @@ export class ImageVideoDto implements ImageVideo {
   storageId!: string;
 
   @IsString()
-  fileName!: string;
+  slug!: string;
 }

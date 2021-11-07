@@ -4,6 +4,7 @@ import { ImagePublic } from './image-public.interface';
 
 export interface EntityPublic {
   readonly type: EntityType;
+  readonly id: string;
   readonly group: string;
   readonly slug: string;
   readonly order: number;

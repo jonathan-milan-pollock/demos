@@ -10,20 +10,17 @@ Cypress.Commands.add(
   ): Cypress.Chainable<Cypress.Response<EntityMinimalPublic[]>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/entities/${entityType}`,
+      url: `/api/v1/entities/entity-type/${entityType}`,
       failOnStatusCode: false,
     })
 );
 
 Cypress.Commands.add(
   'findOnePublicEntities',
-  (
-    entityType: string,
-    entityId: string
-  ): Cypress.Chainable<Cypress.Response<EntityPublic>> =>
+  (entityId: string): Cypress.Chainable<Cypress.Response<EntityPublic>> =>
     cy.request({
       method: 'GET',
-      url: `/api/v1/entities/${entityType}/${entityId}`,
+      url: `/api/v1/entities/${entityId}`,
       failOnStatusCode: false,
     })
 );

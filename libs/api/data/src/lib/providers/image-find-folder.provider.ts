@@ -13,7 +13,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { validateEntityGoogleDriveFolderId } from '../entities/entity-field-validation.functions';
 
 @Injectable()
@@ -42,8 +42,9 @@ export class ImageFindFolderProvider {
             newImagesFolderName,
             googleDriveFolderId
           );
+        } else {
+          return findGoogleDriveFolderById$(googleDrive, googleDriveFolderId);
         }
-        return findGoogleDriveFolderById$(googleDrive, googleDriveFolderId);
       })
     );
   }

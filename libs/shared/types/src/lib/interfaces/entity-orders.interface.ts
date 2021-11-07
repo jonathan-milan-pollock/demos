@@ -1,3 +1,5 @@
+import { EntityIdOrder } from './entity-id-order.interface';
+
 export interface EntityOrders {
-  readonly entityIds: string[];
+  readonly entityIdOrders: EntityIdOrder[];
 }

@@ -21,6 +21,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.About,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.Thumbnail,
           ImageDimensionType.Small,
           ImageDimensionType.Medium,
@@ -30,6 +33,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.BestOf,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.Thumbnail,
           ImageDimensionType.Small,
           ImageDimensionType.Medium,
@@ -39,6 +45,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.Destination,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.DestinationThumbnail,
           ImageDimensionType.DestinationSmall,
           ImageDimensionType.DestinationMedium,
@@ -48,6 +57,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.Event,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.Thumbnail,
           ImageDimensionType.Small,
           ImageDimensionType.Medium,
@@ -57,6 +69,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.Favorites,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.Thumbnail,
           ImageDimensionType.Small,
           ImageDimensionType.Medium,
@@ -74,11 +89,18 @@ describe('image-dimension-type.functions', () => {
       },
       {
         entityType: EntityType.ImageVideo,
-        imageDimensionTypes: [],
+        imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
+        ],
       },
       {
         entityType: EntityType.PhotoOfTheWeek,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.Thumbnail,
           ImageDimensionType.Small,
           ImageDimensionType.Medium,
@@ -96,6 +118,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.Review,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.ReviewThumbnail,
           ImageDimensionType.ReviewSmall,
           ImageDimensionType.ReviewMedium,
@@ -105,6 +130,9 @@ describe('image-dimension-type.functions', () => {
       {
         entityType: EntityType.ReviewMedia,
         imageDimensionTypes: [
+          ImageDimensionType.IPadSmall,
+          ImageDimensionType.IPadMedium,
+          ImageDimensionType.IPadLarge,
           ImageDimensionType.Thumbnail,
           ImageDimensionType.Small,
           ImageDimensionType.Medium,

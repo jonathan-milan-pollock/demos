@@ -15,12 +15,12 @@ export interface ImageExif {
     LicensorTelephoneType1: string;
     LicensorURL: string;
   };
-  readonly Title: string;
-  readonly 'dc:description': string;
-  readonly 'Iptc4xmpCore:Location'?: string;
+  readonly 'Iptc4xmpCore:Location': string;
   readonly City?: string;
   readonly State?: string;
   readonly Country: string;
+  readonly Title: string;
+  readonly 'dc:description': string;
   readonly 'Keywords+': string[];
   readonly CreateDate: string;
   readonly 'xmp:MetadataDate': string;
@@ -28,7 +28,6 @@ export interface ImageExif {
   readonly Copyrighted: boolean;
   readonly 'xmpRights:Marked': boolean;
   readonly Copyright: string;
-  readonly 'dc:rights': string;
   readonly CopyrightNotice: string;
   readonly Licence: string;
   readonly 'xmpRights:WebStatement': string;

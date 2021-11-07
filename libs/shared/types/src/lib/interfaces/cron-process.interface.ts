@@ -1,7 +1,10 @@
+import { CronProcessType } from '../enums/cron-process-type.enum';
+import { EntityType } from '../enums/entity-type.enum';
+
 export interface CronProcess {
   readonly key: string;
-  readonly type: string;
-  readonly entityType: string;
+  readonly type: CronProcessType;
+  readonly entityType: EntityType;
   readonly entityId: string;
   readonly group: string;
   readonly slug: string;

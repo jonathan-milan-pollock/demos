@@ -4,10 +4,11 @@ export interface ImageAdmin {
   readonly id: string;
   readonly entityId: string;
   readonly storageId: string;
-  readonly fileName: string;
-  readonly state: ImageState;
-  readonly isThreeSixty: boolean;
+  readonly slug: string;
   readonly order: number;
+  readonly state: ImageState;
+  readonly isThreeSixtyImage: boolean;
+  readonly threeSixtyImageStorageId?: string;
   readonly isStarred: boolean;
   readonly isLoved: boolean;
   readonly title?: string;

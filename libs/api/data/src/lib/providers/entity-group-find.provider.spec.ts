@@ -26,9 +26,13 @@ describe('entity-group-find.provider', () => {
     );
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('findGroupsFromGoogleDriveFolderName$', () => {
     it('should return groups from google drive', (done: any) => {
-      jest
+      const mockedFindGoogleDriveFolderByName$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
         .mockReturnValue(of({} as GoogleDriveFolder));
 
@@ -36,7 +40,7 @@ describe('entity-group-find.provider', () => {
         { id: '', name: faker.lorem.word() },
         { id: '', name: faker.lorem.word() },
       ];
-      jest
+      const mockedFindGoogleDriveFolders$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
         .mockReturnValue(of(groupFolders));
 
@@ -47,6 +51,8 @@ describe('entity-group-find.provider', () => {
           faker.datatype.uuid()
         )
         .subscribe((result) => {
+          expect(mockedFindGoogleDriveFolderByName$).toBeCalledTimes(1);
+          expect(mockedFindGoogleDriveFolders$).toBeCalledTimes(1);
           expect(result).toEqual(
             groupFolders.map((groupFolder) => groupFolder.name)
           );
@@ -55,9 +61,14 @@ describe('entity-group-find.provider', () => {
     });
 
     it('should return empty array if entity folder is not found', (done: any) => {
-      jest
+      const mockedFindGoogleDriveFolderByName$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
         .mockReturnValue(of(undefined));
+
+      const mockedFindGoogleDriveFolders$ = jest.spyOn(
+        apiUtil,
+        'findGoogleDriveFolders$'
+      );
 
       entityGroupFindProvider
         .findGroupsFromGoogleDriveFolderName$(
@@ -66,16 +77,21 @@ describe('entity-group-find.provider', () => {
           faker.datatype.uuid()
         )
         .subscribe((result) => {
+          expect(mockedFindGoogleDriveFolderByName$).toBeCalledTimes(1);
+          expect(mockedFindGoogleDriveFolders$).not.toBeCalled();
           expect(result).toHaveLength(0);
           done();
         });
     });
 
     it('should return empty array if folders are not found', (done: any) => {
-      jest
+      const mockedFindGoogleDriveFolderByName$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
         .mockReturnValue(of({} as GoogleDriveFolder));
-      jest.spyOn(apiUtil, 'findGoogleDriveFolders$').mockReturnValue(of([]));
+
+      const mockedFindGoogleDriveFolders$ = jest
+        .spyOn(apiUtil, 'findGoogleDriveFolders$')
+        .mockReturnValue(of([]));
 
       entityGroupFindProvider
         .findGroupsFromGoogleDriveFolderName$(
@@ -84,6 +100,8 @@ describe('entity-group-find.provider', () => {
           faker.datatype.uuid()
         )
         .subscribe((result) => {
+          expect(mockedFindGoogleDriveFolderByName$).toBeCalledTimes(1);
+          expect(mockedFindGoogleDriveFolders$).toBeCalledTimes(1);
           expect(result).toHaveLength(0);
           done();
         });

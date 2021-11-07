@@ -23,33 +23,11 @@ Cypress.Commands.add(
   'orderAdminEntities',
   (
     authHeaders: { Authorization: string },
-    entityWithoutGroupType: string,
     entityOrders: EntityOrders
   ): Cypress.Chainable<Cypress.Response<void>> =>
     cy.request({
       method: 'PUT',
-      url: `/api/v1/admin/entities/entity-type/${entityWithoutGroupType}/order`,
-      headers: {
-        ...authHeaders,
-      },
-      body: {
-        ...entityOrders,
-      },
-      failOnStatusCode: false,
-    })
-);
-
-Cypress.Commands.add(
-  'orderForGroupAdminEntities',
-  (
-    authHeaders: { Authorization: string },
-    entityWithGroupType: string,
-    group: string,
-    entityOrders: EntityOrders
-  ): Cypress.Chainable<Cypress.Response<EntityAdmin[]>> =>
-    cy.request({
-      method: 'PUT',
-      url: `/api/v1/admin/entities/entity-type/${entityWithGroupType}/groups/${group}/order`,
+      url: `/api/v1/admin/entities/order`,
       headers: {
         ...authHeaders,
       },

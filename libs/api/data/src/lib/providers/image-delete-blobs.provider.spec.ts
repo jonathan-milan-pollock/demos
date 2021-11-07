@@ -15,7 +15,7 @@ import { ImageDeleteBlobsProvider } from './image-delete-blobs.provider';
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
-import * as apiUtils from '@dark-rush-photography/api/util';
+import * as apiUtil from '@dark-rush-photography/api/util';
 
 describe('image-delete-blobs.provider', () => {
   let imageDeleteBlobsProvider: ImageDeleteBlobsProvider;
@@ -52,35 +52,41 @@ describe('image-delete-blobs.provider', () => {
 
   describe('deleteImageBlobs$', () => {
     it('should delete image dimension and image blobs for an entity', (done: any) => {
-      const imageDimensionType = faker.random.arrayElement(
-        Object.values(ImageDimensionType)
-      );
-      jest
-        .spyOn(apiUtils, 'getImageDimensions')
+      const mockedGetImageDimensions = jest
+        .spyOn(apiUtil, 'getImageDimensions')
         .mockReturnValue([
-          { type: imageDimensionType } as ImageDimensionStandard,
+          {
+            type: faker.random.arrayElement(Object.values(ImageDimensionType)),
+          } as ImageDimensionStandard,
+          {
+            type: faker.random.arrayElement(Object.values(ImageDimensionType)),
+          } as ImageDimensionStandard,
         ]);
 
+      const mockedGetAzureStorageBlobPathWithImageDimension = jest
+        .spyOn(apiUtil, 'getAzureStorageBlobPathWithImageDimension')
+        .mockReturnValue(faker.internet.url());
+
+      const mockedGetAzureStorageBlobPath = jest
+        .spyOn(apiUtil, 'getAzureStorageBlobPath')
+        .mockReturnValue(faker.internet.url());
+
       const mockedDeleteAzureStorageBlobIfExists$ = jest
-        .spyOn(apiUtils, 'deleteAzureStorageBlobIfExists$')
+        .spyOn(apiUtil, 'deleteAzureStorageBlobIfExists$')
         .mockReturnValue(of(undefined));
 
       const storageId = faker.datatype.uuid();
-      const fileName = faker.system.fileName();
+      const slug = faker.lorem.word();
+
       imageDeleteBlobsProvider
-        .deleteImageBlobs$(storageId, fileName)
+        .deleteImageBlobs$(storageId, slug)
         .subscribe(() => {
-          expect(mockedDeleteAzureStorageBlobIfExists$).toBeCalledTimes(2);
-
-          const [imageDimensionBlobPath] =
-            mockedDeleteAzureStorageBlobIfExists$.mock.calls[0];
-          expect(imageDimensionBlobPath).toBe(
-            `${storageId}/${imageDimensionType.toLowerCase()}/${fileName}`
-          );
-
-          const [imageBlobPath] =
-            mockedDeleteAzureStorageBlobIfExists$.mock.calls[1];
-          expect(imageBlobPath).toBe(`${storageId}/${fileName}`);
+          expect(mockedGetImageDimensions).toBeCalledTimes(1);
+          expect(
+            mockedGetAzureStorageBlobPathWithImageDimension
+          ).toBeCalledTimes(2);
+          expect(mockedGetAzureStorageBlobPath).toBeCalledTimes(1);
+          expect(mockedDeleteAzureStorageBlobIfExists$).toBeCalledTimes(3);
           done();
         });
     });
@@ -88,18 +94,19 @@ describe('image-delete-blobs.provider', () => {
 
   describe('deleteVideoBlob$', () => {
     it('should delete video blob for an entity', (done: any) => {
-      jest
-        .spyOn(apiUtils, 'getAzureStorageBlobPath')
+      const mockedGetAzureStorageBlobPath = jest
+        .spyOn(apiUtil, 'getAzureStorageBlobPath')
         .mockReturnValue(faker.lorem.word());
 
       const mockedDeleteAzureStorageBlobIfExists$ = jest
-        .spyOn(apiUtils, 'deleteAzureStorageBlobIfExists$')
+        .spyOn(apiUtil, 'deleteAzureStorageBlobIfExists$')
         .mockReturnValue(of(undefined));
 
       imageDeleteBlobsProvider
-        .deleteVideoBlob$(faker.datatype.uuid(), faker.system.fileName())
+        .deleteImageVideoBlob$(faker.datatype.uuid(), faker.lorem.word())
         .subscribe(() => {
-          expect(mockedDeleteAzureStorageBlobIfExists$).toBeCalled();
+          expect(mockedGetAzureStorageBlobPath).toBeCalledTimes(1);
+          expect(mockedDeleteAzureStorageBlobIfExists$).toBeCalledTimes(1);
           done();
         });
     });

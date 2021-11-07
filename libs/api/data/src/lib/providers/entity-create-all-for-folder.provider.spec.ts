@@ -32,7 +32,7 @@ describe('entity-create-all-for-folder.provider', () => {
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         EntityCreateAllForFolderProvider,
         EntityCreateOneForFolderProvider,
@@ -55,7 +55,7 @@ describe('entity-create-all-for-folder.provider', () => {
 
   describe('createAllEntitiesForFolder$', () => {
     it('should create all entities for a folder', (done: any) => {
-      jest
+      const mockedFindGoogleDriveFolders$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
         .mockReturnValue(of([{} as GoogleDriveFolder]));
 
@@ -72,13 +72,14 @@ describe('entity-create-all-for-folder.provider', () => {
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockedCreateOneEntityForFolder$).toHaveBeenCalled();
+          expect(mockedFindGoogleDriveFolders$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateOneEntityForFolder$).toHaveBeenCalledTimes(1);
           done();
         });
     });
 
     it('should create all entities with an initial slug when provided', (done: any) => {
-      jest
+      const mockedFindGoogleDriveFolders$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
         .mockReturnValue(of([{} as GoogleDriveFolder]));
 
@@ -97,7 +98,8 @@ describe('entity-create-all-for-folder.provider', () => {
           initialSlug
         )
         .subscribe(() => {
-          expect(mockedCreateOneEntityForFolder$).toHaveBeenCalled();
+          expect(mockedFindGoogleDriveFolders$).toHaveBeenCalledTimes(1);
+          expect(mockedCreateOneEntityForFolder$).toHaveBeenCalledTimes(1);
           const [_entityFolder, _entityType, _watermarkedType, _group, slug] =
             mockedCreateOneEntityForFolder$.mock.calls[0];
           expect(slug).toBe(initialSlug);
@@ -124,7 +126,7 @@ describe('entity-create-all-for-folder.provider', () => {
           faker.lorem.word()
         )
         .subscribe(() => {
-          expect(mockedFindGoogleDriveFolders$).toHaveBeenCalled();
+          expect(mockedFindGoogleDriveFolders$).toHaveBeenCalledTimes(1);
           expect(mockedCreateOneEntityForFolder$).not.toHaveBeenCalled();
           done();
         });

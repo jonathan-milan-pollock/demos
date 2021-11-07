@@ -41,7 +41,7 @@ describe('entity-create.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         EntityCreateProvider,
         EntityCreateWatermarkedTypeProvider,

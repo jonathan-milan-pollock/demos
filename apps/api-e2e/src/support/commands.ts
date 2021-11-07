@@ -49,13 +49,6 @@ declare namespace Cypress {
     }): Cypress.Chainable<Cypress.Response<any>>;
     orderAdminEntities(
       authHeaders: { Authorization: string },
-      entityWithoutGroupType: string,
-      entityOrders: any
-    ): Cypress.Chainable<Cypress.Response<void>>;
-    orderForGroupAdminEntities(
-      authHeaders: { Authorization: string },
-      entityWithGroupType: string,
-      group: string,
       entityOrders: any
     ): Cypress.Chainable<Cypress.Response<void>>;
     updateAdminEntities(
@@ -91,38 +84,46 @@ declare namespace Cypress {
     ): Cypress.Chainable<Cypress.Response<void>>;
 
     // api admin images
-    loadNewImagesAdminEntities(
+    addTestImageAdminImages(
+      authHeaders: { Authorization: string },
+      entityId: string
+    ): Cypress.Chainable<Cypress.Response<any>>;
+    loadImagesAdminImages(
+      authHeaders: { Authorization: string },
+      entityId: string,
+      imageStates: any
+    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    updateNewImagesAdminImages(
       authHeaders: { Authorization: string },
       entityId: string
     ): Cypress.Chainable<Cypress.Response<void>>;
-
-    addThreeSixtyImageAdmin(
+    orderImagesAdminImages(
       authHeaders: { Authorization: string },
       entityId: string,
-      threeSixtyImageAdd: any
-    ): Cypress.Chainable<Cypress.Response<any>>;
-    updateImageAdmin(
+      imageOrders: any
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    selectNewImagesAdminImages(
+      authHeaders: { Authorization: string },
+      entityId: string,
+      imageSelections: any
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    updatePublishImageAdminImages(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string,
       imageUpdate: any
-    ): Cypress.Chainable<Cypress.Response<any>>;
-    selectImageAdmin(
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    archiveImageAdminImages(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string
-    ): Cypress.Chainable<Cypress.Response<any>>;
-    archiveImageAdmin(
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    unarchiveImageAdminImages(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string
-    ): Cypress.Chainable<Cypress.Response<any>>;
-    unarchiveImageAdmin(
-      authHeaders: { Authorization: string },
-      imageId: string,
-      entityId: string
-    ): Cypress.Chainable<Cypress.Response<any>>;
-    removeImageAdmin(
+    ): Cypress.Chainable<Cypress.Response<void>>;
+    removePublishImageAdminImages(
       authHeaders: { Authorization: string },
       imageId: string,
       entityId: string
@@ -133,7 +134,6 @@ declare namespace Cypress {
       entityType: string
     ): Cypress.Chainable<Cypress.Response<any[]>>;
     findOnePublicEntities(
-      entityType: string,
       entityId: string
     ): Cypress.Chainable<Cypress.Response<any>>;
 

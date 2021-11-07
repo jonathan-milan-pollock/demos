@@ -1,38 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository, Repository } from '@nestjs/azure-database';
+import { Inject, Injectable } from '@nestjs/common';
 
-import { concatMap, from, map, Observable } from 'rxjs';
+import { concatMap, map, Observable } from 'rxjs';
 
-import { CronProcess } from '@dark-rush-photography/shared/types';
 import { CronProcessTable } from '../tables/cron-process.table';
+import { loadCronProcessUpdate } from '../cron-processes/cron-process-load.functions';
+import { loadWebSocketCronProcessResponse } from '../cron-processes/web-socket-load-cron-process-response.functions';
+import { CronProcessRepositoryProvider } from './cron-process-repository.provider';
 import { WebSocketMessageProvider } from './web-socket-message.provider';
 
 @Injectable()
 export class CronProcessStateUpdateProvider {
   constructor(
-    @InjectRepository(CronProcessTable)
-    private readonly cronProcessRepository: Repository<CronProcessTable>,
+    @Inject(CronProcessRepositoryProvider.name)
+    private readonly cronProcessRepositoryProvider: CronProcessRepositoryProvider,
     private readonly webSocketMessageProvider: WebSocketMessageProvider
   ) {}
 
   updateCronProcess$(
-    cronProcess: CronProcess,
-    cronProcessUpdate: Partial<CronProcess>
+    cronProcessTable: CronProcessTable,
+    cronProcessUpdate: Partial<CronProcessTable>
   ): Observable<void> {
-    const update = { ...cronProcess, ...cronProcessUpdate };
-
-    const cronProcessTable = new CronProcessTable();
-    Object.assign(cronProcessTable, update);
-
-    const jsonUpdate = JSON.stringify(update);
-
-    return from(
-      this.cronProcessRepository.update(cronProcess.key, cronProcessTable)
-    ).pipe(
-      concatMap(() =>
-        from(this.webSocketMessageProvider.sendMessage(jsonUpdate))
-      ),
-      map(() => undefined)
-    );
+    return this.cronProcessRepositoryProvider
+      .update$(loadCronProcessUpdate(cronProcessTable, cronProcessUpdate))
+      .pipe(
+        concatMap(() =>
+          this.webSocketMessageProvider.sendMessage$(
+            JSON.stringify(
+              loadWebSocketCronProcessResponse({
+                ...cronProcessTable,
+                ...cronProcessUpdate,
+              })
+            )
+          )
+        ),
+        map(() => undefined)
+      );
   }
 }

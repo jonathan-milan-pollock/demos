@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { validatePublishEntity } from '../entities/entity-publish-validation.functions';
 import { ImageProcessAllProvider } from './image-process-all.provider';
 import { ImageProcessOneProvider } from './image-process-one.provider';

@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsInt,
   IsISO8601,
+  IsMongoId,
   IsOptional,
   IsString,
   Min,
@@ -15,11 +16,14 @@ import {
   EntityType,
 } from '@dark-rush-photography/shared/types';
 import { ImagePublicDto } from './image-public.dto';
-import { ResolutionDto } from './resolution.dto';
+import { DimensionDto } from './dimension.dto';
 
 export class EntityMinimalPublicDto implements EntityMinimalPublic {
   @IsEnum(EntityType)
   type!: EntityType;
+
+  @IsMongoId()
+  id!: string;
 
   @IsString()
   group!: string;
@@ -43,9 +47,6 @@ export class EntityMinimalPublicDto implements EntityMinimalPublic {
   publishedDate!: string;
 
   @IsBoolean()
-  hasStarredImage!: boolean;
-
-  @IsBoolean()
   starredImageIsCentered!: boolean;
 
   @ValidateNested()
@@ -54,7 +55,7 @@ export class EntityMinimalPublicDto implements EntityMinimalPublic {
   starredImage?: ImagePublicDto;
 
   @ValidateNested()
-  @Type(() => ResolutionDto)
+  @Type(() => DimensionDto)
   @IsOptional()
-  tileDimension?: ResolutionDto;
+  tileDimension?: DimensionDto;
 }

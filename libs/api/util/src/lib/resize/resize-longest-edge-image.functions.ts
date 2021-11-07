@@ -1,23 +1,24 @@
 import sharp = require('sharp');
 import { concatMap, from, map, Observable } from 'rxjs';
 
-import { findImageResolution$ } from './image-resolution.functions';
+import { findDimension$ } from './image-dimension.functions';
 import { createTempFile$ } from '../file/file.functions';
+import { getImageFileName } from '../..';
 
 export const resizeLongestEdgeImage$ = (
-  fileName: string,
+  slug: string,
   filePath: string,
   longestEdge: number
 ): Observable<string> =>
-  findImageResolution$(filePath).pipe(
+  findDimension$(filePath).pipe(
     concatMap((resolution) => {
       return resolution.width > resolution.height
-        ? createTempFile$(fileName).pipe(
+        ? createTempFile$(getImageFileName(slug)).pipe(
             concatMap((newFilePath) =>
               resizeLongestEdgeImageWidth$(filePath, newFilePath, longestEdge)
             )
           )
-        : createTempFile$(fileName).pipe(
+        : createTempFile$(getImageFileName(slug)).pipe(
             concatMap((newFilePath) =>
               resizeLongestEdgeImageHeight$(filePath, newFilePath, longestEdge)
             )

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { concatMap, from, last, map, Observable, of } from 'rxjs';
+import { concatMap, from, last, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import {
@@ -40,8 +40,7 @@ export class EntityCreateAllForFolderProvider {
           )
         );
       }),
-      last(),
-      map(() => undefined)
+      last()
     );
   }
 }

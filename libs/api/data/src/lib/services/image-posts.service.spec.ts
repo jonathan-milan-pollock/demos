@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Test } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
@@ -6,11 +7,13 @@ import { getModelToken } from '@nestjs/mongoose';
 import * as faker from 'faker';
 import { of } from 'rxjs';
 
-import { EntityMinimalAdmin } from '@dark-rush-photography/shared/types';
+import { CronProcessType } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
+import { CronProcessTable } from '../tables/cron-process.table';
 import { ConfigProvider } from '../providers/config.provider';
 import { ImageAddProvider } from '../providers/image-add.provider';
 import { ImageAddBlobProvider } from '../providers/image-add-blob.provider';
+import { CronProcessRepositoryProvider } from '../providers/cron-process-repository.provider';
 import { ImagePostsService } from './image-posts.service';
 
 jest.mock('../entities/entity-repository.functions', () => ({
@@ -18,14 +21,18 @@ jest.mock('../entities/entity-repository.functions', () => ({
 }));
 import * as entityRepositoryFunctions from '../entities/entity-repository.functions';
 
-jest.mock('../entities/entity-load-admin.functions', () => ({
-  ...jest.requireActual('../entities/entity-load-admin.functions'),
+jest.mock('../cron-processes/cron-process-start.functions', () => ({
+  ...jest.requireActual('../cron-processes/cron-process-start.functions'),
 }));
-import * as entityLoadAdminFunctions from '../entities/entity-load-admin.functions';
+import * as cronProcessStartFunctions from '../cron-processes/cron-process-start.functions';
 
 describe('image-posts.service', () => {
   let imagePostsService: ImagePostsService;
   let imageAddProvider: ImageAddProvider;
+
+  const mockedCronProcessRepositoryProvider = {
+    create$: jest.fn().mockReturnValue(of(undefined)),
+  };
 
   beforeEach(async () => {
     class MockConfigProvider {}
@@ -40,7 +47,11 @@ describe('image-posts.service', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
+        },
+        {
+          provide: CronProcessRepositoryProvider.name,
+          useValue: mockedCronProcessRepositoryProvider,
         },
         ImagePostsService,
         ImageAddProvider,
@@ -62,58 +73,36 @@ describe('image-posts.service', () => {
         .spyOn(entityRepositoryFunctions, 'createImagePostEntity$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const mockedAddUploadImage$ = jest
+      const mockedAddImagePostImage$ = jest
         .spyOn(imageAddProvider, 'addImagePostImage$')
         .mockReturnValue(of(undefined));
 
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
+      const mockedStartCronProcessType = jest
+        .spyOn(cronProcessStartFunctions, 'startCronProcessType')
+        .mockReturnValue({} as CronProcessTable);
 
-      jest
-        .spyOn(entityLoadAdminFunctions, 'loadEntityMinimalAdmin')
-        .mockReturnValue({} as EntityMinimalAdmin);
+      const mockedCreate$ = jest
+        .spyOn(mockedCronProcessRepositoryProvider, 'create$')
+        .mockReturnValue(of(undefined));
 
       imagePostsService
         .create$(faker.lorem.sentence(), {} as Express.Multer.File)
         .subscribe(() => {
-          expect(mockedCreateImagePostEntity$).toBeCalled();
-          expect(mockedAddUploadImage$).toBeCalled();
+          expect(mockedCreateImagePostEntity$).toBeCalledTimes(1);
+          expect(mockedAddImagePostImage$).toBeCalledTimes(1);
+          expect(mockedStartCronProcessType).toBeCalledTimes(1);
+          const [
+            cronProcessType,
+            _entityType,
+            _entityId,
+            _group,
+            _slug,
+            postSocialMedia,
+          ] = mockedStartCronProcessType.mock.calls[0];
+          expect(cronProcessType).toBe(CronProcessType.PublishEntity);
+          expect(postSocialMedia).toBe(true);
+          expect(mockedCreate$).toBeCalledTimes(1);
           done();
-        });
-    });
-
-    it('should not load a minimal admin entity if entity not found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'createImagePostEntity$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      jest
-        .spyOn(imageAddProvider, 'addImagePostImage$')
-        .mockReturnValue(of(undefined));
-
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(null));
-
-      const mockedLoadEntityMinimalAdmin = jest.spyOn(
-        entityLoadAdminFunctions,
-        'loadEntityMinimalAdmin'
-      );
-
-      imagePostsService
-        .create$(faker.lorem.sentence(), {} as Express.Multer.File)
-        .subscribe({
-          next: () => {
-            done();
-          },
-          error: () => {
-            expect(mockedLoadEntityMinimalAdmin).not.toHaveBeenCalled();
-            done();
-          },
-          complete: () => {
-            done();
-          },
         });
     });
   });

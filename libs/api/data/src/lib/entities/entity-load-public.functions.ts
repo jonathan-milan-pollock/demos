@@ -1,47 +1,31 @@
 import {
-  Entity,
   EntityMinimalPublic,
   EntityPublic,
-  EntityType,
-  ImagePublic,
   ImageState,
 } from '@dark-rush-photography/shared/types';
+import { getEntityTypeHasStarredImage } from '@dark-rush-photography/shared/util';
 import { DocumentModel } from '../schema/document.schema';
+import { validatePublicStarredImage } from '../images/image-field-validation.functions';
 import { loadImagePublic } from '../images/image-load.functions';
-import { validateEntityStarredImage } from './entity-field-validation.functions';
 
 export const loadEntityMinimalPublic = (
-  entity: Entity
-): EntityMinimalPublic => {
-  const entityType = entity.type;
-  //TODO:
-  const hasStarredImage =
-    entityType === EntityType.Destination ||
-    entityType === EntityType.Event ||
-    entityType === EntityType.PhotoOfTheWeek;
-
-  const starredImage = hasStarredImage
-    ? loadImagePublic(validateEntityStarredImage(entity))
-    : ({} as ImagePublic);
-
-  //TODO:
-  const publicImages = entity.images.filter(
-    (image) => image.state === ImageState.Public
-  );
-
-  return {
-    type: entityType,
-    group: entity.group,
-    slug: entity.slug,
-    order: entity.order,
-    title: entity.title ?? '',
-    createdDate: entity.createdDate ?? '',
-    publishedDate: entity.publishedDate ?? '',
-    hasStarredImage,
-    starredImageIsCentered: entity.starredImageIsCentered,
-    starredImage,
-  };
-};
+  documentModel: DocumentModel
+): EntityMinimalPublic => ({
+  type: documentModel.type,
+  id: documentModel._id,
+  group: documentModel.group,
+  slug: documentModel.slug,
+  order: documentModel.order,
+  title: documentModel.title ?? '',
+  text: documentModel.text ?? '',
+  createdDate: documentModel.createdDate ?? '',
+  publishedDate: documentModel.publishedDate ?? '',
+  starredImageIsCentered: documentModel.starredImageIsCentered,
+  starredImage: getEntityTypeHasStarredImage(documentModel.type)
+    ? loadImagePublic(validatePublicStarredImage(documentModel.images))
+    : undefined,
+  tileDimension: documentModel.tileDimension,
+});
 
 export const loadEntityPublic = (
   documentModel: DocumentModel
@@ -51,16 +35,17 @@ export const loadEntityPublic = (
   );
   return {
     type: documentModel.type,
+    id: documentModel._id,
     group: documentModel.group,
     slug: documentModel.slug,
     order: documentModel.order,
     title: documentModel.title ?? '',
-    seoDescription: documentModel.seoDescription ?? '',
-    seoKeywords: documentModel.seoKeywords,
+    text: documentModel.text ?? '',
     createdDate: documentModel.createdDate ?? '',
     publishedDate: documentModel.publishedDate ?? '',
+    seoDescription: documentModel.seoDescription ?? '',
+    seoKeywords: documentModel.seoKeywords,
     location: documentModel.location,
-    text: documentModel.text,
     images: publicImages.map(loadImagePublic),
   };
 };

@@ -1,5 +1,5 @@
 import {
-  CronProcessResponse,
+  CronProcess,
   DUMMY_CRON_PROCESS_ROW_KEY,
 } from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
@@ -17,23 +17,19 @@ describe('Delete Admin Cron Processes', () => {
           .then(() => cy.findAllAdminCronProcesses(getAuthHeaders()))
           .its('body')
           .then(
-            (cronProcessResponses) =>
-              cronProcessResponses.find(
-                (cronProcessResponse) =>
-                  cronProcessResponse.entityId === entityId
-              ) as CronProcessResponse
+            (cronProcesses) =>
+              cronProcesses.find(
+                (cronProcess) => cronProcess.entityId === entityId
+              ) as CronProcess
           )
-          .then((cronProcessResponse) =>
-            cy.deleteAdminCronProcesses(
-              getAuthHeaders(),
-              cronProcessResponse.key
-            )
+          .then((cronProcess) =>
+            cy.deleteAdminCronProcesses(getAuthHeaders(), cronProcess.key)
           )
           .then(() => cy.findAllAdminCronProcesses(getAuthHeaders()))
           .its('body')
-          .then((cronProcessResponses) =>
-            cronProcessResponses.filter(
-              (cronProcessResponse) => cronProcessResponse.entityId === entityId
+          .then((cronProcesses) =>
+            cronProcesses.filter(
+              (cronProcess) => cronProcess.entityId === entityId
             )
           )
       )

@@ -24,17 +24,21 @@ export class ImageAdminDto implements ImageAdmin {
   storageId!: string;
 
   @IsString()
-  fileName!: string;
+  slug!: string;
+
+  @IsInt()
+  @Min(0)
+  order!: number;
 
   @IsEnum(ImageState)
   state!: ImageState;
 
   @IsBoolean()
-  isThreeSixty!: boolean;
+  isThreeSixtyImage!: boolean;
 
-  @IsInt()
-  @Min(0)
-  order!: number;
+  @IsString()
+  @IsOptional()
+  threeSixtyImageStorageId?: string;
 
   @IsBoolean()
   isStarred!: boolean;

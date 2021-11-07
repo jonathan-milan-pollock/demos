@@ -1,15 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import {
-  combineLatest,
-  concatMap,
-  from,
-  map,
-  Observable,
-  of,
-  toArray,
-} from 'rxjs';
+import { combineLatest, concatMap, from, map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
@@ -25,7 +17,7 @@ import {
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   findAllEntities$,
-  findAllEntitiesForGroup$,
+  findAllEntitiesForWatermarkedGroup$,
 } from '../entities/entity-repository.functions';
 import { loadEntityAdmin } from '../entities/entity-load-admin.functions';
 
@@ -55,14 +47,9 @@ export class EntityFindAllProvider {
         from([...watermarkedEntities, ...withoutWatermarkEntities])
       ),
       toArray<DocumentModel>(),
-      concatMap((documentModels) => {
-        if (documentModels.length === 0) return of([]);
-
-        return from(documentModels).pipe(
-          map(loadEntityAdmin),
-          toArray<EntityAdmin>()
-        );
-      })
+      map((documentModels) =>
+        documentModels.length === 0 ? [] : documentModels.map(loadEntityAdmin)
+      )
     );
   }
 
@@ -71,13 +58,13 @@ export class EntityFindAllProvider {
     group: string
   ): Observable<EntityAdmin[]> {
     return combineLatest([
-      findAllEntitiesForGroup$(
+      findAllEntitiesForWatermarkedGroup$(
         getEntityTypeFromEntityWithGroupType(entityWithGroupType),
         WatermarkedType.Watermarked,
         group,
         this.entityModel
       ),
-      findAllEntitiesForGroup$(
+      findAllEntitiesForWatermarkedGroup$(
         getEntityTypeFromEntityWithGroupType(entityWithGroupType),
         WatermarkedType.WithoutWatermark,
         group,
@@ -88,14 +75,9 @@ export class EntityFindAllProvider {
         from([...watermarkedEntities, ...withoutWatermarkEntities])
       ),
       toArray<DocumentModel>(),
-      concatMap((documentModels) => {
-        if (documentModels.length === 0) return of([]);
-
-        return from(documentModels).pipe(
-          map(loadEntityAdmin),
-          toArray<EntityAdmin>()
-        );
-      })
+      map((documentModels) =>
+        documentModels.length === 0 ? [] : documentModels.map(loadEntityAdmin)
+      )
     );
   }
 }

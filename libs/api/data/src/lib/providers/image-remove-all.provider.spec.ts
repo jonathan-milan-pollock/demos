@@ -4,14 +4,12 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
 
-import * as faker from 'faker';
 import { of } from 'rxjs';
 
 import {
   DUMMY_MONGODB_ID,
   Image,
   ImageState,
-  ImageVideo,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
@@ -27,10 +25,10 @@ import * as entityRepositoryFunctions from '../entities/entity-repository.functi
 jest.mock('../entities/entity-validation.functions', () => ({
   ...jest.requireActual('../entities/entity-validation.functions'),
 }));
-import * as entityValidationFunctions from '../entities/entity-validate-document-model.functions';
+import * as entityValidationFunctions from '../entities/entity-validation.functions';
 
-describe('image-remove.provider', () => {
-  let imageRemoveProvider: ImageRemoveAllProvider;
+describe('image-remove-all.provider', () => {
+  let imageRemoveAllProvider: ImageRemoveAllProvider;
   let imageRemoveOneProvider: ImageRemoveOneProvider;
 
   beforeEach(async () => {
@@ -46,7 +44,7 @@ describe('image-remove.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         ImageRemoveAllProvider,
         ImageRemoveOneProvider,
@@ -54,7 +52,7 @@ describe('image-remove.provider', () => {
       ],
     }).compile();
 
-    imageRemoveProvider = moduleRef.get<ImageRemoveAllProvider>(
+    imageRemoveAllProvider = moduleRef.get<ImageRemoveAllProvider>(
       ImageRemoveAllProvider
     );
     imageRemoveOneProvider = moduleRef.get<ImageRemoveOneProvider>(
@@ -68,30 +66,38 @@ describe('image-remove.provider', () => {
 
   describe('removeAllImages$', () => {
     it('should remove all images of an entity', (done: any) => {
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
+        .mockReturnValue(
+          of({
+            images: [{} as Image, {} as Image],
+          } as DocumentModel)
+        );
 
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({ images: [{} as Image] } as DocumentModel);
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
 
       const mockedRemoveImage$ = jest
         .spyOn(imageRemoveOneProvider, 'removeImage$')
         .mockReturnValue(of(undefined));
 
-      imageRemoveProvider.removeAllImages$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveImage$).toHaveBeenCalled();
-        done();
-      });
+      imageRemoveAllProvider
+        .removeAllImages$(DUMMY_MONGODB_ID)
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
+          expect(mockedRemoveImage$).toHaveBeenCalledTimes(2);
+          done();
+        });
     });
 
-    it('should not remove all images of entity if entity is not found', (done: any) => {
-      jest
+    it('should not remove all images of entity when entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of(null));
 
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
         .mockImplementation(() => {
           throw new NotFoundException();
@@ -102,96 +108,61 @@ describe('image-remove.provider', () => {
         'removeImage$'
       );
 
-      imageRemoveProvider.removeAllImages$(DUMMY_MONGODB_ID).subscribe({
+      imageRemoveAllProvider.removeAllImages$(DUMMY_MONGODB_ID).subscribe({
         next: () => {
           done();
         },
-        error: () => {
-          expect(mockedRemoveImage$).not.toHaveBeenCalled();
+        error: (error) => {
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedRemoveImage$).not.toBeCalled();
+          expect(error).toBeInstanceOf(NotFoundException);
           done();
         },
         complete: () => {
           done();
         },
-      });
-    });
-
-    it('should not remove all images of entity if it does not have any images', (done: any) => {
-      const documentModel: DocumentModel = {
-        images: [],
-      } as unknown as DocumentModel;
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(documentModel));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue(documentModel);
-
-      const mockedRemoveImage$ = jest.spyOn(
-        imageRemoveOneProvider,
-        'removeImage$'
-      );
-
-      imageRemoveProvider.removeAllImages$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveImage$).not.toHaveBeenCalled();
-        done();
-      });
-    });
-
-    it('should remove multiple images of an entity if they are found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({
-          images: [{} as Image, {} as Image],
-        } as DocumentModel);
-
-      const mockedRemoveImage$ = jest
-        .spyOn(imageRemoveOneProvider, 'removeImage$')
-        .mockReturnValue(of(undefined));
-
-      imageRemoveProvider.removeAllImages$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveImage$).toBeCalledTimes(2);
-        done();
       });
     });
   });
 
-  describe('removeAllImagesForState$', () => {
-    it('should remove all images of an entity for a given state', (done: any) => {
-      jest
+  describe('removeAllNewImages$', () => {
+    it('should remove all new images of an entity', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
+        .mockReturnValue(
+          of({
+            images: [
+              { state: ImageState.New } as Image,
+              { state: ImageState.New } as Image,
+            ],
+          } as DocumentModel)
+        );
 
-      const imageState = faker.random.arrayElement(Object.values(ImageState));
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({
-          images: [{ state: imageState } as Image],
-        } as DocumentModel);
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
 
       const mockedRemoveImage$ = jest
         .spyOn(imageRemoveOneProvider, 'removeImage$')
         .mockReturnValue(of(undefined));
 
-      imageRemoveProvider
+      imageRemoveAllProvider
         .removeAllNewImages$(DUMMY_MONGODB_ID)
         .subscribe(() => {
-          expect(mockedRemoveImage$).toHaveBeenCalled();
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
+          expect(mockedRemoveImage$).toHaveBeenCalledTimes(2);
           done();
         });
     });
 
-    it('should not remove all images of entity for a given state if entity is not found', (done: any) => {
-      jest
+    it('should not remove new images of an entity when entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of(null));
 
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
         .mockImplementation(() => {
           throw new NotFoundException();
@@ -202,12 +173,15 @@ describe('image-remove.provider', () => {
         'removeImage$'
       );
 
-      imageRemoveProvider.removeAllNewImages$(DUMMY_MONGODB_ID).subscribe({
+      imageRemoveAllProvider.removeAllNewImages$(DUMMY_MONGODB_ID).subscribe({
         next: () => {
           done();
         },
-        error: () => {
+        error: (error) => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
           expect(mockedRemoveImage$).not.toHaveBeenCalled();
+          expect(error).toBeInstanceOf(NotFoundException);
           done();
         },
         complete: () => {
@@ -216,236 +190,64 @@ describe('image-remove.provider', () => {
       });
     });
 
-    it('should not remove all images of entity for a given state if entity does not have any images for that state', (done: any) => {
-      const documentModelImageState = ImageState.New;
-      const providedImageState = ImageState.Selected;
-
-      const documentModel: DocumentModel = {
-        images: [{ state: documentModelImageState }],
-      } as unknown as DocumentModel;
-      jest
+    it('should not remove new images of an entity when entity does not have any images', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(documentModel));
+        .mockReturnValue(
+          of({
+            images: [] as Image[],
+          } as DocumentModel)
+        );
 
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue(documentModel);
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
 
       const mockedRemoveImage$ = jest.spyOn(
         imageRemoveOneProvider,
         'removeImage$'
       );
 
-      imageRemoveProvider
+      imageRemoveAllProvider
         .removeAllNewImages$(DUMMY_MONGODB_ID)
         .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
           expect(mockedRemoveImage$).not.toHaveBeenCalled();
           done();
         });
     });
 
-    it('should remove multiple images of an entity for a given state', (done: any) => {
-      jest
+    it('should not remove new images of an entity when entity does not have any images that are new', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
+        .mockReturnValue(
+          of({
+            images: [
+              { state: ImageState.Selected } as Image,
+              { state: ImageState.Public } as Image,
+              { state: ImageState.Archived } as Image,
+            ] as Image[],
+          } as DocumentModel)
+        );
 
-      const imageState = faker.random.arrayElement(Object.values(ImageState));
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({
-          images: [
-            { state: imageState } as Image,
-            { state: imageState } as Image,
-          ],
-        } as DocumentModel);
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
 
-      const mockedRemoveImage$ = jest
-        .spyOn(imageRemoveOneProvider, 'removeImage$')
-        .mockReturnValue(of(undefined));
+      const mockedRemoveImage$ = jest.spyOn(
+        imageRemoveOneProvider,
+        'removeImage$'
+      );
 
-      imageRemoveProvider
+      imageRemoveAllProvider
         .removeAllNewImages$(DUMMY_MONGODB_ID)
         .subscribe(() => {
-          expect(mockedRemoveImage$).toBeCalledTimes(2);
-          done();
-        });
-    });
-  });
-
-  describe('removeImage$', () => {
-    it('should remove an image of an entity', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      const imageId = faker.datatype.uuid();
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({
-          images: [{ id: imageId } as Image],
-        } as DocumentModel);
-
-      const mockedRemoveImage$ = jest
-        .spyOn(imageRemoveOneProvider, 'removeImage$')
-        .mockReturnValue(of(undefined));
-
-      imageRemoveProvider.removeImage$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveImage$).toHaveBeenCalled();
-        done();
-      });
-    });
-
-    it('should not remove an image of an entity if the entity is not found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(null));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockImplementation(() => {
-          throw new NotFoundException();
-        });
-
-      const mockedRemoveImage$ = jest.spyOn(
-        imageRemoveOneProvider,
-        'removeImage$'
-      );
-
-      imageRemoveProvider.removeImage$(DUMMY_MONGODB_ID).subscribe({
-        next: () => {
-          done();
-        },
-        error: () => {
-          expect(mockedRemoveImage$).not.toHaveBeenCalled();
-          done();
-        },
-        complete: () => {
-          done();
-        },
-      });
-    });
-
-    it('should not remove an image of an entity if the image is not found', (done: any) => {
-      const documentModelImageId = faker.datatype.uuid();
-      const providedImageId = faker.datatype.uuid();
-
-      const documentModel: DocumentModel = {
-        images: [{ id: documentModelImageId }],
-      } as unknown as DocumentModel;
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(documentModel));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue(documentModel);
-
-      const mockedRemoveImage$ = jest.spyOn(
-        imageRemoveOneProvider,
-        'removeImage$'
-      );
-
-      imageRemoveProvider
-        .removeImage$(providedImageId, DUMMY_MONGODB_ID)
-        .subscribe(() => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
           expect(mockedRemoveImage$).not.toHaveBeenCalled();
           done();
         });
-    });
-  });
-
-  describe('removeAllVideos$', () => {
-    it('should remove all videos of an entity', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({ imageVideo: [{} as ImageVideo] } as DocumentModel);
-
-      const mockedRemoveVideo$ = jest
-        .spyOn(imageRemoveOneProvider, 'removeVideo$')
-        .mockReturnValue(of(undefined));
-
-      imageRemoveProvider.removeAllVideos$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveVideo$).toHaveBeenCalled();
-        done();
-      });
-    });
-
-    it('should not remove all videos of entity if entity is not found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(null));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockImplementation(() => {
-          throw new NotFoundException();
-        });
-
-      const mockedRemoveVideo$ = jest.spyOn(
-        imageRemoveOneProvider,
-        'removeVideo$'
-      );
-
-      imageRemoveProvider.removeAllVideos$(DUMMY_MONGODB_ID).subscribe({
-        next: () => {
-          done();
-        },
-        error: () => {
-          expect(mockedRemoveVideo$).not.toHaveBeenCalled();
-          done();
-        },
-        complete: () => {
-          done();
-        },
-      });
-    });
-
-    it('should not remove all videos of entity if it does not have any videos', (done: any) => {
-      const documentModel: DocumentModel = {
-        videos: [],
-      } as unknown as DocumentModel;
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(documentModel));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue(documentModel);
-
-      const mockedRemoveVideo$ = jest.spyOn(
-        imageRemoveOneProvider,
-        'removeVideo$'
-      );
-
-      imageRemoveProvider.removeAllVideos$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveVideo$).not.toHaveBeenCalled();
-        done();
-      });
-    });
-
-    it('should remove multiple videos of an entity if they are found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({
-          imageVideo: [{} as ImageVideo, {} as ImageVideo],
-        } as DocumentModel);
-
-      const mockedRemoveVideo$ = jest
-        .spyOn(imageRemoveOneProvider, 'removeVideo$')
-        .mockReturnValue(of(undefined));
-
-      imageRemoveProvider.removeAllVideos$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedRemoveVideo$).toBeCalledTimes(2);
-        done();
-      });
     });
   });
 });

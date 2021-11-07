@@ -1,3 +1,4 @@
+import * as fs from 'fs-extra';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -9,27 +10,35 @@ import {
   Image,
   ImageDimension,
   ImageDimensionType,
+  IMAGE_FILE_EXTENSION,
+  IMAGE_MIME_TYPE,
 } from '@dark-rush-photography/shared/types';
 import { getEntityTypeHasImageVideo } from '@dark-rush-photography/shared/util';
 import {
-  findImageResolution$,
+  downloadAzureStorageBlobToFile$,
+  findDimension$,
+  getAzureStorageBlobPath,
   getImageDimension,
+  getImageFileName,
+  uploadAzureStorageStreamToBlob$,
 } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   updateImageCreatedDate$,
-  updateImageSmallResolution$,
+  updateImageSmallDimension$,
 } from '../images/image-repository.functions';
 import { validateImageFound } from '../images/image-validation.functions';
 import { ImageExifProvider } from './image-exif.provider';
 import { ImageTinifyProvider } from './image-tinify.provider';
 import { ImageResizeProvider } from './image-resize.provider';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ImageProcessOneProvider {
   constructor(
+    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
     private readonly imageExifProvider: ImageExifProvider,
@@ -64,16 +73,13 @@ export class ImageProcessOneProvider {
             )
           ),
           concatMap(() =>
-            this.imageTinifyProvider.tinifyImage$(
-              image.storageId,
-              image.fileName
-            )
+            this.imageTinifyProvider.tinifyImage$(image.storageId, image.slug)
           ),
           concatMap(() => from(iPadImageDimensions)),
           concatMap((iPadImageDimension) =>
             this.imageResizeProvider.resizeImage$(
               image.storageId,
-              image.fileName,
+              image.slug,
               iPadImageDimension
             )
           ),
@@ -91,23 +97,49 @@ export class ImageProcessOneProvider {
   ): Observable<void> {
     const smallImageDimension = getImageDimension(ImageDimensionType.Small);
 
-    return this.imageExifProvider.exifImage$(image, entity).pipe(
+    return downloadAzureStorageBlobToFile$(
+      getAzureStorageBlobPath(
+        image.storageId,
+        image.slug,
+        IMAGE_FILE_EXTENSION
+      ),
+      getImageFileName(image.slug),
+      this.configProvider.azureStorageConnectionStringPublic,
+      this.configProvider.azureStorageBlobContainerNamePublic
+    ).pipe(
+      concatMap((filePath) =>
+        uploadAzureStorageStreamToBlob$(
+          fs.createReadStream(filePath),
+          IMAGE_MIME_TYPE,
+          getAzureStorageBlobPath(
+            image.storageId,
+            image.slug,
+            IMAGE_FILE_EXTENSION
+          ),
+          this.configProvider.azureStorageConnectionStringPublic,
+          this.configProvider.azureStorageBlobContainerNamePublic
+        )
+      ),
+      concatMap(() => this.imageExifProvider.exifImage$(image, entity)),
       concatMap(() =>
-        this.imageResizeProvider.resizeImage$(
+        this.imageResizeProvider.resizePublishImage$(
           image.storageId,
-          image.fileName,
+          image.slug,
           smallImageDimension
         )
       ),
-      concatMap((filePath) => findImageResolution$(filePath)),
-      concatMap((resolution) => {
+      concatMap((filePath) => findDimension$(filePath)),
+      concatMap((dimension) => {
         return findEntityById$(image.entityId, this.entityModel).pipe(
           map(validateEntityFound),
           concatMap((documentModel) => {
-            const foundImage = validateImageFound(image.id, documentModel);
-            return updateImageSmallResolution$(
+            const foundImage = validateImageFound(
+              image.id,
+              documentModel.images
+            );
+            return updateImageSmallDimension$(
               foundImage,
-              resolution,
+              dimension,
               documentModel,
               this.entityModel
             );
@@ -122,9 +154,9 @@ export class ImageProcessOneProvider {
         )
       ),
       concatMap((imageDimension) =>
-        this.imageResizeProvider.resizeImage$(
+        this.imageResizeProvider.resizePublishImage$(
           image.storageId,
-          image.fileName,
+          image.slug,
           imageDimension
         )
       ),

@@ -4,7 +4,13 @@ export const DEFAULT_ENTITY_GROUP = ' ';
 export const DUMMY_CRON_PROCESS_ROW_KEY =
   '00000000-0000-0000-0000-000000000000';
 export const DUMMY_MONGODB_ID = '000000000000000000000000';
+export const IMAGE_FILE_EXTENSION = '.jpg';
 export const IMAGE_MIME_TYPE = 'image/jpeg';
+export const IMAGE_URL_PREFIX_DEV =
+  'https://devpublicsa.blob.core.windows.net/devimages';
+export const IMAGE_URL_PREFIX_PROD =
+  'https://www.darkrushphotography.art/images';
+export const IMAGE_VIDEO_FILE_EXTENSION = '.mp4';
 export const IS_PUBLIC = 'isPublic';
 export const JWT = 'jwt';
 export const RESIZE_EXACT_FIT_RED_BACKGROUND_COLOR = 30;

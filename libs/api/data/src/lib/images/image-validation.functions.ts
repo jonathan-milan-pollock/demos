@@ -1,18 +1,14 @@
+import { ConflictException, NotFoundException } from '@nestjs/common';
+
 import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+  Image,
+  ImageState,
+  ImageVideo,
+} from '@dark-rush-photography/shared/types';
 
-import { Image, ImageState } from '@dark-rush-photography/shared/types';
-import { DocumentModel } from '../schema/document.schema';
-
-export const validateImageFound = (
-  imageId: string,
-  documentModel: DocumentModel
-): Image => {
-  const foundImage = documentModel.images.find((image) => image.id === imageId);
-  if (!foundImage) throw new NotFoundException('Image was not found');
+export const validateImageFound = (imageId: string, images: Image[]): Image => {
+  const foundImage = images.find((image) => image.id === imageId);
+  if (!foundImage) throw new NotFoundException();
   return foundImage;
 };
 
@@ -30,15 +26,16 @@ export const validateCanUnarchiveImage = (image: Image): Image => {
   return image;
 };
 
-export const validateImagePublic = (image: Image): Image => {
-  if (image.state !== ImageState.Public) throw new NotFoundException();
-  return image;
-};
-
 export const validatePublishImage = (image: Image): Image => {
   if (
     !(image.state === ImageState.Selected || image.state === ImageState.Public)
   )
-    throw new BadRequestException('Image must be selected or public');
+    throw new ConflictException('Image must be selected or public');
   return image;
+};
+
+export const validateImageVideo = (imageVideo?: ImageVideo): ImageVideo => {
+  if (!imageVideo) throw new ConflictException('Image video is required');
+
+  return imageVideo;
 };

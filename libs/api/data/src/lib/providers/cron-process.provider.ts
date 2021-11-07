@@ -1,38 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { InjectRepository, Repository } from '@nestjs/azure-database';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { InjectModel } from '@nestjs/mongoose';
 
-import { catchError, concatMap, from, lastValueFrom, of } from 'rxjs';
+import { catchError, concatMap, lastValueFrom, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import { CronProcessType } from '@dark-rush-photography/shared/types';
 import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { CronProcessTable } from '../tables/cron-process.table';
 import { findEntityById$ } from '../entities/entity-repository.functions';
+import { getCronProcessError } from '../cron-processes/cron-process-state.functions';
 import { ConfigProvider } from './config.provider';
-import { CronProcessStateProvider } from './cron-process-state.provider';
-import { ImageUpdateNewProvider } from './image-update-new.provider';
-import { EntityPublishProvider } from './entity-publish.provider';
-import { EntityDeleteProvider } from './entity-delete.provider';
-import { ImageRemoveAllProvider } from './image-remove-all.provider';
+import { CronProcessRepositoryProvider } from './cron-process-repository.provider';
+import { CronProcessRunProvider } from './cron-process-run.provider';
+import { CronProcessStateUpdateProvider } from './cron-process-state-update.provider';
 
 @Injectable()
 export class CronProcessProvider {
-  private isRunningCronProcess = false;
-
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    @InjectRepository(CronProcessTable)
-    private readonly cronProcessRepository: Repository<CronProcessTable>,
-    private readonly cronProcessStateProvider: CronProcessStateProvider,
-    private readonly imageUpdateNewProvider: ImageUpdateNewProvider,
-    private readonly entityPublishProvider: EntityPublishProvider,
-    private readonly entityDeleteProvider: EntityDeleteProvider,
-    private readonly imageRemoveAllProvider: ImageRemoveAllProvider
+    @Inject(CronProcessRepositoryProvider.name)
+    private readonly cronProcessRepositoryProvider: CronProcessRepositoryProvider,
+    private readonly cronProcessRunProvider: CronProcessRunProvider,
+    private readonly cronProcessStateUpdateProvider: CronProcessStateUpdateProvider
   ) {}
 
   @Cron(CronExpression.EVERY_MINUTE, {
@@ -44,96 +36,53 @@ export class CronProcessProvider {
       this.configProvider.googleDrivePrivateKey
     );
 
-    if (this.isRunningCronProcess) {
+    if (this.cronProcessRunProvider.isRunningCronProcess) {
       return Promise.resolve(undefined);
     }
 
     return lastValueFrom(
-      from(
-        this.cronProcessRepository.findAll(
-          this.cronProcessRepository.where('ready == true')
-        )
-      ).pipe(
-        concatMap((response) => {
-          if (response.entries.length === 0) {
-            return of(undefined);
-          }
+      this.cronProcessRepositoryProvider.firstReady$().pipe(
+        concatMap((cronProcessTable) => {
+          if (!cronProcessTable) return of(undefined);
 
-          const cronProcess = response.entries[0];
-          return findEntityById$(cronProcess.entityId, this.entityModel).pipe(
+          return findEntityById$(
+            cronProcessTable.entityId,
+            this.entityModel
+          ).pipe(
             concatMap((documentModel) => {
               if (!documentModel) {
-                return this.cronProcessStateProvider.updateCronProcessError$(
-                  cronProcess
+                return this.cronProcessStateUpdateProvider.updateCronProcess$(
+                  cronProcessTable,
+                  getCronProcessError()
                 );
               }
 
-              this.isRunningCronProcess = true;
-              const cronProcessType = cronProcess.type as CronProcessType;
-              switch (cronProcessType) {
+              switch (cronProcessTable.type) {
                 case CronProcessType.DeleteEntity:
-                  return this.cronProcessStateProvider
-                    .updateCronProcessRunning$(cronProcess)
-                    .pipe(
-                      concatMap(() =>
-                        this.entityDeleteProvider.deleteEntity$(
-                          cronProcess.entityId
-                        )
-                      ),
-                      concatMap(() => {
-                        this.isRunningCronProcess = false;
-                        return this.cronProcessStateProvider.updateCronProcessCompleted$(
-                          cronProcess
-                        );
-                      })
-                    );
+                  this.cronProcessRunProvider.isRunningCronProcess = true;
+                  return this.cronProcessRunProvider.deleteEntity$(
+                    cronProcessTable
+                  );
                 case CronProcessType.PublishEntity:
-                  return this.cronProcessStateProvider
-                    .updateCronProcessRunning$(cronProcess)
-                    .pipe(
-                      concatMap(() =>
-                        this.entityPublishProvider.publishEntity$(
-                          cronProcess.entityId,
-                          cronProcess.postSocialMedia
-                        )
-                      ),
-                      concatMap(() => {
-                        this.isRunningCronProcess = false;
-                        return this.cronProcessStateProvider.updateCronProcessCompleted$(
-                          cronProcess
-                        );
-                      })
-                    );
+                  this.cronProcessRunProvider.isRunningCronProcess = true;
+                  return this.cronProcessRunProvider.publishEntity$(
+                    cronProcessTable
+                  );
                 case CronProcessType.UpdateNewImages:
-                  return this.cronProcessStateProvider
-                    .updateCronProcessRunning$(cronProcess)
-                    .pipe(
-                      concatMap(() =>
-                        this.imageRemoveAllProvider.removeAllNewImages$(
-                          cronProcess.entityId
-                        )
-                      ),
-                      concatMap(() =>
-                        this.imageUpdateNewProvider.updateNewImages$(
-                          googleDrive,
-                          cronProcess.entityId
-                        )
-                      ),
-                      concatMap(() => {
-                        this.isRunningCronProcess = false;
-                        return this.cronProcessStateProvider.updateCronProcessCompleted$(
-                          cronProcess
-                        );
-                      })
-                    );
+                  this.cronProcessRunProvider.isRunningCronProcess = true;
+                  return this.cronProcessRunProvider.updateNewImages$(
+                    googleDrive,
+                    cronProcessTable
+                  );
                 default:
                   return of(undefined);
               }
             }),
             catchError(() => {
-              this.isRunningCronProcess = false;
-              return this.cronProcessStateProvider.updateCronProcessError$(
-                cronProcess
+              this.cronProcessRunProvider.isRunningCronProcess = false;
+              return this.cronProcessStateUpdateProvider.updateCronProcess$(
+                cronProcessTable,
+                getCronProcessError()
               );
             })
           );

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { concatMap, from, map, Observable, of } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import {
@@ -31,12 +31,10 @@ export class EntityCreateWatermarkedTypeProvider {
     watermarkedType: WatermarkedType,
     initialSlug?: string
   ): Observable<void> {
-    return from(
-      findGoogleDriveFolderByName$(
-        googleDrive,
-        folderName,
-        this.configProvider.getGoogleDriveWebsitesFolderId(watermarkedType)
-      )
+    return findGoogleDriveFolderByName$(
+      googleDrive,
+      folderName,
+      this.configProvider.getGoogleDriveWebsitesFolderId(watermarkedType)
     ).pipe(
       concatMap((folder) => {
         if (!folder) return of(undefined);
@@ -49,8 +47,7 @@ export class EntityCreateWatermarkedTypeProvider {
           DEFAULT_ENTITY_GROUP,
           initialSlug
         );
-      }),
-      map(() => undefined)
+      })
     );
   }
 
@@ -61,12 +58,10 @@ export class EntityCreateWatermarkedTypeProvider {
     watermarkedType: WatermarkedType,
     group: string
   ): Observable<void> {
-    return from(
-      findGoogleDriveFolderByName$(
-        googleDrive,
-        folderName,
-        this.configProvider.getGoogleDriveWebsitesFolderId(watermarkedType)
-      )
+    return findGoogleDriveFolderByName$(
+      googleDrive,
+      folderName,
+      this.configProvider.getGoogleDriveWebsitesFolderId(watermarkedType)
     ).pipe(
       concatMap((folder) => {
         if (!folder) return of(undefined);

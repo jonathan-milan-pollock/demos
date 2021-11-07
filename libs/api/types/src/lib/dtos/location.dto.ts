@@ -9,19 +9,11 @@ export class LocationDto implements Location {
 
   @IsString()
   @IsOptional()
-  street?: string;
-
-  @IsString()
-  @IsOptional()
   city?: string;
 
   @IsString()
   @IsOptional()
   stateOrProvince?: string;
-
-  @IsString()
-  @IsOptional()
-  zipCode?: string;
 
   @IsString()
   country!: string;

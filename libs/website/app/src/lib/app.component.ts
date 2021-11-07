@@ -5,7 +5,7 @@ import { EMPTY, map, Observable, pluck, Subscription } from 'rxjs';
 
 import { ADMIN, Auth0User } from '@dark-rush-photography/website/types';
 import { loginWithRedirect, logout } from '@dark-rush-photography/website/data';
-import { Destination, Review } from '@dark-rush-photography/shared/types';
+import { Entity } from '@dark-rush-photography/shared/types';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -20,8 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
   isAuthenticated$: Observable<boolean> = EMPTY;
   user?: Auth0User;
 
-  destinations$: Observable<Destination[]> = EMPTY;
-  reviews$: Observable<Review[]> = EMPTY;
+  destinations$: Observable<Entity[]> = EMPTY;
+  reviews$: Observable<Entity[]> = EMPTY;
 
   constructor(
     private readonly router: Router,

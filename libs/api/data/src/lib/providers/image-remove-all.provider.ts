@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import { ImageState } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
-import { validateEntityFound } from '../entities/entity-validate-document-model.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import { ImageRemoveOneProvider } from './image-remove-one.provider';
 
 @Injectable()
@@ -26,8 +26,7 @@ export class ImageRemoveAllProvider {
 
         return from(documentModel.images).pipe(
           concatMap((image) => this.imageRemoveOneProvider.removeImage$(image)),
-          last(),
-          map(() => undefined)
+          last()
         );
       })
     );
@@ -37,17 +36,16 @@ export class ImageRemoveAllProvider {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const imagesForState = documentModel.images.filter(
+        const newImages = documentModel.images.filter(
           (image) => image.state === ImageState.New
         );
-        if (imagesForState.length === 0) return of(undefined);
+        if (newImages.length === 0) return of(undefined);
 
-        return from([...imagesForState]).pipe(
-          concatMap((imageForState) =>
-            this.imageRemoveOneProvider.removeImage$(imageForState)
+        return from(newImages).pipe(
+          concatMap((newImage) =>
+            this.imageRemoveOneProvider.removeImage$(newImage)
           ),
-          last(),
-          map(() => undefined)
+          last()
         );
       })
     );

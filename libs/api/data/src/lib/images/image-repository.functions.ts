@@ -6,16 +6,15 @@ import {
   Image,
   ImageState,
   ImageUpdate,
-  Resolution,
+  Dimension,
   ImageVideo,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
-  loadPublishImage,
   loadUpdateImage,
   loadUpdateImageCreatedDate,
   loadUpdateImageOrder,
-  loadUpdateImageSmallResolution,
+  loadUpdateImageSmallDimension,
   loadUpdateImageState,
 } from './image-load-document-model.functions';
 
@@ -24,13 +23,12 @@ export const addImage$ = (
   entityId: string,
   documentModel: DocumentModel,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(
+): Observable<DocumentModel | null> =>
+  from(
     entityModel.findByIdAndUpdate(entityId, {
       images: [...documentModel.images, { ...image }],
     })
   );
-};
 
 export const updateImage$ = (
   image: Image,
@@ -70,6 +68,25 @@ export const updateImageOrder$ = (
   );
 };
 
+export const updateImageState$ = (
+  image: Image,
+  state: ImageState,
+  documentModel: DocumentModel,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> => {
+  const imageId = image.id;
+  return from(
+    entityModel.findByIdAndUpdate(image.entityId, {
+      images: [
+        ...documentModel.images.filter((image) => image.id !== imageId),
+        {
+          ...loadUpdateImageState(image, state),
+        },
+      ],
+    })
+  );
+};
+
 export const updateImageCreatedDate$ = (
   image: Image,
   createdDate: string,
@@ -89,9 +106,9 @@ export const updateImageCreatedDate$ = (
   );
 };
 
-export const updateImageSmallResolution$ = (
+export const updateImageSmallDimension$ = (
   image: Image,
-  resolution: Resolution,
+  resolution: Dimension,
   documentModel: DocumentModel,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel | null> => {
@@ -101,45 +118,7 @@ export const updateImageSmallResolution$ = (
       images: [
         ...documentModel.images.filter((image) => image.id !== imageId),
         {
-          ...loadUpdateImageSmallResolution(image, resolution),
-        },
-      ],
-    })
-  );
-};
-
-export const updateImageState$ = (
-  previousImage: Image,
-  newState: ImageState,
-  documentModel: DocumentModel,
-  entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  const imageId = previousImage.id;
-  return from(
-    entityModel.findByIdAndUpdate(previousImage.entityId, {
-      images: [
-        ...documentModel.images.filter((image) => image.id !== imageId),
-        {
-          ...loadUpdateImageState(previousImage, newState),
-        },
-      ],
-    })
-  );
-};
-
-export const publishImage$ = (
-  image: Image,
-  publishFileName: string,
-  documentModel: DocumentModel,
-  entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  const imageId = image.id;
-  return from(
-    entityModel.findByIdAndUpdate(image.entityId, {
-      images: [
-        ...documentModel.images.filter((image) => image.id !== imageId),
-        {
-          ...loadPublishImage(image, publishFileName),
+          ...loadUpdateImageSmallDimension(image, resolution),
         },
       ],
     })
@@ -147,50 +126,34 @@ export const publishImage$ = (
 };
 
 export const removeImage$ = (
-  image: Image,
+  imageId: string,
+  entityId: string,
   documentModel: DocumentModel,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  const imageId = image.id;
-  return from(
-    entityModel.findByIdAndUpdate(image.entityId, {
+): Observable<DocumentModel | null> =>
+  from(
+    entityModel.findByIdAndUpdate(entityId, {
       images: [...documentModel.images.filter((image) => image.id !== imageId)],
     })
   );
-};
 
 export const addImageVideo$ = (
   imageVideo: ImageVideo,
   entityId: string,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(
+): Observable<DocumentModel | null> =>
+  from(
     entityModel.findByIdAndUpdate(entityId, {
       imageVideo: { ...imageVideo },
     })
   );
-};
-
-export const publishImageVideo$ = (
-  imageVideo: ImageVideo,
-  entityId: string,
-  publishFileName: string,
-  entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(
-    entityModel.findByIdAndUpdate(entityId, {
-      imageVideo: { ...imageVideo, fileName: publishFileName },
-    })
-  );
-};
 
 export const removeImageVideo$ = (
   entityId: string,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => {
-  return from(
+): Observable<DocumentModel | null> =>
+  from(
     entityModel.findByIdAndUpdate(entityId, {
       imageVideo: undefined,
     })
   );
-};
