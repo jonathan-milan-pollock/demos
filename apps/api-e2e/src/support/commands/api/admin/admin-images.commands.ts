@@ -1,102 +1,171 @@
-import { ImageAdmin, ImageUpdate } from '@dark-rush-photography/shared/types';
+import {
+  ImageAdmin,
+  ImageOrders,
+  ImageSelections,
+  ImageStates,
+  ImageUpdate,
+} from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add(
-  'updateImageAdmin',
-  async (
+  'addTestImageAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<ImageAdmin>> =>
+    cy.request({
+      method: 'POST',
+      url: `/api/v1/admin/images/test-image?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'loadImagesAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    entityId: string,
+    imageStates: ImageStates
+  ): Cypress.Chainable<Cypress.Response<ImageAdmin[]>> =>
+    cy.request({
+      method: 'POST',
+      url: `/api/v1/admin/images/load?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      body: {
+        ...imageStates,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'updateNewImagesAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'PUT',
+      url: `/api/v1/admin/images/update-new-images?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'orderImagesAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    entityId: string,
+    imageOrders: ImageOrders
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'PUT',
+      url: `/api/v1/admin/images/order-images?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      body: {
+        ...imageOrders,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'selectNewImagesAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    entityId: string,
+    imageSelections: ImageSelections
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'PUT',
+      url: `/api/v1/admin/images/select-new-images?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      body: {
+        ...imageSelections,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'updatePublishImageAdminImages',
+  (
     authHeaders: { Authorization: string },
     imageId: string,
     entityId: string,
     imageUpdate: ImageUpdate
-  ): Promise<ImageAdmin> => {
-    return fetch(`/api/v1/admin/images/${imageId}?entityId=${entityId}`, {
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
       method: 'PUT',
+      url: `/api/v1/admin/images/${imageId}/update-publish-image?entityId=${entityId}`,
       headers: {
         ...authHeaders,
       },
-      body: JSON.stringify({
+      body: {
         ...imageUpdate,
-      }),
+      },
+      failOnStatusCode: false,
     })
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
 );
 
 Cypress.Commands.add(
-  'selectImageAdmin',
-  async (
+  'archiveImageAdminImages',
+  (
     authHeaders: { Authorization: string },
     imageId: string,
     entityId: string
-  ): Promise<ImageAdmin> => {
-    return fetch(
-      `/api/v1/admin/images/${imageId}/select?entityId=${entityId}`,
-      {
-        method: 'PUT',
-        headers: {
-          ...authHeaders,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
-);
-
-Cypress.Commands.add(
-  'archiveImageAdmin',
-  async (
-    authHeaders: { Authorization: string },
-    imageId: string,
-    entityId: string
-  ): Promise<ImageAdmin> => {
-    return fetch(
-      `/api/v1/admin/images/${imageId}/archive?entityId=${entityId}`,
-      {
-        method: 'PUT',
-        headers: {
-          ...authHeaders,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
-);
-
-Cypress.Commands.add(
-  'unarchiveImageAdmin',
-  async (
-    authHeaders: { Authorization: string },
-    imageId: string,
-    entityId: string
-  ): Promise<ImageAdmin> => {
-    return fetch(
-      `/api/v1/admin/images/${imageId}/unarchive?entityId=${entityId}`,
-      {
-        method: 'PUT',
-        headers: {
-          ...authHeaders,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
-);
-
-Cypress.Commands.add(
-  'removeImageAdmin',
-  async (
-    authHeaders: { Authorization: string },
-    imageId: string,
-    entityId: string
-  ): Promise<void> => {
-    return fetch(`/api/v1/admin/images/${imageId}?entityId=${entityId}`, {
-      method: 'DELETE',
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'PUT',
+      url: `/api/v1/admin/images/${imageId}/archive?entityId=${entityId}`,
       headers: {
         ...authHeaders,
       },
-    }).then(() => undefined);
-  }
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'unarchiveImageAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'PUT',
+      url: `/api/v1/admin/images/${imageId}/unarchive?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      failOnStatusCode: false,
+    })
+);
+
+Cypress.Commands.add(
+  'removePublishImageAdminImages',
+  (
+    authHeaders: { Authorization: string },
+    imageId: string,
+    entityId: string
+  ): Cypress.Chainable<Cypress.Response<void>> =>
+    cy.request({
+      method: 'DELETE',
+      url: `/api/v1/admin/images/${imageId}/publish-image?entityId=${entityId}`,
+      headers: {
+        ...authHeaders,
+      },
+      failOnStatusCode: false,
+    })
 );

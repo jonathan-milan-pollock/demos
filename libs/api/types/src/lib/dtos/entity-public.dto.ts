@@ -3,6 +3,8 @@ import {
   IsEnum,
   IsInt,
   IsISO8601,
+  IsMongoId,
+  IsOptional,
   IsString,
   Min,
   ValidateNested,
@@ -17,6 +19,9 @@ export class EntityPublicDto implements EntityPublic {
   @IsEnum(EntityType)
   type!: EntityType;
 
+  @IsMongoId()
+  id!: string;
+
   @IsString()
   group!: string;
 
@@ -28,28 +33,32 @@ export class EntityPublicDto implements EntityPublic {
   order!: number;
 
   @IsString()
-  title!: string;
+  @IsOptional()
+  title?: string;
 
   @IsString()
-  seoDescription!: string;
+  @IsOptional()
+  text?: string;
+
+  @IsISO8601()
+  @IsOptional()
+  createdDate?: string;
+
+  @IsISO8601()
+  publishedDate!: string;
+
+  @IsString()
+  @IsOptional()
+  seoDescription?: string;
 
   @IsArray()
   @Type(() => String)
   seoKeywords: string[] = [];
 
-  @IsISO8601()
-  dateCreated!: string;
-
-  @IsISO8601()
-  datePublished!: string;
-
   @ValidateNested()
   @Type(() => LocationDto)
-  location!: LocationDto;
-
-  @IsArray()
-  @Type(() => String)
-  text: string[] = [];
+  @IsOptional()
+  location?: LocationDto;
 
   @IsArray()
   @ValidateNested({ each: true })

@@ -1,19 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import {
-  combineLatest,
-  concatMap,
-  from,
-  map,
-  Observable,
-  of,
-  toArray,
-} from 'rxjs';
+import { combineLatest, concatMap, from, map, Observable, toArray } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  EntityMinimalAdmin,
+  EntityAdmin,
   EntityWithGroupType,
   EntityWithoutGroupType,
   WatermarkedType,
@@ -21,13 +13,13 @@ import {
 import {
   getEntityTypeFromEntityWithGroupType,
   getEntityTypeFromEntityWithoutGroupType,
-} from '@dark-rush-photography/api/util';
+} from '@dark-rush-photography/shared/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   findAllEntities$,
-  findAllEntitiesForGroup$,
+  findAllEntitiesForWatermarkedGroup$,
 } from '../entities/entity-repository.functions';
-import { loadEntityMinimalAdmin } from '../entities/entity-load-admin.functions';
+import { loadEntityAdmin } from '../entities/entity-load-admin.functions';
 
 @Injectable()
 export class EntityFindAllProvider {
@@ -38,7 +30,7 @@ export class EntityFindAllProvider {
 
   findAllEntities$(
     entityWithoutGroupType: EntityWithoutGroupType
-  ): Observable<EntityMinimalAdmin[]> {
+  ): Observable<EntityAdmin[]> {
     return combineLatest([
       findAllEntities$(
         getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
@@ -55,29 +47,24 @@ export class EntityFindAllProvider {
         from([...watermarkedEntities, ...withoutWatermarkEntities])
       ),
       toArray<DocumentModel>(),
-      concatMap((documentModels) => {
-        if (documentModels.length === 0) return of([]);
-
-        return from(documentModels).pipe(
-          map(loadEntityMinimalAdmin),
-          toArray<EntityMinimalAdmin>()
-        );
-      })
+      map((documentModels) =>
+        documentModels.length === 0 ? [] : documentModels.map(loadEntityAdmin)
+      )
     );
   }
 
   findAllEntitiesForGroup$(
     entityWithGroupType: EntityWithGroupType,
     group: string
-  ): Observable<EntityMinimalAdmin[]> {
+  ): Observable<EntityAdmin[]> {
     return combineLatest([
-      findAllEntitiesForGroup$(
+      findAllEntitiesForWatermarkedGroup$(
         getEntityTypeFromEntityWithGroupType(entityWithGroupType),
         WatermarkedType.Watermarked,
         group,
         this.entityModel
       ),
-      findAllEntitiesForGroup$(
+      findAllEntitiesForWatermarkedGroup$(
         getEntityTypeFromEntityWithGroupType(entityWithGroupType),
         WatermarkedType.WithoutWatermark,
         group,
@@ -88,14 +75,9 @@ export class EntityFindAllProvider {
         from([...watermarkedEntities, ...withoutWatermarkEntities])
       ),
       toArray<DocumentModel>(),
-      concatMap((documentModels) => {
-        if (documentModels.length === 0) return of([]);
-
-        return from(documentModels).pipe(
-          map(loadEntityMinimalAdmin),
-          toArray<EntityMinimalAdmin>()
-        );
-      })
+      map((documentModels) =>
+        documentModels.length === 0 ? [] : documentModels.map(loadEntityAdmin)
+      )
     );
   }
 }

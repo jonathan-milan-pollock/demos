@@ -17,8 +17,8 @@ export class ThomasEdisonFuture extends PhotoOfTheWeekDto {
     'Warmth',
     'Reflection',
   ];
-  dateCreated = new Date(2019, 4, 18).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 4, 18).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 4, 18).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 4, 18).toISOString().substring(0, 10);
   location = {
     place: 'Country Living Magazine Fair',
     city: 'Stone Mountain',

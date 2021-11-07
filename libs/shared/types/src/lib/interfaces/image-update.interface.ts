@@ -1,5 +1,9 @@
+import { ImageState } from '../enums/image-state.enum';
+
 export interface ImageUpdate {
-  readonly order: number;
+  readonly state: ImageState;
+  readonly isThreeSixtyImage: boolean;
+  readonly threeSixtyImageStorageId?: string;
   readonly isStarred: boolean;
   readonly isLoved: boolean;
   readonly title?: string;

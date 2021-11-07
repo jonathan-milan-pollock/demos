@@ -1,4 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
+  DEFAULT_ENTITY_GROUP,
   Entity,
   EntityType,
   EntityUpdate,
@@ -6,72 +9,57 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 
-export const loadCreateEntity = (
+export const loadCreateTestEntity = (): Entity => ({
+  type: EntityType.Test,
+  watermarkedType: WatermarkedType.WithoutWatermark,
+  group: DEFAULT_ENTITY_GROUP,
+  slug: uuidv4(),
+  order: 0,
+  isPublic: false,
+  seoKeywords: [],
+  starredImageIsCentered: false,
+  images: [],
+  isDeleted: false,
+});
+
+export const loadCreateEntityForFolder = (
   entityType: EntityType,
+  googleDriveFolderId: string,
   watermarkedType: WatermarkedType,
   group: string,
   slug: string,
-  googleDriveFolderId: string
+  order: number
 ): Entity => ({
   type: entityType,
   googleDriveFolderId,
   watermarkedType,
   group,
   slug,
-  order: 0,
-  seoKeywords: [],
-  location: {
-    country: 'United States',
-  },
-  starredImageIsCentered: false,
-  text: [],
-  images: [],
-  videos: [],
+  order,
   isPublic: false,
-  isPublished: false,
-  isProcessing: false,
+  seoKeywords: [],
+  starredImageIsCentered: false,
+  images: [],
+  isDeleted: false,
 });
 
-export const loadCreateImagePostEntity = (
-  entityType: EntityType,
-  watermarkedType: WatermarkedType,
-  group: string,
-  slug: string,
-  text: string
-): Entity => ({
-  type: entityType,
-  watermarkedType,
-  group,
-  slug,
+export const loadCreateImagePostEntity = (text: string): Entity => ({
+  type: EntityType.ImagePost,
+  watermarkedType: WatermarkedType.WithoutWatermark,
+  group: DEFAULT_ENTITY_GROUP,
+  slug: uuidv4(),
   order: 0,
-  seoKeywords: [],
-  location: {
-    country: 'United States',
-  },
-  starredImageIsCentered: false,
-  text: [text],
-  images: [],
-  videos: [],
   isPublic: false,
-  isPublished: false,
-  isProcessing: false,
+  text,
+  seoKeywords: [],
+  starredImageIsCentered: false,
+  images: [],
+  isDeleted: false,
 });
 
 export const loadUpdateEntity = (
   entityUpdate: EntityUpdate
-): Partial<DocumentModel> => ({
-  slug: entityUpdate.slug,
-  order: entityUpdate.order,
-  title: entityUpdate.title,
-  seoDescription: entityUpdate.seoDescription,
-  seoKeywords: entityUpdate.seoKeywords,
-  dateCreated: entityUpdate.dateCreated,
-  datePublished: entityUpdate.datePublished,
-  location: entityUpdate.location,
-  starredImageIsCentered: entityUpdate.starredImageIsCentered,
-  text: entityUpdate.text,
-  isPublic: entityUpdate.isPublic,
-});
+): Partial<DocumentModel> => ({ ...entityUpdate });
 
 export const loadDocumentModelsArray = (
   documentModels: DocumentModel | DocumentModel[]

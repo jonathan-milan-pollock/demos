@@ -1,88 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { catchError, concatMap, from, map, Observable, of } from 'rxjs';
+import { concatMap, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { ImageState } from '@dark-rush-photography/shared/types';
-import {
-  getEntityTypeRenameMediaWithSlug,
-  getPublishFileName,
-} from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
+import { findEntityById$ } from '../entities/entity-repository.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { publishImage$ } from '../content/content-repository.functions';
+import { validatePublishEntity } from '../entities/entity-publish-validation.functions';
+import { ImageProcessAllProvider } from './image-process-all.provider';
+import { ImageProcessOneProvider } from './image-process-one.provider';
+import { ImagePublishProvider } from './image-publish.provider';
+import { SocialMediaPostProvider } from './social-media-post.provider';
+import { ImageVideoEmailProvider } from './image-video-email.provider';
 
 @Injectable()
 export class EntityPublishProvider {
   constructor(
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>
+    private readonly entityModel: Model<DocumentModel>,
+    private readonly imageProcessAllProvider: ImageProcessAllProvider,
+    private readonly imageProcessOneProvider: ImageProcessOneProvider,
+    private readonly imagePublishProvider: ImagePublishProvider,
+    private readonly imageVideoEmailProvider: ImageVideoEmailProvider,
+    private readonly socialMediaPostProvider: SocialMediaPostProvider
   ) {}
 
   publishEntity$(entityId: string, postSocialMedia: boolean): Observable<void> {
-    return from(this.entityModel.findById(entityId)).pipe(
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
+      map(validatePublishEntity),
+      concatMap(() => this.imageProcessAllProvider.processAllImages$(entityId)),
       concatMap(() =>
-        from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            isProcessing: true,
-          })
-        )
+        this.imageProcessOneProvider.processImageVideo$(entityId)
       ),
-      map(validateEntityFound),
-      map((documentModel) => {
-        const imagesToPublish = documentModel.images.filter(
-          (image) =>
-            image.state === ImageState.Selected ||
-            image.state === ImageState.Public
-        );
-        if (imagesToPublish.length === 0) return of(undefined);
-
-        return from(imagesToPublish).pipe(
-          concatMap((image) => {
-            let fileName = image.fileName;
-            const renameMediaWithSlug = getEntityTypeRenameMediaWithSlug(
-              documentModel.type
-            );
-            if (renameMediaWithSlug) {
-              fileName = getPublishFileName(
-                documentModel.slug,
-                image.order,
-                image.fileName,
-                renameMediaWithSlug
-              );
-            }
-            return from(this.entityModel.findById(entityId)).pipe(
-              map(validateEntityFound),
-              concatMap((documentModel) =>
-                publishImage$(
-                  image,
-                  fileName,
-                  new Date(),
-                  documentModel,
-                  this.entityModel
-                )
-              )
-            );
-          })
-        );
-      }),
+      concatMap(() => this.imagePublishProvider.publishImages$(entityId)),
+      concatMap(() => this.imagePublishProvider.publishImageVideo$(entityId)),
       concatMap(() =>
-        from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            isProcessing: false,
-            isPublished: true,
-          })
-        )
+        this.socialMediaPostProvider.postSocialMedia$(entityId, postSocialMedia)
       ),
-      catchError(() =>
-        from(
-          this.entityModel.findByIdAndUpdate(entityId, {
-            isProcessing: false,
-          })
-        )
-      ),
+      concatMap(() => this.imageVideoEmailProvider.sendEmail$(entityId)),
       map(() => undefined)
     );
   }

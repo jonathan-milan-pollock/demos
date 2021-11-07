@@ -7,8 +7,8 @@ export class PurpleHaze extends PhotoOfTheWeekDto {
   description = `
     This shot is from a Prairie in Wisconsin`;
   keywords = ['Wisconsin', 'Prairie', 'Purple', 'Flowers', 'Yellow'];
-  dateCreated = new Date(2019, 6, 29).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 6, 29).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 6, 29).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 6, 29).toISOString().substring(0, 10);
   location = { stateOrProvince: 'Wisconsin', country: 'United States' };
   starredImageIsCenteredIsCentered = false;
 

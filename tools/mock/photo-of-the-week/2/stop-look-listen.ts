@@ -14,8 +14,8 @@ export class StopLookListen extends PhotoOfTheWeekDto {
     'Cold Temperature',
     'Puffy Clouds',
   ];
-  dateCreated = new Date(2020, 1, 4).toISOString().substring(0, 10);
-  datePublished = new Date(2020, 1, 4).toISOString().substring(0, 10);
+  createdDate = new Date(2020, 1, 4).toISOString().substring(0, 10);
+  publishedDate = new Date(2020, 1, 4).toISOString().substring(0, 10);
   location = {
     city: 'Buena Vista',
     stateOrProvince: 'Colorado',

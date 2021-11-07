@@ -16,7 +16,7 @@ import {
 import { Document, DocumentModel } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { ImageAddProvider } from './image-add.provider';
-import { ContentAddBlobProvider } from './content-add-blob.provider';
+import { ImageAddBlobProvider } from './image-add-blob.provider';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
@@ -33,19 +33,19 @@ jest.mock('../entities/entity-validation.functions', () => ({
 }));
 import * as entityValidationFunctions from '../entities/entity-validation.functions';
 
-jest.mock('../content/content-load-document-model.functions', () => ({
-  ...jest.requireActual('../content/content-load-document-model.functions'),
+jest.mock('../images/image-load-document-model.functions', () => ({
+  ...jest.requireActual('../images/image-load-document-model.functions'),
 }));
-import * as contentLoadDocumentModelFunctions from '../content/content-load-document-model.functions';
+import * as imageLoadDocumentModelFunctions from '../images/image-load-document-model.functions';
 
-jest.mock('../content/content-repository.functions', () => ({
-  ...jest.requireActual('../content/content-repository.functions'),
+jest.mock('../images/image-repository.functions', () => ({
+  ...jest.requireActual('../images/image-repository.functions'),
 }));
-import * as contentRepositoryFunctions from '../content/content-repository.functions';
+import * as imageRepositoryFunctions from '../images/image-repository.functions';
 
 describe('image-add.provider', () => {
   let imageAddProvider: ImageAddProvider;
-  let contentAddBlobProvider: ContentAddBlobProvider;
+  let imageAddBlobProvider: ImageAddBlobProvider;
 
   beforeEach(async () => {
     class MockConfigProvider {
@@ -67,17 +67,16 @@ describe('image-add.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         ImageAddProvider,
-        ContentAddBlobProvider,
+        ImageAddBlobProvider,
       ],
     }).compile();
 
     imageAddProvider = moduleRef.get<ImageAddProvider>(ImageAddProvider);
-    contentAddBlobProvider = moduleRef.get<ContentAddBlobProvider>(
-      ContentAddBlobProvider
-    );
+    imageAddBlobProvider =
+      moduleRef.get<ImageAddBlobProvider>(ImageAddBlobProvider);
   });
 
   afterEach(() => {
@@ -85,29 +84,29 @@ describe('image-add.provider', () => {
   });
 
   describe('addNewImage$', () => {
-    it('should add the new image and image blob', (done: any) => {
-      jest
-        .spyOn(apiUtil, 'getOrderFromGoogleDriveImageFile')
-        .mockReturnValue(faker.datatype.number());
-
-      jest
-        .spyOn(contentLoadDocumentModelFunctions, 'loadAddImage')
-        .mockReturnValue({} as Image);
-
-      jest
+    it('should add a new image and image blob', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockReturnValue({} as DocumentModel);
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedGetOrderFromGoogleDriveImageFile = jest
+        .spyOn(apiUtil, 'getOrderFromGoogleDriveImageFile')
+        .mockReturnValue(faker.datatype.number());
+
+      const mockedLoadNewImage = jest
+        .spyOn(imageLoadDocumentModelFunctions, 'loadNewImage')
+        .mockReturnValue({} as Image);
 
       const mockedAddImage$ = jest
-        .spyOn(contentRepositoryFunctions, 'addImage$')
+        .spyOn(imageRepositoryFunctions, 'addImage$')
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedAddNewImageBlob$ = jest
-        .spyOn(contentAddBlobProvider, 'addNewImageBlob$')
+        .spyOn(imageAddBlobProvider, 'addNewImageBlob$')
         .mockReturnValue(of(undefined));
 
       imageAddProvider
@@ -116,41 +115,43 @@ describe('image-add.provider', () => {
           {} as GoogleDriveFile,
           DUMMY_MONGODB_ID
         )
-        .subscribe(() => {
-          expect(mockedAddImage$).toBeCalled();
-          expect(mockedAddNewImageBlob$).toBeCalled();
+        .subscribe((image) => {
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedGetOrderFromGoogleDriveImageFile).toBeCalledTimes(1);
+          expect(mockedLoadNewImage).toBeCalledTimes(1);
+          expect(mockedAddImage$).toBeCalledTimes(1);
+          expect(mockedAddNewImageBlob$).toBeCalledTimes(1);
+          expect(image).toBeDefined();
           done();
         });
     });
 
-    /*
-    TODO
-    it('should not add the new image or image blob when the entity is not found', (done: any) => {
-      jest
-        .spyOn(apiUtil, 'getOrderFromGoogleDriveImageFile')
-        .mockReturnValue(faker.datatype.number());
-
-      jest
-        .spyOn(contentLoadDocumentModelFunctions, 'loadAddImage')
-        .mockReturnValue({} as Image);
-
-      jest
+    it('should not add a new image and image blob when the entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
+        .mockReturnValue(of(null));
 
-      jest
+      const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
         .mockImplementation(() => {
           throw new NotFoundException();
         });
 
-      const mockedAddImageToEntity$ = jest.spyOn(
-        contentRepositoryFunctions,
-        'addImage$'
+      const mockedGetOrderFromGoogleDriveImageFile = jest.spyOn(
+        apiUtil,
+        'getOrderFromGoogleDriveImageFile'
       );
 
+      const mockedLoadNewImage = jest.spyOn(
+        imageLoadDocumentModelFunctions,
+        'loadNewImage'
+      );
+
+      const mockedAddImage$ = jest.spyOn(imageRepositoryFunctions, 'addImage$');
+
       const mockedAddNewImageBlob$ = jest.spyOn(
-        contentAddBlobProvider,
+        imageAddBlobProvider,
         'addNewImageBlob$'
       );
 
@@ -160,11 +161,168 @@ describe('image-add.provider', () => {
           {} as GoogleDriveFile,
           DUMMY_MONGODB_ID
         )
+        .subscribe({
+          next: () => {
+            done();
+          },
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toBeCalledTimes(1);
+            expect(mockedGetOrderFromGoogleDriveImageFile).not.toBeCalled();
+            expect(mockedLoadNewImage).not.toBeCalled();
+            expect(mockedAddImage$).not.toBeCalled();
+            expect(mockedAddNewImageBlob$).not.toBeCalled();
+            expect(error).toBeInstanceOf(NotFoundException);
+            done();
+          },
+          complete: () => {
+            done();
+          },
+        });
+    });
+  });
+
+  describe('addImagePostImage$', () => {
+    it('should add an image post image and blob', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedLoadAddImagePostImage = jest
+        .spyOn(imageLoadDocumentModelFunctions, 'loadAddImagePostImage')
+        .mockReturnValue({} as Image);
+
+      const mockedAddImage$ = jest
+        .spyOn(imageRepositoryFunctions, 'addImage$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedAddImagePostImageBlob$ = jest
+        .spyOn(imageAddBlobProvider, 'addImagePostImageBlob$')
+        .mockReturnValue(of(undefined));
+
+      imageAddProvider
+        .addImagePostImage$(DUMMY_MONGODB_ID, {} as Express.Multer.File)
         .subscribe(() => {
-          expect(mockedAddImageToEntity$).not.toBeCalled();
-          expect(mockedAddNewImageBlob$).not.toBeCalled();
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedLoadAddImagePostImage).toBeCalledTimes(1);
+          expect(mockedAddImage$).toBeCalledTimes(1);
+          expect(mockedAddImagePostImageBlob$).toBeCalledTimes(1);
           done();
         });
-    });*/
+    });
+
+    it('should not add an image post image and blob when the entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of(null));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation(() => {
+          throw new NotFoundException();
+        });
+
+      const mockedLoadAddImagePostImage = jest.spyOn(
+        imageLoadDocumentModelFunctions,
+        'loadAddImagePostImage'
+      );
+
+      const mockedAddImage$ = jest.spyOn(imageRepositoryFunctions, 'addImage$');
+
+      const mockedAddImagePostImageBlob$ = jest.spyOn(
+        imageAddBlobProvider,
+        'addImagePostImageBlob$'
+      );
+
+      imageAddProvider
+        .addImagePostImage$(DUMMY_MONGODB_ID, {} as Express.Multer.File)
+        .subscribe({
+          next: () => {
+            done();
+          },
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toBeCalledTimes(1);
+            expect(mockedLoadAddImagePostImage).not.toBeCalled();
+            expect(mockedAddImage$).not.toBeCalled();
+            expect(mockedAddImagePostImageBlob$).not.toBeCalled();
+            expect(error).toBeInstanceOf(NotFoundException);
+            done();
+          },
+          complete: () => {
+            done();
+          },
+        });
+    });
+  });
+
+  describe('addTestImage$', () => {
+    it('should add a test image', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedLoadAddTestImage = jest
+        .spyOn(imageLoadDocumentModelFunctions, 'loadAddTestImage')
+        .mockReturnValue({} as Image);
+
+      const mockedAddImage$ = jest
+        .spyOn(imageRepositoryFunctions, 'addImage$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      imageAddProvider.addTestImage$(DUMMY_MONGODB_ID).subscribe((image) => {
+        expect(mockedFindEntityById$).toBeCalledTimes(1);
+        expect(mockedValidateEntityFound).toBeCalledTimes(1);
+        expect(mockedLoadAddTestImage).toBeCalledTimes(1);
+        expect(mockedAddImage$).toBeCalledTimes(1);
+        expect(image).toBeDefined();
+        done();
+      });
+    });
+
+    it('should not add a test image when the entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of(null));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation(() => {
+          throw new NotFoundException();
+        });
+
+      const mockedLoadAddTestImage = jest.spyOn(
+        imageLoadDocumentModelFunctions,
+        'loadAddTestImage'
+      );
+
+      const mockedAddImage$ = jest.spyOn(imageRepositoryFunctions, 'addImage$');
+
+      imageAddProvider.addTestImage$(DUMMY_MONGODB_ID).subscribe({
+        next: () => {
+          done();
+        },
+        error: (error) => {
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedLoadAddTestImage).not.toBeCalled();
+          expect(mockedAddImage$).not.toBeCalled();
+          expect(error).toBeInstanceOf(NotFoundException);
+          done();
+        },
+        complete: () => {
+          done();
+        },
+      });
+    });
   });
 });

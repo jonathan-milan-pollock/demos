@@ -16,12 +16,13 @@ import { Document } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
 import { EntityCreateProvider } from './entity-create.provider';
 import { EntityCreateWatermarkedTypeProvider } from './entity-create-watermarked-type.provider';
-import { EntityCreateForFolderProvider } from './entity-create-for-folder.provider';
+import { EntityCreateAllForFolderProvider } from './entity-create-all-for-folder.provider';
+import { EntityCreateOneForFolderProvider } from './entity-create-one-for-folder.provider';
 
-jest.mock('@dark-rush-photography/api/util', () => ({
-  ...jest.requireActual('@dark-rush-photography/api/util'),
+jest.mock('@dark-rush-photography/shared/util', () => ({
+  ...jest.requireActual('@dark-rush-photography/shared/util'),
 }));
-import * as apiUtil from '@dark-rush-photography/api/util';
+import * as sharedUtil from '@dark-rush-photography/shared/util';
 
 describe('entity-create.provider', () => {
   let entityCreateProvider: EntityCreateProvider;
@@ -40,11 +41,12 @@ describe('entity-create.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         EntityCreateProvider,
         EntityCreateWatermarkedTypeProvider,
-        EntityCreateForFolderProvider,
+        EntityCreateAllForFolderProvider,
+        EntityCreateOneForFolderProvider,
       ],
     }).compile();
 
@@ -64,12 +66,12 @@ describe('entity-create.provider', () => {
     it('should create watermarked and without watermark', (done: any) => {
       const folderName = faker.lorem.word();
       jest
-        .spyOn(apiUtil, 'getEntityWithoutGroupTypeFolderName')
+        .spyOn(sharedUtil, 'getEntityWithoutGroupTypeFolderName')
         .mockReturnValue(folderName);
 
       const initialSlug = faker.lorem.word();
       jest
-        .spyOn(apiUtil, 'getEntityWithoutGroupTypeInitialSlug')
+        .spyOn(sharedUtil, 'getEntityWithoutGroupTypeInitialSlug')
         .mockReturnValue(initialSlug);
 
       const mockedCreateWatermarkedType$ = jest
@@ -108,7 +110,7 @@ describe('entity-create.provider', () => {
     it('should create watermarked and without watermark entities for a group', (done: any) => {
       const folderName = faker.lorem.word();
       jest
-        .spyOn(apiUtil, 'getEntityWithGroupTypeFolderName')
+        .spyOn(sharedUtil, 'getEntityWithGroupTypeFolderName')
         .mockReturnValue(folderName);
 
       const mockedCreateWatermarkedTypeForGroup$ = jest

@@ -16,8 +16,8 @@ export class AtlantaRhythmSectionConcert2018 extends EventDto {
     'Heritage Sandy Springs',
     'Amazing Concert',
   ];
-  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
-  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  createdDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  publishedDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'Heritage Sandy Springs',
     city: 'Sandy Springs',

@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 
 import { EntityType } from '@dark-rush-photography/shared/types';
 import {
-  EntityMinimalPublicDto,
-  EntityPublicDto,
+  EntityFindAllPublicResponseDto,
+  EntityFindOnePublicResponseDto,
 } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe, Public } from '@dark-rush-photography/api/util';
 import { PublicEntitiesService } from '@dark-rush-photography/api/data';
@@ -17,30 +17,24 @@ import { PublicEntitiesService } from '@dark-rush-photography/api/data';
 export class EntitiesController {
   constructor(private readonly publicEntitiesService: PublicEntitiesService) {}
 
-  @Get(':entityType')
+  @Get('entity-type/:entityType')
   @ApiParam({
     name: 'entityType',
     enum: EntityType,
   })
-  @ApiOkResponse({ type: [EntityMinimalPublicDto] })
+  @ApiOkResponse({ type: EntityFindAllPublicResponseDto })
   findAllPublic$(
     @Param('entityType', new ParseEnumPipe(EntityType))
     entityType: EntityType
-  ): Observable<EntityMinimalPublicDto[]> {
+  ): Observable<EntityFindAllPublicResponseDto> {
     return this.publicEntitiesService.findAllPublic$(entityType);
   }
 
-  @Get(':entityType/:entityId')
-  @ApiParam({
-    name: 'entityType',
-    enum: EntityType,
-  })
-  @ApiOkResponse({ type: EntityPublicDto })
+  @Get(':entityId')
+  @ApiOkResponse({ type: EntityFindOnePublicResponseDto })
   findOnePublic$(
-    @Param('entityType', new ParseEnumPipe(EntityType))
-    entityType: EntityType,
     @Param('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<EntityPublicDto> {
-    return this.publicEntitiesService.findOnePublic$(entityType, entityId);
+  ): Observable<EntityFindOnePublicResponseDto> {
+    return this.publicEntitiesService.findOnePublic$(entityId);
   }
 }

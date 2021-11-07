@@ -7,8 +7,8 @@ export class Colorado extends DestinationDto {
       An Extended Reality (XR) experience Colorado presented by Dark Rush Photography
   `;
   keywords = ['Colorado', 'Mountains', 'Beautiful'];
-  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
-  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  createdDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  publishedDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     stateOrProvince: 'Colorado',
     country: 'United States',

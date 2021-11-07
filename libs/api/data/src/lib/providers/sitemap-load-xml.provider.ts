@@ -3,41 +3,40 @@ import { Injectable } from '@nestjs/common';
 import * as xmlbuilder from 'xmlbuilder';
 
 import {
+  SitemapUrl,
+  PublishedDateBestOfType,
+  PublishedDateSitemapEntityType,
+  Entity,
+} from '@dark-rush-photography/shared/types';
+import {
   getBestOfTypeSitemapLocation,
   getBestOfTypeSitemapPriority,
-  getSitemapDate,
   getSitemapEntityTypeChangeFrequency,
   getSitemapEntityTypeLocation,
   getSitemapEntityTypePriority,
-} from '@dark-rush-photography/api/util';
-import {
-  SitemapUrl,
-  DatePublishedBestOfType,
-  DatePublishedSitemapEntityType,
-  Entity,
-  Event,
-} from '@dark-rush-photography/shared/types';
+} from '@dark-rush-photography/shared/util';
+import { getSitemapDate } from '@dark-rush-photography/api/util';
 
 @Injectable()
 export class SitemapLoadXmlProvider {
   loadDarkRushPhotographySitemapXml(
-    datePublishedEntityTypes: DatePublishedSitemapEntityType[],
+    publishedDateEntityTypes: PublishedDateSitemapEntityType[],
     eventEntities: Entity[]
   ): string {
-    const sitemapEntityUrls = datePublishedEntityTypes.reduce(
+    const sitemapEntityUrls = publishedDateEntityTypes.reduce(
       (
         sitemapUrls: SitemapUrl[],
-        datePublishedSitemapEntityType: DatePublishedSitemapEntityType
+        publishedDateSitemapEntityType: PublishedDateSitemapEntityType
       ) => {
-        const { datePublished, sitemapEntityType } =
-          datePublishedSitemapEntityType;
+        const { publishedDate, sitemapEntityType } =
+          publishedDateSitemapEntityType;
         return [
           ...sitemapUrls,
           {
             loc: getSitemapEntityTypeLocation(sitemapEntityType),
             priority: getSitemapEntityTypePriority(sitemapEntityType),
-            lastmod: datePublished
-              ? getSitemapDate(datePublished)
+            lastmod: publishedDate
+              ? getSitemapDate(publishedDate)
               : getSitemapDate(new Date().toISOString()),
             changefreq: getSitemapEntityTypeChangeFrequency(sitemapEntityType),
           },
@@ -47,15 +46,15 @@ export class SitemapLoadXmlProvider {
     );
 
     const sitemapEventUrls = eventEntities.reduce(
-      (sitemapUrls: SitemapUrl[], event: Event) => {
-        const { datePublished, slug } = event;
+      (sitemapUrls: SitemapUrl[], event: Entity) => {
+        const { publishedDate, slug } = event;
         return [
           ...sitemapUrls,
           {
             loc: `https://www.darkrushphotography.com/events/${slug}`,
             priority: '0.8',
-            lastmod: datePublished
-              ? getSitemapDate(datePublished)
+            lastmod: publishedDate
+              ? getSitemapDate(publishedDate)
               : getSitemapDate(new Date().toISOString()),
             changefreq: 'monthly',
           },
@@ -76,21 +75,21 @@ export class SitemapLoadXmlProvider {
   }
 
   loadThirtySevenPhotosSitemapXml(
-    datePublishedBestOfTypes: DatePublishedBestOfType[]
+    publishedDateBestOfTypes: PublishedDateBestOfType[]
   ): string {
-    const sitemapUrls = datePublishedBestOfTypes.reduce(
+    const sitemapUrls = publishedDateBestOfTypes.reduce(
       (
         sitemapUrls: SitemapUrl[],
-        datePublishedBestOfType: DatePublishedBestOfType
+        publishedDateBestOfType: PublishedDateBestOfType
       ) => {
-        const { datePublished, bestOfType } = datePublishedBestOfType;
+        const { publishedDate, bestOfType } = publishedDateBestOfType;
         return [
           ...sitemapUrls,
           {
             loc: getBestOfTypeSitemapLocation(bestOfType),
             priority: getBestOfTypeSitemapPriority(bestOfType),
-            lastmod: datePublished
-              ? getSitemapDate(datePublished)
+            lastmod: publishedDate
+              ? getSitemapDate(publishedDate)
               : getSitemapDate(new Date().toISOString()),
             changefreq: 'monthly',
           },

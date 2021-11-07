@@ -6,8 +6,8 @@ export class TheLightsFestAtlanta2018 extends EventDto {
   title = 'The Lights Fest Atlanta 2018';
   description = '';
   keywords = [];
-  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
-  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  createdDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  publishedDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     country: 'United States',
   };

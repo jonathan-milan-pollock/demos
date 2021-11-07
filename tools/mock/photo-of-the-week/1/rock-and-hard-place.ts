@@ -15,8 +15,8 @@ export class RockAndHardPlace extends PhotoOfTheWeekDto {
     'Climbing',
     'Stuck',
   ];
-  dateCreated = new Date(2019, 7, 5).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 7, 5).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 7, 5).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 7, 5).toISOString().substring(0, 10);
   location = {
     place: 'Garden of the Gods',
     city: 'Colorado Springs',

@@ -1,19 +1,26 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-Cypress.Commands.add('findAllEventsPublic', async (): Promise<any[]> => {
-  return fetch('/api/v1/events', {
-    method: 'GET',
-  })
-    .then((response) => response.json())
-    .then((json) => JSON.parse(json));
-});
+import {
+  EntityMinimalPublic,
+  EntityPublic,
+} from '@dark-rush-photography/shared/types';
 
 Cypress.Commands.add(
-  'findOneEventPublic',
-  async (entityId: string): Promise<any> => {
-    return fetch(`/api/v1/events/${entityId}`, {
+  'findAllPublicEntities',
+  (
+    entityType: string
+  ): Cypress.Chainable<Cypress.Response<EntityMinimalPublic[]>> =>
+    cy.request({
       method: 'GET',
+      url: `/api/v1/entities/entity-type/${entityType}`,
+      failOnStatusCode: false,
     })
-      .then((response) => response.json())
-      .then((json) => JSON.parse(json));
-  }
+);
+
+Cypress.Commands.add(
+  'findOnePublicEntities',
+  (entityId: string): Cypress.Chainable<Cypress.Response<EntityPublic>> =>
+    cy.request({
+      method: 'GET',
+      url: `/api/v1/entities/${entityId}`,
+      failOnStatusCode: false,
+    })
 );

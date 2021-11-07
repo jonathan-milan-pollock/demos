@@ -1,42 +1,38 @@
-import {
-  EntityAdmin,
-  EntityMinimalAdmin,
-} from '@dark-rush-photography/shared/types';
+import { EntityAdmin } from '@dark-rush-photography/shared/types';
+import { getEntityTypeHasStarredImage } from '@dark-rush-photography/shared/util';
 import { DocumentModel } from '../schema/document.schema';
 import {
+  findFirstImage,
+  findStarredPublishImage,
   loadImageAdmin,
-  loadLocation,
-  loadVideo,
-} from '../content/content-load.functions';
+} from '../images/image-load.functions';
 
-export const loadEntityMinimalAdmin = (
-  documentModel: DocumentModel
-): EntityMinimalAdmin => ({
-  type: documentModel.type,
-  id: documentModel._id,
-  watermarkedType: documentModel.watermarkedType,
-  group: documentModel.group,
-  slug: documentModel.slug,
-});
+export const loadEntityAdmin = (documentModel: DocumentModel): EntityAdmin => {
+  const starredPublishImage = findStarredPublishImage(documentModel.images);
+  const starredPublishOrFirstImage =
+    getEntityTypeHasStarredImage(documentModel.type) && starredPublishImage
+      ? starredPublishImage
+      : findFirstImage(documentModel.images);
 
-export const loadEntityAdmin = (documentModel: DocumentModel): EntityAdmin => ({
-  type: documentModel.type,
-  id: documentModel._id,
-  watermarkedType: documentModel.watermarkedType,
-  group: documentModel.group,
-  slug: documentModel.slug,
-  order: documentModel.order,
-  title: documentModel.title ?? '',
-  seoDescription: documentModel.seoDescription ?? '',
-  seoKeywords: documentModel.seoKeywords,
-  dateCreated: documentModel.dateCreated ?? '',
-  datePublished: documentModel.datePublished ?? '',
-  location: loadLocation(documentModel.location),
-  starredImageIsCentered: documentModel.starredImageIsCentered,
-  text: documentModel.text,
-  images: documentModel.images.map(loadImageAdmin),
-  videos: documentModel.videos.map(loadVideo),
-  isPublic: documentModel.isPublic,
-  isPublished: documentModel.isPublished,
-  isProcessing: documentModel.isProcessing,
-});
+  return {
+    type: documentModel.type,
+    id: documentModel._id,
+    group: documentModel.group,
+    slug: documentModel.slug,
+    order: documentModel.order,
+    isPublic: documentModel.isPublic,
+    title: documentModel.title,
+    text: documentModel.text,
+    createdDate: documentModel.createdDate,
+    publishedDate: documentModel.publishedDate,
+    seoDescription: documentModel.seoDescription,
+    seoKeywords: documentModel.seoKeywords,
+    location: documentModel.location,
+    starredImageIsCentered: documentModel.starredImageIsCentered,
+    starredPublishOrFirstImage: starredPublishOrFirstImage
+      ? loadImageAdmin(starredPublishOrFirstImage)
+      : undefined,
+    imageVideo: documentModel.imageVideo,
+    tileDimension: documentModel.tileDimension,
+  };
+};

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { concatMap, from, Observable, of, pluck, toArray } from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import {
@@ -24,11 +24,9 @@ export class EntityGroupFindProvider {
         if (!entityFolder) return of([]);
 
         return findGoogleDriveFolders$(googleDrive, entityFolder.id).pipe(
-          concatMap((groupFolders) => {
-            if (groupFolders.length === 0) return of([]);
-
-            return from(groupFolders).pipe(pluck('name'), toArray<string>());
-          })
+          map((groupFolders) =>
+            groupFolders.map((groupFolder) => groupFolder.name)
+          )
         );
       })
     );

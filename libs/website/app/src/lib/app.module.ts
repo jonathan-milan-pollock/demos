@@ -23,10 +23,7 @@ import { AppStoreModule } from './app-store.module';
       clientId: 'itlDBOCejY2AxCCR4qNZRnI1AUwWb9O3',
       audience: 'https://www.darkrushphotography.com',
       httpInterceptor: {
-        allowedList: [
-          'http://localhost:1111/v1/api/admin/*',
-          'http://localhost:1111/v1/api/user/*',
-        ],
+        allowedList: ['http://localhost:1111/v1/api/admin/*'],
       },
     }),
     FontAwesomeModule,

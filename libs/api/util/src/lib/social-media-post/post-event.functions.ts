@@ -1,12 +1,12 @@
-import { Event } from '@dark-rush-photography/shared/types';
+import { Entity } from '@dark-rush-photography/shared/types';
 
-export const getEventFacebookPost = (event: Event): string =>
+export const getEventFacebookPost = (event: Entity): string =>
   `
     ${event.title}
     More images at: https://www.darkrushphotography.com/events/${event.slug}
 `;
 
-export const getEventGoogleBusinessPost = (event: Event): string =>
+export const getEventGoogleBusinessPost = (event: Entity): string =>
   `
     ${event.title}
 
@@ -15,7 +15,7 @@ export const getEventGoogleBusinessPost = (event: Event): string =>
     More images at: https://www.darkrushphotography.com/events/${event.slug}
 `;
 
-export const getEventInstagramPost = (event: Event): string =>
+export const getEventInstagramPost = (event: Entity): string =>
   `
     ${event.title}
     More images at: https://www.darkrushphotography.com/events/${event.slug}
@@ -25,7 +25,7 @@ export const getEventInstagramPost = (event: Event): string =>
     ${event.seoKeywords?.join('#').trimEnd()}
 `;
 
-export const getEventLinkedInPost = (event: Event): string =>
+export const getEventLinkedInPost = (event: Entity): string =>
   `
     ${event.title}
 
@@ -35,7 +35,7 @@ export const getEventLinkedInPost = (event: Event): string =>
     ${event.seoKeywords?.join('#').trimEnd()}
 `;
 
-export const getEventYouTubePost = (event: Event): string =>
+export const getEventYouTubePost = (event: Entity): string =>
   `
     ${event.title}
     ${event.seoDescription}

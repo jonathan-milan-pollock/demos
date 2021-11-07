@@ -1,13 +1,13 @@
 import {
-  Controller,
   Body,
-  Param,
-  Put,
-  HttpCode,
+  Controller,
   Delete,
-  Query,
+  HttpCode,
+  Param,
   ParseUUIDPipe,
   Post,
+  Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -20,8 +20,10 @@ import { Observable } from 'rxjs';
 
 import {
   ImageAdminDto,
+  ImageOrdersDto,
+  ImageSelectionsDto,
+  ImageStatesDto,
   ImageUpdateDto,
-  ThreeSixtyImageAddDto,
 } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
 import { ImagesService } from '@dark-rush-photography/api/data';
@@ -32,58 +34,88 @@ import { ImagesService } from '@dark-rush-photography/api/data';
 export class AdminImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
-  @Post('three-sixty-image')
+  @Post('test-image')
   @ApiCreatedResponse({ type: ImageAdminDto })
-  addThreeSixtyImage$(
-    @Query('entityId', ParseObjectIdPipe) entityId: string,
-    @Body() threeSixtyImageAdd: ThreeSixtyImageAddDto
+  addTestImage$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<ImageAdminDto> {
-    return this.imagesService.addThreeSixtyImage$(entityId, threeSixtyImageAdd);
+    return this.imagesService.addTestImage$(entityId);
   }
 
-  @Put(':imageId')
-  @ApiOkResponse({ type: ImageAdminDto })
-  update$(
+  @Post('load')
+  @HttpCode(200)
+  @ApiOkResponse({ type: [ImageAdminDto] })
+  loadImages$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Body() imageStates: ImageStatesDto
+  ): Observable<ImageAdminDto[]> {
+    return this.imagesService.loadImages$(entityId, imageStates);
+  }
+
+  @Put('update-new-images')
+  @HttpCode(204)
+  updateNewImages$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<void> {
+    return this.imagesService.updateNewImages$(entityId);
+  }
+
+  @Put('order-images')
+  @HttpCode(204)
+  orderImages$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Body() imageOrders: ImageOrdersDto
+  ): Observable<void> {
+    return this.imagesService.orderImages$(entityId, imageOrders);
+  }
+
+  @Put('select-new-images')
+  @HttpCode(204)
+  selectNewImages$(
+    @Query('entityId', ParseObjectIdPipe) entityId: string,
+    @Body() imageSelections: ImageSelectionsDto
+  ): Observable<void> {
+    return this.imagesService.selectNewImages$(entityId, imageSelections);
+  }
+
+  @Put(':imageId/update-publish-image')
+  @HttpCode(204)
+  updatePublishImage$(
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string,
     @Body() imageUpdate: ImageUpdateDto
-  ): Observable<ImageAdminDto> {
-    return this.imagesService.update$(imageId, entityId, imageUpdate);
-  }
-
-  @Put(':imageId/select')
-  @ApiOkResponse({ type: ImageAdminDto })
-  select$(
-    @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
-    @Query('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<ImageAdminDto> {
-    return this.imagesService.select$(imageId, entityId);
+  ): Observable<void> {
+    return this.imagesService.updatePublishImage$(
+      imageId,
+      entityId,
+      imageUpdate
+    );
   }
 
   @Put(':imageId/archive')
-  @ApiOkResponse({ type: ImageAdminDto })
-  archive$(
-    @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
-    @Query('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<ImageAdminDto> {
-    return this.imagesService.archive$(imageId, entityId);
-  }
-
-  @Put(':imageId/unarchive')
-  @ApiOkResponse({ type: ImageAdminDto })
-  unarchive$(
-    @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
-    @Query('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<ImageAdminDto> {
-    return this.imagesService.unarchive$(imageId, entityId);
-  }
-
-  @Delete(':imageId')
   @HttpCode(204)
-  remove$(
+  archiveImage$(
     @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
     @Query('entityId', ParseObjectIdPipe) entityId: string
   ): Observable<void> {
-    return this.imagesService.remove$(imageId, entityId);
+    return this.imagesService.archiveImage$(imageId, entityId);
+  }
+
+  @Put(':imageId/unarchive')
+  @HttpCode(204)
+  unarchiveImage$(
+    @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<void> {
+    return this.imagesService.unarchiveImage$(imageId, entityId);
+  }
+
+  @Delete(':imageId/publish-image')
+  @HttpCode(204)
+  removePublishImage$(
+    @Param('imageId', new ParseUUIDPipe({ version: '4' })) imageId: string,
+    @Query('entityId', ParseObjectIdPipe) entityId: string
+  ): Observable<void> {
+    return this.imagesService.removePublishImage$(imageId, entityId);
   }
 }

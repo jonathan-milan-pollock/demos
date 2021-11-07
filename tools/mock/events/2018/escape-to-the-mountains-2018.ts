@@ -19,8 +19,8 @@ export class EscapeToTheMountains2018 extends EventDto {
     'Smithgall Woods State Park',
     'Castle Inn in Helen',
   ];
-  dateCreated = new Date(2018, 1, 7).toISOString().substring(0, 10);
-  datePublished = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  createdDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
+  publishedDate = new Date(2018, 1, 7).toISOString().substring(0, 10);
   location = {
     place: 'The Mountains',
     stateOrProvince: 'Georgia',

@@ -14,8 +14,8 @@ export class ZigZags extends PhotoOfTheWeekDto {
     'Pathway',
     'Shadows',
   ];
-  dateCreated = new Date(2019, 9, 21).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 9, 21).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 9, 21).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 9, 21).toISOString().substring(0, 10);
   location = {
     place: 'Stone Mountain Park',
     city: 'Georgia',

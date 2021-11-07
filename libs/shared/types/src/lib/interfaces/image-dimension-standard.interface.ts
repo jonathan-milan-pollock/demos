@@ -1,7 +1,7 @@
 import { ImageDimension } from './image-dimension.interface';
-import { Resolution } from './resolution.interface';
+import { Dimension } from './dimension.interface';
 
 export interface ImageDimensionStandard extends ImageDimension {
-  readonly resolution: Resolution;
+  readonly dimension: Dimension;
   readonly exactFit: boolean;
 }

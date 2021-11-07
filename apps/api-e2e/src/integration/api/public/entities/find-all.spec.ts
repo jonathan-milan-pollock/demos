@@ -1,61 +1,58 @@
+import { EntityType } from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
-describe('Public Find All Public Entities', () => {
+describe('Find all Public Entities', () => {
   beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
 
-  /*  const authorization = '';
-  const findAll = () =>
-    cy.request({
-      method: 'GET',
-      url: '/api/admin/v1/about',
-      headers: {
-        Authorization: authorization,
-      },
-    });
-
-  const findOne = (entityId: string) =>
-    cy.request({
-      method: 'GET',
-      url: `/api/admin/v1/about/${entityId}`,
-      headers: {
-        Authorization: authorization,
-      },
-    });
-
-
-  it('returns JSON', () => {
-    const randomNumber = Cypress._.random(0, 100).toString();
-    create(`test-about-${randomNumber}`)
+  it('should return application/json', () =>
+    cy
+      .findAllPublicEntities(EntityType.Test)
       .its('headers')
       .its('content-type')
-      .should('include', 'application/json');
-  });
+      .should('include', 'application/json'));
 
-  it('creates about', () => {
-    const randomNumber = Cypress._.random(0, 100).toString();
-    create(`test-about-${randomNumber}`)
-      .its('body.slug')
-      .should('equal', `test-about-${randomNumber}`);
-  });
-
-  it('find all should return the count of about', () => {
-    create('test-about-1').then(() => {
-      findAll().its('body.length').should('equal', 1);
-    });
-  });
-
-  it('finds one returns created about', () => {
-    create('test-about-1')
+  it('should find all public entities', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
       .its('body.id')
-      .then((id) => {
-        findOne(id).its('body.slug').should('equal', 'test-about-1');
-      });
-  });
-
-  it('delete should remove a created about', () => {
-    create('test-about-1')
+      .then((entityId1) =>
+        cy.updateAdminEntities(getAuthHeaders(), entityId1, {
+          isPublic: true,
+          seoKeywords: [],
+          starredImageIsCentered: false,
+        })
+      )
+      .then(() => cy.createTestAdminEntities(getAuthHeaders()))
       .its('body.id')
-      .then((id) => deleteAbout(id))
-      .then(() => findAll().its('body.length').should('equal', 0));
-  });*/
+      .then((entityId2) =>
+        cy.updateAdminEntities(getAuthHeaders(), entityId2, {
+          isPublic: true,
+          seoKeywords: [],
+          starredImageIsCentered: false,
+        })
+      )
+      .then(() => cy.findAllPublicEntities(EntityType.Test))
+      .its('body.length')
+      .should('equal', 2));
+
+  it('should have a count of 0 when no public entities are found', () =>
+    cy
+      .findAllPublicEntities(EntityType.Test)
+      .its('body.length')
+      .should('equal', 0));
+
+  it('should return a status of 200 when finding public entities', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
+      .its('body.id')
+      .then((entityId1) => {
+        return cy.updateAdminEntities(getAuthHeaders(), entityId1, {
+          isPublic: true,
+          seoKeywords: [],
+          starredImageIsCentered: false,
+        });
+      })
+      .findAllPublicEntities(EntityType.Test)
+      .its('status')
+      .should('equal', 200));
 });

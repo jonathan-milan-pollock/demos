@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, last, map, Observable, of, toArray } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
-  EntityMinimalPublic,
-  EntityPublic,
+  EntityFindAllPublicResponse,
+  EntityFindOnePublicResponse,
   EntityType,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
@@ -21,41 +21,56 @@ import {
 import {
   validateEntityFound,
   validateEntityIsPublic,
-  validateEntityType,
 } from '../entities/entity-validation.functions';
+import {
+  loadEventJsonLdNewsArticle,
+  loadEventsJsonLdList,
+} from '../entities/entity-json-ld.functions';
+import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class EntityFindPublicProvider {
   constructor(
+    private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>
   ) {}
 
   findAllPublicEntities$(
     entityType: EntityType
-  ): Observable<EntityMinimalPublic[]> {
+  ): Observable<EntityFindAllPublicResponse> {
     return findAllPublicEntities$(entityType, this.entityModel).pipe(
-      concatMap((documentModels) => {
-        if (documentModels.length === 0) return of([]);
-
-        return from(documentModels).pipe(
-          map((documentModel) => loadEntityMinimalPublic(documentModel)),
-          last(),
-          toArray<EntityMinimalPublic>()
-        );
-      })
+      map((documentModels) => ({
+        minimalPublicEntities:
+          documentModels.length === 0
+            ? []
+            : documentModels.map(loadEntityMinimalPublic),
+        eventsJsonLdList:
+          entityType === EntityType.Event
+            ? JSON.stringify(loadEventsJsonLdList(documentModels))
+            : undefined,
+      }))
     );
   }
 
   findOnePublicEntity$(
-    entityType: EntityType,
     entityId: string
-  ): Observable<EntityPublic> {
+  ): Observable<EntityFindOnePublicResponse> {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       map(validateEntityIsPublic),
-      map((documentModel) => validateEntityType(entityType, documentModel)),
-      map((documentModel) => loadEntityPublic(documentModel))
+      map((documentModel) => ({
+        publicEntity: loadEntityPublic(documentModel),
+        eventJsonLdNewsArticle:
+          documentModel.type === EntityType.Event
+            ? JSON.stringify(
+                loadEventJsonLdNewsArticle(
+                  documentModel,
+                  this.configProvider.production
+                )
+              )
+            : undefined,
+      }))
     );
   }
 }

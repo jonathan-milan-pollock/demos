@@ -19,8 +19,8 @@ export class SweetHomeDressing extends PhotoOfTheWeekDto {
     'Friends',
     'Hospitality',
   ];
-  dateCreated = new Date(2019, 11, 25).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 11, 25).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 11, 25).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 11, 25).toISOString().substring(0, 10);
   location = {
     city: 'Alexander City',
     stateOrProvince: 'Alabama',

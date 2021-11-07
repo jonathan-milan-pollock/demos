@@ -7,9 +7,9 @@ import { of } from 'rxjs';
 
 import { Document } from '../schema/document.schema';
 import { SitemapLoadProvider } from '../providers/sitemap-load.provider';
-import { SitemapsService } from './sitemaps.service';
+import { SitemapLoadMaxPublishedDateProvider } from '../providers/sitemap-load-max-date-published.provider';
 import { SitemapLoadXmlProvider } from '../providers/sitemap-load-xml.provider';
-import { SitemapLoadMaxDatePublishedProvider } from '../providers/sitemap-load-max-date-published.provider';
+import { SitemapsService } from './sitemaps.service';
 
 describe('sitemaps.service', () => {
   let sitemapsService: SitemapsService;
@@ -22,11 +22,11 @@ describe('sitemaps.service', () => {
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
         },
         SitemapsService,
         SitemapLoadProvider,
-        SitemapLoadMaxDatePublishedProvider,
+        SitemapLoadMaxPublishedDateProvider,
         SitemapLoadXmlProvider,
       ],
     }).compile();
@@ -46,8 +46,8 @@ describe('sitemaps.service', () => {
         .spyOn(sitemapLoadProvider, 'loadDarkRushPhotographySitemap$')
         .mockReturnValue(of(faker.lorem.lines()));
 
-      sitemapsService.darkRushPhotographySitemap$().subscribe(() => {
-        expect(mockedLoadDarkRushPhotographySitemap$).toBeCalled();
+      sitemapsService.loadDarkRushPhotographySitemap$().subscribe(() => {
+        expect(mockedLoadDarkRushPhotographySitemap$).toBeCalledTimes(1);
         done();
       });
     });
@@ -59,8 +59,8 @@ describe('sitemaps.service', () => {
         .spyOn(sitemapLoadProvider, 'loadThirtySevenPhotosSitemap$')
         .mockReturnValue(of(faker.lorem.lines()));
 
-      sitemapsService.thirtySevenPhotosSitemap$().subscribe(() => {
-        expect(mockedLoadThirtySevenPhotosSitemap$).toBeCalled();
+      sitemapsService.loadThirtySevenPhotosSitemap$().subscribe(() => {
+        expect(mockedLoadThirtySevenPhotosSitemap$).toBeCalledTimes(1);
         done();
       });
     });

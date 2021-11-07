@@ -14,8 +14,8 @@ export class EenyMeenyMinyMoe extends PhotoOfTheWeekDto {
     'Water',
     'Waiting',
   ];
-  dateCreated = new Date(2019, 6, 23).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 6, 23).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 6, 23).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 6, 23).toISOString().substring(0, 10);
   location = {
     place: 'Kowaliga, Lake Martin',
     city: 'Alexander City',

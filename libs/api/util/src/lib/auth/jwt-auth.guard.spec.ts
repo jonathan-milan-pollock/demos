@@ -73,7 +73,7 @@ describe('jwt-auth.guard', () => {
         .mockReturnValue(canActivate);
 
       const result = jwtAuthGuard.canActivate(mockExecutionContext);
-      expect(mockedSuperCanActivate).toHaveBeenCalled();
+      expect(mockedSuperCanActivate).toHaveBeenCalledTimes(1);
       expect(result).toBe(canActivate);
     });
   });

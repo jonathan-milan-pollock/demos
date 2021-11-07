@@ -1,22 +1,19 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
-import { LocationDefined } from '@dark-rush-photography/shared/types';
+import { Location } from '@dark-rush-photography/shared/types';
 
-export class LocationDto implements LocationDefined {
+export class LocationDto implements Location {
   @IsString()
-  place!: string;
-
-  @IsString()
-  street!: string;
+  @IsOptional()
+  place?: string;
 
   @IsString()
-  city!: string;
+  @IsOptional()
+  city?: string;
 
   @IsString()
-  stateOrProvince!: string;
-
-  @IsString()
-  zipCode!: string;
+  @IsOptional()
+  stateOrProvince?: string;
 
   @IsString()
   country!: string;

@@ -7,11 +7,13 @@ import {
   Param,
   ParseBoolPipe,
   ParseEnumPipe,
+  Post,
   Put,
   Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
   ApiTags,
@@ -25,7 +27,7 @@ import {
 } from '@dark-rush-photography/shared/types';
 import {
   EntityAdminDto,
-  EntityMinimalAdminDto,
+  EntityOrdersDto,
   EntityUpdateDto,
 } from '@dark-rush-photography/api/types';
 import { ParseObjectIdPipe } from '@dark-rush-photography/api/util';
@@ -37,6 +39,18 @@ import { AdminEntitiesService } from '@dark-rush-photography/api/data';
 export class AdminEntitiesController {
   constructor(private readonly adminEntitiesService: AdminEntitiesService) {}
 
+  @Post('test')
+  @ApiCreatedResponse({ type: EntityAdminDto })
+  createTest$(): Observable<EntityAdminDto> {
+    return this.adminEntitiesService.createTest$();
+  }
+
+  @Put('order')
+  @HttpCode(204)
+  order$(@Body() entityOrders: EntityOrdersDto): Observable<void> {
+    return this.adminEntitiesService.order$(entityOrders);
+  }
+
   @Put(':entityId')
   @HttpCode(204)
   update$(
@@ -46,30 +60,13 @@ export class AdminEntitiesController {
     return this.adminEntitiesService.update$(entityId, entityUpdate);
   }
 
-  @Put(':entityId/load-new-images')
-  @HttpCode(204)
-  loadNewImages$(
-    @Param('entityId', ParseObjectIdPipe) entityId: string
-  ): Observable<void> {
-    return this.adminEntitiesService.loadNewImages$(entityId);
-  }
-
   @Put(':entityId/publish')
   @HttpCode(204)
   publish$(
     @Param('entityId', ParseObjectIdPipe) entityId: string,
-    @Query('post-social-media', ParseBoolPipe) postSocialMedia: boolean
+    @Query('postSocialMedia', ParseBoolPipe) postSocialMedia: boolean
   ): Observable<void> {
     return this.adminEntitiesService.publish$(entityId, postSocialMedia);
-  }
-
-  @Put(':entityId/processing/:isProcessing')
-  @HttpCode(204)
-  setIsProcessing$(
-    @Param('entityId', ParseObjectIdPipe) entityId: string,
-    @Param('isProcessing', ParseBoolPipe) isProcessing: boolean
-  ): Observable<void> {
-    return this.adminEntitiesService.setIsProcessing$(entityId, isProcessing);
   }
 
   @Get('entity-type/:entityWithGroupType/groups')
@@ -90,11 +87,11 @@ export class AdminEntitiesController {
     name: 'entityWithoutGroupType',
     enum: EntityWithoutGroupType,
   })
-  @ApiOkResponse({ type: [EntityMinimalAdminDto] })
+  @ApiOkResponse({ type: [EntityAdminDto] })
   findAll$(
     @Param('entityWithoutGroupType', new ParseEnumPipe(EntityWithoutGroupType))
     entityWithoutGroupType: EntityWithoutGroupType
-  ): Observable<EntityMinimalAdminDto[]> {
+  ): Observable<EntityAdminDto[]> {
     return this.adminEntitiesService.findAll$(entityWithoutGroupType);
   }
 
@@ -103,12 +100,12 @@ export class AdminEntitiesController {
     name: 'entityWithGroupType',
     enum: EntityWithGroupType,
   })
-  @ApiOkResponse({ type: [EntityMinimalAdminDto] })
+  @ApiOkResponse({ type: [EntityAdminDto] })
   findAllForGroup$(
     @Param('entityWithGroupType', new ParseEnumPipe(EntityWithGroupType))
     entityWithGroupType: EntityWithGroupType,
     @Param('group') group: string
-  ): Observable<EntityMinimalAdminDto[]> {
+  ): Observable<EntityAdminDto[]> {
     return this.adminEntitiesService.findAllForGroup$(
       entityWithGroupType,
       group

@@ -1,48 +1,36 @@
 import {
-  IsArray,
   IsBoolean,
   IsInt,
-  IsISO8601,
+  IsOptional,
   IsString,
+  IsUUID,
   Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import { ImagePublic } from '@dark-rush-photography/shared/types';
-import { ResolutionDto } from './resolution.dto';
+import { DimensionDto } from './dimension.dto';
 
 export class ImagePublicDto implements ImagePublic {
-  @IsString()
+  @IsUUID()
   storageId!: string;
 
   @IsString()
-  fileName!: string;
+  slug!: string;
 
   @IsInt()
   @Min(0)
   order!: number;
 
-  @IsString()
-  title!: string;
+  @IsBoolean()
+  isThreeSixtyImage!: boolean;
 
   @IsString()
-  seoDescription!: string;
-
-  @IsArray()
-  @Type(() => String)
-  seoKeywords: string[] = [];
-
-  @IsISO8601()
-  dateCreated!: string;
-
-  @IsISO8601()
-  datePublished!: string;
+  @IsOptional()
+  threeSixtyImageStorageId?: string;
 
   @ValidateNested()
-  @Type(() => ResolutionDto)
-  smallResolution!: ResolutionDto;
-
-  @IsBoolean()
-  isThreeSixty!: boolean;
+  @Type(() => DimensionDto)
+  smallDimension!: DimensionDto;
 }

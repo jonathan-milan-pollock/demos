@@ -16,8 +16,8 @@ export class FlowersInTheMist extends PhotoOfTheWeekDto {
     'Wild Flowers',
     'Mountains',
   ];
-  dateCreated = new Date(2019, 6, 8).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 6, 8).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 6, 8).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 6, 8).toISOString().substring(0, 10);
   location = {
     city: 'Bryson City',
     stateOrProvince: 'North Carolina',

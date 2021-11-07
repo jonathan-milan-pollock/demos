@@ -8,10 +8,11 @@ import {
   Image,
   ImageDimensionType,
   SocialMediaType,
-  Video,
+  ImageVideo,
   YOUTUBE_VIDEO_PLAYLIST_ID,
+  IMAGE_FILE_EXTENSION,
 } from '@dark-rush-photography/shared/types';
-import { getSocialMediaTypePlatform } from '../enums/social-media-type.functions';
+import { getSocialMediaTypePlatform } from '@dark-rush-photography/shared/util';
 import { getAzureStorageBlobPathWithImageDimension } from '../azure-storage/azure-storage-blob-path.functions';
 
 export const postSocialMediaImage$ = (
@@ -25,18 +26,21 @@ export const postSocialMediaImage$ = (
   }
 
   const social = new SocialPost(ayrshareApiKey);
+  const mediaUrl =
+    `https://devpublicsa.blob.core.windows.net/devimages/` +
+    getAzureStorageBlobPathWithImageDimension(
+      starredImage.storageId,
+      starredImage.slug,
+      IMAGE_FILE_EXTENSION,
+      ImageDimensionType.Facebook
+    );
+
   return from(
     social.post({
       scheduleDate: new Date().toISOString(),
       post,
       platforms: [getSocialMediaTypePlatform(socialMediaType)],
-      media_urls: [
-        getAzureStorageBlobPathWithImageDimension(
-          starredImage.storageId,
-          starredImage.fileName,
-          ImageDimensionType.Facebook
-        ),
-      ],
+      media_urls: [mediaUrl],
       shorten_links: false,
     })
   ).pipe(map(() => undefined));
@@ -44,7 +48,7 @@ export const postSocialMediaImage$ = (
 
 export const postSocialMediaVideo$ = (
   socialMediaType: SocialMediaType,
-  video: Video,
+  video: ImageVideo,
   starredImage: Image,
   title: string,
   post: string,
@@ -57,14 +61,15 @@ export const postSocialMediaVideo$ = (
         scheduleDate: new Date().toISOString(),
         post,
         platforms: [getSocialMediaTypePlatform(socialMediaType)],
-        media_urls: [`${video.storageId}/${video.fileName}`],
+        media_urls: [`${video.storageId}/${video.slug}`],
         shorten_links: false,
         youTubeOptions: {
           title,
           youTubeVisibility: 'public',
           thumbNail: getAzureStorageBlobPathWithImageDimension(
             starredImage.storageId,
-            starredImage.fileName,
+            starredImage.slug,
+            IMAGE_FILE_EXTENSION,
             ImageDimensionType.Facebook
           ),
           playListId: YOUTUBE_VIDEO_PLAYLIST_ID,
@@ -80,7 +85,8 @@ export const postSocialMediaVideo$ = (
       media_urls: [
         getAzureStorageBlobPathWithImageDimension(
           starredImage.storageId,
-          starredImage.fileName,
+          starredImage.slug,
+          IMAGE_FILE_EXTENSION,
           ImageDimensionType.Facebook
         ),
       ],

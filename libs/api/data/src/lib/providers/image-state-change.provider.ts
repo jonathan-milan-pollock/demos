@@ -1,81 +1,92 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { v4 as uuidv4 } from 'uuid';
-import { concatMap, from, map, Observable } from 'rxjs';
+import { concatMap, from, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
-import { ImageAdmin, ImageState } from '@dark-rush-photography/shared/types';
+import {
+  ImageSelections,
+  ImageState,
+} from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import { updateImageState$ } from '../content/content-repository.functions';
+import { updateImageState$ } from '../images/image-repository.functions';
 import {
   validateCanArchiveImage,
-  validateCanSelectImage,
   validateCanUnarchiveImage,
   validateImageFound,
-} from '../content/content-validation.functions';
-import { ImageFindProvider } from './image-find.provider';
+} from '../images/image-validation.functions';
+import { findEntityById$ } from '../entities/entity-repository.functions';
 
 @Injectable()
 export class ImageStateChangeProvider {
   constructor(
     @InjectModel(Document.name)
-    private readonly entityModel: Model<DocumentModel>,
-    private readonly imageFindProvider: ImageFindProvider
+    private readonly entityModel: Model<DocumentModel>
   ) {}
 
-  selectImage$(imageId: string, entityId: string): Observable<ImageAdmin> {
-    return from(this.entityModel.findById(entityId)).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) => {
-        const previousImage = validateImageFound(imageId, documentModel);
-        validateCanSelectImage(previousImage);
-        return updateImageState$(
-          previousImage,
-          uuidv4(),
-          ImageState.Selected,
-          documentModel,
-          this.entityModel
-        );
-      }),
-      concatMap(() => this.imageFindProvider.findOne$(imageId, entityId))
+  selectNewImages$(
+    entityId: string,
+    imageSelections: ImageSelections
+  ): Observable<void> {
+    if (imageSelections.imageIds.length === 0) return of(undefined);
+
+    return from(imageSelections.imageIds).pipe(
+      concatMap((imageId) =>
+        findEntityById$(entityId, this.entityModel).pipe(
+          map(validateEntityFound),
+          concatMap((documentModel) => {
+            const newImage = documentModel.images.find(
+              (image) => image.id === imageId
+            );
+
+            if (!newImage || newImage.state !== ImageState.New)
+              return of(undefined);
+
+            return updateImageState$(
+              newImage,
+              ImageState.Selected,
+              documentModel,
+              this.entityModel
+            );
+          })
+        )
+      ),
+      map(() => undefined)
     );
   }
 
-  archiveImage$(imageId: string, entityId: string): Observable<ImageAdmin> {
-    return from(this.entityModel.findById(entityId)).pipe(
+  archiveImage$(imageId: string, entityId: string): Observable<void> {
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const previousImage = validateImageFound(imageId, documentModel);
+        const previousImage = validateImageFound(imageId, documentModel.images);
         validateCanArchiveImage(previousImage);
         return updateImageState$(
           previousImage,
-          uuidv4(),
           ImageState.Archived,
           documentModel,
           this.entityModel
         );
       }),
-      concatMap(() => this.imageFindProvider.findOne$(imageId, entityId))
+      map(() => undefined)
     );
   }
 
-  unarchiveImage$(imageId: string, entityId: string): Observable<ImageAdmin> {
-    return from(this.entityModel.findById(entityId)).pipe(
+  unarchiveImage$(imageId: string, entityId: string): Observable<void> {
+    return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const previousImage = validateImageFound(imageId, documentModel);
+        const previousImage = validateImageFound(imageId, documentModel.images);
         validateCanUnarchiveImage(previousImage);
         return updateImageState$(
           previousImage,
-          uuidv4(),
           ImageState.Public,
           documentModel,
           this.entityModel
         );
       }),
-      concatMap(() => this.imageFindProvider.findOne$(imageId, entityId))
+      map(() => undefined)
     );
   }
 }

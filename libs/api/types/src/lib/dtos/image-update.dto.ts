@@ -1,20 +1,24 @@
 import {
   IsArray,
   IsBoolean,
-  IsInt,
-  IsISO8601,
+  IsEnum,
   IsOptional,
   IsString,
-  Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { ImageUpdate } from '@dark-rush-photography/shared/types';
+import { ImageState, ImageUpdate } from '@dark-rush-photography/shared/types';
 
 export class ImageUpdateDto implements ImageUpdate {
-  @IsInt()
-  @Min(0)
-  order!: number;
+  @IsEnum(ImageState)
+  state!: ImageState;
+
+  @IsBoolean()
+  isThreeSixtyImage!: boolean;
+
+  @IsString()
+  @IsOptional()
+  threeSixtyImageStorageId?: string;
 
   @IsBoolean()
   isStarred!: boolean;
@@ -33,12 +37,4 @@ export class ImageUpdateDto implements ImageUpdate {
   @IsArray()
   @Type(() => String)
   seoKeywords: string[] = [];
-
-  @IsISO8601()
-  @IsOptional()
-  dateCreated?: string;
-
-  @IsISO8601()
-  @IsOptional()
-  datePublished?: string;
 }

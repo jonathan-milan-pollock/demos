@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Test } from '@nestjs/testing';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
 
@@ -8,40 +9,32 @@ import { of } from 'rxjs';
 import { drive_v3 } from 'googleapis';
 
 import {
+  CronProcessType,
   DUMMY_MONGODB_ID,
   EntityAdmin,
-  EntityMinimalAdmin,
+  EntityOrders,
   EntityUpdate,
   EntityWithGroupType,
   EntityWithoutGroupType,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
+import { CronProcessTable } from '../tables/cron-process.table';
 import { ConfigProvider } from '../providers/config.provider';
 import { EntityGroupProvider } from '../providers/entity-group.provider';
 import { EntityGroupFindProvider } from '../providers/entity-group-find.provider';
 import { EntityCreateProvider } from '../providers/entity-create.provider';
 import { EntityCreateWatermarkedTypeProvider } from '../providers/entity-create-watermarked-type.provider';
-import { EntityCreateForFolderProvider } from '../providers/entity-create-for-folder.provider';
+import { EntityCreateAllForFolderProvider } from '../providers/entity-create-all-for-folder.provider';
+import { EntityCreateOneForFolderProvider } from '../providers/entity-create-one-for-folder.provider';
 import { EntityFindAllProvider } from '../providers/entity-find-all.provider';
-import { EntityLoadNewImagesProvider } from '../providers/entity-load-new-images.provider';
-import { EntityPublishProvider } from '../providers/entity-publish.provider';
-import { EntityDeleteProvider } from '../providers/entity-delete.provider';
-import { ImageFolderProvider } from '../providers/image-folder.provider';
-import { ImageAddProvider } from '../providers/image-add.provider';
-import { ImageProcessProvider } from '../providers/image-process.provider';
-import { ImageTinifyProvider } from '../providers/image-tinify.provider';
-import { ImageExifProvider } from '../providers/image-exif.provider';
-import { ImageResizeProvider } from '../providers/image-resize.provider';
-import { ContentAddBlobProvider } from '../providers/content-add-blob.provider';
-import { ContentRemoveProvider } from '../providers/content-remove.provider';
-import { ContentRemoveOneProvider } from '../providers/content-remove-one.provider';
-import { ContentDeleteBlobsProvider } from '../providers/content-delete-blobs.provider';
+import { EntityOrderProvider } from '../providers/entity-order.provider';
+import { CronProcessRepositoryProvider } from '../providers/cron-process-repository.provider';
 import { AdminEntitiesService } from './admin-entities.service';
 
 jest.mock('@dark-rush-photography/api/util', () => ({
   ...jest.requireActual('@dark-rush-photography/api/util'),
 }));
-import * as apiUtils from '@dark-rush-photography/api/util';
+import * as apiUtil from '@dark-rush-photography/api/util';
 
 jest.mock('../entities/entity-repository.functions', () => ({
   ...jest.requireActual('../entities/entity-repository.functions'),
@@ -53,14 +46,31 @@ jest.mock('../entities/entity-load-admin.functions', () => ({
 }));
 import * as entityLoadAdminFunctions from '../entities/entity-load-admin.functions';
 
+jest.mock('../cron-processes/cron-process-start.functions', () => ({
+  ...jest.requireActual('../cron-processes/cron-process-start.functions'),
+}));
+import * as cronProcessStartFunctions from '../cron-processes/cron-process-start.functions';
+
+jest.mock('../entities/entity-publish-validation.functions', () => ({
+  ...jest.requireActual('../entities/entity-publish-validation.functions'),
+}));
+import * as entityPublishValidationFunctions from '../entities/entity-publish-validation.functions';
+
+jest.mock('../entities/entity-validation.functions', () => ({
+  ...jest.requireActual('../entities/entity-validation.functions'),
+}));
+import * as entityValidationFunctions from '../entities/entity-validation.functions';
+
 describe('admin-entities.service', () => {
   let adminEntitiesService: AdminEntitiesService;
   let entityGroupProvider: EntityGroupProvider;
   let entityCreateProvider: EntityCreateProvider;
   let entityFindAllProvider: EntityFindAllProvider;
-  let entityLoadNewImagesProvider: EntityLoadNewImagesProvider;
-  let entityPublishProvider: EntityPublishProvider;
-  let entityDeleteProvider: EntityDeleteProvider;
+  let entityOrderProvider: EntityOrderProvider;
+
+  const mockedCronProcessRepositoryProvider = {
+    create$: jest.fn().mockReturnValue(of(undefined)),
+  };
 
   beforeEach(async () => {
     class MockConfigProvider {
@@ -82,28 +92,21 @@ describe('admin-entities.service', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: new MockDocumentModel(),
+          useClass: MockDocumentModel,
+        },
+        {
+          provide: CronProcessRepositoryProvider.name,
+          useValue: mockedCronProcessRepositoryProvider,
         },
         AdminEntitiesService,
         EntityGroupProvider,
         EntityGroupFindProvider,
         EntityCreateProvider,
         EntityCreateWatermarkedTypeProvider,
-        EntityCreateForFolderProvider,
+        EntityCreateAllForFolderProvider,
+        EntityCreateOneForFolderProvider,
         EntityFindAllProvider,
-        EntityLoadNewImagesProvider,
-        EntityPublishProvider,
-        EntityDeleteProvider,
-        ImageFolderProvider,
-        ImageAddProvider,
-        ImageProcessProvider,
-        ImageTinifyProvider,
-        ImageExifProvider,
-        ImageResizeProvider,
-        ContentAddBlobProvider,
-        ContentRemoveProvider,
-        ContentRemoveOneProvider,
-        ContentDeleteBlobsProvider,
+        EntityOrderProvider,
       ],
     }).compile();
 
@@ -116,25 +119,55 @@ describe('admin-entities.service', () => {
     entityFindAllProvider = moduleRef.get<EntityFindAllProvider>(
       EntityFindAllProvider
     );
-    entityLoadNewImagesProvider = moduleRef.get<EntityLoadNewImagesProvider>(
-      EntityLoadNewImagesProvider
-    );
-    entityPublishProvider = moduleRef.get<EntityPublishProvider>(
-      EntityPublishProvider
-    );
-    entityDeleteProvider =
-      moduleRef.get<EntityDeleteProvider>(EntityDeleteProvider);
+    entityOrderProvider =
+      moduleRef.get<EntityOrderProvider>(EntityOrderProvider);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
+  describe('createTest$', () => {
+    it('should create a test entity', (done: any) => {
+      const mockedCreateTestEntity$ = jest
+        .spyOn(entityRepositoryFunctions, 'createTestEntity$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedLoadEntityAdmin = jest
+        .spyOn(entityLoadAdminFunctions, 'loadEntityAdmin')
+        .mockReturnValue({} as EntityAdmin);
+
+      adminEntitiesService.createTest$().subscribe((result) => {
+        expect(mockedCreateTestEntity$).toBeCalledTimes(1);
+        expect(mockedLoadEntityAdmin).toBeCalledTimes(1);
+        expect(result).toBeDefined();
+        done();
+      });
+    });
+  });
+
+  describe('order$', () => {
+    it('should order entities', (done: any) => {
+      const mockedOrder$ = jest
+        .spyOn(entityOrderProvider, 'order$')
+        .mockReturnValue(of(undefined));
+
+      adminEntitiesService.order$({} as EntityOrders).subscribe(() => {
+        expect(mockedOrder$).toBeCalledTimes(1);
+        done();
+      });
+    });
+  });
+
   describe('update$', () => {
     it('should update an entity', (done: any) => {
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockReturnValue({} as DocumentModel);
 
       const mockedUpdateEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'updateEntity$')
@@ -143,15 +176,23 @@ describe('admin-entities.service', () => {
       adminEntitiesService
         .update$(DUMMY_MONGODB_ID, {} as EntityUpdate)
         .subscribe(() => {
-          expect(mockedUpdateEntity$).toBeCalled();
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedUpdateEntity$).toBeCalledTimes(1);
           done();
         });
     });
 
-    it('should not update an entity if entity is not found', (done: any) => {
-      jest
+    it('should not update entity when entity is not found', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of(null));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation(() => {
+          throw new NotFoundException();
+        });
 
       const mockedUpdateEntity$ = jest.spyOn(
         entityRepositoryFunctions,
@@ -164,84 +205,80 @@ describe('admin-entities.service', () => {
           next: () => {
             done();
           },
-          error: () => {
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
             expect(mockedUpdateEntity$).not.toHaveBeenCalled();
+            expect(error).toBeInstanceOf(NotFoundException);
             done();
           },
           complete: () => {
             done();
           },
         });
-    });
-  });
-
-  describe('loadNewImages$', () => {
-    it('should load new images', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      const mockedLoadNewImages$ = jest
-        .spyOn(entityLoadNewImagesProvider, 'loadNewImages$')
-        .mockReturnValue(of(undefined));
-
-      adminEntitiesService.loadNewImages$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedLoadNewImages$).toBeCalled();
-        done();
-      });
-    });
-
-    it('should not load new images if entity is not found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(null));
-
-      const mockedLoadNewImages$ = jest.spyOn(
-        entityLoadNewImagesProvider,
-        'loadNewImages$'
-      );
-
-      adminEntitiesService.loadNewImages$(DUMMY_MONGODB_ID).subscribe({
-        next: () => {
-          done();
-        },
-        error: () => {
-          expect(mockedLoadNewImages$).not.toHaveBeenCalled();
-          done();
-        },
-        complete: () => {
-          done();
-        },
-      });
     });
   });
 
   describe('publish$', () => {
     it('should publish an entity', (done: any) => {
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const mockedPublishEntity$ = jest
-        .spyOn(entityPublishProvider, 'publishEntity$')
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockReturnValue({} as DocumentModel);
+
+      const mockedValidatePublishEntity = jest
+        .spyOn(entityPublishValidationFunctions, 'validatePublishEntity')
+        .mockReturnValue({} as DocumentModel);
+
+      const mockedStartCronProcessType = jest
+        .spyOn(cronProcessStartFunctions, 'startCronProcessType')
+        .mockReturnValue({} as CronProcessTable);
+
+      const mockedCreate$ = jest
+        .spyOn(mockedCronProcessRepositoryProvider, 'create$')
         .mockReturnValue(of(undefined));
 
       adminEntitiesService
         .publish$(DUMMY_MONGODB_ID, faker.datatype.boolean())
         .subscribe(() => {
-          expect(mockedPublishEntity$).toBeCalled();
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedValidatePublishEntity).toBeCalledTimes(1);
+          expect(mockedStartCronProcessType).toBeCalledTimes(1);
+          const [cronProcessType] = mockedStartCronProcessType.mock.calls[0];
+          expect(cronProcessType).toBe(CronProcessType.PublishEntity);
+          expect(mockedCreate$).toBeCalledTimes(1);
           done();
         });
     });
 
     it('should not publish an entity if entity is not found', (done: any) => {
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of(null));
 
-      const mockedPublishEntity$ = jest.spyOn(
-        entityPublishProvider,
-        'publishEntity$'
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation(() => {
+          throw new NotFoundException();
+        });
+
+      const mockedValidatePublishEntity = jest.spyOn(
+        entityPublishValidationFunctions,
+        'validatePublishEntity'
+      );
+
+      const mockedStartCronProcessType = jest.spyOn(
+        cronProcessStartFunctions,
+        'startCronProcessType'
+      );
+
+      const mockedCreate$ = jest.spyOn(
+        mockedCronProcessRepositoryProvider,
+        'create$'
       );
 
       adminEntitiesService
@@ -250,8 +287,13 @@ describe('admin-entities.service', () => {
           next: () => {
             done();
           },
-          error: () => {
-            expect(mockedPublishEntity$).not.toHaveBeenCalled();
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toBeCalledTimes(1);
+            expect(mockedValidatePublishEntity).not.toBeCalled();
+            expect(mockedStartCronProcessType).not.toBeCalled();
+            expect(mockedCreate$).not.toBeCalled();
+            expect(error).toBeInstanceOf(NotFoundException);
             done();
           },
           complete: () => {
@@ -259,44 +301,45 @@ describe('admin-entities.service', () => {
           },
         });
     });
-  });
 
-  describe('setIsProcessing$', () => {
-    it('should set is processing', (done: any) => {
-      jest
+    it('should not publish an entity if entity is not valid for publishing', (done: any) => {
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const mockedFindByIdAndUpdateIsProcessing$ = jest
-        .spyOn(entityRepositoryFunctions, 'findByIdAndUpdateIsProcessing$')
-        .mockReturnValue(of({} as DocumentModel));
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockReturnValue({} as DocumentModel);
 
-      adminEntitiesService
-        .setIsProcessing$(DUMMY_MONGODB_ID, faker.datatype.boolean())
-        .subscribe(() => {
-          expect(mockedFindByIdAndUpdateIsProcessing$).toBeCalled();
-          done();
+      const mockedValidatePublishEntity = jest
+        .spyOn(entityPublishValidationFunctions, 'validatePublishEntity')
+        .mockImplementation(() => {
+          throw new ConflictException();
         });
-    });
 
-    it('should not set is processing if entity is not found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of(null));
+      const mockedStartCronProcessType = jest.spyOn(
+        cronProcessStartFunctions,
+        'startCronProcessType'
+      );
 
-      const mockedFindByIdAndUpdateIsProcessing$ = jest.spyOn(
-        entityRepositoryFunctions,
-        'findByIdAndUpdateIsProcessing$'
+      const mockedCreate$ = jest.spyOn(
+        mockedCronProcessRepositoryProvider,
+        'create$'
       );
 
       adminEntitiesService
-        .setIsProcessing$(DUMMY_MONGODB_ID, faker.datatype.boolean())
+        .publish$(DUMMY_MONGODB_ID, faker.datatype.boolean())
         .subscribe({
           next: () => {
             done();
           },
-          error: () => {
-            expect(mockedFindByIdAndUpdateIsProcessing$).not.toHaveBeenCalled();
+          error: (error) => {
+            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedValidateEntityFound).toBeCalledTimes(1);
+            expect(mockedValidatePublishEntity).toBeCalledTimes(1);
+            expect(mockedStartCronProcessType).not.toBeCalled();
+            expect(mockedCreate$).not.toBeCalled();
+            expect(error).toBeInstanceOf(ConflictException);
             done();
           },
           complete: () => {
@@ -309,28 +352,30 @@ describe('admin-entities.service', () => {
   describe('findGroups$', () => {
     it('should find groups', (done: any) => {
       jest
-        .spyOn(apiUtils, 'getGoogleDrive')
+        .spyOn(apiUtil, 'getGoogleDrive')
         .mockReturnValue({} as drive_v3.Drive);
 
+      const foundGroups = [faker.lorem.word()];
       const mockedFindGroups$ = jest
         .spyOn(entityGroupProvider, 'findGroups$')
-        .mockReturnValue(of([faker.lorem.word()]));
+        .mockReturnValue(of(foundGroups));
 
       adminEntitiesService
         .findGroups$(
           faker.random.arrayElement(Object.values(EntityWithGroupType))
         )
-        .subscribe(() => {
-          expect(mockedFindGroups$).toBeCalled();
+        .subscribe((result) => {
+          expect(mockedFindGroups$).toBeCalledTimes(1);
+          expect(result).toEqual(foundGroups);
           done();
         });
     });
   });
 
   describe('findAll$', () => {
-    it('should create and find all', (done: any) => {
+    it('should find all entities', (done: any) => {
       jest
-        .spyOn(apiUtils, 'getGoogleDrive')
+        .spyOn(apiUtil, 'getGoogleDrive')
         .mockReturnValue({} as drive_v3.Drive);
 
       const mockedCreate$ = jest
@@ -339,24 +384,83 @@ describe('admin-entities.service', () => {
 
       const mockedFindAllEntities$ = jest
         .spyOn(entityFindAllProvider, 'findAllEntities$')
-        .mockReturnValue(of([] as EntityMinimalAdmin[]));
+        .mockReturnValue(
+          of([{} as EntityAdmin, {} as EntityAdmin] as EntityAdmin[])
+        );
 
       adminEntitiesService
         .findAll$(
           faker.random.arrayElement(Object.values(EntityWithoutGroupType))
         )
-        .subscribe(() => {
-          expect(mockedCreate$).toBeCalled();
-          expect(mockedFindAllEntities$).toBeCalled();
+        .subscribe((result) => {
+          expect(mockedCreate$).toBeCalledTimes(1);
+          expect(mockedFindAllEntities$).toBeCalledTimes(1);
+          expect(result).toHaveLength(2);
+          done();
+        });
+    });
+
+    it('should return entities in ascending order', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getGoogleDrive')
+        .mockReturnValue({} as drive_v3.Drive);
+
+      const mockedCreate$ = jest
+        .spyOn(entityCreateProvider, 'create$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindAllEntities$ = jest
+        .spyOn(entityFindAllProvider, 'findAllEntities$')
+        .mockReturnValue(
+          of([
+            { order: 2 } as EntityAdmin,
+            { order: 1 } as EntityAdmin,
+          ] as EntityAdmin[])
+        );
+
+      adminEntitiesService
+        .findAll$(
+          faker.random.arrayElement(Object.values(EntityWithoutGroupType))
+        )
+        .subscribe((result) => {
+          expect(mockedCreate$).toBeCalledTimes(1);
+          expect(mockedFindAllEntities$).toBeCalledTimes(1);
+          expect(result[0].order).toBe(1);
+          expect(result[1].order).toBe(2);
+          done();
+        });
+    });
+
+    it('should return an empty array of entities if none are found', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getGoogleDrive')
+        .mockReturnValue({} as drive_v3.Drive);
+
+      const mockedCreate$ = jest
+        .spyOn(entityCreateProvider, 'create$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindAllEntities$ = jest
+        .spyOn(entityFindAllProvider, 'findAllEntities$')
+        .mockReturnValue(of([] as EntityAdmin[]));
+
+      adminEntitiesService
+        .findAll$(
+          faker.random.arrayElement(Object.values(EntityWithoutGroupType))
+        )
+        .subscribe((result) => {
+          expect(mockedCreate$).toBeCalledTimes(1);
+          expect(mockedFindAllEntities$).toBeCalledTimes(1);
+          expect(result.length).toBe(0);
           done();
         });
     });
   });
 
   describe('findAllForGroup$', () => {
-    it('should create and find all for a group', (done: any) => {
+    it('should find all entities for a group', (done: any) => {
       jest
-        .spyOn(apiUtils, 'getGoogleDrive')
+        .spyOn(apiUtil, 'getGoogleDrive')
         .mockReturnValue({} as drive_v3.Drive);
 
       const mockedCreateForGroup$ = jest
@@ -365,16 +469,77 @@ describe('admin-entities.service', () => {
 
       const mockedFindAllEntitiesForGroup$ = jest
         .spyOn(entityFindAllProvider, 'findAllEntitiesForGroup$')
-        .mockReturnValue(of([] as EntityMinimalAdmin[]));
+        .mockReturnValue(
+          of([{} as EntityAdmin, {} as EntityAdmin] as EntityAdmin[])
+        );
 
       adminEntitiesService
         .findAllForGroup$(
           faker.random.arrayElement(Object.values(EntityWithGroupType)),
           faker.lorem.word()
         )
-        .subscribe(() => {
-          expect(mockedCreateForGroup$).toBeCalled();
-          expect(mockedFindAllEntitiesForGroup$).toBeCalled();
+        .subscribe((result) => {
+          expect(mockedCreateForGroup$).toBeCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toBeCalledTimes(1);
+          expect(result).toHaveLength(2);
+          done();
+        });
+    });
+
+    it('should return entities for a group in ascending order', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getGoogleDrive')
+        .mockReturnValue({} as drive_v3.Drive);
+
+      const mockedCreateForGroup$ = jest
+        .spyOn(entityCreateProvider, 'createForGroup$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityFindAllProvider, 'findAllEntitiesForGroup$')
+        .mockReturnValue(
+          of([
+            { order: 2 } as EntityAdmin,
+            { order: 1 } as EntityAdmin,
+          ] as EntityAdmin[])
+        );
+
+      adminEntitiesService
+        .findAllForGroup$(
+          faker.random.arrayElement(Object.values(EntityWithGroupType)),
+          faker.lorem.word()
+        )
+        .subscribe((result) => {
+          expect(mockedCreateForGroup$).toBeCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toBeCalledTimes(1);
+          expect(result[0].order).toBe(1);
+          expect(result[1].order).toBe(2);
+          done();
+        });
+    });
+
+    it('should return an empty array of entities for a group if none are found', (done: any) => {
+      jest
+        .spyOn(apiUtil, 'getGoogleDrive')
+        .mockReturnValue({} as drive_v3.Drive);
+
+      const mockedCreateForGroup$ = jest
+        .spyOn(entityCreateProvider, 'createForGroup$')
+        .mockReturnValue(of(undefined));
+
+      const mockedFindAllEntitiesForGroup$ = jest
+        .spyOn(entityFindAllProvider, 'findAllEntitiesForGroup$')
+        .mockReturnValue(of([] as EntityAdmin[]));
+
+      adminEntitiesService
+        .findAllForGroup$(
+          faker.random.arrayElement(Object.values(EntityWithGroupType)),
+          faker.lorem.word()
+        )
+        .subscribe((result) => {
+          expect(mockedCreateForGroup$).toBeCalledTimes(1);
+          expect(mockedFindAllEntitiesForGroup$).toBeCalledTimes(1);
+          expect(result.length).toBe(0);
           done();
         });
     });
@@ -382,26 +547,39 @@ describe('admin-entities.service', () => {
 
   describe('findOne$', () => {
     it('should find one entity', (done: any) => {
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const mockedLoadEntityAdmin$ = jest
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockReturnValue({} as DocumentModel);
+
+      const mockedLoadEntityAdmin = jest
         .spyOn(entityLoadAdminFunctions, 'loadEntityAdmin')
         .mockReturnValue({} as EntityAdmin);
 
-      adminEntitiesService.findOne$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedLoadEntityAdmin$).toBeCalled();
+      adminEntitiesService.findOne$(DUMMY_MONGODB_ID).subscribe((result) => {
+        expect(mockedFindEntityById$).toBeCalledTimes(1);
+        expect(mockedValidateEntityFound).toBeCalledTimes(1);
+        expect(mockedLoadEntityAdmin).toBeCalledTimes(1);
+        expect(result).toBeDefined();
         done();
       });
     });
 
     it('should not find one entity if entity is not found', (done: any) => {
-      jest
+      const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(of(null));
 
-      const mockedLoadEntityAdmin$ = jest.spyOn(
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation(() => {
+          throw new NotFoundException();
+        });
+
+      const mockedLoadEntityAdmin = jest.spyOn(
         entityLoadAdminFunctions,
         'loadEntityAdmin'
       );
@@ -410,8 +588,11 @@ describe('admin-entities.service', () => {
         next: () => {
           done();
         },
-        error: () => {
-          expect(mockedLoadEntityAdmin$).not.toHaveBeenCalled();
+        error: (error) => {
+          expect(mockedFindEntityById$).toHaveBeenCalledTimes(1);
+          expect(mockedValidateEntityFound).toHaveBeenCalledTimes(1);
+          expect(mockedLoadEntityAdmin).not.toHaveBeenCalled();
+          expect(error).toBeInstanceOf(NotFoundException);
           done();
         },
         complete: () => {
@@ -423,32 +604,47 @@ describe('admin-entities.service', () => {
 
   describe('delete$', () => {
     it('should delete an entity', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+      const mockedFindByIdAndSoftDelete$ = jest
+        .spyOn(entityRepositoryFunctions, 'findByIdAndSoftDelete$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const mockedDeleteEntity$ = jest
-        .spyOn(entityDeleteProvider, 'deleteEntity$')
+      const mockedStartCronProcessType = jest
+        .spyOn(cronProcessStartFunctions, 'startCronProcessType')
+        .mockReturnValue({} as CronProcessTable);
+
+      const mockedCreate$ = jest
+        .spyOn(mockedCronProcessRepositoryProvider, 'create$')
         .mockReturnValue(of(undefined));
 
       adminEntitiesService.delete$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedDeleteEntity$).toBeCalled();
+        expect(mockedFindByIdAndSoftDelete$).toBeCalledTimes(1);
+        expect(mockedStartCronProcessType).toBeCalledTimes(1);
+        const [cronProcessType] = mockedStartCronProcessType.mock.calls[0];
+        expect(cronProcessType).toBe(CronProcessType.DeleteEntity);
+        expect(mockedCreate$).toBeCalledTimes(1);
         done();
       });
     });
 
     it('should not delete an entity if entity is not found', (done: any) => {
-      jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+      const mockedFindByIdAndSoftDelete$ = jest
+        .spyOn(entityRepositoryFunctions, 'findByIdAndSoftDelete$')
         .mockReturnValue(of(null));
 
-      const mockedDeleteEntity$ = jest.spyOn(
-        entityDeleteProvider,
-        'deleteEntity$'
+      const mockedStartCronProcessType = jest.spyOn(
+        cronProcessStartFunctions,
+        'startCronProcessType'
+      );
+
+      const mockedCreate$ = jest.spyOn(
+        mockedCronProcessRepositoryProvider,
+        'create$'
       );
 
       adminEntitiesService.delete$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedDeleteEntity$).not.toBeCalled();
+        expect(mockedFindByIdAndSoftDelete$).toBeCalledTimes(1);
+        expect(mockedStartCronProcessType).not.toBeCalled();
+        expect(mockedCreate$).not.toBeCalled();
         done();
       });
     });

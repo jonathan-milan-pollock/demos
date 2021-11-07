@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { ImagePost } from '@dark-rush-photography/shared/types';
+import { EntityAdmin } from '@dark-rush-photography/shared/types';
 import { Page } from '@dark-rush-photography/website/types';
 import {
   MetaService,
@@ -17,8 +17,8 @@ import {
   styleUrls: ['./admin-image-post.component.scss'],
 })
 export class AdminImagePostComponent implements OnInit {
-  private imagePost?: ImagePost;
-  private imagePostSubscription?: Subscription;
+  private imagePost?: EntityAdmin;
+  private imagePostSub?: Subscription;
 
   isLoading = true;
   error?: string;
@@ -33,7 +33,7 @@ export class AdminImagePostComponent implements OnInit {
 
   constructor(
     private readonly store: Store<{
-      imagePost?: ImagePost;
+      imagePost?: EntityAdmin;
       isLoading: boolean;
       error?: string;
     }>,
@@ -49,7 +49,7 @@ export class AdminImagePostComponent implements OnInit {
   ngOnInit(): void {
     this.metaService.addMetadataForPage$(Page.AdminImagePost, this.router.url);
 
-    this.imagePostSubscription = this.store.subscribe((imagePostState) => {
+    this.imagePostSub = this.store.subscribe((imagePostState) => {
       this.imagePost = imagePostState.imagePost;
       this.isLoading = imagePostState.isLoading;
       this.error = imagePostState.error;

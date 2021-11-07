@@ -63,6 +63,18 @@ export const downloadAzureStorageBlobToFile$ = (
   );
 };
 
+//TODO: Remove when ready
+/*const deleteAllBlobs = async (
+  containerClient: ContainerClient
+): Promise<void> => {
+  for await (const blob of containerClient.listBlobsFlat()) {
+    console.log(blob.name);
+    const blockBlobClient = containerClient.getBlockBlobClient(blob.name);
+    await blockBlobClient.deleteIfExists();
+  }
+};
+*/
+
 export const deleteAzureStorageBlobIfExists$ = (
   blobPath: string,
   connectionString: string,
@@ -72,5 +84,8 @@ export const deleteAzureStorageBlobIfExists$ = (
     BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
-  return from(blockBlobClient.deleteIfExists()).pipe(map(() => undefined));
+  return from(blockBlobClient.deleteIfExists()).pipe(
+    //    concatMap(() => from(deleteAllBlobs(containerClient))),
+    map(() => undefined)
+  );
 };

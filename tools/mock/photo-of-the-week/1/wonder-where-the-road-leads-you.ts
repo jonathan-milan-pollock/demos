@@ -18,8 +18,8 @@ export class WonderWhereTheRoadLeadsYou extends PhotoOfTheWeekDto {
     'Nature',
     'Outdoors',
   ];
-  dateCreated = new Date(2019, 7, 20).toISOString().substring(0, 10);
-  datePublished = new Date(2019, 7, 20).toISOString().substring(0, 10);
+  createdDate = new Date(2019, 7, 20).toISOString().substring(0, 10);
+  publishedDate = new Date(2019, 7, 20).toISOString().substring(0, 10);
   location = {
     place: 'Myakka River State Park',
     city: 'Sarasota',
