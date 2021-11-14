@@ -1,18 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, last, map, Observable, of } from 'rxjs';
+import { concatMap, from, last, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import { ImageState } from '@dark-rush-photography/shared/types';
-import { getEntityTypeHasImageVideo } from '@dark-rush-photography/shared/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findEntityById$ } from '../entities/entity-repository.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
-import {
-  addImageVideo$,
-  updateImageState$,
-} from '../images/image-repository.functions';
+import { updateImageState$ } from '../images/image-repository.functions';
 
 @Injectable()
 export class ImagePublishProvider {
@@ -47,32 +43,6 @@ export class ImagePublishProvider {
         );
       }),
       last(),
-      map(() => undefined)
-    );
-  }
-
-  publishImageVideo$(entityId: string): Observable<void> {
-    return findEntityById$(entityId, this.entityModel).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) => {
-        if (!getEntityTypeHasImageVideo(documentModel.type)) {
-          return of(undefined);
-        }
-        if (!documentModel.imageVideo) return of(undefined);
-
-        return findEntityById$(entityId, this.entityModel).pipe(
-          map(validateEntityFound),
-          concatMap((documentModel) => {
-            if (!documentModel.imageVideo) return of(undefined);
-
-            return addImageVideo$(
-              documentModel.imageVideo,
-              entityId,
-              this.entityModel
-            );
-          })
-        );
-      }),
       map(() => undefined)
     );
   }

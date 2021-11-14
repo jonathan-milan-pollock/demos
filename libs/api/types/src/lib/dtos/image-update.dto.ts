@@ -1,21 +1,9 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsEnum,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { ImageState, ImageUpdate } from '@dark-rush-photography/shared/types';
+import { ImageUpdate } from '@dark-rush-photography/shared/types';
 
 export class ImageUpdateDto implements ImageUpdate {
-  @IsEnum(ImageState)
-  state!: ImageState;
-
-  @IsBoolean()
-  isThreeSixtyImage!: boolean;
-
   @IsString()
   @IsOptional()
   threeSixtyImageStorageId?: string;

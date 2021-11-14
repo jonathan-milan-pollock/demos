@@ -75,11 +75,11 @@ describe('Add Test Image Admin Images', () => {
       .its('status')
       .should('equal', 404));
 
-  it('should return an unauthorized status when not authenticated', () => {
-    cy.addTestImageAdminImages({ Authorization: '' }, DUMMY_MONGODB_ID)
+  it('should return an unauthorized status when not authenticated', () =>
+    cy
+      .addTestImageAdminImages({ Authorization: '' }, DUMMY_MONGODB_ID)
       .its('status')
-      .should('equal', 401);
-  });
+      .should('equal', 401));
 
   it('should return an unauthorized message when not authenticated', () =>
     cy

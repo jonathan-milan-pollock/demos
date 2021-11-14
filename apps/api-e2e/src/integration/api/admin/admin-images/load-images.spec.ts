@@ -1,4 +1,8 @@
-import { ImageAdmin, ImageState } from '@dark-rush-photography/shared/types';
+import {
+  DUMMY_MONGODB_ID,
+  ImageAdmin,
+  ImageState,
+} from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
 describe('Load Images Admin Images', () => {
@@ -79,91 +83,6 @@ describe('Load Images Admin Images', () => {
           .should('equal', 1);
       }));
 
-  it('should load public images with an image state of public', () =>
-    cy
-      .createTestAdminEntities(getAuthHeaders())
-      .its('body.id')
-      .then((entityId) =>
-        cy.addTestImageAdminImages(getAuthHeaders(), entityId)
-      )
-      .its('body')
-      .then((adminImage: ImageAdmin) => {
-        return cy
-          .selectNewImagesAdminImages(getAuthHeaders(), adminImage.entityId, {
-            imageIds: [adminImage.id],
-          })
-          .then(() =>
-            cy.updatePublishImageAdminImages(
-              getAuthHeaders(),
-              adminImage.id,
-              adminImage.entityId,
-              {
-                state: ImageState.Public,
-                isThreeSixtyImage: adminImage.isThreeSixtyImage,
-                isThreeSixtyImageStorageId: adminImage.threeSixtyImageStorageId,
-                isStarred: adminImage.isStarred,
-                isLoved: adminImage.isLoved,
-                title: adminImage.title,
-                seoDescription: adminImage.seoDescription,
-                seoKeywords: adminImage.seoKeywords,
-              }
-            )
-          )
-          .then(() =>
-            cy.loadImagesAdminImages(getAuthHeaders(), adminImage.entityId, {
-              imageStates: [ImageState.Public],
-            })
-          )
-          .its('body.length')
-          .should('equal', 1);
-      }));
-
-  it('should load archived images with an image state of archived', () =>
-    cy
-      .createTestAdminEntities(getAuthHeaders())
-      .its('body.id')
-      .then((entityId) =>
-        cy.addTestImageAdminImages(getAuthHeaders(), entityId)
-      )
-      .its('body')
-      .then((adminImage: ImageAdmin) => {
-        return cy
-          .selectNewImagesAdminImages(getAuthHeaders(), adminImage.entityId, {
-            imageIds: [adminImage.id],
-          })
-          .then(() =>
-            cy.updatePublishImageAdminImages(
-              getAuthHeaders(),
-              adminImage.id,
-              adminImage.entityId,
-              {
-                state: ImageState.Public,
-                isThreeSixtyImage: adminImage.isThreeSixtyImage,
-                isThreeSixtyImageStorageId: adminImage.threeSixtyImageStorageId,
-                isStarred: adminImage.isStarred,
-                isLoved: adminImage.isLoved,
-                title: adminImage.title,
-                seoDescription: adminImage.seoDescription,
-                seoKeywords: adminImage.seoKeywords,
-              }
-            )
-          )
-          .then(() =>
-            cy.archiveImageAdminImages(
-              getAuthHeaders(),
-              adminImage.id,
-              adminImage.entityId
-            )
-          )
-          .then(() =>
-            cy.loadImagesAdminImages(getAuthHeaders(), adminImage.entityId, {
-              imageStates: [ImageState.Archived],
-            })
-          )
-          .its('body.length')
-          .should('equal', 1);
-      }));
-
   it('should load images with multiple image states', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
@@ -201,6 +120,18 @@ describe('Load Images Admin Images', () => {
       )
       .its('status')
       .should('equal', 200));
+
+  it('should return a not found request status when cannot find an entity', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
+      .its('body.id')
+      .then(() =>
+        cy.loadImagesAdminImages(getAuthHeaders(), DUMMY_MONGODB_ID, {
+          imageStates: [],
+        })
+      )
+      .its('status')
+      .should('equal', 404));
 
   it('should return an unauthorized status when not authenticated', () =>
     cy

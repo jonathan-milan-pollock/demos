@@ -34,18 +34,13 @@ describe('image-order.provider', () => {
   let imageOrderProvider: ImageOrderProvider;
 
   beforeEach(async () => {
-    const mockedDocumentModel = {
-      findById: jest.fn().mockReturnValue(Promise.resolve({} as DocumentModel)),
-      findByIdAndUpdate: jest
-        .fn()
-        .mockReturnValue(Promise.resolve({} as DocumentModel)),
-    };
+    class MockDocumentModel {}
 
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: mockedDocumentModel,
+          useClass: MockDocumentModel,
         },
         ImageOrderProvider,
       ],

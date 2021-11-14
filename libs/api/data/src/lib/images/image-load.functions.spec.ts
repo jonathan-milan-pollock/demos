@@ -7,6 +7,7 @@ import {
 } from '@dark-rush-photography/shared/types';
 import {
   findFirstImage,
+  findLovedPublishImages,
   findStarredPublishImage,
   loadImageAdmin,
   loadImagePublic,
@@ -21,7 +22,6 @@ describe('image-load.functions', () => {
       slug: faker.lorem.word(),
       order: faker.datatype.number(),
       state: faker.random.arrayElement(Object.values(ImageState)),
-      isThreeSixtyImage: faker.datatype.boolean(),
       threeSixtyImageStorageId: faker.datatype.uuid(),
       isStarred: faker.datatype.boolean(),
       isLoved: faker.datatype.boolean(),
@@ -53,7 +53,6 @@ describe('image-load.functions', () => {
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(image.state);
-      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId
       );
@@ -82,7 +81,6 @@ describe('image-load.functions', () => {
       storageId: faker.datatype.uuid(),
       slug: faker.lorem.word(),
       order: faker.datatype.number(),
-      isThreeSixtyImage: faker.datatype.boolean(),
       threeSixtyImageStorageId: faker.datatype.uuid(),
       smallDimension: {
         width: faker.datatype.number(),
@@ -105,7 +103,6 @@ describe('image-load.functions', () => {
       expect(result.storageId).toBe(image.storageId);
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
-      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId
       );
@@ -157,6 +154,55 @@ describe('image-load.functions', () => {
     });
   });
 
+  describe('findLovedPublishImages', () => {
+    it('should find loved publish images with state of selected', () => {
+      const images = [
+        { isLoved: true, state: ImageState.Selected } as Image,
+        { isLoved: true, state: ImageState.Selected } as Image,
+        {} as Image,
+      ];
+
+      const result = findLovedPublishImages(images);
+      expect(result.length).toBe(2);
+    });
+
+    it('should find loved publish images with state of public', () => {
+      const images = [
+        { isLoved: true, state: ImageState.Public } as Image,
+        { isLoved: true, state: ImageState.Public } as Image,
+        {} as Image,
+      ];
+
+      const result = findLovedPublishImages(images);
+      expect(result.length).toBe(2);
+    });
+
+    it('should find loved publish images with state of selected and public', () => {
+      const images = [
+        { isLoved: true, state: ImageState.Selected } as Image,
+        { isLoved: true, state: ImageState.Public } as Image,
+        {} as Image,
+      ];
+
+      const result = findLovedPublishImages(images);
+      expect(result.length).toBe(2);
+    });
+
+    it('should not find loved publish images when non are available', () => {
+      const images = [{} as Image];
+
+      const result = findLovedPublishImages(images);
+      expect(result.length).toBe(0);
+    });
+
+    it('should not find loved publish images when images empty', () => {
+      const images: Image[] = [];
+
+      const result = findLovedPublishImages(images);
+      expect(result.length).toBe(0);
+    });
+  });
+
   describe('findFirstImage', () => {
     it('should find the first image', () => {
       const firstImageId = faker.datatype.uuid();
@@ -172,7 +218,7 @@ describe('image-load.functions', () => {
     it('should return undefined if there are not any images', () => {
       const images: Image[] = [];
 
-      const result = findStarredPublishImage(images);
+      const result = findFirstImage(images);
       expect(result).toBeUndefined();
     });
   });

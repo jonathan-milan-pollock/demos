@@ -5,7 +5,7 @@ import * as faker from 'faker';
 import { EntityType } from '@dark-rush-photography/shared/types';
 import {
   getEntityTypeHasImageVideo,
-  getEntityTypeHasLovedImage,
+  getEntityTypeHasLovedImages,
   getEntityTypeHasStarredImage,
   getEntityTypeNewImagesFolderName,
 } from './entity-type.functions';
@@ -152,7 +152,7 @@ describe('entity-type.functions', () => {
     );
   });
 
-  describe('getEntityTypeHasLovedImage', () => {
+  describe('getEntityTypeHasLovedImages', () => {
     const entityTypeHasLovedImage: {
       entityType: EntityType;
       hasLovedImage: boolean;
@@ -206,14 +206,14 @@ describe('entity-type.functions', () => {
     it.each(entityTypeHasLovedImage)(
       'should return if entity type has a loved image %s',
       ({ entityType, hasLovedImage }) => {
-        expect(getEntityTypeHasLovedImage(entityType)).toBe(hasLovedImage);
+        expect(getEntityTypeHasLovedImages(entityType)).toBe(hasLovedImage);
       }
     );
 
     it('should throw a conflict exception if cannot get has loved image', () => {
       const entityType = faker.lorem.word() as EntityType;
       const result = () => {
-        getEntityTypeHasLovedImage(entityType);
+        getEntityTypeHasLovedImages(entityType);
       };
       expect(result).toThrow(ConflictException);
       expect(result).toThrow(
@@ -225,7 +225,7 @@ describe('entity-type.functions', () => {
       'should not throw for any entity type %s',
       (entityType) => {
         const result = () => {
-          getEntityTypeHasLovedImage(entityType);
+          getEntityTypeHasLovedImages(entityType);
         };
         expect(result).not.toThrow();
       }

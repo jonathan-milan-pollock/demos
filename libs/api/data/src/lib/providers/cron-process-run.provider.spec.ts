@@ -11,27 +11,34 @@ import { CronProcess } from '@dark-rush-photography/shared/types';
 import { CronProcessTable } from '../tables/cron-process.table';
 import { Document } from '../schema/document.schema';
 import { ConfigProvider } from './config.provider';
-import { CronProcessStateUpdateProvider } from './cron-process-state-update.provider';
 import { CronProcessRepositoryProvider } from './cron-process-repository.provider';
+import { CronProcessRunProvider } from './cron-process-run.provider';
+import { CronProcessStateUpdateProvider } from './cron-process-state-update.provider';
 import { EntityDeleteProvider } from './entity-delete.provider';
-import { ImageRemoveAllProvider } from './image-remove-all.provider';
-import { ImageRemoveOneProvider } from './image-remove-one.provider';
-import { ImageDeleteBlobsProvider } from './image-delete-blobs.provider';
+import { EntityProcessProvider } from './entity-process.provider';
 import { EntityPublishProvider } from './entity-publish.provider';
+
+import { ImageAddBlobProvider } from './image-add-blob.provider';
+import { ImageAddProvider } from './image-add.provider';
+import { ImageDeleteBlobsProvider } from './image-delete-blobs.provider';
+import { ImageExifProvider } from './image-exif.provider';
+import { ImageFindFolderProvider } from './image-find-folder.provider';
 import { ImageProcessAllProvider } from './image-process-all.provider';
 import { ImageProcessOneProvider } from './image-process-one.provider';
-import { ImageExifProvider } from './image-exif.provider';
-import { ImageTinifyProvider } from './image-tinify.provider';
-import { ImageResizeProvider } from './image-resize.provider';
-import { ImageAddBlobProvider } from './image-add-blob.provider';
 import { ImagePublishProvider } from './image-publish.provider';
-import { ImageVideoEmailProvider } from './image-video-email.provider';
-import { SocialMediaPostProvider } from './social-media-post.provider';
+import { ImageRemoveAllProvider } from './image-remove-all.provider';
+import { ImageRemoveOneProvider } from './image-remove-one.provider';
+import { ImageResizeProvider } from './image-resize.provider';
+import { ImageTinifyProvider } from './image-tinify.provider';
 import { ImageUpdateNewProvider } from './image-update-new.provider';
-import { ImageFindFolderProvider } from './image-find-folder.provider';
-import { ImageAddProvider } from './image-add.provider';
+import { ImageVideoEmailProvider } from './image-video-email.provider';
+import { ImageVideoFfmpegExifProvider } from './image-video-ffmpeg-exif.provider';
+import { ImageVideoFfmpegFrontCoverProvider } from './image-video-ffmpeg-front-cover.provider';
+import { ImageVideoMeltProcessProvider } from './image-video-melt-process.provider';
+import { ImageVideoMeltProvider } from './image-video-melt.provider';
+import { ImageVideoPublishProvider } from './image-video-publish.provider';
+import { SocialMediaPostProvider } from './social-media-post.provider';
 import { WebSocketMessageProvider } from './web-socket-message.provider';
-import { CronProcessRunProvider } from './cron-process-run.provider';
 
 jest.mock('../cron-processes/cron-process-state.functions', () => ({
   ...jest.requireActual('../cron-processes/cron-process-state.functions'),
@@ -68,22 +75,28 @@ describe('cron-process-run.provider', () => {
         CronProcessRunProvider,
         CronProcessStateUpdateProvider,
         EntityDeleteProvider,
-        ImageRemoveAllProvider,
-        ImageRemoveOneProvider,
-        ImageDeleteBlobsProvider,
         EntityPublishProvider,
+        EntityProcessProvider,
+        ImageAddBlobProvider,
+        ImageAddProvider,
+        ImageDeleteBlobsProvider,
+        ImageExifProvider,
+        ImageFindFolderProvider,
         ImageProcessAllProvider,
         ImageProcessOneProvider,
-        ImageExifProvider,
-        ImageTinifyProvider,
-        ImageResizeProvider,
-        ImageAddBlobProvider,
         ImagePublishProvider,
-        ImageVideoEmailProvider,
-        SocialMediaPostProvider,
+        ImageRemoveAllProvider,
+        ImageRemoveOneProvider,
+        ImageResizeProvider,
+        ImageTinifyProvider,
         ImageUpdateNewProvider,
-        ImageFindFolderProvider,
-        ImageAddProvider,
+        ImageVideoEmailProvider,
+        ImageVideoFfmpegExifProvider,
+        ImageVideoFfmpegFrontCoverProvider,
+        ImageVideoMeltProcessProvider,
+        ImageVideoMeltProvider,
+        ImageVideoPublishProvider,
+        SocialMediaPostProvider,
         WebSocketMessageProvider,
       ],
     }).compile();

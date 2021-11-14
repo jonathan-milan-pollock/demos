@@ -43,30 +43,6 @@ _/
 
 //TODO: Roboto or Raleway???
 
-# nest
-
-- nestjs add caching (https://reposhub.com/nodejs/frameworks/nestjs-ng-universal.html)
-
-- implement K8 available and ready services
--
-
-```ts
-  @Get('status')
-  status(): any {
-    const { uptime, arch, version, platform } = process
-    return {
-      version: VERSION,
-      stack,
-      server: {
-        uptime: uptime(),
-        arch,
-        version,
-        platform,
-      },
-    }
-  }
-```
-
 ## references
 
 - [Angular Performance Best Patterns](https://www.youtube.com/watch?v=-eH2gCGHcGs)
@@ -76,13 +52,18 @@ _/
 - [Essential Meta Tags](https://css-tricks.com/essential-meta-tags-social-media/)
 - [Advertising Sizes](https://www.iab.com/wp-content/uploads/2015/11/IAB_Display_Mobile_Creative_Guidelines_HTML5_2015.pdf)
 - [iPhone Resolutions](https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions)
-- [Node.js can HTTP/2 push!](https://medium.com/the-node-js-collection/node-js-can-http-2-push-b491894e1bb1)
 - [Cool Gray](https://medium.com/ge-design/iot-cool-gray-is-a-great-background-color-for-data-visualization-ebf18c318418)
-- [GitHub Azure Pipelines](https://azuredevopslabs.com/labs/vstsextend/github-azurepipelines/)
 - [Automate Cypress tests on BrowserStack](https://www.browserstack.com/docs/automate/cypress)
-- [GIT LFS](https://www.youtube.com/watch?v=uLR1RNqJ1Mw)
 
 ---
+
+## shotcut
+
+### on MAC
+
+brew install shotcut
+
+## CDN for azure storage, within endpoints check endpoint and change origin type to storage then select storage account
 
 ## change back nameservers
 

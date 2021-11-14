@@ -201,3 +201,6 @@
 5. run pulumi up
 
 ---
+
+- TODO: GitHub Actions and env setting so that testing does not fail
+- NODE_OPTIONS: --max_old_space_size=4096

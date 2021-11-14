@@ -2,7 +2,7 @@ import {
   Entity,
   Image,
   ImageExif,
-  VideoExif,
+  ImageVideoExif,
 } from '@dark-rush-photography/shared/types';
 import { getExifDateFromIsoDate } from '@dark-rush-photography/api/util';
 import {
@@ -63,12 +63,11 @@ export const loadImageExif = (
 });
 
 export const loadImageVideoExif = (
-  title: string,
-  description: string,
+  entity: Entity,
   copyrightYear: number
-): VideoExif => ({
-  title,
-  description,
+): ImageVideoExif => ({
+  title: entity.title ?? '',
+  description: entity.seoDescription ?? '',
   author: 'Dark Rush Photography',
   year: copyrightYear,
   copyright: `© ${copyrightYear} Dark Rush Photography`,

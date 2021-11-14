@@ -16,7 +16,7 @@ export class ImageVideoEmailProvider {
     private readonly entityModel: Model<DocumentModel>
   ) {}
 
-  sendEmail$(entityId: string): Observable<void> {
+  emailImageVideo$(entityId: string): Observable<void> {
     return findEntityById$(entityId, this.entityModel).pipe(
       // map(validateEntityFound),
       //concatMap(() => from(Object.values(SocialMediaType))),

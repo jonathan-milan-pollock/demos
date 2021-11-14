@@ -1,4 +1,4 @@
-export interface VideoExif {
+export interface ImageVideoExif {
   readonly title: string;
   readonly description: string;
   readonly author: string;

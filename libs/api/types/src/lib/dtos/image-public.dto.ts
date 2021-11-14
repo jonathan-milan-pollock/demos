@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsInt,
   IsOptional,
   IsString,
@@ -22,9 +21,6 @@ export class ImagePublicDto implements ImagePublic {
   @IsInt()
   @Min(0)
   order!: number;
-
-  @IsBoolean()
-  isThreeSixtyImage!: boolean;
 
   @IsString()
   @IsOptional()

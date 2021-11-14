@@ -409,7 +409,9 @@
           "outputs": ["coverage/libs/shared/util"],
           "options": {
             "jestConfig": "libs/shared/util/jest.config.js",
-            "passWithNoTests": true
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
           }
         }
       }

@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, last, map, Observable, of } from 'rxjs';
+import { concatMap, from, last, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
@@ -13,7 +13,6 @@ import {
   IMAGE_FILE_EXTENSION,
   IMAGE_MIME_TYPE,
 } from '@dark-rush-photography/shared/types';
-import { getEntityTypeHasImageVideo } from '@dark-rush-photography/shared/util';
 import {
   downloadAzureStorageBlobToFile$,
   findDimension$,
@@ -122,7 +121,7 @@ export class ImageProcessOneProvider {
       ),
       concatMap(() => this.imageExifProvider.exifImage$(image, entity)),
       concatMap(() =>
-        this.imageResizeProvider.resizePublishImage$(
+        this.imageResizeProvider.resizeImage$(
           image.storageId,
           image.slug,
           smallImageDimension
@@ -154,25 +153,13 @@ export class ImageProcessOneProvider {
         )
       ),
       concatMap((imageDimension) =>
-        this.imageResizeProvider.resizePublishImage$(
+        this.imageResizeProvider.resizeImage$(
           image.storageId,
           image.slug,
           imageDimension
         )
       ),
       map(() => undefined)
-    );
-  }
-
-  processImageVideo$(entityId: string): Observable<void> {
-    return findEntityById$(entityId, this.entityModel).pipe(
-      map(validateEntityFound),
-      concatMap((documentModel) => {
-        if (!getEntityTypeHasImageVideo(documentModel.type)) {
-          return of(undefined);
-        }
-        return of(undefined);
-      })
     );
   }
 }

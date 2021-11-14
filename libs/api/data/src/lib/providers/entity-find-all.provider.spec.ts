@@ -33,15 +33,13 @@ describe('entity-find-all.provider', () => {
   let entityFindAllProvider: EntityFindAllProvider;
 
   beforeEach(async () => {
-    const mockedDocumentModel = {
-      find: jest.fn().mockReturnValue(Promise.resolve({} as DocumentModel)),
-    };
+    class MockDocumentModel {}
 
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: mockedDocumentModel,
+          useClass: MockDocumentModel,
         },
         EntityFindAllProvider,
       ],
@@ -82,7 +80,12 @@ describe('entity-find-all.provider', () => {
 
       entityFindAllProvider
         .findAllEntities$(
-          faker.random.arrayElement(Object.values(EntityWithoutGroupType))
+          faker.random.arrayElement(
+            Object.values(EntityWithoutGroupType).filter(
+              (entityWithoutGroupType) =>
+                entityWithoutGroupType !== EntityWithoutGroupType.Test
+            )
+          )
         )
         .subscribe((result) => {
           expect(mockedGetEntityTypeFromEntityWithoutGroupType).toBeCalledTimes(
@@ -114,7 +117,12 @@ describe('entity-find-all.provider', () => {
 
       entityFindAllProvider
         .findAllEntities$(
-          faker.random.arrayElement(Object.values(EntityWithoutGroupType))
+          faker.random.arrayElement(
+            Object.values(EntityWithoutGroupType).filter(
+              (entityWithoutGroupType) =>
+                entityWithoutGroupType !== EntityWithoutGroupType.Test
+            )
+          )
         )
         .subscribe((result) => {
           expect(mockedGetEntityTypeFromEntityWithoutGroupType).toBeCalledTimes(
@@ -123,6 +131,75 @@ describe('entity-find-all.provider', () => {
           expect(mockedFindAllEntities$).toBeCalledTimes(2);
           expect(mockedLoadEntityAdmin).not.toBeCalled();
           expect(result).toHaveLength(0);
+          done();
+        });
+    });
+
+    it('should find all entities for Test entity', (done: any) => {
+      const mockedFindAllTestEntities$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllTestEntities$')
+        .mockReturnValue(of([{} as DocumentModel, {} as DocumentModel]));
+
+      const mockedLoadEntityAdmin = jest
+        .spyOn(entityLoadAdminFunctions, 'loadEntityAdmin')
+        .mockImplementation(
+          (documentModel: DocumentModel) => documentModel as EntityAdmin
+        );
+
+      const mockedGetEntityTypeFromEntityWithoutGroupType = jest.spyOn(
+        sharedUtil,
+        'getEntityTypeFromEntityWithoutGroupType'
+      );
+
+      const mockedFindAllEntities$ = jest.spyOn(
+        entityRepositoryFunctions,
+        'findAllEntities$'
+      );
+
+      entityFindAllProvider
+        .findAllEntities$(EntityWithoutGroupType.Test)
+        .subscribe((result) => {
+          expect(mockedFindAllTestEntities$).toBeCalledTimes(1);
+          expect(mockedLoadEntityAdmin).toBeCalledTimes(2);
+          expect(
+            mockedGetEntityTypeFromEntityWithoutGroupType
+          ).not.toBeCalled();
+          expect(mockedFindAllEntities$).not.toBeCalled();
+          expect(result.length).toBe(2);
+          done();
+        });
+    });
+
+    it('should return an empty array for Test entity if entities are not found', (done: any) => {
+      const mockedFindAllTestEntities$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllTestEntities$')
+        .mockReturnValue(of([]));
+
+      const mockedLoadEntityAdmin = jest.spyOn(
+        entityLoadAdminFunctions,
+        'loadEntityAdmin'
+      );
+
+      const mockedGetEntityTypeFromEntityWithoutGroupType = jest.spyOn(
+        sharedUtil,
+        'getEntityTypeFromEntityWithoutGroupType'
+      );
+
+      const mockedFindAllEntities$ = jest.spyOn(
+        entityRepositoryFunctions,
+        'findAllEntities$'
+      );
+
+      entityFindAllProvider
+        .findAllEntities$(EntityWithoutGroupType.Test)
+        .subscribe((result) => {
+          expect(mockedFindAllTestEntities$).toBeCalledTimes(1);
+          expect(mockedLoadEntityAdmin).not.toBeCalled();
+          expect(
+            mockedGetEntityTypeFromEntityWithoutGroupType
+          ).not.toBeCalled();
+          expect(mockedFindAllEntities$).not.toBeCalled();
+          expect(result.length).toBe(0);
           done();
         });
     });

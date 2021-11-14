@@ -19,15 +19,13 @@ describe('entity-order.provider', () => {
   let entityOrderProvider: EntityOrderProvider;
 
   beforeEach(async () => {
-    const mockedDocumentModel = {
-      findByIdAndUpdate: jest.fn().mockReturnValue(Promise.resolve(null)),
-    };
+    class MockDocumentModel {}
 
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
           provide: getModelToken(Document.name),
-          useValue: mockedDocumentModel,
+          useClass: MockDocumentModel,
         },
         EntityOrderProvider,
       ],
@@ -43,8 +41,8 @@ describe('entity-order.provider', () => {
 
   describe('order$', () => {
     it('should order entities', (done: any) => {
-      const mockedFindByIdAndUpdateOrder$ = jest
-        .spyOn(entityRepositoryFunctions, 'findByIdAndUpdateOrder$')
+      const mockedFindEntityByIdAndUpdateOrder$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityByIdAndUpdateOrder$')
         .mockReturnValue(of({} as DocumentModel));
 
       const entity1Id = faker.datatype.uuid();
@@ -60,13 +58,13 @@ describe('entity-order.provider', () => {
           ],
         } as EntityOrders)
         .subscribe(() => {
-          expect(mockedFindByIdAndUpdateOrder$).toBeCalledTimes(2);
+          expect(mockedFindEntityByIdAndUpdateOrder$).toBeCalledTimes(2);
           const [entityFirstId, entityFirstOrder] =
-            mockedFindByIdAndUpdateOrder$.mock.calls[0];
+            mockedFindEntityByIdAndUpdateOrder$.mock.calls[0];
           expect(entityFirstId).toBe(entity1Id);
           expect(entityFirstOrder).toBe(entity1Order);
           const [entitySecondId, entitySecondOrder] =
-            mockedFindByIdAndUpdateOrder$.mock.calls[1];
+            mockedFindEntityByIdAndUpdateOrder$.mock.calls[1];
           expect(entitySecondId).toBe(entity2Id);
           expect(entitySecondOrder).toBe(entity2Order);
           done();
@@ -74,9 +72,9 @@ describe('entity-order.provider', () => {
     });
 
     it('should not order entities if there are not any entities to order', (done: any) => {
-      const mockedFindByIdAndUpdateOrder$ = jest.spyOn(
+      const mockedFindEntityByIdAndUpdateOrder$ = jest.spyOn(
         entityRepositoryFunctions,
-        'findByIdAndUpdateOrder$'
+        'findEntityByIdAndUpdateOrder$'
       );
 
       entityOrderProvider
@@ -84,7 +82,7 @@ describe('entity-order.provider', () => {
           entityIdOrders: [],
         } as EntityOrders)
         .subscribe(() => {
-          expect(mockedFindByIdAndUpdateOrder$).not.toBeCalled();
+          expect(mockedFindEntityByIdAndUpdateOrder$).not.toBeCalled();
           done();
         });
     });

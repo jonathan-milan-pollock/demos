@@ -18,6 +18,7 @@ import { Document, DocumentModel } from '../schema/document.schema';
 import {
   findAllEntities$,
   findAllEntitiesForWatermarkedGroup$,
+  findAllTestEntities$,
 } from '../entities/entity-repository.functions';
 import { loadEntityAdmin } from '../entities/entity-load-admin.functions';
 
@@ -31,6 +32,14 @@ export class EntityFindAllProvider {
   findAllEntities$(
     entityWithoutGroupType: EntityWithoutGroupType
   ): Observable<EntityAdmin[]> {
+    if (entityWithoutGroupType === EntityWithoutGroupType.Test) {
+      return findAllTestEntities$(this.entityModel).pipe(
+        map((documentModels) =>
+          documentModels.length === 0 ? [] : documentModels.map(loadEntityAdmin)
+        )
+      );
+    }
+
     return combineLatest([
       findAllEntities$(
         getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),

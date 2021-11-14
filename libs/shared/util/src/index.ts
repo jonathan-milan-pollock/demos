@@ -1,3 +1,6 @@
+// entities
+export * from './lib/entities/location.functions';
+
 // enums
 export * from './lib/enums/best-of-type.functions';
 export * from './lib/enums/entity-type.functions';

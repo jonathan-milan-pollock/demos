@@ -8,8 +8,8 @@ import { WebSocketCronProcessResponse } from '@dark-rush-photography/shared/type
 import { CronProcessTable } from '../tables/cron-process.table';
 
 import { CronProcessRepositoryProvider } from './cron-process-repository.provider';
-import { WebSocketMessageProvider } from './web-socket-message.provider';
 import { CronProcessStateUpdateProvider } from './cron-process-state-update.provider';
+import { WebSocketMessageProvider } from './web-socket-message.provider';
 
 jest.mock('../cron-processes/cron-process-load.functions', () => ({
   ...jest.requireActual('../cron-processes/cron-process-load.functions'),

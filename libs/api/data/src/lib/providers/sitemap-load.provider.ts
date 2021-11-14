@@ -14,76 +14,105 @@ import {
 import { Model } from 'mongoose';
 
 import {
-  PublishedDateSitemapEntityType,
+  MaxPublishedDateSitemapEntityType,
   EntityType,
   SitemapEntityType,
+  BestOfType,
 } from '@dark-rush-photography/shared/types';
-
 import { Document, DocumentModel } from '../schema/document.schema';
-import { findAllPublicEntities$ } from '../entities/entity-repository.functions';
-import { SitemapLoadXmlProvider } from './sitemap-load-xml.provider';
-import { SitemapLoadMaxPublishedDateProvider } from './sitemap-load-max-date-published.provider';
-import { getBestOfTypeFromSlug } from '@dark-rush-photography/shared/util';
+import { findOnePublicEntityForSlug$ } from '../entities/entity-repository.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
+import { SitemapMaxPublishedDateProvider } from './sitemap-max-published-date.provider';
+import { SitemapPublishedDateProvider } from './sitemap-published-date.provider';
+import { SitemapXmlProvider } from './sitemap-xml.provider';
 
 @Injectable()
 export class SitemapLoadProvider {
   constructor(
     @InjectModel(Document.name)
     private readonly entityModel: Model<DocumentModel>,
-    private readonly sitemapLoadMaxPublishedDateProvider: SitemapLoadMaxPublishedDateProvider,
-    private readonly sitemapXmlProvider: SitemapLoadXmlProvider
+    private readonly sitemapMaxPublishedDateProvider: SitemapMaxPublishedDateProvider,
+    private readonly sitemapPublishedDateProvider: SitemapPublishedDateProvider,
+    private readonly sitemapXmlProvider: SitemapXmlProvider
   ) {}
 
   loadDarkRushPhotographySitemap$(): Observable<string> {
     return forkJoin([
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.Favorites
       ),
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.Event
       ),
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.About
       ),
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.Review
       ),
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.PhotoOfTheWeek
       ),
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.Destination
       ),
-      this.sitemapLoadMaxPublishedDateProvider.loadMaxPublishedDateEntityType(
+      this.sitemapMaxPublishedDateProvider.findMaxPublishedDate$(
         SitemapEntityType.ReviewMedia
       ),
     ]).pipe(
       mergeMap(
         (publishedDateSitemapEntityTypes) => publishedDateSitemapEntityTypes
       ),
-      toArray<PublishedDateSitemapEntityType>(),
+      toArray<MaxPublishedDateSitemapEntityType>(),
       concatMap((publishedDateSitemapEntityTypes) =>
         combineLatest([
           of(publishedDateSitemapEntityTypes),
-          findAllPublicEntities$(EntityType.Event, this.entityModel),
+          this.sitemapPublishedDateProvider.loadEventPublishedDates$(),
         ])
       ),
-      map(([publishedDateSitemapEntityTypes, publicEventEntities]) =>
+      map(([publishedDateSitemapEntityTypes, eventPublishEventSlugs]) =>
         this.sitemapXmlProvider.loadDarkRushPhotographySitemapXml(
           publishedDateSitemapEntityTypes,
-          publicEventEntities
+          eventPublishEventSlugs
         )
       )
     );
   }
 
   loadThirtySevenPhotosSitemap$(): Observable<string> {
-    return findAllPublicEntities$(EntityType.BestOf, this.entityModel).pipe(
+    return forkJoin([
+      findOnePublicEntityForSlug$(
+        EntityType.BestOf,
+        BestOfType.Events.toLowerCase(),
+        this.entityModel
+      ).pipe(map(validateEntityFound)),
+      findOnePublicEntityForSlug$(
+        EntityType.BestOf,
+        BestOfType.RealEstate.toLowerCase(),
+        this.entityModel
+      ).pipe(map(validateEntityFound)),
+      findOnePublicEntityForSlug$(
+        EntityType.BestOf,
+        BestOfType.Nature.toLowerCase(),
+        this.entityModel
+      ).pipe(map(validateEntityFound)),
+      findOnePublicEntityForSlug$(
+        EntityType.BestOf,
+        BestOfType.Landscapes.toLowerCase(),
+        this.entityModel
+      ).pipe(map(validateEntityFound)),
+      findOnePublicEntityForSlug$(
+        EntityType.BestOf,
+        BestOfType.Children.toLowerCase(),
+        this.entityModel
+      ).pipe(map(validateEntityFound)),
+    ]).pipe(
+      mergeMap((documentModels) => documentModels),
+      toArray<DocumentModel>(),
       map((bestOfEntities) =>
-        bestOfEntities.map((bestOfEntity) => ({
-          publishedDate: bestOfEntity.publishedDate,
-          bestOfType: getBestOfTypeFromSlug(bestOfEntity.slug),
-        }))
+        this.sitemapPublishedDateProvider.loadBestOfPublishedDates(
+          bestOfEntities
+        )
       ),
       map((publishedDateBestOfTypes) =>
         this.sitemapXmlProvider.loadThirtySevenPhotosSitemapXml(

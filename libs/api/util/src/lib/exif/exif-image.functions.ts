@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { concatMap, from, map, Observable, tap } from 'rxjs';
+import { concatMap, from, map, Observable } from 'rxjs';
 
 import { ImageExif } from '@dark-rush-photography/shared/types';
 
@@ -24,7 +24,6 @@ export const exifImage$ = (
       )
     ),
     concatMap(() => from(ep.close())),
-    tap(() => console.log('Exif file path: ' + filePath)),
     map(() => undefined)
   );
 };

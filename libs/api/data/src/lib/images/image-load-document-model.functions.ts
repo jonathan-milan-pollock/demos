@@ -5,6 +5,7 @@ import {
   Image,
   ImageState,
   ImageUpdate,
+  ImageVideo,
 } from '@dark-rush-photography/shared/types';
 
 export const loadNewImage = (
@@ -18,7 +19,6 @@ export const loadNewImage = (
   slug,
   order,
   state: ImageState.New,
-  isThreeSixtyImage: false,
   isStarred: false,
   isLoved: false,
 });
@@ -33,7 +33,6 @@ export const loadAddImagePostImage = (
   slug,
   order: 0,
   state: ImageState.Selected,
-  isThreeSixtyImage: false,
   isStarred: false,
   isLoved: false,
 });
@@ -45,7 +44,6 @@ export const loadAddTestImage = (entityId: string, slug: string): Image => ({
   slug,
   order: 0,
   state: ImageState.New,
-  isThreeSixtyImage: false,
   isStarred: false,
   isLoved: false,
 });
@@ -59,8 +57,7 @@ export const loadUpdateImage = (
   storageId: image.storageId,
   slug: image.slug,
   order: image.order,
-  state: imageUpdate.state,
-  isThreeSixtyImage: imageUpdate.isThreeSixtyImage,
+  state: image.state,
   threeSixtyImageStorageId: imageUpdate.threeSixtyImageStorageId,
   isStarred: imageUpdate.isStarred,
   isLoved: imageUpdate.isLoved,
@@ -78,7 +75,6 @@ export const loadUpdateImageOrder = (image: Image, order: number): Image => ({
   slug: image.slug,
   order,
   state: image.state,
-  isThreeSixtyImage: image.isThreeSixtyImage,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
@@ -99,7 +95,6 @@ export const loadUpdateImageState = (
   slug: image.slug,
   order: image.order,
   state,
-  isThreeSixtyImage: image.isThreeSixtyImage,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
@@ -120,7 +115,6 @@ export const loadUpdateImageCreatedDate = (
   slug: image.slug,
   order: image.order,
   state: image.state,
-  isThreeSixtyImage: image.isThreeSixtyImage,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
@@ -141,7 +135,6 @@ export const loadUpdateImageSmallDimension = (
   slug: image.slug,
   order: image.order,
   state: image.state,
-  isThreeSixtyImage: image.isThreeSixtyImage,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   isStarred: image.isStarred,
   isLoved: image.isLoved,
@@ -150,4 +143,9 @@ export const loadUpdateImageSmallDimension = (
   seoDescription: image.seoDescription,
   seoKeywords: image.seoKeywords,
   smallDimension,
+});
+
+export const loadAddImageVideo = (slug: string): ImageVideo => ({
+  storageId: uuidv4(),
+  slug,
 });

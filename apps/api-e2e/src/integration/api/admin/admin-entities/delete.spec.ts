@@ -7,25 +7,26 @@ import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.fu
 describe('Delete Admin Entities', () => {
   beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
 
-  it('should delete a created entity', () => {
-    cy.createTestAdminEntities(getAuthHeaders())
+  it('should delete a created entity', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
       .its('body.id')
       .then((id) => cy.deleteAdminEntities(getAuthHeaders(), id))
       .then(() => cy.findAllAdminEntities(getAuthHeaders(), EntityType.Test))
       .its('body.length')
-      .should('equal', 0);
-  });
+      .should('equal', 0));
 
-  it('should return a status of 204 when delete', () => {
-    cy.createTestAdminEntities(getAuthHeaders())
+  it('should return a status of 204 when delete', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
       .its('body.id')
       .then((id) => cy.deleteAdminEntities(getAuthHeaders(), id))
       .its('status')
-      .should('equal', 204);
-  });
+      .should('equal', 204));
 
-  it('should not fail when deleting multiple times', () => {
-    cy.createTestAdminEntities(getAuthHeaders())
+  it('should return a status of 204 when deleting multiple times', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
       .its('body.id')
       .then((id) => {
         return cy
@@ -34,14 +35,13 @@ describe('Delete Admin Entities', () => {
       })
       .then((id) => cy.deleteAdminEntities(getAuthHeaders(), id))
       .its('status')
-      .should('equal', 204);
-  });
+      .should('equal', 204));
 
-  it('should not fail if deleting id that does not exist', () => {
-    cy.deleteAdminEntities(getAuthHeaders(), DUMMY_MONGODB_ID)
+  it('should return a status of 204 when attempt to delete id that does not exist', () =>
+    cy
+      .deleteAdminEntities(getAuthHeaders(), DUMMY_MONGODB_ID)
       .its('status')
-      .should('equal', 204);
-  });
+      .should('equal', 204));
 
   it('should return an unauthorized status when not authenticated', () =>
     cy

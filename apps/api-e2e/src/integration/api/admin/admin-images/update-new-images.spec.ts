@@ -14,7 +14,7 @@ describe('Update New Images Admin Images', () => {
       .its('status')
       .should('equal', 204));
 
-  it('should return a not found status when called for an invalid entity id', () =>
+  it('should return a not found status when cannot find an entity', () =>
     cy
       .updateNewImagesAdminImages(getAuthHeaders(), DUMMY_MONGODB_ID)
       .its('status')

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { Observable, concatMap, map } from 'rxjs';
 
@@ -35,45 +35,16 @@ export class ImageResizeProvider {
     ).pipe(
       concatMap((filePath) =>
         resizeImage$(slug, filePath, imageDimension).pipe(
-          concatMap((resizedImageFilePath) =>
+          concatMap((filePath) =>
             this.imageAddBlobProvider
               .addImageDimensionBlob$(
                 storageId,
                 slug,
                 IMAGE_FILE_EXTENSION,
                 imageDimension.type,
-                resizedImageFilePath
+                filePath
               )
-              .pipe(map(() => resizedImageFilePath))
-          )
-        )
-      )
-    );
-  }
-
-  resizePublishImage$(
-    storageId: string,
-    slug: string,
-    imageDimension: ImageDimension
-  ): Observable<string> {
-    return downloadAzureStorageBlobToFile$(
-      getAzureStorageBlobPath(storageId, slug, IMAGE_FILE_EXTENSION),
-      getImageFileName(slug),
-      this.configProvider.azureStorageConnectionStringPublic,
-      this.configProvider.azureStorageBlobContainerNamePublic
-    ).pipe(
-      concatMap((filePath) =>
-        resizeImage$(slug, filePath, imageDimension).pipe(
-          concatMap((resizedImageFilePath) =>
-            this.imageAddBlobProvider
-              .addImageDimensionBlob$(
-                storageId,
-                slug,
-                IMAGE_FILE_EXTENSION,
-                imageDimension.type,
-                resizedImageFilePath
-              )
-              .pipe(map(() => resizedImageFilePath))
+              .pipe(map(() => filePath))
           )
         )
       )
