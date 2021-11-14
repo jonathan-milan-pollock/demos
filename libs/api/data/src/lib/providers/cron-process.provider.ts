@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -17,6 +17,8 @@ import { CronProcessStateUpdateProvider } from './cron-process-state-update.prov
 
 @Injectable()
 export class CronProcessProvider {
+  private readonly logger: Logger;
+
   constructor(
     private readonly configProvider: ConfigProvider,
     @InjectModel(Document.name)
@@ -25,7 +27,9 @@ export class CronProcessProvider {
     private readonly cronProcessRepositoryProvider: CronProcessRepositoryProvider,
     private readonly cronProcessRunProvider: CronProcessRunProvider,
     private readonly cronProcessStateUpdateProvider: CronProcessStateUpdateProvider
-  ) {}
+  ) {
+    this.logger = new Logger(ConfigProvider.name);
+  }
 
   @Cron(CronExpression.EVERY_MINUTE, {
     timeZone: 'US/Eastern',
@@ -78,7 +82,8 @@ export class CronProcessProvider {
                   return of(undefined);
               }
             }),
-            catchError(() => {
+            catchError((error) => {
+              this.logger.error(error);
               this.cronProcessRunProvider.isRunningCronProcess = false;
               return this.cronProcessStateUpdateProvider.updateCronProcess$(
                 cronProcessTable,

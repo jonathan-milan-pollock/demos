@@ -10,12 +10,6 @@
 - [Install Azure Cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
 - [Install Pulumi](https://www.pulumi.com/docs/get-started/install/)
 
-### nginx VSCode extensions
-
-- [Install VSCode NGINX Configuration](https://marketplace.visualstudio.com/items?itemName=william-voyek.vscode-nginx)
-- [Install VSCode NGINX Configuration Language Support](https://marketplace.visualstudio.com/items?itemName=ahmadalli.vscode-nginx-conf)
-- [Install VSCode nginx-formatter](https://marketplace.visualstudio.com/items?itemName=raynigon.nginx-formatter)
-
 ---
 
 ## setup Pulumi
@@ -38,6 +32,10 @@
 ---
 
 ## github actions
+
+### testing
+
+- added NODE_OPTIONS: --max_old_space_size=4096 to handle required memory for testing
 
 ### font awesome pro
 
@@ -210,9 +208,6 @@
 5. run pulumi up
 
 ---
-
-- TODO: GitHub Actions and env setting so that testing does not fail
-- NODE_OPTIONS: --max_old_space_size=4096
 
 - TODO: Turned on App Service Deployment Center
 - Continuous Deployment On

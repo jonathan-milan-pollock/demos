@@ -75,11 +75,11 @@ const prodPublicStorageAccount = createPublicStorageAccount(
   pulumiConfig.prodPublicStorageAccountName,
   resourceGroup
 );
-/*const prodPublicBlobContainer = createPublicBlobContainer(
+const prodPublicBlobContainer = createPublicBlobContainer(
   pulumiConfig.prodPublicBlobContainerName,
   resourceGroup,
   prodPublicStorageAccount
-);*/
+);
 
 const cdnProfile = createCdnProfile(pulumiConfig.cdnProfileName, resourceGroup);
 const cdnEndpoint = createCdnEndpoint(
@@ -212,7 +212,7 @@ export const devPublicBlobContainerUrn = devPublicBlobContainer.urn;
 
 export const prodPrivateStorageAccountUrn = prodPrivateStorageAccount.urn;
 export const prodPublicStorageAccountUrn = prodPublicStorageAccount.urn;
-//export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
+export const prodPublicBlobContainerUrn = prodPublicBlobContainer.urn;
 
 export const cdnProfileUrn = cdnProfile.urn;
 export const cdnEndpointUrn = cdnEndpoint.urn;
