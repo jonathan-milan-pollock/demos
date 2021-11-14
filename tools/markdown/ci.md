@@ -127,7 +127,10 @@
   - www.darkrushphotography.art
 
 - In Azure cdn-endpnt-prodpublicsa > Custom Domains and click on hostname darkrushphotography.art
+
   - Turn on Custom domain HTTPS, CDN Managed, and TLS 1.2
+
+- Within endpoints click endpoint and change origin to storage then select storage account
 
 ### custom domains
 
@@ -192,6 +195,12 @@
 
 ---
 
+## image-video-logo-frame
+
+- add image-video-log-frame.png directly to prodpublicsa images container
+
+---
+
 ## deploy locally if necessary
 
 1. npm run dc:copy from root directory (copies both node_modules and dist) after build
@@ -204,3 +213,6 @@
 
 - TODO: GitHub Actions and env setting so that testing does not fail
 - NODE_OPTIONS: --max_old_space_size=4096
+
+- TODO: Turned on App Service Deployment Center
+- Continuous Deployment On

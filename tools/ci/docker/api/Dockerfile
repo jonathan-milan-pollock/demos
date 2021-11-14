@@ -23,6 +23,8 @@ RUN wget https://github.com/mltframework/shotcut/releases/download/v15.06/shotcu
 # COPY /opt/shotcut/Shotcut.app/shotcut/. /usr/bin/shotcut
 # sudo ln -sf
 
+RUN ls /usr/bin/
+
 WORKDIR /usr/src/app
 COPY dist/node_modules/ ./node_modules/
 COPY dist/apps/api/. /usr/src/app/dist/api
