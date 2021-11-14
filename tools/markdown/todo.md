@@ -63,8 +63,6 @@ _/
 
 brew install shotcut
 
-## CDN for azure storage, within endpoints check endpoint and change origin type to storage then select storage account
-
 ## change back nameservers
 
 A @ 20.49.104.33 automatic
