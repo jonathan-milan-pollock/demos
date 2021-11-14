@@ -1,3 +1,26 @@
+import { Test } from '@nestjs/testing';
+
+import * as faker from 'faker';
+
+import {
+  MaxPublishedDateSitemapEntityType,
+  PublishedDateBestOfType,
+  PublishedDateSlug,
+  SitemapUrl,
+} from '@dark-rush-photography/shared/types';
+import { SitemapXmlProvider } from './sitemap-xml.provider';
+
+jest.mock('xmlbuilder', () => ({
+  ...jest.requireActual('xmlbuilder'),
+}));
+import * as xmlbuilder from 'xmlbuilder';
+
+jest.mock('@dark-rush-photography/api/util', () => ({
+  ...jest.requireActual('@dark-rush-photography/api/util'),
+}));
+import * as apiUtil from '@dark-rush-photography/api/util';
+
+/*
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -91,3 +114,77 @@
     <changefreq>weekly</changefreq>
   </url>
 </urlset>
+*/
+
+describe('sitemap-xml.provider', () => {
+  let sitemapXmlProvider: SitemapXmlProvider;
+
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [SitemapXmlProvider],
+    }).compile();
+    sitemapXmlProvider = moduleRef.get<SitemapXmlProvider>(SitemapXmlProvider);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('loadDarkRushPhotographySitemapXml', () => {
+    it('should load xml sitemap for Dark Rush Photography', () => {
+      const mockedLoadDarkRushPhotographySitemapUrls = jest
+        .spyOn(apiUtil, 'loadDarkRushPhotographySitemapUrls')
+        .mockReturnValue([] as SitemapUrl[]);
+
+      const mockedLoadSitemapEventUrls = jest
+        .spyOn(apiUtil, 'loadSitemapEventUrls')
+        .mockReturnValue([] as SitemapUrl[]);
+
+      const mockedEnd = jest.fn().mockReturnValue(faker.lorem.lines());
+      const xmlElement = {
+        end: mockedEnd,
+      } as unknown as xmlbuilder.XMLElement;
+
+      const mockedCreate = jest
+        .spyOn(xmlbuilder, 'create')
+        .mockReturnValue(xmlElement);
+
+      const result = sitemapXmlProvider.loadDarkRushPhotographySitemapXml(
+        [] as MaxPublishedDateSitemapEntityType[],
+        [] as PublishedDateSlug[]
+      );
+
+      expect(mockedLoadDarkRushPhotographySitemapUrls).toBeCalledTimes(1);
+      expect(mockedLoadSitemapEventUrls).toBeCalledTimes(1);
+      expect(mockedCreate).toBeCalledTimes(1);
+      expect(mockedEnd).toBeCalledTimes(1);
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('loadThirtySevenPhotosSitemapXml', () => {
+    it('should load xml sitemap for thirty seven photos', () => {
+      const mockedLoadThirtySevenPhotosSitemapUrls = jest
+        .spyOn(apiUtil, 'loadThirtySevenPhotosSitemapUrls')
+        .mockReturnValue([] as SitemapUrl[]);
+
+      const mockedEnd = jest.fn().mockReturnValue(faker.lorem.lines());
+      const xmlElement = {
+        end: mockedEnd,
+      } as unknown as xmlbuilder.XMLElement;
+
+      const mockedCreate = jest
+        .spyOn(xmlbuilder, 'create')
+        .mockReturnValue(xmlElement);
+
+      const result = sitemapXmlProvider.loadThirtySevenPhotosSitemapXml(
+        [] as PublishedDateBestOfType[]
+      );
+
+      expect(mockedLoadThirtySevenPhotosSitemapUrls).toBeCalledTimes(1);
+      expect(mockedCreate).toBeCalledTimes(1);
+      expect(mockedEnd).toBeCalledTimes(1);
+      expect(result).toBeDefined();
+    });
+  });
+});

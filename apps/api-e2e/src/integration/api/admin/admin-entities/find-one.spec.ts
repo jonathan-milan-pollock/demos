@@ -1,7 +1,4 @@
-import {
-  DUMMY_MONGODB_ID,
-  EntityAdmin,
-} from '@dark-rush-photography/shared/types';
+import { DUMMY_MONGODB_ID } from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
 describe('Find one Admin Entity', () => {
@@ -10,7 +7,7 @@ describe('Find one Admin Entity', () => {
   it('should return application/json', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
+      .its('body')
       .then((adminEntity) =>
         cy.findOneAdminEntities(getAuthHeaders(), adminEntity.id)
       )
@@ -18,22 +15,22 @@ describe('Find one Admin Entity', () => {
       .its('content-type')
       .should('include', 'application/json'));
 
-  it('should find a created entity', () => {
-    cy.createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
+  it('should find a created entity', () =>
+    cy
+      .createTestAdminEntities(getAuthHeaders())
+      .its('body')
       .then((adminEntity) => {
         return cy
           .findOneAdminEntities(getAuthHeaders(), adminEntity.id)
           .its('body')
           .then((body) => body.id)
           .should('equal', adminEntity.id);
-      });
-  });
+      }));
 
   it('should return a status of 200 when find an entity', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
+      .its('body')
       .then((adminEntity) =>
         cy.findOneAdminEntities(getAuthHeaders(), adminEntity.id)
       )
@@ -49,7 +46,7 @@ describe('Find one Admin Entity', () => {
   it('should return an unauthorized status when not authenticated', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
+      .its('body')
       .then((adminEntity) =>
         cy.findOneAdminEntities({ Authorization: '' }, adminEntity.id)
       )
@@ -59,7 +56,7 @@ describe('Find one Admin Entity', () => {
   it('should return an unauthorized message when not authenticated', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
+      .its('body')
       .then((adminEntity) =>
         cy.findOneAdminEntities({ Authorization: '' }, adminEntity.id)
       )

@@ -32,13 +32,13 @@ describe('Find all Public Entities', () => {
         })
       )
       .then(() => cy.findAllPublicEntities(EntityType.Test))
-      .its('body.length')
+      .its('body.minimalPublicEntities.length')
       .should('equal', 2));
 
   it('should have a count of 0 when no public entities are found', () =>
     cy
       .findAllPublicEntities(EntityType.Test)
-      .its('body.length')
+      .its('body.minimalPublicEntities.length')
       .should('equal', 0));
 
   it('should return a status of 200 when finding public entities', () =>

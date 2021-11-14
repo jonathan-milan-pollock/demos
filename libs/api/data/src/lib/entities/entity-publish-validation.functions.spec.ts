@@ -36,14 +36,12 @@ describe('entity-public-validation.functions', () => {
   let mockedValidateOnePublishImage: any;
   let mockedValidatePublishImagesHaveStorageIds: any;
   let mockedValidatePublishImagesHaveSlugs: any;
-  let mockedValidatePublishThreeSixtyImages: any;
   let mockedValidatePublishImagesAreNotStarredAndLoved: any;
   let mockedValidatePublishStarredImage: any;
   let mockedValidatePublishLovedImages: any;
   let mockedValidatePublishImagesHaveTitles: any;
   let mockedValidatePublishImagesHaveSeoDescriptions: any;
   let mockedValidatePublishImagesHaveSeoKeywords: any;
-  let mockedValidatePublishImagesHaveSmallDimensions: any;
   let mockedValidateEntityTileDimension: any;
 
   afterEach(() => {
@@ -58,7 +56,6 @@ describe('entity-public-validation.functions', () => {
       slug: faker.lorem.word(),
       order: faker.datatype.number(),
       state: faker.random.arrayElement(Object.values(ImageState)),
-      isThreeSixtyImage: faker.datatype.boolean(),
       threeSixtyImageStorageId: faker.datatype.uuid(),
       isStarred: faker.datatype.boolean(),
       isLoved: faker.datatype.boolean(),
@@ -140,10 +137,6 @@ describe('entity-public-validation.functions', () => {
       .spyOn(imageFieldValidationFunctions, 'validatePublishImagesHaveSlugs')
       .mockReturnValue([image] as Image[]);
 
-    mockedValidatePublishThreeSixtyImages = jest
-      .spyOn(imageFieldValidationFunctions, 'validatePublishThreeSixtyImages')
-      .mockReturnValue([image] as Image[]);
-
     mockedValidatePublishImagesAreNotStarredAndLoved = jest
       .spyOn(
         imageFieldValidationFunctions,
@@ -177,13 +170,6 @@ describe('entity-public-validation.functions', () => {
       )
       .mockReturnValue([image] as Image[]);
 
-    mockedValidatePublishImagesHaveSmallDimensions = jest
-      .spyOn(
-        imageFieldValidationFunctions,
-        'validatePublishImagesHaveSmallDimensions'
-      )
-      .mockReturnValue([image] as Image[]);
-
     mockedValidateEntityTileDimension = jest
       .spyOn(entityFieldValidationFunctions, 'validateEntityTileDimension')
       .mockReturnValue({
@@ -205,9 +191,6 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it('should validate BestOf', () => {
@@ -220,7 +203,6 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(mockedValidatePublishThreeSixtyImages).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveTitles).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesHaveSeoDescriptions
@@ -228,9 +210,6 @@ describe('entity-public-validation.functions', () => {
       expect(mockedValidatePublishImagesHaveSeoKeywords).toHaveBeenCalledTimes(
         1
       );
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Destination', () => {
@@ -243,11 +222,7 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(mockedValidatePublishThreeSixtyImages).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishStarredImage).toHaveBeenCalledTimes(1);
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Event', () => {
@@ -267,15 +242,11 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(mockedValidatePublishThreeSixtyImages).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesAreNotStarredAndLoved
       ).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishStarredImage).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishLovedImages).toHaveBeenCalledTimes(1);
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Favorites', () => {
@@ -287,7 +258,6 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(mockedValidatePublishThreeSixtyImages).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveTitles).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesHaveSeoDescriptions
@@ -295,9 +265,6 @@ describe('entity-public-validation.functions', () => {
       expect(mockedValidatePublishImagesHaveSeoKeywords).toHaveBeenCalledTimes(
         1
       );
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Image Post', () => {
@@ -320,6 +287,7 @@ describe('entity-public-validation.functions', () => {
       expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTitle).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntitySeoDescription).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
@@ -351,9 +319,6 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Review', () => {
@@ -369,9 +334,6 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTileDimension).toHaveBeenCalledTimes(1);
     });
 
@@ -384,10 +346,6 @@ describe('entity-public-validation.functions', () => {
         1
       );
       expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
-      expect(mockedValidatePublishThreeSixtyImages).toHaveBeenCalledTimes(1);
-      expect(
-        mockedValidatePublishImagesHaveSmallDimensions
-      ).toHaveBeenCalledTimes(1);
     });
 
     it.each(

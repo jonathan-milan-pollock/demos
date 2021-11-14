@@ -226,14 +226,34 @@ describe('image-exif.functions', () => {
   });
 
   describe('loadImageVideoExif', () => {
-    it('should load image video exif with all values', () => {
-      const title = faker.lorem.sentence();
-      const description = faker.lorem.sentences();
-      const copyrightYear = faker.date.recent().getFullYear();
-      const result = loadImageVideoExif(title, description, copyrightYear);
+    const entity = {
+      title: faker.lorem.sentence(),
+      seoDescription: faker.lorem.sentences(),
+    } as Entity;
 
-      expect(result.title).toBe(title);
-      expect(result.description).toBe(description);
+    it('should load image video exif with all values', () => {
+      const copyrightYear = faker.date.recent().getFullYear();
+      const result = loadImageVideoExif(entity, copyrightYear);
+
+      expect(result.title).toBe(entity.title);
+      expect(result.description).toBe(entity.seoDescription);
+      expect(result.author).toBe('Dark Rush Photography');
+      expect(result.year).toBe(copyrightYear);
+      expect(result.copyright).toBe(`© ${copyrightYear} Dark Rush Photography`);
+    });
+
+    it('should load image video exif with empty string values for undefined values', () => {
+      const copyrightYear = faker.date.recent().getFullYear();
+      const result = loadImageVideoExif(
+        {
+          ...entity,
+          title: undefined,
+          seoDescription: undefined,
+        },
+        copyrightYear
+      );
+      expect(result.title).toBe('');
+      expect(result.description).toBe('');
       expect(result.author).toBe('Dark Rush Photography');
       expect(result.year).toBe(copyrightYear);
       expect(result.copyright).toBe(`© ${copyrightYear} Dark Rush Photography`);

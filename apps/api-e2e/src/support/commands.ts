@@ -19,12 +19,6 @@ declare namespace Cypress {
     deleteTestData(authHeaders: {
       Authorization: string;
     }): Cypress.Chainable<Cypress.Response<any[]>>;
-    deleteTestEntities(authHeaders: {
-      Authorization: string;
-    }): Cypress.Chainable<Cypress.Response<any[]>>;
-    deleteTestCronProcesses(authHeaders: {
-      Authorization: string;
-    }): Cypress.Chainable<Cypress.Response<any[]>>;
 
     // api admin cron processes
     findAllAdminCronProcesses(authHeaders: {
@@ -132,15 +126,9 @@ declare namespace Cypress {
     // api public entities
     findAllPublicEntities(
       entityType: string
-    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    ): Cypress.Chainable<Cypress.Response<any>>;
     findOnePublicEntities(
       entityId: string
     ): Cypress.Chainable<Cypress.Response<any>>;
-
-    // api public sitemap
-    loadDarkRushPhotographySitemap(): Cypress.Chainable<
-      Cypress.Response<string>
-    >;
-    loadThirtySevenPhotosSitemap(): Cypress.Chainable<Cypress.Response<string>>;
   }
 }

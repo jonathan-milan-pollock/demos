@@ -22,8 +22,6 @@ import {
   validatePublishImagesHaveSlugs,
   validatePublishImagesHaveStorageIds,
   validatePublishStarredImage,
-  validatePublishThreeSixtyImages,
-  validatePublishImagesHaveSmallDimensions,
   validatePublishImagesHaveSeoKeywords,
   validatePublishImagesHaveSeoDescriptions,
   validatePublishImagesHaveTitles,
@@ -40,27 +38,22 @@ export const validatePublishEntity = (
       validateEntityText(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     case EntityType.BestOf:
       validateEntitySlug(documentModel);
       validateEntityOrder(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishThreeSixtyImages(documentModel.images);
       validatePublishImagesHaveTitles(documentModel.images);
       validatePublishImagesHaveSeoDescriptions(documentModel.images);
       validatePublishImagesHaveSeoKeywords(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     case EntityType.Destination:
       validateEntitySlug(documentModel);
       validateEntityOrder(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishThreeSixtyImages(documentModel.images);
       validatePublishStarredImage(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     case EntityType.Event:
       validateEntityGroup(documentModel);
@@ -74,21 +67,17 @@ export const validatePublishEntity = (
       validateEntityLocation(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishThreeSixtyImages(documentModel.images);
       validatePublishImagesAreNotStarredAndLoved(documentModel.images);
       validatePublishStarredImage(documentModel.images);
       validatePublishLovedImages(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     case EntityType.Favorites:
       validateEntitySlug(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishThreeSixtyImages(documentModel.images);
       validatePublishImagesHaveTitles(documentModel.images);
       validatePublishImagesHaveSeoDescriptions(documentModel.images);
       validatePublishImagesHaveSeoKeywords(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     case EntityType.ImagePost:
       validateEntitySlug(documentModel);
@@ -101,6 +90,7 @@ export const validatePublishEntity = (
       validateEntitySlug(documentModel);
       validateEntityTitle(documentModel);
       validateEntityText(documentModel);
+      validateEntitySeoDescription(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
       validatePublishImagesAreNotStarredAndLoved(documentModel.images);
@@ -120,7 +110,6 @@ export const validatePublishEntity = (
       validateOnePublishImage(documentModel.images);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     case EntityType.Review:
       validateEntitySlug(documentModel);
@@ -130,15 +119,12 @@ export const validatePublishEntity = (
       validateOnePublishImage(documentModel.images);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       validateEntityTileDimension(documentModel);
       break;
     case EntityType.ReviewMedia:
       validateEntitySlug(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
       validatePublishImagesHaveSlugs(documentModel.images);
-      validatePublishThreeSixtyImages(documentModel.images);
-      validatePublishImagesHaveSmallDimensions(documentModel.images);
       break;
     default:
       throw new ConflictException(

@@ -68,7 +68,7 @@ export const updateEntity$ = (
     })
   );
 
-export const findByIdAndUpdateOrder$ = (
+export const findEntityByIdAndUpdateOrder$ = (
   entityId: string,
   order: number,
   entityModel: Model<DocumentModel>
@@ -79,6 +79,18 @@ export const findEntityById$ = (
   entityId: string,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel | null> => from(entityModel.findById(entityId));
+
+export const findPublicEntityById$ = (
+  entityId: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> =>
+  from(
+    entityModel.findOne({
+      _id: entityId,
+      isPublic: true,
+      isDeleted: false,
+    })
+  );
 
 export const findOneEntity$ = (
   entityType: EntityType,
@@ -93,6 +105,20 @@ export const findOneEntity$ = (
       watermarkedType,
       group,
       slug,
+    })
+  );
+
+export const findOnePublicEntityForSlug$ = (
+  entityType: EntityType,
+  slug: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> =>
+  from(
+    entityModel.findOne({
+      type: entityType,
+      slug,
+      isPublic: true,
+      isDeleted: false,
     })
   );
 
@@ -137,6 +163,15 @@ export const findAllEntitiesForGroup$ = (
     })
   ).pipe(map(loadDocumentModelsArray));
 
+export const findAllTestEntities$ = (
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel[]> =>
+  from(
+    entityModel.find({
+      type: EntityType.Test,
+    })
+  ).pipe(map(loadDocumentModelsArray));
+
 export const findAllPublicEntities$ = (
   entityType: EntityType,
   entityModel: Model<DocumentModel>
@@ -149,7 +184,7 @@ export const findAllPublicEntities$ = (
     })
   ).pipe(map(loadDocumentModelsArray));
 
-export const findByIdAndSoftDelete$ = (
+export const findEntityByIdAndSoftDelete$ = (
   entityId: string,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel | null> =>

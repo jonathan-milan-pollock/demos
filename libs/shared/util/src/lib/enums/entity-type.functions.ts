@@ -33,7 +33,7 @@ const entityTypeHasStarredImageMap = new Map<EntityType, boolean>([
   [EntityType.Test, false],
 ]);
 
-const entityTypeHasLovedImageMap = new Map<EntityType, boolean>([
+const entityTypeHasLovedImagesMap = new Map<EntityType, boolean>([
   [EntityType.About, false],
   [EntityType.BestOf, false],
   [EntityType.Destination, false],
@@ -78,8 +78,10 @@ export const getEntityTypeHasStarredImage = (
   return hasStarredImage;
 };
 
-export const getEntityTypeHasLovedImage = (entityType: EntityType): boolean => {
-  const hasLovedImage = entityTypeHasLovedImageMap.get(entityType);
+export const getEntityTypeHasLovedImages = (
+  entityType: EntityType
+): boolean => {
+  const hasLovedImage = entityTypeHasLovedImagesMap.get(entityType);
   if (hasLovedImage === undefined)
     throw new ConflictException(
       `Could not get has loved image for entity type ${entityType}`

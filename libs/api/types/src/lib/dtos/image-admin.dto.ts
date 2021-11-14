@@ -33,9 +33,6 @@ export class ImageAdminDto implements ImageAdmin {
   @IsEnum(ImageState)
   state!: ImageState;
 
-  @IsBoolean()
-  isThreeSixtyImage!: boolean;
-
   @IsString()
   @IsOptional()
   threeSixtyImageStorageId?: string;

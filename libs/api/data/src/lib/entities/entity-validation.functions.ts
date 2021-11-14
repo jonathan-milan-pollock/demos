@@ -8,10 +8,3 @@ export const validateEntityFound = (
   if (!documentModel) throw new NotFoundException();
   return documentModel;
 };
-
-export const validateEntityIsPublic = (
-  documentModel: DocumentModel
-): DocumentModel => {
-  if (!documentModel.isPublic) throw new NotFoundException();
-  return documentModel;
-};

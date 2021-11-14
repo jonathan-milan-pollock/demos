@@ -8,6 +8,7 @@ import {
   CronProcessType,
   EntityAdmin,
   EntityOrders,
+  EntityType,
   EntityUpdate,
   EntityWithGroupType,
   EntityWithoutGroupType,
@@ -16,9 +17,10 @@ import { getGoogleDrive } from '@dark-rush-photography/api/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   createTestEntity$,
-  findByIdAndSoftDelete$,
+  findEntityByIdAndSoftDelete$,
   findEntityById$,
   updateEntity$,
+  findEntityByIdAndDelete$,
 } from '../entities/entity-repository.functions';
 import { loadEntityAdmin } from '../entities/entity-load-admin.functions';
 import { startCronProcessType } from '../cron-processes/cron-process-start.functions';
@@ -65,8 +67,10 @@ export class AdminEntitiesService {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       map(validatePublishEntity),
-      concatMap((documentModel) =>
-        this.cronProcessRepositoryProvider.create$(
+      concatMap((documentModel) => {
+        if (documentModel.type === EntityType.Test) return of(undefined);
+
+        return this.cronProcessRepositoryProvider.create$(
           startCronProcessType(
             CronProcessType.PublishEntity,
             documentModel.type,
@@ -75,8 +79,8 @@ export class AdminEntitiesService {
             documentModel.slug,
             postSocialMedia
           )
-        )
-      )
+        );
+      })
     );
   }
 
@@ -143,9 +147,18 @@ export class AdminEntitiesService {
   }
 
   delete$(entityId: string): Observable<void> {
-    return findByIdAndSoftDelete$(entityId, this.entityModel).pipe(
+    return findEntityByIdAndSoftDelete$(entityId, this.entityModel).pipe(
       concatMap((documentModel) => {
-        if (!documentModel) return of(undefined);
+        if (!documentModel) {
+          return of(undefined);
+        }
+
+        if (documentModel.type === EntityType.Test) {
+          return findEntityByIdAndDelete$(
+            documentModel._id,
+            this.entityModel
+          ).pipe(map(() => undefined));
+        }
 
         return this.cronProcessRepositoryProvider.create$(
           startCronProcessType(

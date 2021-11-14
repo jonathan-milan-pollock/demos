@@ -8,6 +8,8 @@ import {
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
 describe('Update Admin Entities', () => {
+  beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
+
   const entityUpdate: EntityUpdate = {
     isPublic: faker.datatype.boolean(),
     title: faker.lorem.sentence(),
@@ -29,21 +31,20 @@ describe('Update Admin Entities', () => {
     },
   };
 
-  beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
-
   it('should update values', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
-      .then((adminEntity) =>
+      .its('body')
+      .then((adminEntity: EntityAdmin) =>
         cy
           .updateAdminEntities(getAuthHeaders(), adminEntity.id, entityUpdate)
           .then(() => adminEntity)
       )
-      .then((adminEntity) =>
+      .then((adminEntity: EntityAdmin) =>
         cy.findOneAdminEntities(getAuthHeaders(), adminEntity.id)
       )
-      .then((response) => {
+      .its('body')
+      .then((adminEntity) => {
         const {
           isPublic,
           title,
@@ -55,7 +56,7 @@ describe('Update Admin Entities', () => {
           location,
           starredImageIsCentered,
           tileDimension,
-        } = response.body;
+        } = adminEntity;
         return {
           isPublic,
           title,
@@ -74,7 +75,7 @@ describe('Update Admin Entities', () => {
   it('should return a status of 204 when update an entity', () =>
     cy
       .createTestAdminEntities(getAuthHeaders())
-      .then((response) => response.body as EntityAdmin)
+      .its('body')
       .then((adminEntity) =>
         cy.updateAdminEntities(getAuthHeaders(), adminEntity.id, entityUpdate)
       )

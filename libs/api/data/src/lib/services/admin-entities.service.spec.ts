@@ -13,6 +13,7 @@ import {
   DUMMY_MONGODB_ID,
   EntityAdmin,
   EntityOrders,
+  EntityType,
   EntityUpdate,
   EntityWithGroupType,
   EntityWithoutGroupType,
@@ -251,6 +252,41 @@ describe('admin-entities.service', () => {
           const [cronProcessType] = mockedStartCronProcessType.mock.calls[0];
           expect(cronProcessType).toBe(CronProcessType.PublishEntity);
           expect(mockedCreate$).toBeCalledTimes(1);
+          done();
+        });
+    });
+
+    it('should not publish an entity for entity type Test', (done: any) => {
+      const mockedFindEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+        .mockReturnValue(of({ type: EntityType.Test } as DocumentModel));
+
+      const mockedValidateEntityFound = jest
+        .spyOn(entityValidationFunctions, 'validateEntityFound')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedValidatePublishEntity = jest
+        .spyOn(entityPublishValidationFunctions, 'validatePublishEntity')
+        .mockImplementation((documentModel) => documentModel as DocumentModel);
+
+      const mockedStartCronProcessType = jest.spyOn(
+        cronProcessStartFunctions,
+        'startCronProcessType'
+      );
+
+      const mockedCreate$ = jest.spyOn(
+        mockedCronProcessRepositoryProvider,
+        'create$'
+      );
+
+      adminEntitiesService
+        .publish$(DUMMY_MONGODB_ID, faker.datatype.boolean())
+        .subscribe(() => {
+          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedValidateEntityFound).toBeCalledTimes(1);
+          expect(mockedValidatePublishEntity).toBeCalledTimes(1);
+          expect(mockedStartCronProcessType).not.toBeCalled();
+          expect(mockedCreate$).not.toBeCalled();
           done();
         });
     });
@@ -604,8 +640,8 @@ describe('admin-entities.service', () => {
 
   describe('delete$', () => {
     it('should delete an entity', (done: any) => {
-      const mockedFindByIdAndSoftDelete$ = jest
-        .spyOn(entityRepositoryFunctions, 'findByIdAndSoftDelete$')
+      const mockedFindEntityByIdAndSoftDelete$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityByIdAndSoftDelete$')
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedStartCronProcessType = jest
@@ -617,7 +653,7 @@ describe('admin-entities.service', () => {
         .mockReturnValue(of(undefined));
 
       adminEntitiesService.delete$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedFindByIdAndSoftDelete$).toBeCalledTimes(1);
+        expect(mockedFindEntityByIdAndSoftDelete$).toBeCalledTimes(1);
         expect(mockedStartCronProcessType).toBeCalledTimes(1);
         const [cronProcessType] = mockedStartCronProcessType.mock.calls[0];
         expect(cronProcessType).toBe(CronProcessType.DeleteEntity);
@@ -626,9 +662,37 @@ describe('admin-entities.service', () => {
       });
     });
 
+    it('should delete an entity for Test entity', (done: any) => {
+      const mockedFindEntityByIdAndSoftDelete$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityByIdAndSoftDelete$')
+        .mockReturnValue(of({ type: EntityType.Test } as DocumentModel));
+
+      const mockedFindEntityByIdAndDelete$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityByIdAndDelete$')
+        .mockReturnValue(of({} as DocumentModel));
+
+      const mockedStartCronProcessType = jest.spyOn(
+        cronProcessStartFunctions,
+        'startCronProcessType'
+      );
+
+      const mockedCreate$ = jest.spyOn(
+        mockedCronProcessRepositoryProvider,
+        'create$'
+      );
+
+      adminEntitiesService.delete$(DUMMY_MONGODB_ID).subscribe(() => {
+        expect(mockedFindEntityByIdAndSoftDelete$).toBeCalledTimes(1);
+        expect(mockedFindEntityByIdAndDelete$).toBeCalledTimes(1);
+        expect(mockedStartCronProcessType).not.toBeCalled();
+        expect(mockedCreate$).not.toBeCalled();
+        done();
+      });
+    });
+
     it('should not delete an entity if entity is not found', (done: any) => {
-      const mockedFindByIdAndSoftDelete$ = jest
-        .spyOn(entityRepositoryFunctions, 'findByIdAndSoftDelete$')
+      const mockedFindEntityByIdAndSoftDelete$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityByIdAndSoftDelete$')
         .mockReturnValue(of(null));
 
       const mockedStartCronProcessType = jest.spyOn(
@@ -642,7 +706,7 @@ describe('admin-entities.service', () => {
       );
 
       adminEntitiesService.delete$(DUMMY_MONGODB_ID).subscribe(() => {
-        expect(mockedFindByIdAndSoftDelete$).toBeCalledTimes(1);
+        expect(mockedFindEntityByIdAndSoftDelete$).toBeCalledTimes(1);
         expect(mockedStartCronProcessType).not.toBeCalled();
         expect(mockedCreate$).not.toBeCalled();
         done();

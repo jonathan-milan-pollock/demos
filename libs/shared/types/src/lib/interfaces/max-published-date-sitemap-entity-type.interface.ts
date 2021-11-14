@@ -1,6 +1,6 @@
 import { SitemapEntityType } from '../enums/sitemap-entity-type.enum';
 
-export interface PublishedDateSitemapEntityType {
-  readonly publishedDate?: string;
+export interface MaxPublishedDateSitemapEntityType {
+  readonly maxPublishedDate: string;
   readonly sitemapEntityType: SitemapEntityType;
 }

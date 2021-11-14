@@ -44,9 +44,7 @@ describe('entity-find-public.provider', () => {
 
   beforeEach(async () => {
     class MockConfigProvider {}
-    const mockedDocumentModel = {
-      find: jest.fn().mockReturnValue(Promise.resolve({} as DocumentModel)),
-    };
+    class MockDocumentModel {}
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -57,7 +55,7 @@ describe('entity-find-public.provider', () => {
         },
         {
           provide: getModelToken(Document.name),
-          useValue: mockedDocumentModel,
+          useClass: MockDocumentModel,
         },
         EntityFindPublicProvider,
       ],
@@ -166,12 +164,38 @@ describe('entity-find-public.provider', () => {
           done();
         });
     });
+
+    it('should return an empty array and events json-ld if events are not found', (done: any) => {
+      const mockedFindAllPublicEntities$ = jest
+        .spyOn(entityRepositoryFunctions, 'findAllPublicEntities$')
+        .mockReturnValue(of([] as DocumentModel[]));
+
+      const mockedLoadEntityMinimalPublic = jest.spyOn(
+        entityLoadPublicFunctions,
+        'loadEntityMinimalPublic'
+      );
+
+      const mockedLoadEventsJsonLdList = jest
+        .spyOn(entityJsonLdFunctions, 'loadEventsJsonLdList')
+        .mockReturnValue({} as JsonLdList);
+
+      entityFindPublicProvider
+        .findAllPublicEntities$(EntityType.Event)
+        .subscribe((result) => {
+          expect(mockedFindAllPublicEntities$).toBeCalledTimes(1);
+          expect(mockedLoadEntityMinimalPublic).not.toBeCalled();
+          expect(mockedLoadEventsJsonLdList).toBeCalledTimes(1);
+          expect(result.minimalPublicEntities.length).toBe(0);
+          expect(result.eventsJsonLdList).toBeDefined();
+          done();
+        });
+    });
   });
 
   describe('findOnePublicEntity$', () => {
     it('should find one public entity', (done: any) => {
-      const mockedFindEntityById$ = jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+      const mockedFindPublicEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findPublicEntityById$')
         .mockReturnValue(
           of({
             type: faker.random.arrayElement(
@@ -186,10 +210,6 @@ describe('entity-find-public.provider', () => {
         .spyOn(entityValidationFunctions, 'validateEntityFound')
         .mockImplementation((documentModel) => documentModel as DocumentModel);
 
-      const mockedValidateEntityIsPublic = jest
-        .spyOn(entityValidationFunctions, 'validateEntityIsPublic')
-        .mockImplementation((documentModel) => documentModel as DocumentModel);
-
       const mockedLoadEntityPublic = jest
         .spyOn(entityLoadPublicFunctions, 'loadEntityPublic')
         .mockReturnValue({} as EntityPublic);
@@ -202,9 +222,8 @@ describe('entity-find-public.provider', () => {
       entityFindPublicProvider
         .findOnePublicEntity$(DUMMY_MONGODB_ID)
         .subscribe((result) => {
-          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedFindPublicEntityById$).toBeCalledTimes(1);
           expect(mockedValidateEntityFound).toBeCalledTimes(1);
-          expect(mockedValidateEntityIsPublic).toBeCalledTimes(1);
           expect(mockedLoadEntityPublic).toBeCalledTimes(1);
           expect(mockedLoadEventJsonLdNewsArticle).not.toBeCalled();
           expect(result.publicEntity).toBeDefined();
@@ -213,9 +232,9 @@ describe('entity-find-public.provider', () => {
         });
     });
 
-    it('should load event json-ld when find one public entity', (done: any) => {
-      const mockedFindEntityById$ = jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+    it('should load event json-ld when find one public event', (done: any) => {
+      const mockedFindPublicEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findPublicEntityById$')
         .mockReturnValue(
           of({
             type: EntityType.Event,
@@ -224,10 +243,6 @@ describe('entity-find-public.provider', () => {
 
       const mockedValidateEntityFound = jest
         .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockImplementation((documentModel) => documentModel as DocumentModel);
-
-      const mockedValidateEntityIsPublic = jest
-        .spyOn(entityValidationFunctions, 'validateEntityIsPublic')
         .mockImplementation((documentModel) => documentModel as DocumentModel);
 
       const mockedLoadEntityPublic = jest
@@ -241,9 +256,8 @@ describe('entity-find-public.provider', () => {
       entityFindPublicProvider
         .findOnePublicEntity$(DUMMY_MONGODB_ID)
         .subscribe((result) => {
-          expect(mockedFindEntityById$).toBeCalledTimes(1);
+          expect(mockedFindPublicEntityById$).toBeCalledTimes(1);
           expect(mockedValidateEntityFound).toBeCalledTimes(1);
-          expect(mockedValidateEntityIsPublic).toBeCalledTimes(1);
           expect(mockedLoadEntityPublic).toBeCalledTimes(1);
           expect(mockedLoadEventJsonLdNewsArticle).toBeCalledTimes(1);
           expect(result.publicEntity).toBeDefined();
@@ -253,8 +267,8 @@ describe('entity-find-public.provider', () => {
     });
 
     it('should throw a not found exception when entity is not found', (done: any) => {
-      const mockedFindEntityById$ = jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
+      const mockedFindPublicEntityById$ = jest
+        .spyOn(entityRepositoryFunctions, 'findPublicEntityById$')
         .mockReturnValue(of(null));
 
       const mockedValidateEntityFound = jest
@@ -263,11 +277,6 @@ describe('entity-find-public.provider', () => {
           throw new NotFoundException();
         });
 
-      const mockedValidateEntityIsPublic = jest.spyOn(
-        entityValidationFunctions,
-        'validateEntityIsPublic'
-      );
-
       const mockedLoadEntityPublic = jest.spyOn(
         entityLoadPublicFunctions,
         'loadEntityPublic'
@@ -285,55 +294,8 @@ describe('entity-find-public.provider', () => {
             done();
           },
           error: (error) => {
-            expect(mockedFindEntityById$).toBeCalledTimes(1);
+            expect(mockedFindPublicEntityById$).toBeCalledTimes(1);
             expect(mockedValidateEntityFound).toBeCalledTimes(1);
-            expect(mockedValidateEntityIsPublic).not.toBeCalled();
-            expect(mockedLoadEntityPublic).not.toBeCalled();
-            expect(mockedLoadEventJsonLdNewsArticle).not.toBeCalled();
-            expect(error).toBeInstanceOf(NotFoundException);
-            done();
-          },
-          complete: () => {
-            done();
-          },
-        });
-    });
-
-    it('should throw a not found exception when entity is not public', (done: any) => {
-      const mockedFindEntityById$ = jest
-        .spyOn(entityRepositoryFunctions, 'findEntityById$')
-        .mockReturnValue(of({} as DocumentModel));
-
-      const mockedValidateEntityFound = jest
-        .spyOn(entityValidationFunctions, 'validateEntityFound')
-        .mockImplementation((documentModel) => documentModel as DocumentModel);
-
-      const mockedValidateEntityIsPublic = jest
-        .spyOn(entityValidationFunctions, 'validateEntityIsPublic')
-        .mockImplementation(() => {
-          throw new NotFoundException();
-        });
-
-      const mockedLoadEntityPublic = jest.spyOn(
-        entityLoadPublicFunctions,
-        'loadEntityPublic'
-      );
-
-      const mockedLoadEventJsonLdNewsArticle = jest.spyOn(
-        entityJsonLdFunctions,
-        'loadEventJsonLdNewsArticle'
-      );
-
-      entityFindPublicProvider
-        .findOnePublicEntity$(DUMMY_MONGODB_ID)
-        .subscribe({
-          next: () => {
-            done();
-          },
-          error: (error) => {
-            expect(mockedFindEntityById$).toBeCalledTimes(1);
-            expect(mockedValidateEntityFound).toBeCalledTimes(1);
-            expect(mockedValidateEntityIsPublic).toBeCalledTimes(1);
             expect(mockedLoadEntityPublic).not.toBeCalled();
             expect(mockedLoadEventJsonLdNewsArticle).not.toBeCalled();
             expect(error).toBeInstanceOf(NotFoundException);

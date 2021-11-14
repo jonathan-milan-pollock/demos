@@ -42,20 +42,6 @@ export const validatePublishImagesHaveSlugs = (images: Image[]): Image[] => {
   return images;
 };
 
-export const validatePublishThreeSixtyImages = (images: Image[]): Image[] => {
-  const threeSixtyImagesWithoutStorageId = images.filter(
-    (image) =>
-      image.isThreeSixtyImage &&
-      !image.threeSixtyImageStorageId &&
-      (image.state === ImageState.Selected || image.state === ImageState.Public)
-  );
-  if (threeSixtyImagesWithoutStorageId.length > 0)
-    throw new ConflictException(
-      'Three sixty images are required to have a three sixty image storage id'
-    );
-  return images;
-};
-
 export const validatePublishImagesAreNotStarredAndLoved = (
   images: Image[]
 ): Image[] => {
@@ -150,22 +136,6 @@ export const validatePublishImagesHaveSeoKeywords = (
   );
   if (imagesWithoutSeoKeywords.length > 0) {
     throw new ConflictException('Image SEO keywords are required');
-  }
-  return images;
-};
-
-export const validatePublishImagesHaveSmallDimensions = (
-  images: Image[]
-): Image[] => {
-  const imagesWithoutSmallDimensions = images.filter(
-    (image) =>
-      (!image.smallDimension ||
-        image.smallDimension.width <= 0 ||
-        image.smallDimension.height <= 0) &&
-      (image.state === ImageState.Selected || image.state === ImageState.Public)
-  );
-  if (imagesWithoutSmallDimensions.length > 0) {
-    throw new ConflictException('Small image dimensions are required');
   }
   return images;
 };

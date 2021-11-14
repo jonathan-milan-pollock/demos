@@ -156,7 +156,6 @@ describe('entity-load-public.functions', () => {
       slug: faker.lorem.word(),
       order: faker.datatype.number(),
       state: faker.random.arrayElement(Object.values(ImageState)),
-      isThreeSixtyImage: faker.datatype.boolean(),
       threeSixtyImageStorageId: faker.datatype.uuid(),
       isStarred: faker.datatype.boolean(),
       isLoved: faker.datatype.boolean(),

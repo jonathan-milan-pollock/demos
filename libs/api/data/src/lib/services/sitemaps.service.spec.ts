@@ -7,8 +7,9 @@ import { of } from 'rxjs';
 
 import { Document } from '../schema/document.schema';
 import { SitemapLoadProvider } from '../providers/sitemap-load.provider';
-import { SitemapLoadMaxPublishedDateProvider } from '../providers/sitemap-load-max-date-published.provider';
-import { SitemapLoadXmlProvider } from '../providers/sitemap-load-xml.provider';
+import { SitemapMaxPublishedDateProvider } from '../providers/sitemap-max-published-date.provider';
+import { SitemapPublishedDateProvider } from '../providers/sitemap-published-date.provider';
+import { SitemapXmlProvider } from '../providers/sitemap-xml.provider';
 import { SitemapsService } from './sitemaps.service';
 
 describe('sitemaps.service', () => {
@@ -26,8 +27,9 @@ describe('sitemaps.service', () => {
         },
         SitemapsService,
         SitemapLoadProvider,
-        SitemapLoadMaxPublishedDateProvider,
-        SitemapLoadXmlProvider,
+        SitemapMaxPublishedDateProvider,
+        SitemapPublishedDateProvider,
+        SitemapXmlProvider,
       ],
     }).compile();
 

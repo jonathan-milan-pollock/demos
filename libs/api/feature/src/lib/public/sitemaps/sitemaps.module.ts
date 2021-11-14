@@ -4,10 +4,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   Document,
   DocumentSchema,
-  SitemapLoadMaxPublishedDateProvider,
+  SitemapMaxPublishedDateProvider,
   SitemapLoadProvider,
-  SitemapLoadXmlProvider,
+  SitemapXmlProvider,
   SitemapsService,
+  SitemapPublishedDateProvider,
 } from '@dark-rush-photography/api/data';
 import { SitemapsController } from './sitemaps.controller';
 
@@ -21,8 +22,9 @@ import { SitemapsController } from './sitemaps.controller';
   providers: [
     SitemapsService,
     SitemapLoadProvider,
-    SitemapLoadMaxPublishedDateProvider,
-    SitemapLoadXmlProvider,
+    SitemapMaxPublishedDateProvider,
+    SitemapPublishedDateProvider,
+    SitemapXmlProvider,
   ],
 })
 export class SitemapsModule {}

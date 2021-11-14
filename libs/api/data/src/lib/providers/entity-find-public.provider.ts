@@ -12,16 +12,13 @@ import {
 import { Document, DocumentModel } from '../schema/document.schema';
 import {
   findAllPublicEntities$,
-  findEntityById$,
+  findPublicEntityById$,
 } from '../entities/entity-repository.functions';
 import {
   loadEntityMinimalPublic,
   loadEntityPublic,
 } from '../entities/entity-load-public.functions';
-import {
-  validateEntityFound,
-  validateEntityIsPublic,
-} from '../entities/entity-validation.functions';
+import { validateEntityFound } from '../entities/entity-validation.functions';
 import {
   loadEventJsonLdNewsArticle,
   loadEventsJsonLdList,
@@ -56,9 +53,8 @@ export class EntityFindPublicProvider {
   findOnePublicEntity$(
     entityId: string
   ): Observable<EntityFindOnePublicResponse> {
-    return findEntityById$(entityId, this.entityModel).pipe(
+    return findPublicEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
-      map(validateEntityIsPublic),
       map((documentModel) => ({
         publicEntity: loadEntityPublic(documentModel),
         eventJsonLdNewsArticle:

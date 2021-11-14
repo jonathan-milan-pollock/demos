@@ -8,6 +8,7 @@ import {
 } from '@dark-rush-photography/shared/types';
 import {
   loadAddImagePostImage,
+  loadAddImageVideo,
   loadAddTestImage,
   loadNewImage,
   loadUpdateImage,
@@ -25,7 +26,6 @@ describe('image-load-document-model.functions', () => {
     slug: faker.lorem.word(),
     order: faker.datatype.number(),
     state: faker.random.arrayElement(Object.values(ImageState)),
-    isThreeSixtyImage: faker.datatype.boolean(),
     threeSixtyImageStorageId: faker.datatype.uuid(),
     isStarred: faker.datatype.boolean(),
     isLoved: faker.datatype.boolean(),
@@ -57,7 +57,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(slug);
       expect(result.order).toBe(order);
       expect(result.state).toBe(ImageState.New);
-      expect(result.isThreeSixtyImage).toBe(false);
       expect(result.isStarred).toBe(false);
       expect(result.isLoved).toBe(false);
     });
@@ -76,7 +75,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(slug);
       expect(result.order).toBe(0);
       expect(result.state).toBe(ImageState.Selected);
-      expect(result.isThreeSixtyImage).toBe(false);
       expect(result.isStarred).toBe(false);
       expect(result.isLoved).toBe(false);
     });
@@ -95,7 +93,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(slug);
       expect(result.order).toBe(0);
       expect(result.state).toBe(ImageState.New);
-      expect(result.isThreeSixtyImage).toBe(false);
       expect(result.isStarred).toBe(false);
       expect(result.isLoved).toBe(false);
     });
@@ -104,8 +101,6 @@ describe('image-load-document-model.functions', () => {
   describe('loadUpdateImage', () => {
     it('should load values', () => {
       const imageUpdate: ImageUpdate = {
-        state: faker.random.arrayElement(Object.values(ImageState)),
-        isThreeSixtyImage: faker.datatype.boolean(),
         threeSixtyImageStorageId: faker.datatype.uuid(),
         isStarred: faker.datatype.boolean(),
         isLoved: faker.datatype.boolean(),
@@ -125,8 +120,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.storageId).toBe(image.storageId);
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
-      expect(result.state).toBe(imageUpdate.state);
-      expect(result.isThreeSixtyImage).toBe(imageUpdate.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         imageUpdate.threeSixtyImageStorageId
       );
@@ -151,7 +144,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(order);
       expect(result.state).toBe(image.state);
-      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId
       );
@@ -176,7 +168,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(state);
-      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId
       );
@@ -201,7 +192,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(image.state);
-      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId
       );
@@ -229,7 +219,6 @@ describe('image-load-document-model.functions', () => {
       expect(result.slug).toBe(image.slug);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(image.state);
-      expect(result.isThreeSixtyImage).toBe(image.isThreeSixtyImage);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId
       );
@@ -240,6 +229,17 @@ describe('image-load-document-model.functions', () => {
       expect(result.seoDescription).toBe(image.seoDescription);
       expect(result.seoKeywords).toBe(image.seoKeywords);
       expect(result.smallDimension).toEqual(smallDimension);
+    });
+  });
+
+  describe('loadAddImageVideo', () => {
+    it('should load values', () => {
+      const slug = faker.lorem.word();
+
+      const result = loadAddImageVideo(slug);
+
+      expect(result.storageId).toBeDefined();
+      expect(result.slug).toBe(slug);
     });
   });
 });

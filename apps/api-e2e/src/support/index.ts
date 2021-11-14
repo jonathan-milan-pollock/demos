@@ -23,7 +23,6 @@ import './commands/api/admin/admin-images.commands';
 
 // api public
 import './commands/api/public/entities.commands';
-import './commands/api/public/sitemap.commands';
 
 // api
 import './commands/api/delete-test-data.commands';

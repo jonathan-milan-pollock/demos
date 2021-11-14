@@ -9,7 +9,7 @@ import {
 } from '@dark-rush-photography/shared/types';
 import { getAuthHeaders } from '../../../../support/commands/api/auth-headers.functions';
 
-describe('Order Admin Images', () => {
+describe('Order Images Admin Images', () => {
   beforeEach(() => cy.login().then(() => cy.deleteTestData(getAuthHeaders())));
 
   it('should order images', () => {

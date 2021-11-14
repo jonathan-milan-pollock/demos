@@ -10,12 +10,10 @@ import {
   validatePublishImagesHaveSeoDescriptions,
   validatePublishImagesHaveSeoKeywords,
   validatePublishImagesHaveSlugs,
-  validatePublishImagesHaveSmallDimensions,
   validatePublishImagesHaveStorageIds,
   validatePublishImagesHaveTitles,
   validatePublishLovedImages,
   validatePublishStarredImage,
-  validatePublishThreeSixtyImages,
 } from './image-field-validation.functions';
 
 describe('image-validation.functions', () => {
@@ -163,61 +161,6 @@ describe('image-validation.functions', () => {
       };
       expect(result).toThrow(ConflictException);
       expect(result).toThrow('Image slugs are required');
-    });
-  });
-
-  describe('validatePublishThreeSixtyImages', () => {
-    it('should return images when all three sixty publish images have three sixty image storage ids', () => {
-      const images = [
-        {
-          state: ImageState.Selected,
-          isThreeSixtyImage: true,
-          threeSixtyImageStorageId: faker.datatype.uuid(),
-        } as Image,
-        {
-          state: ImageState.Public,
-          isThreeSixtyImage: true,
-          threeSixtyImageStorageId: faker.datatype.uuid(),
-        } as Image,
-      ];
-      const result = validatePublishThreeSixtyImages(images);
-      expect(result).toEqual(images);
-    });
-
-    it('should return images when new or archived three sixty publish images do not have three sixty storage ids', () => {
-      const images = [
-        {
-          state: ImageState.New,
-          isThreeSixtyImage: true,
-        } as Image,
-        {
-          state: ImageState.Archived,
-          isThreeSixtyImage: true,
-        } as Image,
-      ];
-      const result = validatePublishThreeSixtyImages(images);
-      expect(result).toEqual(images);
-    });
-
-    it('should throw a conflict exception when a publish three sixty image does not have a three sixty storage id', () => {
-      const images = [
-        {
-          state: ImageState.Selected,
-          isThreeSixtyImage: true,
-        } as Image,
-        {
-          state: ImageState.Public,
-          isThreeSixtyImage: true,
-          threeSixtyImageStorageId: faker.datatype.uuid(),
-        } as Image,
-      ];
-      const result = () => {
-        validatePublishThreeSixtyImages(images);
-      };
-      expect(result).toThrow(ConflictException);
-      expect(result).toThrow(
-        'Three sixty images are required to have a three sixty image storage id'
-      );
     });
   });
 
@@ -590,110 +533,6 @@ describe('image-validation.functions', () => {
       };
       expect(result).toThrow(ConflictException);
       expect(result).toThrow('Image SEO keywords are required');
-    });
-  });
-
-  describe('validatePublishImagesHaveSmallDimensions', () => {
-    it('should return images when publish images all have small dimensions', () => {
-      const images = [
-        {
-          state: ImageState.Selected,
-          smallDimension: {
-            width: faker.datatype.number({ min: 1 }),
-            height: faker.datatype.number({ min: 1 }),
-          },
-        } as Image,
-        {
-          state: ImageState.Public,
-          smallDimension: {
-            width: faker.datatype.number({ min: 1 }),
-            height: faker.datatype.number({ min: 1 }),
-          },
-        } as Image,
-      ];
-      const result = validatePublishImagesHaveSmallDimensions(images);
-      expect(result).toEqual(images);
-    });
-
-    it('should return images when new or archived images do not have small dimensions', () => {
-      const images = [
-        {
-          state: ImageState.New,
-        } as Image,
-        {
-          state: ImageState.Archived,
-        } as Image,
-      ];
-      const result = validatePublishImagesHaveSmallDimensions(images);
-      expect(result).toEqual(images);
-    });
-
-    it('should throw a conflict exception when a publish image does not have a small dimension', () => {
-      const images = [
-        {
-          state: ImageState.Selected,
-        } as Image,
-        {
-          state: ImageState.Public,
-          smallDimension: {
-            width: faker.datatype.number({ min: 1 }),
-            height: faker.datatype.number({ min: 1 }),
-          },
-        } as Image,
-      ];
-      const result = () => {
-        validatePublishImagesHaveSmallDimensions(images);
-      };
-      expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Small image dimensions are required');
-    });
-
-    it('should throw a conflict exception when a publish image does not have a small dimension width greater than 0', () => {
-      const images = [
-        {
-          state: ImageState.Selected,
-          smallDimension: {
-            width: faker.datatype.number({ max: 0 }),
-            height: faker.datatype.number({ min: 1 }),
-          },
-        } as Image,
-        {
-          state: ImageState.Public,
-          smallDimension: {
-            width: faker.datatype.number({ min: 1 }),
-            height: faker.datatype.number({ min: 1 }),
-          },
-        } as Image,
-      ];
-      const result = () => {
-        validatePublishImagesHaveSmallDimensions(images);
-      };
-      expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Small image dimensions are required');
-    });
-
-    it('should throw a conflict exception when a publish image does not have a small dimension height greater than 0', () => {
-      const images = [
-        {
-          state: ImageState.Selected,
-          smallDimension: {
-            width: faker.datatype.number({ min: 1 }),
-            height: faker.datatype.number({ max: 0 }),
-          },
-        } as Image,
-        {
-          state: ImageState.Public,
-          smallDimension: {
-            width: faker.datatype.number({ min: 1 }),
-            height: faker.datatype.number({ min: 1 }),
-          },
-        } as Image,
-      ];
-      const result = () => {
-        validatePublishImagesHaveSmallDimensions(images);
-      };
-      expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Small image dimensions are required');
     });
   });
 });

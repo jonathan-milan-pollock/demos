@@ -12,7 +12,6 @@ export const imageSchema = {
     enum: Object.keys(ImageState),
     required: true,
   },
-  isThreeSixtyImage: { type: Boolean, required: true, default: false },
   threeSixtyImageStorageId: { type: String, required: false },
   isStarred: { type: Boolean, required: true, default: false },
   isLoved: { type: Boolean, required: true, default: false },

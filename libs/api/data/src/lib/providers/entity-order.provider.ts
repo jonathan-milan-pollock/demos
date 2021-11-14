@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 
 import { EntityOrders } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { findByIdAndUpdateOrder$ } from '../entities/entity-repository.functions';
+import { findEntityByIdAndUpdateOrder$ } from '../entities/entity-repository.functions';
 
 @Injectable()
 export class EntityOrderProvider {
@@ -20,7 +20,7 @@ export class EntityOrderProvider {
 
     return from(entityOrders.entityIdOrders).pipe(
       concatMap(({ entityId, order }) =>
-        findByIdAndUpdateOrder$(entityId, order, this.entityModel)
+        findEntityByIdAndUpdateOrder$(entityId, order, this.entityModel)
       ),
       last(),
       map(() => undefined)

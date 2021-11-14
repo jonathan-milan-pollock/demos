@@ -36,7 +36,7 @@ describe('Find one Public Entities', () => {
             starredImageIsCentered: false,
           })
           .then(() => cy.findOnePublicEntities(entityId))
-          .its('body.type')
+          .its('body.publicEntity.type')
           .should('equal', EntityType.Test)
       ));
 
