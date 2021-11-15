@@ -3,7 +3,7 @@ LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
 RUN apt-get update
 RUN apt-get install -y libasound2
-RUN apt-get install -y libc6-dev
+RUN apt-get install -y libc6
 RUN apt-get install -y wget
 
 WORKDIR /usr/bin
