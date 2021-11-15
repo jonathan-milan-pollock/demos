@@ -2,6 +2,7 @@ FROM node:14.16.1
 LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
 RUN apt-get update
+RUN apt-get install -y libasound2
 RUN apt-get install -y wget
 
 # $ wget https://github.com/mltframework/shotcut/releases/download/v15.06/shotcut-debian7-x86_64-150601.tar.bz2
