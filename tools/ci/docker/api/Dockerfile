@@ -14,7 +14,7 @@ RUN apt-get install -y wget
 # RUN apt-get install shotcut --classic
 WORKDIR /usr/bin
 RUN wget https://github.com/mltframework/shotcut/releases/download/v21.10.31/shotcut-linux-x86_64-211031.AppImage && \
-  shotcut-linux-x86_64-211031.AppImage --appimage-extract && \
+  exec shotcut-linux-x86_64-211031.AppImage --appimage-extract && \
   rm shotcut-linux-x86_64-211031.AppImage
 
 
