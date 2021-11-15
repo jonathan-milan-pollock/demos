@@ -9,7 +9,6 @@
 - use undefined or unknown instead of null
 - use underscores as number separators
 - use ids to match label for, classes for css, and data-testid for cypress
-- use ems instead of px for measurement
 - use a for links to other pages and button for actions
 - don't put href on anchor tags causes the page to reload
 - names of variables and functions for Observables should end with $
@@ -69,19 +68,8 @@
   - on Windows use installer
     - <https://shotcut.org/download/>
     - Add C:\Program Files\Shotcut to System Variables Path to use melt.exe
+  - on MAC
+    - brew install shotcut
 - setup Android emulator
-
----
-
-## when generating new files
-
-### ui and ui feature components create with NxConsole
-
-- use these settings:
-
-  - style: scss
-  - select SkipTests
-
-- other files should be created manually
 
 ---
