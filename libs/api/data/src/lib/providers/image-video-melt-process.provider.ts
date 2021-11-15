@@ -2,7 +2,7 @@
 import * as fs from 'fs-extra';
 import util = require('util');
 const exec = util.promisify(require('child_process').exec);
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { concatMap, from, Observable } from 'rxjs';
 
@@ -25,11 +25,7 @@ import { ConfigProvider } from './config.provider';
 
 @Injectable()
 export class ImageVideoMeltProcessProvider {
-  private readonly logger: Logger;
-
-  constructor(private readonly configProvider: ConfigProvider) {
-    this.logger = new Logger(ImageVideoMeltProcessProvider.name);
-  }
+  constructor(private readonly configProvider: ConfigProvider) {}
 
   meltProcess$(
     imageVideo: ImageVideo,
@@ -39,8 +35,6 @@ export class ImageVideoMeltProcessProvider {
     const meltCommand = this.configProvider.production
       ? MELT_COMMAND_PROD
       : MELT_COMMAND_DEV;
-
-    this.logger.log(`melt command ${meltCommand}`);
 
     return createTempFile$(getImageVideoFileName(imageVideo.slug)).pipe(
       concatMap((imageVideoFilePath) =>
