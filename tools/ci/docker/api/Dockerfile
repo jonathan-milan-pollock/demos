@@ -28,8 +28,6 @@ RUN wget https://github.com/mltframework/shotcut/releases/download/v21.10.31/sho
 # COPY /opt/shotcut/Shotcut.app/shotcut/. /usr/bin/shotcut
 # sudo ln -sf
 
-RUN ls /usr/bin/shotcut
-
 WORKDIR /usr/src/app
 COPY dist/node_modules/ ./node_modules/
 COPY dist/apps/api/. /usr/src/app/dist/api
