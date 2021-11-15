@@ -1,10 +1,12 @@
-FROM node:14.16.1
+FROM ubuntu
 LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
+
 RUN apt-get update
+RUN apt-get install -y curl wget make g++
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y nodejs
 RUN apt-get install -y libasound2
-RUN apt-get install -y libc6
-RUN apt-get install -y wget
 
 WORKDIR /usr/bin
 RUN wget https://github.com/mltframework/shotcut/releases/download/v21.10.31/shotcut-linux-x86_64-211031.AppImage && \
