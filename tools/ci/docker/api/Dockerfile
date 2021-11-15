@@ -18,7 +18,7 @@ RUN wget https://github.com/mltframework/shotcut/releases/download/v21.10.31/sho
   /usr/bin/shotcut-linux-x86_64-211031.AppImage --appimage-extract && \
   rm /usr/bin/shotcut-linux-x86_64-211031.AppImage
 
-COPY squashfs-root /usr/bin/shotcut
+#COPY /usr/bin/squashfs-root /us
 #shotcut/usr/bin/melt
 
 #&& rm -rf /opt/shotcut
