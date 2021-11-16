@@ -10,6 +10,8 @@ RUN apt-get install -y libx11-6
 RUN apt-get install -y libasound2
 RUN apt-get install -y libjack-jackd2-0
 RUN apt-get install -y libcairo2
+RUN apt-get install -y libdrm
+
 
 WORKDIR /usr/bin
 RUN wget https://github.com/mltframework/shotcut/releases/download/v21.10.31/shotcut-linux-x86_64-211031.AppImage && \
