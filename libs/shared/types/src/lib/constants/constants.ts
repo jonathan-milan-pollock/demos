@@ -8,7 +8,7 @@ export const DUMMY_CRON_PROCESS_ROW_KEY =
 export const DUMMY_MONGODB_ID = '000000000000000000000000';
 export const FFMPEG_COMMAND_DEV =
   '/Applications/Shotcut.app/Contents/MacOS/ffmpeg';
-export const FFMPEG_COMMAND_PROD = '/usr/bin/squashfs-root/usr/bin/ffmpeg';
+export const FFMPEG_COMMAND_PROD = '/opt/Shotcut/Shotcut.app/ffmpeg';
 export const IMAGE_FILE_EXTENSION = '.jpg';
 export const IMAGE_MIME_TYPE = 'image/jpeg';
 export const IMAGE_URL_PREFIX_DEV =
@@ -21,7 +21,7 @@ export const IMAGE_VIDEO_MIME_TYPE = 'video/mp4';
 export const IS_PUBLIC = 'isPublic';
 export const JWT = 'jwt';
 export const MELT_COMMAND_DEV = '/Applications/Shotcut.app/Contents/MacOS/melt';
-export const MELT_COMMAND_PROD = '/usr/bin/squashfs-root/usr/bin/qmelt';
+export const MELT_COMMAND_PROD = '/opt/Shotcut/Shotcut.app/melt';
 export const RESIZE_EXACT_FIT_RED_BACKGROUND_COLOR = 30;
 export const RESIZE_EXACT_FIT_GREEN_BACKGROUND_COLOR = 30;
 export const RESIZE_EXACT_FIT_BLUE_BACKGROUND_COLOR = 30;
