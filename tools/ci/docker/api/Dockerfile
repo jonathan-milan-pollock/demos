@@ -2,11 +2,14 @@ FROM ubuntu:rolling
 LABEL maintainer milan@darkrush.photo
 VOLUME ["/root"]
 
+RUN apt-get update
+RUN apt-get install -y nodejs
+
 #
 # Update repos and install dependencies
 #
 RUN set -e \
-  &&  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --yes \
+  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --yes \
   bzip2 \
   ca-certificates \
   curl \
