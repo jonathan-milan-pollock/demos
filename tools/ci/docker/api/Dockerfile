@@ -15,6 +15,7 @@ RUN apt-get update \
   libegl1 \
   libxext6 \
   libx11-6 \
+  curl \
   && rm -rf /var/lib/apt/lists/*
 
 # Env vars for the nvidia-container-runtime.
