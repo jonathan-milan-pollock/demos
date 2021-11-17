@@ -10,7 +10,7 @@ RUN apt-get install -y libx11-6
 RUN apt-get install -y libasound2
 RUN apt-get install -y libjack-jackd2-0
 RUN apt-get install -y libcairo2
-RUN apt-get install -y libdrm
+RUN apt-get install -y libdrm-dev
 
 
 WORKDIR /usr/bin
