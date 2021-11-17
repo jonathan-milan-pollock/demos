@@ -16,7 +16,7 @@ RUN apt-get install -y libsox-dev
 RUN apt-get install -y libxml2
 RUN apt-get install -y libgl-dev
 RUN apt-get install -y libpulse-dev
-RUN apt-get install -y libglvnd
+RUN apt-get install -y libglvnd-dev
 
 WORKDIR /usr/bin
 RUN wget https://github.com/mltframework/shotcut/releases/download/v21.10.31/shotcut-linux-x86_64-211031.AppImage && \
