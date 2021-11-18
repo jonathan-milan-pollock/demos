@@ -4,9 +4,10 @@ VOLUME ["/root"]
 
 RUN apt-get update
 RUN apt-get install -y nodejs
-#RUN apt-get install -y libsox-dev
 
-# Dependencies for glvnd and X11.
+#
+# Dependencies for glvnd, X11 and shotcut
+#
 RUN apt-get update \
   && apt-get install -y -qq --no-install-recommends \
   libglvnd0 \
@@ -15,11 +16,39 @@ RUN apt-get update \
   libegl1 \
   libxext6 \
   libx11-6 \
+  bzip2 \
+  ca-certificates \
   curl \
+  libavcodec-extra \
+  libasound2 \
+  libpulse0 \
   xz-utils \
+  libc6 \
+  libcairo-gobject2 \
+  libcairo2 \
+  libcanberra-gtk-module \
+  libcanberra-gtk3-module \
+  libgcc1 \
+  libglib2.0-0 \
+  libpango-1.0-0 \
+  libpangocairo-1.0-0 \
+  libstdc++6 \
+  libx11-xcb1 \
+  libxcb-shm0 \
+  libxcb1 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxfixes3 \
+  libxrender1 \
+  libxt6 \
+  libjack-jackd2-0 \
+  netsurf-common \
+  xdg-utils \
   && rm -rf /var/lib/apt/lists/*
 
-# Env vars for the nvidia-container-runtime.
+#
+# Env vars for the nvidia-container-runtime
+#
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
 
