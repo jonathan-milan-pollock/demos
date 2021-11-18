@@ -46,6 +46,7 @@ RUN apt-get update \
   xdg-utils \
   libsox-dev \
   libopengl0 \
+  xvfb \
   && rm -rf /var/lib/apt/lists/*
 
 #
