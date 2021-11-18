@@ -44,6 +44,8 @@ RUN apt-get update \
   libjack-jackd2-0 \
   netsurf-common \
   xdg-utils \
+  libsox-dev \
+  libopengl0 \
   && rm -rf /var/lib/apt/lists/*
 
 #
