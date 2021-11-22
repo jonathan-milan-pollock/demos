@@ -21,8 +21,6 @@ import { WebSocketMessageProviderModule } from './web-socket-message-provider.mo
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get('mongoDbConnectionString'),
         useNewUrlParser: true,
-        useFindAndModify: false,
-        useCreateIndex: true,
         useUnifiedTopology: true,
       }),
       inject: [ConfigService],

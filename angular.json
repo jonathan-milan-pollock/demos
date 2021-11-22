@@ -1,9 +1,5 @@
 {
   "version": 1,
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "defaultProject": "website",
   "schematics": {
     "@nrwl/angular:application": {
       "style": "scss",
@@ -82,7 +78,8 @@
             "lintFilePatterns": ["apps/api/**/*.ts"]
           }
         }
-      }
+      },
+      "tags": ["scope:api", "type:app"]
     },
     "api-data": {
       "root": "libs/api/data",
@@ -105,7 +102,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:api", "type:data"]
     },
     "api-e2e": {
       "root": "apps/api-e2e",
@@ -128,7 +126,9 @@
             "lintFilePatterns": ["apps/api-e2e/**/*.{js,ts}"]
           }
         }
-      }
+      },
+      "tags": ["scope:api", "type:app"],
+      "implicitDependencies": ["api"]
     },
     "api-feature": {
       "root": "libs/api/feature",
@@ -141,7 +141,8 @@
             "lintFilePatterns": ["libs/api/feature/**/*.ts"]
           }
         }
-      }
+      },
+      "tags": ["scope:api", "type:feature"]
     },
     "api-types": {
       "root": "libs/api/types",
@@ -154,7 +155,8 @@
             "lintFilePatterns": ["libs/api/types/**/*.ts"]
           }
         }
-      }
+      },
+      "tags": ["scope:api", "type:types"]
     },
     "api-util": {
       "root": "libs/api/util",
@@ -177,7 +179,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:api", "type:util"]
     },
     "best-of": {
       "root": "apps/best-of",
@@ -220,7 +223,8 @@
             "lintFilePatterns": ["apps/best-of/**/*.{ts,tsx,js,jsx}"]
           }
         }
-      }
+      },
+      "tags": ["scope:best-of", "type:app"]
     },
     "best-of-data": {
       "root": "libs/best-of/data",
@@ -243,7 +247,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:best-of", "type:data"]
     },
     "best-of-e2e": {
       "root": "apps/best-of-e2e",
@@ -269,7 +274,9 @@
             "lintFilePatterns": ["apps/best-of-e2e/**/*.{js,ts}"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["best-of"]
     },
     "best-of-feature": {
       "root": "libs/best-of/feature",
@@ -282,7 +289,8 @@
             "lintFilePatterns": ["libs/best-of/feature/**/*.{ts,tsx,js,jsx}"]
           }
         }
-      }
+      },
+      "tags": ["scope:best-of", "type:feature"]
     },
     "best-of-types": {
       "root": "libs/best-of/types",
@@ -295,7 +303,8 @@
             "lintFilePatterns": ["libs/best-of/types/**/*.{ts,tsx,js,jsx}"]
           }
         }
-      }
+      },
+      "tags": ["scope:best-of", "type:types"]
     },
     "best-of-ui": {
       "root": "libs/best-of/ui",
@@ -308,7 +317,8 @@
             "lintFilePatterns": ["libs/best-of/ui/**/*.{ts,tsx,js,jsx}"]
           }
         }
-      }
+      },
+      "tags": ["scope:best-of", "type:ui"]
     },
     "best-of-util": {
       "root": "libs/best-of/util",
@@ -331,7 +341,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:best-of", "type:util"]
     },
     "image-elements": {
       "root": "libs/image-elements",
@@ -378,7 +389,8 @@
           "style": "scss",
           "storybook": false
         }
-      }
+      },
+      "tags": ["scope:image-elements", "type:ui"]
     },
     "shared-types": {
       "root": "libs/shared/types",
@@ -391,7 +403,8 @@
             "lintFilePatterns": ["libs/shared/types/**/*.ts"]
           }
         }
-      }
+      },
+      "tags": ["scope:shared", "type:types"]
     },
     "shared-util": {
       "root": "libs/shared/util",
@@ -414,7 +427,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:shared", "type:util"]
     },
     "ui-storybook": {
       "projectType": "library",
@@ -466,7 +480,8 @@
             }
           }
         }
-      }
+      },
+      "tags": ["scope:ui-storybook", "type:ui"]
     },
     "ui-storybook-e2e": {
       "root": "apps/ui-storybook-e2e",
@@ -492,7 +507,9 @@
             "lintFilePatterns": ["apps/ui-storybook-e2e/**/*.{js,ts}"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["ui-storybook"]
     },
     "website": {
       "projectType": "application",
@@ -628,7 +645,8 @@
             "production": {}
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:app"]
     },
     "website-app": {
       "projectType": "library",
@@ -645,7 +663,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:feature"]
     },
     "website-data": {
       "projectType": "library",
@@ -672,7 +691,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:data"]
     },
     "website-e2e": {
       "root": "apps/website-e2e",
@@ -695,7 +715,9 @@
             "lintFilePatterns": ["apps/website-e2e/**/*.{js,ts}"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["website"]
     },
     "website-features-admin": {
       "projectType": "library",
@@ -712,7 +734,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:feature"]
     },
     "website-features-home": {
       "projectType": "library",
@@ -729,7 +752,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:feature"]
     },
     "website-host": {
       "root": "apps/website-host",
@@ -765,7 +789,8 @@
             "lintFilePatterns": ["apps/website-host/**/*.ts"]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:app"]
     },
     "website-types": {
       "projectType": "library",
@@ -782,7 +807,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:types"]
     },
     "website-ui-ui-admin": {
       "projectType": "library",
@@ -799,7 +825,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:ui"]
     },
     "website-ui-ui-common": {
       "projectType": "library",
@@ -816,7 +843,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:ui"]
     },
     "website-ui-ui-directives": {
       "projectType": "library",
@@ -843,7 +871,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:ui"]
     },
     "website-ui-ui-home": {
       "projectType": "library",
@@ -860,7 +889,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:ui"]
     },
     "website-ui-ui-shell": {
       "projectType": "library",
@@ -877,7 +907,8 @@
             ]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:ui"]
     },
     "website-util": {
       "projectType": "library",
@@ -904,7 +935,8 @@
             "coverageReporters": ["text", "json", "lcov"]
           }
         }
-      }
+      },
+      "tags": ["scope:website", "type:util"]
     }
   }
 }

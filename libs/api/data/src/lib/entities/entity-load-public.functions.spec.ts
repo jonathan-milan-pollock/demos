@@ -1,11 +1,15 @@
+import { ConflictException } from '@nestjs/common';
+
 import * as faker from 'faker';
 
 import {
+  Dimension,
   DUMMY_MONGODB_ID,
   EntityType,
   Image,
   ImagePublic,
   ImageState,
+  Location,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
 import {
@@ -17,6 +21,11 @@ jest.mock('@dark-rush-photography/shared/util', () => ({
   ...jest.requireActual('@dark-rush-photography/shared/util'),
 }));
 import * as sharedUtil from '@dark-rush-photography/shared/util';
+
+jest.mock('./entity-load.functions', () => ({
+  ...jest.requireActual('./entity-load.functions'),
+}));
+import * as entityLoadFunctions from './entity-load.functions';
 
 jest.mock('../images/image-field-validation.functions', () => ({
   ...jest.requireActual('../images/image-field-validation.functions'),
@@ -64,6 +73,10 @@ describe('entity-load-public.functions', () => {
         .spyOn(imageLoadFunctions, 'loadImagePublic')
         .mockReturnValue({} as ImagePublic);
 
+      jest
+        .spyOn(entityLoadFunctions, 'loadTileDimension')
+        .mockReturnValue({} as Dimension);
+
       const result = loadEntityMinimalPublic({
         _id: DUMMY_MONGODB_ID,
       } as DocumentModel);
@@ -84,11 +97,16 @@ describe('entity-load-public.functions', () => {
         .spyOn(imageLoadFunctions, 'loadImagePublic')
         .mockReturnValue({} as ImagePublic);
 
+      const mockedLoadTileDimension = jest
+        .spyOn(entityLoadFunctions, 'loadTileDimension')
+        .mockReturnValue({} as Dimension);
+
       const result = loadEntityMinimalPublic(documentModel);
 
       expect(mockedGetEntityTypeHasStarredImage).toBeCalledTimes(1);
       expect(mockedValidatePublicStarredImage).toBeCalledTimes(1);
       expect(mockedLoadImagePublic).toBeCalledTimes(1);
+      expect(mockedLoadTileDimension).toBeCalledTimes(1);
 
       expect(result.type).toBe(documentModel.type);
       expect(result.id).toBe(documentModel._id);
@@ -103,7 +121,7 @@ describe('entity-load-public.functions', () => {
         documentModel.starredImageIsCentered
       );
       expect(result.starredImage).toBeDefined();
-      expect(result.tileDimension).toEqual(documentModel.tileDimension);
+      expect(result.tileDimension).toBeDefined();
     });
 
     it('should load an entity without starred image if entity does not have a starred image', () => {
@@ -111,7 +129,7 @@ describe('entity-load-public.functions', () => {
         .spyOn(sharedUtil, 'getEntityTypeHasStarredImage')
         .mockReturnValue(false);
 
-      const mockedValidateEntityStarredPublicImage = jest.spyOn(
+      const mockedValidatePublicStarredImage = jest.spyOn(
         imageFieldValidationFunctions,
         'validatePublicStarredImage'
       );
@@ -121,16 +139,38 @@ describe('entity-load-public.functions', () => {
         'loadImagePublic'
       );
 
+      const mockedLoadTileDimension = jest
+        .spyOn(entityLoadFunctions, 'loadTileDimension')
+        .mockReturnValue({} as Dimension);
+
       const result = loadEntityMinimalPublic(documentModel);
 
       expect(mockedGetEntityTypeHasStarredImage).toBeCalledTimes(1);
-      expect(mockedValidateEntityStarredPublicImage).not.toBeCalled();
+      expect(mockedValidatePublicStarredImage).not.toBeCalled();
       expect(mockedLoadImagePublic).not.toBeCalled();
-
-      expect(result.starredImage).not.toBeDefined();
+      expect(result.starredImage).toBeUndefined();
+      expect(mockedLoadTileDimension).toBeCalledTimes(1);
     });
 
     it('should load undefined values', () => {
+      const mockedGetEntityTypeHasStarredImage = jest
+        .spyOn(sharedUtil, 'getEntityTypeHasStarredImage')
+        .mockReturnValue(false);
+
+      const mockedValidatePublicStarredImage = jest.spyOn(
+        imageFieldValidationFunctions,
+        'validatePublicStarredImage'
+      );
+
+      const mockedLoadImagePublic = jest.spyOn(
+        imageLoadFunctions,
+        'loadImagePublic'
+      );
+
+      const mockedLoadTileDimension = jest
+        .spyOn(entityLoadFunctions, 'loadTileDimension')
+        .mockReturnValue(undefined);
+
       const result = loadEntityMinimalPublic({
         ...documentModel,
         title: undefined,
@@ -140,11 +180,56 @@ describe('entity-load-public.functions', () => {
         tileDimension: undefined,
       } as DocumentModel);
 
+      expect(mockedGetEntityTypeHasStarredImage).toBeCalledTimes(1);
+      expect(mockedValidatePublicStarredImage).not.toBeCalled();
+      expect(mockedLoadImagePublic).not.toBeCalled();
+      expect(mockedLoadTileDimension).toBeCalledTimes(1);
+
       expect(result.title).toBe('');
       expect(result.text).toBe('');
       expect(result.createdDate).toBe('');
       expect(result.publishedDate).toBe('');
+      expect(result.starredImage).toBeUndefined();
       expect(result.tileDimension).toBeUndefined();
+    });
+
+    it('should throw a conflict exception when starred image is not found', () => {
+      const mockedGetEntityTypeHasStarredImage = jest
+        .spyOn(sharedUtil, 'getEntityTypeHasStarredImage')
+        .mockReturnValue(true);
+
+      const mockedValidatePublicStarredImage = jest
+        .spyOn(imageFieldValidationFunctions, 'validatePublicStarredImage')
+        .mockImplementation(() => {
+          throw new ConflictException();
+        });
+
+      const mockedLoadImagePublic = jest.spyOn(
+        imageLoadFunctions,
+        'loadImagePublic'
+      );
+
+      const mockedLoadTileDimension = jest.spyOn(
+        entityLoadFunctions,
+        'loadTileDimension'
+      );
+
+      const result = () => {
+        return loadEntityMinimalPublic({
+          ...documentModel,
+          title: undefined,
+          text: undefined,
+          createdDate: undefined,
+          publishedDate: undefined,
+          tileDimension: undefined,
+        } as DocumentModel);
+      };
+
+      expect(result).toThrow(ConflictException);
+      expect(mockedGetEntityTypeHasStarredImage).toBeCalledTimes(1);
+      expect(mockedValidatePublicStarredImage).toBeCalledTimes(1);
+      expect(mockedLoadImagePublic).not.toBeCalled();
+      expect(mockedLoadTileDimension).not.toBeCalled();
     });
   });
 
@@ -196,6 +281,10 @@ describe('entity-load-public.functions', () => {
 
     it('should not contain an _id value', () => {
       jest
+        .spyOn(entityLoadFunctions, 'loadLocation')
+        .mockReturnValue({} as Location);
+
+      jest
         .spyOn(imageLoadFunctions, 'loadImagePublic')
         .mockReturnValue({} as ImagePublic);
 
@@ -208,6 +297,10 @@ describe('entity-load-public.functions', () => {
     });
 
     it('should load an entity with all values', () => {
+      const mockedLoadLocation = jest
+        .spyOn(entityLoadFunctions, 'loadLocation')
+        .mockReturnValue({} as Location);
+
       const mockedLoadImagePublic = jest
         .spyOn(imageLoadFunctions, 'loadImagePublic')
         .mockReturnValue({} as ImagePublic);
@@ -221,6 +314,7 @@ describe('entity-load-public.functions', () => {
         ],
       } as DocumentModel);
 
+      expect(mockedLoadLocation).toBeCalledTimes(1);
       expect(mockedLoadImagePublic).toBeCalledTimes(3);
 
       expect(result.type).toBe(documentModel.type);
@@ -234,11 +328,15 @@ describe('entity-load-public.functions', () => {
       expect(result.publishedDate).toBe(documentModel.publishedDate);
       expect(result.seoDescription).toBe(documentModel.seoDescription);
       expect(result.seoKeywords).toBe(documentModel.seoKeywords);
-      expect(result.location).toEqual(documentModel.location);
+      expect(result.location).toBeDefined();
       expect(result.images.length).toBe(3);
     });
 
     it('should load an entity with all values without images if none are public', () => {
+      const mockedLoadLocation = jest
+        .spyOn(entityLoadFunctions, 'loadLocation')
+        .mockReturnValue({} as Location);
+
       const mockedLoadImagePublic = jest
         .spyOn(imageLoadFunctions, 'loadImagePublic')
         .mockReturnValue({} as ImagePublic);
@@ -252,6 +350,7 @@ describe('entity-load-public.functions', () => {
         ],
       } as DocumentModel);
 
+      expect(mockedLoadLocation).toBeCalledTimes(1);
       expect(mockedLoadImagePublic).not.toBeCalled();
 
       expect(result.type).toBe(documentModel.type);
@@ -265,11 +364,19 @@ describe('entity-load-public.functions', () => {
       expect(result.publishedDate).toBe(documentModel.publishedDate);
       expect(result.seoDescription).toBe(documentModel.seoDescription);
       expect(result.seoKeywords).toBe(documentModel.seoKeywords);
-      expect(result.location).toEqual(documentModel.location);
+      expect(result.location).toBeDefined();
       expect(result.images.length).toBe(0);
     });
 
     it('should load undefined values', () => {
+      const mockedLoadLocation = jest
+        .spyOn(entityLoadFunctions, 'loadLocation')
+        .mockReturnValue(undefined);
+
+      jest
+        .spyOn(imageLoadFunctions, 'loadImagePublic')
+        .mockReturnValue({} as ImagePublic);
+
       const result = loadEntityPublic({
         ...documentModel,
         title: undefined,
@@ -279,6 +386,8 @@ describe('entity-load-public.functions', () => {
         seoDescription: undefined,
         location: undefined,
       } as DocumentModel);
+
+      expect(mockedLoadLocation).toBeCalledTimes(1);
 
       expect(result.title).toBe('');
       expect(result.text).toBe('');
