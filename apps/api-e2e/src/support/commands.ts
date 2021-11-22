@@ -29,7 +29,7 @@ declare namespace Cypress {
         Authorization: string;
       },
       key: string
-    ): Cypress.Chainable<Cypress.Response<any[]>>;
+    ): Cypress.Chainable<Cypress.Response<any>>;
     deleteAdminCronProcesses(
       authHeaders: {
         Authorization: string;

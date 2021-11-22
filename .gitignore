@@ -43,4 +43,10 @@ Thumbs.db
 
 # ci
 /ci/dist
-apps/api-e2e/src/fixtures/video.mp4
+
+# cypress
+
+/apps/api-e2e/cypress
+
+# angular
+.angular/
