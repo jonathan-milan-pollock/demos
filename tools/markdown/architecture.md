@@ -21,13 +21,10 @@
    - Error reporting?
    - 3rd Party components needed ?
 2. create draw.io application diagram
-3. create architecture md
-4. create draw.io components diagram with defined routes
-5. create projects from install-workspace.js script
-6. create page components (such as HomeComponent) and remove selector
-7. adjust routes and child child routes
-8. add basic routing between pages
-9. create website-e2e Cypress test for routes
+3. create architecture.md
+4. create dev.md
+5. create ci.md
+6. create projects from install-workspace.js script
 
 ---
 
@@ -133,7 +130,21 @@
 
 ## setup image-elements
 
-- rename generators back to schematics in angular.json
+- changed www config in stencil.config.js
+
+```ts
+{
+  type: 'www',
+  serviceWorker: null, // disable service workers
+  copy: [{ src: 'pages' }],
+},
+```
+
+- added to tsconfig.json
+
+```json
+"composite": false
+```
 
 - added to root jest.config.js
 
@@ -159,14 +170,6 @@ module.exports = {
 };
 ```
 
-- TODO: Fix error in tsconfig.json
-
-- added to tsconfig.json
-
-```json
-"composite": true
-```
-
 - added to tsconfig.spec.json
 
 ```json
@@ -187,16 +190,7 @@ module.exports = {
 }
 ```
 
-- in stencil.config.ts add
-
-```ts
-    {
-      type: 'www',
-      serviceWorker: null, // disable service workers
-    },
-```
-
-- update license with additional licenses of image components converted by lib
+- update README with additional licenses for projects that were converted to image components
 
 - from a jest enabled lib copy
   - add tsconfig.spec.json

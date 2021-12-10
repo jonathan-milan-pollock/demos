@@ -1,62 +1,35 @@
-import React, { useEffect } from 'react';
-import { AppProps } from 'next/app';
+import * as React from 'react';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '../theme/theme';
+import '../styles/globals.scss';
+import '../styles/variables.scss';
+import '../styles/theme-dark-variables.scss';
+import '../styles/theme-light-variables.scss';
+import '../styles/utilities.scss';
 
 //import { ReactComponent as NxLogo } from '../public/nx-logo-white.svg';
 // <NxLogo width="75" height="50" />
 //TODO: Setup GA
 //ReactGA.initialize(Application.GOOGLE_ANALYTICS_TRACKING_ID);
 
-import { TopNavigationBar, TabBar } from '@dark-rush-photography/best-of/ui';
-import theme from '../theme/theme';
-import './styles.scss';
-
-function CustomApp({ Component, pageProps }: AppProps): JSX.Element {
-  const router = useRouter();
-
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-
+export default function MyApp(props: AppProps) {
+  const { Component, pageProps } = props;
   return (
-    <>
+    <React.Fragment>
       <Head>
-        <title>37 (DR) Images</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
+        <title>Next App</title>
+        <link href="/favicon.ico" rel="icon" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
-        <TopNavigationBar
-          isDarkTheme={true}
-          activeLink="/"
-          onToggleTheme={() => {
-            console.log('toggle theme');
-          }}
-          onLinkClicked={(link) => {
-            router.push(link);
-          }}
-        />
-        <TabBar
-          activeLink={router.pathname === '/' ? '/events' : router.pathname}
-          onTabChange={(link) => {
-            router.push(link);
-          }}
-        />
         <Component {...pageProps} />
-      </MuiThemeProvider>
-    </>
+      </ThemeProvider>
+    </React.Fragment>
   );
 }
-
-export default CustomApp;

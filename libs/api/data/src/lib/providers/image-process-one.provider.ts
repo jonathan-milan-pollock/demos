@@ -159,6 +159,7 @@ export class ImageProcessOneProvider {
           imageDimension
         )
       ),
+      last(),
       map(() => undefined)
     );
   }

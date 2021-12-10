@@ -21,6 +21,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+  app.enableCors();
 
   if (!environment.production) {
     const config = new DocumentBuilder()

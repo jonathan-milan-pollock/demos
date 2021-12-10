@@ -1,0 +1,32 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { HyperlinkComponent } from './hyperlink.component';
+import { WebsiteUiUiCommonModule } from '../website-ui-ui-common.module';
+
+<Meta
+  title="UI COMMON/Hyperlink"
+  component={HyperlinkComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        WebsiteUiUiCommonModule,
+      ],
+    }),
+  ]}
+/>
+
+# Hyperlink
+
+<Story height="500px" name="Default">
+  {(args) => <drp-hyperlink {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={HyperlinkComponent} />

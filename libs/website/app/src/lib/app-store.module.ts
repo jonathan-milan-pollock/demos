@@ -4,24 +4,16 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import {
-  AuthenticationEffects,
-  authenticationFeatureKey,
-  authenticationReducer,
-  imagePostFeatureKey,
-  imagePostReducer,
+  entitiesFeatureKey,
+  entitiesReducer,
 } from '@dark-rush-photography/website/data';
 
 @NgModule({
   imports: [
     StoreModule.forRoot({
-      [authenticationFeatureKey]: authenticationReducer,
-      //[destinationFeatureKey]: DestinationState,
-      //[eventFeatureKey]: EventState,
-      [imagePostFeatureKey]: imagePostReducer,
-      //[photoOfTheWeekFeatureKey]: PhotoOfTheWeekState,
-      //[reviewFeatureKey]: reviewReducer,
+      [entitiesFeatureKey]: entitiesReducer,
     }),
-    EffectsModule.forRoot([AuthenticationEffects]),
+    EffectsModule.forRoot([]),
   ],
 })
 export class AppStoreModule {}

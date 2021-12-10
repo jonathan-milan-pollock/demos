@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+
+Disallow: /photo-of-the-week/*
+Disallow: /swagger/
+Disallow: /index.html
+
+Sitemap: https://darkrushphotography.com/sitemap.xml

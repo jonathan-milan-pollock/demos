@@ -1,21 +1,35 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 
-import Link from 'next/link';
+import { ImagePublic } from '@dark-rush-photography/shared/types';
+import { SlugPage } from '@dark-rush-photography/best-of/feature';
 
-import styles from './index.module.scss';
+interface Props {
+  images: ImagePublic[];
+}
 
-function Index(): JSX.Element {
-  return (
-    <div className={styles.page}>
-      <ul>
-        <li><Link href="/children">Children</Link></li>
-        <li><Link href="/events">Events</Link></li>
-        <li><Link href="/landscape">Landscape</Link></li>
-        <li><Link href="/nature">Nature</Link></li>
-        <li><Link href="/real-estate">Real Estate</Link></li>
-      </ul>
-    </div>
-  );
+function Index(props: Props): JSX.Element {
+  const router = useRouter();
+
+  function displayImageHandler(image: ImagePublic) {
+    router.push(
+      `/events/${
+        image.threeSixtyImageStorageId
+          ? image.threeSixtyImageStorageId
+          : image.storageId
+      }`
+    );
+  }
+
+  return <SlugPage images={props.images} displayImage={displayImageHandler} />;
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      images: [{}] as ImagePublic[], // will get images for events
+    },
+  };
 }
 
 export default Index;

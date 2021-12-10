@@ -68,6 +68,11 @@ export const updateEntity$ = (
     })
   );
 
+export const findEntityById$ = (
+  entityId: string,
+  entityModel: Model<DocumentModel>
+): Observable<DocumentModel | null> => from(entityModel.findById(entityId));
+
 export const findEntityByIdAndUpdateOrder$ = (
   entityId: string,
   order: number,
@@ -75,10 +80,11 @@ export const findEntityByIdAndUpdateOrder$ = (
 ): Observable<DocumentModel | null> =>
   from(entityModel.findByIdAndUpdate(entityId, { order }));
 
-export const findEntityById$ = (
+export const findEntityByIdAndMakePublic$ = (
   entityId: string,
   entityModel: Model<DocumentModel>
-): Observable<DocumentModel | null> => from(entityModel.findById(entityId));
+): Observable<DocumentModel | null> =>
+  from(entityModel.findByIdAndUpdate(entityId, { isPublic: true }));
 
 export const findPublicEntityById$ = (
   entityId: string,

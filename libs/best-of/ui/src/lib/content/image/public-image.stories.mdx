@@ -1,0 +1,15 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+import { Image } from './image';
+
+<Meta title="BEST OF/Image" component={Image} />
+
+# Image
+
+<Canvas>
+  <Story name="Default">{(args) => <Image {...args} />}</Story>
+</Canvas>
+
+## Args Table
+
+<ArgsTable of={Image} />

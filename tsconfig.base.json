@@ -36,33 +36,25 @@
       ],
       "@dark-rush-photography/shared/types": ["libs/shared/types/src/index.ts"],
       "@dark-rush-photography/shared/util": ["libs/shared/util/src/index.ts"],
+      "@dark-rush-photography/storybook-angular": [
+        "libs/storybook-angular/src/index.ts"
+      ],
+      "@dark-rush-photography/storybook-react": [
+        "libs/storybook-react/src/index.ts"
+      ],
+      "@dark-rush-photography/storybook-stencil": [
+        "libs/storybook-stencil/src/index.ts"
+      ],
       "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
       "@dark-rush-photography/website/app": ["libs/website/app/src/index.ts"],
       "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
-      "@dark-rush-photography/website/features/admin": [
-        "libs/website/features/admin/src/index.ts"
-      ],
-      "@dark-rush-photography/website/features/home": [
-        "libs/website/features/home/src/index.ts"
+      "@dark-rush-photography/website/feature": [
+        "libs/website/feature/src/index.ts"
       ],
       "@dark-rush-photography/website/types": [
         "libs/website/types/src/index.ts"
       ],
-      "@dark-rush-photography/website/ui/ui-admin": [
-        "libs/website/ui/ui-admin/src/index.ts"
-      ],
-      "@dark-rush-photography/website/ui/ui-common": [
-        "libs/website/ui/ui-common/src/index.ts"
-      ],
-      "@dark-rush-photography/website/ui/ui-directives": [
-        "libs/website/ui/ui-directives/src/index.ts"
-      ],
-      "@dark-rush-photography/website/ui/ui-home": [
-        "libs/website/ui/ui-home/src/index.ts"
-      ],
-      "@dark-rush-photography/website/ui/ui-shell": [
-        "libs/website/ui/ui-shell/src/index.ts"
-      ],
+      "@dark-rush-photography/website/ui": ["libs/website/ui/src/index.ts"],
       "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"]
     }
   },

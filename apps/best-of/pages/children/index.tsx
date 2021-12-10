@@ -1,33 +1,34 @@
 import React from 'react';
-
 import { useRouter } from 'next/router';
 
-import styles from './index.module.scss';
-import { TabBar, TopNavigationBar } from '@dark-rush-photography/best-of/ui';
+import { ImagePublic } from '@dark-rush-photography/shared/types';
+import { getImagePageUrl } from '@dark-rush-photography/best-of/util';
+import { SlugPage } from '@dark-rush-photography/best-of/feature';
 
-function Index(props): JSX.Element {
+interface Props {
+  images: ImagePublic[];
+}
+
+function Index(props: Props): JSX.Element {
   const router = useRouter();
 
-  function displayImageHandler() {
-    router.push('/children/image1');
+  function displayImageHandler(image: ImagePublic) {
+    router.push(
+      getImagePageUrl(
+        'children',
+        image.storageId,
+        image.threeSixtyImageStorageId
+      )
+    );
   }
 
-  const images = props.images;
-
-  return (
-    <div className={styles.page}>
-      <h1>Children</h1>
-      <button onClick={displayImageHandler}>Display Child Image</button>
-    </div>
-  );
+  return <SlugPage images={props.images} displayImage={displayImageHandler} />;
 }
 
 export async function getStaticProps() {
-  // prepare props for this page
-  // fetch data from an API
   return {
     props: {
-      images: [{}],
+      images: [{}] as ImagePublic[], // will get images for children
     },
   };
 }

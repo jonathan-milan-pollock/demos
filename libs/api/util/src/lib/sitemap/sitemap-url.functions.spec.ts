@@ -176,7 +176,7 @@ describe('sitemap-url.functions', () => {
 
       expect(result).toEqual([
         {
-          loc: `https://www.darkrushphotography.com/events/${firstSlug}`,
+          loc: `https://darkrushphotography.com/events/${firstSlug}`,
           priority: '0.8',
           lastmod: firstPublishedDate.substring(
             0,
@@ -185,7 +185,7 @@ describe('sitemap-url.functions', () => {
           changefreq: 'monthly',
         },
         {
-          loc: `https://www.darkrushphotography.com/events/${secondSlug}`,
+          loc: `https://darkrushphotography.com/events/${secondSlug}`,
           priority: '0.8',
           lastmod: secondPublishedDate.substring(
             0,

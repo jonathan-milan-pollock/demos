@@ -39,10 +39,10 @@ export class ImagePublishProvider {
                 )
               )
             );
-          })
+          }),
+          last()
         );
       }),
-      last(),
       map(() => undefined)
     );
   }

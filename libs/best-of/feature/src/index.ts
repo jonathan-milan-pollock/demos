@@ -1,5 +1,4 @@
-export { default as Children } from './lib/children';
-export { default as Events } from './lib/events';
-export { default as Landscape } from './lib/landscape';
-export { default as Nature } from './lib/nature';
-export { default as RealEstate } from './lib/real-estate';
+export { default as AboutPage } from './lib/pages/about-page/about-page';
+export { default as ImagePage } from './lib/pages/image-page/image-page';
+export { default as SlugPage } from './lib/pages/slug-page/slug-page';
+export { default as ThreeSixtyImagePage } from './lib/pages/three-sixty-image-page/three-sixty-image-page';

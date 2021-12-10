@@ -6,56 +6,184 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
+    interface DrpDestinationSandySpringsGeorgia {
+    }
+    interface DrpImageCarousel {
+        "autoPlay": boolean;
+        "disableKeyDown": boolean;
+        "height": string;
+        "images": string;
+        "showIndex": boolean;
+        "showPlayButton": boolean;
+        "slideDuration": number;
+        "startIndex": number;
+    }
+    interface DrpImageCarouselImage {
         /**
-          * The first name
+          * Height of the container surrounding the image.
          */
-        "first": string;
+        "height": string;
         /**
-          * The last name
+          * Source of the image.
          */
-        "last": string;
+        "imageSrc": string;
         /**
-          * The middle name
+          * Source of the thumbnail image.
          */
-        "middle": string;
+        "thumbnailSrc": string;
+        /**
+          * Transition time between when the image is loaded and is displayed.
+         */
+        "transitionMilliseconds": number;
+        /**
+          * Width of the container surrounding the image.
+         */
+        "width": string;
+    }
+    interface DrpImageGrid {
+        "imageType": ImageGridType;
+        "images": ImageGridImage[];
+        "targetRowHeight": number;
+    }
+    interface DrpImageGridImage {
+        /**
+          * Height of the image
+         */
+        "height": string;
+        /**
+          * Source of the image
+         */
+        "imageSrc": string;
+        /**
+          * Source of the thumbnail image
+         */
+        "thumbnailSrc": string;
+        /**
+          * Width of the image
+         */
+        "width": string;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLDrpDestinationSandySpringsGeorgiaElement extends Components.DrpDestinationSandySpringsGeorgia, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLDrpDestinationSandySpringsGeorgiaElement: {
+        prototype: HTMLDrpDestinationSandySpringsGeorgiaElement;
+        new (): HTMLDrpDestinationSandySpringsGeorgiaElement;
+    };
+    interface HTMLDrpImageCarouselElement extends Components.DrpImageCarousel, HTMLStencilElement {
+    }
+    var HTMLDrpImageCarouselElement: {
+        prototype: HTMLDrpImageCarouselElement;
+        new (): HTMLDrpImageCarouselElement;
+    };
+    interface HTMLDrpImageCarouselImageElement extends Components.DrpImageCarouselImage, HTMLStencilElement {
+    }
+    var HTMLDrpImageCarouselImageElement: {
+        prototype: HTMLDrpImageCarouselImageElement;
+        new (): HTMLDrpImageCarouselImageElement;
+    };
+    interface HTMLDrpImageGridElement extends Components.DrpImageGrid, HTMLStencilElement {
+    }
+    var HTMLDrpImageGridElement: {
+        prototype: HTMLDrpImageGridElement;
+        new (): HTMLDrpImageGridElement;
+    };
+    interface HTMLDrpImageGridImageElement extends Components.DrpImageGridImage, HTMLStencilElement {
+    }
+    var HTMLDrpImageGridImageElement: {
+        prototype: HTMLDrpImageGridImageElement;
+        new (): HTMLDrpImageGridImageElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "drp-destination-sandy-springs-georgia": HTMLDrpDestinationSandySpringsGeorgiaElement;
+        "drp-image-carousel": HTMLDrpImageCarouselElement;
+        "drp-image-carousel-image": HTMLDrpImageCarouselImageElement;
+        "drp-image-grid": HTMLDrpImageGridElement;
+        "drp-image-grid-image": HTMLDrpImageGridImageElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
+    interface DrpDestinationSandySpringsGeorgia {
+    }
+    interface DrpImageCarousel {
+        "autoPlay"?: boolean;
+        "disableKeyDown"?: boolean;
+        "height"?: string;
+        "images": string;
+        "showIndex"?: boolean;
+        "showPlayButton"?: boolean;
+        "slideDuration"?: number;
+        "startIndex"?: number;
+    }
+    interface DrpImageCarouselImage {
         /**
-          * The first name
+          * Height of the container surrounding the image.
          */
-        "first": string;
+        "height": string;
         /**
-          * The last name
+          * Source of the image.
          */
-        "last": string;
+        "imageSrc": string;
         /**
-          * The middle name
+          * Source of the thumbnail image.
          */
-        "middle": string;
+        "thumbnailSrc": string;
+        /**
+          * Transition time between when the image is loaded and is displayed.
+         */
+        "transitionMilliseconds"?: number;
+        /**
+          * Width of the container surrounding the image.
+         */
+        "width": string;
+    }
+    interface DrpImageGrid {
+        "imageType"?: ImageGridType;
+        "images": ImageGridImage[];
+        "targetRowHeight"?: number;
+    }
+    interface DrpImageGridImage {
+        /**
+          * Height of the image
+         */
+        "height": string;
+        /**
+          * Source of the image
+         */
+        "imageSrc": string;
+        /**
+          * When the image is clicked
+         */
+        "onDrp-image-grid-image-clicked"?: (event: CustomEvent<{
+    imageSrc: string;
+  }>) => void;
+        /**
+          * Source of the thumbnail image
+         */
+        "thumbnailSrc": string;
+        /**
+          * Width of the image
+         */
+        "width": string;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "drp-destination-sandy-springs-georgia": DrpDestinationSandySpringsGeorgia;
+        "drp-image-carousel": DrpImageCarousel;
+        "drp-image-carousel-image": DrpImageCarouselImage;
+        "drp-image-grid": DrpImageGrid;
+        "drp-image-grid-image": DrpImageGridImage;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "drp-destination-sandy-springs-georgia": LocalJSX.DrpDestinationSandySpringsGeorgia & JSXBase.HTMLAttributes<HTMLDrpDestinationSandySpringsGeorgiaElement>;
+            "drp-image-carousel": LocalJSX.DrpImageCarousel & JSXBase.HTMLAttributes<HTMLDrpImageCarouselElement>;
+            "drp-image-carousel-image": LocalJSX.DrpImageCarouselImage & JSXBase.HTMLAttributes<HTMLDrpImageCarouselImageElement>;
+            "drp-image-grid": LocalJSX.DrpImageGrid & JSXBase.HTMLAttributes<HTMLDrpImageGridElement>;
+            "drp-image-grid-image": LocalJSX.DrpImageGridImage & JSXBase.HTMLAttributes<HTMLDrpImageGridImageElement>;
         }
     }
 }
