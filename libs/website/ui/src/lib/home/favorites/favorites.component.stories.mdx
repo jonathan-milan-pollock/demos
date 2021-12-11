@@ -1,0 +1,28 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { FavoritesComponent } from './favorites.component';
+import { WebsiteUiModule } from '../../website-ui.module';
+
+<Meta
+  title="UI HOME/Favorites"
+  component={FavoritesComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiModule],
+    }),
+  ]}
+/>
+
+# Favorites
+
+<Story height="500px" name="Default">
+  {(args) => <drp-favorites {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={FavoritesComponent} />

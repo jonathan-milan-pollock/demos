@@ -13,12 +13,12 @@
     "noUnusedParameters": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "composite": true
+    "composite": false
   },
-  "include": ["src"],
+  "include": [],
   "references": [
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./tsconfig.lib.json"
     }
   ]
 }

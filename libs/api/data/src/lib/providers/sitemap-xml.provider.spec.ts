@@ -24,91 +24,91 @@ import * as apiUtil from '@dark-rush-photography/api/util';
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.darkrushphotography.com</loc>
+    <loc>https://darkrushphotography.com</loc>
     <priority>1.0</priority>
     <lastmod>2020-04-01</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/about</loc>
+    <loc>https://darkrushphotography.com/about</loc>
     <priority>0.9</priority>
      <lastmod>2020-04-01</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/reviews</loc>
+    <loc>https://darkrushphotography.com/reviews</loc>
     <priority>0.9</priority>
      <lastmod>2020-04-01</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/reviews/review</loc>
+    <loc>https://darkrushphotography.com/reviews/review</loc>
     <priority>0.8</priority>
      <lastmod>2020-04-01</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events</loc>
+    <loc>https://darkrushphotography.com/events</loc>
     <priority>0.8</priority>
     <lastmod>2020-04-01</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/photo-of-the-week</loc>
+    <loc>https://darkrushphotography.com/photo-of-the-week</loc>
     <priority>0.8</priority>
     <lastmod>2020-04-01</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/destinations</loc>
+    <loc>https://darkrushphotography.com/destinations</loc>
     <priority>0.8</priority>
     <lastmod>2020-04-01</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/len-foote-hike-inn-amicalola-falls-2017</loc>
+    <loc>https://darkrushphotography.com/events/len-foote-hike-inn-amicalola-falls-2017</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/sandy-springs-festival-2017</loc>
+    <loc>https://darkrushphotography.com/events/sandy-springs-festival-2017</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/south-cobb-arts-alliance-storytelling-festival-2017</loc>
+    <loc>https://darkrushphotography.com/events/south-cobb-arts-alliance-storytelling-festival-2017</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/classic-cars-1952-pontiac</loc>
+    <loc>https://darkrushphotography.com/events/classic-cars-1952-pontiac</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/sarasota-florida-vacation-2019</loc>
+    <loc>https://darkrushphotography.com/events/sarasota-florida-vacation-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/macon-international-cherry-blossom-festival-2019</loc>
+    <loc>https://darkrushphotography.com/events/macon-international-cherry-blossom-festival-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/midtown-alliance-spring-crawl-2019</loc>
+    <loc>https://darkrushphotography.com/events/midtown-alliance-spring-crawl-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.darkrushphotography.com/events/food-that-rocks-a-celebration-of-sandy-springs-2019</loc>
+    <loc>https://darkrushphotography.com/events/food-that-rocks-a-celebration-of-sandy-springs-2019</loc>
     <priority>0.7</priority>
      <lastmod>2020-03-10</lastmod>
     <changefreq>weekly</changefreq>

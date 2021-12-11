@@ -98,8 +98,7 @@ export class ImageProcessAllProvider {
           ),
           last()
         );
-      }),
-      map(() => undefined)
+      })
     );
   }
 
@@ -134,8 +133,7 @@ export class ImageProcessAllProvider {
           ),
           last()
         );
-      }),
-      map(() => undefined)
+      })
     );
   }
 }

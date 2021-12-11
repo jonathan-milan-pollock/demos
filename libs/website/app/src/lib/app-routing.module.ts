@@ -5,15 +5,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('@dark-rush-photography/website/features/home').then(
-        (module) => module.WebsiteFeaturesHomeModule
-      ),
-  },
-  {
-    path: 'admin',
-    loadChildren: () =>
-      import('@dark-rush-photography/website/features/admin').then(
-        (module) => module.WebsiteFeaturesAdminModule
+      import('@dark-rush-photography/website/feature').then(
+        (module) => module.WebsiteFeatureModule
       ),
   },
   { path: '**', redirectTo: '/' },

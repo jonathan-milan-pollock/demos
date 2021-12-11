@@ -1,0 +1,39 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+import { KabobMenuComponent } from './kabob-menu.component';
+import { WebsiteUiModule } from '../../website-ui.module';
+
+<Meta
+  title="UI SHELL/Kabob Menu"
+  component={KabobMenuComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FontAwesomeModule,
+        WebsiteUiUiShellModule,
+      ],
+    }),
+  ]}
+  argTypes={{
+    darkModeSelected: { action: 'darkModeSelected' },
+    menuItemClicked: { action: 'menuItemClicked' },
+    signIn: { action: 'signIn' },
+    signOut: { action: 'signOut' },
+  }}
+/>
+
+# Kabob Menu
+
+<Story name="Default">{(args) => <drp-kabob-menu {...args} />}</Story>
+
+## Args Table
+
+<ArgsTable of={KabobMenuComponent} />

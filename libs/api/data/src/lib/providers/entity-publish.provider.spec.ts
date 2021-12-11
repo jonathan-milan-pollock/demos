@@ -140,6 +140,10 @@ describe('entity-publish.provider', () => {
         .spyOn(socialMediaPostProvider, 'postSocialMedia$')
         .mockReturnValue(of(undefined));
 
+      const mockedFindEntityByIdAndMakePublic$ = jest
+        .spyOn(entityRepositoryFunctions, 'findEntityByIdAndMakePublic$')
+        .mockReturnValue(of({} as DocumentModel));
+
       entityPublishProvider
         .publishEntity$(DUMMY_MONGODB_ID, faker.datatype.boolean())
         .subscribe(() => {
@@ -151,6 +155,7 @@ describe('entity-publish.provider', () => {
           expect(mockedPublishImageVideo$).toBeCalledTimes(1);
           expect(mockedEmailImageVideo$).toBeCalledTimes(1);
           expect(mockedPostSocialMedia$).toBeCalledTimes(1);
+          expect(mockedFindEntityByIdAndMakePublic$).toBeCalledTimes(1);
           done();
         });
     });

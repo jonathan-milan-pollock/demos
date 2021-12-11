@@ -5,7 +5,10 @@ import { concatMap, map, Observable } from 'rxjs';
 import { Model } from 'mongoose';
 
 import { Document, DocumentModel } from '../schema/document.schema';
-import { findEntityById$ } from '../entities/entity-repository.functions';
+import {
+  findEntityById$,
+  findEntityByIdAndMakePublic$,
+} from '../entities/entity-repository.functions';
 import { validatePublishEntity } from '../entities/entity-publish-validation.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { EntityProcessProvider } from './entity-process.provider';
@@ -38,7 +41,9 @@ export class EntityPublishProvider {
       concatMap(() => this.imageVideoEmailProvider.emailImageVideo$(entityId)),
       concatMap(() =>
         this.socialMediaPostProvider.postSocialMedia$(entityId, postSocialMedia)
-      )
+      ),
+      concatMap(() => findEntityByIdAndMakePublic$(entityId, this.entityModel)),
+      map(() => undefined)
     );
   }
 }

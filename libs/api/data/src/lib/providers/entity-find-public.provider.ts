@@ -38,6 +38,7 @@ export class EntityFindPublicProvider {
   ): Observable<EntityFindAllPublicResponse> {
     return findAllPublicEntities$(entityType, this.entityModel).pipe(
       map((documentModels) => ({
+        entityType,
         minimalPublicEntities:
           documentModels.length === 0
             ? []

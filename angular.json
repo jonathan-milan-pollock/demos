@@ -1,41 +1,5 @@
 {
   "version": 1,
-  "schematics": {
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "none",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "none"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    },
-    "@nrwl/react": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "scss"
-      },
-      "library": {
-        "style": "scss",
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint"
-      }
-    }
-  },
   "projects": {
     "api": {
       "root": "apps/api",
@@ -296,15 +260,16 @@
       "root": "libs/best-of/types",
       "sourceRoot": "libs/best-of/types/src",
       "projectType": "library",
+      "tags": ["scope:best-of", "type:types"],
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
           "options": {
             "lintFilePatterns": ["libs/best-of/types/**/*.{ts,tsx,js,jsx}"]
           }
         }
-      },
-      "tags": ["scope:best-of", "type:types"]
+      }
     },
     "best-of-ui": {
       "root": "libs/best-of/ui",
@@ -348,18 +313,26 @@
       "root": "libs/image-elements",
       "sourceRoot": "libs/image-elements/src",
       "projectType": "library",
+      "schematics": {
+        "@nxext/stencil:component": {
+          "style": "scss"
+        }
+      },
+      "tags": ["scope:image-elements", "type:ui"],
       "architect": {
         "build": {
           "builder": "@nxext/stencil:build",
           "outputs": ["{options.outputPath}"],
           "options": {
             "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
             "configPath": "libs/image-elements/stencil.config.ts",
             "outputPath": "dist/libs/image-elements"
           },
           "configurations": {
             "production": {
-              "dev": false
+              "dev": false,
+              "prod": true
             }
           }
         },
@@ -368,29 +341,31 @@
           "outputs": ["{options.outputPath}"],
           "options": {
             "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
             "configPath": "libs/image-elements/stencil.config.ts",
             "outputPath": "dist/libs/image-elements",
             "serve": true,
             "watch": true
           }
         },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/image-elements"],
+        "e2e": {
+          "builder": "@nxext/stencil:e2e",
+          "outputs": ["{options.outputPath}"],
           "options": {
-            "jestConfig": "libs/image-elements/jest.config.js",
-            "passWithNoTests": true,
-            "codeCoverage": true
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/image-elements/**/*.{ts,tsx}"]
           }
         }
-      },
-      "schematics": {
-        "@nxext/stencil:component": {
-          "style": "scss",
-          "storybook": false
-        }
-      },
-      "tags": ["scope:image-elements", "type:ui"]
+      }
     },
     "shared-types": {
       "root": "libs/shared/types",
@@ -429,6 +404,231 @@
         }
       },
       "tags": ["scope:shared", "type:util"]
+    },
+    "storybook-angular": {
+      "projectType": "library",
+      "root": "libs/storybook-angular",
+      "sourceRoot": "libs/storybook-angular/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/storybook-angular/src/**/*.ts",
+              "libs/storybook-angular/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/storybook-angular/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/storybook-angular",
+            "config": {
+              "configFolder": "libs/storybook-angular/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      },
+      "tags": ["scope:storybook-angular", "type:ui"]
+    },
+    "storybook-angular-e2e": {
+      "root": "apps/storybook-angular-e2e",
+      "sourceRoot": "apps/storybook-angular-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/storybook-angular-e2e/cypress.json",
+            "devServerTarget": "storybook-angular:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "storybook-angular:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/storybook-angular-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["storybook-angular"]
+    },
+    "storybook-react": {
+      "root": "libs/storybook-react",
+      "sourceRoot": "libs/storybook-react/src",
+      "projectType": "library",
+      "tags": ["scope:storybook-react", "type:ui"],
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/storybook-react/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/react",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/storybook-react/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/react",
+            "outputPath": "dist/storybook/storybook-react",
+            "config": {
+              "configFolder": "libs/storybook-react/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "storybook-react-e2e": {
+      "root": "apps/storybook-react-e2e",
+      "sourceRoot": "apps/storybook-react-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/storybook-react-e2e/cypress.json",
+            "devServerTarget": "storybook-react:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "storybook-react:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/storybook-react-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["storybook-react"]
+    },
+    "storybook-stencil": {
+      "root": "libs/storybook-stencil",
+      "sourceRoot": "libs/storybook-stencil/src",
+      "projectType": "library",
+      "tags": ["scope:storybook-stencil", "type:ui"],
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/storybook-stencil/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/react",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/storybook-stencil/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/react",
+            "outputPath": "dist/storybook/storybook-stencil",
+            "config": {
+              "configFolder": "libs/storybook-stencil/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "storybook-stencil-e2e": {
+      "root": "apps/storybook-stencil-e2e",
+      "sourceRoot": "apps/storybook-stencil-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/storybook-stencil-e2e/cypress.json",
+            "devServerTarget": "storybook-stencil:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "storybook-stencil:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/storybook-stencil-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["storybook-stencil"]
     },
     "ui-storybook": {
       "projectType": "library",
@@ -527,8 +727,9 @@
             "tsConfig": "apps/website/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "apps/website/src/favicon.ico",
               "apps/website/src/assets",
+              "apps/website/src/favicon.ico",
+              "apps/website/src/robots.txt",
               "apps/website/src/manifest.webmanifest"
             ],
             "styles": ["apps/website/src/styles.scss"],
@@ -640,9 +841,6 @@
             "browserTarget": "website:build:production",
             "serverTarget": "website:server:production",
             "routes": ["/"]
-          },
-          "configurations": {
-            "production": {}
           }
         }
       },
@@ -719,36 +917,18 @@
       "tags": [],
       "implicitDependencies": ["website"]
     },
-    "website-features-admin": {
+    "website-feature": {
       "projectType": "library",
-      "root": "libs/website/features/admin",
-      "sourceRoot": "libs/website/features/admin/src",
+      "root": "libs/website/feature",
+      "sourceRoot": "libs/website/feature/src",
       "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/website/features/admin/src/**/*.ts",
-              "libs/website/features/admin/src/**/*.html"
-            ]
-          }
-        }
-      },
-      "tags": ["scope:website", "type:feature"]
-    },
-    "website-features-home": {
-      "projectType": "library",
-      "root": "libs/website/features/home",
-      "sourceRoot": "libs/website/features/home/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/features/home/src/**/*.ts",
-              "libs/website/features/home/src/**/*.html"
+              "libs/website/feature/src/**/*.ts",
+              "libs/website/feature/src/**/*.html"
             ]
           }
         }
@@ -810,101 +990,50 @@
       },
       "tags": ["scope:website", "type:types"]
     },
-    "website-ui-ui-admin": {
+    "website-ui": {
       "projectType": "library",
-      "root": "libs/website/ui/ui-admin",
-      "sourceRoot": "libs/website/ui/ui-admin/src",
+      "root": "libs/website/ui",
+      "sourceRoot": "libs/website/ui/src",
       "prefix": "drp",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "libs/website/ui/ui-admin/src/**/*.ts",
-              "libs/website/ui/ui-admin/src/**/*.html"
-            ]
-          }
-        }
-      },
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-common": {
-      "projectType": "library",
-      "root": "libs/website/ui/ui-common",
-      "sourceRoot": "libs/website/ui/ui-common/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/ui/ui-common/src/**/*.ts",
-              "libs/website/ui/ui-common/src/**/*.html"
-            ]
-          }
-        }
-      },
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-directives": {
-      "projectType": "library",
-      "root": "libs/website/ui/ui-directives",
-      "sourceRoot": "libs/website/ui/ui-directives/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/ui/ui-directives/src/**/*.ts",
-              "libs/website/ui/ui-directives/src/**/*.html"
+              "libs/website/ui/src/**/*.ts",
+              "libs/website/ui/src/**/*.html"
             ]
           }
         },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/website/ui/ui-directives"],
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
           "options": {
-            "jestConfig": "libs/website/ui/ui-directives/jest.config.js",
-            "passWithNoTests": true,
-            "codeCoverage": true,
-            "coverageReporters": ["text", "json", "lcov"]
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/website/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
           }
-        }
-      },
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-home": {
-      "projectType": "library",
-      "root": "libs/website/ui/ui-home",
-      "sourceRoot": "libs/website/ui/ui-home/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/website/ui/ui-home/src/**/*.ts",
-              "libs/website/ui/ui-home/src/**/*.html"
-            ]
-          }
-        }
-      },
-      "tags": ["scope:website", "type:ui"]
-    },
-    "website-ui-ui-shell": {
-      "projectType": "library",
-      "root": "libs/website/ui/ui-shell",
-      "sourceRoot": "libs/website/ui/ui-shell/src",
-      "prefix": "drp",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/website/ui/ui-shell/src/**/*.ts",
-              "libs/website/ui/ui-shell/src/**/*.html"
-            ]
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/website-ui",
+            "config": {
+              "configFolder": "libs/website/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
           }
         }
       },

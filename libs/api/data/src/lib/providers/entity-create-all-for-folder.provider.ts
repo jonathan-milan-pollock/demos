@@ -37,10 +37,10 @@ export class EntityCreateAllForFolderProvider {
               group,
               initialSlug
             )
-          )
+          ),
+          last()
         );
-      }),
-      last()
+      })
     );
   }
 }

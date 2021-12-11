@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { from, map, Observable, of } from 'rxjs';
+import { from, last, map, Observable, of } from 'rxjs';
 
 import { WebSocketClient } from '@dark-rush-photography/shared/types';
 
@@ -25,7 +25,8 @@ export class WebSocketMessageProvider {
     }
 
     return from(webSocketClients).pipe(
-      map((webSocketClient) => webSocketClient.send(message))
+      map((webSocketClient) => webSocketClient.send(message)),
+      last()
     );
   }
 }

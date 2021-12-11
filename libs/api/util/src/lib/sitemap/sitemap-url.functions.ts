@@ -43,7 +43,7 @@ export const loadSitemapEventUrls = (
     (sitemapUrls: SitemapUrl[], publishDateSlug: PublishedDateSlug) => [
       ...sitemapUrls,
       {
-        loc: `https://www.darkrushphotography.com/events/${publishDateSlug.slug}`,
+        loc: `https://darkrushphotography.com/events/${publishDateSlug.slug}`,
         priority: '0.8',
         lastmod: getSitemapDate(publishDateSlug.publishedDate),
         changefreq: 'monthly',

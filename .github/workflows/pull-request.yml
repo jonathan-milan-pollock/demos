@@ -26,6 +26,8 @@ jobs:
         run: npm run sb:docs
       - name: Storybook Build
         run: npx nx run ui-storybook:build-storybook
+      - name: Image Elements Build
+        run: npx nx run image-elements:build
       - name: Website Build
         run: npm run build:ssr
       - name: Best Of Build

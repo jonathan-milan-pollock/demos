@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { concatMap, from, map, Observable, of } from 'rxjs';
+import { concatMap, from, last, map, Observable, of } from 'rxjs';
 import { Model } from 'mongoose';
 
 import {
@@ -52,6 +52,7 @@ export class ImageStateChangeProvider {
           })
         )
       ),
+      last(),
       map(() => undefined)
     );
   }
