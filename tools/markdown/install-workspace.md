@@ -88,9 +88,6 @@ react-test-renderer
 
 ### add Vue Dependencies
 
-- npm i vue@3.2.24
--
-
 ### add Angular Dependencies
 
 - npx nx add @angular/material --theme=custom --typography=true --animations=true --project=website
@@ -158,6 +155,7 @@ react-test-renderer
 - npm i -D @storybook/testing-vue3
 - npm i -D @storybook/testing-react
 - npm i -D @storybook/testing-angular
+- npm i -D immer
 
 ### add Cypress Dependencies
 
