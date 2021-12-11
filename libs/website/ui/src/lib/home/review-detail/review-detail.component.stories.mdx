@@ -5,14 +5,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ReviewDetailComponent } from './review-detail.component';
-import { WebsiteUiUiHomeModule } from '../website-ui-ui-home.module';
+import { WebsiteUiModule } from '../../website-ui.module';
 
 <Meta
   title="UI HOME/Review Detail"
   component={ReviewDetailComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiHomeModule],
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiModule],
     }),
   ]}
 />

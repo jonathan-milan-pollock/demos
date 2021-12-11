@@ -5,14 +5,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { EventGridGalleryComponent } from './event-grid-gallery.component';
-import { WebsiteUiUiHomeModule } from '../website-ui-ui-home.module';
+import { WebsiteUiModule } from '../../website-ui.module';
 
 <Meta
   title="UI HOME/Event Grid Gallery"
   component={EventGridGalleryComponent}
   decorators={[
     moduleMetadata({
-      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiHomeModule],
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiModule],
     }),
   ]}
 />

@@ -4,7 +4,7 @@ interface Props {
   readonly title: string;
 }
 
-function Image(props: Props): JSX.Element {
+function PublicImage(props: Props): JSX.Element {
   return (
     <section className="image-section">
       <img src={props.src} alt={props.alt} />
@@ -13,4 +13,4 @@ function Image(props: Props): JSX.Element {
   );
 }
 
-export default Image;
+export default PublicImage;

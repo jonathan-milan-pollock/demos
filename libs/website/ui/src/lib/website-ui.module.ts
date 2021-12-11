@@ -14,7 +14,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 // admin
 import { AdminTopNavBarComponent } from './admin/admin-top-nav-bar/admin-top-nav-bar.component';
-import { NotifyMeFormComponent } from './home/notify-me-form/notify-me-form.component';
 import { MasterComponent } from './admin/master/master.component';
 
 // common
@@ -67,7 +66,6 @@ import { ReviewsMasterComponent } from './home/reviews-master/reviews-master.com
   declarations: [
     // admin
     AdminTopNavBarComponent,
-    NotifyMeFormComponent,
     MasterComponent,
     // common
     CloseButtonComponent,
@@ -103,7 +101,6 @@ import { ReviewsMasterComponent } from './home/reviews-master/reviews-master.com
   exports: [
     // admin
     AdminTopNavBarComponent,
-    NotifyMeFormComponent,
     MasterComponent,
     // common
     CloseButtonComponent,
