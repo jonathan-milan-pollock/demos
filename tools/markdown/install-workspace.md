@@ -15,18 +15,19 @@ react-test-renderer
 
 ## dev dependencies
 
-- npm i -D source-map-explorer
-- npm i -D concurrently
-- npm i -D copyfiles
-- npm i -D faker
 - npm i -D @types/faker
 - npm i -D @types/fs-extra
 - npm i -D @types/uuid
+- npm i -D concurrently
+- npm i -D copyfiles
+- npm i -D faker
+- npm i -D source-map-explorer
 
 ---
 
 ## dependencies
 
+- "nuxt3" : "latest"
 - npm i fs-extra
 - npm i uuid
 
@@ -84,6 +85,11 @@ react-test-renderer
 ---
 
 ## add libraries
+
+### add Vue Dependencies
+
+- npm i vue@3.2.24
+-
 
 ### add Angular Dependencies
 
@@ -148,15 +154,15 @@ react-test-renderer
 - npm i -D @storybook/addon-essentials
 - npm i -D @storybook/addon-a11y
 - npm i -D storybook-addon-themes
-- npm i -D @storybook/addon-postcss
 - npm i -D @compodoc/compodoc
-- npm i -D immer
+- npm i -D @storybook/testing-vue3
+- npm i -D @storybook/testing-react
+- npm i -D @storybook/testing-angular
 
 ### add Cypress Dependencies
 
 - npm uninstall cypress
 - npm i -D cypress
-- npm i -D cypress-storybook
 
 ### add Image Processing Dependencies
 
@@ -176,7 +182,7 @@ react-test-renderer
 ### add Font Awesome Dependencies
 
 - npm i @fortawesome/fontawesome-svg-core
-- npm i @fortawesome/vue-fontawesome
+- npm i @fortawesome/vue-fontawesome@prerelease
 - npm i @fortawesome/angular-fontawesome
 - npm i @fortawesome/react-fontawesome
 - npm i @fortawesome/free-brands-svg-icons

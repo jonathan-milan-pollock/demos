@@ -3,7 +3,6 @@ import * as faker from 'faker';
 import {
   DEFAULT_ENTITY_GROUP,
   EntityType,
-  EntityUpdate,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -12,7 +11,6 @@ import {
   loadCreateImagePostEntity,
   loadCreateTestEntity,
   loadDocumentModelsArray,
-  loadUpdateEntity,
 } from './entity-load-document-model.functions';
 
 describe('entity-load-document-model.functions', () => {
@@ -84,50 +82,6 @@ describe('entity-load-document-model.functions', () => {
       expect(result.starredImageIsCentered).toBe(false);
       expect(result.images.length).toBe(0);
       expect(result.isDeleted).toBe(false);
-    });
-  });
-
-  describe('loadUpdateEntity', () => {
-    it('should load update values', () => {
-      const entityUpdate: EntityUpdate = {
-        isPublic: faker.datatype.boolean(),
-        title: faker.lorem.sentence(),
-        text: faker.lorem.paragraphs(),
-        createdDate: faker.date.recent().toISOString(),
-        publishedDate: faker.date.recent().toISOString(),
-        seoDescription: faker.lorem.sentences(),
-        seoKeywords: [
-          faker.lorem.word(),
-          faker.lorem.word(),
-          faker.lorem.word(),
-        ],
-        location: {
-          place: faker.company.companyName(),
-          city: faker.address.city(),
-          stateOrProvince: faker.address.state(),
-          country: faker.address.country(),
-        },
-        starredImageIsCentered: faker.datatype.boolean(),
-        tileDimension: {
-          width: faker.datatype.number(),
-          height: faker.datatype.number(),
-        },
-      };
-
-      const result = loadUpdateEntity(entityUpdate);
-
-      expect(result.isPublic).toBe(entityUpdate.isPublic);
-      expect(result.title).toBe(entityUpdate.title);
-      expect(result.text).toBe(entityUpdate.text);
-      expect(result.createdDate).toBe(entityUpdate.createdDate);
-      expect(result.publishedDate).toBe(entityUpdate.publishedDate);
-      expect(result.seoDescription).toBe(entityUpdate.seoDescription);
-      expect(result.seoKeywords).toBe(entityUpdate.seoKeywords);
-      expect(result.location).toBe(entityUpdate.location);
-      expect(result.starredImageIsCentered).toBe(
-        entityUpdate.starredImageIsCentered
-      );
-      expect(result.tileDimension).toBe(entityUpdate.tileDimension);
     });
   });
 

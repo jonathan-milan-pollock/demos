@@ -108,7 +108,6 @@
 ## cypress
 
 - :page_with_curl: [Cypress](https://docs.cypress.io/guides/overview/why-cypress)
-- :page_with_curl: [Cypress-Storybook](https://www.npmjs.com/package/cypress-storybook)
 - :page_with_curl: [The Right Way to Test Components](https://www.freecodecamp.org/news/the-right-way-to-test-react-components-548a4736ab22/)
 - :clapper: [Cypress at Assert(JS) 2018 Part 1](https://youtu.be/5XQOK0v_YRE)
 - :clapper: [Cypress at Assert(JS) 2018 Part 2](https://youtu.be/5FnalKRjpZk)

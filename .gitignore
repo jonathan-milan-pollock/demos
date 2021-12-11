@@ -45,10 +45,18 @@ Thumbs.db
 /ci/dist
 
 # cypress
-
 /apps/api-e2e/cypress
 
-# angular
-.angular/
+# nuxt
+node_modules
+*.log
+.nuxt
+nuxt.d.ts
+.output
+.env
 
+# angular
 .angular
+
+
+

@@ -1,24 +1,5 @@
 # todo
 
-- test mobile sizes with
-
-```json
-  "viewportHeight": 763,
-  "viewportWidth": 700,
-```
-
-## manifest
-
-```json
-  "related_applications":[
-      {
-          "platform": "play",
-          "url": "https://play.google.com/store/apps/details?id=com.example.app1",
-          "id": "com.example.app1"
-      }
-  ]
-```
-
 ## create correct image sizes for json-ld
 
 https://www.hillwebcreations.com/valid-image-size-json-ld-snippet-markup/

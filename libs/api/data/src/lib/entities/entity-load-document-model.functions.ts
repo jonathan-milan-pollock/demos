@@ -4,7 +4,6 @@ import {
   DEFAULT_ENTITY_GROUP,
   Entity,
   EntityType,
-  EntityUpdate,
   WatermarkedType,
 } from '@dark-rush-photography/shared/types';
 import { DocumentModel } from '../schema/document.schema';
@@ -56,10 +55,6 @@ export const loadCreateImagePostEntity = (text: string): Entity => ({
   images: [],
   isDeleted: false,
 });
-
-export const loadUpdateEntity = (
-  entityUpdate: EntityUpdate
-): Partial<DocumentModel> => ({ ...entityUpdate });
 
 export const loadDocumentModelsArray = (
   documentModels: DocumentModel | DocumentModel[]

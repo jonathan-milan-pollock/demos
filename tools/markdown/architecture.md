@@ -120,11 +120,100 @@
 "coverageReporters": ["text", "json", "lcov"]
 ```
 
-### reorder apps and libs
+---
 
-- order apps then libs in source order
-  - jest.config.js (only has testable libs)
-  - tsconfig.base.json (only has libs)
+## setup nuxt
+
+### outside this directory create admin app
+
+- npx nuxi init admin
+
+### create admin folder from contents of nuxt output
+
+### update tsconfig.json
+
+```json
+{
+  // https://v3.nuxtjs.org/concepts/typescript
+  "extends": "../../tsconfig.base.json",
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
+}
+```
+
+### move nuxt.config.ts to the root
+
+- also add strict type checking
+
+```ts
+import { defineNuxtConfig } from 'nuxt3';
+
+// https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
+export default defineNuxtConfig({
+  srcDir: 'apps/admin',
+  typescript: {
+    strict: true,
+  },
+});
+```
+
+### copy tsconfig.base.json to tsconfig.json at root
+
+### create admin-e2e by copying existing e2e project
+
+- add entry to angular.json
+
+```json
+    "admin-e2e": {
+      "root": "apps/admin-e2e",
+      "sourceRoot": "apps/admin-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/admin-e2e/cypress.json",
+            "tsConfig": "apps/admin-e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/admin-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["admin"]
+    },
+```
+
+### alphabetically add nuxt3 in package.json and run npm i
+
+"nuxt3": "latest"
+
+### add to gitignore
+
+```shell
+# nuxt
+node_modules
+*.log
+.nuxt
+nuxt.d.ts
+.output
+.env
+```
+
+### add package.json script
+
+```json
+ "serve:admin": "concurrently \"nuxi dev\" \"nx run admin-e2e:e2e --watch\"",
+```
 
 ---
 
@@ -415,7 +504,6 @@ module.exports = rootMain;
 - update .storybook/preview.js with compodoc and plugin setup
 
 ```js
-import 'cypress-storybook/angular';
 import { setCompodocJson } from '@storybook/addon-docs/angular';
 import docJson from './public/documentation.json';
 
@@ -475,14 +563,6 @@ export const parameters = {
   - run cypress and select _runs_ tab and create project for a projectId to be added to cypress.json
     - ui-storybook-e2e
     - website-e2e
-
-### setup cypress-storybook
-
-- in ui-storybook-e2e/src/support/index.ts add:
-
-```ts
-import 'cypress-storybook/cypress';
-```
 
 ---
 

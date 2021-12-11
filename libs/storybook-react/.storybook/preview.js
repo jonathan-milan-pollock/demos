@@ -1,4 +1,3 @@
-import 'cypress-storybook/react';
 import { setCompodocJson } from '@storybook/addon-docs/react';
 import docJson from './public/documentation.json';
 

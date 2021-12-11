@@ -1,4 +1,3 @@
-import 'cypress-storybook/angular';
 import { setCompodocJson } from '@storybook/addon-docs/angular';
 import docJson from './public/documentation.json';
 

@@ -49,10 +49,9 @@
 - [What Web Can Do?](https://whatwebcando.today/)
 - [Is Service Worker Ready?](https://jakearchibald.github.io/isserviceworkerready/)
 - [npm trends](https://www.npmtrends.com/)
+- [Google Trends](https://trends.google.com/)
 - [GlobalStats](https://gs.statcounter.com/)
 - [Screen sizes](https://screensiz.es)
-- [Markdown Emojis](https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md)
-- [Google Trends](https://trends.google.com/)
 
 ---
 
@@ -62,16 +61,16 @@
    <a href="https://nx.dev/">
       <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="55">
    </a>
-   <a href="https://angular.io/">
-      <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="50">
+   <a href="https://vuejs.org">
+      <img src="https://avatars.githubusercontent.com/u/6128107?s=280&v=4" width="55">
    </a>
    <a href="https://reactjs.org/">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/800px-React-icon.svg.png" width="70">
    </a>
-   <a href="https://nextjs.org/">
-      <img src="https://miro.medium.com/max/1300/1*Hva7hcsFWulFUPhrEWui1A.jpeg" width="70">
+   <a href="https://angular.io/">
+      <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="50">
    </a>
-      <a href="https://stenciljs.com/">
+  <a href="https://stenciljs.com/">
       <img src="https://pbs.twimg.com/profile_images/1135534552137510914/5ZzvOFFp_400x400.png" width="40">
    </a>
    <a href="https://nestjs.com/">

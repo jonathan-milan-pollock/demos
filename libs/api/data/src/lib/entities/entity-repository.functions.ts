@@ -13,7 +13,6 @@ import {
   loadCreateImagePostEntity,
   loadCreateTestEntity,
   loadDocumentModelsArray,
-  loadUpdateEntity,
 } from './entity-load-document-model.functions';
 
 export const createTestEntity$ = (
@@ -64,7 +63,7 @@ export const updateEntity$ = (
 ): Observable<DocumentModel | null> =>
   from(
     entityModel.findByIdAndUpdate(entityId, {
-      ...loadUpdateEntity(entityUpdate),
+      ...entityUpdate,
     })
   );
 

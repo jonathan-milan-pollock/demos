@@ -1,0 +1,65 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "declaration": false,
+    "sourceMap": true,
+    "rootDir": ".",
+    "importHelpers": true,
+    "strict": true,
+    "alwaysStrict": false,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "paths": {
+      "@dark-rush-photography/api/data": ["libs/api/data/src/index.ts"],
+      "@dark-rush-photography/api/feature": ["libs/api/feature/src/index.ts"],
+      "@dark-rush-photography/api/types": ["libs/api/types/src/index.ts"],
+      "@dark-rush-photography/api/util": ["libs/api/util/src/index.ts"],
+      "@dark-rush-photography/best-of/data": ["libs/best-of/data/src/index.ts"],
+      "@dark-rush-photography/best-of/feature": [
+        "libs/best-of/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/best-of/types": [
+        "libs/best-of/types/src/index.ts"
+      ],
+      "@dark-rush-photography/best-of/ui": ["libs/best-of/ui/src/index.ts"],
+      "@dark-rush-photography/best-of/util": ["libs/best-of/util/src/index.ts"],
+      "@dark-rush-photography/image-elements": ["dist/libs/image-elements"],
+      "@dark-rush-photography/image-elements/loader": [
+        "dist/libs/image-elements/loader"
+      ],
+      "@dark-rush-photography/shared/types": ["libs/shared/types/src/index.ts"],
+      "@dark-rush-photography/shared/util": ["libs/shared/util/src/index.ts"],
+      "@dark-rush-photography/storybook-angular": [
+        "libs/storybook-angular/src/index.ts"
+      ],
+      "@dark-rush-photography/storybook-react": [
+        "libs/storybook-react/src/index.ts"
+      ],
+      "@dark-rush-photography/storybook-stencil": [
+        "libs/storybook-stencil/src/index.ts"
+      ],
+      "@dark-rush-photography/ui-storybook": ["libs/ui-storybook/src/index.ts"],
+      "@dark-rush-photography/website/app": ["libs/website/app/src/index.ts"],
+      "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
+      "@dark-rush-photography/website/feature": [
+        "libs/website/feature/src/index.ts"
+      ],
+      "@dark-rush-photography/website/types": [
+        "libs/website/types/src/index.ts"
+      ],
+      "@dark-rush-photography/website/ui": ["libs/website/ui/src/index.ts"],
+      "@dark-rush-photography/website/util": ["libs/website/util/src/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
+  "exclude": ["node_modules", "tmp"]
+}
