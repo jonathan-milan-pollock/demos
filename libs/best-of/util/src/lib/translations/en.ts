@@ -1,6 +1,6 @@
 import { Translation } from '@dark-rush-photography/best-of/types';
 
-export const enTranslation: Translation = {
+export const enTranslation = {
   phoneNumber: '404.992.3275',
   phoneKeypadNumber: '404.992.DARK',
   emailAddress: 'dark@darkrush.photo',

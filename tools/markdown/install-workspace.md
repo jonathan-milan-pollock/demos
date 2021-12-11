@@ -1,5 +1,7 @@
 # install-workspace
 
+react-test-renderer
+
 ## schematics
 
 - npm i -D @nrwl/angular
@@ -83,31 +85,31 @@
 
 ## add libraries
 
-### add Angular ng-universal
+### add Angular Dependencies
 
+- npx nx add @angular/material --theme=custom --typography=true --animations=true --project=website
 - npx nx add @nestjs/ng-universal --clientProject=website
-
-### add Angular ngrx
-
+- npx ng add @angular/pwa --project=website
 - npx ng add @ngrx/store --project=website
 - npm i @ngrx/effects
 - npm i @ngrx/entity
 
-### add Angular material
-
-- npx nx add @angular/material --theme=custom --typography=true --animations=true --project=website
-
-### add Angular PWA
-
-- npx ng add @angular/pwa --project=website
-
-### add React Material UI
-
-- npm i @material-ui/core
-
 ### add React Dependencies
 
 - npm i -D eslint-config-next
+- npm i -D react-test-renderer
+- npm i -D @types/react-grid-layout
+- npm i -D @testing-library/react-hooks
+- npm i @mui/material
+- npm i react-device-detect
+- npm i react-grid-layout
+- npm i react-use
+- npm i styled-components **_do we use?_**
+- npm i css-loader **_do we use?_**
+- npm i sass-loader **_do we use?_**
+- npm i style-loader **_do we use?_**
+- npm i @emotion/react
+- npm i @emotion/styled
 
 ### add Nest Dependencies
 
@@ -148,6 +150,7 @@
 - npm i -D storybook-addon-themes
 - npm i -D @storybook/addon-postcss
 - npm i -D @compodoc/compodoc
+- npm i -D immer
 
 ### add Cypress Dependencies
 
@@ -165,6 +168,10 @@
 - npm i node-exiftool
 - npm i googleapis
 - npm i xmlbuilder
+
+### add Image Display Dependencies
+
+- npm i babylonjs
 
 ### add Font Awesome Dependencies
 

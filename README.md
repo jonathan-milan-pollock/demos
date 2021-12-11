@@ -17,6 +17,7 @@
 ### tech stack
 
 - **_Nx_**
+- **_Vue_**
 - **_Angular Universal_**
 - **_React NextJS_**
 - **_StencilJS_**
