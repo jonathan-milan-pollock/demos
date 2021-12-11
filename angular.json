@@ -318,7 +318,54 @@
           "style": "scss"
         }
       },
-      "tags": ["scope:image-elements", "type:ui"]
+      "tags": ["scope:image-elements", "type:ui"],
+      "architect": {
+        "build": {
+          "builder": "@nxext/stencil:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements"
+          },
+          "configurations": {
+            "production": {
+              "dev": false,
+              "prod": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nxext/stencil:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements",
+            "serve": true,
+            "watch": true
+          }
+        },
+        "e2e": {
+          "builder": "@nxext/stencil:e2e",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/image-elements/**/*.{ts,tsx}"]
+          }
+        }
+      }
     },
     "shared-types": {
       "root": "libs/shared/types",

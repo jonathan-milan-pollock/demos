@@ -31,6 +31,8 @@ jobs:
         run: npx nx run ui-storybook:build-storybook
       - name: Storybook Copy Files
         run: npm run sb:copy
+      - name: Image Elements Build
+        run: npx nx run image-elements:build
       - name: Website Build
         run: npm run build:ssr
       - name: Best Of Build
