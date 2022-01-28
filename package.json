@@ -99,7 +99,7 @@
     "googleapis": "^91.0.0",
     "jwks-rsa": "^2.0.5",
     "mongoose": "^6.0.13",
-    "next": "^12.0.7",
+    "next": "^12.0.9",
     "node-exiftool": "^2.3.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
