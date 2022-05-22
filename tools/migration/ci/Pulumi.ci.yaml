@@ -1,0 +1,22 @@
+config:
+  deployment:location: East US
+  deployment:resourceGroupName: drp-rg
+  deployment:devMongoDbAccountName: drp-dev-mongo-db-account
+  deployment:devMongoDbDatabaseName: drp-dev-mongo-db-database
+  deployment:prodMongoDbAccountName: drp-prod-mongo-db-account
+  deployment:prodMongoDbDatabaseName: drp-prod-mongo-db-database
+  deployment:devPrivateStorageAccountName: devprivatesa
+  deployment:devPublicStorageAccountName: devpublicsa
+  deployment:devPublicBlobContainerName: devimages
+  deployment:prodPrivateStorageAccountName: prodprivatesa
+  deployment:prodPublicStorageAccountName: prodpublicsa
+  deployment:prodPublicBlobContainerName: images
+  deployment:cdnProfileName: drp-cdn
+  deployment:cdnEndpointName: dark-rush-photography
+  deployment:containerRegistryName: darkrushphotography
+  deployment:nginxImageName: nginx
+  deployment:websiteImageName: website
+  deployment:apiImageName: api
+  deployment:mediaServiceStorageAccountName: mediasvcsa
+  deployment:mediaServiceName: mediasvc
+  deployment:vaultName: drpkeyvault

@@ -1,0 +1,24 @@
+.tab-bar {
+  margin-top: 5px;
+  width: 100%;
+}
+
+.tab {
+  color: rgb(200, 200, 200);
+  opacity: 1;
+  font-weight: 300;
+  &:hover {
+    color: var(--accent-color);
+    font-weight: 400;
+  }
+}
+
+.tab-active {
+  color: var(--accent-color);
+  opacity: 1;
+  font-weight: 400;
+}
+
+.tab-icon {
+  margin-right: 0.5em;
+}

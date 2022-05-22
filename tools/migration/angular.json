@@ -1,0 +1,1095 @@
+{
+  "version": 1,
+  "projects": {
+    "admin-e2e": {
+      "root": "apps/admin-e2e",
+      "sourceRoot": "apps/admin-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/admin-e2e/cypress.json",
+            "tsConfig": "apps/admin-e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/admin-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": []
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": ["apps/api/src/assets"],
+            "webpackConfig": "apps/api/webpack.config.js"
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        }
+      },
+      "tags": ["scope:api", "type:app"]
+    },
+    "api-data": {
+      "root": "libs/api/data",
+      "sourceRoot": "libs/api/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/data/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/data"],
+          "options": {
+            "jestConfig": "libs/api/data/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:api", "type:data"]
+    },
+    "api-e2e": {
+      "root": "apps/api-e2e",
+      "sourceRoot": "apps/api-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/api-e2e/cypress.json",
+            "tsConfig": "apps/api-e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": ["scope:api", "type:app"],
+      "implicitDependencies": ["api"]
+    },
+    "api-feature": {
+      "root": "libs/api/feature",
+      "sourceRoot": "libs/api/feature/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/feature/**/*.ts"]
+          }
+        }
+      },
+      "tags": ["scope:api", "type:feature"]
+    },
+    "api-types": {
+      "root": "libs/api/types",
+      "sourceRoot": "libs/api/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/types/**/*.ts"]
+          }
+        }
+      },
+      "tags": ["scope:api", "type:types"]
+    },
+    "api-util": {
+      "root": "libs/api/util",
+      "sourceRoot": "libs/api/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/util"],
+          "options": {
+            "jestConfig": "libs/api/util/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:api", "type:util"]
+    },
+    "best-of": {
+      "root": "apps/best-of",
+      "sourceRoot": "apps/best-of",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/best-of",
+            "outputPath": "dist/apps/best-of"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "best-of:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "best-of:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "builder": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "best-of:build:production"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/best-of/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      },
+      "tags": ["scope:best-of", "type:app"]
+    },
+    "best-of-data": {
+      "root": "libs/best-of/data",
+      "sourceRoot": "libs/best-of/data/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/data/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/best-of/data"],
+          "options": {
+            "jestConfig": "libs/best-of/data/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:best-of", "type:data"]
+    },
+    "best-of-e2e": {
+      "root": "apps/best-of-e2e",
+      "sourceRoot": "apps/best-of-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/best-of-e2e/cypress.json",
+            "tsConfig": "apps/best-of-e2e/tsconfig.e2e.json",
+            "devServerTarget": "best-of:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "best-of:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/best-of-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["best-of"]
+    },
+    "best-of-feature": {
+      "root": "libs/best-of/feature",
+      "sourceRoot": "libs/best-of/feature/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/feature/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      },
+      "tags": ["scope:best-of", "type:feature"]
+    },
+    "best-of-types": {
+      "root": "libs/best-of/types",
+      "sourceRoot": "libs/best-of/types/src",
+      "projectType": "library",
+      "tags": ["scope:best-of", "type:types"],
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/best-of/types/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "best-of-ui": {
+      "root": "libs/best-of/ui",
+      "sourceRoot": "libs/best-of/ui/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/ui/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      },
+      "tags": ["scope:best-of", "type:ui"]
+    },
+    "best-of-util": {
+      "root": "libs/best-of/util",
+      "sourceRoot": "libs/best-of/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/best-of/util/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/best-of/util"],
+          "options": {
+            "jestConfig": "libs/best-of/util/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:best-of", "type:util"]
+    },
+    "image-elements": {
+      "root": "libs/image-elements",
+      "sourceRoot": "libs/image-elements/src",
+      "projectType": "library",
+      "schematics": {
+        "@nxext/stencil:component": {
+          "style": "scss"
+        }
+      },
+      "tags": ["scope:image-elements", "type:ui"],
+      "architect": {
+        "build": {
+          "builder": "@nxext/stencil:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements"
+          },
+          "configurations": {
+            "production": {
+              "dev": false,
+              "prod": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nxext/stencil:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements",
+            "serve": true,
+            "watch": true
+          }
+        },
+        "e2e": {
+          "builder": "@nxext/stencil:e2e",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "projectType": "library",
+            "tsConfig": "libs/image-elements/tsconfig.lib.json",
+            "configPath": "libs/image-elements/stencil.config.ts",
+            "outputPath": "dist/libs/image-elements"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/image-elements/**/*.{ts,tsx}"]
+          }
+        }
+      }
+    },
+    "shared-types": {
+      "root": "libs/shared/types",
+      "sourceRoot": "libs/shared/types/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/types/**/*.ts"]
+          }
+        }
+      },
+      "tags": ["scope:shared", "type:types"]
+    },
+    "shared-util": {
+      "root": "libs/shared/util",
+      "sourceRoot": "libs/shared/util/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/shared/util/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/util"],
+          "options": {
+            "jestConfig": "libs/shared/util/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:shared", "type:util"]
+    },
+    "storybook-angular": {
+      "projectType": "library",
+      "root": "libs/storybook-angular",
+      "sourceRoot": "libs/storybook-angular/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/storybook-angular/src/**/*.ts",
+              "libs/storybook-angular/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/storybook-angular/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/storybook-angular",
+            "config": {
+              "configFolder": "libs/storybook-angular/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      },
+      "tags": ["scope:storybook-angular", "type:ui"]
+    },
+    "storybook-angular-e2e": {
+      "root": "apps/storybook-angular-e2e",
+      "sourceRoot": "apps/storybook-angular-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/storybook-angular-e2e/cypress.json",
+            "devServerTarget": "storybook-angular:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "storybook-angular:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/storybook-angular-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["storybook-angular"]
+    },
+    "storybook-react": {
+      "root": "libs/storybook-react",
+      "sourceRoot": "libs/storybook-react/src",
+      "projectType": "library",
+      "tags": ["scope:storybook-react", "type:ui"],
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/storybook-react/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/react",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/storybook-react/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/react",
+            "outputPath": "dist/storybook/storybook-react",
+            "config": {
+              "configFolder": "libs/storybook-react/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "storybook-react-e2e": {
+      "root": "apps/storybook-react-e2e",
+      "sourceRoot": "apps/storybook-react-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/storybook-react-e2e/cypress.json",
+            "devServerTarget": "storybook-react:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "storybook-react:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/storybook-react-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["storybook-react"]
+    },
+    "storybook-stencil": {
+      "root": "libs/storybook-stencil",
+      "sourceRoot": "libs/storybook-stencil/src",
+      "projectType": "library",
+      "tags": ["scope:storybook-stencil", "type:ui"],
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/storybook-stencil/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/react",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/storybook-stencil/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/react",
+            "outputPath": "dist/storybook/storybook-stencil",
+            "config": {
+              "configFolder": "libs/storybook-stencil/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      }
+    },
+    "storybook-stencil-e2e": {
+      "root": "apps/storybook-stencil-e2e",
+      "sourceRoot": "apps/storybook-stencil-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/storybook-stencil-e2e/cypress.json",
+            "devServerTarget": "storybook-stencil:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "storybook-stencil:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/storybook-stencil-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["storybook-stencil"]
+    },
+    "ui-storybook": {
+      "projectType": "library",
+      "root": "libs/ui-storybook",
+      "sourceRoot": "libs/ui-storybook/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ui-storybook/src/**/*.ts",
+              "libs/ui-storybook/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "staticDir": ["libs/ui-storybook/.storybook/public"],
+            "config": {
+              "configFolder": "libs/ui-storybook/.storybook"
+            },
+            "styles": ["apps/website/src/styles.scss"]
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/ui-storybook",
+            "staticDir": ["libs/ui-storybook/.storybook/public"],
+            "config": {
+              "configFolder": "libs/ui-storybook/.storybook"
+            },
+            "styles": ["apps/website/src/styles.scss"]
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      },
+      "tags": ["scope:ui-storybook", "type:ui"]
+    },
+    "ui-storybook-e2e": {
+      "root": "apps/ui-storybook-e2e",
+      "sourceRoot": "apps/ui-storybook-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/ui-storybook-e2e/cypress.json",
+            "tsConfig": "apps/ui-storybook-e2e/tsconfig.e2e.json",
+            "devServerTarget": "ui-storybook:storybook"
+          },
+          "configurations": {
+            "ci": {
+              "devServerTarget": "ui-storybook:storybook:ci"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/ui-storybook-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["ui-storybook"]
+    },
+    "website": {
+      "projectType": "application",
+      "root": "apps/website",
+      "sourceRoot": "apps/website/src",
+      "prefix": "drp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/website/browser",
+            "index": "apps/website/src/index.html",
+            "main": "apps/website/src/main.ts",
+            "polyfills": "apps/website/src/polyfills.ts",
+            "tsConfig": "apps/website/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/website/src/assets",
+              "apps/website/src/favicon.ico",
+              "apps/website/src/robots.txt",
+              "apps/website/src/manifest.webmanifest"
+            ],
+            "styles": ["apps/website/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/website/src/environments/environment.ts",
+                  "with": "apps/website/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/website/ngsw-config.json"
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "website:build",
+            "proxyConfig": "apps/website/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "website:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "website:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/website/src/**/*.ts",
+              "apps/website/src/**/*.html"
+            ]
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/website/server",
+            "main": "apps/website/server.ts",
+            "tsConfig": "apps/website/tsconfig.server.json",
+            "externalDependencies": [
+              "@nestjs/microservices",
+              "@nestjs/microservices/microservices-module",
+              "@nestjs/websockets",
+              "@nestjs/websockets/socket-module",
+              "cache-manager"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "apps/website/src/environments/environment.ts",
+                  "with": "apps/website/src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": false
+            }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "website:build",
+            "serverTarget": "website:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "website:build:production",
+              "serverTarget": "website:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "website:build:production",
+            "serverTarget": "website:server:production",
+            "routes": ["/"]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:app"]
+    },
+    "website-app": {
+      "projectType": "library",
+      "root": "libs/website/app",
+      "sourceRoot": "libs/website/app/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/app/src/**/*.ts",
+              "libs/website/app/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-data": {
+      "projectType": "library",
+      "root": "libs/website/data",
+      "sourceRoot": "libs/website/data/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/data/src/**/*.ts",
+              "libs/website/data/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/data"],
+          "options": {
+            "jestConfig": "libs/website/data/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:data"]
+    },
+    "website-e2e": {
+      "root": "apps/website-e2e",
+      "sourceRoot": "apps/website-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/website-e2e/cypress.json",
+            "tsConfig": "apps/website-e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/website-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["website"]
+    },
+    "website-feature": {
+      "projectType": "library",
+      "root": "libs/website/feature",
+      "sourceRoot": "libs/website/feature/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/feature/src/**/*.ts",
+              "libs/website/feature/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:feature"]
+    },
+    "website-host": {
+      "root": "apps/website-host",
+      "sourceRoot": "apps/website-host/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/website-host",
+            "main": "apps/website-host/src/main.ts",
+            "tsConfig": "apps/website-host/tsconfig.app.json",
+            "assets": ["apps/website-host/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/website-host/src/environments/environment.ts",
+                  "with": "apps/website-host/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/website-host/**/*.ts"]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:app"]
+    },
+    "website-types": {
+      "projectType": "library",
+      "root": "libs/website/types",
+      "sourceRoot": "libs/website/types/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/types/src/**/*.ts",
+              "libs/website/types/src/**/*.html"
+            ]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:types"]
+    },
+    "website-ui": {
+      "projectType": "library",
+      "root": "libs/website/ui",
+      "sourceRoot": "libs/website/ui/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/ui/src/**/*.ts",
+              "libs/website/ui/src/**/*.html"
+            ]
+          }
+        },
+        "storybook": {
+          "builder": "@nrwl/storybook:storybook",
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "port": 4400,
+            "config": {
+              "configFolder": "libs/website/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        },
+        "build-storybook": {
+          "builder": "@nrwl/storybook:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "uiFramework": "@storybook/angular",
+            "outputPath": "dist/storybook/website-ui",
+            "config": {
+              "configFolder": "libs/website/ui/.storybook"
+            }
+          },
+          "configurations": {
+            "ci": {
+              "quiet": true
+            }
+          }
+        }
+      },
+      "tags": ["scope:website", "type:ui"]
+    },
+    "website-util": {
+      "projectType": "library",
+      "root": "libs/website/util",
+      "sourceRoot": "libs/website/util/src",
+      "prefix": "drp",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/website/util/src/**/*.ts",
+              "libs/website/util/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/website/util"],
+          "options": {
+            "jestConfig": "libs/website/util/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true,
+            "coverageReporters": ["text", "json", "lcov"]
+          }
+        }
+      },
+      "tags": ["scope:website", "type:util"]
+    }
+  }
+}

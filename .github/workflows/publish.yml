@@ -1,0 +1,62 @@
+name: 'Publish'
+on:
+  workflow_dispatch:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: production
+    runs-on: ubuntu-latest
+    env:
+      NX_BRANCH: ${{ github.event.number }}
+      NX_RUN_GROUP: ${{ github.run_id }}
+      NODE_OPTIONS: --max_old_space_size=4096
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: setup node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: install dependencies
+        run: |
+          npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
+          npm install
+      - name: admin build
+        run: npx nx run admin:build:production
+      - name: api build
+        run: npx nx run api:build:production
+      - name: best-of build
+        run: npx nx run best-of:build:production
+      - name: drp-art build
+        run: npx nx run drp-art:build:production
+      - name: website build
+        run: npx nx run website:build:production  
+      - name: unit test
+        run: npm run test
+      #- name: Pulumi Install CLI
+      #  uses: pulumi/setup-pulumi@v2
+      #- name: Pulumi Install Dependencies
+      #  run: npm install
+      #  working-directory: ./tools/ci/
+      #- name: Pulumi Up
+      #  uses: pulumi/actions@v3
+      #  with:
+      #    work-dir: ./tools/ci/
+      #    command: up
+      #   stack-name: ci
+        env:
+          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+          ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          NX_GOOGLE_DRIVE_CLIENT_EMAIL: ${{ secrets.NX_GOOGLE_DRIVE_CLIENT_EMAIL }}
+          NX_GOOGLE_DRIVE_PRIVATE_KEY: ${{ secrets.NX_GOOGLE_DRIVE_PRIVATE_KEY }}
+          NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID: ${{ secrets.NX_GOOGLE_DRIVE_WEBSITES_WATERMARKED_FOLDER_ID }}
+          NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID: ${{ secrets.NX_GOOGLE_DRIVE_WEBSITES_WITHOUT_WATERMARK_FOLDER_ID }}
+          NX_TINY_PNG_API_KEY: ${{ secrets.NX_TINY_PNG_API_KEY }}
+          NX_AYRSHARE_API_KEY: ${{ secrets.NX_AYRSHARE_API_KEY }}

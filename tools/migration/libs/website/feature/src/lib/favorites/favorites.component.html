@@ -1,0 +1,10 @@
+<div *ngIf="favoritesEntity$ | async as favoritesEntity">
+  <drp-image-carousel
+    [images]="getImages(favoritesEntity)"
+    height="680px"
+    start-index="0"
+    show-index="true"
+    show-play-button="true"
+    auto-play="true"
+  ></drp-image-carousel>
+</div>

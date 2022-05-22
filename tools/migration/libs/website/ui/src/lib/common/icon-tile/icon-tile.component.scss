@@ -1,0 +1,24 @@
+.icon-tile-button {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 20px;
+  border-width: 2px;
+  margin: 10px;
+  border-style: solid;
+  border-color: transparent;
+  background-color: rgb(11, 11, 11);
+  &:hover {
+    border-color: rgb(200, 200, 200);
+  }
+}
+
+.icon-tile-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  color: rgb(200, 200, 200);
+  font-size: 1em;
+  line-height: 24px;
+}

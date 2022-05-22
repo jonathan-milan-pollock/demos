@@ -1,0 +1,29 @@
+<div class="review">
+  <div class="master-page">
+    <div class="scroll-container">
+      <header class="title-container">
+        <h2 class="title">{{ title }}</h2>
+      </header>
+      <section class="text-container">
+        <p>
+          {{ textWriteReview }}
+        </p>
+        <p>
+          {{ textThankYou }}
+        </p>
+      </section>
+    </div>
+  </div>
+  <div class="detail-page">
+    <div *ngIf="reviewMediaImage$ | async as reviewMediaImage">
+      <drp-image-carousel
+        [images]="getImages(reviewMediaImage)"
+        height="100%"
+        start-index="0"
+        show-index="false"
+        show-play-button="false"
+        auto-play="false"
+      ></drp-image-carousel>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+.contact-bar {
+  flex: 1;
+  background-color: rgb(0, 0, 0); //theme.palette.custom.footerBackgroundColor
+}
+
+.phone-number {
+  display: flex;
+  align-items: baseline;
+  padding: 0.5em 0.25em 0;
+  height: 46px;
+  text-align: 'center';
+  justify-content: 'center';
+}

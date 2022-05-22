@@ -1,0 +1,28 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { PhotoOfTheWeekDetailComponent } from './photo-of-the-week-detail.component';
+import { WebsiteUiModule } from '../../website-ui.module';
+
+<Meta
+  title="UI HOME/Photo of the Week Detail"
+  component={PhotoOfTheWeekDetailComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiModule],
+    }),
+  ]}
+/>
+
+# Photo of the Week Detail
+
+<Story height="500px" name="Default">
+  {(args) => <drp-photo-of-the-week-detail {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={PhotoOfTheWeekDetailComponent} />
