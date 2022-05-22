@@ -1,0 +1,19 @@
+.container {
+  background-color: var(--textBackgroundColor);
+  width: 95%;
+  margin: auto;
+  margin-top: 13px;
+  padding: 15px;
+  border-radius: 40px;
+  text-align: center;
+}
+
+.title {
+  color: var(--textColor);
+  font-family: var(--font-family);
+  font-size: var(--largeFontSize);
+  font-weight: bold;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  padding-top: 5px;
+}

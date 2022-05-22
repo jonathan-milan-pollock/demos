@@ -50,6 +50,7 @@
         "libs/extended-reality/src/index.ts"
       ],
       "@dark-rush-photography/shared/types": ["libs/shared/types/src/index.ts"],
+      "@dark-rush-photography/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@dark-rush-photography/shared/util": ["libs/shared/util/src/index.ts"],
       "@dark-rush-photography/website/data": ["libs/website/data/src/index.ts"],
       "@dark-rush-photography/website/feature": [

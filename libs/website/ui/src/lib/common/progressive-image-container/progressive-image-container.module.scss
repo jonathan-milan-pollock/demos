@@ -1,0 +1,8 @@
+.container {
+  position: relative;
+  width: 100%;
+  //height: (props: StyleProps) => props.height,
+  //margin-left: (props: StyleProps) => props.marginLeft,
+  background-color: var(--imageGalleryContainerBackgroundColor);
+  overflow: 'hidden';
+}

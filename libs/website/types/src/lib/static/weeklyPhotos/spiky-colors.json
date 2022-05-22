@@ -1,0 +1,23 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "spiky-colors",
+  "name": "Spiky Colors",
+  "descriptionParagraphs": [
+    "Around march when the leaves are still green but coming alive, I just like all the colors and spiky leaves."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Ashville",
+    "stateProvince": "North Carolina",
+    "country": null
+  },
+  "keywords": [
+    "Ashville",
+    "North Carolina",
+    "Leaves",
+    "Colorful",
+    "Spiky"
+  ]
+}

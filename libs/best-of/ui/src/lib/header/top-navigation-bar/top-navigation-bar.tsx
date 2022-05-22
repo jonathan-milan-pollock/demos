@@ -2,9 +2,9 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { faHome, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
+import styles from './top-navigation-bar.module.scss';
 import TopNavigationBarButton from '../top-navigation-bar-button/top-navigation-bar-button';
 import ThemeToggleButton from '../theme-toggle-button/theme-toggle-button';
-import classes from './top-navigation-bar.module.scss';
 
 export interface TopNavigationBarProps {
   readonly isDarkTheme: boolean;
@@ -15,10 +15,10 @@ export interface TopNavigationBarProps {
 
 function TopNavigationBar(props: TopNavigationBarProps): JSX.Element {
   return (
-    <div className={classes.outerContainer}>
-      <AppBar className={classes.container} position="static">
+    <div className={styles['outerContainer']}>
+      <AppBar className={styles['container']} position="static">
         <Toolbar>
-          <div className={classes.buttonContainer}>
+          <div className={styles['buttonContainer']}>
             <TopNavigationBarButton
               icon={faHome}
               text="Home"
@@ -32,9 +32,9 @@ function TopNavigationBar(props: TopNavigationBarProps): JSX.Element {
               onClick={() => props.onLinkClicked('/about')}
             ></TopNavigationBarButton>
           </div>
-          <div className={classes.imageContainer}>
+          <div className={styles['imageContainer']}>
             <img
-              className={classes.image}
+              className={styles['image']}
               alt={`37 (DR) Images`}
               src="/dark-rush-photography-logo.png"
             />

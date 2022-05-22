@@ -1,0 +1,25 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "fancy-maid",
+  "name": "Fancy Maid",
+  "descriptionParagraphs": [
+    "I'm just the maid, I'm just a fancy maid in the garden."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Buckhead",
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Buckhead",
+    "Georgia",
+    "Flower",
+    "Purple",
+    "Simple",
+    "Fancy",
+    "Garden"
+  ]
+}

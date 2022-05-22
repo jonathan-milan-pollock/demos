@@ -1,0 +1,25 @@
+{
+  "isPosted": false,
+  "useTileImage": false,
+  "pathname": "beauty-of-new-and-refreshed",
+  "name": "Beauty of New and Refreshed",
+  "descriptionParagraphs": [
+    "This was taken just outside of Nashville, Tennessee on someones B&B land.  The old restored truck was in the middle of the woods.  He had to know what he was doing placing this car in such a perfect setting, it couldn't just have been unplanned."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Nashville",
+    "stateProvince": "Tennessee",
+    "country": null
+  },
+  "keywords": [
+    "Nashville",
+    "Tennessee",
+    "Truck",
+    "Scenic",
+    "Classic",
+    "Car",
+    "Outdoors"
+  ]
+}

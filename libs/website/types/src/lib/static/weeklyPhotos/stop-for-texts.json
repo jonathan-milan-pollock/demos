@@ -1,0 +1,28 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "stop-for-texts",
+  "name": "Stop for Texts",
+  "descriptionParagraphs": [
+    "I should really stop to read my texts!"
+  ],
+  "eventDate":{
+    "month": 3,
+    "day": 8,
+    "year": 2020
+  },
+  "location": {
+    "place": null,
+    "city": "Venice",
+    "stateProvince": null,
+    "country": "Italy"
+  },
+  "keywords": [
+    "Venice",
+    "Italy",
+    "Text",
+    "Cell Phone",
+    "Vespa",
+    "Model"
+  ]
+}

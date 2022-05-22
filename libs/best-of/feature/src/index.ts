@@ -1,4 +1,4 @@
-export { default as AboutPage } from './lib/pages/about-page/about-page';
-export { default as ImagePage } from './lib/pages/image-page/image-page';
-export { default as SlugPage } from './lib/pages/slug-page/slug-page';
-export { default as ThreeSixtyImagePage } from './lib/pages/three-sixty-image-page/three-sixty-image-page';
+export { default as AboutPage } from './lib/about-page/about-page.feature';
+export { default as ImagePage } from './lib/image-page/image-page.feature';
+export { default as PathnamePage } from './lib/pathname-page/pathname-page.feature';
+export { default as ThreeSixtyImagePage } from './lib/three-sixty-image-page/three-sixty-image-page.feature';

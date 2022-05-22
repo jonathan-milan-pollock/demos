@@ -88,6 +88,7 @@
 
 - npx nx g @nrwl/js:lib shared/types --unitTestRunner=none --style=scss --tags=scope:shared,type:types
 - npx nx g @nrwl/js:lib shared/util --unitTestRunner=jest --style=scss --tags=scope:shared,type:util
+- npx nx g @nrwl/next:lib shared/ui --unitTestRunner=none --style=scss --tags=scope:shared,type:ui
 
 ---
 
@@ -115,6 +116,8 @@
 - npm i node-exiftool
 - npm i googleapis
 - npm i xmlbuilder
+- npm i class-transformer
+- npm i class-validator
 
 ### add api web socket dependencies
 
@@ -133,6 +136,7 @@
 ### add next app dependencies
 
 - npm i -D @types/react-grid-layout
+- npm i -D @types/react-image-gallery
 - npm i react-device-detect
 - npm i react-grid-layout
 - npm i react-use
@@ -141,6 +145,8 @@
 - npm i styled-components
 - npm i @emotion/react
 - npm i @emotion/styled
+- npm i react-scrollbars-custom
+- npm i react-image-gallery
 
 ### add font awesome dependencies
 

@@ -1,0 +1,17 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "midnight-rider",
+  "name": "Midnight Rider",
+  "descriptionParagraphs": [
+    "Perhaps surprsingly, this is probably the only place in Alex City that I've never been inside!"
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "Alexander City Municipal Court",
+    "city": " Alexander City",
+    "stateProvince": "Alabama",
+    "country": null
+  },
+  "keywords": []
+}

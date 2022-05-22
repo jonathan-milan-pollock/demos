@@ -1,0 +1,29 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "sorghum-sryup",
+  "name": "The Making of Sorghum Syrup",
+  "descriptionParagraphs": [
+    "This is the homemade making of Sorghum Syrup and what you would see in the 1950s."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "My Friends House, The Grangers",
+    "city": "Eclectic",
+    "stateProvince": "Alabama",
+    "country": null
+  },
+  "keywords": [
+    "Friends House",
+    "The Grangers",
+    "Eclectic",
+    "Alabama",
+    "Sorghum Syrup",
+    "1950s",
+    "Homemade",
+    "Family",
+    "Family Farm",
+    "American",
+    "Horse"
+  ]
+}

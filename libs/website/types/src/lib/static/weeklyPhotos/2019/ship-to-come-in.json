@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "ship-to-come-in",
+  "name": "Waiting for my Ship to Come In",
+  "descriptionParagraphs": [],
+  "eventDate":{
+    "month": 5,
+    "day": 12,
+    "year": 2019
+  },
+  "location": {
+    "place": null,
+    "city": "Northport",
+    "stateProvince": "Michigan",
+    "country": null
+  },
+  "keywords": [
+    "Northport",
+    "Michigan",
+    "Adirondack Chairs",
+    "Relaxing",
+    "Peaceful",
+    "Water",
+    "Boat",
+    "Flowers",
+    "Summer"
+  ]
+}

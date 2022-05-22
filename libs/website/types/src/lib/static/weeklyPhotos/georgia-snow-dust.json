@@ -1,0 +1,24 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "georgia-snow-dust",
+  "name": "Georgia Snow Dust",
+  "descriptionParagraphs": [
+    "I like that everything is still and frozen."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Sandy Springs",
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Sandy Springs",
+    "Georgia",
+    "Still",
+    "Frozen",
+    "Icicle",
+    "Cold"
+  ]
+}

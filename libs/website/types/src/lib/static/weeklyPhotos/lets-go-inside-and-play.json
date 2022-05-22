@@ -1,0 +1,23 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "lets-go-inside-and-play",
+  "name": "Let's Go Inside and Play",
+  "descriptionParagraphs": [
+    "Let's play where the others played, And the others played, We will play as well as the other ones played."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Rome",
+    "stateProvince": "Italy",
+    "country": null
+  },
+  "keywords": [
+    "Rome",
+    "Italy",
+    "Play",
+    "Actors",
+    "History"
+  ]
+}

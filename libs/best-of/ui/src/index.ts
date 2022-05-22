@@ -1,9 +1,11 @@
-// content
-export { default as Image } from './lib/content/image/public-image';
+// common
+export { default as ImagePageLayout } from './lib/common/image-page-layout/image-page-layout.component';
+export { default as PageLayout } from './lib/common/page-layout/page-layout.component';
+export { default as PublicImage } from './lib/common/public-image/public-image.component';
 
 // footer
-export { default as BottomDivider } from './lib/footer/bottom-divider/bottom-divider';
-export { default as BottomNavigationBar } from './lib/footer/bottom-divider/bottom-divider';
+export { default as BottomDivider } from './lib/footer/bottom-divider/bottom-divider.component';
+export { default as BottomNavigationBar } from './lib/footer/bottom-divider/bottom-divider.component';
 
 // header
 export { default as ImageDisplayModeBar } from './lib/header/image-display-mode-bar/image-display-mode-bar';

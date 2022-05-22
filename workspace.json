@@ -29,6 +29,7 @@
     "drp-art-util": "libs/drp-art/util",
     "extended-reality": "libs/extended-reality",
     "shared-types": "libs/shared/types",
+    "shared-ui": "libs/shared/ui",
     "shared-util": "libs/shared/util",
     "website": "apps/website",
     "website-data": "libs/website/data",

@@ -1,0 +1,29 @@
+{
+  "isPosted": false,
+  "useTileImage": false,
+  "pathname": "magical-treasure-chest",
+  "name": "Magical Treasure Chest",
+  "descriptionParagraphs": [
+    "I went with my friend Shante to a mystic gypsy fortune teller which such spirituality that I fondly remember that day."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Myrtle Beach",
+    "stateProvince": "South Carolina",
+    "country": null
+  },
+  "keywords": [
+    "Myrtle Beach",
+    "South Carolina",
+    "Gypsy",
+    "Fortune Teller",
+    "Stories",
+    "Tarot Cards",
+    "Mystic",
+    "Magical",
+    "Reading",
+    "Spiritual",
+    "Books"
+  ]
+}

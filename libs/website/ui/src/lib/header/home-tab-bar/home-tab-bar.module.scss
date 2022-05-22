@@ -1,0 +1,25 @@
+.tabs {
+  background-color: var(--headerBackgroundColor);
+}
+
+.tab {
+  width: 25%;
+  min-width: 70px;
+  font-family: var(--fontFamily);
+  font-weight: 500;
+  color: var(--headerAccentColor);
+  opacity: 1;
+}
+
+.tabSelected {
+  width: 25%;
+  min-width: 70;
+  font-family: var(--fontFamily);
+  font-weight: 500;
+  color: var(--accentColor);
+  opacity: 1;
+}
+
+.tabIndicator {
+  background-color: var(--accentColor);
+}

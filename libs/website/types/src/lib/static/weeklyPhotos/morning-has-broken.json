@@ -1,0 +1,22 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "morning-has-broken",
+  "name": "Morning Has Broken",
+  "descriptionParagraphs": [
+    "This is from the Native American Festival at Stone Mountain. It almost feel like you could hide in any of these petals."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "Stone Mountain Park",
+    "city": "Stone Mountain",
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Stone Mountain Park",
+    "Georgia",
+    "Yellow Flower",
+    "Ruffles"
+  ]
+}

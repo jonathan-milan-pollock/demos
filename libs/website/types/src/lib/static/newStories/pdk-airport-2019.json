@@ -1,0 +1,22 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "pdk-airport",
+  "name": null,
+  "descriptionParagraphs": [],
+  "eventDate": {
+    "month": 0,
+    "day": 0,
+    "year": 0
+  },
+  "location": {
+    "place": null,
+    "city": null,
+    "stateProvince": null,
+    "country": null
+  },
+  "keywords": [],
+  "images": [],
+  "threeSixtyImages": [],
+  "youTubeVideos": []
+}

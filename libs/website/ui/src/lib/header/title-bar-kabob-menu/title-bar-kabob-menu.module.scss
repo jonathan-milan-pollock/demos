@@ -1,0 +1,51 @@
+:root {
+  z-index: 6000;
+}
+
+.container {
+  margin-left: 'auto';
+}
+
+.kabobIcon {
+  color: var(--headerIconColor);
+}
+
+.menu {
+  margin-top: 85px;
+  z-index: 4000;
+  cursor: 'pointer';
+}
+
+.menu ul {
+  background-color: var(--headerBackgroundColor);
+}
+
+.menuItem {
+  background-color: var(--headerBackgroundColor);
+}
+
+.menuItem:focus {
+  border: 0;
+  outline: 'none';
+}
+
+.menuItem:hover {
+  border: 0;
+  outline: 'none';
+  & .icon {
+    color: var(--accentColor);
+  }
+  & .text {
+    color: var(--accentColor);
+  }
+}
+
+.icon {
+  color: var(--iconColor);
+}
+
+.text {
+  color: var(--headerAccentColor);
+  font-size: var(--kabobMenuFontSize);
+  margin-left: -20px;
+}

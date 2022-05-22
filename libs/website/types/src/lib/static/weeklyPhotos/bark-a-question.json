@@ -1,0 +1,24 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "bark-a-question",
+  "name": "Bark a Question",
+  "descriptionParagraphs": [
+    "Hey, I really wanted to ask a question but all I can do is Bark."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "Heritage Sandy Springs",
+    "city": "Sandy Springs",
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Heritage Sandy Springs",
+    "Sandy Springs",
+    "Georgia",
+    "dog",
+    "puppy",
+    "inquisitive"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "thanksgiving-in-alexander-city-2018",
+  "name": "Thanksgiving in Alexander City, 2018",
+  "descriptionParagraphs": [
+    "It's beginnning to look a lot like Christmas"
+  ],
+  "eventDate": {
+    "month": 11,
+    "day": 22,
+    "year": 2018
+  },
+  "location": {
+    "place": null,
+    "city": "Alexander City",
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Alexander City",
+    "Georgia",
+    "Hometown",
+    "Christmas"
+  ],
+  "images": [
+    {
+      "imageNumber": 1,
+      "width": 530,
+      "height": 217
+    },
+    {
+      "imageNumber": 2,
+      "width": 530,
+      "height": 326
+    },
+    {
+      "imageNumber": 3,
+      "width": 530,
+      "height": 283
+    },
+    {
+      "imageNumber": 4,
+      "width": 530,
+      "height": 335
+    },
+    {
+      "imageNumber": 5,
+      "width": 530,
+      "height": 180
+    },
+    {
+      "imageNumber": 6,
+      "width": 530,
+      "height": 156
+    },
+    {
+      "imageNumber": 7,
+      "width": 530,
+      "height": 353
+    },
+    {
+      "imageNumber": 8,
+      "width": 530,
+      "height": 288
+    },
+    {
+      "imageNumber": 9,
+      "width": 530,
+      "height": 332
+    },
+    {
+      "imageNumber": 10,
+      "width": 530,
+      "height": 426
+    },
+    {
+      "imageNumber": 11,
+      "width": 530,
+      "height": 327
+    },
+    {
+      "imageNumber": 12,
+      "width": 530,
+      "height": 347
+    }
+  ],
+  "threeSixtyImages": [],
+  "youTubeVideos": []
+}

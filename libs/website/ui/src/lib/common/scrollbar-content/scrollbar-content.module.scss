@@ -1,0 +1,23 @@
+/*
+colorScrollbar: {
+    position: 'absolute',
+    top: (props: StyleProps) => props.top,
+    left: 0,
+    width: (props: StyleProps) => props.width,
+    height: (props: StyleProps) => props.height,
+    marginLeft: (props: StyleProps) => props.marginLeft,
+    padding: 0,
+    backgroundColor: theme.palette.custom.detailBackgroundColor
+},
+scrollbar: {
+    position: 'absolute',
+    top: (props: StyleProps) => props.top,
+    left: 0,
+    width: (props: StyleProps) => props.width,
+    height: (props: StyleProps) => props.height,
+    marginLeft: (props: StyleProps) => props.marginLeft,
+    overflow: 'hidden',
+    overflowY: 'scroll',
+    backgroundColor: theme.palette.custom.detailBackgroundColor
+}
+*/
