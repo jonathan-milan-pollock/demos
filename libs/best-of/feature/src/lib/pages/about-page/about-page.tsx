@@ -2,7 +2,7 @@ import {
   EntityMinimalPublic,
   EntityPublic,
 } from '@dark-rush-photography/shared/types';
-import PageLayout from '../../layout/page-layout/page-layout';
+import PageLayout from '../../page-layout/page-layout';
 import classes from './about-page.module.scss';
 
 interface Props {
