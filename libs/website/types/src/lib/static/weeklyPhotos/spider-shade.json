@@ -1,0 +1,27 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "spider-shade",
+  "name": "Spider Shade",
+  "descriptionParagraphs": [
+    "I was walking down a trail and saw the shadow beneath these palm trees that I love."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "Cumberland Island",
+    "city": null,
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Cumberland Island",
+    "Georgia",
+    "Palm Tree",
+    "Walk",
+    "Island",
+    "Shade",
+    "Beach",
+    "Sand",
+    "Blue Sky"
+  ]
+}

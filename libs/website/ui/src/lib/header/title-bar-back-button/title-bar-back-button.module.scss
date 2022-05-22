@@ -1,0 +1,11 @@
+.iconButton {
+  &:hover {
+    & .icon {
+      color: var(--accentColor);
+    }
+  }
+}
+
+.icon {
+  color: var(--titleBarBackButtonIconColor);
+}

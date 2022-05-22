@@ -1,0 +1,17 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "let-it-shine",
+  "name": "Let it Shine",
+  "descriptionParagraphs": [
+    "This little light on mine, I'm gonna let it shine."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": null,
+    "stateProvince": null,
+    "country":  "United States"
+  },
+  "keywords": []
+}

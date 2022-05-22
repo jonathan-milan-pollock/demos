@@ -1,0 +1,30 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "dads-domain",
+  "name": "My Dad's Domain",
+  "descriptionParagraphs": [
+    "My family's home and hometown will always be my first love because it is my first love. This is Alex City, Alabama and every year I demand that we have a spiritual bonfire and we play music from my car in the driveway and dance around the fire in the backyard."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": "Alexander City",
+    "stateProvince": "Alabama",
+    "country": null
+  },
+  "keywords": [
+    "Alexander City",
+    "Alabama",
+    "Home",
+    "Hometown",
+    "First Love",
+    "Campfire",
+    "Bonfire",
+    "Spiritual",
+    "Music",
+    "Dance",
+    "Fire",
+    "Backyard"
+  ]
+}

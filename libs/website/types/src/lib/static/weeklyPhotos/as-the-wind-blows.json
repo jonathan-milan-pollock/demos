@@ -1,0 +1,28 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "as-the-wind-blows",
+  "name": "As the Wind Blows",
+  "descriptionParagraphs": [
+    "I was getting off the train and saw so many cool lights that I kinda forgot what train I was supposed to get on!"
+  ],
+  "eventDate":{
+    "month": 3,
+    "day": 1,
+    "year": 2020
+  },
+  "location": {
+    "place": "Milano Centrale Railway Station",
+    "city": "Milan",
+    "stateProvince": null,
+    "country": "Italy"
+  },
+  "keywords": [
+    "train",
+    "Milan",
+    "Italy",
+    "fast",
+    "Railway Station",
+    "colorful"
+  ]
+}

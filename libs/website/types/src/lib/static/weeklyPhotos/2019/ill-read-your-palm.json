@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "ill-read-your-palm",
+  "name": "I'll Read Your Palm",
+  "descriptionParagraphs": [
+    "I'll read your palm if you read mine in front of the palm tree."
+  ],
+  "eventDate":{
+    "month": 4,
+    "day": 4,
+    "year": 2019
+  },
+  "location": {
+    "place": "Jackson Square",
+    "city": "New Orleans",
+    "stateProvince": "Louisiana",
+    "country": null
+  },
+  "keywords": [
+    "Jackson Square",
+    "New Orleans",
+    "Louisiana",
+    "Paulm Tree",
+    "Blue Sky",
+    "Manicured Lawn",
+    "Landscaping"
+  ]
+}

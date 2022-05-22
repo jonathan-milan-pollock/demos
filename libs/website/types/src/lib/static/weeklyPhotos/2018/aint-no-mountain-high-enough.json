@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "aint-no-mountain-high-enough",
+  "name": "Ain't No Mountain High Enough",
+  "descriptionParagraphs": [
+    "I held onto this Coke bottle like it was my wubby for the whole time I was in Colorado to take this shot till I got to Rocky Mountain National Park."
+  ],
+  "eventDate":{
+    "month": 1,
+    "day": 7,
+    "year": 2018
+  },
+  "location": {
+    "place": "Rocky Mountain National Park",
+    "city": null,
+    "stateProvince": "Colorado",
+    "country": null
+  },
+  "keywords": [
+    "Colorado",
+    "Rocky Mountain National Park",
+    "Coke",
+    "Outdoor",
+    "Mountains",
+    "Coca-Cola",
+    "Ain't no mountain high enough"
+  ]
+}

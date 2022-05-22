@@ -1,0 +1,56 @@
+{
+    "isPosted": true,
+    "useTileImage": true,
+    "pathname": "classic-cars-1952-pontiac",
+    "name": "Classic 1952 Pontiac",
+    "descriptionParagraphs": [
+        "Over the holiday, my photographer friends and I went out to capture photos around Goodwater, Alabama.  On the side of the road was this classic 1952 Pontiac.  While we heard them in their backyard shooting something (perhaps squirrel), we were in front \"shooting\" their car!"
+    ],
+    "eventDate": {
+        "month": 12,
+        "day": 28,
+        "year": 2017
+    },
+    "location": {
+        "place": null,
+        "city": "Goodwater",
+        "stateProvince": "Alabama",
+        "country": null
+    },
+    "keywords": [
+        "Goodwater",
+        "Alabama",
+        "Classic",
+        "1952 Pontiac",
+        "Car"
+    ],
+    "images": [
+        {
+            "imageNumber": 1,
+            "width": 530,
+            "height": 336
+        },
+        {
+            "imageNumber": 2,
+            "width": 530,
+            "height": 352
+        },
+        {
+            "imageNumber": 3,
+            "width": 352,
+            "height": 530
+        },
+        {
+            "imageNumber": 4,
+            "width": 530,
+            "height": 278
+        },
+        {
+            "imageNumber": 5,
+            "width": 530,
+            "height": 318
+        }
+    ],
+    "threeSixtyImages": [],
+    "youTubeVideos": []
+}

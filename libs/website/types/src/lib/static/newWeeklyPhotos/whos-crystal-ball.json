@@ -1,0 +1,17 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "whos-crystal-ball",
+  "name": "Who's crystal ball is this?",
+  "descriptionParagraphs": [
+    "This photo is from the Phoenix & Dragon Bookstore in Atlanta, Georgia. It's so mystic looking to a crystal ball, an instant fisheye lens."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "Phoenix & Dragon Bookstore",
+    "city": "Sandy Springs",
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": []
+}

@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "rover-rover-please-come-over",
+  "name": "Rover Rover Please Come Over",
+  "descriptionParagraphs": [
+    "Rover is my best customer"
+  ],
+  "eventDate":{
+    "month": 1,
+    "day": 27,
+    "year": 2020
+  },
+  "location": {
+    "place": null,
+    "city": "Venice",
+    "stateProvince": "Florida",
+    "country": null
+  },
+  "keywords": [
+    "Venice",
+    "Florida",
+    "Rover",
+    "Family Store",
+    "Family",
+    "Happy",
+    "Memories"
+  ]
+}

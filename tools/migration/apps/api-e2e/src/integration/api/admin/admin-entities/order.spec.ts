@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as faker from 'faker';
+import faker from '@faker-js/faker';
 
 import {
   EntityAdmin,

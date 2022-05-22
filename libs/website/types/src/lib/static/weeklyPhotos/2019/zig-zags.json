@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": false,
+  "pathname": "zig-zags",
+  "name": "Zig Zags",
+  "descriptionParagraphs": [
+    "Which line takes me where? I like the lines and the zig zags in this photo!"
+  ],
+  "eventDate":{
+    "month": 9,
+    "day": 21,
+    "year": 2019
+  },
+  "location": {
+    "place": "Stone Mountain Park,",
+    "city": null,
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Stone Mountain Park",
+    "Georgia",
+    "Stairs",
+    "Pattern",
+    "Zig-zags",
+    "Pathway",
+    "Shadows"
+  ]
+}

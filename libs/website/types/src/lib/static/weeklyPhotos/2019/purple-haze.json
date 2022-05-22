@@ -1,0 +1,27 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "purple-haze",
+  "name": "Purple Haze",
+  "descriptionParagraphs": [
+    "This shot is from a Prairie in Wisconsin"
+  ],
+  "eventDate":{
+    "month": 6,
+    "day": 29,
+    "year": 2019
+  },
+  "location": {
+    "place": null,
+    "city": null,
+    "stateProvince": "Wisconsin",
+    "country": null
+  },
+  "keywords": [
+    "Wisconsin",
+    "Prairie",
+    "Purple",
+    "Flowers",
+    "Yellow"
+  ]
+}

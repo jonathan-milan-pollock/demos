@@ -1,0 +1,17 @@
+{
+  "isPosted": false,
+  "useTileImage": true,
+  "pathname": "on-the-other-side",
+  "name": "What's on the Other Side?",
+  "descriptionParagraphs": [
+    "Let's see whats on the other side."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": null,
+    "city": null,
+    "stateProvince": null,
+    "country": null
+  },
+  "keywords": []
+}

@@ -1,0 +1,28 @@
+{
+  "isPosted": true,
+  "useTileImage": false,
+  "pathname": "curiouser-and-curiouser",
+  "name": "Curious, What Do You See? I'm Getting Curiouser and Curiouser!",
+  "descriptionParagraphs": [
+    "I've always loved pictures where you're looking through something to see something. I see a different world that your looking into from where your standing."
+  ],
+  "eventDate":{
+    "month": 8,
+    "day": 18,
+    "year": 2019
+  },
+  "location": {
+    "place": null,
+    "city": "Buena Vista",
+    "stateProvince": "Colorado",
+    "country": null
+  },
+  "keywords": [
+    "Buena Vista",
+    "Colorado",
+    "Looking Glass",
+    "Window Pane",
+    "Another World",
+    "Colorful"
+  ]
+}

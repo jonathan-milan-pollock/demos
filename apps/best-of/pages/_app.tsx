@@ -6,11 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 
 import theme from '../theme/theme';
-import '../styles/globals.scss';
-import '../styles/variables.scss';
-import '../styles/theme-dark-variables.scss';
-import '../styles/theme-light-variables.scss';
-import '../styles/utilities.scss';
+import '../styles/styles.scss';
 
 //import { ReactComponent as NxLogo } from '../public/nx-logo-white.svg';
 // <NxLogo width="75" height="50" />

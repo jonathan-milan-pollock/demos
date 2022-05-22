@@ -1,0 +1,64 @@
+.optionsBar {
+  height: 64px;
+  background-color: var(--headerBackgroundColor);
+}
+
+.app-bar {
+  background-color: var(--headerBackgroundColor);
+  width: 100%;
+  z-index: 2000;
+}
+
+.container {
+  min-height: 64px !important;
+}
+
+button {
+  background-color: transparent;
+  color: var(--optionsBarButtonColor);
+  height: 52px;
+}
+
+button:hover {
+  color: var(--accentColor);
+  background-color: transparent;
+}
+
+button:active {
+  color: var(--accentColor);
+  background-color: transparent;
+}
+
+button:not(:active) {
+  color: var(--optionsBarButtonColor);
+  background-color: transparent;
+}
+
+.closeButton {
+  background-color: transparent;
+  color: var(--optionsBarButtonColor);
+  height: 52px;
+  margin-left: auto;
+}
+
+.closeButton:hover {
+  color: var(--accentColor);
+  background-color: transparent;
+}
+
+.closeButton:active {
+  color: var(--accentColor);
+  background-color: transparent;
+}
+
+.closeButton:not(:active) {
+  color: var(--accentColor);
+  background-color: 'transparent';
+}
+
+.buttonText {
+  color: var(--optionsBarButtonColor);
+  font-family: var(--fontFamily);
+  font-size: var(--smallFontSize);
+  margin-left: 10px;
+}

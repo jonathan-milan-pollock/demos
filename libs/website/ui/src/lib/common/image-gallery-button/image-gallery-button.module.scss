@@ -1,0 +1,32 @@
+buttonContainer {
+  position: 'absolute';
+  //width: (props: StyleProps) => props.width,
+  height: '100%';
+  //top: (props: StyleProps) => props.top,
+  //left: (props: StyleProps) => props.left
+}
+
+button {
+  background-color: 'transparent';
+  color: var(--imageGalleryButtonColor);
+  height: 52px;
+}
+
+button:hover {
+  color: var(--accentColor);
+  background-color: transparent;
+}
+
+button:active {
+  color: var(--accentColor);
+  background-color: transparent;
+}
+
+button:not(:active) {
+  color: var(--imageGalleryButtonColor);
+  background-color: 'transparent';
+}
+
+button:disabled {
+  color: var(--imageGalleryDisabledButtonColor);
+}

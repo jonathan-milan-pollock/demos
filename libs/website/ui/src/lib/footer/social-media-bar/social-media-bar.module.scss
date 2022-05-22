@@ -1,0 +1,10 @@
+.outerContainer {
+  flex-grow: 1;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--headerBackgroundColor);
+}

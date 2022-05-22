@@ -1,0 +1,24 @@
+{
+  "isPosted": false,
+  "useTileImage": false,
+  "pathname": "sail-on",
+  "name": "Sail On!",
+  "descriptionParagraphs": [
+    "The fishing gear up to fish for the day."
+  ],
+  "eventDate": null,
+  "location": {
+    "place": "Cumberland Island",
+    "city": null,
+    "stateProvince": "Georgia",
+    "country": null
+  },
+  "keywords": [
+    "Cumberland Island",
+    "Georgia",
+    "Sailboat",
+    "Water",
+    "Calm",
+    "Blue Sky"
+  ]
+}

@@ -1,0 +1,30 @@
+.header {
+  background-color: var(--headerBackgroundColor);
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+}
+
+main {
+  background-color: var(--mainBackgroundColor);
+  position: fixed;
+  left: 0;
+  //top: (props: StyleProps) => props.mainTop,
+  //bottom: (props: StyleProps) => props.mainBottom,
+  width: 100%;
+  overflow: hidden;
+}
+
+footer {
+  background-color: var(--footerBackgroundColor);
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  //height: (props: StyleProps) => props.footerHeight,
+  z-index: 2000;
+}

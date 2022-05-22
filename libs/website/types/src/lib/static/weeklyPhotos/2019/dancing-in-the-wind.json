@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "dancing-in-the-wind",
+  "name": "Dancing in the Wind",
+  "descriptionParagraphs": [
+    "Join us, we're dancing in the wind!"
+  ],
+  "eventDate":{
+    "month": 5,
+    "day": 26,
+    "year": 2019
+  },
+  "location": {
+    "place": null,
+    "city": null,
+    "stateProvince": null,
+    "country": "United States"
+  },
+  "keywords": [
+    "United States",
+    "Proud",
+    "American",
+    "Flag",
+    "Wind",
+    "Blue Sky",
+    "Puffy Clouds"
+  ]
+}

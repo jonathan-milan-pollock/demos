@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 
 import { ImagePublic } from '@dark-rush-photography/shared/types';
-import { SlugPage } from '@dark-rush-photography/best-of/feature';
+import { PathnamePage } from '@dark-rush-photography/best-of/feature';
 
 interface Props {
   images: ImagePublic[];
@@ -21,7 +21,9 @@ function Index(props: Props): JSX.Element {
     );
   }
 
-  return <SlugPage images={props.images} displayImage={displayImageHandler} />;
+  return (
+    <PathnamePage images={props.images} displayImage={displayImageHandler} />
+  );
 }
 
 export async function getStaticProps() {

@@ -1,0 +1,29 @@
+{
+  "isPosted": true,
+  "useTileImage": true,
+  "pathname": "beautiful-day",
+  "name": "It's a Beautiful Day",
+  "descriptionParagraphs": [],
+  "eventDate":{
+    "month": 6,
+    "day": 15,
+    "year": 2019
+  },
+  "location": {
+    "place": null,
+    "city": "Sicily",
+    "stateProvince": null,
+    "country": "Italy"
+  },
+  "keywords": [
+    "Sicily",
+    "Italy",
+    "Beach",
+    "Blue Water",
+    "Mountain",
+    "Beach Homes",
+    "Swimming",
+    "Blue Sky",
+    "Puffy Clouds"
+  ]
+}
