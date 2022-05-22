@@ -1,0 +1,11 @@
+.hyperlink {
+  font-size: 18px; //mediumFontSize,
+  font-weight: 500;
+  text-decoration: 'underline';
+  color: rgb(200, 200, 200); // hyperlinkColor,
+  text-decoration-color: rgba(200, 200, 200, 0.6); // hyperlinkUnderlineColor,
+  &:hover {
+    color: #00b2a9; // accentColor
+    text-decoration-color: #00b2a9; // accentColor
+  }
+}

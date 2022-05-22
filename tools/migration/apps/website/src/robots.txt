@@ -1,0 +1,6 @@
+User-agent: *
+
+Disallow: /admin/
+Disallow: /index.html
+
+Sitemap: https://darkrushphotography.com/sitemap.xml

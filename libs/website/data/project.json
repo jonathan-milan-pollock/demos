@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/website/data/src",
+  "projectType": "library",
+  "tags": ["scope:website", "type:data"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/website/data/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/website/data"],
+      "options": {
+        "jestConfig": "libs/website/data/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

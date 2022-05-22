@@ -1,0 +1,38 @@
+name: 'Pull Request'
+on:
+  - pull_request
+jobs:
+  build:
+    name: build & test
+    runs-on: ubuntu-latest
+    env:
+      NX_BRANCH: ${{ github.event.number }}
+      NX_RUN_GROUP: ${{ github.run_id }}
+      NODE_OPTIONS: --max_old_space_size=4096
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: setup node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: install dependencies
+        run: |
+          npm config set '//npm.fontawesome.com/:_authToken' "${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}"
+          npm install
+      - name: admin build
+        run: npx nx run admin:build:production
+      - name: api build
+        run: npx nx run api:build:production
+      - name: best-of build
+        run: npx nx run best-of:build:production
+      - name: drp-art build
+        run: npx nx run drp-art:build:production
+      - name: website build
+        run: npx nx run website:build:production  
+      - name: unit test
+        run: npm run test
+      - name: upload coverage to codecov
+        uses: codecov/codecov-action@v1

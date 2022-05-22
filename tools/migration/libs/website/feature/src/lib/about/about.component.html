@@ -1,0 +1,40 @@
+<div *ngIf="isLoading$ | async">Loading...</div>
+<div class="about">
+  <div class="master-page">
+    <div class="scroll-container">
+      <header class="title-container">
+        <h2 class="title">{{ title }}</h2>
+      </header>
+      <section class="text-container">
+        <h3 class="subtitle">{{ subTitleContactUs }}</h3>
+        <p>{{ textPhoneNumber }}</p>
+        <p>{{ textEmail }}</p>
+        <p>{{ textOpenHours }}</p>
+      </section>
+      <section class="text-container">
+        <h3 class="subtitle">{{ subTitleLocations }}</h3>
+        <p>{{ textLocations }}</p>
+        <ul class="text-list">
+          <li *ngFor="let location of locations">{{ location }}</li>
+        </ul>
+      </section>
+      <section class="text-container">
+        <h3 class="subtitle">{{ subTitleFindUsOn }}</h3>
+        <button class="social-media-button">Facebook</button>
+        <button class="social-media-button">Instagram</button>
+        <button class="social-media-button">LinkedIn</button>
+        <button class="social-media-button">YouTube</button>
+      </section>
+      <section class="text-container">
+        <p></p>
+      </section>
+    </div>
+  </div>
+  <div class="detail-page">
+    <ul>
+      <li *ngFor="let aboutEntity of aboutEntities$ | async">
+        {{ aboutEntity.title }}
+      </li>
+    </ul>
+  </div>
+</div>

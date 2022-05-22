@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/admin/types/src",
+  "projectType": "library",
+  "tags": ["scope:admin", "type:types"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/types/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "short_name": "Dark Rush Photography",
+  "name": "Dark Rush Photography",
+  "description": "Dark Rush Photography specializes in Event, Drone, and VR Photography in Sandy Springs, Dunwoody, Vinings, Buckhead, Midtown and Atlanta, Georgia.",
+  "start_url": "https://darkrushphotography.com",
+  "theme_color": "#00B2A9",
+  "background_color": "#1E1E1E",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-168x168.png",
+      "sizes": "168x168",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://dark-rush-photography-images.azureedge.net/dark-rush-photography-site/icons/dark-rush-photography-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

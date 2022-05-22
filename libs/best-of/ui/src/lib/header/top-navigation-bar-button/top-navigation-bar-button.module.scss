@@ -1,0 +1,20 @@
+.container {
+  padding: 0 0.25em;
+}
+
+.container .button {
+  color: #ffffff; //topHeaderAccentColor
+  &:hover {
+    color: rgb(0, 178, 169);
+  }
+}
+
+.container
+  .buttonSelected.MuiButtonBase-root.MuiTab-root.MuiTab-labelIcon.MuiTab-textColorPrimary.Mui-selected {
+  color: rgb(0, 178, 169) !important; // accent-color
+}
+
+.container .text {
+  margin-left: 0.25em;
+  font-size: 1rem;
+}

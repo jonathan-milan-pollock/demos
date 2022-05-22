@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/best-of/data/src",
+  "projectType": "library",
+  "tags": ["scope:best-of", "type:data"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/best-of/data/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/best-of/data"],
+      "options": {
+        "jestConfig": "libs/best-of/data/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

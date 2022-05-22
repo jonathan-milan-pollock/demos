@@ -1,0 +1,38 @@
+import { Meta, Story, ArgsTable } from '@storybook/addon-docs';
+import { moduleMetadata } from '@storybook/angular';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { SocialMediaButtonComponent } from './social-media-button.component';
+import { WebsiteUiModule } from '../../website-ui.module';
+
+<Meta
+  title="UI SHELL/Social Media Button"
+  component={SocialMediaButtonComponent}
+  decorators={[
+    moduleMetadata({
+      imports: [BrowserModule, BrowserAnimationsModule, WebsiteUiUiShellModule],
+    }),
+  ]}
+  argTypes={{
+    clicked: { action: 'clicked' },
+  }}
+/>
+
+# Social Media Button
+
+## Default
+
+<Story
+  name="Facebook"
+  args={{
+    ariaLabel: 'Share Image with Dark Rush Photography on Facebook',
+  }}
+>
+  {(args) => <drp-social-media-button {...args} />}
+</Story>
+
+## Args Table
+
+<ArgsTable of={SocialMediaButtonComponent} />
