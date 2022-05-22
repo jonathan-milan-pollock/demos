@@ -4,7 +4,6 @@
   "license": "MIT",
   "description": "Workspace for Dark Rush Photography",
   "scripts": {
-    "ng": "nx",
     "nx": "nx",
     "build:all": "nx run-many --target=build --all",
     "test": "nx test",
