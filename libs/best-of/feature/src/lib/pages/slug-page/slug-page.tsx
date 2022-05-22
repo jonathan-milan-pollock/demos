@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 
 import { ImagePublic } from '@dark-rush-photography/shared/types';
-import PageLayout from '../../layout/page-layout/page-layout';
+import PageLayout from '../../page-layout/page-layout';
 import classes from './slug-page.module.scss';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 export function SlugPage(props: Props): JSX.Element {
   const router = useRouter();
 
-  const slug = router.query.slug;
+  const slug = ''; //router.query.slug;
   return (
     <PageLayout>
       <>
