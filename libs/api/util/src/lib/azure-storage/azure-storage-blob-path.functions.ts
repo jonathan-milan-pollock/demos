@@ -2,14 +2,14 @@ import { ImageDimensionType } from '@dark-rush-photography/shared/types';
 
 export const getAzureStorageBlobPath = (
   storageId: string,
-  slug: string,
+  pathname: string,
   fileExtension: string
-): string => `${storageId}/${slug}${fileExtension}`;
+): string => `${storageId}/${pathname}${fileExtension}`;
 
 export const getAzureStorageBlobPathWithImageDimension = (
   storageId: string,
-  slug: string,
+  pathname: string,
   fileExtension: string,
   imageDimensionType: ImageDimensionType
 ): string =>
-  `${storageId}/${imageDimensionType.toLowerCase()}/${slug}${fileExtension}`;
+  `${storageId}/${imageDimensionType.toLowerCase()}/${pathname}${fileExtension}`;

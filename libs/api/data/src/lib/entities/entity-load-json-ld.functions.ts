@@ -22,7 +22,7 @@ export const loadJsonLdEventImageUrls = (
     .map((image) =>
       getImageUrl(
         image.storageId,
-        image.slug,
+        image.pathname,
         ImageDimensionType.JsonLd,
         isProduction
       )

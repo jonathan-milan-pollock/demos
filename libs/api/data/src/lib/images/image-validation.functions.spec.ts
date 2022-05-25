@@ -125,7 +125,7 @@ describe('image-validation.functions', () => {
     it('should return image video when provided', () => {
       const imageVideo: ImageVideo = {
         storageId: faker.datatype.uuid(),
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       };
 
       const result = validateImageVideo(imageVideo);

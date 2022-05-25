@@ -36,7 +36,7 @@ export class ImageVideoMeltProcessProvider {
       ? MELT_COMMAND_PROD
       : MELT_COMMAND_DEV;
 
-    return createTempFile$(getImageVideoFileName(imageVideo.slug)).pipe(
+    return createTempFile$(getImageVideoFileName(imageVideo.pathname)).pipe(
       concatMap((imageVideoFilePath) =>
         from(
           exec(
@@ -53,7 +53,7 @@ export class ImageVideoMeltProcessProvider {
               IMAGE_VIDEO_MIME_TYPE,
               getAzureStorageBlobPath(
                 imageVideo.storageId,
-                imageVideo.slug,
+                imageVideo.pathname,
                 IMAGE_VIDEO_FILE_EXTENSION
               ),
               this.configProvider.azureStorageConnectionStringPublic,

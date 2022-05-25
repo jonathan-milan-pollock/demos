@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
-
 import { AppBar, Button, Toolbar } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './options-bar.module.scss';
 import { Image } from '@dark-rush-photography/website/types';
-import { downloadImage } from '@dark-rush-photography/best-of/util';
+import { downloadImage } from '@dark-rush-photography/website/util';
 
 interface Props {
   image: Image;
@@ -13,25 +11,15 @@ interface Props {
   closeModalDialog?(): void;
 }
 
-OptionsBar.propTypes = {
-  image: PropTypes.object.isRequired,
-  isCloseButtonDisplayed: PropTypes.bool.isRequired,
-  closeModalDialog: PropTypes.func,
-};
-
-export default function OptionsBar({
-  image,
-  isCloseButtonDisplayed,
-  closeModalDialog,
-}: Props): JSX.Element {
+export default function OptionsBar(props: Props): JSX.Element {
   const renderCloseButton = () => {
-    if (!isCloseButtonDisplayed) return;
+    if (!props.isCloseButtonDisplayed) return;
 
     return (
       <Button
         className={styles['closeButton']}
         onClick={() => {
-          if (closeModalDialog) closeModalDialog();
+          if (props.closeModalDialog) props.closeModalDialog();
         }}
       >
         <FontAwesomeIcon
@@ -68,7 +56,7 @@ export default function OptionsBar({
           <Button
             className={styles['button']}
             onClick={() => {
-              downloadImage(image.large, image.fileName);
+              downloadImage(props.image.large, props.image.fileName);
             }}
           >
             <FontAwesomeIcon

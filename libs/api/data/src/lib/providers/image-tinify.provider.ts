@@ -20,10 +20,10 @@ import { ConfigProvider } from './config.provider';
 export class ImageTinifyProvider {
   constructor(private readonly configProvider: ConfigProvider) {}
 
-  tinifyImage$(storageId: string, slug: string): Observable<void> {
+  tinifyImage$(storageId: string, pathname: string): Observable<void> {
     return downloadAzureStorageBlobToFile$(
-      getAzureStorageBlobPath(storageId, slug, IMAGE_FILE_EXTENSION),
-      getImageFileName(slug),
+      getAzureStorageBlobPath(storageId, pathname, IMAGE_FILE_EXTENSION),
+      getImageFileName(pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
@@ -36,7 +36,7 @@ export class ImageTinifyProvider {
         uploadAzureStorageStreamToBlob$(
           Readable.from(Buffer.from(uint8Array as Uint8Array)),
           IMAGE_MIME_TYPE,
-          getAzureStorageBlobPath(storageId, slug, IMAGE_FILE_EXTENSION),
+          getAzureStorageBlobPath(storageId, pathname, IMAGE_FILE_EXTENSION),
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic
         )

@@ -11,7 +11,7 @@ import {
 import {
   getEntityWithGroupTypeFolderName,
   getEntityWithoutGroupTypeFolderName,
-  getEntityWithoutGroupTypeInitialSlug,
+  getEntityWithoutGroupTypeInitialPathname,
 } from '@dark-rush-photography/shared/util';
 import { EntityCreateWatermarkedTypeProvider } from './entity-create-watermarked-type.provider';
 
@@ -28,7 +28,7 @@ export class EntityCreateProvider {
     const folderName = getEntityWithoutGroupTypeFolderName(
       entityWithoutGroupType
     );
-    const initialSlug = getEntityWithoutGroupTypeInitialSlug(
+    const initialPathname = getEntityWithoutGroupTypeInitialPathname(
       entityWithoutGroupType
     );
 
@@ -38,7 +38,7 @@ export class EntityCreateProvider {
         folderName,
         entityWithoutGroupType,
         WatermarkedType.Watermarked,
-        initialSlug
+        initialPathname
       )
       .pipe(
         concatMap(() =>
@@ -47,7 +47,7 @@ export class EntityCreateProvider {
             folderName,
             entityWithoutGroupType,
             WatermarkedType.WithoutWatermark,
-            initialSlug
+            initialPathname
           )
         )
       );

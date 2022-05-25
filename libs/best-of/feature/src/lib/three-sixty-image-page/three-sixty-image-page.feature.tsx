@@ -5,7 +5,7 @@ interface ThreeSixtyImagePageProps {
   threeSixtyImageStorageId: string;
 }
 
-export default function ThreeSixtyImagePage({
+function ThreeSixtyImagePage({
   threeSixtyImageStorageId,
 }: ThreeSixtyImagePageProps): JSX.Element {
   return (
@@ -27,3 +27,5 @@ export default function ThreeSixtyImagePage({
     </ImagePageLayout>
   );
 }
+
+export default ThreeSixtyImagePage;

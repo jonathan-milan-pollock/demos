@@ -1,4 +1,5 @@
 export enum EntityType {
+  None = 'None',
   About = 'About',
   BestOf = 'BestOf',
   Destination = 'Destination',

@@ -18,13 +18,13 @@ import { ConfigProvider } from './config.provider';
 export class ImageDeleteBlobsProvider {
   constructor(private readonly configProvider: ConfigProvider) {}
 
-  deleteImageBlobs$(storageId: string, slug: string): Observable<void> {
+  deleteImageBlobs$(storageId: string, pathname: string): Observable<void> {
     return from(getImageDimensions()).pipe(
       concatMap((imageDimension) =>
         deleteAzureStorageBlobIfExists$(
           getAzureStorageBlobPathWithImageDimension(
             storageId,
-            slug,
+            pathname,
             IMAGE_FILE_EXTENSION,
             imageDimension.type
           ),
@@ -36,7 +36,7 @@ export class ImageDeleteBlobsProvider {
       concatMap(() => {
         const blobPath = getAzureStorageBlobPath(
           storageId,
-          slug,
+          pathname,
           IMAGE_FILE_EXTENSION
         );
         return deleteAzureStorageBlobIfExists$(
@@ -48,9 +48,9 @@ export class ImageDeleteBlobsProvider {
     );
   }
 
-  deleteImageVideoBlob$(storageId: string, slug: string): Observable<void> {
+  deleteImageVideoBlob$(storageId: string, pathname: string): Observable<void> {
     return deleteAzureStorageBlobIfExists$(
-      getAzureStorageBlobPath(storageId, slug, IMAGE_VIDEO_FILE_EXTENSION),
+      getAzureStorageBlobPath(storageId, pathname, IMAGE_VIDEO_FILE_EXTENSION),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(map(() => undefined));

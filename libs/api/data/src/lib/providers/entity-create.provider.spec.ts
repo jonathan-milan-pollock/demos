@@ -69,10 +69,10 @@ describe('entity-create.provider', () => {
         .spyOn(sharedUtil, 'getEntityWithoutGroupTypeFolderName')
         .mockReturnValue(folderName);
 
-      const initialSlug = faker.lorem.word();
+      const initialPathname = faker.lorem.word();
       jest
-        .spyOn(sharedUtil, 'getEntityWithoutGroupTypeInitialSlug')
-        .mockReturnValue(initialSlug);
+        .spyOn(sharedUtil, 'getEntityWithoutGroupTypeInitialPathname')
+        .mockReturnValue(initialPathname);
 
       const mockedCreateWatermarkedType$ = jest
         .spyOn(entityCreateWatermarkedTypeProvider, 'createWatermarkedType$')
@@ -91,14 +91,14 @@ describe('entity-create.provider', () => {
               folderName,
               entityWithoutGroupType,
               WatermarkedType.Watermarked,
-              initialSlug,
+              initialPathname,
             ],
             [
               {},
               folderName,
               entityWithoutGroupType,
               WatermarkedType.WithoutWatermark,
-              initialSlug,
+              initialPathname,
             ],
           ]);
           done();

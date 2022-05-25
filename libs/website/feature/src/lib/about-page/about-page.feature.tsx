@@ -1,23 +1,19 @@
 import styles from './about-page.module.scss';
-import {
-  EntityMinimalPublic,
-  EntityPublic,
-} from '@dark-rush-photography/shared/types';
-import PageLayout from '../../page-layout/page-layout.feature';
+import { PageType } from '@dark-rush-photography/website/types';
+import { useLayout } from '@dark-rush-photography/website/util';
+import { PageContainer } from '@dark-rush-photography/website/ui';
+import AboutMaster from '../about-master/about-master.feature';
+import AboutDetail from '../about-detail/about-detail.feature';
 
-interface Props {
-  aboutMinimalEntities: EntityMinimalPublic[];
-  aboutEntities: EntityPublic[];
-}
-
-export function AboutPage({
-  aboutMinimalEntities,
-  aboutEntities,
-}: Props): JSX.Element {
+function AboutPage(): JSX.Element {
+  const layout = useLayout(PageType.About);
   return (
-    <PageLayout>
-      <div>About</div>
-    </PageLayout>
+    <PageContainer pageType={PageType.About} layout={layout}>
+      <>
+        <AboutMaster />
+        <AboutDetail />
+      </>
+    </PageContainer>
   );
 }
 

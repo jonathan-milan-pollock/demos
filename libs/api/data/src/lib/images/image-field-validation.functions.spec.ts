@@ -9,7 +9,7 @@ import {
   validatePublishImagesAreNotStarredAndLoved,
   validatePublishImagesHaveSeoDescriptions,
   validatePublishImagesHaveSeoKeywords,
-  validatePublishImagesHaveSlugs,
+  validatePublishImagesHavePathnames,
   validatePublishImagesHaveStorageIds,
   validatePublishImagesHaveTitles,
   validatePublishLovedImages,
@@ -119,23 +119,23 @@ describe('image-validation.functions', () => {
     });
   });
 
-  describe('validatePublishImagesHaveSlugs', () => {
-    it('should return images when all publish images have slugs', () => {
+  describe('validatePublishImagesHavePathnames', () => {
+    it('should return images when all publish images have pathnames', () => {
       const images = [
         {
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Selected,
         } as Image,
         {
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Public,
         } as Image,
       ];
-      const result = validatePublishImagesHaveSlugs(images);
+      const result = validatePublishImagesHavePathnames(images);
       expect(result).toEqual(images);
     });
 
-    it('should return images when new or archived images do not have slugs', () => {
+    it('should return images when new or archived images do not have pathnames', () => {
       const images = [
         {
           state: ImageState.New,
@@ -144,23 +144,23 @@ describe('image-validation.functions', () => {
           state: ImageState.Archived,
         } as Image,
       ];
-      const result = validatePublishImagesHaveSlugs(images);
+      const result = validatePublishImagesHavePathnames(images);
       expect(result).toEqual(images);
     });
 
-    it('should throw a conflict exception when a publish image does not have a slug', () => {
+    it('should throw a conflict exception when a publish image does not have a pathname', () => {
       const images = [
         { state: ImageState.Selected } as Image,
         {
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Public,
         } as Image,
       ];
       const result = () => {
-        validatePublishImagesHaveSlugs(images);
+        validatePublishImagesHavePathnames(images);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Image slugs are required');
+      expect(result).toThrow('Image pathnames are required');
     });
   });
 

@@ -7,11 +7,11 @@ function Index(): JSX.Element {
   const router = useRouter();
 
   const storageId = router.query.storageId;
-  const slug = router.query.slug;
+  const pathname = router.query.pathname;
   return (
     <ImagePage
       storageId={Array.isArray(storageId) ? storageId[0] : storageId}
-      slug={Array.isArray(slug) ? slug[0] : slug}
+      pathname={Array.isArray(pathname) ? pathname[0] : pathname}
     />
   );
 }

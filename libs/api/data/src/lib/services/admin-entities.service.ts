@@ -76,7 +76,7 @@ export class AdminEntitiesService {
             documentModel.type,
             documentModel._id,
             documentModel.group,
-            documentModel.slug,
+            documentModel.pathname,
             postSocialMedia
           )
         );
@@ -166,7 +166,7 @@ export class AdminEntitiesService {
             documentModel.type,
             documentModel._id,
             documentModel.group,
-            documentModel.slug
+            documentModel.pathname
           )
         );
       })

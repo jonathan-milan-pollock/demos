@@ -5,7 +5,7 @@ export const imageSchema = {
   id: { type: String, required: true },
   entityId: { type: String, required: true },
   storageId: { type: String, required: true },
-  slug: { type: String, required: true },
+  pathname: { type: String, required: true },
   order: { type: Number, required: true, default: 0 },
   state: {
     type: String,

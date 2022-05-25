@@ -10,7 +10,7 @@ import {
   validateEntityPublishedDate,
   validateEntitySeoDescription,
   validateEntitySeoKeywords,
-  validateEntitySlug,
+  validateEntityPathname,
   validateEntityText,
   validateEntityTileDimension,
   validateEntityTitle,
@@ -19,7 +19,7 @@ import {
   validatePublishLovedImages,
   validateOnePublishImage,
   validatePublishImagesAreNotStarredAndLoved,
-  validatePublishImagesHaveSlugs,
+  validatePublishImagesHavePathnames,
   validatePublishImagesHaveStorageIds,
   validatePublishStarredImage,
   validatePublishImagesHaveSeoKeywords,
@@ -32,32 +32,32 @@ export const validatePublishEntity = (
 ): DocumentModel => {
   switch (documentModel.type) {
     case EntityType.About:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityOrder(documentModel);
       validateEntityTitle(documentModel);
       validateEntityText(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       break;
     case EntityType.BestOf:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityOrder(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       validatePublishImagesHaveTitles(documentModel.images);
       validatePublishImagesHaveSeoDescriptions(documentModel.images);
       validatePublishImagesHaveSeoKeywords(documentModel.images);
       break;
     case EntityType.Destination:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityOrder(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       validatePublishStarredImage(documentModel.images);
       break;
     case EntityType.Event:
       validateEntityGroup(documentModel);
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityOrder(documentModel);
       validateEntityTitle(documentModel);
       validateEntityText(documentModel);
@@ -66,40 +66,40 @@ export const validatePublishEntity = (
       validateEntitySeoKeywords(documentModel);
       validateEntityLocation(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       validatePublishImagesAreNotStarredAndLoved(documentModel.images);
       validatePublishStarredImage(documentModel.images);
       validatePublishLovedImages(documentModel.images);
       break;
     case EntityType.Favorites:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       validatePublishImagesHaveTitles(documentModel.images);
       validatePublishImagesHaveSeoDescriptions(documentModel.images);
       validatePublishImagesHaveSeoKeywords(documentModel.images);
       break;
     case EntityType.ImagePost:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityText(documentModel);
       validateOnePublishImage(documentModel.images);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       break;
     case EntityType.ImageVideo:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityTitle(documentModel);
       validateEntityText(documentModel);
       validateEntitySeoDescription(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       validatePublishImagesAreNotStarredAndLoved(documentModel.images);
       validatePublishStarredImage(documentModel.images);
       validatePublishLovedImages(documentModel.images);
       break;
     case EntityType.PhotoOfTheWeek:
       validateEntityGroup(documentModel);
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityOrder(documentModel);
       validateEntityTitle(documentModel);
       validateEntityText(documentModel);
@@ -109,22 +109,22 @@ export const validatePublishEntity = (
       validateEntityLocation(documentModel);
       validateOnePublishImage(documentModel.images);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       break;
     case EntityType.Review:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validateEntityOrder(documentModel);
       validateEntityTitle(documentModel);
       validateEntityText(documentModel);
       validateOnePublishImage(documentModel.images);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       validateEntityTileDimension(documentModel);
       break;
     case EntityType.ReviewMedia:
-      validateEntitySlug(documentModel);
+      validateEntityPathname(documentModel);
       validatePublishImagesHaveStorageIds(documentModel.images);
-      validatePublishImagesHaveSlugs(documentModel.images);
+      validatePublishImagesHavePathnames(documentModel.images);
       break;
     default:
       throw new ConflictException(

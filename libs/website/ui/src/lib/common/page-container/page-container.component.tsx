@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 import styles from './page-container.module.scss';
 import { Layout, PageType } from '@dark-rush-photography/website/types';
@@ -11,31 +10,21 @@ import BottomDivider from '../../footer/bottom-divider/bottom-divider.component'
 import SocialMediaBar from '../../footer/social-media-bar/social-media-bar.component';
 import BottomNavigationBar from '../../footer/bottom-navigation-bar/bottom-navigation-bar.component';
 
-interface Props {
+interface PageContainerProps {
   pageType: PageType;
   layout: Layout;
-  renderItem: JSX.Element;
+  children?: React.ReactNode;
 }
 
-PageContainer.propTypes = {
-  pageType: PropTypes.number.isRequired,
-  layout: PropTypes.object.isRequired,
-  renderItem: PropTypes.object.isRequired,
-};
-
-export default function PageContainer({
-  pageType,
-  layout,
-  renderItem,
-}: Props): JSX.Element {
+export default function PageContainer(props: PageContainerProps): JSX.Element {
   const renderHomeTabBar = () => {
-    if (pageType !== PageType.Home) return;
+    if (props.pageType !== PageType.Home) return;
 
-    return <HomeTabBar layout={layout} />;
+    return <HomeTabBar layout={props.layout} />;
   };
 
   const renderAdditionalContactBar = () => {
-    if (!layout.isAdditionalContactBarDisplayed) return;
+    if (!props.layout.isAdditionalContactBarDisplayed) return;
 
     return (
       <ContactBar
@@ -50,27 +39,27 @@ export default function PageContainer({
     <Fragment>
       <div className={styles['header']}>
         <TitleBar
-          pageType={pageType}
-          isDisplayed={!layout.isLargeWindowWidth}
+          pageType={props.pageType}
+          isDisplayed={!props.layout.isLargeWindowWidth}
         />
         <TopNavigationBar
-          pageType={pageType}
-          isDisplayed={layout.isLargeWindowWidth}
+          pageType={props.pageType}
+          isDisplayed={props.layout.isLargeWindowWidth}
         />
         {renderHomeTabBar()}
       </div>
-      <div className={styles['main']}>{renderItem}</div>
+      <div className={styles['main']}>{props.children}</div>
       <div className={styles['footer']}>
         <BottomDivider />
-        <SocialMediaBar isDisplayed={layout.isLargeWindowWidth} />
+        <SocialMediaBar isDisplayed={props.layout.isLargeWindowWidth} />
         <ContactBar
-          isPhoneNumberDisplayed={!layout.isAdditionalContactBarDisplayed}
+          isPhoneNumberDisplayed={!props.layout.isAdditionalContactBarDisplayed}
           isCopyrightDisplayed={true}
-          isEmailDisplayed={!layout.isAdditionalContactBarDisplayed}
+          isEmailDisplayed={!props.layout.isAdditionalContactBarDisplayed}
         />
         {renderAdditionalContactBar()}
         <BottomNavigationBar
-          isDisplayed={layout.isBottomNavigationBarDisplayed}
+          isDisplayed={props.layout.isBottomNavigationBarDisplayed}
         />
       </div>
     </Fragment>

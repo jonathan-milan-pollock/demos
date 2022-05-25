@@ -47,7 +47,7 @@ export class Document implements Entity {
   group!: string;
 
   @Prop({ type: String, required: true })
-  slug!: string;
+  pathname!: string;
 
   @Prop({ type: Number, required: true, default: 0 })
   order!: number;

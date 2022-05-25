@@ -10,12 +10,12 @@ export const logCreatingEntityMessage = (
   folderName: string,
   entityType: EntityType,
   group: string,
-  slug?: string
+  pathname?: string
 ): void => {
   logger.log(
     `Creating ${entityType} entity ${
       group !== DEFAULT_ENTITY_GROUP ? `${group} ` : ''
-    }${slug ?? folderName}`
+    }${pathname ?? folderName}`
   );
 };
 
@@ -24,11 +24,11 @@ export const logFoundEntityMessage = (
   folderName: string,
   entityType: EntityType,
   group: string,
-  slug?: string
+  pathname?: string
 ): void => {
   return logger.log(
     `Found ${entityType} entity ${
       group !== DEFAULT_ENTITY_GROUP ? `${group} ` : ''
-    }${slug ?? folderName}`
+    }${pathname ?? folderName}`
   );
 };

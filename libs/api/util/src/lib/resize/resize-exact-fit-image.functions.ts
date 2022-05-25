@@ -11,12 +11,12 @@ import { createTempFile$ } from '../file/file.functions';
 import { getImageFileName } from '../images/image-file-name.functions';
 
 export const resizeExactFitImage$ = (
-  slug: string,
+  pathname: string,
   filePath: string,
   imageDimensionStandard: ImageDimensionStandard
 ): Observable<string> => {
   const { width, height } = imageDimensionStandard.dimension;
-  return createTempFile$(getImageFileName(slug)).pipe(
+  return createTempFile$(getImageFileName(pathname)).pipe(
     concatMap((newFilePath) =>
       combineLatest([
         of(newFilePath),

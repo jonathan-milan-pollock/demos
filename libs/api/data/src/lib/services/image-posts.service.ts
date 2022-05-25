@@ -34,7 +34,7 @@ export class ImagePostsService {
                   documentModel.type,
                   documentModel._id,
                   documentModel.group,
-                  documentModel.slug,
+                  documentModel.pathname,
                   true
                 )
               )

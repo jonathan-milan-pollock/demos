@@ -1,3 +1,6 @@
+// apis
+export * from './lib/apis/archived-images.api';
+
 // entities
 export * from './lib/entities/location.functions';
 
@@ -10,5 +13,11 @@ export * from './lib/enums/image-dimension-type.functions';
 export * from './lib/enums/sitemap-entity-type.functions';
 export * from './lib/enums/social-media-type.functions';
 
-// images
-export * from './lib/images/image-url.functions';
+// functions
+export * from './lib/functions/string-sanitization.functions';
+
+// urls
+export * from './lib/urls/entity-url.functions';
+export * from './lib/urls/group-url.functions';
+export * from './lib/urls/image-url.functions';
+export * from './lib/urls/image-video-url.functions';

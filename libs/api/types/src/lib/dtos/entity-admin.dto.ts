@@ -29,7 +29,7 @@ export class EntityAdminDto implements EntityAdmin {
   group!: string;
 
   @IsString()
-  slug!: string;
+  pathname!: string;
 
   @IsInt()
   @Min(0)

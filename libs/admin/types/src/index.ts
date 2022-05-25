@@ -1,1 +1,2 @@
-export * from './lib/admin-types';
+// constants
+export * from './lib/constants/constants';

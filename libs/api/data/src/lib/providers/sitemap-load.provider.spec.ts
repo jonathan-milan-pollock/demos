@@ -11,7 +11,7 @@ import {
   BestOfType,
   MaxPublishedDateSitemapEntityType,
   PublishedDateBestOfType,
-  PublishedDateSlug,
+  PublishedDatePathname,
   SitemapEntityType,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
@@ -76,7 +76,7 @@ describe('sitemap-load.provider', () => {
 
       const mockedLoadEventPublishedDates$ = jest
         .spyOn(sitemapPublishedDateProvider, 'loadEventPublishedDates$')
-        .mockReturnValue(of([] as PublishedDateSlug[]));
+        .mockReturnValue(of([] as PublishedDatePathname[]));
 
       const mockedLoadDarkRushPhotographySitemapXml = jest
         .spyOn(sitemapXmlProvider, 'loadDarkRushPhotographySitemapXml')
@@ -110,8 +110,8 @@ describe('sitemap-load.provider', () => {
 
   describe('loadThirtySevenPhotosSitemap$', () => {
     it('should load thirty seven photos sitemap', (done: any) => {
-      const mockedFindOnePublicEntityForSlug$ = jest
-        .spyOn(entityRepositoryFunctions, 'findOnePublicEntityForSlug$')
+      const mockedFindOnePublicEntityForPathname$ = jest
+        .spyOn(entityRepositoryFunctions, 'findOnePublicEntityForPathname$')
         .mockReturnValue(of({} as DocumentModel));
 
       const mockedValidateEntityFound = jest
@@ -127,11 +127,13 @@ describe('sitemap-load.provider', () => {
         .mockReturnValue(faker.lorem.lines());
 
       sitemapLoadProvider.loadThirtySevenPhotosSitemap$().subscribe(() => {
-        expect(mockedFindOnePublicEntityForSlug$).toBeCalledTimes(
+        expect(mockedFindOnePublicEntityForPathname$).toBeCalledTimes(
           Object.values(BestOfType).length
         );
         const calledFindOneBestOfTypes =
-          mockedFindOnePublicEntityForSlug$.mock.calls.map((call) => call[1]);
+          mockedFindOnePublicEntityForPathname$.mock.calls.map(
+            (call) => call[1]
+          );
         Object.values(BestOfType).forEach((bestOfType) =>
           expect(calledFindOneBestOfTypes.includes(bestOfType.toLowerCase()))
         );
@@ -153,8 +155,8 @@ describe('sitemap-load.provider', () => {
     });
 
     it('should not load thirty seven photos sitemap when best of entity does not exist', (done: any) => {
-      const mockedFindOnePublicEntityForSlug$ = jest
-        .spyOn(entityRepositoryFunctions, 'findOnePublicEntityForSlug$')
+      const mockedFindOnePublicEntityForPathname$ = jest
+        .spyOn(entityRepositoryFunctions, 'findOnePublicEntityForPathname$')
         .mockReturnValue(of(null));
 
       const mockedValidateEntityFound = jest
@@ -178,7 +180,7 @@ describe('sitemap-load.provider', () => {
           done();
         },
         error: (error) => {
-          expect(mockedFindOnePublicEntityForSlug$).toBeCalledTimes(5);
+          expect(mockedFindOnePublicEntityForPathname$).toBeCalledTimes(5);
           expect(mockedValidateEntityFound).toBeCalled();
           expect(mockedLoadBestOfPublishedDates).not.toBeCalled();
           expect(mockedLoadThirtySevenPhotosSitemapXml).not.toBeCalled();

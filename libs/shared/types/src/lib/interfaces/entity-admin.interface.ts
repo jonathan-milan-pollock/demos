@@ -8,7 +8,7 @@ export interface EntityAdmin {
   readonly type: EntityType;
   readonly id: string;
   readonly group: string;
-  readonly slug: string;
+  readonly pathname: string;
   readonly order: number;
   readonly isPublic: boolean;
   readonly title?: string;

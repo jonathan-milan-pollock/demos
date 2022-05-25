@@ -47,3 +47,4 @@ Thumbs.db
 /apps/best-of-e2e/cypress
 /apps/drp-art-e2e/cypress
 /apps/website-e2e/cypress
+*.local

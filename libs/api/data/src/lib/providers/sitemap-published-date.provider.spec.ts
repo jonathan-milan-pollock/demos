@@ -51,8 +51,8 @@ describe('sitemap-published-date.provider', () => {
       const firstPublishedDate = faker.date.recent().toISOString();
       const secondPublishedDate = faker.date.recent().toISOString();
 
-      const firstSlug = faker.lorem.word();
-      const secondSlug = faker.lorem.word();
+      const firstPathname = faker.lorem.word();
+      const secondPathname = faker.lorem.word();
 
       const mockedFindAllPublicEntities$ = jest
         .spyOn(entityRepositoryFunctions, 'findAllPublicEntities$')
@@ -60,11 +60,11 @@ describe('sitemap-published-date.provider', () => {
           of([
             {
               publishedDate: firstPublishedDate,
-              slug: firstSlug,
+              pathname: firstPathname,
             } as DocumentModel,
             {
               publishedDate: secondPublishedDate,
-              slug: secondSlug,
+              pathname: secondPathname,
             } as DocumentModel,
           ])
         );
@@ -76,11 +76,11 @@ describe('sitemap-published-date.provider', () => {
           expect(result).toEqual([
             {
               publishedDate: firstPublishedDate,
-              slug: firstSlug,
+              pathname: firstPathname,
             },
             {
               publishedDate: secondPublishedDate,
-              slug: secondSlug,
+              pathname: secondPathname,
             },
           ]);
           done();
@@ -103,7 +103,7 @@ describe('sitemap-published-date.provider', () => {
 
     it('should throw a conflict exception when an event has a undefined published date', (done: any) => {
       const firstGroup = faker.lorem.word();
-      const firstSlug = faker.lorem.word();
+      const firstPathname = faker.lorem.word();
 
       const mockedFindAllPublicEntities$ = jest
         .spyOn(entityRepositoryFunctions, 'findAllPublicEntities$')
@@ -111,7 +111,7 @@ describe('sitemap-published-date.provider', () => {
           of([
             {
               group: firstGroup,
-              slug: firstSlug,
+              pathname: firstPathname,
               publishedDate: undefined,
             } as DocumentModel,
             {
@@ -128,7 +128,7 @@ describe('sitemap-published-date.provider', () => {
           expect(mockedFindAllPublicEntities$).toBeCalledTimes(1);
           expect(error).toBeInstanceOf(ConflictException);
           expect(error.message).toBe(
-            `Public event ${firstGroup} ${firstSlug} has an undefined published date`
+            `Public event ${firstGroup} ${firstPathname} has an undefined published date`
           );
           done();
         },
@@ -151,8 +151,8 @@ describe('sitemap-published-date.provider', () => {
         Object.values(BestOfType)
       );
 
-      const mockedGetBestOfTypeFromSlug = jest
-        .spyOn(sharedUtil, 'getBestOfTypeFromSlug')
+      const mockedGetBestOfTypeFromPathname = jest
+        .spyOn(sharedUtil, 'getBestOfTypeFromPathname')
         .mockReturnValueOnce(firstBestOfType)
         .mockReturnValueOnce(secondBestOfType);
 
@@ -161,7 +161,7 @@ describe('sitemap-published-date.provider', () => {
         { publishedDate: secondPublishedDate } as DocumentModel,
       ]);
 
-      expect(mockedGetBestOfTypeFromSlug).toBeCalledTimes(2);
+      expect(mockedGetBestOfTypeFromPathname).toBeCalledTimes(2);
       expect(result).toEqual([
         { publishedDate: firstPublishedDate, bestOfType: firstBestOfType },
         { publishedDate: secondPublishedDate, bestOfType: secondBestOfType },
@@ -169,40 +169,40 @@ describe('sitemap-published-date.provider', () => {
     });
 
     it('should return an empty array when best of entities is empty', () => {
-      const mockedGetBestOfTypeFromSlug = jest.spyOn(
+      const mockedGetBestOfTypeFromPathname = jest.spyOn(
         sharedUtil,
-        'getBestOfTypeFromSlug'
+        'getBestOfTypeFromPathname'
       );
 
       const result = sitemapPublishedDateProvider.loadBestOfPublishedDates([]);
 
-      expect(mockedGetBestOfTypeFromSlug).not.toBeCalled();
+      expect(mockedGetBestOfTypeFromPathname).not.toBeCalled();
       expect(result).toEqual([]);
     });
 
     it('should throw a conflict exception when a best of type entity has an undefined published date', () => {
-      const secondSlug = faker.lorem.word();
+      const secondPathname = faker.lorem.word();
 
-      const mockedGetBestOfTypeFromSlug = jest
-        .spyOn(sharedUtil, 'getBestOfTypeFromSlug')
+      const mockedGetBestOfTypeFromPathname = jest
+        .spyOn(sharedUtil, 'getBestOfTypeFromPathname')
         .mockReturnValue(faker.random.arrayElement(Object.values(BestOfType)));
 
       const result = () => {
         sitemapPublishedDateProvider.loadBestOfPublishedDates([
           {
-            slug: faker.lorem.word(),
+            pathname: faker.lorem.word(),
             publishedDate: faker.date.recent().toISOString(),
           } as Entity,
           {
-            slug: secondSlug,
+            pathname: secondPathname,
             publishedDate: undefined,
           } as Entity,
         ] as Entity[]);
       };
-      expect(mockedGetBestOfTypeFromSlug).not.toBeCalledTimes(1);
+      expect(mockedGetBestOfTypeFromPathname).not.toBeCalledTimes(1);
       expect(result).toThrow(ConflictException);
       expect(result).toThrow(
-        `Best of type entity ${secondSlug} has an undefined published date`
+        `Best of type entity ${secondPathname} has an undefined published date`
       );
     });
   });

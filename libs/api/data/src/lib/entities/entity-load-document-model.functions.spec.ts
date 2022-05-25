@@ -21,7 +21,7 @@ describe('entity-load-document-model.functions', () => {
       expect(result.type).toBe(EntityType.Test);
       expect(result.watermarkedType).toBe(WatermarkedType.WithoutWatermark);
       expect(result.group).toBe(DEFAULT_ENTITY_GROUP);
-      expect(result.slug).toBeDefined();
+      expect(result.pathname).toBeDefined();
       expect(result.order).toBe(0);
       expect(result.isPublic).toBe(false);
       expect(result.seoKeywords.length).toBe(0);
@@ -39,7 +39,7 @@ describe('entity-load-document-model.functions', () => {
         Object.values(WatermarkedType)
       );
       const group = faker.lorem.word();
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
       const order = faker.datatype.number();
 
       const result = loadCreateEntityForFolder(
@@ -47,7 +47,7 @@ describe('entity-load-document-model.functions', () => {
         googleDriveFolderId,
         watermarkedType,
         group,
-        slug,
+        pathname,
         order
       );
 
@@ -55,7 +55,7 @@ describe('entity-load-document-model.functions', () => {
       expect(result.googleDriveFolderId).toBe(googleDriveFolderId);
       expect(result.watermarkedType).toBe(watermarkedType);
       expect(result.group).toBe(group);
-      expect(result.slug).toBe(slug);
+      expect(result.pathname).toBe(pathname);
       expect(result.order).toBe(order);
       expect(result.isPublic).toBe(false);
       expect(result.seoKeywords.length).toBe(0);
@@ -74,7 +74,7 @@ describe('entity-load-document-model.functions', () => {
       expect(result.type).toBe(EntityType.ImagePost);
       expect(result.watermarkedType).toBe(WatermarkedType.WithoutWatermark);
       expect(result.group).toBe(DEFAULT_ENTITY_GROUP);
-      expect(result.slug).toBeDefined();
+      expect(result.pathname).toBeDefined();
       expect(result.order).toBe(0);
       expect(result.isPublic).toBe(false);
       expect(result.text).toEqual(text);

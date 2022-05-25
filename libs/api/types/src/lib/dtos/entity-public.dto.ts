@@ -26,7 +26,7 @@ export class EntityPublicDto implements EntityPublic {
   group!: string;
 
   @IsString()
-  slug!: string;
+  pathname!: string;
 
   @IsInt()
   @Min(0)

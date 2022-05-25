@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 
 import styles from './top-navigation-bar-button.module.scss';
 import { Button } from '@mui/material';
@@ -13,14 +12,6 @@ interface Props {
   buttonPathnames: string[];
   isDisplayed: boolean;
 }
-
-TopNavigationBarButton.propTypes = {
-  icon: PropTypes.object.isRequired,
-  text: PropTypes.string.isRequired,
-  buttonPathname: PropTypes.string.isRequired,
-  buttonPathnames: PropTypes.array.isRequired,
-  isDisplayed: PropTypes.bool.isRequired,
-};
 
 export default function TopNavigationBarButton({
   icon,

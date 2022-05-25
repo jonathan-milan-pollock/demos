@@ -1,4 +1,4 @@
-export default interface Theme {
+export interface Theme {
   readonly fontFamily: string;
   readonly accentColor: string;
   readonly bottomButtonFontSize: number;

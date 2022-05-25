@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import OptionsBar from '../options-bar/options-bar.component';
 import ProgressiveImage from '../progressive-image/progressive-image.component';
 import { ApplicationLayout, Image } from '@dark-rush-photography/website/types';
@@ -14,35 +12,19 @@ interface Props {
   closeModalDialog?(): void;
 }
 
-ProgressiveImageWithOptions.propTypes = {
-  image: PropTypes.object.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  marginLeft: PropTypes.number.isRequired,
-  isCloseButtonDisplayed: PropTypes.bool.isRequired,
-  closeModalDialog: PropTypes.func,
-};
-
-export default function ProgressiveImageWithOptions({
-  image,
-  width,
-  height,
-  marginLeft,
-  isCloseButtonDisplayed,
-  closeModalDialog,
-}: Props): JSX.Element {
+export default function ProgressiveImageWithOptions(props: Props): JSX.Element {
   return (
     <div className={styles['outerContainer']}>
       <OptionsBar
-        image={image}
-        isCloseButtonDisplayed={isCloseButtonDisplayed}
-        closeModalDialog={closeModalDialog}
+        image={props.image}
+        isCloseButtonDisplayed={props.isCloseButtonDisplayed}
+        closeModalDialog={props.closeModalDialog}
       />
-      <div className={styles['container']} onClick={closeModalDialog}>
+      <div className={styles['container']} onClick={props.closeModalDialog}>
         <ProgressiveImage
-          image={image}
-          width={width}
-          height={height - ApplicationLayout.OPTIONS_BAR_HEIGHT}
+          image={props.image}
+          width={props.width}
+          height={props.height - ApplicationLayout.OPTIONS_BAR_HEIGHT}
         />
       </div>
     </div>

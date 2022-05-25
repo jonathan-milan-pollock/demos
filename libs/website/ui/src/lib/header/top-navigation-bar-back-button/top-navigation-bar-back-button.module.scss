@@ -1,11 +1,11 @@
 .iconButton {
   &:hover {
-    icon: {
+    .icon {
       color: var(--accentColor);
     }
   }
 }
 
-icon {
+.icon {
   color: var(--topNavigationBarBackButtonIconColor);
 }

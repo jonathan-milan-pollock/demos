@@ -17,7 +17,7 @@ export const loadEventsJsonLdList = (events: Entity[]): JsonLdList => ({
     '@type': 'ListItem',
     position: index + 1,
     url: `${getSitemapEntityTypeLocation(SitemapEntityType.Event)}/${
-      event.slug
+      event.pathname
     }`,
   })),
 });
@@ -30,7 +30,7 @@ export const loadEventJsonLdNewsArticle = (
   '@type': 'NewsArticle',
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': `https://darkrushphotography.com/${event.slug}`,
+    '@id': `https://darkrushphotography.com/${event.pathname}`,
   },
   headline: event.title ?? '',
   description: event.text ?? '',

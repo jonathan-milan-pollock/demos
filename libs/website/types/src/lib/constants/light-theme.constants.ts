@@ -1,4 +1,4 @@
-import Theme from '../interfaces/theme.interface';
+import { Theme } from '../interfaces/theme.interface';
 import { ApplicationLayout } from './application-layout.constants';
 import { Application } from './application.constants';
 

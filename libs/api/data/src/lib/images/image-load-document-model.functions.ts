@@ -10,13 +10,13 @@ import {
 
 export const loadNewImage = (
   entityId: string,
-  slug: string,
+  pathname: string,
   order: number
 ): Image => ({
   id: uuidv4(),
   entityId,
   storageId: uuidv4(),
-  slug,
+  pathname,
   order,
   state: ImageState.New,
   isStarred: false,
@@ -25,23 +25,26 @@ export const loadNewImage = (
 
 export const loadAddImagePostImage = (
   entityId: string,
-  slug: string
+  pathname: string
 ): Image => ({
   id: uuidv4(),
   entityId,
   storageId: uuidv4(),
-  slug,
+  pathname,
   order: 0,
   state: ImageState.Selected,
   isStarred: false,
   isLoved: false,
 });
 
-export const loadAddTestImage = (entityId: string, slug: string): Image => ({
+export const loadAddTestImage = (
+  entityId: string,
+  pathname: string
+): Image => ({
   id: uuidv4(),
   entityId,
   storageId: uuidv4(),
-  slug,
+  pathname,
   order: 0,
   state: ImageState.New,
   isStarred: false,
@@ -55,7 +58,7 @@ export const loadUpdateImage = (
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order: image.order,
   state: image.state,
   threeSixtyImageStorageId: imageUpdate.threeSixtyImageStorageId,
@@ -72,7 +75,7 @@ export const loadUpdateImageOrder = (image: Image, order: number): Image => ({
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order,
   state: image.state,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
@@ -92,7 +95,7 @@ export const loadUpdateImageState = (
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order: image.order,
   state,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
@@ -112,7 +115,7 @@ export const loadUpdateImageCreatedDate = (
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order: image.order,
   state: image.state,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
@@ -132,7 +135,7 @@ export const loadUpdateImageSmallDimension = (
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order: image.order,
   state: image.state,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
@@ -145,7 +148,7 @@ export const loadUpdateImageSmallDimension = (
   smallDimension,
 });
 
-export const loadAddImageVideo = (slug: string): ImageVideo => ({
+export const loadAddImageVideo = (pathname: string): ImageVideo => ({
   storageId: uuidv4(),
-  slug,
+  pathname,
 });

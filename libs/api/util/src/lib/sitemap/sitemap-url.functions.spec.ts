@@ -145,8 +145,8 @@ describe('sitemap-url.functions', () => {
     it('should load event sitemap urls', () => {
       const firstPublishedDate = faker.date.recent().toISOString();
       const secondPublishedDate = faker.date.recent().toISOString();
-      const firstSlug = faker.lorem.word();
-      const secondSlug = faker.lorem.word();
+      const firstPathname = faker.lorem.word();
+      const secondPathname = faker.lorem.word();
 
       const mockedGetSitemapDate = jest
         .spyOn(sitemapDateFunctions, 'getSitemapDate')
@@ -160,11 +160,11 @@ describe('sitemap-url.functions', () => {
       const result = loadSitemapEventUrls([
         {
           publishedDate: firstPublishedDate,
-          slug: firstSlug,
+          pathname: firstPathname,
         },
         {
           publishedDate: secondPublishedDate,
-          slug: secondSlug,
+          pathname: secondPathname,
         },
       ]);
 
@@ -176,7 +176,7 @@ describe('sitemap-url.functions', () => {
 
       expect(result).toEqual([
         {
-          loc: `https://darkrushphotography.com/events/${firstSlug}`,
+          loc: `https://darkrushphotography.com/events/${firstPathname}`,
           priority: '0.8',
           lastmod: firstPublishedDate.substring(
             0,
@@ -185,7 +185,7 @@ describe('sitemap-url.functions', () => {
           changefreq: 'monthly',
         },
         {
-          loc: `https://darkrushphotography.com/events/${secondSlug}`,
+          loc: `https://darkrushphotography.com/events/${secondPathname}`,
           priority: '0.8',
           lastmod: secondPublishedDate.substring(
             0,

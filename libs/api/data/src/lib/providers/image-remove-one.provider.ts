@@ -23,7 +23,7 @@ export class ImageRemoveOneProvider {
 
   removeImage$(image: Image): Observable<void> {
     return this.imageDeleteBlobsProvider
-      .deleteImageBlobs$(image.storageId, image.slug)
+      .deleteImageBlobs$(image.storageId, image.pathname)
       .pipe(
         concatMap(() => findEntityById$(image.entityId, this.entityModel)),
         concatMap((documentModel) => {
@@ -49,7 +49,7 @@ export class ImageRemoveOneProvider {
 
         if (
           !documentModel.imageVideo.storageId ||
-          !documentModel.imageVideo.slug
+          !documentModel.imageVideo.pathname
         ) {
           return of(undefined);
         }
@@ -57,7 +57,7 @@ export class ImageRemoveOneProvider {
         return this.imageDeleteBlobsProvider
           .deleteImageVideoBlob$(
             documentModel.imageVideo.storageId,
-            documentModel.imageVideo.slug
+            documentModel.imageVideo.pathname
           )
           .pipe(concatMap(() => removeImageVideo$(entityId, this.entityModel)));
       }),

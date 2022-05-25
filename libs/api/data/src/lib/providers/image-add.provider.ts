@@ -36,7 +36,7 @@ export class ImageAddProvider {
       concatMap((documentModel) => {
         const newImage = loadNewImage(
           entityId,
-          documentModel.slug,
+          documentModel.pathname,
           getOrderFromGoogleDriveImageFile(newImageFile.name)
         );
 
@@ -68,7 +68,7 @@ export class ImageAddProvider {
       concatMap((documentModel) => {
         const imagePostImage = loadAddImagePostImage(
           entityId,
-          documentModel.slug
+          documentModel.pathname
         );
         return addImage$(
           imagePostImage,
@@ -91,7 +91,7 @@ export class ImageAddProvider {
     return findEntityById$(entityId, this.entityModel).pipe(
       map(validateEntityFound),
       concatMap((documentModel) => {
-        const testImage = loadAddTestImage(entityId, documentModel.slug);
+        const testImage = loadAddTestImage(entityId, documentModel.pathname);
         return addImage$(
           testImage,
           entityId,

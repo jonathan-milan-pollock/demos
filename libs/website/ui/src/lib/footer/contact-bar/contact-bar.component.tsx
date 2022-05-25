@@ -1,8 +1,6 @@
-import PropTypes from 'prop-types';
-
 import { Grid } from '@mui/material';
 
-import { findYear } from '@dark-rush-photography/best-of/util';
+import { findYear } from '@dark-rush-photography/website/util';
 import EmailAddress from '../../common/email-address/email-address.component';
 import PhoneNumber from '../../common/phone-number/phone-number.component';
 import styles from './contact-bar.module.scss';
@@ -12,12 +10,6 @@ interface Props {
   isCopyrightDisplayed: boolean;
   isEmailDisplayed: boolean;
 }
-
-ContactBar.propTypes = {
-  isPhoneNumberDisplayed: PropTypes.bool.isRequired,
-  isCopyrightDisplayed: PropTypes.bool.isRequired,
-  isEmailDisplayed: PropTypes.bool.isRequired,
-};
 
 export default function ContactBar({
   isPhoneNumberDisplayed,

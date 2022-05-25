@@ -13,23 +13,23 @@
   min-height: 64px !important;
 }
 
-button {
+.button {
   background-color: transparent;
   color: var(--optionsBarButtonColor);
   height: 52px;
 }
 
-button:hover {
+.button:hover {
   color: var(--accentColor);
   background-color: transparent;
 }
 
-button:active {
+.button:active {
   color: var(--accentColor);
   background-color: transparent;
 }
 
-button:not(:active) {
+.button:not(:active) {
   color: var(--optionsBarButtonColor);
   background-color: transparent;
 }

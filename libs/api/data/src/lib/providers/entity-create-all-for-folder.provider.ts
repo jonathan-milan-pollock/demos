@@ -22,7 +22,7 @@ export class EntityCreateAllForFolderProvider {
     entityType: EntityType,
     watermarkedType: WatermarkedType,
     group: string,
-    initialSlug?: string
+    initialPathname?: string
   ): Observable<void> {
     return findGoogleDriveFolders$(googleDrive, folderId).pipe(
       concatMap((entityFolders) => {
@@ -35,7 +35,7 @@ export class EntityCreateAllForFolderProvider {
               entityType,
               watermarkedType,
               group,
-              initialSlug
+              initialPathname
             )
           ),
           last()

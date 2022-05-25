@@ -1,6 +1,6 @@
-import * as React from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import * as React from 'react';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
@@ -13,7 +13,7 @@ import '../styles/styles.scss';
 //TODO: Setup GA
 //ReactGA.initialize(Application.GOOGLE_ANALYTICS_TRACKING_ID);
 
-export default function MyApp(props: AppProps) {
+function MyApp(props: AppProps) {
   const { Component, pageProps } = props;
   return (
     <React.Fragment>
@@ -29,3 +29,5 @@ export default function MyApp(props: AppProps) {
     </React.Fragment>
   );
 }
+
+export default MyApp;

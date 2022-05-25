@@ -1,8 +1,6 @@
-import PropTypes from 'prop-types';
-
 import styles from './master-image-gallery.module.scss';
 import { Image } from '@dark-rush-photography/website/types';
-import { useImageIndex } from '@dark-rush-photography/best-of/util';
+import { useImageIndex } from '@dark-rush-photography/website/util';
 import ImageGallery from '../../common/image-gallery/image-gallery.component';
 
 interface Props {
@@ -10,12 +8,6 @@ interface Props {
   width: number;
   height: number;
 }
-
-MasterImageGallery.propTypes = {
-  images: PropTypes.array.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-};
 
 export default function MasterImageGallery({
   images,

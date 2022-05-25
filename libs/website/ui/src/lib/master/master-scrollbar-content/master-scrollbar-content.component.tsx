@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import styles from './master-scrollbar-content.module.scss';
 import {
   ApplicationLayout,
@@ -11,34 +9,23 @@ interface Props {
   top: number;
   height: number;
   layout: Layout;
-  renderItem: JSX.Element;
+  children?: React.ReactNode;
 }
 
-MasterScrollbarContent.propTypes = {
-  top: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  layout: PropTypes.object.isRequired,
-  renderItem: PropTypes.node.isRequired,
-};
-
-export default function MasterScrollbarContent({
-  top,
-  height,
-  layout,
-  renderItem,
-}: Props): JSX.Element {
+export default function MasterScrollbarContent(props: Props): JSX.Element {
   return (
     <ScrollbarContent
-      top={top}
+      top={props.top}
       width={
-        layout.isLargeWindowWidth
+        props.layout.isLargeWindowWidth
           ? ApplicationLayout.MASTER_WIDTH
-          : layout.width
+          : props.layout.width
       }
-      height={height}
+      height={props.height}
       marginLeft={0}
       className={styles['detailScrollbar']}
-      renderItem={renderItem}
-    />
+    >
+      {props.children}
+    </ScrollbarContent>
   );
 }

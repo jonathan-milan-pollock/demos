@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { Fade } from '@mui/material';
 
 import styles from './logo.module.scss';
@@ -7,7 +5,7 @@ import { Application } from '@dark-rush-photography/website/types';
 import {
   findBrowserHasColorScrollbar,
   findCacheBustingUrl,
-} from '@dark-rush-photography/best-of/util';
+} from '@dark-rush-photography/website/util';
 import PhoneKeypadNumber from '../phone-keypad-number/phone-keypad-number.component';
 import PhoneNumber from '../phone-number/phone-number.component';
 import EmailAddress from '../email-address/email-address.component';
@@ -17,12 +15,7 @@ interface Props {
   width: number | string;
 }
 
-Logo.propTypes = {
-  isSmallPage: PropTypes.bool.isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-};
-
-export default function Logo({ isSmallPage, width }: Props): JSX.Element {
+export default function Logo(props: Props): JSX.Element {
   return (
     <div
       className={

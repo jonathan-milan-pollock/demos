@@ -7,6 +7,6 @@ export const loadImageVideo = (
 
   return {
     storageId: imageVideo.storageId,
-    slug: imageVideo.slug,
+    pathname: imageVideo.pathname,
   };
 };

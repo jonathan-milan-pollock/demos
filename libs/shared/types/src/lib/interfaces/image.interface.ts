@@ -5,7 +5,7 @@ export interface Image {
   readonly id: string;
   readonly entityId: string;
   readonly storageId: string;
-  readonly slug: string;
+  readonly pathname: string;
   readonly order: number;
   readonly state: ImageState;
   readonly threeSixtyImageStorageId?: string;

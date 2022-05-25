@@ -61,10 +61,10 @@ describe('entity-find-all.provider', () => {
         .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
 
       const watermarkedEntity = {
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       } as DocumentModel;
       const withoutWatermarkEntity = {
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       } as DocumentModel;
 
       const mockedFindAllEntities$ = jest
@@ -212,10 +212,10 @@ describe('entity-find-all.provider', () => {
         .mockReturnValue(faker.random.arrayElement(Object.values(EntityType)));
 
       const watermarkedEntity = {
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       } as DocumentModel;
       const withoutWatermarkEntity = {
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       } as DocumentModel;
 
       const mockedFindAllEntitiesForWatermarkedGroup$ = jest

@@ -1,10 +1,9 @@
 import { Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 import { Fade } from '@mui/material';
 
 import { Application } from '@dark-rush-photography/website/types';
-import { findBrowserHasColorScrollbar } from '@dark-rush-photography/best-of/util';
+import { findBrowserHasColorScrollbar } from '@dark-rush-photography/website/util';
 import ColorScrollbar from '../color-scrollbar/color-scrollbar.component';
 import styles from './scrollbar-content.module.scss';
 
@@ -14,48 +13,36 @@ interface Props {
   height: number;
   marginLeft: number;
   className?: string;
-  renderItem: JSX.Element;
+  children?: React.ReactNode;
 }
-
-ScrollbarContent.propTypes = {
-  top: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  marginLeft: PropTypes.number.isRequired,
-  className: PropTypes.string,
-  renderItem: PropTypes.node.isRequired,
-};
 
 /*
           <Fade in={true} timeout={{ enter: Application.FADE_TIME }}>
-            <ColorScrollbar>{renderItem}</ColorScrollbar>
+            <ColorScrollbar>{props.children}</ColorScrollbar>
           </Fade>
            */
-export default function ScrollbarContent({
-  top,
-  width,
-  height,
-  marginLeft,
-  className,
-  renderItem,
-}: Props): JSX.Element {
+export default function ScrollbarContent(props: Props): JSX.Element {
   const renderContent = () => {
     if (findBrowserHasColorScrollbar()) {
       let scrollbarClassName = styles['scrollbar'];
-      if (className) {
-        scrollbarClassName = `${styles['scrollbar']} ${styles[className]}`;
+      if (props.className) {
+        scrollbarClassName = `${styles['scrollbar']} ${
+          styles[props.className]
+        }`;
       }
       return (
         <div className={scrollbarClassName}>
           <Fade in={true} timeout={{ enter: Application.FADE_TIME }}>
-            <div data-testid="scrollbar">{renderItem}</div>
+            <div data-testid="scrollbar">{props.children}</div>
           </Fade>
         </div>
       );
     } else {
       let scrollbarClassName = styles['colorScrollbar'];
-      if (className) {
-        scrollbarClassName = `${styles['colorScrollbar']} ${styles[className]}`;
+      if (props.className) {
+        scrollbarClassName = `${styles['colorScrollbar']} ${
+          styles[props.className]
+        }`;
       }
       return <div className={scrollbarClassName}></div>;
     }

@@ -13,12 +13,12 @@ interface PathnamePageProps {
 function PathnamePage(props: PathnamePageProps): JSX.Element {
   const router = useRouter();
 
-  const slug = ''; //router.query.slug;
+  const pathname = ''; //router.query.pathname;
   return (
     <PageLayout>
       <>
         <div>
-          <h1>{Array.isArray(slug) ? slug[0] : slug}</h1>
+          <h1>{Array.isArray(pathname) ? pathname[0] : pathname}</h1>
         </div>
         <button type="button"></button>
       </>

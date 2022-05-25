@@ -6,7 +6,7 @@ export interface EntityPublic {
   readonly type: EntityType;
   readonly id: string;
   readonly group: string;
-  readonly slug: string;
+  readonly pathname: string;
   readonly order: number;
   readonly title?: string;
   readonly text?: string;

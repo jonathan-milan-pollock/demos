@@ -1,20 +1,14 @@
-import PropTypes from 'prop-types';
-import styles from './page-container.module.scss';
+import styles from './paragraph.module.scss';
 
 interface Props {
   text: string;
   className?: string;
 }
 
-Paragraph.propTypes = {
-  text: PropTypes.string.isRequired,
-  className: PropTypes.string,
-};
-
-export default function Paragraph({ text, className }: Props): JSX.Element {
+export default function Paragraph(props: Props): JSX.Element {
   let paragraphClassName = styles['paragraph'];
-  if (className) {
-    paragraphClassName = `${styles['paragraph']} ${className}`;
+  if (props.className) {
+    paragraphClassName = `${styles['paragraph']} ${props.className}`;
   }
-  return <p className={paragraphClassName}>{text}</p>;
+  return <p className={paragraphClassName}>{props.text}</p>;
 }

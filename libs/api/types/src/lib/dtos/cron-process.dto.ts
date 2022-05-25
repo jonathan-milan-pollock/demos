@@ -23,7 +23,7 @@ export class CronProcessDto implements CronProcess {
   group!: string;
 
   @IsString()
-  slug!: string;
+  pathname!: string;
 
   @IsBoolean()
   postSocialMedia!: boolean;

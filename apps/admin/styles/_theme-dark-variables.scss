@@ -1,4 +1,11 @@
 :root {
+  /* font-size */
+  --font-size-bottom-button: 0.75rem;
+  --font-size-kabob-menu: 0.875rem;
+  --font-size-small: 1rem;
+  --font-size-medium: 1.125rem;
+  --font-size-large: 1.25rem;
+
   /* color */
   --color-text: rgb(160, 160, 160);
   --color-hyperlink: rgb(230, 230, 230);
@@ -32,13 +39,6 @@
   --background-color-footer: rgb(0, 0, 0);
   --background-color-master-image-gallery: transparent;
   --background-color-image-gallery-container: rgba(33, 33, 33, 0.95);
-
-  /* font-size */
-  --font-size-bottom-button: 0.75rem;
-  --font-size-kabob-menu: 0.875rem;
-  --font-size-small: 1rem;
-  --font-size-medium: 1.125rem;
-  --font-size-large: 1.25rem;
 
   /* border */
   --border-bottom-divider: 2px solid rgb(0, 0, 0);

@@ -24,22 +24,22 @@ export class ImageResizeProvider {
 
   resizeImage$(
     storageId: string,
-    slug: string,
+    pathname: string,
     imageDimension: ImageDimension
   ): Observable<string> {
     return downloadAzureStorageBlobToFile$(
-      getAzureStorageBlobPath(storageId, slug, IMAGE_FILE_EXTENSION),
-      getImageFileName(slug),
+      getAzureStorageBlobPath(storageId, pathname, IMAGE_FILE_EXTENSION),
+      getImageFileName(pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
       concatMap((filePath) =>
-        resizeImage$(slug, filePath, imageDimension).pipe(
+        resizeImage$(pathname, filePath, imageDimension).pipe(
           concatMap((filePath) =>
             this.imageAddBlobProvider
               .addImageDimensionBlob$(
                 storageId,
-                slug,
+                pathname,
                 IMAGE_FILE_EXTENSION,
                 imageDimension.type,
                 filePath

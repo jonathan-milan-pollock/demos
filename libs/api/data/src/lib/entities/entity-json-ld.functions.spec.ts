@@ -25,26 +25,26 @@ describe('entity-json-ld.functions', () => {
   describe('loadEventsJsonLdList', () => {
     it('should load a json ld list with all values', () => {
       const events = [
-        { slug: faker.lorem.word() } as Entity,
-        { slug: faker.lorem.word() } as Entity,
-        { slug: faker.lorem.word() } as Entity,
+        { pathname: faker.lorem.word() } as Entity,
+        { pathname: faker.lorem.word() } as Entity,
+        { pathname: faker.lorem.word() } as Entity,
       ];
 
       const listItems: JsonLdListItem[] = [
         {
           '@type': 'ListItem',
           position: 1,
-          url: `https://darkrushphotography.com/events/${events[0].slug}`,
+          url: `https://darkrushphotography.com/events/${events[0].pathname}`,
         },
         {
           '@type': 'ListItem',
           position: 2,
-          url: `https://darkrushphotography.com/events/${events[1].slug}`,
+          url: `https://darkrushphotography.com/events/${events[1].pathname}`,
         },
         {
           '@type': 'ListItem',
           position: 3,
-          url: `https://darkrushphotography.com/events/${events[2].slug}`,
+          url: `https://darkrushphotography.com/events/${events[2].pathname}`,
         },
       ];
 
@@ -64,7 +64,7 @@ describe('entity-json-ld.functions', () => {
   describe('loadEventJsonLdNewsArticle', () => {
     it('should load a json ld news article with all values', () => {
       const event = {
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
         title: faker.lorem.sentence(),
         text: faker.lorem.paragraphs(),
         createdDate: faker.date.recent().toISOString(),
@@ -91,7 +91,7 @@ describe('entity-json-ld.functions', () => {
       expect(result['@type']).toBe('NewsArticle');
       expect(result.mainEntityOfPage['@type']).toBe('WebPage');
       expect(result.mainEntityOfPage['@id']).toBe(
-        `https://darkrushphotography.com/${event.slug}`
+        `https://darkrushphotography.com/${event.pathname}`
       );
       expect(result.headline).toBe(event.title);
       expect(result.description).toBe(event.text);
@@ -109,7 +109,7 @@ describe('entity-json-ld.functions', () => {
 
     it('should load a json ld news article with values for undefined entity values', () => {
       const event = {
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
         title: undefined,
         text: undefined,
         createdDate: faker.date.recent().toISOString(),

@@ -5,7 +5,7 @@ import faker from '@faker-js/faker';
 import {
   MaxPublishedDateSitemapEntityType,
   PublishedDateBestOfType,
-  PublishedDateSlug,
+  PublishedDatePathname,
   SitemapUrl,
 } from '@dark-rush-photography/shared/types';
 import { SitemapXmlProvider } from './sitemap-xml.provider';
@@ -151,7 +151,7 @@ describe('sitemap-xml.provider', () => {
 
       const result = sitemapXmlProvider.loadDarkRushPhotographySitemapXml(
         [] as MaxPublishedDateSitemapEntityType[],
-        [] as PublishedDateSlug[]
+        [] as PublishedDatePathname[]
       );
 
       expect(mockedLoadDarkRushPhotographySitemapUrls).toBeCalledTimes(1);

@@ -43,7 +43,7 @@ describe('entity-load-admin.functions', () => {
       _id: DUMMY_MONGODB_ID,
       type: faker.random.arrayElement(Object.values(EntityType)),
       group: faker.lorem.word(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       isPublic: faker.datatype.boolean(),
       title: faker.lorem.sentence(),
@@ -63,7 +63,7 @@ describe('entity-load-admin.functions', () => {
       imageVideo: {
         _id: DUMMY_MONGODB_ID,
         storageId: faker.datatype.uuid(),
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       },
       tileDimension: {
         _id: DUMMY_MONGODB_ID,
@@ -154,7 +154,7 @@ describe('entity-load-admin.functions', () => {
       expect(result.type).toBe(documentModel.type);
       expect(result.id).toBe(documentModel._id);
       expect(result.group).toBe(documentModel.group);
-      expect(result.slug).toBe(documentModel.slug);
+      expect(result.pathname).toBe(documentModel.pathname);
       expect(result.order).toBe(documentModel.order);
       expect(result.isPublic).toBe(documentModel.isPublic);
       expect(result.title).toBe(documentModel.title);

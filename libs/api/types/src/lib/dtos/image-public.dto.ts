@@ -16,7 +16,7 @@ export class ImagePublicDto implements ImagePublic {
   storageId!: string;
 
   @IsString()
-  slug!: string;
+  pathname!: string;
 
   @IsInt()
   @Min(0)

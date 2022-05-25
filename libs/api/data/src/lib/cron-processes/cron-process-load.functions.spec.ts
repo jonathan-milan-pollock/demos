@@ -24,7 +24,7 @@ describe('cron-process-load.functions', () => {
           .toString(),
         entityId: DUMMY_MONGODB_ID,
         group: faker.lorem.word(),
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
         postSocialMedia: faker.datatype.boolean(),
         ready: faker.datatype.boolean(),
         running: faker.datatype.boolean(),
@@ -42,7 +42,7 @@ describe('cron-process-load.functions', () => {
           .toString(),
         entityId: DUMMY_MONGODB_ID,
         group: faker.lorem.word(),
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
         postSocialMedia: faker.datatype.boolean(),
         ready: faker.datatype.boolean(),
         running: faker.datatype.boolean(),
@@ -60,7 +60,7 @@ describe('cron-process-load.functions', () => {
       expect(result.entityType).toBe(cronProcessTableUpdate.entityType);
       expect(result.entityId).toBe(cronProcessTableUpdate.entityId);
       expect(result.group).toBe(cronProcessTableUpdate.group);
-      expect(result.slug).toBe(cronProcessTableUpdate.slug);
+      expect(result.pathname).toBe(cronProcessTableUpdate.pathname);
       expect(result.postSocialMedia).toBe(
         cronProcessTableUpdate.postSocialMedia
       );
@@ -80,7 +80,7 @@ describe('cron-process-load.functions', () => {
       const entityTypeString = entityType.toString();
       const entityId = DUMMY_MONGODB_ID;
       const group = faker.lorem.word();
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
       const postSocialMedia = faker.datatype.boolean();
       const ready = faker.datatype.boolean();
       const running = faker.datatype.boolean();
@@ -93,7 +93,7 @@ describe('cron-process-load.functions', () => {
         entityType: entityTypeString,
         entityId,
         group,
-        slug,
+        pathname,
         postSocialMedia,
         ready,
         running,
@@ -106,7 +106,7 @@ describe('cron-process-load.functions', () => {
       expect(result.entityType).toBe(entityType);
       expect(result.entityId).toBe(entityId);
       expect(result.group).toBe(group);
-      expect(result.slug).toBe(slug);
+      expect(result.pathname).toBe(pathname);
       expect(result.postSocialMedia).toBe(postSocialMedia);
       expect(result.ready).toBe(ready);
       expect(result.running).toBe(running);

@@ -3,7 +3,7 @@ import styles from './drp-art-util.module.scss';
 /* eslint-disable-next-line */
 export interface DrpArtUtilProps {}
 
-export function DrpArtUtil(props: DrpArtUtilProps) {
+function DrpArtUtil(props: DrpArtUtilProps) {
   return (
     <div className={styles['container']}>
       <h1>Welcome to DrpArtUtil!</h1>

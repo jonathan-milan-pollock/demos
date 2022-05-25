@@ -18,19 +18,20 @@ export const validateEntityGroup = (entity: Entity): string => {
   return entity.group;
 };
 
-export const validateEntitySlug = (entity: Entity): string => {
-  if (entity.slug === '') throw new ConflictException('Slug is required');
+export const validateEntityPathname = (entity: Entity): string => {
+  if (entity.pathname === '')
+    throw new ConflictException('pathname is required');
 
-  if (entity.slug.includes(' '))
-    throw new ConflictException('Slug cannot contain spaces');
+  if (entity.pathname.includes(' '))
+    throw new ConflictException('pathname cannot contain spaces');
 
-  if (entity.slug.toLowerCase() !== entity.slug)
-    throw new ConflictException('Slug must be lowercase');
+  if (entity.pathname.toLowerCase() !== entity.pathname)
+    throw new ConflictException('pathname must be lowercase');
 
-  if (encodeURIComponent(entity.slug) !== entity.slug)
-    throw new ConflictException('Slug cannot require URI encoding');
+  if (encodeURIComponent(entity.pathname) !== entity.pathname)
+    throw new ConflictException('pathname cannot require URI encoding');
 
-  return entity.slug;
+  return entity.pathname;
 };
 
 export const validateEntityOrder = (entity: Entity): number => {

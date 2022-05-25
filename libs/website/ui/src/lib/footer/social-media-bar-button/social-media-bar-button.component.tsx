@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { IconButton } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -12,12 +10,6 @@ interface Props {
   url: string;
   openInBrowserWindow(window: BrowserWindow, url: string): string;
 }
-
-SocialMediaBarButton.propTypes = {
-  icon: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired,
-  openInBrowserWindow: PropTypes.func.isRequired,
-};
 
 export default function SocialMediaBarButton({
   icon,

@@ -1,18 +1,33 @@
-import { AppProps } from 'next/app';
+import * as React from 'react';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import './styles.css';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '../theme/theme';
+import '../styles/styles.scss';
+
+//import { ReactComponent as NxLogo } from '../public/nx-logo-white.svg';
+// <NxLogo width="75" height="50" />
+//TODO: Setup GA
+//ReactGA.initialize(Application.GOOGLE_ANALYTICS_TRACKING_ID);
+
+function MyApp(props: AppProps) {
+  const { Component, pageProps } = props;
   return (
-    <>
+    <React.Fragment>
       <Head>
-        <title>Welcome to website!</title>
+        <title>Dark Rush Photography</title>
+        <link href="/favicon.ico" rel="icon" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <main className="app">
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Component {...pageProps} />
-      </main>
-    </>
+      </ThemeProvider>
+    </React.Fragment>
   );
 }
 
-export default CustomApp;
+export default MyApp;

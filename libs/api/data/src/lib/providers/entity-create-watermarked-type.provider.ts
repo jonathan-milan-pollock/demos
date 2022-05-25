@@ -29,7 +29,7 @@ export class EntityCreateWatermarkedTypeProvider {
     folderName: string,
     entityWithoutGroupType: EntityWithoutGroupType,
     watermarkedType: WatermarkedType,
-    initialSlug?: string
+    initialPathname?: string
   ): Observable<void> {
     return findGoogleDriveFolderByName$(
       googleDrive,
@@ -45,7 +45,7 @@ export class EntityCreateWatermarkedTypeProvider {
           getEntityTypeFromEntityWithoutGroupType(entityWithoutGroupType),
           watermarkedType,
           DEFAULT_ENTITY_GROUP,
-          initialSlug
+          initialPathname
         );
       })
     );

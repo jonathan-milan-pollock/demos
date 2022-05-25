@@ -13,7 +13,7 @@ export class CronProcessTable {
   @EntityString() entityType!: string;
   @EntityString() entityId!: string;
   @EntityString() group!: string;
-  @EntityString() slug!: string;
+  @EntityString() pathname!: string;
   @EntityBoolean() postSocialMedia!: boolean;
   @EntityBoolean() ready!: boolean;
   @EntityBoolean() running!: boolean;

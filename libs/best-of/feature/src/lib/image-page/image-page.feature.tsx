@@ -6,14 +6,14 @@ interface ImagePageProps {
   pathname: string;
 }
 
-export function ImagePage({
+function ImagePage({
   storageId,
-  pathname: slug,
+  pathname: pathname,
 }: ImagePageProps): JSX.Element {
   return (
     <PageLayout>
       <div className={styles['page']}>
-        {storageId}/{slug}
+        {storageId}/{pathname}
       </div>
     </PageLayout>
   );

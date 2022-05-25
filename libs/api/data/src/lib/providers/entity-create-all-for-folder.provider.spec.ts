@@ -78,7 +78,7 @@ describe('entity-create-all-for-folder.provider', () => {
         });
     });
 
-    it('should create all entities with an initial slug when provided', (done: any) => {
+    it('should create all entities with an initial pathname when provided', (done: any) => {
       const mockedFindGoogleDriveFolders$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolders$')
         .mockReturnValue(of([{} as GoogleDriveFolder]));
@@ -87,7 +87,7 @@ describe('entity-create-all-for-folder.provider', () => {
         .spyOn(entityCreateOneForFolderProvider, 'createOneEntityForFolder$')
         .mockReturnValue(of(undefined));
 
-      const initialSlug = faker.lorem.word();
+      const initialPathname = faker.lorem.word();
       entityCreateAllForFolderProvider
         .createAllEntitiesForFolder$(
           {} as drive_v3.Drive,
@@ -95,14 +95,19 @@ describe('entity-create-all-for-folder.provider', () => {
           faker.random.arrayElement(Object.values(EntityType)),
           faker.random.arrayElement(Object.values(WatermarkedType)),
           faker.lorem.word(),
-          initialSlug
+          initialPathname
         )
         .subscribe(() => {
           expect(mockedFindGoogleDriveFolders$).toHaveBeenCalledTimes(1);
           expect(mockedCreateOneEntityForFolder$).toHaveBeenCalledTimes(1);
-          const [_entityFolder, _entityType, _watermarkedType, _group, slug] =
-            mockedCreateOneEntityForFolder$.mock.calls[0];
-          expect(slug).toBe(initialSlug);
+          const [
+            _entityFolder,
+            _entityType,
+            _watermarkedType,
+            _group,
+            pathname,
+          ] = mockedCreateOneEntityForFolder$.mock.calls[0];
+          expect(pathname).toBe(initialPathname);
           done();
         });
     });

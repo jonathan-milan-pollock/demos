@@ -10,13 +10,13 @@ import { resizeExactFitImage$ } from './resize-exact-fit-image.functions';
 import { resizeStandardImage$ } from './resize-standard-image.functions';
 
 export const resizeImage$ = (
-  slug: string,
+  pathname: string,
   filePath: string,
   imageDimension: ImageDimension
 ): Observable<string> => {
   if ('longestEdge' in imageDimension) {
     return resizeLongestEdgeImage$(
-      slug,
+      pathname,
       filePath,
       (imageDimension as ImageDimensionLongestEdge).longestEdge
     );
@@ -25,11 +25,11 @@ export const resizeImage$ = (
   const imageDimensionStandard = imageDimension as ImageDimensionStandard;
   if (imageDimensionStandard.exactFit) {
     return resizeExactFitImage$(
-      slug,
+      pathname,
       filePath,
       imageDimension as ImageDimensionStandard
     );
   }
 
-  return resizeStandardImage$(slug, filePath, imageDimensionStandard);
+  return resizeStandardImage$(pathname, filePath, imageDimensionStandard);
 };

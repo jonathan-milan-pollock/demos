@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types';
-
 import { AppBar, Toolbar } from '@mui/material';
 
 import styles from './title-bar.module.scss';
 import { Application, PageType } from '@dark-rush-photography/website/types';
-import { findCacheBustingUrl } from '@dark-rush-photography/best-of/util';
+import { findCacheBustingUrl } from '@dark-rush-photography/website/util';
 import TitleBarBackButton from '../title-bar-back-button/title-bar-back-button.component';
 import TitleBarKabobMenu from '../title-bar-kabob-menu/title-bar-kabob-menu.component';
 
@@ -12,11 +10,6 @@ interface Props {
   pageType: PageType;
   isDisplayed: boolean;
 }
-
-TitleBar.propTypes = {
-  pageType: PropTypes.number.isRequired,
-  isDisplayed: PropTypes.bool.isRequired,
-};
 
 export default function TitleBar({
   pageType,

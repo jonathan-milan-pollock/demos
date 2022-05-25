@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { AppBar, Paper, Tab, Tabs } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,10 +14,6 @@ import styles from './home-tab-bar.module.scss';
 interface Props {
   layout: Layout;
 }
-
-HomeTabBar.propTypes = {
-  layout: PropTypes.object.isRequired,
-};
 
 export default function HomeTabBar({ layout }: Props): JSX.Element {
   const router = useRouter();

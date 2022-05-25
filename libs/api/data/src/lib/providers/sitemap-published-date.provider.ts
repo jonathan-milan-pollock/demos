@@ -8,9 +8,9 @@ import {
   Entity,
   EntityType,
   PublishedDateBestOfType,
-  PublishedDateSlug,
+  PublishedDatePathname,
 } from '@dark-rush-photography/shared/types';
-import { getBestOfTypeFromSlug } from '@dark-rush-photography/shared/util';
+import { getBestOfTypeFromPathname } from '@dark-rush-photography/shared/util';
 import { Document, DocumentModel } from '../schema/document.schema';
 import { findAllPublicEntities$ } from '../entities/entity-repository.functions';
 
@@ -21,19 +21,19 @@ export class SitemapPublishedDateProvider {
     private readonly entityModel: Model<DocumentModel>
   ) {}
 
-  loadEventPublishedDates$(): Observable<PublishedDateSlug[]> {
+  loadEventPublishedDates$(): Observable<PublishedDatePathname[]> {
     return findAllPublicEntities$(EntityType.Event, this.entityModel).pipe(
       map((publicEventEntities) =>
         publicEventEntities.map((publicEventEntity) => {
           const publishedDate = publicEventEntity.publishedDate;
           if (!publishedDate)
             throw new ConflictException(
-              `Public event ${publicEventEntity.group} ${publicEventEntity.slug} has an undefined published date`
+              `Public event ${publicEventEntity.group} ${publicEventEntity.pathname} has an undefined published date`
             );
 
           return {
             publishedDate,
-            slug: publicEventEntity.slug,
+            pathname: publicEventEntity.pathname,
           };
         })
       )
@@ -47,12 +47,12 @@ export class SitemapPublishedDateProvider {
       const publishedDate = bestOfEntity.publishedDate;
       if (!publishedDate)
         throw new ConflictException(
-          `Best of type entity ${bestOfEntity.slug} has an undefined published date`
+          `Best of type entity ${bestOfEntity.pathname} has an undefined published date`
         );
 
       return {
         publishedDate,
-        bestOfType: getBestOfTypeFromSlug(bestOfEntity.slug),
+        bestOfType: getBestOfTypeFromPathname(bestOfEntity.pathname),
       };
     });
   };

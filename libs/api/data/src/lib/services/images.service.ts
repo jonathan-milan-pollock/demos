@@ -76,7 +76,7 @@ export class ImagesService {
             documentModel.type,
             documentModel._id,
             documentModel.group,
-            documentModel.slug
+            documentModel.pathname
           )
         );
       }),

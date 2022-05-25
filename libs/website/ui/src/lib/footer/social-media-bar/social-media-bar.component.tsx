@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types';
-
 import { Grid } from '@mui/material';
 
 import { SocialMediaUrl } from '@dark-rush-photography/website/types';
-import { openInBrowserWindow } from '@dark-rush-photography/best-of/util';
+import { openInBrowserWindow } from '@dark-rush-photography/website/util';
 import SocialMediaBarButton from '../social-media-bar-button/social-media-bar-button.component';
 import styles from './social-media-bar.module.scss';
 
@@ -11,13 +9,7 @@ interface Props {
   isDisplayed: boolean;
 }
 
-SocialMediaBar.propTypes = {
-  isDisplayed: PropTypes.bool.isRequired,
-};
-
 export default function SocialMediaBar({ isDisplayed }: Props): JSX.Element {
-  if (!isDisplayed) return <></>;
-
   return (
     <Grid
       container

@@ -49,7 +49,7 @@ export * from './lib/interfaces/json-ld-news-article.interface';
 export * from './lib/interfaces/location.interface';
 export * from './lib/interfaces/max-published-date-sitemap-entity-type.interface';
 export * from './lib/interfaces/published-date-best-of-type.interface';
-export * from './lib/interfaces/published-date-slug.interface';
+export * from './lib/interfaces/published-date-pathname.interface';
 export * from './lib/interfaces/sitemap-url.interface';
 export * from './lib/interfaces/web-socket-client.interface';
 export * from './lib/interfaces/web-socket-cron-process-response.interface';

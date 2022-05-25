@@ -1,18 +1,28 @@
-import { AppProps } from 'next/app';
-import Head from 'next/head';
-import './styles.css';
+import type { AppProps } from 'next/app';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+import { UserProvider } from '@auth0/nextjs-auth0';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from '../theme/theme';
+import '../styles/styles.scss';
+
+//import { ReactComponent as NxLogo } from '../public/nx-logo-white.svg';
+// <NxLogo width="75" height="50" />
+//ReactGA.initialize(Application.GOOGLE_ANALYTICS_TRACKING_ID);
+
+function MyApp(props: AppProps) {
+  const { Component, pageProps } = props;
   return (
-    <>
-      <Head>
-        <title>Welcome to admin!</title>
-      </Head>
-      <main className="app">
-        <Component {...pageProps} />
-      </main>
-    </>
+    <div className="dark">
+      <UserProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UserProvider>
+    </div>
   );
 }
 
-export default CustomApp;
+export default MyApp;
