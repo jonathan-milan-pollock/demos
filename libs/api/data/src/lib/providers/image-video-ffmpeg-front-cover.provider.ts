@@ -43,10 +43,10 @@ export class ImageVideoFfmpegFrontCoverProvider {
     return downloadAzureStorageBlobToFile$(
       getAzureStorageBlobPath(
         imageVideo.storageId,
-        imageVideo.slug,
+        imageVideo.pathname,
         IMAGE_VIDEO_FILE_EXTENSION
       ),
-      getImageVideoFileName(imageVideo.slug),
+      getImageVideoFileName(imageVideo.pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
@@ -56,15 +56,15 @@ export class ImageVideoFfmpegFrontCoverProvider {
           downloadAzureStorageBlobToFile$(
             getAzureStorageBlobPathWithImageDimension(
               starredImage.storageId,
-              starredImage.slug,
+              starredImage.pathname,
               IMAGE_FILE_EXTENSION,
               ImageDimensionType.YouTube
             ),
-            getImageFileName(starredImage.slug),
+            getImageFileName(starredImage.pathname),
             this.configProvider.azureStorageConnectionStringPublic,
             this.configProvider.azureStorageBlobContainerNamePublic
           ),
-          createTempFile$(getImageVideoFileName(imageVideo.slug)),
+          createTempFile$(getImageVideoFileName(imageVideo.pathname)),
         ])
       ),
       concatMap(
@@ -88,7 +88,7 @@ export class ImageVideoFfmpegFrontCoverProvider {
                 IMAGE_VIDEO_MIME_TYPE,
                 getAzureStorageBlobPath(
                   imageVideo.storageId,
-                  imageVideo.slug,
+                  imageVideo.pathname,
                   IMAGE_VIDEO_FILE_EXTENSION
                 ),
                 this.configProvider.azureStorageConnectionStringPublic,

@@ -9,7 +9,7 @@ import {
 import {
   getEntityTypeFromEntityWithoutGroupType,
   getEntityWithoutGroupTypeFolderName,
-  getEntityWithoutGroupTypeInitialSlug,
+  getEntityWithoutGroupTypeInitialPathname,
 } from './entity-without-group-type.functions';
 
 describe('entity-without-group-type.functions', () => {
@@ -162,55 +162,55 @@ describe('entity-without-group-type.functions', () => {
     );
   });
 
-  describe('getEntityWithoutGroupTypeInitialSlug', () => {
-    const entityWithoutGroupTypeInitialSlugs: {
+  describe('getEntityWithoutGroupTypeInitialPathname', () => {
+    const entityWithoutGroupTypeInitialPathnames: {
       entityWithoutGroupType: EntityWithoutGroupType;
-      initialSlug?: string;
+      initialPathname?: string;
     }[] = [
       {
         entityWithoutGroupType: EntityWithoutGroupType.About,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.BestOf,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.Destination,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.Favorites,
-        initialSlug: 'favorites',
+        initialPathname: 'favorites',
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.ImagePost,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.ImageVideo,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.Review,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.ReviewMedia,
-        initialSlug: 'review-thank-you',
+        initialPathname: 'review-thank-you',
       },
       {
         entityWithoutGroupType: EntityWithoutGroupType.Test,
-        initialSlug: undefined,
+        initialPathname: undefined,
       },
     ];
 
-    it.each(entityWithoutGroupTypeInitialSlugs)(
-      'should return initial slug %s',
-      ({ entityWithoutGroupType, initialSlug }) => {
+    it.each(entityWithoutGroupTypeInitialPathnames)(
+      'should return initial pathname %s',
+      ({ entityWithoutGroupType, initialPathname }) => {
         expect(
-          getEntityWithoutGroupTypeInitialSlug(entityWithoutGroupType)
-        ).toBe(initialSlug);
+          getEntityWithoutGroupTypeInitialPathname(entityWithoutGroupType)
+        ).toBe(initialPathname);
       }
     );
   });

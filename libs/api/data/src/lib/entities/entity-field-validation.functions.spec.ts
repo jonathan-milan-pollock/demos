@@ -13,7 +13,7 @@ import {
   validateEntityPublishedDate,
   validateEntitySeoDescription,
   validateEntitySeoKeywords,
-  validateEntitySlug,
+  validateEntityPathname,
   validateEntityText,
   validateEntityTileDimension,
   validateEntityTitle,
@@ -57,57 +57,57 @@ describe('entity-field-validation.functions', () => {
     });
   });
 
-  describe('validateEntitySlug', () => {
-    it('should return slug from entity', () => {
-      const slug = faker.lorem.word();
-      const result = validateEntitySlug({ slug } as DocumentModel);
-      expect(result).toBe(slug);
+  describe('validateEntityPathname', () => {
+    it('should return pathname from entity', () => {
+      const pathname = faker.lorem.word();
+      const result = validateEntityPathname({ pathname } as DocumentModel);
+      expect(result).toBe(pathname);
     });
 
-    it('should allow dashes in slug', () => {
-      const slug = `${faker.lorem.word()}-${faker.lorem.word()}`;
-      const result = validateEntitySlug({ slug } as DocumentModel);
-      expect(result).toBe(slug);
+    it('should allow dashes in pathname', () => {
+      const pathname = `${faker.lorem.word()}-${faker.lorem.word()}`;
+      const result = validateEntityPathname({ pathname } as DocumentModel);
+      expect(result).toBe(pathname);
     });
 
-    it('should throw a conflict exception when the slug is an empty string', () => {
+    it('should throw a conflict exception when the pathname is an empty string', () => {
       const result = () => {
-        validateEntitySlug({
-          slug: '',
+        validateEntityPathname({
+          pathname: '',
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Slug is required');
+      expect(result).toThrow('pathname is required');
     });
 
-    it('should throw a conflict exception when the slug contains spaces', () => {
+    it('should throw a conflict exception when the pathname contains spaces', () => {
       const result = () => {
-        validateEntitySlug({
-          slug: `${faker.lorem.word()} ${faker.lorem.word()}`,
+        validateEntityPathname({
+          pathname: `${faker.lorem.word()} ${faker.lorem.word()}`,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Slug cannot contain spaces');
+      expect(result).toThrow('pathname cannot contain spaces');
     });
 
-    it('should throw a conflict exception when the slug is not lowercase', () => {
+    it('should throw a conflict exception when the pathname is not lowercase', () => {
       const result = () => {
-        validateEntitySlug({
-          slug: faker.lorem.word().toUpperCase(),
+        validateEntityPathname({
+          pathname: faker.lorem.word().toUpperCase(),
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Slug must be lowercase');
+      expect(result).toThrow('pathname must be lowercase');
     });
 
-    it('should throw a conflict exception when the slug requires URI encoding', () => {
+    it('should throw a conflict exception when the pathname requires URI encoding', () => {
       const result = () => {
-        validateEntitySlug({
-          slug: `#${faker.lorem.word()}`,
+        validateEntityPathname({
+          pathname: `#${faker.lorem.word()}`,
         } as DocumentModel);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow('Slug cannot require URI encoding');
+      expect(result).toThrow('pathname cannot require URI encoding');
     });
   });
 

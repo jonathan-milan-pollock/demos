@@ -26,7 +26,7 @@ export const loadCronProcess = (
     entityType: cronProcessTable.entityType as EntityType,
     entityId: cronProcessTable.entityId,
     group: cronProcessTable.group,
-    slug: cronProcessTable.slug,
+    pathname: cronProcessTable.pathname,
     postSocialMedia: cronProcessTable.postSocialMedia,
     ready: cronProcessTable.ready,
     running: cronProcessTable.running,

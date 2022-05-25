@@ -48,13 +48,13 @@ describe('entity-load-json-ld.functions', () => {
       const publicStarredAndLovedImages = [
         {
           storageId: faker.datatype.uuid(),
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Public,
           isStarred: true,
         } as Image,
         {
           storageId: faker.datatype.uuid(),
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Public,
           isLoved: true,
         } as Image,
@@ -70,23 +70,23 @@ describe('entity-load-json-ld.functions', () => {
 
       const [
         firstStorageId,
-        firstSlug,
+        firstPathname,
         firstImageDimensionType,
         firstIsProduction,
       ] = mockedGetImageUrl.mock.calls[0];
       expect(firstStorageId).toBe(publicStarredAndLovedImages[0].storageId);
-      expect(firstSlug).toBe(publicStarredAndLovedImages[0].slug);
+      expect(firstPathname).toBe(publicStarredAndLovedImages[0].pathname);
       expect(firstImageDimensionType).toBe(ImageDimensionType.JsonLd);
       expect(firstIsProduction).toBe(isProduction);
 
       const [
         secondStorageId,
-        secondSlug,
+        secondPathname,
         secondImageDimensionType,
         secondIsProduction,
       ] = mockedGetImageUrl.mock.calls[1];
       expect(secondStorageId).toBe(publicStarredAndLovedImages[1].storageId);
-      expect(secondSlug).toBe(publicStarredAndLovedImages[1].slug);
+      expect(secondPathname).toBe(publicStarredAndLovedImages[1].pathname);
       expect(secondImageDimensionType).toBe(ImageDimensionType.JsonLd);
       expect(secondIsProduction).toBe(isProduction);
     });
@@ -99,13 +99,13 @@ describe('entity-load-json-ld.functions', () => {
       const publicStarredAndLovedImages = [
         {
           storageId: faker.datatype.uuid(),
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Selected,
           isStarred: true,
         } as Image,
         {
           storageId: faker.datatype.uuid(),
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Archived,
           isLoved: true,
         } as Image,
@@ -128,13 +128,13 @@ describe('entity-load-json-ld.functions', () => {
       const publicStarredAndLovedImages = [
         {
           storageId: faker.datatype.uuid(),
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Public,
           isStarred: false,
         } as Image,
         {
           storageId: faker.datatype.uuid(),
-          slug: faker.lorem.word(),
+          pathname: faker.lorem.word(),
           state: ImageState.Public,
           isLoved: false,
         } as Image,

@@ -1,5 +1,9 @@
-import { ThemeType } from '@dark-rush-photography/website/types';
-import Theme from 'libs/website/types/src/lib/interfaces/theme.interface';
+import {
+  darkTheme,
+  lightTheme,
+  ThemeType,
+  Theme,
+} from '@dark-rush-photography/website/types';
 import { findIsLargeBrowserWindow } from './browser.functions';
 
 export const loadTheme = (themeType: ThemeType): Theme => {

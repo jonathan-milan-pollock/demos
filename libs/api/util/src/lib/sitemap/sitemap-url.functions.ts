@@ -1,7 +1,7 @@
 import {
   MaxPublishedDateSitemapEntityType,
   PublishedDateBestOfType,
-  PublishedDateSlug,
+  PublishedDatePathname,
   SitemapUrl,
 } from '@dark-rush-photography/shared/types';
 import {
@@ -37,15 +37,15 @@ export const loadDarkRushPhotographySitemapUrls = (
   );
 
 export const loadSitemapEventUrls = (
-  publishedDateSlugs: PublishedDateSlug[]
+  publishedDatePathnames: PublishedDatePathname[]
 ): SitemapUrl[] =>
-  publishedDateSlugs.reduce(
-    (sitemapUrls: SitemapUrl[], publishDateSlug: PublishedDateSlug) => [
+  publishedDatePathnames.reduce(
+    (sitemapUrls: SitemapUrl[], publishDatePathname: PublishedDatePathname) => [
       ...sitemapUrls,
       {
-        loc: `https://darkrushphotography.com/events/${publishDateSlug.slug}`,
+        loc: `https://darkrushphotography.com/events/${publishDatePathname.pathname}`,
         priority: '0.8',
-        lastmod: getSitemapDate(publishDateSlug.publishedDate),
+        lastmod: getSitemapDate(publishDatePathname.publishedDate),
         changefreq: 'monthly',
       },
     ],

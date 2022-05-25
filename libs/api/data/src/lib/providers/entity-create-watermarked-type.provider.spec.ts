@@ -109,7 +109,7 @@ describe('entity-create-watermarked-type.provider', () => {
         });
     });
 
-    it('should create watermarked type entity with initial slug', (done: any) => {
+    it('should create watermarked type entity with initial pathname', (done: any) => {
       const mockedFindGoogleDriveFolderByName$ = jest
         .spyOn(apiUtil, 'findGoogleDriveFolderByName$')
         .mockReturnValue(
@@ -124,14 +124,14 @@ describe('entity-create-watermarked-type.provider', () => {
         .spyOn(entityCreateAllForFolderProvider, 'createAllEntitiesForFolder$')
         .mockReturnValue(of(undefined));
 
-      const initialSlug = faker.lorem.word();
+      const initialPathname = faker.lorem.word();
       entityCreateWatermarkedTypeProvider
         .createWatermarkedType$(
           {} as drive_v3.Drive,
           faker.lorem.word(),
           faker.random.arrayElement(Object.values(EntityWithoutGroupType)),
           faker.random.arrayElement(Object.values(WatermarkedType)),
-          initialSlug
+          initialPathname
         )
         .subscribe(() => {
           expect(mockedFindGoogleDriveFolderByName$).toHaveBeenCalledTimes(1);
@@ -145,9 +145,9 @@ describe('entity-create-watermarked-type.provider', () => {
             _entityType,
             _watermarkedType,
             _defaultEntityGroup,
-            slug,
+            pathname,
           ] = mockedCreateAllEntitiesForFolder$.mock.calls[0];
-          expect(slug).toBe(initialSlug);
+          expect(pathname).toBe(initialPathname);
           done();
         });
     });

@@ -47,7 +47,7 @@ describe('entity-load-public.functions', () => {
       _id: DUMMY_MONGODB_ID,
       type: faker.random.arrayElement(Object.values(EntityType)),
       group: faker.lorem.word(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       title: faker.lorem.sentence(),
       text: faker.lorem.paragraphs(),
@@ -111,7 +111,7 @@ describe('entity-load-public.functions', () => {
       expect(result.type).toBe(documentModel.type);
       expect(result.id).toBe(documentModel._id);
       expect(result.group).toBe(documentModel.group);
-      expect(result.slug).toBe(documentModel.slug);
+      expect(result.pathname).toBe(documentModel.pathname);
       expect(result.order).toBe(documentModel.order);
       expect(result.title).toBe(documentModel.title);
       expect(result.text).toEqual(documentModel.text);
@@ -238,7 +238,7 @@ describe('entity-load-public.functions', () => {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
       storageId: faker.datatype.uuid(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       state: faker.random.arrayElement(Object.values(ImageState)),
       threeSixtyImageStorageId: faker.datatype.uuid(),
@@ -262,7 +262,7 @@ describe('entity-load-public.functions', () => {
       _id: DUMMY_MONGODB_ID,
       type: faker.random.arrayElement(Object.values(EntityType)),
       group: faker.lorem.word(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       title: faker.lorem.sentence(),
       text: faker.lorem.paragraphs(),
@@ -320,7 +320,7 @@ describe('entity-load-public.functions', () => {
       expect(result.type).toBe(documentModel.type);
       expect(result.id).toBe(documentModel._id);
       expect(result.group).toBe(documentModel.group);
-      expect(result.slug).toBe(documentModel.slug);
+      expect(result.pathname).toBe(documentModel.pathname);
       expect(result.order).toBe(documentModel.order);
       expect(result.title).toBe(documentModel.title);
       expect(result.text).toEqual(documentModel.text);
@@ -356,7 +356,7 @@ describe('entity-load-public.functions', () => {
       expect(result.type).toBe(documentModel.type);
       expect(result.id).toBe(documentModel._id);
       expect(result.group).toBe(documentModel.group);
-      expect(result.slug).toBe(documentModel.slug);
+      expect(result.pathname).toBe(documentModel.pathname);
       expect(result.order).toBe(documentModel.order);
       expect(result.title).toBe(documentModel.title);
       expect(result.text).toEqual(documentModel.text);

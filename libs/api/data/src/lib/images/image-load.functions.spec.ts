@@ -19,7 +19,7 @@ describe('image-load.functions', () => {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
       storageId: faker.datatype.uuid(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       state: faker.random.arrayElement(Object.values(ImageState)),
       threeSixtyImageStorageId: faker.datatype.uuid(),
@@ -50,7 +50,7 @@ describe('image-load.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(image.state);
       expect(result.threeSixtyImageStorageId).toBe(
@@ -79,7 +79,7 @@ describe('image-load.functions', () => {
   describe('loadImagePublic', () => {
     const image = {
       storageId: faker.datatype.uuid(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       threeSixtyImageStorageId: faker.datatype.uuid(),
       smallDimension: {
@@ -101,7 +101,7 @@ describe('image-load.functions', () => {
       const result = loadImagePublic(image);
 
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(image.order);
       expect(result.threeSixtyImageStorageId).toBe(
         image.threeSixtyImageStorageId

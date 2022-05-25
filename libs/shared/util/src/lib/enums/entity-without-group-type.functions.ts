@@ -35,7 +35,7 @@ const entityWithoutGroupTypeFolderNameMap = new Map<
   [EntityWithoutGroupType.Test, 'test'],
 ]);
 
-const entityWithoutGroupTypeInitialSlugMap = new Map<
+const entityWithoutGroupTypeInitialPathnameMap = new Map<
   EntityWithoutGroupType,
   string | undefined
 >([
@@ -76,8 +76,8 @@ export const getEntityWithoutGroupTypeFolderName = (
   return folderName;
 };
 
-export const getEntityWithoutGroupTypeInitialSlug = (
+export const getEntityWithoutGroupTypeInitialPathname = (
   entityWithoutGroupType: EntityWithoutGroupType
 ): string | undefined => {
-  return entityWithoutGroupTypeInitialSlugMap.get(entityWithoutGroupType);
+  return entityWithoutGroupTypeInitialPathnameMap.get(entityWithoutGroupType);
 };

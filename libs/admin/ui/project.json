@@ -10,6 +10,14 @@
       "options": {
         "lintFilePatterns": ["libs/admin/ui/**/*.{ts,tsx,js,jsx}"]
       }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/ui"],
+      "options": {
+        "jestConfig": "libs/admin/ui/jest.config.ts",
+        "passWithNoTests": true
+      }
     }
   }
 }

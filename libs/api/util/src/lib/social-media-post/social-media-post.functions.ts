@@ -30,7 +30,7 @@ export const postSocialMediaImage$ = (
     `https://devpublicsa.blob.core.windows.net/devimages/` +
     getAzureStorageBlobPathWithImageDimension(
       starredImage.storageId,
-      starredImage.slug,
+      starredImage.pathname,
       IMAGE_FILE_EXTENSION,
       ImageDimensionType.Facebook
     );
@@ -61,14 +61,14 @@ export const postSocialMediaVideo$ = (
         scheduleDate: new Date().toISOString(),
         post,
         platforms: [getSocialMediaTypePlatform(socialMediaType)],
-        media_urls: [`${video.storageId}/${video.slug}`],
+        media_urls: [`${video.storageId}/${video.pathname}`],
         shorten_links: false,
         youTubeOptions: {
           title,
           youTubeVisibility: 'public',
           thumbNail: getAzureStorageBlobPathWithImageDimension(
             starredImage.storageId,
-            starredImage.slug,
+            starredImage.pathname,
             IMAGE_FILE_EXTENSION,
             ImageDimensionType.Facebook
           ),
@@ -85,7 +85,7 @@ export const postSocialMediaVideo$ = (
       media_urls: [
         getAzureStorageBlobPathWithImageDimension(
           starredImage.storageId,
-          starredImage.slug,
+          starredImage.pathname,
           IMAGE_FILE_EXTENSION,
           ImageDimensionType.Facebook
         ),

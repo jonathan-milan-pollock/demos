@@ -8,7 +8,7 @@
   z-index: 2000;
 }
 
-main {
+.main {
   background-color: var(--mainBackgroundColor);
   position: fixed;
   left: 0;
@@ -18,7 +18,7 @@ main {
   overflow: hidden;
 }
 
-footer {
+.footer {
   background-color: var(--footerBackgroundColor);
   display: block;
   position: fixed;

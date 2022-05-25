@@ -35,14 +35,14 @@ export class EntityCreateOneForFolderProvider {
     entityType: EntityType,
     watermarkedType: WatermarkedType,
     group: string,
-    initialSlug?: string
+    initialPathname?: string
   ): Observable<void> {
-    const slug = initialSlug ?? entityFolder.name;
+    const pathname = initialPathname ?? entityFolder.name;
     return findOneEntity$(
       entityType,
       watermarkedType,
       group,
-      slug,
+      pathname,
       this.entityModel
     ).pipe(
       concatMap((documentModel) => {
@@ -52,7 +52,7 @@ export class EntityCreateOneForFolderProvider {
             entityFolder.name,
             entityType,
             group,
-            initialSlug
+            initialPathname
           );
           return of(undefined);
         }
@@ -62,7 +62,7 @@ export class EntityCreateOneForFolderProvider {
           entityFolder.name,
           entityType,
           group,
-          initialSlug
+          initialPathname
         );
         return findAllEntitiesForGroup$(
           entityType,
@@ -82,7 +82,7 @@ export class EntityCreateOneForFolderProvider {
               entityFolder.id,
               watermarkedType,
               group,
-              slug,
+              pathname,
               order + 1,
               this.entityModel
             )

@@ -2,7 +2,7 @@ import { ConflictException } from '@nestjs/common';
 
 import { BestOfType } from '@dark-rush-photography/shared/types';
 
-const slugToBestOfTypeMap = new Map<string, BestOfType>([
+const pathnameToBestOfTypeMap = new Map<string, BestOfType>([
   ['children', BestOfType.Children],
   ['events', BestOfType.Events],
   ['landscapes', BestOfType.Landscapes],
@@ -26,10 +26,12 @@ const bestOfTypeSitemapPriorityMap = new Map<BestOfType, string>([
   [BestOfType.RealEstate, '0.9'],
 ]);
 
-export const getBestOfTypeFromSlug = (slug: string): BestOfType => {
-  const bestOfType = slugToBestOfTypeMap.get(slug);
+export const getBestOfTypeFromPathname = (pathname: string): BestOfType => {
+  const bestOfType = pathnameToBestOfTypeMap.get(pathname);
   if (!bestOfType)
-    throw new ConflictException(`Could not get best of type for slug ${slug}`);
+    throw new ConflictException(
+      `Could not get best of type for pathname ${pathname}`
+    );
   return bestOfType;
 };
 

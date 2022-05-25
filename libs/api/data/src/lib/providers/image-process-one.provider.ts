@@ -72,13 +72,16 @@ export class ImageProcessOneProvider {
             )
           ),
           concatMap(() =>
-            this.imageTinifyProvider.tinifyImage$(image.storageId, image.slug)
+            this.imageTinifyProvider.tinifyImage$(
+              image.storageId,
+              image.pathname
+            )
           ),
           concatMap(() => from(iPadImageDimensions)),
           concatMap((iPadImageDimension) =>
             this.imageResizeProvider.resizeImage$(
               image.storageId,
-              image.slug,
+              image.pathname,
               iPadImageDimension
             )
           ),
@@ -99,10 +102,10 @@ export class ImageProcessOneProvider {
     return downloadAzureStorageBlobToFile$(
       getAzureStorageBlobPath(
         image.storageId,
-        image.slug,
+        image.pathname,
         IMAGE_FILE_EXTENSION
       ),
-      getImageFileName(image.slug),
+      getImageFileName(image.pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
@@ -112,7 +115,7 @@ export class ImageProcessOneProvider {
           IMAGE_MIME_TYPE,
           getAzureStorageBlobPath(
             image.storageId,
-            image.slug,
+            image.pathname,
             IMAGE_FILE_EXTENSION
           ),
           this.configProvider.azureStorageConnectionStringPublic,
@@ -123,7 +126,7 @@ export class ImageProcessOneProvider {
       concatMap(() =>
         this.imageResizeProvider.resizeImage$(
           image.storageId,
-          image.slug,
+          image.pathname,
           smallImageDimension
         )
       ),
@@ -155,7 +158,7 @@ export class ImageProcessOneProvider {
       concatMap((imageDimension) =>
         this.imageResizeProvider.resizeImage$(
           image.storageId,
-          image.slug,
+          image.pathname,
           imageDimension
         )
       ),

@@ -1,9 +1,9 @@
 export const getImagePageUrl = (
-  slug: string,
+  pathname: string,
   storageId: string,
   threeSixtyImageStorageId: string
 ) => {
-  return `/${slug}/${
+  return `/${pathname}/${
     threeSixtyImageStorageId ? threeSixtyImageStorageId : storageId
   }${threeSixtyImageStorageId ? '/360' : ''}`;
 };

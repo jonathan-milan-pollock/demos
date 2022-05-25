@@ -44,14 +44,14 @@ export class ImageVideoMeltProvider {
       concatMap((emotionImage) => {
         const blobPath = getAzureStorageBlobPathWithImageDimension(
           emotionImage.storageId,
-          emotionImage.slug,
+          emotionImage.pathname,
           IMAGE_FILE_EXTENSION,
           ImageDimensionType.YouTube
         );
 
         return downloadAzureStorageBlobToFile$(
           blobPath,
-          getImageFileName(emotionImage.slug),
+          getImageFileName(emotionImage.pathname),
           this.configProvider.azureStorageConnectionStringPublic,
           this.configProvider.azureStorageBlobContainerNamePublic
         ).pipe(

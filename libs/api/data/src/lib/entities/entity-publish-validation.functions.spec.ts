@@ -24,7 +24,7 @@ import * as imageFieldValidationFunctions from '../images/image-field-validation
 
 describe('entity-public-validation.functions', () => {
   let mockedValidateEntityGroup: any;
-  let mockedValidateEntitySlug: any;
+  let mockedValidateEntityPathname: any;
   let mockedValidateEntityOrder: any;
   let mockedValidateEntityTitle: any;
   let mockedValidateEntityText: any;
@@ -35,7 +35,7 @@ describe('entity-public-validation.functions', () => {
   let mockedValidateEntityLocation: any;
   let mockedValidateOnePublishImage: any;
   let mockedValidatePublishImagesHaveStorageIds: any;
-  let mockedValidatePublishImagesHaveSlugs: any;
+  let mockedValidatePublishImagesHavePathnames: any;
   let mockedValidatePublishImagesAreNotStarredAndLoved: any;
   let mockedValidatePublishStarredImage: any;
   let mockedValidatePublishLovedImages: any;
@@ -53,7 +53,7 @@ describe('entity-public-validation.functions', () => {
       id: faker.datatype.uuid(),
       entityId: DUMMY_MONGODB_ID,
       storageId: faker.datatype.uuid(),
-      slug: faker.lorem.word(),
+      pathname: faker.lorem.word(),
       order: faker.datatype.number(),
       state: faker.random.arrayElement(Object.values(ImageState)),
       threeSixtyImageStorageId: faker.datatype.uuid(),
@@ -77,8 +77,8 @@ describe('entity-public-validation.functions', () => {
       .spyOn(entityFieldValidationFunctions, 'validateEntityGroup')
       .mockReturnValue(faker.lorem.word());
 
-    mockedValidateEntitySlug = jest
-      .spyOn(entityFieldValidationFunctions, 'validateEntitySlug')
+    mockedValidateEntityPathname = jest
+      .spyOn(entityFieldValidationFunctions, 'validateEntityPathname')
       .mockReturnValue(faker.lorem.word());
 
     mockedValidateEntityOrder = jest
@@ -133,8 +133,11 @@ describe('entity-public-validation.functions', () => {
       )
       .mockReturnValue([image] as Image[]);
 
-    mockedValidatePublishImagesHaveSlugs = jest
-      .spyOn(imageFieldValidationFunctions, 'validatePublishImagesHaveSlugs')
+    mockedValidatePublishImagesHavePathnames = jest
+      .spyOn(
+        imageFieldValidationFunctions,
+        'validatePublishImagesHavePathnames'
+      )
       .mockReturnValue([image] as Image[]);
 
     mockedValidatePublishImagesAreNotStarredAndLoved = jest
@@ -183,26 +186,26 @@ describe('entity-public-validation.functions', () => {
       const documentModel = { type: EntityType.About } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityOrder).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTitle).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
     });
 
     it('should validate BestOf', () => {
       const documentModel = { type: EntityType.BestOf } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityOrder).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveTitles).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesHaveSeoDescriptions
@@ -216,12 +219,12 @@ describe('entity-public-validation.functions', () => {
       const documentModel = { type: EntityType.Destination } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityOrder).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishStarredImage).toHaveBeenCalledTimes(1);
     });
 
@@ -230,7 +233,7 @@ describe('entity-public-validation.functions', () => {
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
       expect(mockedValidateEntityGroup).toHaveBeenCalledTimes(1);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityOrder).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTitle).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
@@ -241,7 +244,7 @@ describe('entity-public-validation.functions', () => {
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesAreNotStarredAndLoved
       ).toHaveBeenCalledTimes(1);
@@ -253,11 +256,11 @@ describe('entity-public-validation.functions', () => {
       const documentModel = { type: EntityType.Favorites } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveTitles).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesHaveSeoDescriptions
@@ -271,27 +274,27 @@ describe('entity-public-validation.functions', () => {
       const documentModel = { type: EntityType.ImagePost } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
       expect(mockedValidateOnePublishImage).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Image Video', () => {
       const documentModel = { type: EntityType.ImageVideo } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTitle).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntitySeoDescription).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
       expect(
         mockedValidatePublishImagesAreNotStarredAndLoved
       ).toHaveBeenCalledTimes(1);
@@ -306,7 +309,7 @@ describe('entity-public-validation.functions', () => {
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
       expect(mockedValidateEntityGroup).toHaveBeenCalledTimes(1);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityOrder).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTitle).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
@@ -318,14 +321,14 @@ describe('entity-public-validation.functions', () => {
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
     });
 
     it('should validate Review', () => {
       const documentModel = { type: EntityType.Review } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityOrder).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTitle).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityText).toHaveBeenCalledTimes(1);
@@ -333,7 +336,7 @@ describe('entity-public-validation.functions', () => {
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
       expect(mockedValidateEntityTileDimension).toHaveBeenCalledTimes(1);
     });
 
@@ -341,11 +344,11 @@ describe('entity-public-validation.functions', () => {
       const documentModel = { type: EntityType.ReviewMedia } as DocumentModel;
       const result = validatePublishEntity(documentModel);
       expect(result).toEqual(documentModel);
-      expect(mockedValidateEntitySlug).toHaveBeenCalledTimes(1);
+      expect(mockedValidateEntityPathname).toHaveBeenCalledTimes(1);
       expect(mockedValidatePublishImagesHaveStorageIds).toHaveBeenCalledTimes(
         1
       );
-      expect(mockedValidatePublishImagesHaveSlugs).toHaveBeenCalledTimes(1);
+      expect(mockedValidatePublishImagesHavePathnames).toHaveBeenCalledTimes(1);
     });
 
     it.each(

@@ -61,6 +61,19 @@ const entityTypeHasImageVideoMap = new Map<EntityType, boolean>([
   [EntityType.Test, false],
 ]);
 
+const entityTypePluralDescriptionMap = new Map<EntityType, string>([
+  [EntityType.About, 'About'],
+  [EntityType.BestOf, 'Best Of'],
+  [EntityType.Destination, 'Destinations'],
+  [EntityType.Event, 'Events'],
+  [EntityType.Favorites, 'Favorites'],
+  [EntityType.ImagePost, 'Image Posts'],
+  [EntityType.ImageVideo, 'Image Videos'],
+  [EntityType.PhotoOfTheWeek, 'Photo of the Week'],
+  [EntityType.Review, 'Reviews'],
+  [EntityType.ReviewMedia, 'Review Media'],
+]);
+
 export const getEntityTypeNewImagesFolderName = (
   entityType: EntityType
 ): string | undefined => {
@@ -96,4 +109,15 @@ export const getEntityTypeHasImageVideo = (entityType: EntityType): boolean => {
       `Could not get has image video for entity type ${entityType}`
     );
   return hasImageVideo;
+};
+
+export const getEntityTypePluralDescription = (
+  entityType: EntityType
+): string => {
+  const pluralDescription = entityTypePluralDescriptionMap.get(entityType);
+  if (!pluralDescription)
+    throw new ConflictException(
+      `Could not get plural description for entity type ${entityType}`
+    );
+  return pluralDescription;
 };

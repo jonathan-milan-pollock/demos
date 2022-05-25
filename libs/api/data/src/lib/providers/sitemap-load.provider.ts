@@ -20,7 +20,7 @@ import {
   BestOfType,
 } from '@dark-rush-photography/shared/types';
 import { Document, DocumentModel } from '../schema/document.schema';
-import { findOnePublicEntityForSlug$ } from '../entities/entity-repository.functions';
+import { findOnePublicEntityForPathname$ } from '../entities/entity-repository.functions';
 import { validateEntityFound } from '../entities/entity-validation.functions';
 import { SitemapMaxPublishedDateProvider } from './sitemap-max-published-date.provider';
 import { SitemapPublishedDateProvider } from './sitemap-published-date.provider';
@@ -70,10 +70,10 @@ export class SitemapLoadProvider {
           this.sitemapPublishedDateProvider.loadEventPublishedDates$(),
         ])
       ),
-      map(([publishedDateSitemapEntityTypes, eventPublishEventSlugs]) =>
+      map(([publishedDateSitemapEntityTypes, eventPublishEventPathnames]) =>
         this.sitemapXmlProvider.loadDarkRushPhotographySitemapXml(
           publishedDateSitemapEntityTypes,
-          eventPublishEventSlugs
+          eventPublishEventPathnames
         )
       )
     );
@@ -81,27 +81,27 @@ export class SitemapLoadProvider {
 
   loadThirtySevenPhotosSitemap$(): Observable<string> {
     return forkJoin([
-      findOnePublicEntityForSlug$(
+      findOnePublicEntityForPathname$(
         EntityType.BestOf,
         BestOfType.Events.toLowerCase(),
         this.entityModel
       ).pipe(map(validateEntityFound)),
-      findOnePublicEntityForSlug$(
+      findOnePublicEntityForPathname$(
         EntityType.BestOf,
         BestOfType.RealEstate.toLowerCase(),
         this.entityModel
       ).pipe(map(validateEntityFound)),
-      findOnePublicEntityForSlug$(
+      findOnePublicEntityForPathname$(
         EntityType.BestOf,
         BestOfType.Nature.toLowerCase(),
         this.entityModel
       ).pipe(map(validateEntityFound)),
-      findOnePublicEntityForSlug$(
+      findOnePublicEntityForPathname$(
         EntityType.BestOf,
         BestOfType.Landscapes.toLowerCase(),
         this.entityModel
       ).pipe(map(validateEntityFound)),
-      findOnePublicEntityForSlug$(
+      findOnePublicEntityForPathname$(
         EntityType.BestOf,
         BestOfType.Children.toLowerCase(),
         this.entityModel

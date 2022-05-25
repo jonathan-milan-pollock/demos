@@ -56,47 +56,49 @@ describe('log-messages.functions', () => {
       expect(logMessage).toBe(`Creating ${entityType} entity ${folderName}`);
     });
 
-    it('should log a creating entity message for a group and slug', () => {
+    it('should log a creating entity message for a group and pathname', () => {
       const mockedLogger = {
         log: jest.fn().mockReturnValue(undefined),
       };
 
       const entityType = faker.random.arrayElement(Object.values(EntityType));
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
       logCreatingEntityMessage(
         mockedLogger as unknown as Logger,
         faker.lorem.word(),
         entityType,
         DEFAULT_ENTITY_GROUP,
-        slug
+        pathname
       );
 
       expect(mockedLogger.log).toBeCalledTimes(1);
       const [logMessage] = mockedLogger.log.mock.calls[0];
-      expect(logMessage).toBe(`Creating ${entityType} entity ${slug}`);
+      expect(logMessage).toBe(`Creating ${entityType} entity ${pathname}`);
     });
 
-    it('should log a creating entity message for a default entity group and slug', () => {
+    it('should log a creating entity message for a default entity group and pathname', () => {
       const mockedLogger = {
         log: jest.fn().mockReturnValue(undefined),
       };
 
       const entityType = faker.random.arrayElement(Object.values(EntityType));
       const group = faker.lorem.word();
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
       logCreatingEntityMessage(
         mockedLogger as unknown as Logger,
         faker.lorem.word(),
         entityType,
         group,
-        slug
+        pathname
       );
 
       expect(mockedLogger.log).toBeCalledTimes(1);
       const [logMessage] = mockedLogger.log.mock.calls[0];
-      expect(logMessage).toBe(`Creating ${entityType} entity ${group} ${slug}`);
+      expect(logMessage).toBe(
+        `Creating ${entityType} entity ${group} ${pathname}`
+      );
     });
   });
 
@@ -144,47 +146,49 @@ describe('log-messages.functions', () => {
       expect(logMessage).toBe(`Found ${entityType} entity ${folderName}`);
     });
 
-    it('should log a found entity message for a group and slug', () => {
+    it('should log a found entity message for a group and pathname', () => {
       const mockedLogger = {
         log: jest.fn().mockReturnValue(undefined),
       };
 
       const entityType = faker.random.arrayElement(Object.values(EntityType));
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
       logFoundEntityMessage(
         mockedLogger as unknown as Logger,
         faker.lorem.word(),
         entityType,
         DEFAULT_ENTITY_GROUP,
-        slug
+        pathname
       );
 
       expect(mockedLogger.log).toBeCalledTimes(1);
       const [logMessage] = mockedLogger.log.mock.calls[0];
-      expect(logMessage).toBe(`Found ${entityType} entity ${slug}`);
+      expect(logMessage).toBe(`Found ${entityType} entity ${pathname}`);
     });
 
-    it('should log a found entity message for a default entity group and slug', () => {
+    it('should log a found entity message for a default entity group and pathname', () => {
       const mockedLogger = {
         log: jest.fn().mockReturnValue(undefined),
       };
 
       const entityType = faker.random.arrayElement(Object.values(EntityType));
       const group = faker.lorem.word();
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
       logFoundEntityMessage(
         mockedLogger as unknown as Logger,
         faker.lorem.word(),
         entityType,
         group,
-        slug
+        pathname
       );
 
       expect(mockedLogger.log).toBeCalledTimes(1);
       const [logMessage] = mockedLogger.log.mock.calls[0];
-      expect(logMessage).toBe(`Found ${entityType} entity ${group} ${slug}`);
+      expect(logMessage).toBe(
+        `Found ${entityType} entity ${group} ${pathname}`
+      );
     });
   });
 });

@@ -6,19 +6,19 @@ import { createTempFile$ } from '../file/file.functions';
 import { getImageFileName } from '../..';
 
 export const resizeLongestEdgeImage$ = (
-  slug: string,
+  pathname: string,
   filePath: string,
   longestEdge: number
 ): Observable<string> =>
   findDimension$(filePath).pipe(
     concatMap((resolution) => {
       return resolution.width > resolution.height
-        ? createTempFile$(getImageFileName(slug)).pipe(
+        ? createTempFile$(getImageFileName(pathname)).pipe(
             concatMap((newFilePath) =>
               resizeLongestEdgeImageWidth$(filePath, newFilePath, longestEdge)
             )
           )
-        : createTempFile$(getImageFileName(slug)).pipe(
+        : createTempFile$(getImageFileName(pathname)).pipe(
             concatMap((newFilePath) =>
               resizeLongestEdgeImageHeight$(filePath, newFilePath, longestEdge)
             )

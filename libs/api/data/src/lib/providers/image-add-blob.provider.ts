@@ -36,7 +36,7 @@ export class ImageAddBlobProvider {
           IMAGE_MIME_TYPE,
           getAzureStorageBlobPath(
             image.storageId,
-            image.slug,
+            image.pathname,
             IMAGE_FILE_EXTENSION
           ),
           this.configProvider.azureStorageConnectionStringPublic,
@@ -55,7 +55,7 @@ export class ImageAddBlobProvider {
       IMAGE_MIME_TYPE,
       getAzureStorageBlobPath(
         image.storageId,
-        image.slug,
+        image.pathname,
         IMAGE_FILE_EXTENSION
       ),
       this.configProvider.azureStorageConnectionStringPublic,
@@ -65,7 +65,7 @@ export class ImageAddBlobProvider {
 
   addImageDimensionBlob$(
     storageId: string,
-    slug: string,
+    pathname: string,
     fileExtension: string,
     imageDimensionType: ImageDimensionType,
     imageFilePath: string
@@ -75,7 +75,7 @@ export class ImageAddBlobProvider {
       IMAGE_MIME_TYPE,
       getAzureStorageBlobPathWithImageDimension(
         storageId,
-        slug,
+        pathname,
         fileExtension,
         imageDimensionType
       ),

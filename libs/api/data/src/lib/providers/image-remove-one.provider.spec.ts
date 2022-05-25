@@ -111,7 +111,7 @@ describe('image-remove-one.provider', () => {
           of({
             imageVideo: {
               storageId: faker.datatype.uuid(),
-              slug: faker.lorem.word(),
+              pathname: faker.lorem.word(),
             },
           } as DocumentModel)
         );
@@ -191,7 +191,7 @@ describe('image-remove-one.provider', () => {
           of({
             imageVideo: {
               storageId: '',
-              slug: faker.lorem.word(),
+              pathname: faker.lorem.word(),
             },
           } as DocumentModel)
         );
@@ -216,14 +216,14 @@ describe('image-remove-one.provider', () => {
         });
     });
 
-    it('should not delete image video blobs and remove an image video when image video does not have a slug', (done: any) => {
+    it('should not delete image video blobs and remove an image video when image video does not have a pathname', (done: any) => {
       const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(
           of({
             imageVideo: {
               storageId: faker.lorem.word(),
-              slug: '',
+              pathname: '',
             },
           } as DocumentModel)
         );
@@ -248,14 +248,14 @@ describe('image-remove-one.provider', () => {
         });
     });
 
-    it('should not delete image video blobs and remove an image video when image video does not have a storage id or slug', (done: any) => {
+    it('should not delete image video blobs and remove an image video when image video does not have a storage id or pathname', (done: any) => {
       const mockedFindEntityById$ = jest
         .spyOn(entityRepositoryFunctions, 'findEntityById$')
         .mockReturnValue(
           of({
             imageVideo: {
               storageId: '',
-              slug: '',
+              pathname: '',
             },
           } as DocumentModel)
         );

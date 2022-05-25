@@ -12,7 +12,7 @@ import {
 import {
   findFooterHeight,
   findHeaderHeight,
-} from '@dark-rush-photography/best-of/util';
+} from '../functions/layout.functions';
 
 export function useLayout(pageType: PageType): Layout {
   const [layout, setLayout] = useState({

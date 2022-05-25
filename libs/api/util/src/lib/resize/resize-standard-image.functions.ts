@@ -6,12 +6,12 @@ import { createTempFile$ } from '../file/file.functions';
 import { getImageFileName } from '../images/image-file-name.functions';
 
 export const resizeStandardImage$ = (
-  slug: string,
+  pathname: string,
   filePath: string,
   standardImageResolution: ImageDimensionStandard
 ): Observable<string> => {
   const { width, height } = standardImageResolution.dimension;
-  return createTempFile$(getImageFileName(slug)).pipe(
+  return createTempFile$(getImageFileName(pathname)).pipe(
     concatMap((newFilePath) =>
       combineLatest([
         of(newFilePath),

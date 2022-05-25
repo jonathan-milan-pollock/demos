@@ -29,7 +29,7 @@ export const createEntityForFolder$ = (
   googleDriveFolderId: string,
   watermarkedType: WatermarkedType,
   group: string,
-  slug: string,
+  pathname: string,
   order: number,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel> =>
@@ -40,7 +40,7 @@ export const createEntityForFolder$ = (
         googleDriveFolderId,
         watermarkedType,
         group,
-        slug,
+        pathname,
         order
       ),
     }).save()
@@ -101,7 +101,7 @@ export const findOneEntity$ = (
   entityType: EntityType,
   watermarkedType: WatermarkedType,
   group: string,
-  slug: string,
+  pathname: string,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel | null> =>
   from(
@@ -109,19 +109,19 @@ export const findOneEntity$ = (
       type: entityType,
       watermarkedType,
       group,
-      slug,
+      pathname: pathname,
     })
   );
 
-export const findOnePublicEntityForSlug$ = (
+export const findOnePublicEntityForPathname$ = (
   entityType: EntityType,
-  slug: string,
+  pathname: string,
   entityModel: Model<DocumentModel>
 ): Observable<DocumentModel | null> =>
   from(
     entityModel.findOne({
       type: entityType,
-      slug,
+      pathname: pathname,
       isPublic: true,
       isDeleted: false,
     })

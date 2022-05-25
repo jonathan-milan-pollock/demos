@@ -23,7 +23,7 @@ describe('image-load-document-model.functions', () => {
     id: faker.datatype.uuid(),
     entityId: DUMMY_MONGODB_ID,
     storageId: faker.datatype.uuid(),
-    slug: faker.lorem.word(),
+    pathname: faker.lorem.word(),
     order: faker.datatype.number(),
     state: faker.random.arrayElement(Object.values(ImageState)),
     threeSixtyImageStorageId: faker.datatype.uuid(),
@@ -46,15 +46,15 @@ describe('image-load-document-model.functions', () => {
   describe('loadNewImage', () => {
     it('should load values', () => {
       const entityId = DUMMY_MONGODB_ID;
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
       const order = faker.datatype.number();
 
-      const result = loadNewImage(entityId, slug, order);
+      const result = loadNewImage(entityId, pathname, order);
 
       expect(result.id).toBeDefined();
       expect(result.entityId).toBe(entityId);
       expect(result.storageId).toBeDefined();
-      expect(result.slug).toBe(slug);
+      expect(result.pathname).toBe(pathname);
       expect(result.order).toBe(order);
       expect(result.state).toBe(ImageState.New);
       expect(result.isStarred).toBe(false);
@@ -65,14 +65,14 @@ describe('image-load-document-model.functions', () => {
   describe('loadAddImagePostImage', () => {
     it('should load values', () => {
       const entityId = DUMMY_MONGODB_ID;
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
-      const result = loadAddImagePostImage(entityId, slug);
+      const result = loadAddImagePostImage(entityId, pathname);
 
       expect(result.id).toBeDefined();
       expect(result.entityId).toBe(entityId);
       expect(result.storageId).toBeDefined();
-      expect(result.slug).toBe(slug);
+      expect(result.pathname).toBe(pathname);
       expect(result.order).toBe(0);
       expect(result.state).toBe(ImageState.Selected);
       expect(result.isStarred).toBe(false);
@@ -83,14 +83,14 @@ describe('image-load-document-model.functions', () => {
   describe('loadAddTestImage', () => {
     it('should load values', () => {
       const entityId = DUMMY_MONGODB_ID;
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
-      const result = loadAddTestImage(entityId, slug);
+      const result = loadAddTestImage(entityId, pathname);
 
       expect(result.id).toBeDefined();
       expect(result.entityId).toBe(entityId);
       expect(result.storageId).toBeDefined();
-      expect(result.slug).toBe(slug);
+      expect(result.pathname).toBe(pathname);
       expect(result.order).toBe(0);
       expect(result.state).toBe(ImageState.New);
       expect(result.isStarred).toBe(false);
@@ -118,7 +118,7 @@ describe('image-load-document-model.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(image.order);
       expect(result.threeSixtyImageStorageId).toBe(
         imageUpdate.threeSixtyImageStorageId
@@ -141,7 +141,7 @@ describe('image-load-document-model.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(order);
       expect(result.state).toBe(image.state);
       expect(result.threeSixtyImageStorageId).toBe(
@@ -165,7 +165,7 @@ describe('image-load-document-model.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(state);
       expect(result.threeSixtyImageStorageId).toBe(
@@ -189,7 +189,7 @@ describe('image-load-document-model.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(image.state);
       expect(result.threeSixtyImageStorageId).toBe(
@@ -216,7 +216,7 @@ describe('image-load-document-model.functions', () => {
       expect(result.id).toBe(image.id);
       expect(result.entityId).toBe(image.entityId);
       expect(result.storageId).toBe(image.storageId);
-      expect(result.slug).toBe(image.slug);
+      expect(result.pathname).toBe(image.pathname);
       expect(result.order).toBe(image.order);
       expect(result.state).toBe(image.state);
       expect(result.threeSixtyImageStorageId).toBe(
@@ -234,12 +234,12 @@ describe('image-load-document-model.functions', () => {
 
   describe('loadAddImageVideo', () => {
     it('should load values', () => {
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
-      const result = loadAddImageVideo(slug);
+      const result = loadAddImageVideo(pathname);
 
       expect(result.storageId).toBeDefined();
-      expect(result.slug).toBe(slug);
+      expect(result.pathname).toBe(pathname);
     });
   });
 });

@@ -1,1 +1,1 @@
-export * from './lib/website-feature';
+export { default as AboutPage } from './lib/about-page/about-page.feature';

@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types';
-
 import { AppBar, Toolbar } from '@mui/material';
 
 import styles from './top-navigation-bar.module.scss';
 import { Application, PageType } from '@dark-rush-photography/website/types';
-import { findCacheBustingUrl } from '@dark-rush-photography/best-of/util';
+import { findCacheBustingUrl } from '@dark-rush-photography/website/util';
 import TopNavigationBarButton from '../top-navigation-bar-button/top-navigation-bar-button.component';
 import TopNavigationBarBackButton from '../top-navigation-bar-back-button/top-navigation-bar-back-button.component';
 import ThemeToggleButton from '../theme-toggle-button/theme-toggle-button.component';
@@ -13,11 +11,6 @@ interface Props {
   pageType: PageType;
   isDisplayed: boolean;
 }
-
-TopNavigationBar.propTypes = {
-  pageType: PropTypes.number.isRequired,
-  isDisplayed: PropTypes.bool.isRequired,
-};
 
 export default function TopNavigationBar({
   pageType,

@@ -96,7 +96,7 @@ describe('image-posts.service', () => {
             _entityType,
             _entityId,
             _group,
-            _slug,
+            _pathname,
             postSocialMedia,
           ] = mockedStartCronProcessType.mock.calls[0];
           expect(cronProcessType).toBe(CronProcessType.PublishEntity);

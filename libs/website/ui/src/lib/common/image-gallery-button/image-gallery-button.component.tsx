@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,34 +17,16 @@ interface Props {
   onClick(event: React.MouseEvent<HTMLElement, MouseEvent>): void;
 }
 
-ImageGalleryButton.propTypes = {
-  galleryButtonType: PropTypes.number.isRequired,
-  icon: PropTypes.object.isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  height: PropTypes.number.isRequired,
-  isDisplayed: PropTypes.bool.isRequired,
-  isDisabled: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-
-export default function ImageGalleryButton({
-  galleryButtonType,
-  icon,
-  width,
-  height,
-  isDisplayed,
-  isDisabled,
-  onClick,
-}: Props): JSX.Element {
+export default function ImageGalleryButton(props: Props): JSX.Element {
   const renderButton = () => {
-    if (!isDisplayed) return;
+    if (!props.isDisplayed) return;
     return (
       <Button
         className={styles['button']}
-        disabled={isDisabled}
-        onClick={onClick}
+        disabled={props.isDisabled}
+        onClick={props.onClick}
       >
-        <FontAwesomeIcon icon={icon} size="2x" />
+        <FontAwesomeIcon icon={props.icon} size="2x" />
       </Button>
     );
   };

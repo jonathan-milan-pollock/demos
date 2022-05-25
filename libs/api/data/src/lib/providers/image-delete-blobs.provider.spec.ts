@@ -76,10 +76,10 @@ describe('image-delete-blobs.provider', () => {
         .mockReturnValue(of(undefined));
 
       const storageId = faker.datatype.uuid();
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
 
       imageDeleteBlobsProvider
-        .deleteImageBlobs$(storageId, slug)
+        .deleteImageBlobs$(storageId, pathname)
         .subscribe(() => {
           expect(mockedGetImageDimensions).toBeCalledTimes(1);
           expect(

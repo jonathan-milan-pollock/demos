@@ -34,10 +34,10 @@ export class ImageExifProvider {
     return downloadAzureStorageBlobToFile$(
       getAzureStorageBlobPath(
         image.storageId,
-        image.slug,
+        image.pathname,
         IMAGE_FILE_EXTENSION
       ),
-      getImageFileName(image.slug),
+      getImageFileName(image.pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
@@ -49,7 +49,7 @@ export class ImageExifProvider {
       tap((createdDate) =>
         this.logger.log(
           `Exif image ${getImageFileName(
-            image.slug
+            image.pathname
           )} created date is ${createdDate}`
         )
       )
@@ -63,10 +63,10 @@ export class ImageExifProvider {
     return downloadAzureStorageBlobToFile$(
       getAzureStorageBlobPath(
         image.storageId,
-        image.slug,
+        image.pathname,
         IMAGE_FILE_EXTENSION
       ),
-      getImageFileName(image.slug),
+      getImageFileName(image.pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
@@ -81,7 +81,7 @@ export class ImageExifProvider {
               IMAGE_MIME_TYPE,
               getAzureStorageBlobPath(
                 image.storageId,
-                image.slug,
+                image.pathname,
                 IMAGE_FILE_EXTENSION
               ),
               this.configProvider.azureStorageConnectionStringPublic,

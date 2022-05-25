@@ -1,5 +1,4 @@
 import { useState, Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 import { Image } from '@dark-rush-photography/website/types';
 import styles from './progressive-image.module.scss';
@@ -10,17 +9,7 @@ interface Props {
   height: number;
 }
 
-ProgressiveImage.propTypes = {
-  image: PropTypes.object.isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  height: PropTypes.number.isRequired,
-};
-
-export default function ProgressiveImage({
-  image,
-  width,
-  height,
-}: Props): JSX.Element {
+export default function ProgressiveImage(props: Props): JSX.Element {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const renderFillImage = () => {
@@ -31,10 +20,10 @@ export default function ProgressiveImage({
           imageLoaded
             ? {
                 opacity: 0,
-                backgroundImage: `url(${image.thumbnail})`,
+                backgroundImage: `url(${props.image.thumbnail})`,
               }
             : {
-                backgroundImage: `url(${image.thumbnail})`,
+                backgroundImage: `url(${props.image.thumbnail})`,
               }
         }
         onClick={() => {
@@ -51,7 +40,7 @@ export default function ProgressiveImage({
       <div
         className={styles['image']}
         style={{
-          backgroundImage: `url(${image.original})`,
+          backgroundImage: `url(${props.image.original})`,
         }}
         onClick={() => {
           console.log('render image');
@@ -67,7 +56,7 @@ export default function ProgressiveImage({
         onLoad={() => {
           setImageLoaded(true);
         }}
-        src={image.original}
+        src={props.image.original}
         alt=""
       />
       {renderFillImage()}

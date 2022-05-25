@@ -53,7 +53,7 @@
 - npx nx g @nrwl/next:lib admin/data --unitTestRunner=jest --style=scss --tags=scope:admin,type:data
 - npx nx g @nrwl/next:lib admin/feature --unitTestRunner=none --style=scss --tags=scope:admin,type:feature
 - npx nx g @nrwl/next:lib admin/types --unitTestRunner=none --style=scss --tags=scope:admin,type:types
-- npx nx g @nrwl/next:lib admin/ui --unitTestRunner=none --style=scss --tags=scope:admin,type:ui
+- npx nx g @nrwl/next:lib admin/ui --unitTestRunner=jest --style=scss --tags=scope:admin,type:ui
 - npx nx g @nrwl/next:lib admin/util --unitTestRunner=jest --style=scss --tags=scope:admin,type:util
 
 #### generate best-of libs
@@ -61,7 +61,7 @@
 - npx nx g @nrwl/next:lib best-of/data --unitTestRunner=jest --style=scss --tags=scope:best-of,type:data
 - npx nx g @nrwl/next:lib best-of/feature --unitTestRunner=none --style=scss --tags=scope:best-of,type:feature
 - npx nx g @nrwl/next:lib best-of/types --unitTestRunner=none --style=scss --tags=scope:best-of,type:types
-- npx nx g @nrwl/next:lib best-of/ui --unitTestRunner=none --style=scss --tags=scope:best-of,type:ui
+- npx nx g @nrwl/next:lib best-of/ui --unitTestRunner=jest --style=scss --tags=scope:best-of,type:ui
 - npx nx g @nrwl/next:lib best-of/util --unitTestRunner=jest --style=scss --tags=scope:best-of,type:util
 
 #### generate drp-art libs
@@ -69,7 +69,7 @@
 - npx nx g @nrwl/next:lib drp-art/data --unitTestRunner=jest --style=scss --tags=scope:drp-art,type:data
 - npx nx g @nrwl/next:lib drp-art/feature --unitTestRunner=none --style=scss --tags=scope:drp-art,type:feature
 - npx nx g @nrwl/next:lib drp-art/types --unitTestRunner=none --style=scss --tags=scope:drp-art,type:types
-- npx nx g @nrwl/next:lib drp-art/ui --unitTestRunner=none --style=scss --tags=scope:drp-art,type:ui
+- npx nx g @nrwl/next:lib drp-art/ui --unitTestRunner=jest --style=scss --tags=scope:drp-art,type:ui
 - npx nx g @nrwl/next:lib drp-art/util --unitTestRunner=jest --style=scss --tags=scope:drp-art,type:util
 
 #### generate website libs
@@ -77,7 +77,7 @@
 - npx nx g @nrwl/next:lib website/data --unitTestRunner=jest --style=scss --tags=scope:website,type:data
 - npx nx g @nrwl/next:lib website/feature --unitTestRunner=none --style=scss --tags=scope:website,type:feature
 - npx nx g @nrwl/next:lib website/types --unitTestRunner=none --style=scss --tags=scope:website,type:types
-- npx nx g @nrwl/next:lib website/ui --unitTestRunner=none --style=scss --tags=scope:website,type:ui
+- npx nx g @nrwl/next:lib website/ui --unitTestRunner=jest --style=scss --tags=scope:website,type:ui
 - npx nx g @nrwl/next:lib website/util --unitTestRunner=jest --style=scss --tags=scope:website,type:util
 
 #### generate extended reality lib
@@ -88,7 +88,7 @@
 
 - npx nx g @nrwl/js:lib shared/types --unitTestRunner=none --style=scss --tags=scope:shared,type:types
 - npx nx g @nrwl/js:lib shared/util --unitTestRunner=jest --style=scss --tags=scope:shared,type:util
-- npx nx g @nrwl/next:lib shared/ui --unitTestRunner=none --style=scss --tags=scope:shared,type:ui
+- npx nx g @nrwl/next:lib shared/ui --unitTestRunner=jest --style=scss --tags=scope:shared,type:ui
 
 ---
 
@@ -137,16 +137,24 @@
 
 - npm i -D @types/react-grid-layout
 - npm i -D @types/react-image-gallery
+- npm i -D @types/styled-components
 - npm i react-device-detect
 - npm i react-grid-layout
 - npm i react-use
 - npm i @mui/material
+- npm i @mui/x-date-pickers
 - npm i @mui/styled-engine-sc
 - npm i styled-components
 - npm i @emotion/react
 - npm i @emotion/styled
 - npm i react-scrollbars-custom
 - npm i react-image-gallery
+- npm i react-photo-album
+- npm i react-draggable-tags
+
+### add next app authentication dependencies
+
+- npm i @auth0/nextjs-auth0
 
 ### add font awesome dependencies
 
@@ -182,40 +190,12 @@ import { Multer } from 'multer';
 ### for api e2e testing
 
 - copy apps/website-e2e to apps/api-e2e
-- in apps/api-e2e/.eslintrc.json change website-e2e to api-e2e for parserOptions project
+  - then replace website-e2e with api-e2e
+- in cypress.json add baseUrl to localhost:1111
 
 ```json
- "overrides": [
-    {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "parserOptions": {
-        "project": "apps/api-e2e/tsconfig.*?.json"
-      },
-      "rules": {}
-    },
-```
-
-- in cypress.json change videos and screenshots folders and baseUrl to localhost:1111
-
-```json
-  "videosFolder": "../../dist/cypress/apps/api-e2e/videos",
-  "screenshotsFolder": "../../dist/cypress/apps/api-e2e/screenshots",
-  "chromeWebSecurity": false,
   "baseUrl": "http://localhost:1111",
 ```
-
-- remove projectId in cypress.json so that a new cypress project id will be created
-- in angular.json copy website-e2e to api-e2e and make corresponding changes to tasks
-- in nx.json add api-e2e project
-
-```json
-  "api-e2e": {
-      "tags": [],
-      "implicitDependencies": ["api"]
-    },
-```
-
-- in package.json add api:e2e to serve:api npm script
 
 ---
 
@@ -283,6 +263,10 @@ app.useWebSocketAdapter(new WsAdapter(app));
 "codeCoverage": true,
 "coverageReporters": ["text", "json", "lcov"]
 ```
+
+## add scss-module.d.ts in ui projects for jest
+
+- scss-module.d.ts
 
 ---
 

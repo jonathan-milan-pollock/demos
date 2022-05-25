@@ -23,7 +23,7 @@ describe('cron-process-start.functions', () => {
       const entityType = faker.random.arrayElement(Object.values(EntityType));
       const entityId = DUMMY_MONGODB_ID;
       const group = faker.lorem.word();
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
       const postSocialMedia = faker.datatype.boolean();
 
       const cronProcessTable = startCronProcessType(
@@ -31,7 +31,7 @@ describe('cron-process-start.functions', () => {
         entityType,
         entityId,
         group,
-        slug,
+        pathname,
         postSocialMedia
       );
 
@@ -40,7 +40,7 @@ describe('cron-process-start.functions', () => {
       expect(cronProcessTable.entityType).toBe(entityType);
       expect(cronProcessTable.entityId).toBe(entityId);
       expect(cronProcessTable.group).toBe(group);
-      expect(cronProcessTable.slug).toBe(slug);
+      expect(cronProcessTable.pathname).toBe(pathname);
       expect(cronProcessTable.postSocialMedia).toBe(postSocialMedia);
     });
   });

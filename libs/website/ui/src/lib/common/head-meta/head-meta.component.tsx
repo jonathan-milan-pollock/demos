@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 //import { v4 as uuidv4 } from 'uuid';
 
 import styles from './head-meta.module.scss';
@@ -10,13 +8,7 @@ interface Props {
   pageUrl: string;
 }
 
-HeadMeta.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  pageUrl: PropTypes.string.isRequired,
-};
-
-export default function HeadMeta({ title, description, pageUrl }: Props) {
+export default function HeadMeta(props: Props) {
   return;
   /*
     return (

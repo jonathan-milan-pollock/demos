@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 
 import ReactImageGallery from 'react-image-gallery';
 
@@ -17,23 +16,7 @@ interface Props {
   displayImage(currentImageIndex: number): void;
 }
 
-ImageGallery.propTypes = {
-  images: PropTypes.array.isRequired,
-  imageIndex: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  autoPlay: PropTypes.bool.isRequired,
-  displayImage: PropTypes.func.isRequired,
-};
-
-export default function ImageGallery({
-  images,
-  imageIndex,
-  width,
-  height,
-  autoPlay,
-  displayImage,
-}: Props): JSX.Element {
+export default function ImageGallery(props: Props): JSX.Element {
   const imageGalleryRef = useRef<any>(null);
   useEffect(() => {
     imageGalleryRef.current.handleResize = () => {
@@ -56,9 +39,9 @@ export default function ImageGallery({
       <ImageGalleryButton
         galleryButtonType={GalleryButtonType.Left}
         icon={{ prefix: 'fas', iconName: 'chevron-left' }}
-        width={width}
-        height={height}
-        isDisplayed={images.length > 1}
+        width={props.width}
+        height={props.height}
+        isDisplayed={props.images.length > 1}
         isDisabled={disabled}
         onClick={onClick}
       />
@@ -73,9 +56,9 @@ export default function ImageGallery({
       <ImageGalleryButton
         galleryButtonType={GalleryButtonType.Right}
         icon={{ prefix: 'fas', iconName: 'chevron-right' }}
-        width={width}
-        height={height}
-        isDisplayed={images.length > 1}
+        width={props.width}
+        height={props.height}
+        isDisplayed={props.images.length > 1}
         isDisabled={disabled}
         onClick={onClick}
       />
@@ -86,14 +69,14 @@ export default function ImageGallery({
     <div className={styles['imageGallery']}>
       <ReactImageGallery
         ref={imageGalleryRef}
-        items={images}
+        items={props.images}
         renderItem={(image) => {
           if (!image.original || !image.thumbnail) return;
           return (
             <ProgressiveImage
               image={image as Image}
-              width={width}
-              height={height}
+              width={props.width}
+              height={props.height}
             />
           );
         }}
@@ -109,13 +92,11 @@ export default function ImageGallery({
         showThumbnails={false}
         showNav={true}
         showPlayButton={false}
-        autoPlay={autoPlay}
-        startIndex={imageIndex}
+        autoPlay={props.autoPlay}
+        startIndex={props.imageIndex}
         slideInterval={8000}
-        slideDuration={autoPlay ? 3000 : 2000}
-        onSlide={(currentIndex) => {
-          displayImage(currentIndex);
-        }}
+        slideDuration={props.autoPlay ? 3000 : 2000}
+        onSlide={props.displayImage}
       />
     </div>
   );

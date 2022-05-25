@@ -9,7 +9,7 @@ export const loadImageAdmin = (image: Image): ImageAdmin => ({
   id: image.id,
   entityId: image.entityId,
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order: image.order,
   state: image.state,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
@@ -22,7 +22,7 @@ export const loadImageAdmin = (image: Image): ImageAdmin => ({
 
 export const loadImagePublic = (image: Image): ImagePublic => ({
   storageId: image.storageId,
-  slug: image.slug,
+  pathname: image.pathname,
   order: image.order,
   threeSixtyImageStorageId: image.threeSixtyImageStorageId,
   smallDimension: image.smallDimension ?? { width: 0, height: 0 },

@@ -7,7 +7,7 @@ export interface CronProcess {
   readonly entityType: EntityType;
   readonly entityId: string;
   readonly group: string;
-  readonly slug: string;
+  readonly pathname: string;
   readonly postSocialMedia: boolean;
   readonly ready: boolean;
   readonly running: boolean;

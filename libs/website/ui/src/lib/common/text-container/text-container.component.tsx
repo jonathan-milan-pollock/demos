@@ -1,35 +1,21 @@
-import PropTypes from 'prop-types';
-
 import styles from './text-container.module.scss';
 
 interface Props {
   title?: string;
   className?: string;
   titleClassName?: string;
-  renderItem: JSX.Element;
+  children?: React.ReactNode;
 }
 
-TextContainer.propTypes = {
-  title: PropTypes.string,
-  className: PropTypes.string,
-  titleClassName: PropTypes.string,
-  renderItem: PropTypes.object.isRequired,
-};
-
-export default function TextContainer({
-  title,
-  className,
-  titleClassName,
-  renderItem,
-}: Props): JSX.Element {
+export default function TextContainer(props: Props): JSX.Element {
   let textClasses = styles['container'];
-  if (className) {
-    textClasses = `${styles['container']} ${styles[className]}`;
+  if (props.className) {
+    textClasses = `${styles['container']} ${styles[props.className]}`;
   }
 
   let titleClasses = styles['title'];
-  if (titleClassName) {
-    titleClasses = `${styles['title']} ${styles[titleClassName]}`;
+  if (props.titleClassName) {
+    titleClasses = `${styles['title']} ${styles[props.titleClassName]}`;
   }
 
   const renderTitle = (title?: string) => {
@@ -40,8 +26,8 @@ export default function TextContainer({
 
   return (
     <div className={textClasses}>
-      {renderTitle(title)}
-      {renderItem}
+      {renderTitle(props.title)}
+      {props.children}
     </div>
   );
 }

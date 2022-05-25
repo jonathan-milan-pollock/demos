@@ -20,7 +20,7 @@ export const loadEntityAdmin = (documentModel: DocumentModel): EntityAdmin => {
     type: documentModel.type,
     id: documentModel._id,
     group: documentModel.group,
-    slug: documentModel.slug,
+    pathname: documentModel.pathname,
     order: documentModel.order,
     isPublic: documentModel.isPublic,
     title: documentModel.title,

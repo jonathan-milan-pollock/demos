@@ -4,52 +4,54 @@ import faker from '@faker-js/faker';
 
 import { BestOfType } from '@dark-rush-photography/shared/types';
 import {
-  getBestOfTypeFromSlug,
+  getBestOfTypeFromPathname,
   getBestOfTypeSitemapLocation,
   getBestOfTypeSitemapPriority,
 } from './best-of-type.functions';
 
 describe('best-of-type.functions', () => {
-  describe('getBestOfTypeFromSlug', () => {
-    const bestOfTypeSlugs: {
+  describe('getBestOfTypeFromPathname', () => {
+    const bestOfTypePathnames: {
       bestOfType: BestOfType;
-      slug: string;
+      pathname: string;
     }[] = [
       {
         bestOfType: BestOfType.Children,
-        slug: 'children',
+        pathname: 'children',
       },
       {
         bestOfType: BestOfType.Events,
-        slug: 'events',
+        pathname: 'events',
       },
       {
         bestOfType: BestOfType.Landscapes,
-        slug: 'landscapes',
+        pathname: 'landscapes',
       },
       {
         bestOfType: BestOfType.Nature,
-        slug: 'nature',
+        pathname: 'nature',
       },
       {
         bestOfType: BestOfType.RealEstate,
-        slug: 'real-estate',
+        pathname: 'real-estate',
       },
     ];
-    it.each(bestOfTypeSlugs)(
+    it.each(bestOfTypePathnames)(
       'should return best of type %s',
-      ({ bestOfType, slug }) => {
-        expect(getBestOfTypeFromSlug(slug)).toBe(bestOfType);
+      ({ bestOfType, pathname }) => {
+        expect(getBestOfTypeFromPathname(pathname)).toBe(bestOfType);
       }
     );
 
     it('should throw a conflict exception if cannot get the best of type', () => {
-      const slug = faker.lorem.word();
+      const pathname = faker.lorem.word();
       const result = () => {
-        getBestOfTypeFromSlug(slug);
+        getBestOfTypeFromPathname(pathname);
       };
       expect(result).toThrow(ConflictException);
-      expect(result).toThrow(`Could not get best of type for slug ${slug}`);
+      expect(result).toThrow(
+        `Could not get best of type for pathname ${pathname}`
+      );
     });
   });
 

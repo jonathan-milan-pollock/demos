@@ -130,7 +130,7 @@ describe('entity-create-one-for-folder.provider', () => {
             _googleDriveFolderId,
             _watermarkedType,
             _group,
-            _slug,
+            _pathname,
             order,
           ] = mockedCreateEntityForFolder$.mock.calls[0];
           expect(order).toBe(1);
@@ -185,7 +185,7 @@ describe('entity-create-one-for-folder.provider', () => {
             _googleDriveFolderId,
             _watermarkedType,
             _group,
-            _slug,
+            _pathname,
             order,
           ] = mockedCreateEntityForFolder$.mock.calls[0];
           expect(order).toBe(documentModelOrder + 1);
@@ -234,7 +234,7 @@ describe('entity-create-one-for-folder.provider', () => {
         });
     });
 
-    it('should create an entity with the folder name when the initial slug is not provided', (done: any) => {
+    it('should create an entity with the folder name when the initial pathname is not provided', (done: any) => {
       const mockedFindOneEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'findOneEntity$')
         .mockReturnValue(of(null));
@@ -275,14 +275,14 @@ describe('entity-create-one-for-folder.provider', () => {
             _googleDriveFolderId,
             _watermarkedType,
             _group,
-            slug,
+            pathname,
           ] = mockedCreateEntityForFolder$.mock.calls[0];
-          expect(slug).toBe(folderName);
+          expect(pathname).toBe(folderName);
           done();
         });
     });
 
-    it('should create an entity with the initial slug when the initial slug is provided', (done: any) => {
+    it('should create an entity with the initial pathname when the initial pathname is provided', (done: any) => {
       const mockedFindOneEntity$ = jest
         .spyOn(entityRepositoryFunctions, 'findOneEntity$')
         .mockReturnValue(of(null));
@@ -304,7 +304,7 @@ describe('entity-create-one-for-folder.provider', () => {
         .spyOn(entityRepositoryFunctions, 'createEntityForFolder$')
         .mockReturnValue(of({} as DocumentModel));
 
-      const initialSlug = faker.lorem.word();
+      const initialPathname = faker.lorem.word();
       entityCreateOneForFolderProvider
         .createOneEntityForFolder$(
           {
@@ -314,7 +314,7 @@ describe('entity-create-one-for-folder.provider', () => {
           faker.random.arrayElement(Object.values(EntityType)),
           faker.random.arrayElement(Object.values(WatermarkedType)),
           faker.lorem.word(),
-          initialSlug
+          initialPathname
         )
         .subscribe(() => {
           expect(mockedFindOneEntity$).toHaveBeenCalledTimes(1);
@@ -327,9 +327,9 @@ describe('entity-create-one-for-folder.provider', () => {
             _googleDriveFolderId,
             _watermarkedType,
             _group,
-            slug,
+            pathname,
           ] = mockedCreateEntityForFolder$.mock.calls[0];
-          expect(slug).toBe(initialSlug);
+          expect(pathname).toBe(initialPathname);
           done();
         });
     });

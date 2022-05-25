@@ -24,7 +24,7 @@ export class ImageAdminDto implements ImageAdmin {
   storageId!: string;
 
   @IsString()
-  slug!: string;
+  pathname!: string;
 
   @IsInt()
   @Min(0)

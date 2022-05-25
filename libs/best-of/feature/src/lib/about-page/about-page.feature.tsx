@@ -10,7 +10,7 @@ interface Props {
   aboutEntities: EntityPublic[];
 }
 
-export function AboutPage({
+function AboutPage({
   aboutMinimalEntities,
   aboutEntities,
 }: Props): JSX.Element {

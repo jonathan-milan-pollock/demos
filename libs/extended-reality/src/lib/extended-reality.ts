@@ -1,3 +1,3 @@
-export function extendedReality(): string {
+export const extendedReality = (): string => {
   return 'extended-reality';
-}
+};

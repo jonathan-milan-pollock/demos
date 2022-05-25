@@ -5,7 +5,7 @@ import * as xmlbuilder from 'xmlbuilder';
 import {
   MaxPublishedDateSitemapEntityType,
   PublishedDateBestOfType,
-  PublishedDateSlug,
+  PublishedDatePathname,
 } from '@dark-rush-photography/shared/types';
 import {
   loadDarkRushPhotographySitemapUrls,
@@ -17,7 +17,7 @@ import {
 export class SitemapXmlProvider {
   loadDarkRushPhotographySitemapXml(
     maxPublishedDateSitemapEntityTypes: MaxPublishedDateSitemapEntityType[],
-    eventPublishDateSlugs: PublishedDateSlug[]
+    eventPublishDatePathnames: PublishedDatePathname[]
   ): string {
     return xmlbuilder
       .create(
@@ -28,7 +28,7 @@ export class SitemapXmlProvider {
               ...loadDarkRushPhotographySitemapUrls(
                 maxPublishedDateSitemapEntityTypes
               ),
-              ...loadSitemapEventUrls(eventPublishDateSlugs),
+              ...loadSitemapEventUrls(eventPublishDatePathnames),
             ],
           },
         },

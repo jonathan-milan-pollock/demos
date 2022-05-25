@@ -30,14 +30,16 @@ export const validatePublishImagesHaveStorageIds = (
   return images;
 };
 
-export const validatePublishImagesHaveSlugs = (images: Image[]): Image[] => {
+export const validatePublishImagesHavePathnames = (
+  images: Image[]
+): Image[] => {
   const imagesWithoutStorageIds = images.filter(
     (image) =>
-      !image.slug &&
+      !image.pathname &&
       (image.state === ImageState.Selected || image.state === ImageState.Public)
   );
   if (imagesWithoutStorageIds.length > 0) {
-    throw new ConflictException('Image slugs are required');
+    throw new ConflictException('Image pathnames are required');
   }
   return images;
 };

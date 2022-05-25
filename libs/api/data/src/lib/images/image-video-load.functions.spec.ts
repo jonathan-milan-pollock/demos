@@ -16,7 +16,7 @@ describe('image-video-load.functions', () => {
     it('should not contain an _id value', () => {
       const imageVideo = {
         storageId: faker.datatype.uuid(),
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       };
 
       const result = loadImageVideo({
@@ -35,13 +35,13 @@ describe('image-video-load.functions', () => {
     it('should load an image video with all values', () => {
       const imageVideo = {
         storageId: faker.datatype.uuid(),
-        slug: faker.lorem.word(),
+        pathname: faker.lorem.word(),
       };
 
       const result = loadImageVideo(imageVideo);
 
       expect(result?.storageId).toBe(imageVideo.storageId);
-      expect(result?.slug).toBe(imageVideo.slug);
+      expect(result?.pathname).toBe(imageVideo.pathname);
     });
   });
 });

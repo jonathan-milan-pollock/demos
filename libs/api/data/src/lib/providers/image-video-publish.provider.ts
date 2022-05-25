@@ -36,7 +36,7 @@ export class ImageVideoPublishProvider {
           return of(undefined);
         }
 
-        const imageVideo = loadAddImageVideo(documentModel.slug);
+        const imageVideo = loadAddImageVideo(documentModel.pathname);
 
         const starredPublishImage = findStarredPublishImage(
           documentModel.images

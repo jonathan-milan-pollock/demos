@@ -1,5 +1,4 @@
 import { Fragment, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import {
   Fade,
@@ -12,18 +11,13 @@ import {
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import styles from './title-bar-back-button.module.scss';
+import styles from './title-bar-kabob-menu.module.scss';
 import {
   BrowserWindow,
   SocialMediaUrl,
   ThemeType,
 } from '@dark-rush-photography/website/types';
-import { openInBrowserWindow } from '@dark-rush-photography/best-of/util';
-
-TitleBarKabobMenu.propTypes = {
-  themeType: PropTypes.number,
-  changeTheme: PropTypes.func,
-};
+import { openInBrowserWindow } from '@dark-rush-photography/website/util';
 
 export default function TitleBarKabobMenu(props: any): JSX.Element {
   const { themeType, actions } = props;

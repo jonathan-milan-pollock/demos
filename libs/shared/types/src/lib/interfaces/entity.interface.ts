@@ -11,7 +11,7 @@ export interface Entity {
   readonly googleDriveFolderId?: string;
   readonly watermarkedType: WatermarkedType;
   readonly group: string;
-  readonly slug: string;
+  readonly pathname: string;
   readonly order: number;
   readonly isPublic: boolean;
   readonly title?: string;

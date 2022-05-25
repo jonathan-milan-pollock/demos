@@ -12,7 +12,7 @@ export const startCronProcessType = (
   entityType: EntityType,
   entityId: string,
   group: string,
-  slug: string,
+  pathname: string,
   postSocialMedia = false
 ): CronProcessTable => {
   const cronProcessTable = new CronProcessTable();
@@ -21,7 +21,7 @@ export const startCronProcessType = (
   cronProcessTable.entityType = entityType;
   cronProcessTable.entityId = entityId;
   cronProcessTable.group = group;
-  cronProcessTable.slug = slug;
+  cronProcessTable.pathname = pathname;
   cronProcessTable.postSocialMedia = postSocialMedia;
   setCronProcessReady(cronProcessTable);
   return cronProcessTable;

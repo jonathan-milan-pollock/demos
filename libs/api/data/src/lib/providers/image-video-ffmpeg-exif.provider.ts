@@ -40,17 +40,17 @@ export class ImageVideoFfmpegExifProvider {
     return downloadAzureStorageBlobToFile$(
       getAzureStorageBlobPath(
         imageVideo.storageId,
-        imageVideo.slug,
+        imageVideo.pathname,
         IMAGE_VIDEO_FILE_EXTENSION
       ),
-      getImageVideoFileName(imageVideo.slug),
+      getImageVideoFileName(imageVideo.pathname),
       this.configProvider.azureStorageConnectionStringPublic,
       this.configProvider.azureStorageBlobContainerNamePublic
     ).pipe(
       concatMap((imageVideoFilePath) =>
         combineLatest([
           of(imageVideoFilePath),
-          createTempFile$(getImageVideoFileName(imageVideo.slug)),
+          createTempFile$(getImageVideoFileName(imageVideo.pathname)),
         ])
       ),
       concatMap(([imageVideoFilePath, outputImageVideoFilePath]) =>
@@ -69,7 +69,7 @@ export class ImageVideoFfmpegExifProvider {
               IMAGE_VIDEO_MIME_TYPE,
               getAzureStorageBlobPath(
                 imageVideo.storageId,
-                imageVideo.slug,
+                imageVideo.pathname,
                 IMAGE_VIDEO_FILE_EXTENSION
               ),
               this.configProvider.azureStorageConnectionStringPublic,
