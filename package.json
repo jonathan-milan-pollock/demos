@@ -101,7 +101,7 @@
     "@nrwl/next": "14.1.7",
     "babylonjs": "^5.7.0",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
+    "class-validator": "^0.14.0",
     "core-js": "^3.6.5",
     "dist-exiftool": "^10.53.0",
     "fs-extra": "^10.1.0",
