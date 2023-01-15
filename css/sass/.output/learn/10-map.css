@@ -1,0 +1,92 @@
+/* map */
+.separator {
+  background: #fff889; }
+
+.rainbow-selector {
+  background: linear-gradient(#b23c56, #fff889, #45a8cc); }
+
+/* compiles to */
+.separator {
+  background: #fff889; }
+
+.rainbow-selector {
+  background: linear-gradient(#b23c56, #fff889, #45abcc); }
+
+.hero-size {
+  width: 300px; }
+
+.hero-size {
+  width: 600px; }
+
+.hero-size {
+  width: 900px; }
+
+/* compiles to */
+.hero-small {
+  width: 300px; }
+
+.hero-medium {
+  width: 600px; }
+
+.hero-large {
+  width: 900px; }
+
+h1 {
+  font-size: 30px; }
+
+h2 {
+  font-size: 22px; }
+
+h3 {
+  font-size: 18px; }
+
+/* compiles to */
+h1 {
+  font-size: 30px; }
+
+h2 {
+  font-size: 22px; }
+
+h3 {
+  font-size: 18px; }
+
+/* map-merge */
+.twitter-icon {
+  background: #55acee; }
+
+.facebook-icon {
+  background: #3b5998; }
+
+.g-plus-icon {
+  background: #dd4839; }
+
+.linkedin-icon {
+  background: #0077b5; }
+
+/* compiles to */
+.twitter-icon {
+  background: #55acee; }
+
+.facebook-icon {
+  background: #3b5998; }
+
+.g-plus-icon {
+  background: #dd4839; }
+
+.linked-in-icon {
+  background: #0077b5; }
+
+/* remove item */
+.confirm-button {
+  background: green; }
+
+.error-button {
+  background: red; }
+
+.confirm-button {
+  background: green; }
+
+.error-button {
+  background: red; }
+
+/*# sourceMappingURL=10-map.css.map */

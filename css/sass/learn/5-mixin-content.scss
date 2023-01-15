@@ -1,0 +1,42 @@
+@mixin sales-styles {
+  body[data-selector='summer-sale'] & {
+    @content;
+  }
+}
+
+.sign-in {
+  display: block;
+  /* content block passed into mixin, when declaration block passed it emits this */
+  @include sales-styles {
+    float: left;
+  }
+}
+
+/* compiles to */
+.sign-in {
+  display: block;
+}
+
+body[data-selector='summer-sale'] .sign-in {
+  float: left;
+}
+
+/* renaming a media size class */
+@mixin larger-than($size) {
+  @media (min-width: $size) {
+    @content;
+  }
+}
+
+.modal {
+  @include larger-than(900px) {
+    width: 500px;
+  }
+}
+
+/* compiles to */
+@media (min-width: 900px) {
+  .modal {
+    width: 500px;
+  }
+}

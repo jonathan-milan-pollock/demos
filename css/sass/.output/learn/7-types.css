@@ -1,0 +1,32 @@
+/* types in SASS
+    type-of($value) function to tell you what something is
+    inspect($value) function to convert anything to a string
+        inspect(200) returns "200"
+        inspect(false) returns "false"
+
+    numbers: numbers with or without units
+    colors: hex (#336699) or rgb values rgb(120, 200, 891)
+    booleans: true or false
+    null: if something isn't present
+    string: everything else in Sass (class names, font names, ...) 
+    list:
+    map: 
+*/
+.alert {
+  border-color: #369;
+  border-width: 1px; }
+
+.button {
+  border-color: #f84;
+  border-width: 4px; }
+
+/* compiles to */
+.alert {
+  border-color: #369;
+  border-width: 1px; }
+
+.button {
+  border-color: #f84;
+  border-width: 4px; }
+
+/*# sourceMappingURL=7-types.css.map */

@@ -1,0 +1,30 @@
+/* can use @content to handle css prefixes */
+header input {
+  -webkit-appearance: searchfield;
+  -moz-appearance: searchfield;
+  appearance: searchfield; }
+
+/* compiles to */
+header input {
+  -webkit-appearance: searchfield;
+  -moz-appearance: searchfield;
+  appearance: searchfield; }
+
+input::-webkit-input-placeholder {
+  font-style: italic; }
+input::-moz-placeholder {
+  font-style: italic; }
+input::-ms-input-placeholder {
+  font-style: italic; }
+
+/* compiles to */
+input::-webkit-input-placeholder {
+  font-style: italic; }
+
+input::-moz-placeholder {
+  font-style: italic; }
+
+input::-ms-input-placeholder {
+  font-style: italic; }
+
+/*# sourceMappingURL=6-css-prefixes.css.map */

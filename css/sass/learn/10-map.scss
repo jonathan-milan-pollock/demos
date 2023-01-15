@@ -1,0 +1,129 @@
+/* map */
+$colors: (
+  geranium: #b23c56,
+  daffodil: #fff889,
+  iris: #45a8cc,
+);
+
+.separator {
+  background: map-get($colors, daffodil);
+}
+
+.rainbow-selector {
+  background: linear-gradient(map-values($colors));
+}
+
+/* compiles to */
+.separator {
+  background: #fff889;
+}
+
+.rainbow-selector {
+  background: linear-gradient(#b23c56, #fff889, #45abcc);
+}
+
+$hero-widths: (
+  small: 300px,
+  medium: 600px,
+  large: 900px,
+);
+
+@each $size, $width in $hero-widths {
+  .hero-#{size} {
+    width: $width;
+  }
+}
+
+/* compiles to */
+.hero-small {
+  width: 300px;
+}
+
+.hero-medium {
+  width: 600px;
+}
+
+.hero-large {
+  width: 900px;
+}
+
+$typography: (
+  h1: 30px,
+  h2: 22px,
+  h3: 18px,
+);
+@each $tag, $size in $typography {
+  #{$tag} {
+    font-size: $size;
+  }
+}
+
+/* compiles to */
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+/* map-merge */
+$social-standard: (
+  twitter: #55acee,
+  facebook: #3b5998,
+);
+$social-extra: (
+  g-plus: #dd4839,
+  linkedin: #0077b5,
+);
+
+$all-social: map-merge($social-standard, $social-extra);
+
+@each $social, $color in $all-social {
+  .#{$social}-icon {
+    background: $color;
+  }
+}
+
+/* compiles to */
+.twitter-icon {
+  background: #55acee;
+}
+
+.facebook-icon {
+  background: #3b5998;
+}
+
+.g-plus-icon {
+  background: #dd4839;
+}
+
+.linked-in-icon {
+  background: #0077b5;
+}
+
+/* remove item */
+$notifications: (
+  confirm: green,
+  error: red,
+  info: blue,
+);
+$button-colors: map-remove($notifications, info);
+
+@each $name, $color in $button-colors {
+  .#{$name}-button {
+    background: $color;
+  }
+}
+
+.confirm-button {
+  background: green;
+}
+
+.error-button {
+  background: red;
+}

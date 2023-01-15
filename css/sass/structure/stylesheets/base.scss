@@ -1,0 +1,14 @@
+@import 'globals/reset';
+
+@import 'clients/client-a';
+@import 'globals/variables';
+@import 'globals/colors';
+@import 'globals/typography';
+@import 'globals/mixins';
+
+@import 'components/header';
+@import 'components/main';
+@import 'components/footer';
+
+@import 'pages/profile';
+@import 'pages/register';

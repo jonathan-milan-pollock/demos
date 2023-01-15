@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,cAAc;AAEd;qDACqD;AACrD,MAAO;EACL,KAAK,EAAE,IAAI;;AAIb,cAAe;EACb,KAAK,EAAE,IAAI",
+"sources": ["../../learn/2-comments.scss"],
+"names": [],
+"file": "2-comments.css"
+}

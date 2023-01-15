@@ -1,0 +1,65 @@
+/* when have a group of properties to use together create a mixin */
+/* common to have mixins in a separate file */
+.input-error {
+  color: #ae2f2f;
+  font-size: 14px;
+  font-variant: small-caps;
+  margin-bottom: 10px; }
+
+/* a mixin with variables */
+.warning {
+  background: red;
+  border: 1px solid #990000;
+  width: 100%; }
+
+.welcome {
+  /* named variables so order can be switched */
+  background: green;
+  border: 1px solid #001a00;
+  width: 300px; }
+
+/* mixin arguments can have defaults if null then property is left off */
+.header-menu {
+  background: #333;
+  padding: 10px 20px;
+  width: 300px; }
+
+/* compiles to */
+.header-menu {
+  background: #333;
+  padding: 10px 20px;
+  width: 300px; }
+
+/* box-shadows and liner-gradients can take multiple so $variable... */
+.warm-rainbow {
+  background: linear-gradient(red, orange, yellow); }
+
+/* compiles to */
+.warm-rainbow {
+  background: linear-gradient(red, orange, yellow); }
+
+.full-rainbow {
+  background: linear-gradient(red, orange, yellow, green, blue, purple); }
+
+/* complies to */
+.full-rainbow {
+  background: linear-gradient(red, orange, yellow, green, blue, purple); }
+
+.flat-button {
+  background: green;
+  border: 2px solid #001a00; }
+
+.floating-button {
+  background: red;
+  box-shadow: 1px 0px 0px #999; }
+
+/* compiles to */
+.flat-button {
+  background: green;
+  border: 2px solid #001a00; }
+
+.floating-button {
+  background: red;
+  box-shadow: 1px 0px 0px #999; }
+
+/*# sourceMappingURL=1-semantic-including-mixins.css.map */

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,wBAAwB;AAGxB,4BAA6B;EAC3B,KAAK,EAAE,GAAG;;AAEZ,yBAA0B;EACxB,KAAK,EAAE,KAAK;;AAMV,4BAAS;EACP,KAAK,EAAE,GAAG;AAIZ,yBAAS;EACP,KAAK,EAAE,KAAK",
+"sources": ["../../learn/3-direct-decendants.scss"],
+"names": [],
+"file": "3-direct-decendants.css"
+}

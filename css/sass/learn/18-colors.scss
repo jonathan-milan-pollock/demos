@@ -1,0 +1,56 @@
+/* with css can use filter */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function */
+$primary-color: #336699;
+$secondary-color: #993266;
+
+/* desaturate */
+.box-1 {
+  color: desaturate($primary-color, 30%);
+}
+
+.box-1-compiled {
+  color: #52667a;
+}
+
+/* lighten */
+.box-2 {
+  color: lighten($primary-color, 20%);
+}
+
+.box-2-compiled {
+  color: #6699cc;
+}
+
+/* darken */
+.box-3 {
+  color: darken($primary-color, 20%);
+}
+
+.box-3-compiled {
+  color: #1a334d;
+}
+
+/* grayscale */
+.box-4 {
+  /* same as desaturate($primary-color, 100%); */
+  color: grayscale($primary-color);
+}
+
+.box-4-compiled {
+  color: #666666;
+}
+
+/* mix colors */
+.box-5 {
+  /* can mix primary colors and then use saturation and lightness to modify */
+  color: mix($primary-color, $secondary-color); // can specify amount
+}
+
+.box-5-compiled {
+  color: #664c80;
+}
+
+.box-6 {
+  color: adjust-hue($primary-color, 180); // number of degrees to rotate the hue
+  background-color: adjust-hue(desaturate($primary-color, 10%), 90);
+}

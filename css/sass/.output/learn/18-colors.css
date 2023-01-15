@@ -1,0 +1,44 @@
+/* with css can use filter */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function */
+/* desaturate */
+.box-1 {
+  color: #52667a; }
+
+.box-1-compiled {
+  color: #52667a; }
+
+/* lighten */
+.box-2 {
+  color: #6699cc; }
+
+.box-2-compiled {
+  color: #6699cc; }
+
+/* darken */
+.box-3 {
+  color: #1a334d; }
+
+.box-3-compiled {
+  color: #1a334d; }
+
+/* grayscale */
+.box-4 {
+  /* same as desaturate($primary-color, 100%); */
+  color: #666666; }
+
+.box-4-compiled {
+  color: #666666; }
+
+/* mix colors */
+.box-5 {
+  /* can mix primary colors and then use saturation and lightness to modify */
+  color: #664c80; }
+
+.box-5-compiled {
+  color: #664c80; }
+
+.box-6 {
+  color: #996633;
+  background-color: #8f3d8f; }
+
+/*# sourceMappingURL=18-colors.css.map */

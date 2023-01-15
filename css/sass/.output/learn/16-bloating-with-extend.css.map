@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,uDAAuD;AAKvD;;;;;;;;;;yCAA8B;EAC5B,KAAK,EAAE,IAAI;;AAGb,gDAAgD;AAK5C;;;;;uBACU;EAbZ,KAAK,EAAE,IAAI;;AAmBb,0DAA0D",
+"sources": ["../../learn/16-bloating-with-extend.scss"],
+"names": [],
+"file": "16-bloating-with-extend.css"
+}

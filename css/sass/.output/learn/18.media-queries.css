@@ -1,0 +1,46 @@
+/*
+media styles
+
+@media
+
+size classes: rage of acceptable browser widths matched against styles for a site
+
+< 400px mobile size class
+> 1200px large desktop size class
+
+in css can't use var in media query declarations, so can't do this now, there is an environment variables proposal
+
+:root {
+	--mobile-breakpoint: 400px;
+	--tablet-breakpoint: 900px;
+    --desktop-breakpoint: 1200px;
+}
+
+@media(max-width: var(--mobile-breakpoint)) {
+}
+
+can do with SASS because the variables are replaced by their values
+*/
+.information {
+  color: #336699;
+  line-height: 1em; }
+  @media (min-width: 800px) {
+    .information {
+      line-height: 1.5em; } }
+  @media (min-width: 1200px) {
+    .information {
+      line-height: 2em; } }
+
+/* compiles to */
+.information {
+  color: #336699;
+  line-height: 1em; }
+
+@media (min-width: 800px) {
+  .information {
+    line-height: 1.5em; } }
+@media (min-width: 1200px) {
+  .information {
+    line-height: 2em; } }
+
+/*# sourceMappingURL=18.media-queries.css.map */

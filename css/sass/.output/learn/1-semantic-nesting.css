@@ -1,0 +1,38 @@
+/* scoping */
+em {
+  color: green; }
+
+.sidebar p em {
+  /* more specificity than em */
+  /* allows making HTML more semantic and readable */
+  color: blue; }
+
+/* while great to scope it's repetitive */
+.infobox {
+  width: 200px; }
+
+.infobox .message {
+  border: 1px solid red; }
+
+.infobox .message .title {
+  color: red; }
+
+.infobox .user {
+  border: 2px solid black; }
+
+.infobox .user .title {
+  color: black; }
+
+/* with SASS can do this */
+.infobox {
+  width: 200px; }
+  .infobox .message {
+    border: 1px solid red; }
+    .infobox .message .title {
+      color: red; }
+  .infobox .user {
+    border: 2px solid black; }
+    .infobox .user .title {
+      color: black; }
+
+/*# sourceMappingURL=1-semantic-nesting.css.map */

@@ -1,0 +1,21 @@
+@import 'typography.css';
+/*
+how can I clean this up?
+1. create recommended structure
+2. rename with scss extension so that they can be compiled
+3. repitition (ex. vender prefixes)?
+4. media queries?
+5. variables? (some may be css others sass)
+6. mixins or extends? when should I use @mixin or @extend or partial?
+7. use of list or maps?
+8. any declaration blocks that should go with other documentation-blocks?
+9. any imported files that should start with underscore so not output?
+10. move content into recommended structure 
+*/
+@import 'globals/reset';
+@import 'globals/variables'; // use $default to ensure variables have values or overwritten by client-a
+@import 'globals/colors';
+@import 'globals/typography';
+@import 'globals/mixins';
+
+@import 'pages/useful-resources';

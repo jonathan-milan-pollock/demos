@@ -1,0 +1,30 @@
+/* ampersand-is-the-parent-selector */
+.infobox {
+  color: blue; }
+  .user .infobox {
+    color: gray; }
+
+.message {
+  color: gray; }
+  .message.new {
+    color: red; }
+
+body.has-sidebar .infobox .message {
+  content: 'body.has-sidebar .infobox .message'; }
+
+.infobox {
+  color: blue; }
+
+.user .infobox {
+  color: gray; }
+
+.message {
+  color: gray; }
+
+.message.new {
+  color: red; }
+
+body.has-sidebar .infobox .message {
+  content: 'body.has-sidebar .infobox .message'; }
+
+/*# sourceMappingURL=4-ampersand-is-the-parent-selector.css.map */

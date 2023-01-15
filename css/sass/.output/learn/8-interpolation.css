@@ -1,0 +1,29 @@
+/* interpolation */
+.button-alert {
+  color: "red";
+  width: 100px; }
+  .button-alert .icon {
+    background: url("images/exclamation.png"); }
+
+.button-register {
+  color: "green";
+  width: 100px; }
+  .button-register .icon {
+    background: url("images/arrow.png"); }
+
+/* compiles to */
+.button-alert {
+  color: red;
+  width: 100px; }
+
+.button-alert .icon {
+  background: url("images/exclamation.png"); }
+
+.button-register {
+  color: green;
+  width: 100px; }
+
+.button-register .icon {
+  background: url("images/arrow.png"); }
+
+/*# sourceMappingURL=8-interpolation.css.map */

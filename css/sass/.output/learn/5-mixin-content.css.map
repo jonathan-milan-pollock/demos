@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAMA,QAAS;EACP,OAAO,EAAE,KAAK;EACd,kFAAkF;EAPlF,0CAAoC;IASlC,KAAK,EAAE,IAAI;;AAIf,iBAAiB;AACjB,QAAS;EACP,OAAO,EAAE,KAAK;;AAGhB,0CAA2C;EACzC,KAAK,EAAE,IAAI;;AAGb,iCAAiC;AAE/B,yBAA0B;EAK5B,MAAO;IAEH,KAAK,EAAE,KAAK;;AAIhB,iBAAiB;AACjB,yBAA0B;EACxB,MAAO;IACL,KAAK,EAAE,KAAK",
+"sources": ["../../learn/5-mixin-content.scss"],
+"names": [],
+"file": "5-mixin-content.css"
+}

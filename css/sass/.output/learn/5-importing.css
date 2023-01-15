@@ -1,0 +1,72 @@
+/*
+Error: Undefined variable: "$small-box-size".
+        on line 14 of ./sass/learn/5-importing.scss
+
+9:   height: var(--large-box-size);
+10:   background-color: var(--large-box-color, red); // like the !default sass value
+11: }
+12: 
+13: .box-2 {
+14:   width: $small-box-size;
+15:   height: $small-box-size;
+16:   background-color: $small-box-color;
+17: }
+18: 
+19: $header-background: #eee;
+
+Backtrace:
+./sass/learn/5-importing.scss:14
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/script/tree/variable.rb:49:in `_perform'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/script/tree/node.rb:50:in `perform'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:398:in `visit_prop'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `block in with_base'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/stack.rb:135:in `with_frame'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `with_base'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:440:in `block (2 levels) in visit_rule'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:440:in `map'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:440:in `block in visit_rule'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:438:in `visit_rule'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `block in with_base'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/stack.rb:135:in `with_frame'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `with_base'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:52:in `map'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:157:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:10:in `visit'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/root_node.rb:36:in `css_tree'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/engine.rb:389:in `_render_with_sourcemap'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/engine.rb:307:in `render_with_sourcemap'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:462:in `update_stylesheet'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `each'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:443:in `on_file_changed'
+/Library/Ruby/Gems/2.6.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:320:in `block in watch'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/config.rb:23:in `call'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:115:in `_process_changes'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:19:in `block in loop_for'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:15:in `loop'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/processor.rb:15:in `loop_for'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/loop.rb:84:in `_wait_for_changes'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/event/loop.rb:42:in `block in setup'
+/Library/Ruby/Gems/2.6.0/gems/sass-listen-4.0.0/lib/sass-listen/internals/thread_pool.rb:6:in `block in add'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Undefined variable: \"$small-box-size\".\A         on line 14 of ./sass/learn/5-importing.scss\A \A 9:   height: var(--large-box-size);\A 10:   background-color: var(--large-box-color, red); // like the !default sass value\A 11: }\A 12: \A 13: .box-2 {\A 14:   width: $small-box-size;\A 15:   height: $small-box-size;\A 16:   background-color: $small-box-color;\A 17: }\A 18: \A 19: $header-background: #eee;"; }

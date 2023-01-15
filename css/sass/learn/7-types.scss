@@ -1,0 +1,44 @@
+/* types in SASS
+    type-of($value) function to tell you what something is
+    inspect($value) function to convert anything to a string
+        inspect(200) returns "200"
+        inspect(false) returns "false"
+
+    numbers: numbers with or without units
+    colors: hex (#336699) or rgb values rgb(120, 200, 891)
+    booleans: true or false
+    null: if something isn't present
+    string: everything else in Sass (class names, font names, ...) 
+    list:
+    map: 
+*/
+
+@mixin border($argument1, $argument2) {
+  @if type-of($argument1) == 'color' {
+    border-color: $argument1;
+    border-width: $argument2;
+  } @else {
+    border-color: $argument2;
+    border-width: $argument1;
+  }
+}
+
+.alert {
+  @include border(#369, 1px);
+}
+
+.button {
+  @include border(4px, #f84);
+}
+
+/* compiles to */
+
+.alert {
+  border-color: #369;
+  border-width: 1px;
+}
+
+.button {
+  border-color: #f84;
+  border-width: 4px;
+}

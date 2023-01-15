@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA;;;;;;;;;;;;;EAaE;AAYF,MAAO;EARH,YAAY,EASE,IAAI;EARlB,YAAY,EAQQ,GAAG;;AAG3B,OAAQ;EATJ,YAAY,EAUO,IAAI;EATvB,YAAY,EASE,GAAG;;AAGrB,iBAAiB;AAEjB,MAAO;EACL,YAAY,EAAE,IAAI;EAClB,YAAY,EAAE,GAAG;;AAGnB,OAAQ;EACN,YAAY,EAAE,IAAI;EAClB,YAAY,EAAE,GAAG",
+"sources": ["../../learn/7-types.scss"],
+"names": [],
+"file": "7-types.css"
+}

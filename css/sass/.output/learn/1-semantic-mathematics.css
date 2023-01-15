@@ -1,0 +1,17 @@
+.page {
+  width: 500px; }
+  .page .sidebar {
+    width: 100px; }
+  .page .content {
+    width: 400px; }
+
+.page {
+  width: 500px; }
+
+.page .sidebar {
+  width: 100px; }
+
+.page .content {
+  width: 400px; }
+
+/*# sourceMappingURL=1-semantic-mathematics.css.map */

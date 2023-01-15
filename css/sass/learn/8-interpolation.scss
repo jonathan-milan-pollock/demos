@@ -1,0 +1,33 @@
+/* interpolation */
+@mixin button($type, $color, $icon) {
+  // create a class with the button type
+  .button-#{$type} {
+    color: $color;
+    width: 100px;
+    .icon {
+      background: url('images/#{$icon}.png');
+    }
+  }
+}
+
+@include button('alert', 'red', 'exclamation');
+@include button('register', 'green', 'arrow');
+
+/* compiles to */
+.button-alert {
+  color: red;
+  width: 100px;
+}
+
+.button-alert .icon {
+  background: url('images/exclamation.png');
+}
+
+.button-register {
+  color: green;
+  width: 100px;
+}
+
+.button-register .icon {
+  background: url('images/arrow.png');
+}
