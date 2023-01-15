@@ -1,0 +1,11 @@
+{
+  "name": "cssinaction",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "npx sass --watch ./sass:./sass/.output"
+  },
+  "author": "",
+  "license": "ISC"
+}
