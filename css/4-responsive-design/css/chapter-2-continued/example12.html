@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .panel {
+        font-size: 1rem; /* set to rem so predictable font-size no matter where placed */
+        padding: 1em;
+        border-radius: 0.5em;
+        border: 1px solid #999;
+      }
+
+      /* child combinator */
+      .panel > h2 {
+        margin-top: 0;
+        font-size: 0.8em; /* set to em so relative to parent font-size */
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      /* compound selector */
+      /* with one line can resize the entire panel */
+      .panel.large {
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <h2>Single-origin</h2>
+      <div class="panel-body">
+        <!-- uses panel-body class for clarity not used in css -->
+        We have built partnerships with small farms around the world to
+        hand-select beans at the peak of the season. We then carefully roast in
+        <a href="/batch-size">small batches</a> to maximize their potential.
+      </div>
+    </div>
+
+    <div class="panel large">
+      <h2>Single-origin</h2>
+      <div class="panel-body">
+        <!-- uses panel-body class for clarity not used in css -->
+        We have built partnerships with small farms around the world to
+        hand-select beans at the peak of the season. We then carefully roast in
+        <a href="/batch-size">small batches</a> to maximize their potential.
+      </div>
+    </div>
+  </body>
+</html>

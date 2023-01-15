@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* must have a space on either side of the operator */
+      /* .5em the base a minimum font size and 1vw a responsive scalar */
+      /* scales from 11.75px on an iPhone6 to 20px for 1,2000 px browser window */
+      :root {
+        font-size: calc(0.5em + 1vw);
+      }
+
+      .panel {
+        padding: 1em; /* em for padding */
+        border-radius: 0.5em; /* em for border-radius */
+        border: 1px solid #999; /* px for border */
+      }
+
+      /* child combinator */
+      .panel > h2 {
+        margin-top: 0;
+        font-size: 0.8rem; /* rem for font-size */
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <h2>Single-origin</h2>
+      <div class="panel-body">
+        <!-- uses panel-body class for clarity not used in css -->
+        We have built partnerships with small farms around the world to
+        hand-select beans at the peak of the season. We then carefully roast in
+        <a href="/batch-size">small batches</a> to maximize their potential.
+      </div>
+    </div>
+  </body>
+</html>

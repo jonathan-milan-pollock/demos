@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* anchors get the color blue */
+      a:link {
+        color: blue;
+      }
+
+      .footer {
+        color: #665;
+        background-color: #ccc;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      /* use inherit to use the color from parent footer element */
+      .footer a {
+        /*color: inherit;*/
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <footer class="footer">
+      &copy; 2021 Wombat Coffee Roasters &mdash;
+      <a href="/terms-of-use">Terms of use</a>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- doctype provides the standards mode -->
+<html lang="en">
+  <!-- language of the page -->
+  <head>
+    <meta charset="UTF-8" />
+    <!-- character encoding -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- script -->
+    <script type="module" src="script.js" defer></script>
+    <script>
+      // inline script
+    </script>
+    <title>Document</title>
+    <style>
+      /*
+      List has padding and list-style-type disc
+      (Can see in Developer tools)
+      */
+
+      h1 {
+        color: red;
+      }
+
+      #page-title {
+        color: green;
+      }
+
+      .title {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <h1 id="page-title" class="title">Wombat Coffee Roasters</h1>
+      <nav>
+        <ul id="main-nav" class="nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/coffees">Coffees</a></li>
+          <li><a href="/brewers">Brewers</a></li>
+          <li><a href="/specials" class="featured">Specials</a></li>
+        </ul>
+      </nav>
+    </header>
+  </body>
+</html>
