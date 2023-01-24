@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Background Color Popup</title>
+    <script src="popup-info.js" defer></script>
+    <style>
+      :root {
+        --info-color-background: lightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>An info popup with color background</h1>
+
+    <form>
+      <div>
+        <label for="cvc"
+          >An info popup with color background<popup-info
+            img="img/alt.png"
+            data-text="An info popup with color background, how to color me in the shadow?"
+          ></popup-info
+        ></label>
+        <input type="text" id="cvc" />
+      </div>
+    </form>
+  </body>
+</html>

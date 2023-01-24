@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        padding-top: 13em;
+      }
+
+      .box {
+        color: black;
+        padding: 1em;
+        border-radius: 1em;
+        background-color: lightgray;
+      }
+
+      .box.box-small {
+        font-size: 12px;
+      }
+
+      .box.box-large {
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NOTE this is a case with 2 classes -->
+    <!-- the order the classes are in does not affect specificity -->
+    <span class="box-small box">Small</span>
+    <span class="box box-large">Large</span>
+  </body>
+</html>

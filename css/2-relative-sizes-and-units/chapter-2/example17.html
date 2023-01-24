@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      const rootElement = document.documentElement;
+      rootElement.style.setProperty('--main-bg', '#cdf');
+
+      const styles = getComputedStyle(rootElement);
+      const mainColor = styles.getPropertyValue('--main-bg');
+      console.log(String(mainColor).trim());
+    </script>
+    <style>
+      :root {
+        /* defines CSS variables */
+        --main-bg: #fff;
+        --main-color: #000;
+      }
+
+      /* redefines the CSS variables and as the colors are inherited changes the second */
+      .dark {
+        margin-top: 2em;
+        padding: 1em;
+        background-color: #999;
+        --main-bg: #333;
+        --main-color: #fff;
+      }
+
+      .panel {
+        font-size: 1rem;
+        padding: 1em;
+        border: 1px solid #999;
+        border-radius: 0.5em;
+        background-color: var(--main-bg);
+        color: var(--main-color);
+      }
+
+      .panel > h2 {
+        margin-top: 0;
+        font-size: 0.8em;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <h2>Single-origin</h2>
+      <div class="body">
+        We have built partnerships with small farms around the word to
+        hand-select beans at the peak of season. We then careful roast in small
+        batches to maximize their potential.
+      </div>
+    </div>
+    <aside class="dark">
+      <div class="panel">
+        <h2>Single-origin</h2>
+        <div class="body">
+          We have built partnerships with small farms around the world to
+          hand-select beans at the peak of season. We then careful roast in
+          small batches to maximize their potential.
+        </div>
+      </div>
+    </aside>
+  </body>
+</html>

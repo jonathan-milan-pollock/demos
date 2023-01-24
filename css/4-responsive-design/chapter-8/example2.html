@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      :root {
+        box-sizing: border-box;
+        font-size: calc(1vw + 0.6em);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      body {
+        margin: 0;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      a:link {
+        color: #1476b8;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      a:visited {
+        color: #2430b8;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      a:active {
+        color: #b81414;
+      }
+
+      .page-header {
+        padding: 0.4em 1em;
+        background-color: #fff;
+      }
+
+      .title > h1 {
+        color: #333;
+        text-transform: uppercase;
+        font-size: 1.5rem;
+        margin: 0.2em 0;
+      }
+
+      .slogan {
+        color: #888;
+        font-size: 0.875em;
+        margin: 0;
+      }
+
+      .hero {
+        padding: 2em 1em;
+        text-align: center;
+        background-image: url(coffee-beans.jpg);
+        background-size: 100%;
+        color: #fff;
+        text-shadow: 0.1em 0.1em 0.3em #000;
+      }
+
+      .menu {
+        /* establishes containing block for both absolutely positioned children */
+        /* the toggle button and dropdown */
+        position: relative;
+      }
+
+      /* 1st absolutely positioned child */
+      .menu-toggle {
+        position: absolute;
+        top: -1.2em; /* pulls the button up outside its containing block */
+        right: 0.1em; /* along the right side of the screen */
+        border: 0; /* removes the border normally on buttons */
+        background-color: transparent;
+        font-size: 3em;
+        width: 1em; /* fix width at 1em */
+        height: 1em;
+        line-height: 0.4;
+        text-indent: 5em; /* hides the text content of the button */
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      /* 2nd absolutely positioned child */
+      .menu-toggle::after {
+        position: absolute;
+        top: 0.2em;
+        left: 0.5em;
+        display: block;
+        content: '\2261'; /* unicode symbol, hamburger icon */
+        text-indent: 0;
+      }
+
+      .menu-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        left: 0;
+        margin: 0;
+      }
+
+      /* when menu gets is-open class added display dropdown */
+      .menu.is-open .menu-dropdown {
+        display: block;
+      }
+
+      /* nav-menu an unordered list (ul) */
+      .nav-menu {
+        margin: 0;
+        padding-left: 0; /* remove default left padding */
+        border: 1px solid #ccc;
+        list-style: none; /* remove default disc style */
+        border-color: #000;
+        color: #fff;
+      }
+
+      /* border between each menu item */
+      /* adjacent sibling combinator targets every li except the first */
+      .nav-menu > li + li {
+        border-top: 1px solid #ccc;
+      }
+
+      .nav-menu > li > a {
+        display: block;
+        padding: 0.8em 1em; /* large amount of padding so can click */
+        /* need large clickable areas when mobile */
+        color: #fff;
+        font-weight: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- header (contains hamburger icon for smaller breakpoint) -->
+    <header id="header" class="page-header">
+      <div class="title">
+        <h1>Wombat Coffee Roasters</h1>
+        <div class="slogan">We love coffee</div>
+      </div>
+    </header>
+    <!-- putting this outside the header allowed the nav 
+      to naturally follow the header in desktop -->
+    <nav class="menu" id="main-menu">
+      <button class="menu-toggle" id="toggle-menu">toggle menu</button>
+      <div class="menu-dropdown">
+        <!-- Nav menu hidden by default on mobile allows for display for mobile and desktop -->
+        <ul class="nav-menu">
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/shop.html">Shop</a></li>
+          <li><a href="/menu.html">Menu</a></li>
+          <li><a href="/brew.html">Brew</a></li>
+        </ul>
+      </div>
+    </nav>
+    <!-- hero image (with text over hero image)-->
+    <aside id="hero" class="hero">
+      Welcome to Wombat Coffee Roasters! We are passionate about our craft,
+      striving to bring you the best hand-crafted coffee in the city.
+    </aside>
+    <!-- main content -->
+    <main id="main">
+      <!-- row and column classes are in place for desktop -->
+      <div class="row">
+        <section class="column">
+          <h2 class="subtitle">Single-origin</h2>
+          <p>
+            We have built partnerships with small farms around the world to
+            hand-select beans at the peak of season. We then carefully roast in
+            <a href="/batch-size.html">small batches</a>
+            to maximize their potential.
+          </p>
+        </section>
+        <section class="column">
+          <h2 class="subtitle">Blends</h2>
+          <p>
+            Our tasters have put together a selection of carefully balanced
+            blends. Our famous
+            <a href="/house-blend.html">house blend</a>
+            is available year round.
+          </p>
+        </section>
+        <section class="column">
+          <h2 class="subtitle">Brewing Equipment</h2>
+          <p>
+            We offer our favorite kettles, French presses, and pour-over cones.
+            Come to one of our
+            <a href="/classes.html">brewing classes</a>
+            to learn how to brew the perfect pour-over cup.
+          </p>
+        </section>
+      </div>
+    </main>
+    <script>
+      const button = document.getElementById('toggle-menu');
+      button.addEventListener('click', (event) => {
+        // click or touchscreen tap
+        event.preventDefault();
+        const menu = document.getElementById('main-menu');
+        menu.classList.toggle('is-open'); // toggles the is-open class on the menu
+      });
+    </script>
+  </body>
+</html>

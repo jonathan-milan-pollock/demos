@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: #709b90;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .portfolio {
+        display: grid;
+        /* fit as many vertical grid tracks (grid columns) as can */
+        /* without any of the columns being less than 200px */
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        /* implicit horizontal grid tracks (grid rows) of 1fr */
+        grid-auto-rows: 1fr;
+        gap: 1em;
+      }
+
+      .portfolio > figure {
+        /* override user agent margins */
+        margin: 0;
+      }
+
+      .portfolio img {
+        max-width: 100%;
+      }
+
+      .portfolio figcaption {
+        padding: 0.3em 0.8em;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- grid container -->
+    <div class="portfolio">
+      <!-- each figure a grid item -->
+      <figure class="featured">
+        <!-- as the alt is redundant to the figcaption should be empty  -->
+        <img src="images/monkey.jpg" alt="" />
+        <figcaption>Monkey</figcaption>
+      </figure>
+      <figure>
+        <img src="images/eagle.jpg" alt="" />
+        <figcaption>Eagle</figcaption>
+      </figure>
+      <figure class="featured">
+        <img src="images/bird.jpg" alt="" />
+        <figcaption>Bird</figcaption>
+      </figure>
+      <figure>
+        <img src="images/bear.jpg" alt="" />
+        <figcaption>Bear</figcaption>
+      </figure>
+      <figure class="featured">
+        <img src="images/swan.jpg" alt="" />
+        <figcaption>Swan</figcaption>
+      </figure>
+      <figure>
+        <img src="images/elephants.jpg" alt="" />
+        <figcaption>Elephants</figcaption>
+      </figure>
+      <figure>
+        <img src="images/owl.jpg" alt="" />
+        <figcaption>Owl</figcaption>
+      </figure>
+    </div>
+  </body>
+</html>

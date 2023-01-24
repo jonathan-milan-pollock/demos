@@ -3,11 +3,28 @@
 because CSS browser compatibility issues are much less likely than 
 they were in the old IE 6 days.  */
 
+/* within the css reset will not see class names or IDs as these are generic styles applied to all pages */
+/* instead */
 /* Box sizing rules */
-/* Some people think that pseudo-elements should inherit box sizing, but I think that’s silly. If you want to use a different box-sizing value, set it explicitly */
+/*
+Often see
+:root {
+  box-sizing: border-box;
+}
+
 * {
   &::before,
-  &:after {
+  &::after {
+    box-sizing: inherit;
+  }
+}
+
+*/
+/* Some people think that pseudo-elements should inherit box sizing, 
+but I think that’s silly. If you want to use a different box-sizing value, set it explicitly */
+* {
+  &::before,
+  &::after {
     box-sizing: border-box;
   }
 }
