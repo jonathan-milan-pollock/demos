@@ -16,15 +16,15 @@
 
 ### What is JavaScript responsible for?
 
-- functionality
+- interactivity
 
-## What are the 3 ways to add CSS to an html page
+## What are the 3 possible locations for CSS
 
 1. inline-style
 2. style section of HTML head element
 3. external stylesheet
 
-## 1. inline-style
+### 1. inline-style
 
 - style attribute used on an HTML tag
 
@@ -33,7 +33,7 @@
 <div style="color: black; font-size: 12px;"></div>
 ```
 
-### parts of an inline-style
+#### parts of an inline-style
 
 property
 : what want to style (eg. background-color or height)
@@ -41,11 +41,11 @@ property
 value
 : how want to style it (eg. red or 100vh)
 
-### what's wrong with inline-styles?
+#### what's wrong with inline-styles?
 
 - can't be reused as applied directly to HTML tag
 
-## 2. style section of HTML head element
+### 2. style section of HTML head element
 
 ```html
 <html>
@@ -55,18 +55,18 @@ value
 </html>
 ```
 
-### what part is added for style section of HTMl head element?
+#### what part is added for style section of HTMl head element?
 
 selector
 : what part of the DOM do you want to style?
 
-## 3. external stylesheet
+### 3. external stylesheet
 
 ```css
 <link rel="stylesheet" href="styles/main.css" />
 ```
 
-### Why are external stylesheets recommended?
+#### Why are external stylesheets recommended?
 
 1. Clear separation of HTML and CSS
 2. When lots of properties hard to read if in the HTML head section
@@ -75,12 +75,20 @@ selector
 
 **_NOTE_** for the course the style tag will be primarily used but that is for demo purposes
 
+---
+
 ## Parts of a CSS ruleset
 
 ![CSS Ruleset](ruleset.jpg)
 
+Rule or Ruleset
+: Selector with it's declaration
+
 Selector
 : what part of DOM do you want to style
+
+Declaration
+: properties and their values
 
 Property
 : what you want to style
@@ -95,15 +103,21 @@ h1 {
 }
 ```
 
+---
+
 ## creating an HTML page in VSCode
 
 - type html and select html:5
 
 [example1.html](example1.html)
 
+---
+
 ## "Cascading" Style Sheets (CSS)
 
 ### Why is the cascade so important?
+
+- it's the way resolves which value "wins" when multiple values can be used for a property
 
 Cascade
 : resolves which value "wins" when multiple values can be used for a property
@@ -111,155 +125,177 @@ Cascade
 Cascaded Value
 : The value that "wins" the cascade having the highest precedence, at most one and may not be a value if property value not provided in any ruleset
 
-## 3 ways the cascade resolves conflicts
+### What are the 4 ways the Cascade resolves values?
 
-### Stylesheet **origin**
+1. Origin (Author Important, Author, User Agent (Browser))
+2. Specificity
+3. Inheritance
+4. Source Order - the last factor
 
-1.  Author important **NOT RECOMMENDED**
+#### 1. Origin
 
-    ```css
-    font-family: serif !important;
-    ```
+##### What are the 3 types of Stylesheet Origin in oder of precedence (priority)?
 
-2.  Author
-3.  User Agent
+1. Author important (**_NOT RECOMMENDED_**)
 
-    - Example 1
-    - Example 2
+- declarations you write with !important
 
-Author styles
-: override user agent styles higher priority
+```css
+/* not recommended */
+font-family: serif !important;
+```
 
-User agent styles
-: ex. chrome://settings Appearance
+2. Author
+
+- declarations you write
+
+3. User Agent
+
+- chrome://settings Appearance
+
+###### What are examples of User Agent styles?
 
 - h1 to h6 and p top and bottom margin
 - ol and ul left padding
 - link colors
 - default fonts and sizes
 
-### **_Specificity_** some styles more specific than others
+```css
+/*
+  User Agent Styles unordered list elements (ul) have 
+  left padding and list-style-type disc so remove the 
+  user agent list styles
+  */
+#main-nav {
+  margin-top: 10px;
+  list-style: none; /* list-style-type disc */
+  padding-left: 0;
+}
+```
 
-1. **inline** style attribute
+[example2.html](example2.html)
+
+#### 2. Specificity
+
+##### What is Specificity defined by? Some styles more specific than others
+
+1. Location of rules
+2. Types of selectors
+
+###### 1. Location of Rules
+
+- What are the 3 possible locations for CSS?
+
+1. inline-style
 
 ```html
 <div style="background-color: blue;"></div>
 ```
 
-- Selectors appear in all rule sets except inline styles
+- as selectors appear in all rules sets except inline styles in order to override have to use !important
+- if inline-styles are marked !important there is no way to override them
 
-- If inline style marked important nothing can override them
+2. style section of HTML head element
+3. external stylesheet
 
-**NOT RECOMMENDED need to override with Author important !**
+###### 2. Types of selectors (in order of specificity)
 
-- If creating an npm package of components make sure not to have inline styles otherwise whomever uses the component will have to use !important to override styling
-- Example 3
+- universal selectors and combinators have no effect on specificity
 
-2. **Style element**
+| selector type                   |                                       |
+| ------------------------------- | ------------------------------------- |
+| id                              | #example                              |
+| class, pseudo-class, attribute  | .example                              |
+|                                 | pseudo-class (:hover)                 |
+|                                 | attribute (type["input"], [disabled]) |
+| element (tag)                   | div, section, header, main, footer    |
+| universal selector, combinators | \*                                    |
+|                                 | combinators (>, +, - )                |
+
+```html
+<html>
+  <head>
+    <style>
+      /* attribute selector */
+      /* selects all disabled elements regardless if a button */
+      [disabled] {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <button disabled>Click</button>
+  </body>
+</html>
+```
+
+###### What color is Wombat Coffee Roasters?
+
+- green
 
 ```html
 <head>
   <style>
-    .example {
-      background-color: blue;
+    /* an element (tag) selector */
+    h1 {
+      color: red;
+    }
+
+    /* a class selector */
+    .title {
+      color: blue;
+    }
+
+    /* and id selector */
+    #page-title {
+      color: green;
     }
   </style>
 </head>
-
 <body>
-  <div class="example"></div>
+  <header class="page-header">
+    <h1 id="page-title" class="title">Wombat Coffee Roasters</h1>
+  </header>
 </body>
 ```
 
-1. **Link element** external .css stylesheet
+###### What if reverse the order of class and id selector, what color is Wombat Coffee Roasters?
 
-   - preferred for browser caching as can use across pages
+- still green as id selectors have higher precedence
 
 ```html
 <head>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* an element (tag) selector */
+    h1 {
+      color: red;
+    }
+
+    /* and id selector */
+    #page-title {
+      color: green;
+    }
+
+    /* a class selector */
+    .title {
+      color: blue;
+    }
+  </style>
 </head>
+<body>
+  <header class="page-header">
+    <h1 id="page-title" class="title">Wombat Coffee Roasters</h1>
+  </header>
+</body>
 ```
 
-##### Types of selectors in order of specificity
+[example3.html](example3.html)
 
-- a single id has a higher specificity than any number of classes
+###### 3. Inheritance
 
-1. id selectors (#) **NOT RECOMMENDED**
-
-   - when used end up having to copy the selector and add a class to it
-
-2. class selectors (.)
-
-- pseudo-class selectors (:hover)
-- attribute selectors (type["input"])
-
-1. tag selectors (div)
-
-universal selector (\*)
-: very weak and has no affect on specificity
-
-- also combinators (>, +, - ) have no effect on specificity
-
-```css
-html body header h1 {
-  color: blue;
-}
-
-body header.page-header h1 {
-  color: orange;
-}
-
-.page-header .title {
-  color: green;
-}
-
-#page-title {
-  color: red;
-}
-```
-
-| Inline | # ids | . class | tag | notation              |
-| ------ | ----- | ------- | --- | --------------------- |
-|        |       |         | 4   | 0,0,0,4               |
-|        |       | 1       | 3   | 0,0,1,3               |
-|        |       | 2       |     | 0,0,2,0               |
-|        | 1     |         |     | 0,1,0,0 most specific |
-
-- We can simplify by not using inline styles or #ids
-
-  - then we simply count 2 selectors beat 1 selector
-
-| . classes | tags |
-| --------- | ---- |
-|           |      |
-
-- Example 4
-- Example 5
-- Example 6
-
-### **Source Order**
-
-- If comes later takes precedence, considered after origin and specificity
-
-* Example 7
-
-### **LoVe HAte**
-
-![LoVe HAte](lovehate.jpg)
-
-- an example where source order matters, as psuedo classes have the same specificity, :link, :visited, :hover, :active, should be in LoVe HAte source order
-
-- user Hovers over a Visited link Hover style takes precedence
-- if user Activates the Link while Hovering over it then Active style takes precedence
-
-* Example 8
-
-## Inheritance - last way an element can receive styles
-
-![Inheritance](inheritance.png)
-
-- inheritance values are passed down until overridden by cascaded value
+- inherited values are passed down until overridden by cascaded value
+- ![Inheritance](inheritance.png)
+- h1 in image is a cascaded value thus the em has inherited #ff0000 (not #333333)
 
 ### inherited properties
 
@@ -287,31 +323,57 @@ body header.page-header h1 {
   - border-collapse
   - border-spacing
 
-* Example 9
+```css
+/* due to inheritance all descendant elements will have a sans-serif font */
+body {
+  font-family: sans-serif;
+}
+```
 
-- DevTools display Cascaded Styles at top and inherited values on bottom
-  - they are listed in the order of precedence
+###### 4. Source Order
 
-element.style
-: inline styles
+- the last factor in the Cascade
+
+```css
+/* if the following two styles have same origin (author) and
+* specificity 0,1,1 then the 2nd takes precedence
+*/
+.nav a {
+  color: white;
+  background-color: #13a4a4;
+  padding: 5px;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+/* specificity 0,1,1 also but source order last */
+a.featured {
+  background-color: orange;
+}
+```
+
+[example4.html](example4.html)
+
+---
+
+## Cascade as shown in DevTools
 
 ![DevTools](devtools.png)
 
----
+#### in DevTools what is shown first?
 
-## Cascade
+- in DevTools element.style is shown first because these are the inline styles
 
-1. Origin (Author Important, Author, User Agent)
-2. Specificity
-3. Inheritance
+#### in DevTools where are inherited values shown?
 
-- Example #9
+- inherited values are shown last because DevTools displays the Cascade in the order of precedence
 
 ---
 
-## Selectors
+## Calculating Specificity
 
-### Basic
+**_"\*"_** universal selector\*\* - specificity 0, 0, 0
+: targets all elements but very low specificity
 
 **tag selectors** - specificity 0, 0, 1
 : body, a
@@ -327,7 +389,71 @@ element.style
 : target element with a particular id
 
 - **NOT RECOMMENDED** - where classes only used for css ids have other purposes
-- also increases the complexity of thinking about complexity
+- also increases the complexity of thinking about cascade
+
+```css
+html body header h1 {
+  color: blue;
+}
+
+body header.page-header h1 {
+  color: orange;
+}
+
+.page-header .title {
+  color: green;
+}
+
+#page-title {
+  color: red;
+}
+```
+
+| Inline | # ids | . class | tag | notation              |
+| ------ | ----- | ------- | --- | --------------------- |
+|        |       |         | 4   | 0,0,0,4               |
+|        |       | 1       | 3   | 0,0,1,3               |
+|        |       | 2       |     | 0,0,2,0               |
+|        | 1     |         |     | 0,1,0,0 most specific |
+
+- a single id has a higher specificity than any number of classes
+
+## How can we simplify the Cascade
+
+- don't use Author Important (simplifies Origin to just Author)
+- don't use inline styles or ids (simplifies location and type for specificity)
+
+### then simply count 2 types selectors
+
+| . classes | tags |
+| --------- | ---- |
+|           |      |
+
+### What is the purpose of tags, classes, and ids?
+
+- the purpose of elements (tags) are for HTML
+- the purpose of classes are for CSS - **_therefore prefer class selectors_**
+- the purpose of ids are for JavaScript
+
+[example5.html](example5.html)
+[example6.html](example6.html)
+
+### **LoVe HAte**
+
+![LoVe HAte](lovehate.jpg)
+
+- an example where source order matters, as psuedo classes have the same specificity, :link, :visited, :hover, :active, should be in LoVe HAte source order
+
+- user Hovers over a Visited link Hover style takes precedence
+- if user Activates the Link while Hovering over it then Active style takes precedence
+
+[example7.html](example7.html)
+
+---
+
+## Selectors
+
+### Basic
 
 ```html
 <!-- An HTML feature links with # can link to sections of the page -->
@@ -342,9 +468,6 @@ element.style
   <p>This is the outro section.</p>
 </section>
 ```
-
-**_"\*"_** universal selector\*\* - specificity 0, 0, 0
-: targets all elements but very low specificity
 
 ---
 
@@ -372,6 +495,30 @@ element.style
   <span class="is-active">Not Styled</span>
 </div>
 ```
+
+## If want to select only the divs which have both A and C or B and C?
+
+```html
+<html>
+  <head>
+    <style>
+      .a.c,
+      .b.c {
+        background: pink;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="a">Div A</div>
+    <div class="a c">Div AC</div>
+    <div class="b">Div B</div>
+    <div class="b c">Div BC</div>
+    <div class="c">Div C</div>
+  </body>
+</html>
+```
+
+[example11a.html](example11a.html)
 
 **_NOTE_** compound selectors like descendant combinators provide the another way to add more info so create more precedence
 

@@ -11,18 +11,20 @@
         margin-bottom: 10px;
       }
 
-      #main-nav {
+      .nav {
         margin-top: 10px;
         list-style: none;
         padding-left: 0;
       }
 
-      #main-nav li {
+      .nav li {
         display: inline-block;
       }
 
-      /* higher specificity 1 id and 1 tag selector */
-      #main-nav a {
+      /* if the following two styles have same origin (author) and
+       * specificity 0,1,1 then the 2nd takes precedence
+       */
+      .nav a {
         color: white;
         background-color: #13a4a4;
         padding: 5px;
@@ -30,19 +32,15 @@
         text-decoration: none;
       }
 
-      /* only 1 class selector */
-      .featured {
+      /* specificity 0,1,1 also but source order last */
+      a.featured {
         background-color: orange;
       }
-
-      /* how to fix? */
-      /* Add !important making it higher priority origin Author Important / Author */
-      /* NO!!! - 1 !important leads to many */
     </style>
   </head>
   <body>
     <header class="page-header">
-      <h1 id="page-title" class="title">Wombat Coffee Roasters</h1>
+      <h1 id="page-title" class="title">Wambat Coffee Roasters</h1>
       <nav>
         <ul id="main-nav" class="nav">
           <li><a href="/">Home</a></li>
@@ -52,5 +50,12 @@
         </ul>
       </nav>
     </header>
+    <main>
+      <p>
+        <!-- the a.featured style applies to this as well -->
+        Be sure to check out
+        <a href="/specials" class="featured">our specials</a>
+      </p>
+    </main>
   </body>
 </html>

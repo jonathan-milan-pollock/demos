@@ -6,21 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      /*
-      Using id selector which is not recommended!
-      */
-
       h1 {
         color: #2f4f4f;
         margin-bottom: 10px;
       }
 
       /*
-      List has padding and list-style-type disc
-      (Can see in Developer tools)
+      User Agent Styles list elements (ul) have left padding and list-style-type disc
+      so remove the user agent list styles
       */
-
-      /* remove user agent list styles */
       #main-nav {
         margin-top: 10px;
         list-style: none; /* list-style-type disc */
@@ -50,7 +44,10 @@
           <li><a href="/">Home</a></li>
           <li><a href="/coffees">Coffees</a></li>
           <li><a href="/brewers">Brewers</a></li>
-          <li><a href="/specials" class="featured">Specials</a></li>
+          <!-- An inline style -->
+          <a href="/specials" class="featured" style="background-color: orange">
+            Specials
+          </a>
         </ul>
       </nav>
     </header>

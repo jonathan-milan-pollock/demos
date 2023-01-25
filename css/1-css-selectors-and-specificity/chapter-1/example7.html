@@ -6,54 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      h1 {
-        color: #2f4f4f;
-        margin-bottom: 10px;
-      }
+/*:link 0,1,1 */
 
-      .nav {
-        margin-top: 10px;
-        list-style: none;
-        padding-left: 0;
-      }
-
-      .nav li {
-        display: inline-block;
-      }
-
-      /* if the following two styles have same origin (author) and
-       * specificity 0,1,1 then the 2nd takes precedence
-       */
-      .nav a {
+      a:link {
         color: white;
-        background-color: #13a4a4;
-        padding: 5px;
-        border-radius: 2px;
         text-decoration: none;
       }
 
-      /* but what now if you use a featured class outside of nav? */
-      a.featured {
-        background-color: orange;
+      a:visited {
+        color: purple;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      a:active {
+        color: red;
       }
     </style>
   </head>
   <body>
-    <header class="page-header">
-      <h1 id="page-title" class="title">Wambat Coffee Roasters</h1>
-      <nav>
-        <ul id="main-nav" class="nav">
-          <li><a href="/">Home</a></li>
-          <li><a href="/coffees">Coffees</a></li>
-          <li><a href="/brewers">Brewers</a></li>
-          <li><a href="/specials" class="featured">Specials</a></li>
-        </ul>
-      </nav>
-    </header>
     <main>
       <p>
-        <!-- the a.featured style applies to this as well -->
-        Be sure to check out
         <a href="/specials" class="featured">our specials</a>
       </p>
     </main>

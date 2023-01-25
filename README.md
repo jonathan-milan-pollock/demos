@@ -1,14 +1,12 @@
-# CSS in Depth
+# Demos
+
+---
 
 ## CSS in Depth
 
 ### Introduction
 
-While many libraries including Bootstrap, Material, and Tailwind simplify the use of CSS, what happens under the hood? As knowledge of CSS is an essential skill for website development, we'll take a closer look following a wonderful book Manning CSS in Depth <https://www.manning.com/books/css-in-depth>. Each class we'll cover a chapter outlining best practices and how to use the material covered in the book.
-
-This course will be at the 100-200 level teaching from the ground up on the fundamentals of CSS. The goal is to be proficient in the language of speaking about and implementing CSS. We will use VS Code for this course.
-
----
+You may have heard of Bootstrap or Tailwind CSS or other CSS frameworks that help when writing CSS. Let’s peek behind the curtain and learn CSS in depth and from the ground up, following the topics in Keith J. Grant’s book CSS in Depth.
 
 ### Materials
 
@@ -18,57 +16,21 @@ Amazon: <https://www.amazon.com/dp/1617293458>
 
 Manning: <https://www.manning.com/books/css-in-depth>
 
----
-
-### CSS Recordings
-
-Class 1 Introduction
-
-Class 2 The Cascade (Chapter 1)
-
-Class 3: Working with Relative Units (Chapter 2)
-
-Class 4
-
-Class 5
-
-Class 6
-
-Class 7
-
-Class 8
-
-Class 9
-
-Class 10
-
-Class 11
-
-Class 12
-
-Class 13
-
-Class 14
-
-Class 15
-
-Class 16
-
----
-
 ### References
 
 - [CSS in Depth](https://www.manning.com/books/css-in-depth)
-- [HTML5: The Missing Manual, 2nd Edition](https://www.oreilly.com/library/view/html5-the-missing/9781449373412/)
 - [MSDN Web Docs CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
 - [MSDN Web Docs HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
 - [Responsive Images](https://classroom.udacity.com/courses/ud882)
 - [Udacity Web Accessibility (a11y)](https://classroom.udacity.com/courses/ud891)
 - [PWA](https://classroom.udacity.com/courses/ud899)
-- [The New CSS Reset](https://elad2412.github.io/the-new-css-reset/)
-- [https://en.wikipedia.org/wiki/CSS](https://en.wikipedia.org/wiki/CSS)
-- [A brief history of CSS until 2016](https://www.w3.org/Style/CSS20/history.html)
-- [A Look Back at the History of CSS](https://css-tricks.com/look-back-history-css/)
+- [Can I Use?](https://caniuse.com/)
+- [What Web Can Do?](https://whatwebcando.today/)
+- [Is Service Worker Ready?](https://jakearchibald.github.io/isserviceworkerready/)
+- [npm trends](https://www.npmtrends.com/)
+- [Google Trends](https://trends.google.com/)
+- [GlobalStats](https://gs.statcounter.com/)
+- [Screen sizes](https://screensiz.es)
 
 ---
 
@@ -80,8 +42,6 @@ Class 16
 
 This class will be at the 100-200 level teaching from the ground up on the fundamentals of SASS. The goal is to be proficient in the concepts of speaking about and implementing SASS. We will use VS Code for this course.
 
----
-
 ### Materials
 
 While the book is not required for the course, following along with it will be beneficial.
@@ -90,39 +50,20 @@ Amazon: <https://www.amazon.com/Pragmatic-Guide-Sass-Modern-Style/dp/1680501763>
 
 The Pragmatic Bookshelf: <https://pragprog.com/titles/pg_sass3/pragmatic-guide-to-sass-3/>
 
----
-
-### SASS Recordings
-
-Class 1:
-
-Class 2:
-
-Class 3:
-
----
-
 ### References
 
 - [Pragmatic Guide to Sass 3](https://pragprog.com/titles/pg_sass3/pragmatic-guide-to-sass-3/)
 
 ---
 
-## Tools for Courses
+## About Instructor
 
-1. Install VSCode and Extensions
-   -VSCode download link  https://code.visualstudio.com/
-   Project source contains recommended extensions
+Jonathan Milan Pollock, MS
 
-2. Install Chrome https://www.google.com/chrome/
-
-3. Add HTML Outliner Extension
-   https://chrome.google.com/webstore/detail/html5-outliner/afoibpobokebhgfnknfndkgemglggomo?hl=en
+I’m one of the lucky ones, to have an over 20-year career that’s also a passion. How many can say they honestly love their day jobs? With both the excitement and reward of building new and refining older enterprise solutions, it’s like playing with Legos for adults! This enjoyment has led me to obtaining my master’s at the University of Michigan in Computer Information Science, avid reading and learning new skills, and the overall opportunity to help and teach others. I’m fortunate to architect, lead, and develop website and Azure cloud projects, having my kind of fun! Outside of work I own a small photography business where I am a certified drone pilot and dabble in new technologies including Extended Reality (XR).
 
 ---
 
-## About Instructor
-
-Jonathan Milan Pollock, MS has over 20 years of development experience and a master's in computer science from the University of Michigan. He has developed extensive applications and his current area of focus is Universal JavaScript.
+[Open in Visual Studio Code](https://open.vscode.dev/milanpollock/demos)
 
 ---

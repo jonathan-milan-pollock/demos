@@ -21,6 +21,7 @@
         display: inline-block;
       }
 
+      /* higher specificity 1 id and 1 tag selector */
       /*1,0,1*/
       #main-nav a {
         color: white;
@@ -30,10 +31,17 @@
         text-decoration: none;
       }
 
-      /* 1,1,0 */
-      #main-nav .featured {
+      /* 1st attempt at styling specials */
+      /* 0,1,0 which is clearly lower than 1,0,1 */
+      /* how to fix, do NOT use !important */
+      .featured {
         background-color: orange;
       }
+
+      /* can add id #main-nav to the front now 1,1,0 */
+      /*#main-nav .featured {
+        background-color: orange;
+      }*/
     </style>
   </head>
   <body>
