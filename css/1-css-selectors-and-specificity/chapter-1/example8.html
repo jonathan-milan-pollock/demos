@@ -11,25 +11,31 @@
         margin-bottom: 10px;
       }
 
+      /* an even better way to solve, lower the specificity */
+      /* why is this better? stylesheets grow so better to keep specificity as low as possible */
+
+      /*0,1,0*/
       .nav {
         margin-top: 10px;
         list-style: none;
         padding-left: 0;
       }
 
+      /*0,1,1*/
       .nav li {
         display: inline-block;
       }
 
+      /*0,1,1*/
       .nav a {
         color: white;
         background-color: #13a4a4;
-        /* padding TRBL */
-        padding: 10px 15px 0 5px;
+        padding: 5px;
         border-radius: 2px;
         text-decoration: none;
       }
 
+      /*0,2,0*/
       .nav .featured {
         background-color: orange;
       }

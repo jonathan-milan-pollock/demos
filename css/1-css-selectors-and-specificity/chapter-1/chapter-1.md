@@ -115,12 +115,12 @@ h1 {
 
 ## "Cascading" Style Sheets (CSS)
 
-### Why is the cascade so important?
+### Why is cascade in the name?
 
-- it's the way resolves which value "wins" when multiple values can be used for a property
+- it's the way resolves which value "wins" when multiple values apply for a property
 
 Cascade
-: resolves which value "wins" when multiple values can be used for a property
+: resolves which value "wins" when multiple values apply for a property
 
 Cascaded Value
 : The value that "wins" the cascade having the highest precedence, at most one and may not be a value if property value not provided in any ruleset
@@ -129,19 +129,20 @@ Cascaded Value
 
 1. Origin (Author Important, Author, User Agent (Browser))
 2. Specificity
-3. Inheritance
-4. Source Order - the last factor
+3. Source Order - the last factor
 
-#### 1. Origin
+---
 
-##### What are the 3 types of Stylesheet Origin in oder of precedence (priority)?
+## 1. Origin
+
+### What are the 3 types of Stylesheet Origin in oder of precedence (priority)?
 
 1. Author important (**_NOT RECOMMENDED_**)
 
 - declarations you write with !important
 
 ```css
-/* not recommended */
+/* not recommended as overwrites specificity and all other selectors */
 font-family: serif !important;
 ```
 
@@ -153,7 +154,7 @@ font-family: serif !important;
 
 - chrome://settings Appearance
 
-###### What are examples of User Agent styles?
+### What are examples of User Agent styles?
 
 - h1 to h6 and p top and bottom margin
 - ol and ul left padding
@@ -175,42 +176,22 @@ font-family: serif !important;
 
 [example2.html](example2.html)
 
-#### 2. Specificity
+## 2. Specificity
 
-##### What is Specificity defined by? Some styles more specific than others
+### What is Specificity defined by? Some styles more specific than others
 
-1. Location of rules
-2. Types of selectors
-
-###### 1. Location of Rules
-
-- What are the 3 possible locations for CSS?
-
-1. inline-style
-
-```html
-<div style="background-color: blue;"></div>
-```
-
-- as selectors appear in all rules sets except inline styles in order to override have to use !important
-- if inline-styles are marked !important there is no way to override them
-
-2. style section of HTML head element
-3. external stylesheet
-
-###### 2. Types of selectors (in order of specificity)
-
-- universal selectors and combinators have no effect on specificity
-
-| selector type                   |                                       |
+|                                 |                                       |
 | ------------------------------- | ------------------------------------- |
+| inline styles                   |                                       |
 | id                              | #example                              |
 | class, pseudo-class, attribute  | .example                              |
 |                                 | pseudo-class (:hover)                 |
 |                                 | attribute (type["input"], [disabled]) |
-| element (tag)                   | div, section, header, main, footer    |
+| element (tag), pseudo-element   | div, ::after                          |
 | universal selector, combinators | \*                                    |
 |                                 | combinators (>, +, - )                |
+
+- universal selectors and combinators have no effect on specificity
 
 ```html
 <html>
@@ -229,7 +210,7 @@ font-family: serif !important;
 </html>
 ```
 
-###### What color is Wombat Coffee Roasters?
+### What color is Wombat Coffee Roasters?
 
 - green
 
@@ -259,7 +240,7 @@ font-family: serif !important;
 </body>
 ```
 
-###### What if reverse the order of class and id selector, what color is Wombat Coffee Roasters?
+#### What if reverse the order of class and id selector, what color is Wombat Coffee Roasters?
 
 - still green as id selectors have higher precedence
 
@@ -291,7 +272,44 @@ font-family: serif !important;
 
 [example3.html](example3.html)
 
-###### 3. Inheritance
+## 3. Source Order
+
+- the last factor in the Cascade
+
+```css
+/* if the following two styles have same origin (author) and
+* specificity 0,1,1 then the 2nd takes precedence
+*/
+.nav a {
+  color: white;
+  background-color: #13a4a4;
+  padding: 5px;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+/* specificity 0,1,1 also but source order last */
+a.featured {
+  background-color: orange;
+}
+```
+
+[example4.html](example4.html)
+
+### **LoVe HAte** an example where source order matters
+
+![LoVe HAte](lovehate.jpg)
+
+- psuedo classes have the same specificity, :link, :visited, :hover, :active, should be in LoVe HAte source order
+
+- user Hovers over a Visited link Hover style takes precedence
+- if user Activates the Link while Hovering over it then Active style takes precedence
+
+[example5.html](example5.html)
+
+---
+
+## Inheritance
 
 - inherited values are passed down until overridden by cascaded value
 - ![Inheritance](inheritance.png)
@@ -330,29 +348,10 @@ body {
 }
 ```
 
-###### 4. Source Order
+inherit
+: for inheritance to take precedence over a cascaded value, can also used for properties not normally inherited like padding or margins
 
-- the last factor in the Cascade
-
-```css
-/* if the following two styles have same origin (author) and
-* specificity 0,1,1 then the 2nd takes precedence
-*/
-.nav a {
-  color: white;
-  background-color: #13a4a4;
-  padding: 5px;
-  border-radius: 2px;
-  text-decoration: none;
-}
-
-/* specificity 0,1,1 also but source order last */
-a.featured {
-  background-color: orange;
-}
-```
-
-[example4.html](example4.html)
+[example6.html](example6.html)
 
 ---
 
@@ -372,24 +371,14 @@ a.featured {
 
 ## Calculating Specificity
 
-**_"\*"_** universal selector\*\* - specificity 0, 0, 0
-: targets all elements but very low specificity
+- **_NOTE_** can hover a selector in VSCode to see its specificity
 
-**tag selectors** - specificity 0, 0, 1
-: body, a
-
-- good for basic styling such as body and anchor tags, otherwise classes preferred
-
-**.class selectors** - specificity 0, 1, 0
-: target elements with a particular class name
-
-- always a good idea even when only one element will have class
-
-**#id selectors** - specificity 1, 0, 0
-: target element with a particular id
-
-- **NOT RECOMMENDED** - where classes only used for css ids have other purposes
-- also increases the complexity of thinking about cascade
+|                       |                     |
+| --------------------- | ------------------- |
+| universal selector \* | specificity 0, 0, 0 |
+| tag selector          | specificity 0, 0, 1 |
+| class selector        | specificity 0, 1, 0 |
+| id selector           | specificity 1, 0, 0 |
 
 ```css
 html body header h1 {
@@ -418,12 +407,12 @@ body header.page-header h1 {
 
 - a single id has a higher specificity than any number of classes
 
-## How can we simplify the Cascade
+### How can we simplify the Cascade
 
 - don't use Author Important (simplifies Origin to just Author)
 - don't use inline styles or ids (simplifies location and type for specificity)
 
-### then simply count 2 types selectors
+#### then simply count 2 types selectors
 
 | . classes | tags |
 | --------- | ---- |
@@ -433,70 +422,46 @@ body header.page-header h1 {
 
 - the purpose of elements (tags) are for HTML
 - the purpose of classes are for CSS - **_therefore prefer class selectors_**
-- the purpose of ids are for JavaScript
+- the purpose of ids are for JavaScript and internal page links
 
-[example5.html](example5.html)
-[example6.html](example6.html)
+### What Selector Type should I use?
 
-### **LoVe HAte**
-
-![LoVe HAte](lovehate.jpg)
-
-- an example where source order matters, as psuedo classes have the same specificity, :link, :visited, :hover, :active, should be in LoVe HAte source order
-
-- user Hovers over a Visited link Hover style takes precedence
-- if user Activates the Link while Hovering over it then Active style takes precedence
+|                       |                                                                         |
+| --------------------- | ----------------------------------------------------------------------- |
+| universal selector \* | when want all elements to have the same style                           |
+| tag selector          | good basic styling body and anchor tags, less control classes preferred |
+| class selector        | reusable, always a good idea even when only one element will have class |
+| id selector           | not recommended                                                         |
 
 [example7.html](example7.html)
+[example8.html](example8.html)
 
 ---
 
-## Selectors
+## Compound Selectors
 
-### Basic
-
-```html
-<!-- An HTML feature links with # can link to sections of the page -->
-<nav>
-  <a href="#intro" class="active">Intro</a>
-  <a href="#outro">Outro</a>
-</nav>
-<section id="intro" class="main-section highlighted">
-  <p>This is the intro section.</p>
-</section>
-<section id="outro" class="main-section">
-  <p>This is the outro section.</p>
-</section>
-```
-
----
-
-## Compound Selectors (vs. Simple Selectors)
-
-**compound selector** .dropdown.is-active
+compound selector
 : targets elements that match all its simple selectors
+
+- chaining selectors allow being more specific about what want to select
+- compound selectors do increase the specificity
 
 ```html
 <style>
   /* compound selector */
-  /* if a space between .dropdown .is-active 
-    would be a descendant selector and
-    target any element under .dropdown 
-    with class is-active */
   .dropdown.is-active {
     color: green;
   }
 </style>
-<!-- compound selector -->
-<!-- targets this -->
 <div class="dropdown is-active">Styled</div>
-<!-- but not this -->
 <div class="dropdown">
   <span class="is-active">Not Styled</span>
 </div>
 ```
 
-## If want to select only the divs which have both A and C or B and C?
+### If want to select only the divs which have both A and C or B and C?
+
+- **_NOTE_** you can use more than one class on an element and the order of these classes doesn't matter
 
 ```html
 <html>
@@ -518,25 +483,29 @@ body header.page-header h1 {
 </html>
 ```
 
-[example11a.html](example11a.html)
-
-**_NOTE_** compound selectors like descendant combinators provide the another way to add more info so create more precedence
+[example9.html](example9.html)
 
 ---
 
 ## Combinators
 
 - combine multiple selectors
+- combining selectors does create a higher specificity
 
-#### descendant vs direct descendant combinators
+|                           |         |
+| ------------------------- | ------- | ------------ |
+| descendant                | div p   | whitespace   |
+| child (direct descendant) | div > p | greater than |
+| general sibling           | h2 ~ p  | tilde        |
+| adjacent sibling          | h2 + p  | plus         |
 
-**descendant combinator**
-: div p
+### Descendant Combinator
 
-- has a space
-- p can be nested at any depth under div
-- the most commonly used combinator
-- can have multiple div p span
+descendant combinator selector
+: targets elements that can be nested at any depth from another selector
+
+- with div p, p can be nested at any depth under div
+- with div p span, span can be nested at any depth under p which can be nested any depth under div
 
 ```html
 <style>
@@ -545,21 +514,20 @@ body header.page-header h1 {
   }
 </style>
 <div>
-  <p>styled</p>
-  <!-- style applied here -->
+  <p>Styled</p>
   <article>
-    <p>styled</p>
-    <!-- style applied here -->
+    <p>Styled</p>
   </article>
 </div>
 ```
 
-**direct descendant combinator**
-: div > p
+### Child (Direct Descendant) Combinator
 
-- p **must be nested \***directly\*\*\* under the div
-- child parent relationship
-- can have multiple div > p > span
+child combinator selector
+: targets elements that directly follow another selector
+
+- with div > p, p must be directly under the div
+- with div > p > span, span must be directly under p which must be directly under div
 
 ```html
 <style>
@@ -568,67 +536,65 @@ body header.page-header h1 {
   }
 </style>
 <div>
-  <p>styled</p>
-  <!-- style applied here -->
+  <p>Styled</p>
   <article>
-    <p>not styled</p>
+    <p>Not Styled</p>
   </article>
 </div>
 ```
 
-#### general sibling vs adjacent sibling combinators
+### General Sibling Combinator
 
-**general sibling combinator**
-: h2 ~ p
+general sibling combinator
+: targets sibling elements following a specified element
 
-- targets sibling elements following a specified element
+- can be more than 2 combined selectors
 
 ```html
 <style>
-  /* general sibling combinator */
   h2 ~ p {
     color: lightseagreen;
   }
 </style>
-<div> <!-- have to have the same parent -->
-  <h2>not targeted</h2>
-  <p>styled</p> <!-- style applied here -->
-  <h2>not targeted<h2>
-  <h3>not targeted</h3>
-  <p>styled</p>  <!-- style applied here -->
+<div>
+  <!-- have to have the same parent -->
+  <h2>Not Styled</h2>
+  <p>Styled</p>
+  <h3>Not Styled</h3>
+  <!-- p somewhere following h2 -->
+  <p>Styled</p>
+  <h2>Not Styled</h2>
+  <p>Styled</p>
 </div>
 ```
 
-**adjacent sibling combinator**
-: p + h2
+### Adjacent Sibling Combinator
 
-- targets sibling elements directly following (adjacent) a specified element
-- can have multiple p + h2 + a
+adjacent sibling combinator
+: targets sibling elements directly following (adjacent) a specified element
+
+- can be more than 2 combined selectors
 
 ```html
 <style>
-  /* adjacent sibling combinator */
-  p + h2 {
+  h2 + p {
     color: lightcoral;
   }
 </style>
-<div> <!-- have to have the same parent -->
-  <p>A paragraph</p>
-  <h2>styled heading<h2> <!-- style applied here -->
+<div>
+  <!-- have to have the same parent -->
+  <h2>Not Styled</h2>
+  <p>Styled</p>
+  <h3>Not Styled</h3>
+  <p>Not Styled</p>
+  <h2>Not Styled</h2>
+  <p>Styled</p>
 </div>
 ```
 
-- Example #10
-
 ---
 
-## Manipulating the Cascade with Inherit and Initial
-
-inherit
-: for inheritance to take precedence over a cascaded value
-
-- can also force inheritance for properties not normally inherited such as padding or margins
-- Example 11
+## Initial Property Value
 
 initial
 : to undo an cascaded value
@@ -660,14 +626,6 @@ div {
 ```
 
 **NOTE** **initial** does not work in IE11 or Opera mini but all other major browsers
-
-### [caniuse](https://caniuse.com/)
-
-- as with JavaScript can use https://caniuse.com/ to determine if a feature is supported
-- this is recommended in checking css features, properties and styles to check the browsers need to support
-- look at the market share feature to see if generally safe
-
-- Example 12
 
 ## Shorthand Properties
 
@@ -723,11 +681,11 @@ div {
 }
 ```
 
-- Example 13
+### Shorthand Properties Quirks
 
-## Shorthand Properties Quirks
+#### 1. Omitting Values
 
-1. If you omit values and only specify the values concerned with the others will get their initial values (NOT their cascaded values)
+- if you omit values and only specify the values concerned with the others will get their initial values (NOT their cascaded values)
 
 ```css
 div {
@@ -745,9 +703,7 @@ div {
 }
 ```
 
-Example #14
-
-2. Understanding shorthand properties order
+#### 2. Shorthand properties try to be lenient
 
 ```css
 /* shorthand properties try to be lenient */
@@ -763,22 +719,24 @@ div {
 }
 ```
 
-### 4 value properties (clock) **TRouBLe** Top Right Bottom Left
+---
 
-- sometimes order matters, it's clockwise Top Right Bottom Left
+## 4 and 2 value properties
+
+### 4 value properties follow a clock Top Right Bottom Left (TRBL)
 
 ![TRouBLe](trouble.jpg)
 
-Example #15
-
 #### TRBL Truncated Notations
+
+- if value not provided the values comes from the opposite side
+- the 3 values is the tricky one
 
 ```css
 div {
   /* the following are equivalent */
-  padding: 1em 2em; /* TB 1em RL 2em */
-  /*        T   R  B  (since no L value given its taken from the opposite side) */
-  padding: 1em 2em 1em; /* T 1em RL 2em 1 1em */
+  padding: 1em 2em; /* TB 1em RL 2em  */
+  padding: 1em 2em 1em; /* T 1em RL 2em 1 1em (this is the tricky one) */
   padding: 1em 2em 1em 2em; /* T 1em R 1em B 1em L 1em */
 }
 
@@ -789,15 +747,18 @@ div {
   padding: 1em 1em 1em; /* T 1em RL 1em B 1em */
   padding: 1em 1em 1em 1em; /* T 1em R 1em B 1em L 1em */
 }
+
+.nav a {
+  color: white;
+  background-color: #13a4a4;
+  /* T 5px R 15px as B and L not specified their value comes from the other side */
+  padding: 5px 15px 5px 15px; /* Often more horizontal spacing looks best */
+  border-radius: 2px;
+  text-decoration: none;
+}
 ```
 
-Example #16
-
-#### 2 value properties (Cartesian grid)
-
-- with 4 value properties TRBL vertical top/bottom then horizontal left/right
-- with 2 value properties the order is reversed horizontal then vertical
-- why? because of the Cartesian grid x (across) then y (down)
+### 2 value properties use Cartesian grid
 
 ```css
 background-position: 25% 75% /* 25% horizontal 75% vertical */
@@ -813,5 +774,3 @@ text-shadow: 1px 2px #FF0000; /* 1 pixel right x then 2 down y */
   */
 text-shadow: 0.1em 0.1em 0.3em #000;
 ```
-
-Example #17

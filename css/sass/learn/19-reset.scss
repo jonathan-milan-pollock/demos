@@ -62,6 +62,21 @@ ol[role='list'] {
 
 /* Set core root defaults */
 /* previously with a link down the page would not scroll smoothly */
+/*
+```html
+<!-- An HTML feature links with # can link to sections of the page -->
+<nav>
+  <a href="#intro" class="active">Intro</a>
+  <a href="#outro">Outro</a>
+</nav>
+<section id="intro" class="main-section highlighted">
+  <p>This is the intro section.</p>
+</section>
+<section id="outro" class="main-section">
+  <p>This is the outro section.</p>
+</section>
+```
+*
 /* <a href="#link-down-the-page">Jump down</a> anchors focusable so works well,
     /* for an h2 (normally not focusable) would need
     <h2 tabindex="-1" id="link-down-the-page">Header</h2> */

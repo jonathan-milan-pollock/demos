@@ -6,52 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      h1 {
-        color: #2f4f4f;
-        margin-bottom: 10px;
+      /* anchors get the color blue */
+      a:link {
+        color: blue;
       }
 
-      /* an even better way to solve, lower the specificity */
-      /* why is this better? stylesheets grow so better to keep specificity as low as possible */
-
-      /*0,1,0*/
-      .nav {
-        margin-top: 10px;
-        list-style: none;
-        padding-left: 0;
+      .footer {
+        color: #665;
+        background-color: #ccc;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 14px;
       }
 
-      /*0,1,1*/
-      .nav li {
-        display: inline-block;
-      }
-
-      /*0,1,1*/
-      .nav a {
-        color: white;
-        background-color: #13a4a4;
-        padding: 5px;
-        border-radius: 2px;
-        text-decoration: none;
-      }
-
-      /*0,2,0*/
-      .nav .featured {
-        background-color: orange;
+      /* use inherit to use the color from the user agent of black */
+      .footer a {
+        /*color: inherit;*/
+        text-decoration: underline;
       }
     </style>
   </head>
   <body>
-    <header class="page-header">
-      <h1 id="page-title" class="title">Wombat Coffee Roasters</h1>
-      <nav>
-        <ul id="main-nav" class="nav">
-          <li><a href="/">Home</a></li>
-          <li><a href="/coffees">Coffees</a></li>
-          <li><a href="/brewers">Brewers</a></li>
-          <li><a href="/specials" class="featured">Specials</a></li>
-        </ul>
-      </nav>
-    </header>
+    <footer class="footer">
+      &copy; 2021 Wombat Coffee Roasters &mdash;
+      <a href="/terms-of-use">Terms of use</a>
+    </footer>
   </body>
 </html>
