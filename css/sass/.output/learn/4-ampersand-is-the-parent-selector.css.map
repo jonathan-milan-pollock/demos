@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,sCAAsC;AAEtC,QAAS;EACP,KAAK,EAAE,IAAI;EACX,cAAQ;IACN,KAAK,EAAE,IAAI;;AAIf,QAAS;EACP,KAAK,EAAE,IAAI;EACX,YAAM;IACJ,KAAK,EAAE,GAAG;;AAKZ,kCAA4B;EAC1B,OAAO,EAAE,oCAAoC;;AAMjD,QAAS;EACP,KAAK,EAAE,IAAI;;AAEb,cAAe;EACb,KAAK,EAAE,IAAI;;AAGb,QAAS;EACP,KAAK,EAAE,IAAI;;AAEb,YAAa;EACX,KAAK,EAAE,GAAG;;AAGZ,kCAAmC;EACjC,OAAO,EAAE,oCAAoC",
-"sources": ["../../learn/4-ampersand-is-the-parent-selector.scss"],
-"names": [],
-"file": "4-ampersand-is-the-parent-selector.css"
-}

@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAUA,KAAM;EACJ,KAAK,EAJM,KAAK;EAKhB,cAAS;IACP,KAAK,EAAE,KAA8B;EAEvC,cAAS;IACP,KAAK,EAAE,KAAoC;;AAK/C,KAAM;EACJ,KAAK,EAAE,KAAK;;AAGd,cAAe;EACb,KAAK,EAAE,KAAK;;AAGd,cAAe;EACb,KAAK,EAAE,KAAK",
-"sources": ["../../learn/1-semantic-mathematics.scss"],
-"names": [],
-"file": "1-semantic-mathematics.css"
-}
