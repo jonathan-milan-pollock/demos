@@ -8,6 +8,8 @@
     "pkief.material-icon-theme",
     "christian-kohler.path-intellisense",
     "esbenp.prettier-vscode",
-    "syler.sass-indented"
+    "syler.sass-indented",
+    "github.copilot",
+    "github.copilot-labs"
   ]
 }
