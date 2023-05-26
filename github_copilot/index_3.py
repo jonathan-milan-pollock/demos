@@ -1,6 +1,4 @@
-import requests
-
 '''
-API Wrapper with body for the JSONPlaceholder API
+API Wrapper MethodView blueprint with body for the Flask smorest API
 '''
-#class
+class 

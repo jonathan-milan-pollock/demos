@@ -1,4 +1,8 @@
 {
   "cSpell.words": ["viewports"],
-  "liveServer.settings.port": 5502
+  "liveServer.settings.port": 5502,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "python.formatting.provider": "none"
 }
