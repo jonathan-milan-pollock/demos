@@ -1,4 +1,6 @@
 '''
-API Wrapper MethodView blueprint with body for the Flask smorest API
+given I post a book
+when the API returns an invalid response
+then API wrapper should return an error
 '''
-class 
+#def

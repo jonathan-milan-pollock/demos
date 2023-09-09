@@ -1,3 +1,3 @@
-const token = process.env["TWITTER_TOKEN"]
+import d3 from "d3"
 
-const fetchTweets =
+const drawScatterplot
